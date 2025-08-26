@@ -191,11 +191,35 @@ verify_installation() {
 # Reports success if configuration loads cleanly, warns if errors detected
 test_configuration() {
     log INFO "Testing configuration loading..."
-    # Test if Emacs can load the configuration without errors (with proper quoting)
-    if emacs --batch --load "$EMACS_DIR/init.el" --eval '(message "Configuration loaded successfully")' >/dev/null 2>&1; then
+    
+    # Capture the output and exit code for better diagnostics
+    local temp_output
+    temp_output=$(mktemp)
+    local exit_code
+    
+    # Test if Emacs can load the configuration without errors
+    if emacs --batch --load "$EMACS_DIR/init.el" --eval '(message "Configuration loaded successfully")' >"$temp_output" 2>&1; then
         log SUCCESS "Configuration loads without errors"
+        # Clean up temp file
+        rm -f "$temp_output"
     else
-        log WARN "Configuration may have issues (check with 'emacs --debug-init')"
+        exit_code=$?
+        log WARN "Configuration test returned exit code $exit_code"
+        
+        # Check if it's likely a package-related issue
+        if grep -q -E "(package|melpa|install|download|network|timeout)" "$temp_output" 2>/dev/null; then
+            log WARN "Detected package/network-related warnings (this is often normal on first run)"
+            log INFO "Try running: emacs --batch --load \"$EMACS_DIR/init.el\" --eval '(message \"Test\")'"
+            # Clean up temp file since we're not providing it for debugging
+            rm -f "$temp_output"
+        else
+            log WARN "Configuration may have issues. Output saved to: $temp_output"
+            log INFO "To debug, check the output file above or run: emacs --debug-init"
+            # Keep temp file for debugging (user is informed of location)
+        fi
+        
+        # Don't fail the installation for configuration warnings
+        log INFO "Installation continues - configuration warnings don't prevent usage"
     fi
 }
 
