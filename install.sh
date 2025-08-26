@@ -1,9 +1,6 @@
 #!/bin/bash
-
-# Emacs Configuration Installer
-# This script creates symlinks from ~/.emacs.d/ to this repository's configuration files
-
-set -e  # Exit on any error
+# Enhanced Emacs configuration installer with better error handling and validation
+set -euo pipefail  # Exit on error, undefined variables, and pipe failures
 
 # Colors for output
 RED='\033[0;31m'
@@ -12,124 +9,287 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get the absolute path of this script's directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Configuration
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 EMACS_DIR="$HOME/.emacs.d"
+BACKUP_DIR="/tmp/emacs.d.backup.$(date +%Y%m%d-%H%M%S)"
 
-echo -e "${BLUE}Emacs Configuration Installer${NC}"
-echo "=================================="
-echo -e "Repository path: ${BLUE}$SCRIPT_DIR${NC}"
-echo -e "Target path: ${BLUE}$EMACS_DIR${NC}"
-echo
-
-# Function to backup existing files/directories
-backup_if_exists() {
-    local target="$1"
-    local backup_suffix=".backup.$(date +%Y%m%d_%H%M%S)"
-    
-    if [[ -e "$target" ]]; then
-        echo -e "${YELLOW}Backing up existing $target to $target$backup_suffix${NC}"
-        mv "$target" "$target$backup_suffix"
-        return 0
-    fi
-    return 1
+# Centralized logging function with color-coded output levels
+# Takes log level as first argument, message as remaining arguments
+# Outputs INFO/SUCCESS to stdout, WARN/ERROR to stderr with appropriate colors
+log() {
+    local level=$1
+    shift
+    case $level in
+        INFO) echo -e "${BLUE}[INFO]${NC} $*" ;;
+        WARN) echo -e "${YELLOW}[WARN]${NC} $*" ;;
+        ERROR) echo -e "${RED}[ERROR]${NC} $*" >&2 ;;
+        SUCCESS) echo -e "${GREEN}[SUCCESS]${NC} $*" ;;
+    esac
 }
 
-# Function to create symlink with removal of existing files/directories
-create_symlink() {
-    local source="$1"
-    local target="$2"
-    local target_name="$(basename "$target")"
-    
-    echo -e "${BLUE}Processing $target_name...${NC}"
-    
-    # Check if source exists
-    if [[ ! -e "$source" ]]; then
-        echo -e "${RED}ERROR: Source $source does not exist!${NC}"
+
+# Verifies Emacs is installed and checks version compatibility
+# Exits with error code 1 if Emacs not found in PATH
+# Warns if version is below recommended 26.1 but continues installation
+check_emacs() {
+    if ! command -v emacs &> /dev/null; then
+        log ERROR "Emacs is not installed or not in PATH"
         exit 1
     fi
-    
-    # Create ~/.emacs.d directory if it doesn't exist
-    mkdir -p "$(dirname "$target")"
-    
-    # Check if target exists
-    if [[ -e "$target" ]]; then
-        if [[ -L "$target" ]] && [[ "$(readlink "$target")" == "$source" ]]; then
-            echo -e "${GREEN}✓ $target_name already correctly symlinked${NC}"
-            return 0
-        else
-            echo -e "${YELLOW}Removing existing $target${NC}"
-            rm -rf "$target"
-        fi
+    local version
+    version=$(emacs --version | head -n1 | grep -oE '[0-9]+\.[0-9]+')
+    log INFO "Found Emacs version: $version"
+    # Check for minimum version (26.1)
+    if printf '%s\n' "26.1" "$version" | sort -V | head -n1 | grep -q "26.1"; then
+        log SUCCESS "Emacs version is compatible"
+    else
+        log WARN "Emacs version $version may not be compatible (recommended: 26.1+)"
     fi
-    
-    # Create the symlink
-    echo -e "${BLUE}Creating symlink: $target -> $source${NC}"
-    ln -s "$source" "$target"
-    echo -e "${GREEN}✓ Successfully created symlink for $target_name${NC}"
 }
 
-# Function to create symlink with backup (alternative approach)
-create_symlink_with_backup() {
-    local source="$1"
-    local target="$2"
-    local target_name="$(basename "$target")"
-    
-    echo -e "${BLUE}Processing $target_name...${NC}"
-    
-    # Check if source exists
-    if [[ ! -e "$source" ]]; then
-        echo -e "${RED}ERROR: Source $source does not exist!${NC}"
+
+# Validates that all required repository files and directories exist
+# Checks for essential structure: init.el, config/, lang/, themes/, custom/
+# Exits with error code 1 if any required components are missing
+validate_repo() {
+    log INFO "Validating repository structure..."
+    local required_files=("init.el" "config" "lang" "themes" "custom")
+    local missing_files=()
+    for file in "${required_files[@]}"; do
+        if [[ ! -e "$REPO_DIR/$file" ]]; then
+            missing_files+=("$file")
+        fi
+    done
+    if [[ ${#missing_files[@]} -gt 0 ]]; then
+        log ERROR "Missing required files/directories: ${missing_files[*]}"
         exit 1
     fi
-    
-    # Create ~/.emacs.d directory if it doesn't exist
-    mkdir -p "$(dirname "$target")"
-    
-    # Backup existing file/directory if it exists and is not already a symlink to our source
-    if [[ -e "$target" ]]; then
-        if [[ -L "$target" ]] && [[ "$(readlink "$target")" == "$source" ]]; then
-            echo -e "${GREEN}✓ $target_name already correctly symlinked${NC}"
-            return 0
-        else
-            backup_if_exists "$target"
-        fi
-    fi
-    
-    # Create the symlink
-    echo -e "${BLUE}Creating symlink: $target -> $source${NC}"
-    ln -s "$source" "$target"
-    echo -e "${GREEN}✓ Successfully created symlink for $target_name${NC}"
+    log SUCCESS "Repository structure is valid"
 }
 
-echo "Starting installation..."
-echo
 
-# Create symlinks for all configuration directories
-create_symlink "$SCRIPT_DIR/config" "$EMACS_DIR/config"
-create_symlink "$SCRIPT_DIR/lang" "$EMACS_DIR/lang"
-create_symlink "$SCRIPT_DIR/themes" "$EMACS_DIR/themes"
-create_symlink "$SCRIPT_DIR/custom" "$EMACS_DIR/custom"
 
-# Create symlink for init.el file
-create_symlink "$SCRIPT_DIR/init.el" "$EMACS_DIR/init.el"
+# Creates selective backups of existing files that would be overwritten
+# Backs up only files/directories that conflict with repository symlinks
+# Places backups in /tmp directory with timestamp to avoid conflicts
+# Preserves unmanaged files in ~/.emacs.d that don't conflict with repo structure
+backup_existing() {
+    local files_to_backup=("init.el" "config" "lang" "themes" "custom")
+    local backed_up_files=()
+    local backup_needed=false
+    
+    # First check if any files need backing up
+    for file in "${files_to_backup[@]}"; do
+        local file_path="$EMACS_DIR/$file"
+        if [[ -e "$file_path" ]]; then
+            backup_needed=true
+            break
+        fi
+    done
+    
+    if [[ "$backup_needed" = true ]]; then
+        if mkdir -p "$BACKUP_DIR"; then
+            log INFO "Created backup directory: $BACKUP_DIR"
+        else
+            log ERROR "Failed to create backup directory: $BACKUP_DIR"
+            exit 1
+        fi
+        
+        for file in "${files_to_backup[@]}"; do
+            local file_path="$EMACS_DIR/$file"
+            if [[ -e "$file_path" ]]; then
+                if cp -r "$file_path" "$BACKUP_DIR/"; then
+                    backed_up_files+=("$file")
+                    if rm -rf "$file_path"; then
+                        log SUCCESS "Backed up and removed: $file"
+                    else
+                        log ERROR "Failed to remove $file after backup"
+                        exit 1
+                    fi
+                else
+                    log ERROR "Failed to backup $file"
+                    exit 1
+                fi
+            fi
+        done
+        
+        log SUCCESS "Backed up conflicting files: ${backed_up_files[*]}"
+        log INFO "Backup location: $BACKUP_DIR"
+    else
+        log INFO "No conflicting files found to backup"
+    fi
+}
 
-# Optional: Create symlink for site-lisp directory (for backward compatibility)
-# Uncomment the line below if you want to keep the old site-lisp structure
-# create_symlink "$SCRIPT_DIR/site-lisp" "$EMACS_DIR/site-lisp"
 
-echo
-echo -e "${GREEN}Installation completed successfully!${NC}"
-echo
-echo "Your Emacs configuration is now symlinked to this repository."
-echo "The following directories have been symlinked:"
-echo "  • ~/.emacs.d/config/  → Configuration modules"
-echo "  • ~/.emacs.d/lang/    → Language-specific settings"
-echo "  • ~/.emacs.d/themes/  → Theme configuration"
-echo "  • ~/.emacs.d/custom/  → Custom functions and settings"
-echo "  • ~/.emacs.d/init.el  → Main configuration file"
-echo
-echo "Any changes made to files in this repository will be reflected in your Emacs configuration."
-echo
-echo -e "${YELLOW}Note: Existing files/directories were removed to create clean symlinks.${NC}"
-echo -e "${YELLOW}The old site-lisp directory is not symlinked - you can manually remove it when ready.${NC}"
+# Creates ~/.emacs.d directory if needed and establishes symbolic links to repository files
+# Links core files (init.el) and directories (config, lang, themes, custom)
+# Uses force flag (-f) to overwrite any existing symlinks
+# Warns about missing source files but continues with available ones
+# Exits with error code 1 if critical symlinks fail (directory creation always succeeds)
+create_symlinks() {
+    log INFO "Creating symlinks in existing .emacs.d directory..."
+    mkdir -p "$EMACS_DIR"
+    log SUCCESS "Ensured .emacs.d directory exists"
+    
+    local links=(
+        "init.el:init.el"
+        "config:config"
+        "lang:lang"
+        "themes:themes"
+        "custom:custom"
+    )
+    for link in "${links[@]}"; do
+        local src="${link%%:*}"
+        local dest="${link##*:}"
+        local src_path="$REPO_DIR/$src"
+        local dest_path="$EMACS_DIR/$dest"
+        if [[ -e "$src_path" ]]; then
+            if ln -sf "$src_path" "$dest_path"; then
+                log SUCCESS "Created symlink: $dest -> $src_path"
+            else
+                log ERROR "Failed to create symlink for $dest"
+                exit 1
+            fi
+        else
+            log WARN "Source file/directory not found: $src_path (skipping)"
+        fi
+    done
+}
+
+
+# Verifies that all expected symlinks were created and point to valid targets
+# Checks each symlink exists, is actually a symlink, and target file/directory exists
+# Reports success for valid links, warns about non-symlinks, errors on broken links
+# Exits with error code 1 if any symlinks are broken (point to non-existent targets)
+verify_installation() {
+    log INFO "Verifying installation..."
+    local expected_links=("init.el" "config" "lang" "themes" "custom")
+    local broken_links=()
+    for link in "${expected_links[@]}"; do
+        local link_path="$EMACS_DIR/$link"
+        if [[ -L "$link_path" ]]; then
+            if [[ -e "$link_path" ]]; then
+                log SUCCESS "✓ $link symlink is valid"
+            else
+                broken_links+=("$link")
+            fi
+        else
+            log WARN "✗ $link is not a symlink"
+        fi
+    done
+    if [[ ${#broken_links[@]} -gt 0 ]]; then
+        log ERROR "Broken symlinks found: ${broken_links[*]}"
+        exit 1
+    fi
+}
+
+
+# Tests whether Emacs can successfully load the new configuration
+# Runs Emacs in batch mode to load init.el without starting GUI
+# Uses proper shell quoting for the Emacs Lisp eval expression
+# Reports success if configuration loads cleanly, warns if errors detected
+test_configuration() {
+    log INFO "Testing configuration loading..."
+    # Test if Emacs can load the configuration without errors (with proper quoting)
+    if emacs --batch --load "$EMACS_DIR/init.el" --eval '(message "Configuration loaded successfully")' >/dev/null 2>&1; then
+        log SUCCESS "Configuration loads without errors"
+    else
+        log WARN "Configuration may have issues (check with 'emacs --debug-init')"
+    fi
+}
+
+
+# Displays comprehensive help information about script usage and options
+# Lists all available command-line flags and their purposes
+# Explains the installation process step-by-step for user understanding
+show_usage() {
+    cat << EOF
+Usage: $0 [OPTIONS]
+
+Options:
+    -h, --help      Show this help message
+    --no-backup     Skip backing up conflicting files
+    --no-test       Skip configuration testing
+    --force         Force installation even if validation fails
+
+This script will:
+1. Check for Emacs installation
+2. Validate repository structure  
+3. Backup conflicting files to /tmp (unless --no-backup)
+4. Create symlinks from ~/.emacs.d to this repository
+5. Verify the installation
+6. Test configuration loading (unless --no-test)
+
+Note: This script preserves existing ~/.emacs.d and only backs up files
+that would conflict with the repository symlinks (init.el, config/, etc.).
+
+EOF
+}
+
+# Parse command line arguments
+# Processes command-line options to control script behavior
+# Sets boolean flags for --no-backup, --no-test, --force options
+# Displays help and exits for -h/--help, errors on unknown options
+NO_BACKUP=false
+NO_TEST=false
+FORCE=false
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            show_usage
+            exit 0
+            ;;
+        --no-backup)
+            NO_BACKUP=true
+            shift
+            ;;
+        --no-test)
+            NO_TEST=true
+            shift
+            ;;
+        --force)
+            FORCE=true
+            shift
+            ;;
+        *)
+            log ERROR "Unknown option: $1"
+            show_usage
+            exit 1
+            ;;
+    esac
+done
+
+
+# Main installation orchestration function
+# Coordinates all installation steps in proper sequence
+# Respects command-line flags to skip backup/testing as requested
+# Provides comprehensive logging of installation progress and final status
+main() {
+    log INFO "Starting Emacs configuration installation..."
+    log INFO "Repository: $REPO_DIR"
+    log INFO "Target: $EMACS_DIR"
+    check_emacs
+    if ! validate_repo && [[ "$FORCE" != true ]]; then
+        log ERROR "Repository validation failed. Use --force to override."
+        exit 1
+    fi
+    if [[ "$NO_BACKUP" != true ]]; then
+        backup_existing
+    fi
+    create_symlinks
+    verify_installation
+    if [[ "$NO_TEST" != true ]]; then
+        test_configuration
+    fi
+    log SUCCESS "Installation completed successfully!"
+    log INFO "You can now start Emacs or restart if already running"
+    if [[ -f "$EMACS_DIR/config/core-validation.el" ]]; then
+        log INFO "To validate your configuration, run: emacs --batch -l ~/.emacs.d/config/core-validation.el -f run-config-validation"
+    else
+        log INFO "To debug configuration issues, run: emacs --debug-init"
+    fi
+}
+
+# Execute main function with all passed arguments
+main "$@"
