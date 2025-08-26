@@ -5,6 +5,18 @@
 (message "Loading core-ui.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; UI Elements Control:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Disable UI elements for cleaner interface
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+
+;; Modern line number display
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'relative)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load Misc Prefrences:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display the time
@@ -21,8 +33,9 @@
 (set-default 'truncate-lines t)
 ;; Turn off jumpy scroll
 (setq-default scroll-step 1)
-;; No beeps, flash on errors
-(setq-default visible-bell t)
+;; Better defaults
+(setq ring-bell-function 'ignore)  ; Better than visible-bell
+(global-hl-line-mode 1)           ; Highlight current line
 ;; Visual feedback on
 (setq-default transient-mark-mode t)
 ;; The ctrl-k kills whole line if at col 0
