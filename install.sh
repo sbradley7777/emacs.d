@@ -78,7 +78,7 @@ backup_existing() {
     local files_to_backup=("init.el" "config" "lang" "themes" "custom")
     local backed_up_files=()
     local backup_needed=false
-    
+
     # First check if any files need backing up
     for file in "${files_to_backup[@]}"; do
         local file_path="$EMACS_DIR/$file"
@@ -87,7 +87,7 @@ backup_existing() {
             break
         fi
     done
-    
+
     if [[ "$backup_needed" = true ]]; then
         if mkdir -p "$BACKUP_DIR"; then
             log INFO "Created backup directory: $BACKUP_DIR"
@@ -95,7 +95,7 @@ backup_existing() {
             log ERROR "Failed to create backup directory: $BACKUP_DIR"
             exit 1
         fi
-        
+
         for file in "${files_to_backup[@]}"; do
             local file_path="$EMACS_DIR/$file"
             if [[ -e "$file_path" ]]; then
@@ -113,7 +113,7 @@ backup_existing() {
                 fi
             fi
         done
-        
+
         log SUCCESS "Backed up conflicting files: ${backed_up_files[*]}"
         log INFO "Backup location: $BACKUP_DIR"
     else
@@ -131,7 +131,7 @@ create_symlinks() {
     log INFO "Creating symlinks in existing .emacs.d directory..."
     mkdir -p "$EMACS_DIR"
     log SUCCESS "Ensured .emacs.d directory exists"
-    
+
     local links=(
         "init.el:init.el"
         "config:config"
@@ -191,12 +191,12 @@ verify_installation() {
 # Reports success if configuration loads cleanly, warns if errors detected
 test_configuration() {
     log INFO "Testing configuration loading..."
-    
+
     # Capture the output and exit code for better diagnostics
     local temp_output
     temp_output=$(mktemp)
     local exit_code
-    
+
     # Test if Emacs can load the configuration without errors
     if emacs --batch --load "$EMACS_DIR/init.el" --eval '(message "Configuration loaded successfully")' >"$temp_output" 2>&1; then
         log SUCCESS "Configuration loads without errors"
@@ -205,7 +205,7 @@ test_configuration() {
     else
         exit_code=$?
         log WARN "Configuration test returned exit code $exit_code"
-        
+
         # Check if it's likely a package-related issue
         if grep -q -E "(package|melpa|install|download|network|timeout)" "$temp_output" 2>/dev/null; then
             log WARN "Detected package/network-related warnings (this is often normal on first run)"
@@ -217,7 +217,7 @@ test_configuration() {
             log INFO "To debug, check the output file above or run: emacs --debug-init"
             # Keep temp file for debugging (user is informed of location)
         fi
-        
+
         # Don't fail the installation for configuration warnings
         log INFO "Installation continues - configuration warnings don't prevent usage"
     fi
@@ -239,7 +239,7 @@ Options:
 
 This script will:
 1. Check for Emacs installation
-2. Validate repository structure  
+2. Validate repository structure
 3. Backup conflicting files to /tmp (unless --no-backup)
 4. Create symlinks from ~/.emacs.d to this repository
 5. Verify the installation
