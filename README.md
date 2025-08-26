@@ -8,14 +8,14 @@ To use this Emacs configuration, run the installer script which will create syml
 
 ```bash
 # Clone this repository if you haven't already
-git clone https://github.com/yourusername/emacs.d.git ~/github/emacs.d
+$ git clone https://github.com/yourusername/emacs.d.git ~/github/emacs.d
 
 # Navigate to the repository directory
-cd ~/github/emacs.d
+$ cd ~/github/emacs.d
 
 # Make the installer executable and run it
-chmod +x install.sh
-./install.sh
+$ chmod +x install.sh
+$ ./install.sh
 ```
 
 ### What the installer does
@@ -23,7 +23,7 @@ chmod +x install.sh
 The installer script will:
 
 1. **Remove existing configuration**: Any existing directories or files that conflict with the new structure will be removed
-2. **Create symlinks**: 
+2. **Create symlinks**:
    - `~/.emacs.d/init.el` → `~/github/emacs.d/init.el`
    - `~/.emacs.d/config/` → `~/github/emacs.d/config/`
    - `~/.emacs.d/lang/` → `~/github/emacs.d/lang/`
@@ -42,14 +42,14 @@ If you prefer to set up the symlinks manually:
 
 ```bash
 # Remove existing directories/files (be careful!)
-rm -rf ~/.emacs.d/init.el ~/.emacs.d/config ~/.emacs.d/lang ~/.emacs.d/themes ~/.emacs.d/custom
+$ rm -rf ~/.emacs.d/init.el ~/.emacs.d/config ~/.emacs.d/lang ~/.emacs.d/themes ~/.emacs.d/custom
 
 # Create symlinks
-ln -s ~/github/emacs.d/init.el ~/.emacs.d/init.el
-ln -s ~/github/emacs.d/config ~/.emacs.d/config
-ln -s ~/github/emacs.d/lang ~/.emacs.d/lang
-ln -s ~/github/emacs.d/themes ~/.emacs.d/themes
-ln -s ~/github/emacs.d/custom ~/.emacs.d/custom
+$ ln -s ~/github/emacs.d/init.el ~/.emacs.d/init.el
+$ ln -s ~/github/emacs.d/config ~/.emacs.d/config
+$ ln -s ~/github/emacs.d/lang ~/.emacs.d/lang
+$ ln -s ~/github/emacs.d/themes ~/.emacs.d/themes
+$ ln -s ~/github/emacs.d/custom ~/.emacs.d/custom
 ```
 
 ## Configuration Structure
