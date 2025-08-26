@@ -22,10 +22,13 @@ chmod +x install.sh
 
 The installer script will:
 
-1. **Backup existing configuration**: Any existing `~/.emacs.d/init.el` file or `~/.emacs.d/site-lisp/` directory will be backed up with a timestamp
+1. **Remove existing configuration**: Any existing directories or files that conflict with the new structure will be removed
 2. **Create symlinks**: 
    - `~/.emacs.d/init.el` → `~/github/emacs.d/init.el`
-   - `~/.emacs.d/site-lisp/` → `~/github/emacs.d/site-lisp/`
+   - `~/.emacs.d/config/` → `~/github/emacs.d/config/`
+   - `~/.emacs.d/lang/` → `~/github/emacs.d/lang/`
+   - `~/.emacs.d/themes/` → `~/github/emacs.d/themes/`
+   - `~/.emacs.d/custom/` → `~/github/emacs.d/custom/`
 
 This approach allows you to:
 - Keep your configuration in version control
@@ -38,24 +41,33 @@ This approach allows you to:
 If you prefer to set up the symlinks manually:
 
 ```bash
-# Backup existing files (optional)
-mv ~/.emacs.d/init.el ~/.emacs.d/init.el.backup
-mv ~/.emacs.d/site-lisp ~/.emacs.d/site-lisp.backup
+# Remove existing directories/files (be careful!)
+rm -rf ~/.emacs.d/init.el ~/.emacs.d/config ~/.emacs.d/lang ~/.emacs.d/themes ~/.emacs.d/custom
 
 # Create symlinks
 ln -s ~/github/emacs.d/init.el ~/.emacs.d/init.el
-ln -s ~/github/emacs.d/site-lisp ~/.emacs.d/site-lisp
+ln -s ~/github/emacs.d/config ~/.emacs.d/config
+ln -s ~/github/emacs.d/lang ~/.emacs.d/lang
+ln -s ~/github/emacs.d/themes ~/.emacs.d/themes
+ln -s ~/github/emacs.d/custom ~/.emacs.d/custom
 ```
 
 ## Configuration Structure
 
-- `init.el` - Main Emacs initialization file
-- `site-lisp/` - Custom Emacs Lisp files
-  - `functions.el` - Custom functions
-  - `hotkeys.el` - Key bindings
-  - `modes.el` - Mode configurations
-  - `prefs.el` - General preferences
-  - `filearchive.el` - File archive utilities
+- `init.el` - Main Emacs initialization file that loads all configuration modules
+- `config/` - Core configuration modules
+  - `core-packages.el` - Package management and setup
+  - `core-ui.el` - Basic UI configuration
+  - `core-editing.el` - Editing preferences and behavior
+  - `core-files.el` - File handling and backup settings
+  - `core-keybindings.el` - Global key bindings
+- `lang/` - Language-specific configurations
+  - `lang-python.el` - Python development settings
+  - `lang-yaml.el` - YAML file handling
+- `themes/` - Theme and appearance configuration
+  - `theme-config.el` - Theme setup and customization
+- `custom/` - Custom functions and utilities
+  - `functions.el` - Custom helper functions
 
 ## Usage
 
