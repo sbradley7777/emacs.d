@@ -1,7 +1,6 @@
 ;;; core-ui.el --- User Interface Configuration
 ;;; Commentary:
-;; Display preferences and UI behavior
-;;; Code:
+;;      Display preferences and UI behavior
 
 (message "Loading core-ui.el...")
 
@@ -45,6 +44,5 @@
 
 (normal-erase-is-backspace-mode 0)
 
-(message "core-ui.el loaded successfully.")
 (provide 'core-ui)
-;;; core-ui.el ends here
+(message "core-ui.el loaded successfully.")

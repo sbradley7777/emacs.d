@@ -1,7 +1,6 @@
 ;;; core-keybindings.el --- Global Key Bindings Configuration
 ;;; Commentary:
-;; Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
-;;; Code:
+;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
 (message "Loading core-keybindings.el...")
 
@@ -61,6 +60,5 @@
     (condition-case nil (scroll-up)
       (end-of-buffer (goto-char (point-max))))))
 
-(message "core-keybindings.el loaded successfully.")
 (provide 'core-keybindings)
-;;; core-keybindings.el ends here
+(message "core-keybindings.el loaded successfully.")

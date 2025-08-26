@@ -1,7 +1,6 @@
 ;;; theme-config.el --- Theme Configuration
 ;;; Commentary:
-;; Theme selection and customization
-;;; Code:
+;;      Theme selection and customization
 
 (message "Loading theme-config.el...")
 
@@ -29,6 +28,5 @@
 ;;   - https://github.com/bbatsov/zenburn-emacs
 (load-theme 'zenburn t)
 
-(message "theme-config.el loaded successfully.")
 (provide 'theme-config)
-;;; theme-config.el ends here
+(message "theme-config.el loaded successfully.")

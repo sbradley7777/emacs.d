@@ -1,7 +1,6 @@
 ;;; lang-python.el --- Python Language Configuration
 ;;; Commentary:
-;; Python and Elpy configuration
-;;; Code:
+;;      Python and Elpy configuration
 
 (message "Loading lang-python.el...")
 
@@ -26,6 +25,5 @@
             (setq indent-tabs-mode nil) ; Use spaces
             (setq python-indent 4)))   ; 4 spaces for indentation
 
-(message "lang-python.el loaded successfully.")
 (provide 'lang-python)
-;;; lang-python.el ends here
+(message "lang-python.el loaded successfully.")

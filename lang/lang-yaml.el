@@ -1,7 +1,6 @@
 ;;; lang-yaml.el --- YAML Language Configuration
 ;;; Commentary:
-;; YAML mode support and configuration
-;;; Code:
+;;      YAML mode support and configuration
 
 (message "Loading lang-yaml.el...")
 
@@ -16,6 +15,5 @@
 	  #'(lambda ()
 	      (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
-(message "lang-yaml.el loaded successfully.")
 (provide 'lang-yaml)
-;;; lang-yaml.el ends here
+(message "lang-yaml.el loaded successfully.")

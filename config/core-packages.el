@@ -1,7 +1,6 @@
 ;;; core-packages.el --- Package Management Configuration
 ;;; Commentary:
-;; Package management and MELPA repository setup
-;;; Code:
+;;      Package management and MELPA repository setup
 
 (message "Loading core-packages.el...")
 (message "Loading package management and MELPA repository.")
@@ -52,6 +51,5 @@
             (package-install package)))
       myPackages)
 
-(message "core-packages.el loaded successfully.")
 (provide 'core-packages)
-;;; core-packages.el ends here
+(message "core-packages.el loaded successfully.")

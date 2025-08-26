@@ -1,7 +1,6 @@
 ;;; core-editing.el --- Editing Behavior Configuration
 ;;; Commentary:
-;; Tabs, spaces, and general editing preferences
-;;; Code:
+;;      Tabs, spaces, and general editing preferences
 
 (message "Loading core-editing.el...")
 
@@ -11,6 +10,5 @@
 ;; - http://www.emacswiki.org/emacs/NoTabs
 (setq-default indent-tabs-mode nil)
 
-(message "core-editing.el loaded successfully.")
 (provide 'core-editing)
-;;; core-editing.el ends here
+(message "core-editing.el loaded successfully.")

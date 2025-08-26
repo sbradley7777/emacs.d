@@ -1,7 +1,6 @@
 ;;; core-files.el --- File Handling Configuration
 ;;; Commentary:
-;; File archiving, backups, and autosave settings
-;;; Code:
+;;      File archiving, backups, and autosave settings
 
 (message "Loading core-files.el...")
 
@@ -58,6 +57,5 @@
 ;; Keeps two old copies that will not be deleted.
 (setq kept-old-versions 2)
 
-(message "core-files.el loaded successfully.")
 (provide 'core-files)
-;;; core-files.el ends here
+(message "core-files.el loaded successfully.")

@@ -1,7 +1,6 @@
 ;;; functions.el --- Custom Functions
 ;;; Commentary:
-;; User-defined custom functions
-;;; Code:
+;;      User-defined custom functions
 
 (message "Loading functions.el...")
 
@@ -33,6 +32,5 @@
 ;;      (byte-compile-file (buffer-file-name))))
 ;;(add-hook 'after-save-hook 'autocompile)
 
-(message "functions.el loaded successfully.")
 (provide 'functions)
-;;; functions.el ends here
+(message "functions.el loaded successfully.")
