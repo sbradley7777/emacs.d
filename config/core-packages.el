@@ -96,5 +96,6 @@
 	     (which-key-mode 1)
 	     (setq which-key-idle-delay 0.5))
 
+;; Make this module available for loading with (require 'core-packages)
 (provide 'core-packages)
 (message "core-packages.el loaded successfully.")

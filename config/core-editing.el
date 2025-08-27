@@ -26,5 +26,6 @@
 (setq whitespace-style '(face trailing tabs tab-mark))
 (global-whitespace-mode 1)
 
+;; Make this module available for loading with (require 'core-editing)
 (provide 'core-editing)
 (message "core-editing.el loaded successfully.")

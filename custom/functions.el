@@ -22,5 +22,6 @@
     (load-file init-file)
     (message "init.el reloaded successfully")))
 
+;; Make this module available for loading with (require 'functions)
 (provide 'functions)
 (message "functions.el loaded successfully.")

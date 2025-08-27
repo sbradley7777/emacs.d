@@ -60,5 +60,6 @@
 		  (condition-case nil (scroll-up)
 		    (end-of-buffer (goto-char (point-max))))))
 
+;; Make this module available for loading with (require 'core-keybindings)
 (provide 'core-keybindings)
 (message "core-keybindings.el loaded successfully.")

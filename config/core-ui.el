@@ -69,5 +69,6 @@
 
 (normal-erase-is-backspace-mode 0)
 
+;; Make this module available for loading with (require 'core-ui)
 (provide 'core-ui)
 (message "core-ui.el loaded successfully.")

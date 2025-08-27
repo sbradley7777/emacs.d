@@ -17,5 +17,6 @@
 ;; Load the theme.
 (load-theme 'zenburn t)
 
+;; Make this module available for loading with (require 'theme-config)
 (provide 'theme-config)
 (message "theme-config.el loaded successfully.")

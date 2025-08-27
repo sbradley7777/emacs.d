@@ -15,5 +15,6 @@
 	  #'(lambda ()
 	      (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
+;; Make this module available for loading with (require 'lang-yaml)
 (provide 'lang-yaml)
 (message "lang-yaml.el loaded successfully.")

@@ -57,5 +57,6 @@
 ;; Keeps two old copies that will not be deleted.
 (setq kept-old-versions 2)
 
+;; Make this module available for loading with (require 'core-files)
 (provide 'core-files)
 (message "core-files.el loaded successfully.")

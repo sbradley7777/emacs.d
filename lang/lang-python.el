@@ -13,5 +13,6 @@
             (setq indent-tabs-mode nil) ; Use spaces
             (setq python-indent 4)))   ; 4 spaces for indentation
 
+;; Make this module available for loading with (require 'lang-python)
 (provide 'lang-python)
 (message "lang-python.el loaded successfully.")
