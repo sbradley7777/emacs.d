@@ -23,7 +23,7 @@
 (display-time)
 ;; Dont show the GNU splash screen
 (setq inhibit-startup-message t)
-;; Make searches case insenstive
+;; Make searches case insensitive
 (setq case-fold-search t)
 ;; Current line & column number of cursor in the mode line
 (line-number-mode 1)

@@ -5,7 +5,7 @@
 (message "Loading core-keybindings.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Keyboard bahavior and Custom HotKeys (aka: keyboard-modifiers or shortcuts):
+;; Keyboard behavior and Custom HotKeys (aka: keyboard-modifiers or shortcuts):
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; List of hotkeys:  http://www.math.uh.edu/~bgb/emacs_keys.html

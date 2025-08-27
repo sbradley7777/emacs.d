@@ -28,7 +28,7 @@ $ ./install.sh [OPTIONS]
 Options:
     -h, --help      Show help message
     --no-backup     Skip backing up conflicting files
-    --no-test       Skip configuration testing  
+    --no-test       Skip configuration testing
     --force         Force installation even if validation fails
 ```
 
