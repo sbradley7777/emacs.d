@@ -53,6 +53,7 @@
     flycheck
     pylint
     which-key
+    pyvenv
     )
   )
 
