@@ -18,6 +18,7 @@ $ chmod +x install.sh
 $ ./install.sh
 ```
 
+
 ### Installation Options
 
 The installer supports several command-line options:
