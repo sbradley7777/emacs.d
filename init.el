@@ -104,8 +104,9 @@ DESCRIPTION is an optional human-readable description."
 (safe-load-config 'lang-python "Python development")
 (safe-load-config 'lang-yaml "YAML file support")
 
-;; Custom functions
+;; Custom functions and aliases
 (safe-load-config 'functions "Custom helper functions")
+(safe-load-config 'aliases "Function aliases and shortcuts")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI tweaks via emacs menu:
