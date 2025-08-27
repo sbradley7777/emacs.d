@@ -7,25 +7,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configure the theme
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; List of themes
-;;   - https://melpa.org/#/?q=theme&sort=downloads&asc=false
-;; Set variables for theme.
-;;   - https://github.com/nashamri/spacemacs-theme?tab=readme-ov-file#override-themes-colors
-;;(custom-set-variables
-;; '(spacemacs-theme-comment-bg nil)
-;; '(spacemacs-theme-custom-colors (quote ((bg1 . "#000000")))))
-;;(custom-set-faces)
-;; Load the theme.
-;;   - https://github.com/nashamri/spacemacs-theme
-;; (load-theme 'spacemacs-dark t)
-
+;; Theme
+;;   - https://github.com/bbatsov/zenburn-emacs
 ;; Set variables for theme.
 ;;  - https://github.com/bbatsov/zenburn-emacs?tab=readme-ov-file#customization
 (setq zenburn-override-colors-alist
       '(("zenburn-bg"  . "#000000")
         ))
 ;; Load the theme.
-;;   - https://github.com/bbatsov/zenburn-emacs
 (load-theme 'zenburn t)
 
 (provide 'theme-config)

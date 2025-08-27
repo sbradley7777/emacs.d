@@ -12,25 +12,15 @@
   (y-or-n-p arg))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Reload .emacs on the Fly:
+;; Reload init.el on the Fly:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun reload-dot-emacs()
+(defun reload-init-file()
   (interactive)
-  (if(bufferp (get-file-buffer ".emacs"))
-      (save-buffer(get-buffer ".emacs")))
-  (load-file "~/.emacs")
-  (message ".emacs reloaded successfully"))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Compile ~/.emacs:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(defun autocompile nil
-;;  "compile itself if ~/.emacs"
-;;  (interactive)
-;;  (require 'bytecomp)
-;;  (if (string= (buffer-file-name) (expand-file-name (concat default-directory ".emacs")))
-;;      (byte-compile-file (buffer-file-name))))
-;;(add-hook 'after-save-hook 'autocompile)
+  (let ((init-file (expand-file-name "init.el" user-emacs-directory)))
+    (if (bufferp (get-file-buffer init-file))
+        (save-buffer (get-buffer (file-name-nondirectory init-file))))
+    (load-file init-file)
+    (message "init.el reloaded successfully")))
 
 (provide 'functions)
 (message "functions.el loaded successfully.")
