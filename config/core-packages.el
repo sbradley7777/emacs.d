@@ -35,7 +35,8 @@
 ;;   - https://github.com/nashamri/spacemacs-theme
 ;;   - https://github.com/jorgenschaefer/elpy?tab=readme-ov-file
 (defvar myPackages
-  '(spacemacs-theme
+  '(use-package
+    spacemacs-theme
     zenburn-theme
     yaml-mode
     elpy
@@ -45,11 +46,55 @@
     )
   )
 
-;; Scans the list in myPackages and if the package listed is not already installed, then install it.
+;; Install packages from myPackages list (including use-package)
 (mapc #'(lambda (package)
           (unless (package-installed-p package)
             (package-install package)))
       myPackages)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configure use-package
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(eval-when-compile
+  (require 'use-package))
+
+;; Always ensure packages are installed
+(setq use-package-always-ensure t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package configurations using use-package
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package spacemacs-theme
+	     :defer t)
+
+(use-package zenburn-theme
+	     :defer t)
+
+(use-package yaml-mode
+	     :mode ("\\.ya?ml\\'" . yaml-mode))
+
+(use-package flycheck
+	     :hook (prog-mode . flycheck-mode))
+
+(use-package pylint
+	     :after python)
+
+(use-package elpy
+	     :init
+	     (elpy-enable)
+	     :config
+	     (setq python-shell-interpreter "/usr/bin/python3")
+	     (setq elpy-rpc-python-command "/usr/bin/python3")
+	     ;; Use flycheck instead of flymake
+	     (when (require 'flycheck nil t)
+	       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+	       (add-hook 'elpy-mode-hook 'flycheck-mode)
+	       (flycheck-add-next-checker 'python-flake8 'python-pylint)))
+
+(use-package which-key
+	     :config
+	     (which-key-mode 1)
+	     (setq which-key-idle-delay 0.5))
 
 (provide 'core-packages)
 (message "core-packages.el loaded successfully.")

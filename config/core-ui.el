@@ -67,11 +67,6 @@
 (setq recentf-max-saved-items 50)
 (setq recentf-exclude '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
 
-;; Enable which-key for keybinding discovery
-(when (require 'which-key nil t)
-  (which-key-mode 1)
-  (setq which-key-idle-delay 0.5))
-
 (normal-erase-is-backspace-mode 0)
 
 (provide 'core-ui)
