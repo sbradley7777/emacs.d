@@ -83,8 +83,13 @@
 	     :init
 	     (elpy-enable)
 	     :config
-	     (setq python-shell-interpreter "/usr/bin/python3")
-	     (setq elpy-rpc-python-command "/usr/bin/python3")
+	     ;; Dynamically find Python executable for better portability
+	     (setq python-shell-interpreter (or (executable-find "python3")
+	                                        (executable-find "python")
+	                                        "python3"))
+	     (setq elpy-rpc-python-command (or (executable-find "python3")
+	                                       (executable-find "python")
+	                                       "python3"))
 	     ;; Use flycheck instead of flymake
 	     (when (require 'flycheck nil t)
 	       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
