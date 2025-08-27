@@ -19,20 +19,18 @@
 
 ;; The init will load all the packages into the load path.
 (package-initialize)
+;; Secure keyring management - pin keyring updates to GNU ELPA for security
 (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
-;; Install or update the key required for "melpa".
-;;   - https://stackoverflow.com/questions/5701388/where-can-i-find-the-public-key-for-gnu-emacs
+
+;; Ensure GNU ELPA keyring is available before installing other packages
+;; This approach maintains security by keeping signature verification enabled
 (unless (package-installed-p 'gnu-elpa-keyring-update)
-  ;; Save default value of `package-check-signature' variable
-  (defvar package-check-signature-default package-check-signature)
-  ;; Disable signature checking
-  (setq package-check-signature nil)
-  ;; Download package archives (without signature checking)
+  ;; Refresh package contents to get latest keyring package info
   (package-refresh-contents)
-  ;; Install package `gnu-elpa-keyring-update' (without signature checking)
-  (package-install 'gnu-elpa-keyring-update t)
-  ;; Restore `package-check-signature' value to default.
-  (setq package-check-signature package-check-signature-default))
+  ;; Install the keyring update package from GNU ELPA (signatures are trusted)
+  (package-install 'gnu-elpa-keyring-update)
+  ;; The keyring update will automatically update GPG keys for package verification
+  (message "GNU ELPA keyring updated for secure package verification"))
 ;; If there are no archived package contents, refresh them
 (when (not package-archive-contents)
   (package-refresh-contents))
