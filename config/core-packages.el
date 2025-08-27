@@ -42,6 +42,7 @@
     elpy
     flycheck
     pylint
+    which-key
     )
   )
 
