@@ -37,24 +37,75 @@
 (add-to-list 'load-path custom-dir)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load configuration modules in order
+;; Error handling and robustness
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar init-start-time (current-time)
+  "Time when Emacs initialization started.")
+
+(defvar config-load-results '()
+  "List of configuration loading results for diagnostics.")
+
+(defun safe-load-config (config-name &optional description)
+  "Safely load a configuration module with comprehensive error handling.
+CONFIG-NAME is the module to load.
+DESCRIPTION is an optional human-readable description."
+  (let ((load-time (current-time))
+        (desc (or description (symbol-name config-name))))
+    (condition-case err
+        (progn
+          (require config-name)
+          (let ((elapsed (float-time (time-subtract (current-time) load-time))))
+            (add-to-list 'config-load-results
+                         (list config-name 'success elapsed desc))
+            (message "✓ Loaded %s (%.3f seconds)" desc elapsed)
+            t))
+      (error
+       (let ((elapsed (float-time (time-subtract (current-time) load-time))))
+         (add-to-list 'config-load-results
+                      (list config-name 'failed elapsed desc (error-message-string err)))
+         (message "✗ Failed to load %s: %s" desc (error-message-string err))
+         (message "  Consider checking: file exists, syntax is valid, dependencies available")
+         nil)))))
+
+(defun show-config-diagnostics ()
+  "Display configuration loading diagnostics."
+  (let ((total-time (float-time (time-subtract (current-time) init-start-time)))
+        (successful 0)
+        (failed 0))
+    (message "\n=== Configuration Loading Summary ===")
+    (dolist (result (reverse config-load-results))
+      (let ((name (nth 0 result))
+            (status (nth 1 result))
+            (time (nth 2 result))
+            (desc (nth 3 result)))
+        (if (eq status 'success)
+            (progn
+              (setq successful (1+ successful))
+              (message "  ✓ %s (%.3fs)" desc time))
+          (setq failed (1+ failed))
+          (message "  ✗ %s (%.3fs) - %s" desc time (nth 4 result)))))
+    (message "=== Total: %d successful, %d failed (%.3fs total) ==="
+             successful failed total-time)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load configuration modules in order with error handling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core configuration (order matters)
-(require 'core-packages)      ; Package management first
-(require 'core-ui)           ; Basic UI setup
-(require 'core-editing)      ; Editing preferences
-(require 'core-files)        ; File handling
-(require 'core-keybindings)  ; Global keybindings
+(safe-load-config 'core-packages "Package management")    ; Package management first
+(safe-load-config 'core-ui "Basic UI setup")           ; Basic UI setup
+(safe-load-config 'core-editing "Editing preferences") ; Editing preferences
+(safe-load-config 'core-files "File handling")         ; File handling
+(safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
 
 ;; Theme configuration
-(require 'theme-config)
+(safe-load-config 'theme-config "Theme configuration")
 
 ;; Language-specific configurations
-(require 'lang-python)
-(require 'lang-yaml)
+(safe-load-config 'lang-python "Python development")
+(safe-load-config 'lang-yaml "YAML file support")
 
 ;; Custom functions
-(require 'functions)
+(safe-load-config 'functions "Custom helper functions")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI tweaks via emacs menu:
@@ -64,6 +115,8 @@
 (setq custom-file "~/.emacs.d/custom_prefs.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Last message before initialization is complete.
+;; Initialization complete - show diagnostics
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Display detailed loading diagnostics
+(show-config-diagnostics)
 (message "init.el loaded successfully.")
