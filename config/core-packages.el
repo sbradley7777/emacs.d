@@ -17,8 +17,11 @@
         ("gnu" . 15)
         ("melpa" . 10)))
 
-;; The init will load all the packages into the load path.
-(package-initialize)
+;; Package initialization - check if already initialized to prevent duplicate calls
+;; This should eliminate the "Unnecessary call to 'package-initialize'" warning
+(require 'package)
+(unless package--initialized
+  (package-initialize))
 ;; Secure keyring management - pin keyring updates to GNU ELPA for security
 (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
 
