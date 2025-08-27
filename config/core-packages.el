@@ -6,8 +6,17 @@
 (message "Loading package management and MELPA repository.")
 (require 'cl-lib)
 (require 'package)
-;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Enable both MELPA repositories for maximum package availability
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
+;; Set package archive priorities (higher number = higher priority)
+;; Prefer stable packages when available, fallback to development versions
+(setq package-archive-priorities
+      '(("melpa-stable" . 20)
+        ("gnu" . 15)
+        ("melpa" . 10)))
+
 ;; The init will load all the packages into the load path.
 (package-initialize)
 (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
