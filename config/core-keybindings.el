@@ -51,14 +51,14 @@
 ;; http://snarfed.org/emacs_page_up_page_down
 ;; Page down the buffer.
 (global-set-key [f11]
-  (lambda () (interactive)
-    (condition-case nil (scroll-down)
-      (beginning-of-buffer (goto-char (point-min))))))
+		(lambda () (interactive)
+		  (condition-case nil (scroll-down)
+		    (beginning-of-buffer (goto-char (point-min))))))
 ;; Page up the buffer.
 (global-set-key [f12]
-  (lambda () (interactive)
-    (condition-case nil (scroll-up)
-      (end-of-buffer (goto-char (point-max))))))
+		(lambda () (interactive)
+		  (condition-case nil (scroll-up)
+		    (end-of-buffer (goto-char (point-max))))))
 
 (provide 'core-keybindings)
 (message "core-keybindings.el loaded successfully.")
