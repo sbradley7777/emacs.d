@@ -105,6 +105,7 @@ DESCRIPTION is an optional human-readable description."
 (safe-load-config 'theme-config "Theme configuration")
 
 ;; Language-specific configurations
+(safe-load-config 'lang-lisp "Emacs Lisp development")
 (safe-load-config 'lang-python "Python development")
 (safe-load-config 'lang-yaml "YAML file support")
 
