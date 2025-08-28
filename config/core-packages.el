@@ -54,7 +54,6 @@
     pylint
     which-key
     pyvenv
-    elisp-format
     )
   )
 
@@ -113,8 +112,6 @@
 	     (which-key-mode 1)
 	     (setq which-key-idle-delay 0.5))
 
-(use-package elisp-format
-	     :commands elisp-format-buffer elisp-format-region)
 
 ;; Make this module available for loading with (require 'core-packages)
 (provide 'core-packages)

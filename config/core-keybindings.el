@@ -31,29 +31,6 @@
 ;; Delete all the extra whitespaces at end of line
 (global-set-key [f6] 'delete-trailing-whitespace)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Code formatting keybindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Format current region or buffer for Emacs Lisp
-(global-set-key (kbd "C-M-\\") 'indent-region)
-;; Format entire Emacs Lisp buffer (when elisp-format is available)
-(global-set-key (kbd "C-c f b")
-                (lambda ()
-                  (interactive)
-                  (if (and (eq major-mode 'emacs-lisp-mode)
-                           (fboundp 'elisp-format-buffer))
-                      (elisp-format-buffer)
-                    (indent-region (point-min) (point-max)))))
-;; Format current region for Emacs Lisp
-(global-set-key (kbd "C-c f r")
-                (lambda ()
-                  (interactive)
-                  (if (and (eq major-mode 'emacs-lisp-mode)
-                           (fboundp 'elisp-format-region)
-                           (use-region-p))
-                      (elisp-format-region (region-beginning) (region-end))
-                    (when (use-region-p)
-                      (indent-region (region-beginning) (region-end))))))
 
 ;; Keyboard commands for controlling the buffer.
 ;;

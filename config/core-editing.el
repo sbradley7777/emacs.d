@@ -26,17 +26,6 @@
 (setq whitespace-style '(face trailing tabs tab-mark))
 (global-whitespace-mode 1)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Automatic formatting for Emacs Lisp
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun auto-format-elisp-buffer ()
-  "Automatically format Emacs Lisp buffer before saving."
-  (when (eq major-mode 'emacs-lisp-mode)
-    (delete-trailing-whitespace)
-    (indent-region (point-min) (point-max))))
-
-;; Enable automatic formatting on save for Emacs Lisp files
-(add-hook 'before-save-hook 'auto-format-elisp-buffer)
 
 ;; Make this module available for loading with (require 'core-editing)
 (provide 'core-editing)
