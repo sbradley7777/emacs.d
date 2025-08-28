@@ -59,8 +59,7 @@
 (setq vc-follow-symlinks t)
 ;; Always end a file with a newline, t to enable
 (setq require-final-newline t)
-;; Wrap at col 70
-(setq-default fill-column 127)
+;; Note: fill-column is configured in core-editing.el
 ;; Show matching parenthesis
 (show-paren-mode 1)
 
