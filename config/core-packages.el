@@ -10,29 +10,23 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
-;; Set package archive priorities (higher number = higher priority)
-;; Prefer stable packages when available, fallback to development versions
+;; Set package archive priorities (higher number = higher priority) - prefer stable packages, fallback to development
 (setq package-archive-priorities
       '(("melpa-stable" . 20)
         ("gnu" . 15)
         ("melpa" . 10)))
 
-;; Package initialization - check if already initialized to prevent duplicate calls
-;; This should eliminate the "Unnecessary call to 'package-initialize'" warning
+;; Package initialization - check if already initialized to prevent duplicate calls and eliminate warnings
 (require 'package)
 (unless package--initialized
   (package-initialize))
 ;; Secure keyring management - pin keyring updates to GNU ELPA for security
 (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
 
-;; Ensure GNU ELPA keyring is available before installing other packages
-;; This approach maintains security by keeping signature verification enabled
+;; Ensure GNU ELPA keyring is available before installing other packages (maintains security with signature verification)
 (unless (package-installed-p 'gnu-elpa-keyring-update)
-  ;; Refresh package contents to get latest keyring package info
-  (package-refresh-contents)
-  ;; Install the keyring update package from GNU ELPA (signatures are trusted)
-  (package-install 'gnu-elpa-keyring-update)
-  ;; The keyring update will automatically update GPG keys for package verification
+  (package-refresh-contents)                               ; Refresh package contents to get latest keyring info
+  (package-install 'gnu-elpa-keyring-update)               ; Install keyring update package from GNU ELPA
   (message "GNU ELPA keyring updated for secure package verification"))
 ;; If there are no archived package contents, refresh them
 (when (not package-archive-contents)
@@ -41,9 +35,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Install and load packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; myPackages contains a list of package names
-;;   - https://github.com/nashamri/spacemacs-theme
-;;   - https://github.com/jorgenschaefer/elpy?tab=readme-ov-file
+;; Package list - spacemacs-theme: https://github.com/nashamri/spacemacs-theme | elpy: https://github.com/jorgenschaefer/elpy
 (defvar myPackages
   '(use-package
     spacemacs-theme
@@ -75,32 +67,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package configurations using use-package
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package spacemacs-theme
-             :defer t)
-
-(use-package zenburn-theme
-             :defer t)
-
-(use-package yaml-mode
-             :mode ("\\.ya?ml\\'" . yaml-mode))
-
-(use-package flycheck
-             :hook (prog-mode . flycheck-mode))
-
-(use-package pylint
-             :after python)
+(use-package spacemacs-theme :defer t)                     ; Deferred loading for spacemacs theme
+(use-package zenburn-theme :defer t)                       ; Deferred loading for zenburn theme
+(use-package yaml-mode :mode ("\\.ya?ml\\'" . yaml-mode)) ; YAML file support
+(use-package flycheck :hook (prog-mode . flycheck-mode))  ; Syntax checking for programming modes
+(use-package pylint :after python)                        ; Python linting support
 
 (use-package elpy
              :init
              (elpy-enable)
              :config
              ;; Dynamically find Python executable for better portability
-             (setq python-shell-interpreter (or (executable-find "python3")
-                                                (executable-find "python")
-                                                "python3"))
-             (setq elpy-rpc-python-command (or (executable-find "python3")
-                                               (executable-find "python")
-                                               "python3"))
+             (setq python-shell-interpreter (or (executable-find "python3") (executable-find "python") "python3")
+                   elpy-rpc-python-command (or (executable-find "python3") (executable-find "python") "python3"))
              ;; Use flycheck instead of flymake
              (when (require 'flycheck nil t)
                (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
