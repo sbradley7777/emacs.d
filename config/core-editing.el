@@ -21,9 +21,21 @@
               indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Show whitespace
+;; Line length and fill column configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq whitespace-style '(face trailing tabs tab-mark))
+;; Set maximum line length to 127 characters
+(setq-default fill-column 127)
+
+;; Enable visual line indicators for long lines
+(setq whitespace-line-column 127)
+
+;; Display fill column indicator (vertical line at column 127)
+(global-display-fill-column-indicator-mode 1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Show whitespace and long lines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq whitespace-style '(face trailing tabs tab-mark lines-tail))
 (global-whitespace-mode 1)
 
 
