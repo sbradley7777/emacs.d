@@ -74,7 +74,7 @@
                                       pyvenv-virtual-env
                                       (string-equal pyvenv-virtual-env venv-path))))
                    (pyvenv-activate venv-path)
-                   ;; Update python-shell-interpreter to use the virtual environment's Python
+                   ;; Update both Python shell and Elpy RPC to use the virtual environment's Python
                    (let ((venv-python (expand-file-name "bin/python" venv-path))
                          (project-name (file-name-nondirectory
                                         (directory-file-name
@@ -82,7 +82,8 @@
                                           (directory-file-name venv-path))))))
                      (when (file-executable-p venv-python)
                        (setq python-shell-interpreter venv-python)
-                       (message "Updated Python interpreter to: %s" python-shell-interpreter))
+                       (setq elpy-rpc-python-command venv-python)
+                       (message "Updated Python interpreter and Elpy RPC to: %s" python-shell-interpreter))
                      ;; Set the project name globally for modeline display
                      (setq-default pyvenv-project-name project-name)
                      (setq pyvenv-project-name project-name)
