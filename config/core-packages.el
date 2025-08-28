@@ -76,41 +76,41 @@
 ;; Package configurations using use-package
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package spacemacs-theme
-	     :defer t)
+             :defer t)
 
 (use-package zenburn-theme
-	     :defer t)
+             :defer t)
 
 (use-package yaml-mode
-	     :mode ("\\.ya?ml\\'" . yaml-mode))
+             :mode ("\\.ya?ml\\'" . yaml-mode))
 
 (use-package flycheck
-	     :hook (prog-mode . flycheck-mode))
+             :hook (prog-mode . flycheck-mode))
 
 (use-package pylint
-	     :after python)
+             :after python)
 
 (use-package elpy
-	     :init
-	     (elpy-enable)
-	     :config
-	     ;; Dynamically find Python executable for better portability
-	     (setq python-shell-interpreter (or (executable-find "python3")
-	                                        (executable-find "python")
-	                                        "python3"))
-	     (setq elpy-rpc-python-command (or (executable-find "python3")
-	                                       (executable-find "python")
-	                                       "python3"))
-	     ;; Use flycheck instead of flymake
-	     (when (require 'flycheck nil t)
-	       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-	       (add-hook 'elpy-mode-hook 'flycheck-mode)
-	       (flycheck-add-next-checker 'python-flake8 'python-pylint)))
+             :init
+             (elpy-enable)
+             :config
+             ;; Dynamically find Python executable for better portability
+             (setq python-shell-interpreter (or (executable-find "python3")
+                                                (executable-find "python")
+                                                "python3"))
+             (setq elpy-rpc-python-command (or (executable-find "python3")
+                                               (executable-find "python")
+                                               "python3"))
+             ;; Use flycheck instead of flymake
+             (when (require 'flycheck nil t)
+               (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+               (add-hook 'elpy-mode-hook 'flycheck-mode)
+               (flycheck-add-next-checker 'python-flake8 'python-pylint)))
 
 (use-package which-key
-	     :config
-	     (which-key-mode 1)
-	     (setq which-key-idle-delay 0.5))
+             :config
+             (which-key-mode 1)
+             (setq which-key-idle-delay 0.5))
 
 
 ;; Make this module available for loading with (require 'core-packages)
