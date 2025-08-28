@@ -61,7 +61,6 @@
 	     (defun pyvenv-auto-activate ()
 	       "Automatically activate virtual environment if found in project."
 	       (interactive)
-	       (message "PYVENV DEBUG: Starting auto-activation check...")
 	       (let* ((current-dir (expand-file-name default-directory))
 		      (git-root (locate-dominating-file current-dir ".git"))
 		      (pyproject-root (locate-dominating-file current-dir "pyproject.toml"))
@@ -69,59 +68,34 @@
 		      (project-root (or git-root pyproject-root requirements-root current-dir))
 		      (venv-path (when project-root
 				   (expand-file-name "venv" project-root))))
-		 (message "PYVENV DEBUG: current-dir = %s" current-dir)
-		 (message "PYVENV DEBUG: git-root = %s" git-root)
-		 (message "PYVENV DEBUG: pyproject-root = %s" pyproject-root)
-		 (message "PYVENV DEBUG: requirements-root = %s" requirements-root)
-		 (message "PYVENV DEBUG: project-root = %s" project-root)
-		 (message "PYVENV DEBUG: venv-path = %s" venv-path)
-		 (message "PYVENV DEBUG: venv exists? = %s" (when venv-path (file-directory-p venv-path)))
-		 (message "PYVENV DEBUG: pyvenv-virtual-env bound? = %s" (boundp 'pyvenv-virtual-env))
-		 (message "PYVENV DEBUG: current pyvenv-virtual-env = %s"
-			  (if (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
-			      pyvenv-virtual-env
-			    "nil"))
-		 (if (not venv-path)
-		     (message "PYVENV DEBUG: No venv-path found")
-		   (if (not (file-directory-p venv-path))
-		       (message "PYVENV DEBUG: venv directory does not exist: %s" venv-path)
-		     (if (and (boundp 'pyvenv-virtual-env)
-			      pyvenv-virtual-env
-			      (string-equal pyvenv-virtual-env venv-path))
-			 (message "PYVENV DEBUG: Already activated: %s" venv-path)
-		       (progn
-			 (message "PYVENV DEBUG: Activating virtual environment: %s" venv-path)
-			 (pyvenv-activate venv-path)
-			 ;; Update python-shell-interpreter to use the virtual environment's Python
-			 (let ((venv-python (expand-file-name "bin/python" venv-path))
-			       (project-name (file-name-nondirectory
-					      (directory-file-name
-					       (file-name-directory
-						(directory-file-name venv-path))))))
-			   (when (file-executable-p venv-python)
-			     (setq python-shell-interpreter venv-python)
-			     (message "PYVENV DEBUG: Updated python-shell-interpreter to: %s" python-shell-interpreter)
-			     )
-			   ;; Set the project name globally for modeline display
-			   (setq-default pyvenv-project-name project-name)
-			   (setq pyvenv-project-name project-name)  ; Also set locally for immediate effect
-			   (message "PYVENV DEBUG: Set pyvenv-project-name to: %s" pyvenv-project-name)
-			   (message "PYVENV DEBUG: Modeline should show: [venv: %s]" project-name)
-			   ;; Force modeline update
-			   (force-mode-line-update t))
-			 (message "PYVENV DEBUG: SUCCESS! Virtual environment activated: %s" venv-path)
-			 (message "PYVENV DEBUG: New pyvenv-virtual-env = %s" pyvenv-virtual-env)
-			 ))))))
+		 (when (and venv-path
+			    (file-directory-p venv-path)
+			    (not (and (boundp 'pyvenv-virtual-env)
+				      pyvenv-virtual-env
+				      (string-equal pyvenv-virtual-env venv-path))))
+		   (pyvenv-activate venv-path)
+		   ;; Update python-shell-interpreter to use the virtual environment's Python
+		   (let ((venv-python (expand-file-name "bin/python" venv-path))
+			 (project-name (file-name-nondirectory
+					(directory-file-name
+					 (file-name-directory
+					  (directory-file-name venv-path))))))
+		     (when (file-executable-p venv-python)
+		       (setq python-shell-interpreter venv-python)
+		       (message "Updated Python interpreter to: %s" python-shell-interpreter))
+		     ;; Set the project name globally for modeline display
+		     (setq-default pyvenv-project-name project-name)
+		     (setq pyvenv-project-name project-name)
+		     ;; Force modeline update
+		     (force-mode-line-update t))
+		   (message "Activated virtual environment: %s" venv-path))))
 
 	     ;; Auto-activate when opening Python files
 	     (add-hook 'python-mode-hook
-		       (lambda ()
-			 (message "HOOK DEBUG: python-mode-hook triggered for file: %s" (buffer-file-name))
-			 (pyvenv-auto-activate)))
+		       #'pyvenv-auto-activate)
 	     (add-hook 'find-file-hook
 		       (lambda ()
 			 (when (derived-mode-p 'python-mode)
-			   (message "HOOK DEBUG: find-file-hook triggered for Python file: %s" (buffer-file-name))
 			   (pyvenv-auto-activate))))
 
 	     ;; Ensure modeline updates when switching buffers
