@@ -9,7 +9,7 @@
 ;; http://snarfed.org/gnu_emacs_backup_files and
 ;; http://stackoverflow.com/questions/2020941/emacs-newbie-how-can-i-hide-the-buffer-files-that-emacs-creates
 ;;
-;; Autosave files: ~/.emacs.d/autosaves/ | Backup files: ~/.emacs_archive/backups/
+;; Autosave files: ~/.emacs.d/autosaves/ | Backup files: ~/.emacs.d/backups/
 ;; Directories are automatically created if they don't exist.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -26,9 +26,9 @@
 (make-directory autosave-dir t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Backup files (example: foo~) -> ~/.emacs_archive/backups/
+;; Backup files (example: foo~) -> ~/.emacs.d/backups/
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar backup-dir (expand-file-name "~/.emacs_archive/backups/"))
+(defvar backup-dir (expand-file-name "~/.emacs.d/backups/"))
 (setq backup-directory-alist (list (cons ".*" backup-dir)))
 ;; Create the backups directory if it does not exist.
 (make-directory backup-dir t)
