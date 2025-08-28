@@ -93,7 +93,8 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load configuration modules in order with error handling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core configuration (order matters)
-(safe-load-config 'core-packages "Package management")       ; Package management first
+(safe-load-config 'core-package-manager "Package system setup")  ; Package system setup first
+(safe-load-config 'core-packages "Package declarations")         ; Package declarations and configurations
 (safe-load-config 'core-ui "Basic UI setup")                 ; Basic UI setup
 (safe-load-config 'core-editing "Editing preferences")       ; Editing preferences
 (safe-load-config 'core-files "File handling")               ; File handling
