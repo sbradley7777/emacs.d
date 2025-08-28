@@ -33,18 +33,16 @@
 ;; Create the backups directory if it does not exist.
 (make-directory backup-dir t)
 
-;; Various backup preferences.
-(setq make-backup-files t)
-(setq backup-by-copying t)
-(setq backup-by-copying-when-mismatch t)
-(setq backup-by-copying-when-linked t)
-(setq version-control t)
-;; Remove any backups that are either not the 2 oldest copies or the 3 newest copies.
-(setq-default delete-old-versions t)
-;; Keeps at most 3 copies that are newer than the 2 oldest copies. This means there could be 5 total backups at one time.
-(setq kept-new-versions 3)
-;; Keeps two old copies that will not be deleted.
-(setq kept-old-versions 2)
+;; Backup preferences configuration
+(setq make-backup-files t                    ; Enable backup files
+      backup-by-copying t                    ; Copy files instead of renaming
+      backup-by-copying-when-mismatch t      ; Copy when ownership/permissions would change
+      backup-by-copying-when-linked t        ; Copy when file has multiple hard links
+      version-control t)                     ; Enable numbered backups
+;; Backup version management - maintains 5 total backups (2 old + 3 new)
+(setq-default delete-old-versions t)         ; Remove backups outside the 2 oldest/3 newest range
+(setq kept-new-versions 3                    ; Keep 3 newest backup versions
+      kept-old-versions 2)                   ; Keep 2 oldest backup versions
 
 ;; Make this module available for loading with (require 'core-files)
 (provide 'core-files)
