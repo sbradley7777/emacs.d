@@ -105,7 +105,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 
 ;; Language-specific configurations
 (safe-load-config 'lang-lisp "Emacs Lisp development")
-(safe-load-config 'lang-python "Python development")
+(safe-load-config 'lang-python-core "Python core editing")
+(safe-load-config 'lang-python-venv "Python virtual environments")
+(safe-load-config 'lang-python-tools "Python development tools")
 (safe-load-config 'lang-yaml "YAML file support")
 
 ;; Custom functions and aliases

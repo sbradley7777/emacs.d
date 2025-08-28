@@ -1,17 +1,9 @@
-;;; lang-python.el --- Python Language Configuration -*- lexical-binding: t -*-
+;;; lang-python-venv.el --- Python Virtual Environment Management -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      Python and Elpy configuration
+;;      Complete virtual environment management with pyvenv integration,
+;;      auto-activation, modeline display, and project detection.
 
-(message "Loading lang-python.el...")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Python-specific indentation settings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-hook 'python-mode-hook
-          (lambda ()
-            (setq python-indent-guess-indent-offset t) ; Attempts to guess indentation offset based on existing file indentation
-            (setq indent-tabs-mode nil)                ; Use spaces
-            (setq python-indent 4)))                   ; 4 spaces for indentation
+(message "Loading lang-python-venv.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Virtual environment support
@@ -86,13 +78,6 @@
              ;; Ensure modeline updates when switching buffers
              (add-hook 'buffer-list-update-hook (lambda () (when (and pyvenv-virtual-env pyvenv-project-name) (force-mode-line-update)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Python shell integration improvements
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Python shell improvements: disable native completion (prevents hangs) and prompt detection warnings (cleaner REPL)
-(setq python-shell-completion-native-enable nil
-      python-shell-prompt-detect-failure-warning nil)
-
-;; Make this module available for loading with (require 'lang-python)
-(provide 'lang-python)
-(message "lang-python.el loaded successfully.")
+;; Make this module available for loading with (require 'lang-python-venv)
+(provide 'lang-python-venv)
+(message "lang-python-venv.el loaded successfully.")

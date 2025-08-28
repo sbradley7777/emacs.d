@@ -35,18 +35,7 @@
 (use-package flycheck :hook (prog-mode . flycheck-mode))  ; Syntax checking for programming modes
 (use-package pylint :after python)                        ; Python linting support
 
-(use-package elpy
-             :init
-             (elpy-enable)
-             :config
-             ;; Dynamically find Python executable for better portability
-             (setq python-shell-interpreter (or (executable-find "python3") (executable-find "python") "python3")
-                   elpy-rpc-python-command (or (executable-find "python3") (executable-find "python") "python3"))
-             ;; Use flycheck instead of flymake
-             (when (require 'flycheck nil t)
-               (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-               (add-hook 'elpy-mode-hook 'flycheck-mode)
-               (flycheck-add-next-checker 'python-flake8 'python-pylint)))
+;; Note: Elpy configuration moved to lang-python-tools.el for better organization
 
 (use-package which-key
              :config
