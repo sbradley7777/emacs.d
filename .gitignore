@@ -46,6 +46,7 @@ Thumbs.db
 # Emacs artifacts.
 *~
 \#*\#
+*.elc
 
 # Configuration files and caches.
 .mypy_cache/
