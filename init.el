@@ -23,7 +23,7 @@
 ;; Restore normal values after startup is complete
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 2 1000 1000)) ; 2MB for normal operation
+            (setq gc-cons-threshold (* 2 1000 1000))                 ; 2MB for normal operation
             (message "Emacs startup complete. GC threshold restored.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -51,8 +51,7 @@
 
 (defun safe-load-config (config-name &optional description)
   "Safely load a configuration module with comprehensive error handling.
-CONFIG-NAME is the module to load.
-DESCRIPTION is an optional human-readable description."
+CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable description."
   (let ((load-time (current-time))
         (desc (or description (symbol-name config-name))))
     (condition-case err
@@ -88,18 +87,17 @@ DESCRIPTION is an optional human-readable description."
               (message "  ✓ %s (%.3fs)" desc time))
           (setq failed (1+ failed))
           (message "  ✗ %s (%.3fs) - %s" desc time (nth 4 result)))))
-    (message "=== Total: %d successful, %d failed (%.3fs total) ==="
-             successful failed total-time)))
+    (message "=== Total: %d successful, %d failed (%.3fs total) ===" successful failed total-time)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configuration modules in order with error handling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core configuration (order matters)
-(safe-load-config 'core-packages "Package management")    ; Package management first
-(safe-load-config 'core-ui "Basic UI setup")           ; Basic UI setup
-(safe-load-config 'core-editing "Editing preferences") ; Editing preferences
-(safe-load-config 'core-files "File handling")         ; File handling
-(safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
+(safe-load-config 'core-packages "Package management")       ; Package management first
+(safe-load-config 'core-ui "Basic UI setup")                 ; Basic UI setup
+(safe-load-config 'core-editing "Editing preferences")       ; Editing preferences
+(safe-load-config 'core-files "File handling")               ; File handling
+(safe-load-config 'core-keybindings "Global keybindings")    ; Global keybindings
 
 ;; Theme configuration
 (safe-load-config 'theme-config "Theme configuration")
@@ -116,8 +114,7 @@ DESCRIPTION is an optional human-readable description."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI tweaks via emacs menu:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set location of any changes to emacs while running. These changes are not
-;; loaded when emacs restarts.
+;; Set location of any changes to emacs while running. These changes are not loaded when emacs restarts.
 (setq custom-file "~/.emacs.d/custom_prefs.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
