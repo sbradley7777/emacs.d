@@ -9,11 +9,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (message "Requiring yaml-mode.")
 (require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
-(add-hook 'yaml-mode-hook
-          #'(lambda ()
-              (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+(add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-mode))  ; Support both .yml and .yaml files
+(add-hook 'yaml-mode-hook (lambda () (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 ;; Make this module available for loading with (require 'lang-yaml)
 (provide 'lang-yaml)
