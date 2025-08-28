@@ -8,10 +8,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package system configuration (Snap-compatible approach)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Disable package auto-initialization VERY early to prevent warnings
-;; This must be one of the first things we do
-(setq package-enable-at-startup nil)
-(setq package-quickstart nil)
+;; Disable package auto-initialization VERY early to prevent warnings (this must be one of the first things we do)
+(setq package-enable-at-startup nil
+      package-quickstart nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance optimizations for faster startup
@@ -35,10 +34,7 @@
 (defvar custom-dir (expand-file-name "custom" user-emacs-directory))
 
 ;; Add directories to load path
-(add-to-list 'load-path config-dir)
-(add-to-list 'load-path lang-dir)
-(add-to-list 'load-path themes-dir)
-(add-to-list 'load-path custom-dir)
+(mapc (lambda (dir) (add-to-list 'load-path dir)) (list config-dir lang-dir themes-dir custom-dir))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Error handling and robustness
