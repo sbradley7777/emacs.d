@@ -8,22 +8,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package system configuration (Snap-compatible approach)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Disable package auto-initialization VERY early to prevent warnings (this must be one of the first things we do)
-(setq package-enable-at-startup nil
-      package-quickstart nil)
+;; Note: Package auto-initialization is now disabled in early-init.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance optimizations for faster startup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Note: Early performance settings are handled in early-init.el
-;; Additional performance tuning after early-init
-(setq gc-cons-threshold (* 50 1000 1000)) ; 50MB during init
-
-;; Restore normal values after startup is complete
+;; Note: Initial performance settings are handled in early-init.el
+;; Restore normal performance values after startup is complete
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 2 1000 1000))                 ; 2MB for normal operation
-            (message "Emacs startup complete. GC threshold restored.")))
+            ;; Restore normal garbage collection settings
+            (setq gc-cons-threshold (* 2 1000 1000)        ; 2MB for normal operation
+                  gc-cons-percentage 0.1)                  ; 10% of heap for GC
+
+            ;; Restore file name handlers (disabled in early-init.el for faster startup)
+            (setq file-name-handler-alist default-file-name-handler-alist)
+
+            ;; Restore normal input processing
+            (setq idle-update-delay 0.5)                   ; Faster idle updates for responsiveness
+
+            (message "Emacs startup complete. Performance settings restored.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup configuration directories
