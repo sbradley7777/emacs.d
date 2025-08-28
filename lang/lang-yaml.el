@@ -1,4 +1,4 @@
-;;; lang-yaml.el --- YAML Language Configuration
+;;; lang-yaml.el --- YAML Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      YAML mode support and configuration
 

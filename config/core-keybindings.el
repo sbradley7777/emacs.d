@@ -1,4 +1,4 @@
-;;; core-keybindings.el --- Global Key Bindings Configuration
+;;; core-keybindings.el --- Global Key Bindings Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 

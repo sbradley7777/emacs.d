@@ -1,4 +1,4 @@
-;;; theme-config.el --- Theme Configuration
+;;; theme-config.el --- Theme Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Theme selection and customization
 

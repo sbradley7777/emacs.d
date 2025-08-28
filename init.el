@@ -1,4 +1,4 @@
-;;; init.el --- Emacs Configuration Entry Point
+;;; init.el --- Emacs Configuration Entry Point -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Main entry point for Emacs configuration.
 ;;      Loads configuration modules in the correct order.

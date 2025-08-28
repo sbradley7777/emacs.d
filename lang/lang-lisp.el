@@ -1,4 +1,4 @@
-;;; lang-lisp.el --- Emacs Lisp Language Configuration
+;;; lang-lisp.el --- Emacs Lisp Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Emacs Lisp specific settings and formatting
 

@@ -1,4 +1,4 @@
-;;; core-ui.el --- User Interface Configuration
+;;; core-ui.el --- User Interface Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Display preferences and UI behavior
 

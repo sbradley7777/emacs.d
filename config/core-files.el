@@ -1,4 +1,4 @@
-;;; core-files.el --- File Handling Configuration
+;;; core-files.el --- File Handling Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
 

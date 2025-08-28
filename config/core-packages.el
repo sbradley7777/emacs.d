@@ -1,4 +1,4 @@
-;;; core-packages.el --- Package Management Configuration
+;;; core-packages.el --- Package Management Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Package management and MELPA repository setup
 

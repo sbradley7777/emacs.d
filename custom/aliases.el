@@ -1,4 +1,4 @@
-;;; aliases.el --- Function Aliases and Shortcuts
+;;; aliases.el --- Function Aliases and Shortcuts -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Function aliases to improve usability and provide shortcuts
 ;;      for commonly used Emacs functions.

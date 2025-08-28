@@ -1,4 +1,4 @@
-;;; core-editing.el --- Editing Behavior Configuration
+;;; core-editing.el --- Editing Behavior Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Tabs, spaces, and general editing preferences
 
