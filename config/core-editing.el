@@ -38,6 +38,24 @@
 (setq whitespace-style '(face trailing tabs tab-mark lines-tail))
 (global-whitespace-mode 1)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enhanced editing behavior
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Better undo/redo behavior
+(setq undo-limit 6000000                          ; Larger undo buffer (6MB)
+      undo-strong-limit 9000000)                  ; Strong limit for undo (9MB)
+
+;; Smarter beginning-of-line behavior
+(defun smart-beginning-of-line ()
+  "Move to beginning of line or indentation."
+  (interactive)
+  (let ((oldpos (point)))
+    (back-to-indentation)
+    (and (= oldpos (point))
+         (beginning-of-line))))
+
+(global-set-key (kbd "C-a") 'smart-beginning-of-line)
+
 
 ;; Make this module available for loading with (require 'core-editing)
 (provide 'core-editing)

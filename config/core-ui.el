@@ -89,6 +89,14 @@
 
 (normal-erase-is-backspace-mode 0)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enhanced cursor and interaction behavior
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Better cursor and selection visibility
+(setq-default cursor-type 'box                    ; Box cursor for better visibility
+              blink-cursor-mode nil)              ; Non-blinking cursor
+(setq mouse-yank-at-point t)                      ; Paste at cursor, not mouse position
+
 ;; Make this module available for loading with (require 'core-ui)
 (provide 'core-ui)
 (message "core-ui.el loaded successfully.")
