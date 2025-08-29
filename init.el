@@ -137,4 +137,17 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display detailed loading diagnostics
 (show-config-diagnostics)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Memory Management Optimization for Long-Running Sessions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Garbage collection optimization for long-running sessions
+(defun optimize-gc-for-long-session ()
+  "Optimize garbage collection for long-running sessions."
+  (setq gc-cons-threshold (* 100 1000 1000)        ; 100MB threshold for normal operation
+        gc-cons-percentage 0.1))                   ; 10% of heap for GC
+
+;; Run GC optimization every 5 minutes when idle to maintain performance
+(run-with-idle-timer 300 t #'optimize-gc-for-long-session)
+
 (message "init.el loaded successfully.")

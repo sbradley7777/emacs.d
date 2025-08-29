@@ -38,8 +38,8 @@
 (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
 
 ;; Enhanced security configuration for package verification
-(setq package-check-signature 'allow-unsigned    ; Verify signatures when available, allow unsigned
-      package-unsigned-archives '("melpa"))      ; Explicitly allow unsigned packages from MELPA
+(setq package-check-signature 'allow-unsigned      ; Verify signatures when available, allow unsigned
+      package-unsigned-archives '("melpa"))        ; Explicitly allow unsigned packages from MELPA
 
 ;; Ensure GNU ELPA keyring is available before installing other packages
 ;; This maintains security with signature verification
@@ -68,10 +68,10 @@
   (require 'use-package))
 
 ;; Global use-package configuration
-(setq use-package-always-ensure t          ; Always ensure packages are installed
-      use-package-verbose t                 ; Show loading messages for debugging
-      use-package-compute-statistics t      ; Enable statistics collection
-      use-package-minimum-reported-time 0.1) ; Report slow-loading packages
+(setq use-package-always-ensure t              ; Always ensure packages are installed
+      use-package-verbose t                     ; Show loading messages for debugging
+      use-package-compute-statistics t          ; Enable statistics collection
+      use-package-minimum-reported-time 0.1)   ; Report slow-loading packages
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Management Utilities

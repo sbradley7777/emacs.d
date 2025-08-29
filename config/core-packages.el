@@ -79,7 +79,10 @@
 (use-package which-key
              :config
              (which-key-mode 1)
-             (setq which-key-idle-delay 0.5))
+             (setq which-key-idle-delay 0.3                  ; Faster response (was 0.5)
+                   which-key-max-description-length 40       ; Longer descriptions
+                   which-key-add-column-padding 1             ; Better spacing
+                   which-key-separator " → "))
 
 
 ;; Make this module available for loading with (require 'core-packages)

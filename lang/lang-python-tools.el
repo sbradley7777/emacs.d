@@ -20,7 +20,11 @@
              (when (require 'flycheck nil t)
 	       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
 	       (add-hook 'elpy-mode-hook 'flycheck-mode)
-	       (flycheck-add-next-checker 'python-flake8 'python-pylint)))
+	       (flycheck-add-next-checker 'python-flake8 'python-pylint))
+
+             ;; Additional Python tools integration for better REPL experience
+             (setq elpy-shell-echo-output nil                    ; Cleaner Python shell output
+                   python-shell-completion-native-enable nil))   ; Fix completion issues
 
 ;; Make this module available for loading with (require 'lang-python-tools)
 (provide 'lang-python-tools)

@@ -47,8 +47,8 @@
 ;; Enhanced auto-save configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; More frequent auto-saving for better data protection
-(setq auto-save-interval 200                 ; Auto-save every 200 keystrokes (default: 300)
-      auto-save-timeout 20)                  ; Auto-save after 20 seconds of idle time (default: 30)
+(setq auto-save-interval 200                     ; Auto-save every 200 keystrokes (default: 300)
+      auto-save-timeout 20)                      ; Auto-save after 20 seconds of idle time (default: 30)
 
 ;; Auto-save files in the same directory structure but in our autosaves folder
 ;; Note: This replaces the earlier auto-save-file-name-transforms setting with enhanced configuration
