@@ -32,11 +32,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Disable GUI elements in default-frame-alist to prevent them from appearing
 ;; even briefly during startup (eliminates the "flash" effect)
-(push '(tool-bar-lines . 0) default-frame-alist)       ; No tool bar
-(push '(menu-bar-lines . 0) default-frame-alist)       ; No menu bar
-(push '(vertical-scroll-bars) default-frame-alist)     ; No scroll bars
-
-;; Also disable for the initial frame to be thorough
+;; Consolidated GUI element suppression (single operation for better performance)
 (setq default-frame-alist
       (append default-frame-alist
               '((tool-bar-lines . 0)
