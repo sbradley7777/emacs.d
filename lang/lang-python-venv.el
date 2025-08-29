@@ -14,19 +14,19 @@
              (pyvenv-mode 1)
 
              ;; Variable to hold the project name for modeline display (global variable that persists across buffers)
-             (defvar pyvenv-project-name nil "Name of the project containing the current virtual environment.")
-             (setq-default pyvenv-project-name nil)
+             (defvar config-python-project-name nil "Name of the project containing the current virtual environment.")
+             (setq-default config-python-project-name nil)
 
              ;; Show virtual environment in modeline with custom format
              (setq pyvenv-mode-line-indicator
                    '(pyvenv-virtual-env-name
-                     ("[venv: " pyvenv-project-name "] ")))
+                     ("[venv: " config-python-project-name "] ")))
 
              ;; Clear project name when deactivating virtual environment
              (add-hook 'pyvenv-post-deactivate-hooks
                        (lambda ()
-                         (setq-default pyvenv-project-name nil)
-                         (setq pyvenv-project-name nil)
+                         (setq-default config-python-project-name nil)
+                         (setq config-python-project-name nil)
                          (force-mode-line-update t)))
 
              ;; Add our hook AFTER Elpy's hook to ensure our project name persists
@@ -38,8 +38,8 @@
                                            (lambda ()
                                              (let* ((venv-parent-dir (file-name-directory (directory-file-name pyvenv-virtual-env)))
                                                     (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
-                                               (setq-default pyvenv-project-name project-name)
-                                               (setq pyvenv-project-name project-name)
+                                               (setq-default config-python-project-name project-name)
+                                               (setq config-python-project-name project-name)
                                                (message "POST-ACTIVATE HOOK: Set project name to: %s" project-name)
                                                (force-mode-line-update t))))))
                        90) ; Higher priority to run after Elpy's hook
@@ -67,8 +67,8 @@
                              elpy-rpc-python-command venv-python)
                        (message "Updated Python interpreter and Elpy RPC to: %s" python-shell-interpreter))
                      ;; Set the project name globally for modeline display and force update
-                     (setq-default pyvenv-project-name project-name)
-                     (setq pyvenv-project-name project-name)
+                     (setq-default config-python-project-name project-name)
+                     (setq config-python-project-name project-name)
                      (force-mode-line-update t))
                    (message "Activated virtual environment: %s" venv-path))))
 
@@ -77,7 +77,7 @@
              (add-hook 'find-file-hook (lambda () (when (derived-mode-p 'python-mode) (pyvenv-auto-activate))))
 
              ;; Ensure modeline updates when switching buffers
-             (add-hook 'buffer-list-update-hook (lambda () (when (and pyvenv-virtual-env pyvenv-project-name) (force-mode-line-update)))))
+             (add-hook 'buffer-list-update-hook (lambda () (when (and pyvenv-virtual-env config-python-project-name) (force-mode-line-update)))))
 
 ;; Make this module available for loading with (require 'lang-python-venv)
 (provide 'lang-python-venv)

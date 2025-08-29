@@ -9,22 +9,22 @@
 ;; Essential Package Categories
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Organized package lists for better maintainability
-(defvar my-essential-packages
+(defvar config-essential-packages
   '(spacemacs-theme zenburn-theme yaml-mode)
   "Essential packages that must be installed.")
 
-(defvar my-development-packages
+(defvar config-development-packages
   '(elpy flycheck pylint which-key pyvenv)
   "Development and programming packages.")
 
-(defvar my-packages (append my-essential-packages my-development-packages)
+(defvar config-packages (append config-essential-packages config-development-packages)
   "Complete list of packages to install.")
 
 ;; Install packages from organized lists
 (mapc #'(lambda (package)
           (unless (package-installed-p package)
             (package-install package)))
-      my-packages)
+      config-packages)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package configurations using use-package
