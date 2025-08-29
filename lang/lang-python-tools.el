@@ -18,9 +18,9 @@
                    elpy-rpc-python-command (or (executable-find "python3") (executable-find "python") "python3"))
              ;; Use flycheck instead of flymake
              (when (require 'flycheck nil t)
-	       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-	       (add-hook 'elpy-mode-hook 'flycheck-mode)
-	       (flycheck-add-next-checker 'python-flake8 'python-pylint))
+               (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+               (add-hook 'elpy-mode-hook 'flycheck-mode)
+               (flycheck-add-next-checker 'python-flake8 'python-pylint))
 
              ;; Additional Python tools integration for better REPL experience
              (setq elpy-shell-echo-output nil                    ; Cleaner Python shell output
