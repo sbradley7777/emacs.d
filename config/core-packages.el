@@ -15,7 +15,7 @@
   "Essential packages that must be installed.")
 
 (defvar config-development-packages
-  '(elpy flycheck pylint which-key pyvenv)
+  '(elpy flycheck pylint which-key pyvenv elisp-autofmt)
   "Development and programming packages.")
 
 (defvar config-packages (append config-essential-packages config-development-packages)
@@ -84,6 +84,12 @@
                    which-key-max-description-length 40       ; Longer descriptions
                    which-key-add-column-padding 1             ; Better spacing
                    which-key-separator " → "))
+
+(use-package elisp-autofmt
+             :config
+             ;; Configure elisp-autofmt for consistent formatting
+             (setq elisp-autofmt-style 'native)             ; Use native Emacs indentation style
+             (setq elisp-autofmt-parallel-jobs 1))          ; Single-threaded for consistency
 
 
 ;; Make this module available for loading with (require 'core-packages)
