@@ -30,6 +30,18 @@
             (message "Emacs startup complete. Performance settings restored.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration Validation
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Validate that early-init.el properly set up required variables
+(unless (boundp 'default-file-name-handler-alist)
+  (warn "default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
+  (setq default-file-name-handler-alist file-name-handler-alist))
+
+;; Validate that early-init performance optimizations were applied
+(unless (> gc-cons-threshold 800000)
+  (warn "GC threshold not optimized by early-init.el - startup may be slower"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup configuration directories
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar config-dir (expand-file-name "config" user-emacs-directory))

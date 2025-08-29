@@ -36,8 +36,8 @@
                            ;; Small delay to ensure we run after all other hooks
                            (run-with-timer 0.1 nil
                                            (lambda ()
-                                             (let ((project-name (file-name-nondirectory (directory-file-name
-											  (file-name-directory (directory-file-name pyvenv-virtual-env))))))
+                                             (let* ((venv-parent-dir (file-name-directory (directory-file-name pyvenv-virtual-env)))
+                                                    (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
                                                (setq-default pyvenv-project-name project-name)
                                                (setq pyvenv-project-name project-name)
                                                (message "POST-ACTIVATE HOOK: Set project name to: %s" project-name)
@@ -59,8 +59,9 @@
                                       (string-equal pyvenv-virtual-env venv-path))))
                    (pyvenv-activate venv-path)
                    ;; Update both Python shell and Elpy RPC to use the virtual environment's Python
-                   (let ((venv-python (expand-file-name "bin/python" venv-path))
-                         (project-name (file-name-nondirectory (directory-file-name (file-name-directory (directory-file-name venv-path))))))
+                   (let* ((venv-python (expand-file-name "bin/python" venv-path))
+                          (venv-parent-dir (file-name-directory (directory-file-name venv-path)))
+                          (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
                      (when (file-executable-p venv-python)
                        (setq python-shell-interpreter venv-python
                              elpy-rpc-python-command venv-python)
