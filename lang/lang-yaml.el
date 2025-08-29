@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      YAML mode support and configuration
 
+(defvar config-load-start-time (current-time))
 (message "Loading lang-yaml.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16,4 +17,5 @@
 
 ;; Make this module available for loading with (require 'lang-yaml)
 (provide 'lang-yaml)
-(message "lang-yaml.el loaded successfully.")
+(message "lang-yaml.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      Tabs, spaces, and general editing preferences
 
+(defvar config-load-start-time (current-time))
 (message "Loading core-editing.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -59,4 +60,5 @@
 
 ;; Make this module available for loading with (require 'core-editing)
 (provide 'core-editing)
-(message "core-editing.el loaded successfully.")
+(message "core-editing.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

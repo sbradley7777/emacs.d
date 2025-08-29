@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
+(defvar config-load-start-time (current-time))
 (message "Loading core-keybindings.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,4 +56,5 @@
 
 ;; Make this module available for loading with (require 'core-keybindings)
 (provide 'core-keybindings)
-(message "core-keybindings.el loaded successfully.")
+(message "core-keybindings.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
 
+(defvar config-load-start-time (current-time))
 (message "Loading core-files.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,4 +82,5 @@
 
 ;; Make this module available for loading with (require 'core-files)
 (provide 'core-files)
-(message "core-files.el loaded successfully.")
+(message "core-files.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

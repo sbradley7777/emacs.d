@@ -3,6 +3,7 @@
 ;;      Package installation and configuration using use-package.
 ;;      Note: Package manager setup is handled by core-package-manager.el
 
+(defvar config-load-start-time (current-time))
 (message "Loading core-packages.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -87,4 +88,5 @@
 
 ;; Make this module available for loading with (require 'core-packages)
 (provide 'core-packages)
-(message "core-packages.el loaded successfully.")
+(message "core-packages.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

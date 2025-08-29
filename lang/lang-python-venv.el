@@ -3,6 +3,7 @@
 ;;      Complete virtual environment management with pyvenv integration,
 ;;      auto-activation, modeline display, and project detection.
 
+(defvar config-load-start-time (current-time))
 (message "Loading lang-python-venv.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -89,4 +90,5 @@
 
 ;; Make this module available for loading with (require 'lang-python-venv)
 (provide 'lang-python-venv)
-(message "lang-python-venv.el loaded successfully.")
+(message "lang-python-venv.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

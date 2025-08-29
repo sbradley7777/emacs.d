@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      User-defined custom functions
 
+(defvar config-load-start-time (current-time))
 (message "Loading functions.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17,4 +18,5 @@
 
 ;; Make this module available for loading with (require 'functions)
 (provide 'functions)
-(message "functions.el loaded successfully.")
+(message "functions.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

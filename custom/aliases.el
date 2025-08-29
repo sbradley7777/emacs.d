@@ -3,6 +3,7 @@
 ;;      Function aliases to improve usability and provide shortcuts
 ;;      for commonly used Emacs functions.
 
+(defvar config-load-start-time (current-time))
 (message "Loading aliases.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -13,4 +14,5 @@
 
 ;; Make this module available for loading with (require 'aliases)
 (provide 'aliases)
-(message "aliases.el loaded successfully.")
+(message "aliases.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

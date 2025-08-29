@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      Display preferences and UI behavior
 
+(defvar config-load-start-time (current-time))
 (message "Loading core-ui.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -99,4 +100,5 @@
 
 ;; Make this module available for loading with (require 'core-ui)
 (provide 'core-ui)
-(message "core-ui.el loaded successfully.")
+(message "core-ui.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

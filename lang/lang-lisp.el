@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      Emacs Lisp specific settings and formatting
 
+(defvar config-load-start-time (current-time))
 (message "Loading lang-lisp.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19,4 +20,5 @@
 
 ;; Make this module available for loading with (require 'lang-lisp)
 (provide 'lang-lisp)
-(message "lang-lisp.el loaded successfully.")
+(message "lang-lisp.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))

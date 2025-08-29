@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      Theme selection and customization
 
+(defvar config-load-start-time (current-time))
 (message "Loading theme-config.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -17,4 +18,5 @@
 
 ;; Make this module available for loading with (require 'theme-config)
 (provide 'theme-config)
-(message "theme-config.el loaded successfully.")
+(message "theme-config.el loaded (%.2fs)"
+         (float-time (time-subtract (current-time) config-load-start-time)))
