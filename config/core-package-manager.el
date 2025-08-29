@@ -86,8 +86,10 @@
              (pkg-name (package-desc-name pkg-desc))
              (current-version (package-desc-version pkg-desc)))
         (when-let ((available-pkg (cadr (assq pkg-name package-archive-contents))))
-		  (when (version-list-< current-version (package-desc-version available-pkg))
-		    (push pkg-name upgradeable-packages)))))
+		  (let ((available-version (package-desc-version available-pkg)))
+		    (when (and available-version current-version
+			       (version-list-< current-version available-version))
+		      (push pkg-name upgradeable-packages))))))
 
     ;; Attempt to upgrade each package with error handling
     (if upgradeable-packages

@@ -69,4 +69,8 @@
 ;; Reduce input processing overhead during startup
 (setq idle-update-delay 1.0)                   ; Longer delay for idle updates during startup
 
+;; Reduce startup noise and font cache overhead
+(setq inhibit-compacting-font-caches t          ; Don't compact font caches during startup
+      inhibit-startup-buffer-menu t)            ; Don't show buffer menu at startup
+
 (message "early-init.el loaded successfully - performance optimizations active.")
