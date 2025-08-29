@@ -31,16 +31,6 @@ repos:
       - id: detect-private-key
         description: "Checks for the existence of private keys."
 
-  - repo: https://gitlab.corp.redhat.com/infosec-public/developer-workbench/tools.git
-    rev: rh-pre-commit-2.3.2
-    hooks:
-      # Docs:
-      #   - https://source.redhat.com/departments/it/it-information-security/leaktk/leaktk_components/rh_pre_commit
-      #   - https://source.redhat.com/departments/operations/it-information-security/leaktk/leaktk_guides/rh_pre_commit_attestation
-      # - id: rh-pre-commit.commit-msg # Optional for commit-msg attestation
-      - id: rh-pre-commit
-        description: "The utility rh-pre-commit is a git pre-commit hook offered by InfoSec to all Red Hatters that scans code for secrets before they are committed and blocks the commit if any are detected."
-
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
     hooks:
