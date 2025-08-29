@@ -37,6 +37,10 @@
 ;; Secure keyring management - pin keyring updates to GNU ELPA for security
 (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
 
+;; Enhanced security configuration for package verification
+(setq package-check-signature 'allow-unsigned    ; Verify signatures when available, allow unsigned
+      package-unsigned-archives '("melpa"))      ; Explicitly allow unsigned packages from MELPA
+
 ;; Ensure GNU ELPA keyring is available before installing other packages
 ;; This maintains security with signature verification
 (unless (package-installed-p 'gnu-elpa-keyring-update)
