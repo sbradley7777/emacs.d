@@ -10,12 +10,10 @@
 ;; Essential Package Categories
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Organized package lists for better maintainability
-(defvar config-essential-packages
-  '(spacemacs-theme zenburn-theme yaml-mode)
+(defvar config-essential-packages '(spacemacs-theme zenburn-theme yaml-mode)
   "Essential packages that must be installed.")
 
-(defvar config-development-packages
-  '(elpy flycheck pylint which-key pyvenv elisp-autofmt)
+(defvar config-development-packages '(elpy flycheck pylint which-key pyvenv elisp-autofmt)
   "Development and programming packages.")
 
 (defvar config-packages (append config-essential-packages config-development-packages)
@@ -69,30 +67,31 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package configurations using use-package
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package spacemacs-theme :defer t)                     ; Deferred loading for spacemacs theme
-(use-package zenburn-theme :defer t)                       ; Deferred loading for zenburn theme
+(use-package spacemacs-theme :defer t) ; Deferred loading for spacemacs theme
+(use-package zenburn-theme :defer t) ; Deferred loading for zenburn theme
 (use-package yaml-mode :mode ("\\.ya?ml\\'" . yaml-mode)) ; YAML file support
-(use-package flycheck :hook (prog-mode . flycheck-mode))  ; Syntax checking for programming modes
-(use-package pylint :after python)                        ; Python linting support
+(use-package flycheck :hook (prog-mode . flycheck-mode)) ; Syntax checking for programming modes
+(use-package pylint :after python) ; Python linting support
 
 ;; Note: Elpy configuration moved to lang-python-tools.el for better organization
 
-(use-package which-key
-             :config
-             (which-key-mode 1)
-             (setq which-key-idle-delay 0.3                  ; Faster response (was 0.5)
-                   which-key-max-description-length 40       ; Longer descriptions
-                   which-key-add-column-padding 1             ; Better spacing
-                   which-key-separator " → "))
+(use-package
+ which-key
+ :config (which-key-mode 1)
+ (setq
+  which-key-idle-delay 0.3 ; Faster response (was 0.5)
+  which-key-max-description-length 40 ; Longer descriptions
+  which-key-add-column-padding 1 ; Better spacing
+  which-key-separator " → "))
 
-(use-package elisp-autofmt
-             :config
-             ;; Configure elisp-autofmt for consistent formatting
-             (setq elisp-autofmt-style 'native)             ; Use native Emacs indentation style
-             (setq elisp-autofmt-parallel-jobs 1))          ; Single-threaded for consistency
+(use-package
+ elisp-autofmt
+ :config
+ ;; Configure elisp-autofmt for consistent formatting
+ (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
+ (setq elisp-autofmt-parallel-jobs 1)) ; Single-threaded for consistency
 
 
 ;; Make this module available for loading with (require 'core-packages)
 (provide 'core-packages)
-(message "core-packages.el loaded (%.2fs)"
-         (float-time (time-subtract (current-time) config-load-start-time)))
+(message "core-packages.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

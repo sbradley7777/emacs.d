@@ -14,21 +14,17 @@
   (untabify (point-min) (point-max)))
 
 ;; Add hook to convert tabs to spaces when saving Emacs Lisp files
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook 'untabify-buffer nil t)))
+(add-hook 'emacs-lisp-mode-hook (lambda () (add-hook 'before-save-hook 'untabify-buffer nil t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Automatic formatting with elisp-autofmt
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package elisp-autofmt
-	     :hook (emacs-lisp-mode . elisp-autofmt-mode)
-	     :bind (:map emacs-lisp-mode-map
-			 ("C-c C-f" . elisp-autofmt-buffer))
-	     :config
-	     (message "elisp-autofmt configured for automatic formatting on save"))
+(use-package
+ elisp-autofmt
+ :hook (emacs-lisp-mode . elisp-autofmt-mode)
+ :bind (:map emacs-lisp-mode-map ("C-c C-f" . elisp-autofmt-buffer))
+ :config (message "elisp-autofmt configured for automatic formatting on save"))
 
 ;; Make this module available for loading with (require 'lang-lisp)
 (provide 'lang-lisp)
-(message "lang-lisp.el loaded (%.2fs)"
-         (float-time (time-subtract (current-time) config-load-start-time)))
+(message "lang-lisp.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

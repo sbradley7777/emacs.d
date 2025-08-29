@@ -18,10 +18,7 @@
 
 ;; Set package archive priorities (higher number = higher priority)
 ;; Prefer stable packages, fallback to development versions
-(setq package-archive-priorities
-      '(("melpa-stable" . 20)
-        ("gnu" . 15)
-        ("melpa" . 10)))
+(setq package-archive-priorities '(("melpa-stable" . 20) ("gnu" . 15) ("melpa" . 10)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package System Initialization
@@ -38,14 +35,15 @@
 (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
 
 ;; Enhanced security configuration for package verification
-(setq package-check-signature 'allow-unsigned      ; Verify signatures when available, allow unsigned
-      package-unsigned-archives '("melpa"))        ; Explicitly allow unsigned packages from MELPA
+(setq
+ package-check-signature 'allow-unsigned ; Verify signatures when available, allow unsigned
+ package-unsigned-archives '("melpa")) ; Explicitly allow unsigned packages from MELPA
 
 ;; Ensure GNU ELPA keyring is available before installing other packages
 ;; This maintains security with signature verification
 (unless (package-installed-p 'gnu-elpa-keyring-update)
-  (package-refresh-contents)                      ; Refresh package contents to get latest keyring info
-  (package-install 'gnu-elpa-keyring-update)      ; Install keyring update package from GNU ELPA
+  (package-refresh-contents) ; Refresh package contents to get latest keyring info
+  (package-install 'gnu-elpa-keyring-update) ; Install keyring update package from GNU ELPA
   (message "GNU ELPA keyring updated for secure package verification"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -68,10 +66,11 @@
   (require 'use-package))
 
 ;; Global use-package configuration
-(setq use-package-always-ensure t              ; Always ensure packages are installed
-      use-package-verbose t                     ; Show loading messages for debugging
-      use-package-compute-statistics t          ; Enable statistics collection
-      use-package-minimum-reported-time 0.1)   ; Report slow-loading packages
+(setq
+ use-package-always-ensure t ; Always ensure packages are installed
+ use-package-verbose t ; Show loading messages for debugging
+ use-package-compute-statistics t ; Enable statistics collection
+ use-package-minimum-reported-time 0.1) ; Report slow-loading packages
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Management Utilities
@@ -90,10 +89,9 @@
              (pkg-name (package-desc-name pkg-desc))
              (current-version (package-desc-version pkg-desc)))
         (when-let ((available-pkg (cadr (assq pkg-name package-archive-contents))))
-		  (let ((available-version (package-desc-version available-pkg)))
-		    (when (and available-version current-version
-			       (version-list-< current-version available-version))
-		      (push pkg-name upgradeable-packages))))))
+          (let ((available-version (package-desc-version available-pkg)))
+            (when (and available-version current-version (version-list-< current-version available-version))
+              (push pkg-name upgradeable-packages))))))
 
     ;; Attempt to upgrade each package with error handling
     (if upgradeable-packages
@@ -105,15 +103,14 @@
             (condition-case err
                 (progn
                   (package-install pkg)
-		  (setq upgraded-count (1+ upgraded-count))
+                  (setq upgraded-count (1+ upgraded-count))
                   (message "✓ Upgraded: %s" pkg))
               (error
                (push pkg failed-packages)
                (message "✗ Failed to upgrade %s: %s" pkg (error-message-string err)))))
 
           ;; Summary
-          (message "Package upgrade complete: %d successful, %d failed"
-                   upgraded-count (length failed-packages))
+          (message "Package upgrade complete: %d successful, %d failed" upgraded-count (length failed-packages))
           (when failed-packages
             (message "Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
       (message "All packages are up to date"))))
@@ -126,5 +123,4 @@
 
 ;; Make this module available for loading with (require 'core-package-manager)
 (provide 'core-package-manager)
-(message "core-package-manager.el loaded (%.2fs)"
-         (float-time (time-subtract (current-time) config-load-start-time)))
+(message "core-package-manager.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

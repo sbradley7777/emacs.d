@@ -9,24 +9,25 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Elpy Python Development Environment
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package elpy
-             :init
-             (elpy-enable)
-             :config
-             ;; Dynamically find Python executable for better portability
-             (setq python-shell-interpreter (or (executable-find "python3") (executable-find "python") "python3")
-                   elpy-rpc-python-command (or (executable-find "python3") (executable-find "python") "python3"))
-             ;; Use flycheck instead of flymake
-             (when (require 'flycheck nil t)
-               (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-               (add-hook 'elpy-mode-hook 'flycheck-mode)
-               (flycheck-add-next-checker 'python-flake8 'python-pylint))
+(use-package
+ elpy
+ :init (elpy-enable)
+ :config
+ ;; Dynamically find Python executable for better portability
+ (setq
+  python-shell-interpreter (or (executable-find "python3") (executable-find "python") "python3")
+  elpy-rpc-python-command (or (executable-find "python3") (executable-find "python") "python3"))
+ ;; Use flycheck instead of flymake
+ (when (require 'flycheck nil t)
+   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+   (add-hook 'elpy-mode-hook 'flycheck-mode)
+   (flycheck-add-next-checker 'python-flake8 'python-pylint))
 
-             ;; Additional Python tools integration for better REPL experience
-             (setq elpy-shell-echo-output nil                    ; Cleaner Python shell output
-                   python-shell-completion-native-enable nil))   ; Fix completion issues
+ ;; Additional Python tools integration for better REPL experience
+ (setq
+  elpy-shell-echo-output nil ; Cleaner Python shell output
+  python-shell-completion-native-enable nil)) ; Fix completion issues
 
 ;; Make this module available for loading with (require 'lang-python-tools)
 (provide 'lang-python-tools)
-(message "lang-python-tools.el loaded (%.2fs)"
-         (float-time (time-subtract (current-time) config-load-start-time)))
+(message "lang-python-tools.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

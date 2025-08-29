@@ -1,4 +1,4 @@
-;;; functions.el --- Custom Functions -*- lexical-binding: t -*-
+;;; Functions.el --- Custom Functions -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      User-defined custom functions
 
@@ -8,7 +8,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Reload init.el on the Fly:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun reload-init-file()
+(defun reload-init-file ()
   (interactive)
   (let ((init-file (expand-file-name "init.el" user-emacs-directory)))
     (if (bufferp (get-file-buffer init-file))
@@ -18,5 +18,4 @@
 
 ;; Make this module available for loading with (require 'functions)
 (provide 'functions)
-(message "functions.el loaded (%.2fs)"
-         (float-time (time-subtract (current-time) config-load-start-time)))
+(message "functions.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

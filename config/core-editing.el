@@ -8,18 +8,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced editing preferences
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(electric-pair-mode 1)                                ; Auto-close parentheses
-(delete-selection-mode 1)                            ; Replace selected text
-(global-auto-revert-mode 1)                          ; Auto-reload changed files
-(setq auto-revert-check-vc-info t)                   ; Include VC info in auto-revert
+(electric-pair-mode 1) ; Auto-close parentheses
+(delete-selection-mode 1) ; Replace selected text
+(global-auto-revert-mode 1) ; Auto-reload changed files
+(setq auto-revert-check-vc-info t) ; Include VC info in auto-revert
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Better indentation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; - http://www.emacswiki.org/emacs/NoTabs
-(setq-default tab-width 4
-              standard-indent 4
-              indent-tabs-mode nil)
+(setq-default
+ tab-width 4
+ standard-indent 4
+ indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Line length and fill column configuration
@@ -43,8 +44,9 @@
 ;; Enhanced editing behavior
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Better undo/redo behavior
-(setq undo-limit 6000000                          ; Larger undo buffer (6MB)
-      undo-strong-limit 9000000)                  ; Strong limit for undo (9MB)
+(setq
+ undo-limit 6000000 ; Larger undo buffer (6MB)
+ undo-strong-limit 9000000) ; Strong limit for undo (9MB)
 
 ;; Smarter beginning-of-line behavior
 (defun smart-beginning-of-line ()
@@ -52,13 +54,11 @@
   (interactive)
   (let ((oldpos (point)))
     (back-to-indentation)
-    (and (= oldpos (point))
-         (beginning-of-line))))
+    (and (= oldpos (point)) (beginning-of-line))))
 
 (global-set-key (kbd "C-a") 'smart-beginning-of-line)
 
 
 ;; Make this module available for loading with (require 'core-editing)
 (provide 'core-editing)
-(message "core-editing.el loaded (%.2fs)"
-         (float-time (time-subtract (current-time) config-load-start-time)))
+(message "core-editing.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
