@@ -75,12 +75,41 @@
 (defun package-upgrade-all ()
   "Upgrade all installed packages to their latest versions."
   (interactive)
+  (message "Checking for package upgrades...")
   (package-refresh-contents)
-  (let ((upgrades (cl-remove-if-not #'package-installed-p package-alist)))
-    (if upgrades
+  (let ((upgradeable-packages '())
+        (failed-packages '())
+        (upgraded-count 0))
+    ;; Find packages that have newer versions available
+    (dolist (pkg package-alist)
+      (let* ((pkg-desc (car pkg))
+             (pkg-name (package-desc-name pkg-desc))
+             (current-version (package-desc-version pkg-desc)))
+        (when-let ((available-pkg (cadr (assq pkg-name package-archive-contents))))
+		  (when (version-list-< current-version (package-desc-version available-pkg))
+		    (push pkg-name upgradeable-packages)))))
+
+    ;; Attempt to upgrade each package with error handling
+    (if upgradeable-packages
         (progn
-          (mapc #'package-install upgrades)
-          (message "Upgraded %d packages" (length upgrades)))
+          (message "Found %d packages to upgrade: %s"
+                   (length upgradeable-packages)
+                   (mapconcat #'symbol-name upgradeable-packages ", "))
+          (dolist (pkg upgradeable-packages)
+            (condition-case err
+                (progn
+                  (package-install pkg)
+                  (setq upgraded-count (1+ upgraded-count))
+                  (message "✓ Upgraded: %s" pkg))
+              (error
+               (push pkg failed-packages)
+               (message "✗ Failed to upgrade %s: %s" pkg (error-message-string err)))))
+
+          ;; Summary
+          (message "Package upgrade complete: %d successful, %d failed"
+                   upgraded-count (length failed-packages))
+          (when failed-packages
+            (message "Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
       (message "All packages are up to date"))))
 
 (defun package-cleanup-unused ()
