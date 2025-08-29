@@ -41,16 +41,6 @@ repos:
       - id: rh-pre-commit
         description: "The utility rh-pre-commit is a git pre-commit hook offered by InfoSec to all Red Hatters that scans code for secrets before they are committed and blocks the commit if any are detected."
 
-  - repo: https://github.com/eschulte/lisp-format
-    rev: 088c8f78ca41204b44f2636275517ac09a2de6a9 # Use a specific commit hash for stability
-    hooks:
-      - id: lisp-format
-        name: lisp-format
-        description: Run lisp-format against lisp files
-        language: script
-        files: \.(el|cl|lisp|asd|scm|clojure)$
-        entry: lisp-format -i
-
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
     hooks:
