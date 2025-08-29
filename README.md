@@ -8,7 +8,7 @@ To use this Emacs configuration, run the installer script which will create syml
 
 ```bash
 # Clone this repository if you haven't already.
-$ git clone https://github.com/yourusername/emacs.d.git ~/github/emacs.d
+$ git clone <your-repository-url> ~/github/emacs.d
 
 # Navigate to the repository directory.
 $ cd ~/github/emacs.d
@@ -96,9 +96,10 @@ The installer script performs the following steps:
 
 1. **Check Emacs installation**: Verifies Emacs is available and checks version compatibility (26.1+ recommended)
 2. **Validate repository structure**: Ensures all required files and directories exist in the repository
-3. **Backup existing configuration**: Creates timestamped backups in `/tmp/` for any conflicting files (init.el, config/, lang/, themes/, custom/)
+3. **Backup existing configuration**: Creates timestamped backups in `/tmp/` for any conflicting files (init.el, early-init.el, config/, lang/, themes/, custom/)
 4. **Create symlinks**:
    - `~/.emacs.d/init.el` → `~/github/emacs.d/init.el`
+   - `~/.emacs.d/early-init.el` → `~/github/emacs.d/early-init.el`
    - `~/.emacs.d/config/` → `~/github/emacs.d/config/`
    - `~/.emacs.d/lang/` → `~/github/emacs.d/lang/`
    - `~/.emacs.d/themes/` → `~/github/emacs.d/themes/`
@@ -119,10 +120,11 @@ If you prefer to set up the symlinks manually:
 
 ```bash
 # Remove existing directories/files (be careful!).
-$ rm -rf ~/.emacs.d/init.el ~/.emacs.d/config ~/.emacs.d/lang ~/.emacs.d/themes ~/.emacs.d/custom
+$ rm -rf ~/.emacs.d/init.el ~/.emacs.d/early-init.el ~/.emacs.d/config ~/.emacs.d/lang ~/.emacs.d/themes ~/.emacs.d/custom
 
 # Create symlinks.
 $ ln -s ~/github/emacs.d/init.el ~/.emacs.d/init.el
+$ ln -s ~/github/emacs.d/early-init.el ~/.emacs.d/early-init.el
 $ ln -s ~/github/emacs.d/config ~/.emacs.d/config
 $ ln -s ~/github/emacs.d/lang ~/.emacs.d/lang
 $ ln -s ~/github/emacs.d/themes ~/.emacs.d/themes
@@ -132,25 +134,51 @@ $ ln -s ~/github/emacs.d/custom ~/.emacs.d/custom
 ## Configuration Structure
 
 - `init.el` - Main Emacs initialization file that loads all configuration modules
+- `early-init.el` - Early initialization file for performance optimizations (Emacs 27+ feature, loaded before `init.el` and package.el)
 - `config/` - Core configuration modules
-  - `core-packages.el`    - Package management and setup
-  - `core-ui.el`          - Basic UI configuration
-  - `core-editing.el`     - Editing preferences and behavior
-  - `core-files.el`       - File handling and backup settings
-  - `core-keybindings.el` - Global key bindings
+  - `core-package-manager.el` - Package management and setup
+  - `core-packages.el`        - Package declarations and configurations
+  - `core-ui.el`              - Basic UI configuration
+  - `core-editing.el`         - Editing preferences and behavior
+  - `core-files.el`           - File handling and backup settings
+  - `core-keybindings.el`     - Global key bindings
 - `lang/`   - Language-specific configurations
-  - `lang-python.el` - Python development settings
-  - `lang-yaml.el`   - YAML file handling
+  - `lang-python-core.el`  - Core Python development settings
+  - `lang-python-tools.el` - Python development tools and packages
+  - `lang-python-venv.el`  - Python virtual environment management
+  - `lang-lisp.el`         - Lisp/Elisp development settings
+  - `lang-yaml.el`         - YAML file handling
 - `themes/` - Theme and appearance configuration
   - `theme-config.el` - Theme setup and customization
 - `custom/` - Custom functions and utilities
   - `functions.el` - Custom helper functions
+  - `aliases.el`   - Custom command aliases
 
 ## Usage
 
 After installation, simply restart Emacs or reload your configuration with `M-x eval-buffer` while viewing the `init.el` file.
 
 Any changes you make to files in this repository will be immediately available in Emacs since they are symlinked.
+
+## Development
+
+### Code Style
+
+This configuration follows consistent formatting standards documented in `STYLEGUIDE.md`. Key points:
+
+- Uses `elisp-autofmt` for automated code formatting
+- Follows GNU Emacs Lisp conventions
+- Consistent file organization and naming
+- Standardized file headers and documentation
+
+### Performance Features
+
+The configuration includes several performance optimizations:
+
+- **Early initialization** (`early-init.el`): Loaded before package.el and GUI initialization for faster startup
+- **Garbage collection tuning**: Optimized GC settings during startup
+- **Package management**: Controlled package loading and initialization
+- **File handler optimization**: Temporary disabling of file name handlers during startup
 
 ## Troubleshooting
 

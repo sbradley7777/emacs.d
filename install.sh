@@ -57,7 +57,7 @@ check_emacs() {
 # Exits with error code 1 if any required components are missing
 validate_repo() {
     log INFO "Validating repository structure..."
-    local required_files=("init.el" "config" "lang" "themes" "custom")
+    local required_files=("init.el" "early-init.el" "config" "lang" "themes" "custom")
     local missing_files=()
     for file in "${required_files[@]}"; do
         if [[ ! -e "$REPO_DIR/$file" ]]; then
@@ -78,7 +78,7 @@ validate_repo() {
 # Places backups in /tmp directory with timestamp to avoid conflicts
 # Preserves unmanaged files in ~/.emacs.d that don't conflict with repo structure
 backup_existing() {
-    local files_to_backup=("init.el" "config" "lang" "themes" "custom")
+    local files_to_backup=("init.el" "early-init.el" "config" "lang" "themes" "custom")
     local backed_up_files=()
     local backup_needed=false
 
@@ -137,6 +137,7 @@ create_symlinks() {
 
     local links=(
         "init.el:init.el"
+        "early-init.el:early-init.el"
         "config:config"
         "lang:lang"
         "themes:themes"
@@ -167,7 +168,7 @@ create_symlinks() {
 # Exits with error code 1 if any symlinks are broken (point to non-existent targets)
 verify_installation() {
     log INFO "Verifying installation..."
-    local expected_links=("init.el" "config" "lang" "themes" "custom")
+    local expected_links=("init.el" "early-init.el" "config" "lang" "themes" "custom")
     local broken_links=()
     for link in "${expected_links[@]}"; do
         local link_path="$EMACS_DIR/$link"
@@ -244,12 +245,12 @@ This script will:
 1. Check for Emacs installation
 2. Validate repository structure
 3. Backup conflicting files to /tmp (unless --no-backup)
-4. Create symlinks from ~/.emacs.d to this repository
+4. Create symlinks from ~/.emacs.d to this repository (init.el, early-init.el, config/, lang/, themes/, custom/)
 5. Verify the installation
 6. Test configuration loading (unless --no-test)
 
 Note: This script preserves existing ~/.emacs.d and only backs up files
-that would conflict with the repository symlinks (init.el, config/, etc.).
+that would conflict with the repository symlinks (init.el, early-init.el, config/, etc.).
 
 EOF
 }
@@ -311,11 +312,7 @@ main() {
     fi
     log SUCCESS "Installation completed successfully!"
     log INFO "You can now start Emacs or restart if already running"
-    if [[ -f "$EMACS_DIR/config/core-validation.el" ]]; then
-        log INFO "To validate your configuration, run: emacs --batch -l ~/.emacs.d/config/core-validation.el -f run-config-validation"
-    else
-        log INFO "To debug configuration issues, run: emacs --debug-init"
-    fi
+    log INFO "To debug configuration issues, run: emacs --debug-init"
 }
 
 # Execute main function with all passed arguments
