@@ -7,10 +7,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced editing preferences
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(electric-pair-mode 1)                    ; Auto-close parentheses
-(delete-selection-mode 1)                 ; Replace selected text
-(global-auto-revert-mode 1)              ; Auto-reload changed files
-(setq auto-revert-check-vc-info t)        ; Include VC info in auto-revert
+(electric-pair-mode 1)                                ; Auto-close parentheses
+(delete-selection-mode 1)                            ; Replace selected text
+(global-auto-revert-mode 1)                          ; Auto-reload changed files
+(setq auto-revert-check-vc-info t)                   ; Include VC info in auto-revert
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Better indentation

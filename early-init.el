@@ -67,6 +67,6 @@
 ;; Completion and Input Optimizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Reduce input processing overhead during startup
-(setq idle-update-delay 1.0)           ; Longer delay for idle updates during startup
+(setq idle-update-delay 1.0)                   ; Longer delay for idle updates during startup
 
 (message "early-init.el loaded successfully - performance optimizations active.")
