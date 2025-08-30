@@ -23,13 +23,8 @@
  (setq eglot-events-buffer-size 0) ; Disable event logging for performance
  (setq eglot-sync-connect nil) ; Async connection
 
- ;; Integration with flycheck - let eglot handle diagnostics but allow flycheck for additional checks
- (setq eglot-stay-out-of '(flycheck))
-
- ;; Use flycheck for additional linting beyond LSP diagnostics
- (when (require 'flycheck nil t)
-   (add-hook 'python-mode-hook 'flycheck-mode)
-   (flycheck-add-next-checker 'python-flake8 'python-pylint))
+ ;; Use flymake as the diagnostic backend (eglot's default)
+ ;; Eglot will automatically integrate LSP diagnostics with flymake
 
  ;; Additional Python tools integration for better REPL experience
  (setq python-shell-completion-native-enable nil)) ; Fix completion issues
