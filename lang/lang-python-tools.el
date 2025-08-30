@@ -19,12 +19,9 @@
  ;; Configure Python LSP server (requires pylsp: pip install python-lsp-server)
  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
 
- ;; Performance optimizations
- (setq eglot-events-buffer-size 0) ; Disable event logging for performance
- (setq eglot-sync-connect nil) ; Async connection
-
  ;; Use flymake as the diagnostic backend (eglot's default)
  ;; Eglot will automatically integrate LSP diagnostics with flymake
+ ;; Performance settings are configured in core-packages.el
 
  ;; Additional Python tools integration for better REPL experience
  (setq python-shell-completion-native-enable nil)) ; Fix completion issues

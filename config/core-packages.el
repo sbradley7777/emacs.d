@@ -90,6 +90,14 @@
  (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
  (setq elisp-autofmt-parallel-jobs 1)) ; Single-threaded for consistency
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Eglot Performance Settings (applied early before any LSP servers start)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Disable event logging for better performance and memory usage
+(setq eglot-events-buffer-size 0)
+;; Use asynchronous connection for better responsiveness
+(setq eglot-sync-connect nil)
+
 
 ;; Make this module available for loading with (require 'core-packages)
 (provide 'core-packages)
