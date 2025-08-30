@@ -66,15 +66,17 @@
                 (file-directory-p venv-path)
                 (not (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (string-equal pyvenv-virtual-env venv-path))))
        (pyvenv-activate venv-path)
-       ;; Update both Python shell and Elpy RPC to use the virtual environment's Python
+       ;; Update both Python shell and eglot to use the virtual environment's Python
        (let* ((venv-python (expand-file-name "bin/python" venv-path))
               (venv-parent-dir (file-name-directory (directory-file-name venv-path)))
               (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
          (when (file-executable-p venv-python)
-           (setq
-            python-shell-interpreter venv-python
-            elpy-rpc-python-command venv-python)
-           (message "Updated Python interpreter and Elpy RPC to: %s" python-shell-interpreter))
+           (setq python-shell-interpreter venv-python)
+           ;; Restart eglot if it's running to pick up new Python path
+           (when (and (derived-mode-p 'python-mode) (eglot-current-server))
+             (eglot-shutdown (eglot-current-server))
+             (eglot-ensure))
+           (message "Updated Python interpreter to: %s" python-shell-interpreter))
          ;; Set the project name globally for modeline display and force update
          (setq-default config-python-project-name project-name)
          (setq config-python-project-name project-name)
