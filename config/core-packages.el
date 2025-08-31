@@ -97,6 +97,11 @@
 (setq eglot-events-buffer-size 0)
 ;; Use asynchronous connection for better responsiveness
 (setq eglot-sync-connect nil)
+;; Additional stability settings for Emacs 30.x
+(setq eglot-extend-to-xref nil)           ; Prevent xref conflicts
+(setq eglot-confirm-server-initiated-edits nil) ; Reduce confirmation prompts
+;; Suppress some common error messages that don't affect functionality
+(setq eglot-report-progress nil)          ; Reduce progress notification noise
 
 
 ;; Make this module available for loading with (require 'core-packages)
