@@ -61,13 +61,17 @@ This configuration follows consistent formatting standards documented in [`STYLE
 
 ## Usage
 
-After installation, simply restart Emacs or reload your configuration with `M-x eval-buffer` while viewing the `init.el` file.
+After installation, simply restart Emacs or reload your configuration with `M-x eval-buffer` while viewing the [`init.el`](init.el) file.
 
-Any changes you make to files in this repository will be immediately available in Emacs since they are symlinked.
+**Note**: If you used the development installation (symlinks), any changes you make to files in this repository will be immediately available in Emacs for testing and development purposes.
 
 ## Installation
 
-To use this Emacs configuration:
+There are two ways to install this Emacs configuration, depending on your use case:
+
+### Option 1: Development Installation (Symlinks)
+
+**Use this method if you want to modify and develop the configuration itself.**
 
 ```bash
 # Clone this repository
@@ -81,7 +85,27 @@ $ chmod +x scripts/install.sh
 $ ./scripts/install.sh
 ```
 
-The installer creates symlinks from `~/.emacs.d/` to this repository, allowing you to keep your configuration in version control while making changes immediately available in Emacs.
+The installer creates symlinks from `~/.emacs.d/` to this repository, allowing you to:
+- Keep your configuration in version control
+- Make changes immediately available in Emacs for testing
+- Easily test configuration modifications and see errors in real-time
+
+### Option 2: Standard Installation (Copy)
+
+**Use this method for regular daily use without modifying the configuration.**
+
+```bash
+# Clone this repository
+$ git clone <your-repository-url> ~/github/emacs.d
+
+# Copy the configuration to your Emacs directory
+$ cp -r ~/github/emacs.d ~/.emacs.d
+
+# Optional: Remove the cloned repository if you don't need it
+$ rm -rf ~/github/emacs.d
+```
+
+With this method, the configuration files are copied directly to `~/.emacs.d/` and work independently of the repository.
 
 For detailed installation options, troubleshooting, and manual setup instructions, see [`scripts/README.md`](scripts/README.md).
 
