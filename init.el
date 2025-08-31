@@ -121,6 +121,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'lang-python-venv "Python virtual environments")
 (safe-load-config 'lang-python-tools "Python development tools")
 (safe-load-config 'lang-python-eglot "Python LSP (eglot) configuration")
+(safe-load-config 'lang-python-flymake "Python Flymake configuration")
 (safe-load-config 'lang-yaml "YAML file support")
 
 ;; Custom functions and aliases
