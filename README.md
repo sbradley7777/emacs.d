@@ -2,6 +2,28 @@
 
 Personal Emacs configuration files and customizations.
 
+## Table of Contents
+
+- [Configuration Structure](#configuration-structure)
+- [Features](#features)
+  - [Performance Optimizations](#performance-optimizations)
+  - [Language Support](#language-support)
+  - [Code Style and Standards](#code-style-and-standards)
+- [Usage](#usage)
+- [Installation](#installation)
+  - [Option 1: Development Installation (Symlinks)](#option-1-development-installation-symlinks)
+  - [Option 2: Standard Installation (Copy)](#option-2-standard-installation-copy)
+- [Python Development Setup](#python-development-setup)
+  - [Prerequisites](#prerequisites)
+  - [Virtual Environment Configuration](#virtual-environment-configuration)
+    - [Automatic Detection](#automatic-detection)
+    - [Project Setup Example](#project-setup-example)
+    - [Manual Virtual Environment Control](#manual-virtual-environment-control)
+    - [LSP Configuration with pyproject.toml](#lsp-configuration-with-pyprojecttoml)
+  - [Features and Debugging](#features-and-debugging)
+    - [Available Features](#available-features)
+    - [Debugging LSP Issues](#debugging-lsp-issues)
+
 ## Configuration Structure
 
 - `init.el` - Main Emacs initialization file that loads all configuration modules
