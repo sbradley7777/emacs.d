@@ -7,26 +7,27 @@ Personal Emacs configuration files and customizations.
 - `init.el` - Main Emacs initialization file that loads all configuration modules
 - `early-init.el` - Early initialization file for performance optimizations (Emacs 27+ feature, loaded before `init.el` and package.el)
 - `config/` - Core configuration modules
-  - `core-package-manager.el` - Package management and setup
-  - `core-packages.el`        - Package declarations and configurations
-  - `core-ui.el`              - Basic UI configuration
-  - `core-editing.el`         - Editing preferences and behavior
-  - `core-files.el`           - File handling and backup settings
-  - `core-keybindings.el`     - Global key bindings
+  - [`core-package-manager.el`](config/core-package-manager.el) - Package management and setup
+  - [`core-packages.el`](config/core-packages.el)        - Package declarations and configurations
+  - [`core-ui.el`](config/core-ui.el)              - Basic UI configuration
+  - [`core-editing.el`](config/core-editing.el)         - Editing preferences and behavior
+  - [`core-files.el`](config/core-files.el)           - File handling and backup settings
+  - [`core-keybindings.el`](config/core-keybindings.el)     - Global key bindings
 - `lang/`   - Language-specific configurations
-  - `lang-python-core.el`  - Core Python development settings
-  - `lang-python-tools.el` - Python development tools and packages
-  - `lang-python-venv.el`  - Python virtual environment management
-  - `lang-lisp.el`         - Lisp/Elisp development settings
-  - `lang-yaml.el`         - YAML file handling
+  - [`lang-python-core.el`](lang/lang-python-core.el)  - Core Python development settings
+  - [`lang-python-tools.el`](lang/lang-python-tools.el) - Python development tools and packages
+  - [`lang-python-eglot.el`](lang/lang-python-eglot.el) - Eglot LSP configuration for Python development
+  - [`lang-python-venv.el`](lang/lang-python-venv.el)  - Python virtual environment management with auto-detection
+  - [`lang-lisp.el`](lang/lang-lisp.el)         - Lisp/Elisp development settings
+  - [`lang-yaml.el`](lang/lang-yaml.el)         - YAML file handling
 - `themes/` - Theme and appearance configuration
-  - `theme-config.el` - Theme setup and customization
+  - [`theme-config.el`](themes/theme-config.el) - Theme setup and customization
 - `custom/` - Custom functions and utilities
-  - `functions.el` - Custom helper functions
-  - `aliases.el`   - Custom command aliases
+  - [`functions.el`](custom/functions.el) - Custom helper functions
+  - [`aliases.el`](custom/aliases.el)   - Custom command aliases
 - `scripts/` - Installation and utility scripts
-  - `install.sh` - Automated installation script
-  - `README.md` - Detailed installation guide
+  - [`install.sh`](scripts/install.sh) - Automated installation script
+  - [`README.md`](scripts/README.md) - Detailed installation guide
 
 ## Features
 
@@ -41,15 +42,19 @@ The configuration includes several performance enhancements:
 
 ### Language Support
 
-- **Python Development**: Comprehensive Python support with tools, virtual environment management, and core development features
+- **Python Development**: Full-featured Python development environment with:
+  - **Eglot LSP integration** using `python-lsp-server` (pylsp) for intelligent code completion, diagnostics, and navigation
+  - **Automatic virtual environment detection and activation** with project-aware switching
+  - **Flymake integration** for real-time syntax checking and linting
+  - **Enhanced modeline display** showing active virtual environment and project name
 - **Lisp/Elisp Development**: Enhanced support for Lisp programming
 - **YAML Configuration**: Specialized handling for YAML files
 
 ### Code Style and Standards
 
-This configuration follows consistent formatting standards documented in `STYLEGUIDE.md`:
+This configuration follows consistent formatting standards documented in [`STYLEGUIDE.md`](STYLEGUIDE.md):
 
-- Uses `elisp-autofmt` for automated code formatting
+- Uses [`elisp-autofmt`](https://github.com/purcell/elisp-autofmt) for automated code formatting
 - Follows GNU Emacs Lisp conventions
 - Consistent file organization and naming
 - Standardized file headers and documentation
@@ -79,3 +84,105 @@ $ ./scripts/install.sh
 The installer creates symlinks from `~/.emacs.d/` to this repository, allowing you to keep your configuration in version control while making changes immediately available in Emacs.
 
 For detailed installation options, troubleshooting, and manual setup instructions, see [`scripts/README.md`](scripts/README.md).
+
+## Python Development Setup
+
+This configuration provides comprehensive Python development support through Eglot LSP integration and automatic virtual environment management.
+
+### Prerequisites
+
+To use the full Python development features, you'll need to install the following packages in your Python environment:
+
+```bash
+# Core Language Server Protocol support
+pip install python-lsp-server
+
+# Essential pylsp plugins for enhanced functionality
+pip install pylsp-mypy              # MyPy type checking integration
+pip install pylsp-ruff              # Ruff linting and formatting
+```
+
+### Virtual Environment Configuration
+
+The configuration automatically detects and activates virtual environments in your projects:
+
+#### Automatic Detection
+
+Virtual environments are automatically detected when you open Python files if:
+- A `venv/` directory exists in your project root
+- Your project contains `.git/`, `pyproject.toml`, or `requirements.txt` files
+
+#### Project Setup Example
+
+```bash
+# Create a new Python project
+mkdir my-python-project
+cd my-python-project
+
+# Create virtual environment
+python -m venv venv
+
+# Activate it manually (first time)
+source venv/bin/activate
+
+# Install development dependencies
+pip install python-lsp-server pylsp-mypy pylsp-ruff
+
+# Create a project file to test
+echo "def hello_world():" > main.py
+echo "    print('Hello, World!')" >> main.py
+
+# Open in Emacs - virtual environment will auto-activate
+emacs main.py
+```
+
+#### Manual Virtual Environment Control
+
+You can also manually control virtual environments within Emacs:
+
+- `M-x pyvenv-activate` - Manually activate a virtual environment
+- `M-x pyvenv-deactivate` - Deactivate current virtual environment
+- `M-x pyvenv-workon` - Switch to a different virtual environment
+
+#### LSP Configuration with pyproject.toml
+
+The Eglot configuration supports project-specific settings through `pyproject.toml`. The [`lang-python-eglot.el`](lang/lang-python-eglot.el) file configures pylsp to read from `pyproject.toml` automatically:
+
+```toml
+# Python LSP Server (pylsp) Configuration
+# Controls which linters and tools are enabled when using pylsp via editors like Emacs with eglot
+[tool.pylsp.plugins]
+# Disable built-in linters that conflict with our preferred tools
+pycodestyle = {enabled = false}
+pyflakes = {enabled = false}
+autopep8 = {enabled = false}
+yapf = {enabled = false}
+mccabe = {enabled = false}
+pylint = {enabled = false}
+flake8 = {enabled = false}
+# Enable our preferred linters (they will use existing tool configurations above)
+ruff = {enabled = true}
+mypy = {enabled = true}
+```
+
+### Features and Debugging
+
+#### Available Features
+
+- **Code completion** - Intelligent completion based on context and type hints
+- **Real-time diagnostics** - Syntax errors, type checking, and linting displayed in-buffer
+- **Go to definition** - `M-.` to jump to function/class definitions
+- **Find references** - `M-?` to find all references to a symbol
+- **Symbol renaming** - `C-c r` to rename symbols across the project
+- **Code actions** - `C-c a` for available code fixes and refactoring
+
+#### Debugging LSP Issues
+
+If you encounter issues with the language server:
+
+1. **Check LSP events**: `M-x eglot-events-buffer` to see LSP communication
+2. **View server errors**: `M-x eglot-stderr-buffer` to see server error messages
+3. **Restart LSP server**: `M-x eglot-shutdown` followed by `M-x eglot` or reopening the file
+4. **Verify pylsp installation**: Ensure `pylsp` is available in your virtual environment
+
+The modeline will display `[venv: project-name]` when a virtual environment is active, helping you verify the current configuration.
