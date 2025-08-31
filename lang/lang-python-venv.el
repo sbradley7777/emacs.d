@@ -73,9 +73,12 @@
          (when (file-executable-p venv-python)
            (setq python-shell-interpreter venv-python)
            ;; Restart eglot if it's running to pick up new Python path
-           (when (and (derived-mode-p 'python-mode) (eglot-current-server))
+           (when (and (derived-mode-p 'python-mode)
+                      (fboundp 'eglot-current-server)
+                      (eglot-current-server))
              (eglot-shutdown (eglot-current-server))
-             (eglot-ensure))
+             (when (fboundp 'eglot-ensure)
+               (eglot-ensure)))
            (message "Updated Python interpreter to: %s" python-shell-interpreter))
          ;; Set the project name globally for modeline display and force update
          (setq-default config-python-project-name project-name)
