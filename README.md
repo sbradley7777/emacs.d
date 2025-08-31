@@ -154,9 +154,14 @@ The configuration automatically detects and activates virtual environments in yo
 
 #### Automatic Detection
 
-Virtual environments are automatically detected when you open Python files if:
-- A `venv/` directory exists in your project root
-- Your project contains `.git/`, `pyproject.toml`, or `requirements.txt` files
+Virtual environments are automatically detected when you open Python files if **both** conditions are met:
+1. A `venv/` directory exists in your project root.
+2. Your project root is determined by traversing upward from the opened file's directory, searching for **any** of these files:
+   - `.git/` directory (Git repository)
+   - `pyproject.toml` file
+   - `requirements.txt` file
+
+The system starts from the directory containing your Python file and walks up the directory tree (parent by parent) until it finds one of these project markers, which defines the project root.
 
 #### Project Setup Example
 
