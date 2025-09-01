@@ -36,19 +36,11 @@
  ;; Configure Python LSP server (requires system-wide pylsp: pip3.9 install python-lsp-server)
  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
 
- ;; Configure pylsp with minimal plugin enablement
- ;; Plugins will discover their configuration via standard methods:
- ;; 1. pyproject.toml (project-specific)
- ;; 2. ~/.config/tool/ or ~/.tool files (user defaults)
- (setq eglot-workspace-configuration
-       '((pylsp
-          (plugins
-           (mypy
-            (enabled . t))
-           (ruff
-            (enabled . t))
-           (pylint
-            (enabled . t))))))
+ ;; Configure pylsp to use external configuration
+ ;; Plugins are configured via ~/.config/pylsp/config.json
+ ;; This allows for better separation of concerns and easier maintenance
+ ;; Project-specific settings can still be defined in pyproject.toml
+ (setq eglot-workspace-configuration '())
 
  ;; Performance and stability settings
  ;; Note: eglot-events-buffer-size is set to 0 in core-packages.el for performance
