@@ -10,6 +10,7 @@ Personal Emacs configuration files and customizations.
   - [Language Support](#language-support)
   - [Code Style and Standards](#code-style-and-standards)
 - [Usage](#usage)
+- [Requirements](#requirements)
 - [Installation](#installation)
   - [Option 1: Development Installation (Symlinks)](#option-1-development-installation-symlinks)
   - [Option 2: Standard Installation (Copy)](#option-2-standard-installation-copy)
@@ -86,6 +87,11 @@ This configuration follows consistent formatting standards documented in [`STYLE
 After installation, simply restart Emacs or reload your configuration with `M-x eval-buffer` while viewing the [`init.el`](init.el) file.
 
 **Note**: If you used the development installation (symlinks), any changes you make to files in this repository will be immediately available in Emacs for testing and development purposes.
+
+## Requirements
+
+- **Emacs 30.2** or later
+- Access to install Python packages (for Python development features)
 
 ## Installation
 
