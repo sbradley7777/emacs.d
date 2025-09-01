@@ -112,6 +112,8 @@ The installer creates symlinks from `~/.emacs.d/` to this repository, allowing y
 - Make changes immediately available in Emacs for testing
 - Easily test configuration modifications and see errors in real-time
 
+For detailed installation options, troubleshooting, and manual setup instructions, see [`scripts/README.md`](scripts/README.md).
+
 ### Option 2: Standard Installation (Copy)
 
 **Use this method for regular daily use without modifying the configuration.**
@@ -128,8 +130,6 @@ $ rm -rf ~/github/emacs.d
 ```
 
 With this method, the configuration files are copied directly to `~/.emacs.d/` and work independently of the repository.
-
-For detailed installation options, troubleshooting, and manual setup instructions, see [`scripts/README.md`](scripts/README.md).
 
 ## Python Development Setup
 
