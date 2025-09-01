@@ -36,16 +36,15 @@
  ;; Configure Python LSP server (requires system-wide pylsp: pip3.9 install python-lsp-server)
  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
 
- ;; Configure pylsp to read pyproject.toml for plugin configuration
- ;; This ensures pylsp uses project-specific linter settings
+ ;; Configure pylsp with minimal plugin enablement
+ ;; Plugins will discover their configuration via standard methods:
+ ;; 1. pyproject.toml (project-specific)
+ ;; 2. ~/.config/tool/ or ~/.tool files (user defaults)
  (setq eglot-workspace-configuration
        '((pylsp
-          (configurationSources . ["pyproject.toml"])
           (plugins
            (mypy
-            (enabled . t)
-            (live_mode . t)
-            (strict . t))
+            (enabled . t))
            (ruff
             (enabled . t))
            (pylint
