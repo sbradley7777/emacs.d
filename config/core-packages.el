@@ -13,7 +13,7 @@
 (defvar config-essential-packages '(spacemacs-theme zenburn-theme yaml-mode)
   "Essential packages that must be installed.")
 
-(defvar config-development-packages '(pylint which-key pyvenv elisp-autofmt)
+(defvar config-development-packages '(which-key pyvenv elisp-autofmt)
   "Development and programming packages.")
 
 (defvar config-packages (append config-essential-packages config-development-packages)
@@ -70,7 +70,6 @@
 (use-package spacemacs-theme :defer t) ; Deferred loading for spacemacs theme
 (use-package zenburn-theme :defer t) ; Deferred loading for zenburn theme
 (use-package yaml-mode :mode ("\\.ya?ml\\'" . yaml-mode)) ; YAML file support
-(use-package pylint :after python) ; Python linting support
 
 ;; Note: Elpy configuration moved to lang-python-tools.el for better organization
 
