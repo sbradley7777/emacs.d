@@ -93,7 +93,7 @@
 ;; Eglot Performance Settings (applied early before any LSP servers start)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Disable event logging for better performance and memory usage
-(setq eglot-events-buffer-size 0)
+(setq eglot-events-buffer-size 0)  ; Disable for performance
 ;; Use asynchronous connection for better responsiveness
 (setq eglot-sync-connect nil)
 ;; Additional stability settings for Emacs 30.x

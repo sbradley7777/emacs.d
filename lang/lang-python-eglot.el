@@ -36,10 +36,8 @@
  ;; Configure Python LSP server (requires system-wide pylsp: pip3.9 install python-lsp-server)
  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
 
- ;; Configure pylsp to use external configuration
- ;; Plugins are configured via ~/.config/pylsp/config.json
- ;; This allows for better separation of concerns and easier maintenance
- ;; Project-specific settings can still be defined in pyproject.toml
+ ;; Use pylsp defaults for all plugins - no configuration overrides
+ ;; This provides the cleanest, most maintainable setup
  (setq eglot-workspace-configuration '())
 
  ;; Performance and stability settings
