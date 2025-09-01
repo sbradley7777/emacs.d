@@ -158,7 +158,14 @@ This ensures the `pylsp` binary installed by `python-lsp-server` is accessible f
 
 ### Python LSP Configuration
 
-Since pylsp is now installed system-wide and decoupled from virtual environments, you can configure which providers it uses through a global configuration file at `~/.config/pylsp/config.json`:
+Since pylsp is now installed system-wide and decoupled from virtual environments, you can configure which providers it uses through a global configuration file.
+
+Create the directory if it doesn't exist:
+```bash
+mkdir -p ~/.config/pylsp/
+```
+
+Then create the following file `~/.config/pylsp/config.json` with the following content:
 
 ```json
 {
@@ -180,8 +187,6 @@ This configuration:
 - Disables built-in linters that may conflict with your preferred tools
 - Enables Ruff for fast linting and formatting
 - Enables MyPy for static type checking
-
-**Note**: Create the directory if it doesn't exist: `mkdir -p ~/.config/pylsp/`
 
 ### Virtual Environment Configuration
 
