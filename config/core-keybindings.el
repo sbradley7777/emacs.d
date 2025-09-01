@@ -19,6 +19,7 @@
 
 
 ;; Utility function keys
+(global-set-key [f1] 'flymake-show-buffer-diagnostics) ; Show Flymake diagnostics
 (global-set-key [f4] 'kill-this-buffer) ; Kill the buffer
 (global-set-key [f5] 'clipboard-kill-ring-save) ; Copy what is highlighted
 (global-set-key [f6] 'delete-trailing-whitespace) ; Delete trailing whitespace

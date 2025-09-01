@@ -9,31 +9,47 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Eglot LSP Python Development Environment
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Simple eglot activation that checks for system-wide pylsp only
+(defun python-eglot-maybe-start ()
+  "Start eglot for Python only if system-wide pylsp is available."
+  (interactive)
+  (message "EGLOT: Attempting to start eglot for Python...")
+  (if (executable-find "pylsp")
+      (progn
+        (message "EGLOT: Found pylsp at: %s" (executable-find "pylsp"))
+        (condition-case err
+            (progn
+              (eglot-ensure)
+              (message "EGLOT: Successfully started eglot for Python"))
+          (error
+           (message "EGLOT: Failed to start: %s" (error-message-string err)))))
+    (message "EGLOT: pylsp not found - install python-lsp-server for LSP features")))
+
+;; Auto-start eglot for Python files
+(add-hook 'python-mode-hook #'python-eglot-maybe-start)
+
 (use-package
  eglot
- :hook (python-mode . python-eglot-maybe-start)
+ :defer t
  :config
- ;; Configure Python LSP server (requires pylsp: pip install python-lsp-server)
+ ;; Configure Python LSP server (requires system-wide pylsp: pip3.9 install python-lsp-server)
  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
-
- ;; Smart eglot activation that checks for pylsp availability
- (defun python-eglot-maybe-start ()
-   "Start eglot for Python only if pylsp is available."
-   (interactive)
-   (if (or (executable-find "pylsp")
-           (and (boundp 'pyvenv-virtual-env)
-                pyvenv-virtual-env
-                (file-executable-p (expand-file-name "bin/pylsp" pyvenv-virtual-env))))
-       (condition-case err
-           (eglot-ensure)
-         (error
-          (message "Eglot failed to start: %s" (error-message-string err))))
-     (message "pylsp not found - install python-lsp-server for LSP features")))
 
  ;; Configure pylsp to read pyproject.toml for plugin configuration
  ;; This ensures pylsp uses project-specific linter settings
  (setq eglot-workspace-configuration
-       '((pylsp (configurationSources . ["pyproject.toml"]))))
+       '((pylsp
+          (configurationSources . ["pyproject.toml"])
+          (plugins
+           (mypy
+            (enabled . t)
+            (live_mode . t)
+            (strict . t))
+           (ruff
+            (enabled . t))
+           (pylint
+            (enabled . t))))))
 
  ;; Performance and stability settings
  ;; Note: eglot-events-buffer-size is set to 0 in core-packages.el for performance
