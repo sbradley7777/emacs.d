@@ -20,7 +20,6 @@ Personal Emacs configuration files and customizations.
     - [Automatic Detection](#automatic-detection)
     - [Project Setup Example](#project-setup-example)
     - [Manual Virtual Environment Control](#manual-virtual-environment-control)
-    - [LSP Configuration with pyproject.toml](#lsp-configuration-with-pyprojecttoml)
   - [Features and Debugging](#features-and-debugging)
     - [Available Features](#available-features)
     - [Debugging LSP Issues](#debugging-lsp-issues)
@@ -179,24 +178,62 @@ You can configure the individual tools using their standard configuration files:
 **MyPy Configuration** (`~/.mypy.ini`):
 ```ini
 [mypy]
-# MyPy configuration
-check_untyped_defs = true
-disallow_untyped_defs = false
+python_version = 3.11
+show_error_codes = true
+pretty = true
+
+# -- Strictness Checks --
+disallow_untyped_defs = true
+disallow_any_unimported = true
+disallow_incomplete_defs = true
+check_untyped_defs = false
+no_implicit_optional = true
 warn_return_any = true
-warn_unused_configs = true
+warn_unused_ignores = true
+disallow_untyped_decorators = true
+
+# -- Per-module overrides --
+[mypy-tests.*]
+disable_error_code = arg-type
 ```
 
 **Ruff Configuration** (`~/.config/ruff/pyproject.toml`):
 ```toml
 [tool.ruff]
-# Ruff configuration
-line-length = 88
-select = ["E", "F", "W", "C90"]
-ignore = ["E203", "E501"]
+line-length = 127
+indent-width = 4
+target-version = "py311"
 
-[tool.ruff.mccabe]
-max-complexity = 10
+[tool.ruff.lint]
+# Enable the default set of rules (E, F) and extend it with others.
+select = ["E", "F"]
+extend-select = ["D"]
+# The error D107 conflicts with "pydoclint" error DOC301. Ignore the "ruff" error.
+ignore = ["E501", "D107"]
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = true
+line-ending = "auto"
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = false
+# Set the line length limit used when formatting code snippets in
+# docstrings. This only has an effect when the `docstring-code-format` setting
+# is enabled.
+docstring-code-line-length = "dynamic"
 ```
+
+For project-specific configurations, you can create configuration files in your project root that will override these system-wide/user settings.
 
 ### Virtual Environment Configuration
 
@@ -245,25 +282,6 @@ You can also manually control virtual environments within Emacs:
 - `M-x pyvenv-deactivate` - Deactivate current virtual environment
 - `M-x pyvenv-workon` - Switch to a different virtual environment
 
-#### Project-specific Tool Configuration
-
-While the LSP configuration uses defaults, you can still configure individual tools on a per-project basis using their standard configuration files in your project root:
-
-**Project MyPy** (`mypy.ini` or `pyproject.toml`):
-```toml
-[tool.mypy]
-check_untyped_defs = true
-strict_optional = true
-```
-
-**Project Ruff** (`pyproject.toml`):
-```toml
-[tool.ruff]
-line-length = 100
-select = ["E", "F", "W", "C90", "I"]
-```
-
-These project-specific configurations will be automatically picked up by the respective tools when pylsp runs them.
 
 ### Features and Debugging
 
