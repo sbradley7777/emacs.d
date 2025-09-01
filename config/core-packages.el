@@ -71,7 +71,7 @@
 (use-package zenburn-theme :defer t) ; Deferred loading for zenburn theme
 (use-package yaml-mode :mode ("\\.ya?ml\\'" . yaml-mode)) ; YAML file support
 
-;; Note: Elpy configuration moved to lang-python-tools.el for better organization
+;; Note: Python development configuration in lang/ directory (eglot-based setup)
 
 (use-package
  which-key
