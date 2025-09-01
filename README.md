@@ -137,16 +137,51 @@ This configuration provides comprehensive Python development support through Egl
 
 ### Prerequisites
 
-To use the full Python development features, you'll need to install the following packages in your Python environment:
+To use the full Python development features, you'll need to install the following packages system-wide or for your user:
 
 ```bash
-# Core Language Server Protocol support
-pip install python-lsp-server
+# Install pylsp and plugins system-wide (user installation)
+pip3.9 install --user python-lsp-server pylsp-mypy python-lsp-ruff
 
-# Essential pylsp plugins for enhanced functionality
-pip install pylsp-mypy              # MyPy type checking integration
-pip install pylsp-ruff              # Ruff linting and formatting
+# Or install system-wide (if you have admin privileges)
+sudo pip3.9 install python-lsp-server pylsp-mypy python-lsp-ruff
 ```
+
+**Important**: Ensure your `~/.bash_profile` includes `$HOME/.local/bin` in your PATH:
+
+```bash
+# Add to ~/.bash_profile
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+This ensures the `pylsp` binary installed by `python-lsp-server` is accessible from Emacs.
+
+### Python LSP Configuration
+
+Since pylsp is now installed system-wide and decoupled from virtual environments, you can configure which providers it uses through a global configuration file at `~/.config/pylsp/config.json`:
+
+```json
+{
+  "plugins": {
+    "pycodestyle": {"enabled": false},
+    "pyflakes": {"enabled": false},
+    "autopep8": {"enabled": false},
+    "yapf": {"enabled": false},
+    "mccabe": {"enabled": false},
+    "pylint": {"enabled": false},
+    "flake8": {"enabled": false},
+    "ruff": {"enabled": true},
+    "mypy": {"enabled": true}
+  }
+}
+```
+
+This configuration:
+- Disables built-in linters that may conflict with your preferred tools
+- Enables Ruff for fast linting and formatting
+- Enables MyPy for static type checking
+
+**Note**: Create the directory if it doesn't exist: `mkdir -p ~/.config/pylsp/`
 
 ### Virtual Environment Configuration
 
@@ -176,8 +211,8 @@ python -m venv venv
 # Activate it manually (first time)
 source venv/bin/activate
 
-# Install development dependencies
-pip install python-lsp-server pylsp-mypy pylsp-ruff
+# Install your project dependencies
+pip install -r requirements.txt  # or your project dependencies
 
 # Create a project file to test
 echo "def hello_world():" > main.py
