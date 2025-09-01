@@ -147,10 +147,10 @@ To use the full Python development features, you'll need to install the followin
 
 ```bash
 # Install pylsp and plugins system-wide (user installation)
-pip3.9 install --user python-lsp-server pylsp-mypy python-lsp-ruff
+pip3.9 install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
 
 # Or install system-wide (if you have admin privileges)
-sudo pip3.9 install python-lsp-server pylsp-mypy python-lsp-ruff
+sudo pip3.9 install python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
 ```
 
 **Important**: Ensure your `~/.bash_profile` includes `$HOME/.local/bin` in your PATH:
@@ -164,35 +164,39 @@ This ensures the `pylsp` binary installed by `python-lsp-server` is accessible f
 
 ### Python LSP Configuration
 
-Since pylsp is now installed system-wide and decoupled from virtual environments, you can configure which providers it uses through a global configuration file.
+The configuration uses the default pylsp setup without configuration overrides. This provides the cleanest, most maintainable setup. However, since you have installed both `mypy` and `ruff` packages along with their pylsp plugins (`pylsp-mypy` and `python-lsp-ruff`), these tools will override the built-in linters when available.
 
-Create the directory if it doesn't exist:
-```bash
-mkdir -p ~/.config/pylsp/
+**Key providers enabled:**
+- **Ruff**: Fast linting and formatting (overrides built-in pycodestyle, pyflakes, etc.)
+- **MyPy**: Static type checking (enhanced type analysis)
+
+The pylsp plugins automatically detect when `mypy` and `ruff` are installed and prioritize them over built-in linters.
+
+#### Optional: Tool-specific Configuration
+
+You can configure the individual tools using their standard configuration files:
+
+**MyPy Configuration** (`~/.mypy.ini`):
+```ini
+[mypy]
+# MyPy configuration
+check_untyped_defs = true
+disallow_untyped_defs = false
+warn_return_any = true
+warn_unused_configs = true
 ```
 
-Then create the following file `~/.config/pylsp/config.json` with the following content:
+**Ruff Configuration** (`~/.config/ruff/pyproject.toml`):
+```toml
+[tool.ruff]
+# Ruff configuration
+line-length = 88
+select = ["E", "F", "W", "C90"]
+ignore = ["E203", "E501"]
 
-```json
-{
-  "plugins": {
-    "pycodestyle": {"enabled": false},
-    "pyflakes": {"enabled": false},
-    "autopep8": {"enabled": false},
-    "yapf": {"enabled": false},
-    "mccabe": {"enabled": false},
-    "pylint": {"enabled": false},
-    "flake8": {"enabled": false},
-    "ruff": {"enabled": true},
-    "mypy": {"enabled": true}
-  }
-}
+[tool.ruff.mccabe]
+max-complexity = 10
 ```
-
-This configuration:
-- Disables built-in linters that may conflict with your preferred tools
-- Enables Ruff for fast linting and formatting
-- Enables MyPy for static type checking
 
 ### Virtual Environment Configuration
 
@@ -241,26 +245,25 @@ You can also manually control virtual environments within Emacs:
 - `M-x pyvenv-deactivate` - Deactivate current virtual environment
 - `M-x pyvenv-workon` - Switch to a different virtual environment
 
-#### LSP Configuration with pyproject.toml
+#### Project-specific Tool Configuration
 
-The Eglot configuration supports project-specific settings through `pyproject.toml`. The [`lang-python-eglot.el`](lang/lang-python-eglot.el) file configures pylsp to read from `pyproject.toml` automatically:
+While the LSP configuration uses defaults, you can still configure individual tools on a per-project basis using their standard configuration files in your project root:
 
+**Project MyPy** (`mypy.ini` or `pyproject.toml`):
 ```toml
-# Python LSP Server (pylsp) Configuration
-# Controls which linters and tools are enabled when using pylsp via editors like Emacs with eglot
-[tool.pylsp.plugins]
-# Disable built-in linters that conflict with our preferred tools
-pycodestyle = {enabled = false}
-pyflakes = {enabled = false}
-autopep8 = {enabled = false}
-yapf = {enabled = false}
-mccabe = {enabled = false}
-pylint = {enabled = false}
-flake8 = {enabled = false}
-# Enable our preferred linters (they will use existing tool configurations above)
-ruff = {enabled = true}
-mypy = {enabled = true}
+[tool.mypy]
+check_untyped_defs = true
+strict_optional = true
 ```
+
+**Project Ruff** (`pyproject.toml`):
+```toml
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "W", "C90", "I"]
+```
+
+These project-specific configurations will be automatically picked up by the respective tools when pylsp runs them.
 
 ### Features and Debugging
 
