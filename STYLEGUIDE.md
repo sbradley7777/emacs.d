@@ -16,12 +16,34 @@ This configuration follows established Emacs Lisp community standards and best p
 ### Directory Layout
 ```
 emacs.d/
-├── init.el                 # Main configuration entry point
-├── early-init.el          # Early initialization settings
-├── config/                # Core configuration modules
-├── lang/                  # Language-specific configurations
-├── themes/                # Theme configurations
-└── custom/                # Custom functions and aliases
+├── init.el                      # Main configuration entry point
+├── early-init.el                # Early initialization and performance optimizations
+├── config/                      # Core configuration modules
+│   ├── core-package-manager.el  # Package repositories and use-package setup
+│   ├── core-packages.el         # Essential package installations and configurations
+│   ├── core-ui.el               # User interface, themes, and visual settings
+│   ├── core-editing.el          # Text editing behavior and preferences
+│   ├── core-files.el            # File handling, backup, and auto-save settings
+│   ├── core-keybindings.el      # Global keybindings and shortcuts
+│   └── completion-corfu.el      # Completion framework configuration
+├── lang/                        # Language-specific configurations
+│   ├── lang-python-core.el      # Basic Python mode settings and indentation
+│   ├── lang-python-eglot.el     # Python Language Server Protocol integration
+│   ├── lang-python-flymake.el   # Python syntax checking and linting
+│   ├── lang-python-tools.el     # Python development tools and utilities
+│   ├── lang-python-venv.el      # Virtual environment management
+│   ├── lang-lisp.el             # Lisp and Emacs Lisp development settings
+│   └── lang-yaml.el             # YAML file editing configuration
+├── themes/                      # Theme configurations
+│   └── theme-config.el          # Color themes and visual appearance
+├── custom/                      # Custom functions and aliases
+│   ├── functions.el             # User-defined utility functions
+│   └── aliases.el               # Command aliases and shortcuts
+├── scripts/                     # Installation and utility scripts
+│   ├── install.sh               # Automated configuration installation
+│   └── README.md                # Script documentation
+├── STYLEGUIDE.md                # This document - formatting and style conventions
+└── README.md                    # Project documentation and setup instructions
 ```
 
 ### File Naming Convention
