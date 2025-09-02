@@ -35,6 +35,7 @@ Personal Emacs configuration files and customizations.
   - [`core-editing.el`](config/core-editing.el)         - Editing preferences and behavior
   - [`core-files.el`](config/core-files.el)           - File handling and backup settings
   - [`core-keybindings.el`](config/core-keybindings.el)     - Global key bindings
+  - [`core-flymake.el`](config/core-flymake.el)        - Flymake diagnostic display configuration
   - [`completion-corfu.el`](config/completion-corfu.el)     - Universal auto-completion with Corfu
 - `lang/`   - Language-specific configurations
   - [`lang-python-core.el`](lang/lang-python-core.el)  - Core Python development settings
