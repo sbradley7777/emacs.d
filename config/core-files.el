@@ -54,7 +54,6 @@
  auto-save-timeout 20) ; Auto-save after 20 seconds of idle time (default: 30)
 
 ;; Auto-save files in the same directory structure but in our autosaves folder
-;; Note: This replaces the earlier auto-save-file-name-transforms setting with enhanced configuration
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Backup and Auto-save Logging

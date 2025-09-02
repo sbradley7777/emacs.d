@@ -52,7 +52,6 @@
  diff-default-read-only nil ; Turn off read only mode with .patch files
  vc-follow-symlinks t ; Follow symlinks and don't ask
  require-final-newline t) ; Always end a file with a newline
-;; Note: fill-column is configured in core-editing.el
 ;; Show matching parenthesis
 (show-paren-mode 1)
 
