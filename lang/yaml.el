@@ -13,6 +13,6 @@
 (add-hook 'yaml-mode-hook (lambda () (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 ;; Make this module available for loading with (require 'lang-yaml)
-(provide 'lang-yaml)
+(provide 'yaml)
 (message
  "lang-yaml.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

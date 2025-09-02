@@ -49,13 +49,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup configuration directories
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar config-dir (expand-file-name "config" user-emacs-directory))
+(defvar core-dir (expand-file-name "core" user-emacs-directory))
+(defvar features-dir (expand-file-name "features" user-emacs-directory))
 (defvar lang-dir (expand-file-name "lang" user-emacs-directory))
+(defvar python-dir (expand-file-name "lang/python" user-emacs-directory))
 (defvar themes-dir (expand-file-name "themes" user-emacs-directory))
-(defvar custom-dir (expand-file-name "custom" user-emacs-directory))
+(defvar user-dir (expand-file-name "user" user-emacs-directory))
 
-;; Add directories to load path
-(mapc (lambda (dir) (add-to-list 'load-path dir)) (list config-dir lang-dir themes-dir custom-dir))
+;; Add directories to load path (order matters - features before python-dir)
+(mapc (lambda (dir) (add-to-list 'load-path dir)) (list core-dir features-dir themes-dir user-dir lang-dir python-dir))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Error handling and robustness
@@ -108,28 +110,32 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load configuration modules in order with error handling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core configuration (order matters)
-(safe-load-config 'core-package-manager "Package system setup") ; Package system setup first
-(safe-load-config 'core-packages "Package declarations") ; Package declarations and configurations
-(safe-load-config 'core-ui "Basic UI setup") ; Basic UI setup
-(safe-load-config 'core-themes "Theme configuration") ; Visual appearance
-(safe-load-config 'core-editing "Editing preferences") ; Editing preferences
-(safe-load-config 'core-files "File handling") ; File handling
-(safe-load-config 'core-flymake "Flymake configuration") ; Flymake diagnostic display
-(safe-load-config 'core-eglot "General LSP configuration") ; General eglot settings
-(safe-load-config 'core-completion "Auto-completion framework") ; Core completion system
-(safe-load-config 'core-rainbow-delimiters "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
-(safe-load-config 'core-indent-guides "Visual indentation guides") ; Column-based indentation visualization
-(safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
+(safe-load-config 'package-manager "Package system setup") ; Package system setup first
+(safe-load-config 'packages "Package declarations") ; Package declarations and configurations
+(safe-load-config 'ui "Basic UI setup") ; Basic UI setup
+(safe-load-config 'themes "Theme configuration") ; Visual appearance
+(safe-load-config 'editing "Editing preferences") ; Editing preferences
+(safe-load-config 'files "File handling") ; File handling
+(safe-load-config 'keybindings "Global keybindings") ; Global keybindings
+
+;; Optional features (load eglot first before language-specific configs)
+(safe-load-config 'completion "Auto-completion framework") ; Core completion system
+(safe-load-config 'lsp "General LSP configuration") ; General eglot settings
+(safe-load-config 'flymake-config "Flymake configuration") ; Flymake diagnostic display
+(safe-load-config 'rainbow-delimiters "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
+(safe-load-config 'indent-guides "Visual indentation guides") ; Column-based indentation visualization
 
 ;; Language-specific configurations
-(safe-load-config 'lang-lisp "Emacs Lisp development")
-(safe-load-config 'lang-python-core "Python core editing")
-(safe-load-config 'lang-python-venv "Python virtual environments")
-(safe-load-config 'lang-python-eglot "Python LSP (eglot) configuration")
-(safe-load-config 'lang-python-tools "Python development tools")
-(safe-load-config 'lang-yaml "YAML file support")
+(safe-load-config 'lisp "Emacs Lisp development")
+(safe-load-config 'yaml "YAML file support")
 
-;; Custom functions and aliases
+;; Python configurations (load after general eglot)
+(safe-load-config 'core "Python core editing")
+(safe-load-config 'venv "Python virtual environments")
+(safe-load-config 'eglot-config "Python LSP (eglot) configuration") ; This loads lang/python/eglot-config.el
+(safe-load-config 'tools "Python development tools")
+
+;; User functions and aliases
 (safe-load-config 'functions "Custom helper functions")
 (safe-load-config 'aliases "Function aliases and shortcuts")
 

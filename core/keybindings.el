@@ -58,7 +58,7 @@
      (goto-char (point-max))))))
 
 ;; Make this module available for loading with (require 'core-keybindings)
-(provide 'core-keybindings)
+(provide 'keybindings)
 (message
  "core-keybindings.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

@@ -133,7 +133,7 @@
    (force-mode-line-update))))
 
 ;; Make this module available for loading with (require 'lang-python-venv)
-(provide 'lang-python-venv)
+(provide 'venv)
 (message
  "lang-python-venv.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

@@ -15,7 +15,7 @@
 (load-theme 'zenburn t)
 
 ;; Make this module available for loading with (require 'core-themes)
-(provide 'core-themes)
+(provide 'themes)
 (message
  "core-themes.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

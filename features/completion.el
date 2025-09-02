@@ -95,7 +95,7 @@
  (message "==============================="))
 
 ;; Make this module available for loading with (require 'core-completion)
-(provide 'core-completion)
+(provide 'completion)
 (message
  "core-completion.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

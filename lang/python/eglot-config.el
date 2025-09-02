@@ -23,7 +23,10 @@
   (progn
    (message "EGLOT: Found pylsp at: %s" (executable-find "pylsp"))
    (condition-case err
-       (progn (eglot-ensure) (message "EGLOT: Successfully started eglot for Python"))
+       (progn
+         (require 'eglot) ; Ensure eglot is loaded before using it
+         (eglot-ensure)
+         (message "EGLOT: Successfully started eglot for Python"))
      (error
       (message "EGLOT: Failed to start: %s" (error-message-string err)))))
   (message "EGLOT: pylsp not found - install python-lsp-server for LSP features")))
@@ -42,7 +45,7 @@
   )
 
 ;; Make this module available for loading with (require 'lang-python-eglot)
-(provide 'lang-python-eglot)
+(provide 'eglot-config)
 (message
  "lang-python-eglot.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

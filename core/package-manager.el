@@ -133,7 +133,7 @@
  (message "Cleaned up unused packages"))
 
 ;; Make this module available for loading with (require 'core-package-manager)
-(provide 'core-package-manager)
+(provide 'package-manager)
 (message
  "core-package-manager.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

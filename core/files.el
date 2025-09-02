@@ -83,6 +83,6 @@
 (add-hook 'auto-save-hook 'log-auto-save-operation)
 
 ;; Make this module available for loading with (require 'core-files)
-(provide 'core-files)
+(provide 'files)
 (message
  "core-files.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

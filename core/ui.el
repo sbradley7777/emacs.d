@@ -100,6 +100,6 @@
 (setq mouse-yank-at-point t) ; Paste at cursor, not mouse position
 
 ;; Make this module available for loading with (require 'core-ui)
-(provide 'core-ui)
+(provide 'ui)
 (message
  "core-ui.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

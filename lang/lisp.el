@@ -28,6 +28,6 @@
  :config (message "elisp-autofmt configured for automatic formatting on save"))
 
 ;; Make this module available for loading with (require 'lang-lisp)
-(provide 'lang-lisp)
+(provide 'lisp)
 (message
  "lang-lisp.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

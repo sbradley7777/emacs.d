@@ -38,7 +38,7 @@
  )
 
 ;; Make this module available for loading with (require 'core-eglot)
-(provide 'core-eglot)
+(provide 'lsp)
 (message
  "core-eglot.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

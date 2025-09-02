@@ -23,7 +23,7 @@
 (setq python-shell-completion-native-enable nil python-shell-prompt-detect-failure-warning nil)
 
 ;; Make this module available for loading with (require 'lang-python-core)
-(provide 'lang-python-core)
+(provide 'core)
 (message
  "lang-python-core.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

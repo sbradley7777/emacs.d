@@ -47,7 +47,7 @@
  (message "Highlight indent guides configured with column method and responsive highlighting"))
 
 ;; Make this module available for loading with (require 'core-indent-guides)
-(provide 'core-indent-guides)
+(provide 'indent-guides)
 (message
  "core-indent-guides.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

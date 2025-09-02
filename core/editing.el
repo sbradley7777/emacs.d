@@ -56,7 +56,7 @@
 
 
 ;; Make this module available for loading with (require 'core-editing)
-(provide 'core-editing)
+(provide 'editing)
 (message
  "core-editing.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

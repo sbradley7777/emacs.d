@@ -45,7 +45,7 @@
  (message "Rainbow delimiters configured with enhanced bold visibility"))
 
 ;; Make this module available for loading with (require 'core-rainbow-delimiters)
-(provide 'core-rainbow-delimiters)
+(provide 'rainbow-delimiters)
 (message
  "core-rainbow-delimiters.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

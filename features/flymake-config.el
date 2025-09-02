@@ -18,7 +18,7 @@
    (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
 
 ;; Make this module available for loading with (require 'core-flymake)
-(provide 'core-flymake)
+(provide 'flymake-config)
 (message
  "core-flymake.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

@@ -16,7 +16,7 @@
 ;; Note: Native completion disabled in lang-python-core.el to prevent REPL hangs
 
 ;; Make this module available for loading with (require 'lang-python-tools)
-(provide 'lang-python-tools)
+(provide 'tools)
 (message
  "lang-python-tools.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))
