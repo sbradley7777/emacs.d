@@ -116,9 +116,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
 (safe-load-config 'core-flymake "Flymake configuration") ; Flymake diagnostic display
 (safe-load-config 'core-eglot "General LSP configuration") ; General eglot settings
-
-;; Auto-completion configuration
-(safe-load-config 'completion-corfu "Auto-completion with Corfu")
+(safe-load-config 'core-completion "Auto-completion framework") ; Core completion system
 
 ;; Theme configuration
 (safe-load-config 'theme-config "Theme configuration")

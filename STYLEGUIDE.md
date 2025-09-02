@@ -27,7 +27,7 @@ emacs.d/
 │   ├── core-keybindings.el      # Global keybindings and shortcuts
 │   ├── core-flymake.el          # Flymake diagnostic display configuration
 │   ├── core-eglot.el            # General LSP client configuration
-│   └── completion-corfu.el      # Completion framework configuration
+│   └── core-completion.el       # Core auto-completion framework
 ├── lang/                        # Language-specific configurations
 │   ├── lang-python-core.el      # Basic Python mode settings and indentation
 │   ├── lang-python-eglot.el     # Python-specific LSP server configuration

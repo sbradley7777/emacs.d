@@ -1,10 +1,10 @@
-;;; completion-corfu.el --- Corfu Auto-Completion Configuration -*- lexical-binding: t -*-
+;;; core-completion.el --- Core Auto-Completion Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Modern auto-completion framework using Corfu.
 ;;      Provides universal auto-completion for all modes and languages.
 
 (defvar config-load-start-time (current-time))
-(message "Loading completion-corfu.el...")
+(message "Loading core-completion.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Corfu Auto-Completion Framework
@@ -94,8 +94,8 @@
  (when (bound-and-true-p eglot--managed-mode) (message "Eglot Server: %s" (eglot-current-server)))
  (message "==============================="))
 
-;; Make this module available for loading with (require 'completion-corfu)
-(provide 'completion-corfu)
+;; Make this module available for loading with (require 'core-completion)
+(provide 'core-completion)
 (message
- "completion-corfu.el loaded (%.2fs)"
+ "core-completion.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))
