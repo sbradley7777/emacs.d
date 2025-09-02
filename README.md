@@ -28,21 +28,21 @@ Personal Emacs configuration files and customizations.
 
 - `init.el` - Main Emacs initialization file that loads all configuration modules
 - `early-init.el` - Early initialization file for performance optimizations (Emacs 27+ feature, loaded before `init.el` and package.el)
-- `config/` - Core configuration modules
+- `config/` - Core configuration modules (loaded in dependency order)
   - [`core-package-manager.el`](config/core-package-manager.el) - Package management and setup
   - [`core-packages.el`](config/core-packages.el)        - Package declarations and configurations
   - [`core-ui.el`](config/core-ui.el)              - Basic UI configuration
   - [`core-editing.el`](config/core-editing.el)         - Editing preferences and behavior
   - [`core-files.el`](config/core-files.el)           - File handling and backup settings
-  - [`core-keybindings.el`](config/core-keybindings.el)     - Global key bindings
   - [`core-flymake.el`](config/core-flymake.el)        - Flymake diagnostic display configuration
   - [`core-eglot.el`](config/core-eglot.el)          - General LSP client configuration
   - [`core-completion.el`](config/core-completion.el)       - Core auto-completion framework
+  - [`core-keybindings.el`](config/core-keybindings.el)     - Global key bindings
 - `lang/`   - Language-specific configurations
   - [`lang-python-core.el`](lang/lang-python-core.el)  - Core Python development settings
-  - [`lang-python-tools.el`](lang/lang-python-tools.el) - Python development tools and packages
-  - [`lang-python-eglot.el`](lang/lang-python-eglot.el) - Python-specific LSP server configuration
   - [`lang-python-venv.el`](lang/lang-python-venv.el)  - Python virtual environment management with auto-detection
+  - [`lang-python-eglot.el`](lang/lang-python-eglot.el) - Python-specific LSP server configuration
+  - [`lang-python-tools.el`](lang/lang-python-tools.el) - Python development tools and packages
   - [`lang-lisp.el`](lang/lang-lisp.el)         - Lisp/Elisp development settings
   - [`lang-yaml.el`](lang/lang-yaml.el)         - YAML file handling
 - `themes/` - Theme and appearance configuration
