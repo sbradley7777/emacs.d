@@ -35,6 +35,7 @@ Personal Emacs configuration files and customizations.
   - [`core-editing.el`](config/core-editing.el)         - Editing preferences and behavior
   - [`core-files.el`](config/core-files.el)           - File handling and backup settings
   - [`core-keybindings.el`](config/core-keybindings.el)     - Global key bindings
+  - [`completion-corfu.el`](config/completion-corfu.el)     - Universal auto-completion with Corfu
 - `lang/`   - Language-specific configurations
   - [`lang-python-core.el`](lang/lang-python-core.el)  - Core Python development settings
   - [`lang-python-tools.el`](lang/lang-python-tools.el) - Python development tools and packages
@@ -62,6 +63,14 @@ The configuration includes several performance enhancements:
 - **Package management**: Controlled package loading and initialization
 - **File handler optimization**: Temporary disabling of file name handlers during startup
 
+### Auto-Completion
+
+- **Universal Auto-Completion**: Powered by Corfu framework for all file types and modes
+  - **Automatic completion** appears after typing 1 character (200ms delay)
+  - **Smart TAB behavior** - completes when possible, indents otherwise
+  - **Multiple trigger options** - `TAB`, `C-c TAB`, `M-TAB`, `C-M-i`
+  - **Context-aware suggestions** from LSP servers, built-in completion, and mode-specific sources
+
 ### Language Support
 
 - **Python Development**: Full-featured Python development environment with:
@@ -69,8 +78,8 @@ The configuration includes several performance enhancements:
   - **Automatic virtual environment detection and activation** with project-aware switching
   - **Flymake integration** for real-time syntax checking and linting
   - **Enhanced modeline display** showing active virtual environment and project name
-- **Lisp/Elisp Development**: Enhanced support for Lisp programming
-- **YAML Configuration**: Specialized handling for YAML files
+- **Lisp/Elisp Development**: Enhanced support for Lisp programming with auto-completion for functions, variables, and macros
+- **YAML Configuration**: Specialized handling for YAML files with structure-aware completion
 
 ### Code Style and Standards
 
@@ -287,17 +296,26 @@ You can also manually control virtual environments within Emacs:
 
 #### Available Features
 
-- **Code completion** - Intelligent completion based on context and type hints
+- **Auto-completion** - Universal completion across all file types with multiple trigger options:
+  - `TAB` - Smart completion (complete when possible, indent otherwise)
+  - `C-c TAB` - Manual completion trigger (reliable in all environments)
+  - `M-TAB` - Traditional Alt+TAB completion
+  - `C-M-i` - Traditional Ctrl+Alt+i completion
+- **Intelligent completion** - Context-aware suggestions based on LSP servers, mode-specific sources, and type hints
 - **Real-time diagnostics** - Syntax errors, type checking, and linting displayed in-buffer
 - **Go to definition** - `M-.` to jump to function/class definitions
 - **Find references** - `M-?` to find all references to a symbol
 - **Symbol renaming** - `C-c r` to rename symbols across the project
 - **Code actions** - `C-c a` for available code fixes and refactoring
 
-#### Debugging LSP Issues
+#### Debugging Issues
 
-If you encounter issues with the language server:
+**Auto-completion troubleshooting**:
+1. **Check Corfu status**: `M-x corfu-debug-info` to see completion system status
+2. **Test manual completion**: Use `M-x completion-at-point` to verify completions are available
+3. **Verify key bindings**: Try different completion triggers (`C-c TAB`, `M-TAB`, `C-M-i`)
 
+**LSP server issues**:
 1. **Check LSP events**: `M-x eglot-events-buffer` to see LSP communication
 2. **View server errors**: `M-x eglot-stderr-buffer` to see server error messages
 3. **Restart LSP server**: `M-x eglot-shutdown` followed by `M-x eglot` or reopening the file
