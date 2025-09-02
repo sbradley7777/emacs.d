@@ -1,9 +1,9 @@
-;;; core-ui.el --- User Interface Configuration -*- lexical-binding: t -*-
+;;; ui.el --- User Interface Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Display preferences and UI behavior
 
 (defvar config-load-start-time (current-time))
-(message "Loading core-ui.el...")
+(message "Loading ui.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI Elements Control:
@@ -99,7 +99,7 @@
  blink-cursor-mode nil) ; Non-blinking cursor
 (setq mouse-yank-at-point t) ; Paste at cursor, not mouse position
 
-;; Make this module available for loading with (require 'core-ui)
+;; Make this module available for loading with (require 'ui)
 (provide 'ui)
 (message
- "core-ui.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+ "ui.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

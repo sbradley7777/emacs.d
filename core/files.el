@@ -1,9 +1,9 @@
-;;; core-files.el --- File Handling Configuration -*- lexical-binding: t -*-
+;;; files.el --- File Handling Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
 
 (defvar config-load-start-time (current-time))
-(message "Loading core-files.el...")
+(message "Loading files.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Don't litter OS with autosaves (~) and backup (#) files. Based on:
@@ -82,7 +82,7 @@
 ;; Hook into auto-save operations
 (add-hook 'auto-save-hook 'log-auto-save-operation)
 
-;; Make this module available for loading with (require 'core-files)
+;; Make this module available for loading with (require 'files)
 (provide 'files)
 (message
- "core-files.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+ "files.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

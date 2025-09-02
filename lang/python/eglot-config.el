@@ -1,11 +1,11 @@
-;;; lang-python-eglot.el --- Python Eglot LSP Configuration -*- lexical-binding: t -*-
+;;; eglot-config.el --- Python Eglot LSP Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Python-specific Eglot LSP configuration.
 ;;      Provides language server protocol integration for Python using pylsp.
-;;      General eglot settings are in config/core-eglot.el
+;;      General eglot settings are in features/lsp.el
 
 (defvar config-load-start-time (current-time))
-(message "Loading lang-python-eglot.el...")
+(message "Loading eglot-config.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python-Specific Eglot Configuration
@@ -44,8 +44,8 @@
   ;; Python-specific workspace configuration can be added here if needed
   )
 
-;; Make this module available for loading with (require 'lang-python-eglot)
+;; Make this module available for loading with (require 'eglot-config)
 (provide 'eglot-config)
 (message
- "lang-python-eglot.el loaded (%.2fs)"
+ "eglot-config.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

@@ -1,10 +1,10 @@
-;;; core-packages.el --- Package Declarations and Configurations -*- lexical-binding: t -*-
+;;; packages.el --- Package Declarations and Configurations -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Package installation and configuration using use-package.
-;;      Note: Package manager setup is handled by core-package-manager.el
+;;      Note: Package manager setup is handled by package-manager.el
 
 (defvar config-load-start-time (current-time))
-(message "Loading core-packages.el...")
+(message "Loading packages.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Essential Package Categories
@@ -98,7 +98,7 @@
  (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
  (setq elisp-autofmt-parallel-jobs 1)) ; Single-threaded for consistency
 
-;; Note: Rainbow delimiters configuration moved to config/core-rainbow-delimiters.el
+;; Note: Rainbow delimiters configuration moved to features/rainbow-delimiters.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Eglot Performance Settings (applied early before any LSP servers start)
@@ -114,8 +114,8 @@
 (setq eglot-report-progress nil) ; Reduce progress notification noise
 
 
-;; Make this module available for loading with (require 'core-packages)
+;; Make this module available for loading with (require 'packages)
 (provide 'packages)
 (message
- "core-packages.el loaded (%.2fs)"
+ "packages.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

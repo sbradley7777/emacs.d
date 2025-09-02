@@ -1,10 +1,10 @@
-;;; core-package-manager.el --- Package System Configuration -*- lexical-binding: t -*-
+;;; package-manager.el --- Package System Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Package manager setup, repository configuration, and use-package initialization.
 ;;      This file establishes the foundation for package management.
 
 (defvar config-load-start-time (current-time))
-(message "Loading core-package-manager.el...")
+(message "Loading package-manager.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Repository Configuration
@@ -132,8 +132,8 @@
  (package-autoremove)
  (message "Cleaned up unused packages"))
 
-;; Make this module available for loading with (require 'core-package-manager)
+;; Make this module available for loading with (require 'package-manager)
 (provide 'package-manager)
 (message
- "core-package-manager.el loaded (%.2fs)"
+ "package-manager.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

@@ -1,9 +1,9 @@
-;;; lang-python-core.el --- Core Python Language Configuration -*- lexical-binding: t -*-
+;;; core.el --- Core Python Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Basic Python editing settings, indentation, and shell configuration.
 
 (defvar config-load-start-time (current-time))
-(message "Loading lang-python-core.el...")
+(message "Loading core.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python-specific indentation settings
@@ -22,8 +22,8 @@
 ;; Python shell improvements: disable native completion (prevents hangs) and prompt detection warnings (cleaner REPL)
 (setq python-shell-completion-native-enable nil python-shell-prompt-detect-failure-warning nil)
 
-;; Make this module available for loading with (require 'lang-python-core)
+;; Make this module available for loading with (require 'core)
 (provide 'core)
 (message
- "lang-python-core.el loaded (%.2fs)"
+ "core.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

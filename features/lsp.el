@@ -1,10 +1,10 @@
-;;; core-eglot.el --- General Eglot LSP Configuration -*- lexical-binding: t -*-
+;;; lsp.el --- General Eglot LSP Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      General Eglot configuration that applies to all languages.
-;;      Language-specific server configurations should be in lang/lang-<language>-eglot.el files.
+;;      Language-specific server configurations should be in lang/<language>/eglot-config.el files.
 
 (defvar config-load-start-time (current-time))
-(message "Loading core-eglot.el...")
+(message "Loading lsp.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Eglot LSP Configuration
@@ -15,7 +15,7 @@
  :defer t
  :config
  ;; Performance and stability settings that apply to all language servers
- ;; Note: eglot-events-buffer-size is set to 0 in core-packages.el for performance
+ ;; Note: eglot-events-buffer-size is set to 0 in packages.el for performance
  ;; Use M-x eglot-events-buffer to view LSP messages (when enabled)
  ;; Use M-x eglot-stderr-buffer to view server stderr
  ;; Temporarily enable debugging: (setq eglot-events-buffer-size 200000)
@@ -25,7 +25,7 @@
 
  ;; Use flymake as the diagnostic backend (eglot's default)
  ;; Eglot will automatically integrate LSP diagnostics with flymake
- ;; Flymake display configuration is in core-flymake.el
+ ;; Flymake display configuration is in flymake-config.el
 
  ;; Customize eglot modeline to show simple [eglot] indicator instead of project name
  ;; This avoids redundancy with the detailed venv indicator while confirming LSP is active
@@ -37,8 +37,8 @@
    (advice-add 'eglot--mode-line-format :override #'eglot--mode-line-format-advice))
  )
 
-;; Make this module available for loading with (require 'core-eglot)
+;; Make this module available for loading with (require 'lsp)
 (provide 'lsp)
 (message
- "core-eglot.el loaded (%.2fs)"
+ "lsp.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

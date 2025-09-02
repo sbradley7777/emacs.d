@@ -1,9 +1,9 @@
-;;; core-flymake.el --- Flymake Configuration -*- lexical-binding: t -*-
+;;; flymake-config.el --- Flymake Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Global Flymake configuration for diagnostic display and behavior
 
 (defvar config-load-start-time (current-time))
-(message "Loading core-flymake.el...")
+(message "Loading flymake-config.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flymake Display Configuration
@@ -17,8 +17,8 @@
    (window-width . 100)
    (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
 
-;; Make this module available for loading with (require 'core-flymake)
+;; Make this module available for loading with (require 'flymake-config)
 (provide 'flymake-config)
 (message
- "core-flymake.el loaded (%.2fs)"
+ "flymake-config.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

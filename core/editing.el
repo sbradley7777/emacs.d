@@ -1,9 +1,9 @@
-;;; core-editing.el --- Editing Behavior Configuration -*- lexical-binding: t -*-
+;;; editing.el --- Editing Behavior Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Tabs, spaces, and general editing preferences
 
 (defvar config-load-start-time (current-time))
-(message "Loading core-editing.el...")
+(message "Loading editing.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced editing preferences
@@ -55,8 +55,8 @@
 (global-set-key (kbd "C-a") 'smart-beginning-of-line)
 
 
-;; Make this module available for loading with (require 'core-editing)
+;; Make this module available for loading with (require 'editing)
 (provide 'editing)
 (message
- "core-editing.el loaded (%.2fs)"
+ "editing.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

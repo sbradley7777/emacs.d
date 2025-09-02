@@ -1,9 +1,9 @@
-;;; core-keybindings.el --- Global Key Bindings Configuration -*- lexical-binding: t -*-
+;;; keybindings.el --- Global Key Bindings Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
 (defvar config-load-start-time (current-time))
-(message "Loading core-keybindings.el...")
+(message "Loading keybindings.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keyboard behavior and Custom HotKeys (aka: keyboard-modifiers or shortcuts):
@@ -57,8 +57,8 @@
     (end-of-buffer
      (goto-char (point-max))))))
 
-;; Make this module available for loading with (require 'core-keybindings)
+;; Make this module available for loading with (require 'keybindings)
 (provide 'keybindings)
 (message
- "core-keybindings.el loaded (%.2fs)"
+ "keybindings.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))
