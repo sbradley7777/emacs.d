@@ -46,7 +46,7 @@ Personal Emacs configuration files and customizations.
   - [`lang-lisp.el`](lang/lang-lisp.el)         - Lisp/Elisp development settings
   - [`lang-yaml.el`](lang/lang-yaml.el)         - YAML file handling
 - `themes/` - Theme and appearance configuration
-  - [`theme-config.el`](themes/theme-config.el) - Theme setup and customization
+  - [`core-themes.el`](themes/core-themes.el) - Core theme and appearance configuration
 - `custom/` - Custom functions and utilities
   - [`functions.el`](custom/functions.el) - Custom helper functions
   - [`aliases.el`](custom/aliases.el)   - Custom command aliases

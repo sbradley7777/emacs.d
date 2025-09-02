@@ -1,9 +1,9 @@
-;;; theme-config.el --- Theme Configuration -*- lexical-binding: t -*-
+;;; core-themes.el --- Core Theme Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      Theme selection and customization
+;;      Core theme and visual appearance configuration
 
 (defvar config-load-start-time (current-time))
-(message "Loading theme-config.el...")
+(message "Loading core-themes.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configure the theme
@@ -14,8 +14,8 @@
 ;; Load the zenburn theme
 (load-theme 'zenburn t)
 
-;; Make this module available for loading with (require 'theme-config)
-(provide 'theme-config)
+;; Make this module available for loading with (require 'core-themes)
+(provide 'core-themes)
 (message
- "theme-config.el loaded (%.2fs)"
+ "core-themes.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

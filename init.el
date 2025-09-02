@@ -119,7 +119,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
 
 ;; Theme configuration
-(safe-load-config 'theme-config "Theme configuration")
+(safe-load-config 'core-themes "Theme configuration")
 
 ;; Language-specific configurations
 (safe-load-config 'lang-lisp "Emacs Lisp development")

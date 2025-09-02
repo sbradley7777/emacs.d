@@ -36,7 +36,7 @@ emacs.d/
 │   ├── lang-lisp.el             # Lisp and Emacs Lisp development settings
 │   └── lang-yaml.el             # YAML file editing configuration
 ├── themes/                      # Theme configurations
-│   └── theme-config.el          # Color themes and visual appearance
+│   └── core-themes.el           # Core theme and appearance configuration
 ├── custom/                      # Custom functions and aliases
 │   ├── functions.el             # User-defined utility functions
 │   └── aliases.el               # Command aliases and shortcuts
