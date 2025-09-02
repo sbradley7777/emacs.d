@@ -13,7 +13,7 @@
 (defvar config-essential-packages '(spacemacs-theme zenburn-theme yaml-mode)
   "Essential packages that must be installed.")
 
-(defvar config-development-packages '(which-key pyvenv elisp-autofmt)
+(defvar config-development-packages '(which-key pyvenv elisp-autofmt corfu)
   "Development and programming packages.")
 
 (defvar config-packages (append config-essential-packages config-development-packages)

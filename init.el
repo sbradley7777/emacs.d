@@ -112,6 +112,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'core-files "File handling") ; File handling
 (safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
 
+;; Auto-completion configuration
+(safe-load-config 'completion-corfu "Auto-completion with Corfu")
+
 ;; Theme configuration
 (safe-load-config 'theme-config "Theme configuration")
 
