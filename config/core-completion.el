@@ -73,8 +73,8 @@
    (or (completion-at-point) (indent-for-tab-command))
    (indent-for-tab-command))))
 
-;; Bind TAB globally to smart completion
-(global-set-key (kbd "TAB") #'smart-tab)
+;; Note: TAB behavior left to individual modes for proper indentation
+;; Use M-TAB, C-c TAB, or C-M-i for manual completion instead
 
 ;; Diagnostic function to check completion setup
 (defun
