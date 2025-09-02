@@ -25,9 +25,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Disable package.el auto-initialization to prevent loading warnings
 ;; This must be done very early, before any package loading attempts
-(setq
- package-enable-at-startup nil
- package-quickstart nil)
+(setq package-enable-at-startup nil package-quickstart nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GUI Element Suppression - Prevents UI Flashing
@@ -35,17 +33,23 @@
 ;; Disable GUI elements in default-frame-alist to prevent them from appearing
 ;; even briefly during startup (eliminates the "flash" effect)
 ;; Consolidated GUI element suppression (single operation for better performance)
-(setq default-frame-alist
-      (append
-       default-frame-alist
-       '((tool-bar-lines . 0) (menu-bar-lines . 0) (vertical-scroll-bars . nil) (horizontal-scroll-bars . nil))))
+(setq
+ default-frame-alist
+ (append
+  default-frame-alist
+  '((tool-bar-lines . 0)
+    (menu-bar-lines . 0)
+    (vertical-scroll-bars . nil)
+    (horizontal-scroll-bars . nil))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File Handling Optimizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Optimize file-name-handler-alist during startup (restore in init.el)
-(defvar default-file-name-handler-alist file-name-handler-alist
-  "Backup of default file-name-handler-alist for restoration after init.")
+(defvar
+ default-file-name-handler-alist
+ file-name-handler-alist
+ "Backup of default file-name-handler-alist for restoration after init.")
 
 ;; Temporarily disable file name handlers for faster startup
 (setq file-name-handler-alist nil)
@@ -60,9 +64,7 @@
 (setq initial-scratch-message nil) ; Clean scratch buffer
 
 ;; Disable bidirectional text support for performance (can be re-enabled if needed)
-(setq-default
- bidi-display-reordering 'left-to-right
- bidi-paragraph-direction 'left-to-right)
+(setq-default bidi-display-reordering 'left-to-right bidi-paragraph-direction 'left-to-right)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Completion and Input Optimizations

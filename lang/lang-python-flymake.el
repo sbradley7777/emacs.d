@@ -9,14 +9,16 @@
 ;; Flymake Display Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configure Flymake diagnostics to display in side window instead of bottom
-(add-to-list 'display-buffer-alist
-             '("\\*Flymake diagnostics.*\\*"
-               (display-buffer-in-side-window)
-               (side . right)
-               (window-width . 100)
-               (window-parameters . ((no-delete-other-windows . t)
-                                     (no-other-window . nil)))))
+(add-to-list
+ 'display-buffer-alist
+ '("\\*Flymake diagnostics.*\\*"
+   (display-buffer-in-side-window)
+   (side . right)
+   (window-width . 100)
+   (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
 
 ;; Make this module available for loading with (require 'lang-python-flymake)
 (provide 'lang-python-flymake)
-(message "lang-python-flymake.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message
+ "lang-python-flymake.el loaded (%.2fs)"
+ (float-time (time-subtract (current-time) config-load-start-time)))

@@ -14,4 +14,5 @@
 
 ;; Make this module available for loading with (require 'aliases)
 (provide 'aliases)
-(message "aliases.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message
+ "aliases.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

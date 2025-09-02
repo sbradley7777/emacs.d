@@ -16,4 +16,6 @@
 
 ;; Make this module available for loading with (require 'theme-config)
 (provide 'theme-config)
-(message "theme-config.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message
+ "theme-config.el loaded (%.2fs)"
+ (float-time (time-subtract (current-time) config-load-start-time)))

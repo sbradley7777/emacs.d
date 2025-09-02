@@ -14,4 +14,5 @@
 
 ;; Make this module available for loading with (require 'lang-yaml)
 (provide 'lang-yaml)
-(message "lang-yaml.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message
+ "lang-yaml.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

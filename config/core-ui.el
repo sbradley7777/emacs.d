@@ -9,21 +9,19 @@
 ;; UI Elements Control:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Disable UI elements for cleaner interface
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-(when (fboundp 'menu-bar-mode)
-  (menu-bar-mode -1))
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
 ;; Modern line number display with performance optimizations
 ;; Use visual line numbers for better performance with large files
-(when (version<= "26.0.50" emacs-version)
-  (global-display-line-numbers-mode 1)
-  (setq display-line-numbers-type 'visual) ; More efficient than 'relative
-  ;; Disable line numbers in certain modes for better performance
-  (dolist (mode '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0)))))
+(when
+ (version<= "26.0.50" emacs-version) (global-display-line-numbers-mode 1)
+ (setq display-line-numbers-type 'visual) ; More efficient than 'relative
+ ;; Disable line numbers in certain modes for better performance
+ (dolist
+  (mode '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load Misc Preferences:
@@ -47,7 +45,8 @@
  kill-whole-line t ; ctrl-k kills whole line if at col 0
  show-trailing-whitespace t) ; Highlight trailing whitespaces
 ;; Enhanced title bar showing buffer name and file path with hostname
-(setq frame-title-format '("%b - " (:eval (or (file-remote-p default-directory 'host) system-name))))
+(setq
+ frame-title-format '("%b - " (:eval (or (file-remote-p default-directory 'host) system-name))))
 ;; File handling preferences
 (setq
  diff-default-read-only nil ; Turn off read only mode with .patch files
@@ -88,9 +87,7 @@
 
 ;; Track recently opened files
 (recentf-mode 1)
-(setq
- recentf-max-saved-items 50
- recentf-exclude '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
+(setq recentf-max-saved-items 50 recentf-exclude '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
 
 (normal-erase-is-backspace-mode 0)
 
@@ -105,4 +102,5 @@
 
 ;; Make this module available for loading with (require 'core-ui)
 (provide 'core-ui)
-(message "core-ui.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message
+ "core-ui.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

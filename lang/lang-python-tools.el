@@ -10,11 +10,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Dynamically find Python executable for better portability
-(setq python-shell-interpreter (or (executable-find "python3") (executable-find "python") "python3"))
+(setq
+ python-shell-interpreter (or (executable-find "python3") (executable-find "python") "python3"))
 
 ;; Additional Python tools integration for better REPL experience
 (setq python-shell-completion-native-enable nil)
 
 ;; Make this module available for loading with (require 'lang-python-tools)
 (provide 'lang-python-tools)
-(message "lang-python-tools.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message
+ "lang-python-tools.el loaded (%.2fs)"
+ (float-time (time-subtract (current-time) config-load-start-time)))

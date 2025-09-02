@@ -61,26 +61,29 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add helpful logging messages for backup and auto-save operations
 
-(defun log-backup-operation (file)
-  "Log when a backup file is created for FILE."
-  (when file
-    (message "💾 Backup created for: %s" (file-name-nondirectory file))))
+(defun
+ log-backup-operation
+ (file)
+ "Log when a backup file is created for FILE."
+ (when file (message "💾 Backup created for: %s" (file-name-nondirectory file))))
 
-(defun log-auto-save-operation ()
-  "Log when an auto-save operation occurs."
-  (when buffer-file-name
-    (message "💾 Auto-saved: %s" (file-name-nondirectory buffer-file-name))))
+(defun
+ log-auto-save-operation () "Log when an auto-save operation occurs."
+ (when buffer-file-name (message "💾 Auto-saved: %s" (file-name-nondirectory buffer-file-name))))
 
 ;; Hook into backup operations
 (add-hook
  'before-save-hook
- (lambda ()
-   (when (and buffer-file-name make-backup-files (file-exists-p buffer-file-name))
-     (log-backup-operation buffer-file-name))))
+ (lambda
+  ()
+  (when
+   (and buffer-file-name make-backup-files (file-exists-p buffer-file-name))
+   (log-backup-operation buffer-file-name))))
 
 ;; Hook into auto-save operations
 (add-hook 'auto-save-hook 'log-auto-save-operation)
 
 ;; Make this module available for loading with (require 'core-files)
 (provide 'core-files)
-(message "core-files.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message
+ "core-files.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

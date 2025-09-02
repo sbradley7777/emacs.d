@@ -17,10 +17,7 @@
 ;; Better indentation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; - http://www.emacswiki.org/emacs/NoTabs
-(setq-default
- tab-width 4
- standard-indent 4
- indent-tabs-mode nil)
+(setq-default tab-width 4 standard-indent 4 indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Line length and fill column configuration
@@ -49,16 +46,17 @@
  undo-strong-limit 9000000) ; Strong limit for undo (9MB)
 
 ;; Smarter beginning-of-line behavior
-(defun smart-beginning-of-line ()
-  "Move to beginning of line or indentation."
-  (interactive)
-  (let ((oldpos (point)))
-    (back-to-indentation)
-    (and (= oldpos (point)) (beginning-of-line))))
+(defun
+ smart-beginning-of-line () "Move to beginning of line or indentation." (interactive)
+ (let ((oldpos (point)))
+   (back-to-indentation)
+   (and (= oldpos (point)) (beginning-of-line))))
 
 (global-set-key (kbd "C-a") 'smart-beginning-of-line)
 
 
 ;; Make this module available for loading with (require 'core-editing)
 (provide 'core-editing)
-(message "core-editing.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message
+ "core-editing.el loaded (%.2fs)"
+ (float-time (time-subtract (current-time) config-load-start-time)))
