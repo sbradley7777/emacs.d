@@ -18,26 +18,30 @@ This configuration follows established Emacs Lisp community standards and best p
 emacs.d/
 ├── init.el                      # Main configuration entry point
 ├── early-init.el                # Early initialization and performance optimizations
-├── config/                      # Core configuration modules (dependency order)
-│   ├── core-package-manager.el  # Package repositories and use-package setup
-│   ├── core-packages.el         # Essential package installations and configurations
-│   ├── core-ui.el               # User interface and visual settings
-│   ├── core-editing.el          # Text editing behavior and preferences
-│   ├── core-files.el            # File handling, backup, and auto-save settings
-│   ├── core-flymake.el          # Flymake diagnostic display configuration
-│   ├── core-eglot.el            # General LSP client configuration
-│   ├── core-completion.el       # Core auto-completion framework
-│   └── core-keybindings.el      # Global keybindings and shortcuts
+├── core/                        # Essential Emacs functionality (loaded first)
+│   ├── package-manager.el       # Package repositories and use-package setup
+│   ├── packages.el              # Essential package installations and configurations
+│   ├── ui.el                    # User interface and visual settings
+│   ├── editing.el               # Text editing behavior and preferences
+│   ├── files.el                 # File handling, backup, and auto-save settings
+│   └── keybindings.el           # Global keybindings and shortcuts
+├── features/                    # Optional enhancements (can be disabled independently)
+│   ├── completion.el            # Core auto-completion framework
+│   ├── lsp.el                   # General LSP client configuration
+│   ├── flymake-config.el        # Flymake diagnostic display configuration
+│   ├── rainbow-delimiters.el    # Enhanced delimiter visibility
+│   └── indent-guides.el         # Visual indentation guides
 ├── lang/                        # Language-specific configurations
-│   ├── lang-python-core.el      # Basic Python mode settings and indentation
-│   ├── lang-python-venv.el      # Virtual environment management
-│   ├── lang-python-eglot.el     # Python-specific LSP server configuration
-│   ├── lang-python-tools.el     # Python development tools and utilities
-│   ├── lang-lisp.el             # Lisp and Emacs Lisp development settings
-│   └── lang-yaml.el             # YAML file editing configuration
+│   ├── lisp.el                  # Lisp and Emacs Lisp development settings
+│   ├── yaml.el                  # YAML file editing configuration
+│   └── python/                  # Python development environment
+│       ├── core.el              # Basic Python mode settings and indentation
+│       ├── venv.el              # Virtual environment management
+│       ├── eglot-config.el      # Python-specific LSP server configuration
+│       └── tools.el             # Python development tools and utilities
 ├── themes/                      # Theme configurations
-│   └── core-themes.el           # Core theme and appearance configuration
-├── custom/                      # Custom functions and aliases
+│   └── themes.el                # Core theme and appearance configuration
+├── user/                        # Personal customizations
 │   ├── functions.el             # User-defined utility functions
 │   └── aliases.el               # Command aliases and shortcuts
 ├── scripts/                     # Installation and utility scripts
@@ -48,9 +52,10 @@ emacs.d/
 ```
 
 ### File Naming Convention
-- Use kebab-case for file names: `core-package-manager.el`
-- Prefix files by category: `core-`, `lang-`, `theme-`
+- Use kebab-case for file names: `package-manager.el`, `eglot-config.el`
+- Directory structure provides categorization (no prefixes needed)
 - Use descriptive names that indicate purpose
+- Add `-config` suffix for configuration files that might conflict with built-in packages
 
 ## Emacs Lisp Formatting Standards
 

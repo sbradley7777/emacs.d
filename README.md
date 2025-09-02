@@ -28,28 +28,32 @@ Personal Emacs configuration files and customizations.
 
 - `init.el` - Main Emacs initialization file that loads all configuration modules
 - `early-init.el` - Early initialization file for performance optimizations (Emacs 27+ feature, loaded before `init.el` and package.el)
-- `config/` - Core configuration modules (loaded in dependency order)
-  - [`core-package-manager.el`](config/core-package-manager.el) - Package management and setup
-  - [`core-packages.el`](config/core-packages.el)        - Package declarations and configurations
-  - [`core-ui.el`](config/core-ui.el)              - Basic UI configuration
-  - [`core-editing.el`](config/core-editing.el)         - Editing preferences and behavior
-  - [`core-files.el`](config/core-files.el)           - File handling and backup settings
-  - [`core-flymake.el`](config/core-flymake.el)        - Flymake diagnostic display configuration
-  - [`core-eglot.el`](config/core-eglot.el)          - General LSP client configuration
-  - [`core-completion.el`](config/core-completion.el)       - Core auto-completion framework
-  - [`core-keybindings.el`](config/core-keybindings.el)     - Global key bindings
-- `lang/`   - Language-specific configurations
-  - [`lang-python-core.el`](lang/lang-python-core.el)  - Core Python development settings
-  - [`lang-python-venv.el`](lang/lang-python-venv.el)  - Python virtual environment management with auto-detection
-  - [`lang-python-eglot.el`](lang/lang-python-eglot.el) - Python-specific LSP server configuration
-  - [`lang-python-tools.el`](lang/lang-python-tools.el) - Python development tools and packages
-  - [`lang-lisp.el`](lang/lang-lisp.el)         - Lisp/Elisp development settings
-  - [`lang-yaml.el`](lang/lang-yaml.el)         - YAML file handling
+- `core/` - Essential Emacs functionality (loaded first in dependency order)
+  - [`package-manager.el`](core/package-manager.el) - Package management and setup
+  - [`packages.el`](core/packages.el) - Package declarations and configurations
+  - [`ui.el`](core/ui.el) - Basic UI configuration
+  - [`editing.el`](core/editing.el) - Editing preferences and behavior
+  - [`files.el`](core/files.el) - File handling and backup settings
+  - [`keybindings.el`](core/keybindings.el) - Global key bindings
+- `features/` - Optional enhancements (can be disabled independently)
+  - [`completion.el`](features/completion.el) - Core auto-completion framework
+  - [`lsp.el`](features/lsp.el) - General LSP client configuration
+  - [`flymake-config.el`](features/flymake-config.el) - Flymake diagnostic display configuration
+  - [`rainbow-delimiters.el`](features/rainbow-delimiters.el) - Enhanced delimiter visibility
+  - [`indent-guides.el`](features/indent-guides.el) - Visual indentation guides
+- `lang/` - Language-specific configurations
+  - [`lisp.el`](lang/lisp.el) - Lisp/Elisp development settings
+  - [`yaml.el`](lang/yaml.el) - YAML file handling
+  - `python/` - Python development environment
+    - [`core.el`](lang/python/core.el) - Core Python development settings
+    - [`venv.el`](lang/python/venv.el) - Python virtual environment management with auto-detection
+    - [`eglot-config.el`](lang/python/eglot-config.el) - Python-specific LSP server configuration
+    - [`tools.el`](lang/python/tools.el) - Python development tools and packages
 - `themes/` - Theme and appearance configuration
-  - [`core-themes.el`](themes/core-themes.el) - Core theme and appearance configuration
-- `custom/` - Custom functions and utilities
-  - [`functions.el`](custom/functions.el) - Custom helper functions
-  - [`aliases.el`](custom/aliases.el)   - Custom command aliases
+  - [`themes.el`](themes/themes.el) - Core theme and appearance configuration
+- `user/` - Personal customizations
+  - [`functions.el`](user/functions.el) - Custom helper functions
+  - [`aliases.el`](user/aliases.el) - Custom command aliases
 - `scripts/` - Installation and utility scripts
   - [`install.sh`](scripts/install.sh) - Automated installation script
   - [`README.md`](scripts/README.md) - Detailed installation guide
