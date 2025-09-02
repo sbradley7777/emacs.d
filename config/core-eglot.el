@@ -26,6 +26,15 @@
  ;; Use flymake as the diagnostic backend (eglot's default)
  ;; Eglot will automatically integrate LSP diagnostics with flymake
  ;; Flymake display configuration is in core-flymake.el
+
+ ;; Customize eglot modeline to show simple [eglot] indicator instead of project name
+ ;; This avoids redundancy with the detailed venv indicator while confirming LSP is active
+ (with-eval-after-load 'eglot
+   ;; Override the mode line format function to show simple [eglot] indicator
+   (defun eglot--mode-line-format-advice (&rest _args)
+     "Show simple [eglot] indicator when LSP is active."
+     "eglot")
+   (advice-add 'eglot--mode-line-format :override #'eglot--mode-line-format-advice))
  )
 
 ;; Make this module available for loading with (require 'core-eglot)
