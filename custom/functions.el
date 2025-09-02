@@ -17,6 +17,18 @@
    (load-file init-file)
    (message "init.el reloaded successfully")))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Copy Entire Buffer to Kill Ring:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun copy-whole-buffer ()
+  "Copy the entire buffer to the kill ring.
+This is equivalent to doing M-x mark-whole-buffer followed by M-w."
+  (interactive)
+  (save-excursion
+    (mark-whole-buffer)
+    (kill-ring-save (point-min) (point-max)))
+  (message "Buffer copied to kill ring"))
+
 ;; Make this module available for loading with (require 'functions)
 (provide 'functions)
 (message
