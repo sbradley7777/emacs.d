@@ -153,7 +153,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
   gc-cons-threshold (* 100 1000 1000) ; 100MB threshold for normal operation
   gc-cons-percentage 0.1)) ; 10% of heap for GC
 
-;; Run GC optimization every 5 minutes when idle to maintain performance
-(run-with-idle-timer 300 t #'optimize-gc-for-long-session)
+;; Run GC optimization every 15 minutes when idle to maintain performance
+(run-with-idle-timer 900 t #'optimize-gc-for-long-session)
 
 (message "init.el loaded successfully.")
