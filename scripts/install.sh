@@ -78,7 +78,7 @@ validate_repo() {
 # Places backups in /tmp directory with timestamp to avoid conflicts
 # Preserves unmanaged files in ~/.emacs.d that don't conflict with repo structure
 backup_existing() {
-    local files_to_backup=("init.el" "early-init.el" "core" "features" "lang" "themes" "user" "config" "custom")
+    local files_to_backup=("init.el" "early-init.el" "core" "features" "lang" "themes" "user")
     local backed_up_files=()
     local backup_needed=false
 
