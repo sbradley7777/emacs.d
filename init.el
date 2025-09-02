@@ -114,6 +114,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'core-editing "Editing preferences") ; Editing preferences
 (safe-load-config 'core-files "File handling") ; File handling
 (safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
+(safe-load-config 'core-flymake "Flymake configuration") ; Flymake diagnostic display
 
 ;; Auto-completion configuration
 (safe-load-config 'completion-corfu "Auto-completion with Corfu")
@@ -127,7 +128,6 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'lang-python-venv "Python virtual environments")
 (safe-load-config 'lang-python-tools "Python development tools")
 (safe-load-config 'lang-python-eglot "Python LSP (eglot) configuration")
-(safe-load-config 'lang-python-flymake "Python Flymake configuration")
 (safe-load-config 'lang-yaml "YAML file support")
 
 ;; Custom functions and aliases
