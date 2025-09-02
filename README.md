@@ -36,11 +36,12 @@ Personal Emacs configuration files and customizations.
   - [`core-files.el`](config/core-files.el)           - File handling and backup settings
   - [`core-keybindings.el`](config/core-keybindings.el)     - Global key bindings
   - [`core-flymake.el`](config/core-flymake.el)        - Flymake diagnostic display configuration
+  - [`core-eglot.el`](config/core-eglot.el)          - General LSP client configuration
   - [`completion-corfu.el`](config/completion-corfu.el)     - Universal auto-completion with Corfu
 - `lang/`   - Language-specific configurations
   - [`lang-python-core.el`](lang/lang-python-core.el)  - Core Python development settings
   - [`lang-python-tools.el`](lang/lang-python-tools.el) - Python development tools and packages
-  - [`lang-python-eglot.el`](lang/lang-python-eglot.el) - Eglot LSP configuration for Python development
+  - [`lang-python-eglot.el`](lang/lang-python-eglot.el) - Python-specific LSP server configuration
   - [`lang-python-venv.el`](lang/lang-python-venv.el)  - Python virtual environment management with auto-detection
   - [`lang-lisp.el`](lang/lang-lisp.el)         - Lisp/Elisp development settings
   - [`lang-yaml.el`](lang/lang-yaml.el)         - YAML file handling

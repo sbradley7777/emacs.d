@@ -26,10 +26,11 @@ emacs.d/
 │   ├── core-files.el            # File handling, backup, and auto-save settings
 │   ├── core-keybindings.el      # Global keybindings and shortcuts
 │   ├── core-flymake.el          # Flymake diagnostic display configuration
+│   ├── core-eglot.el            # General LSP client configuration
 │   └── completion-corfu.el      # Completion framework configuration
 ├── lang/                        # Language-specific configurations
 │   ├── lang-python-core.el      # Basic Python mode settings and indentation
-│   ├── lang-python-eglot.el     # Python Language Server Protocol integration
+│   ├── lang-python-eglot.el     # Python-specific LSP server configuration
 │   ├── lang-python-tools.el     # Python development tools and utilities
 │   ├── lang-python-venv.el      # Virtual environment management
 │   ├── lang-lisp.el             # Lisp and Emacs Lisp development settings
