@@ -1,13 +1,14 @@
 ;;; lang-python-eglot.el --- Python Eglot LSP Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      Eglot LSP configuration for Python development.
+;;      Python-specific Eglot LSP configuration.
 ;;      Provides language server protocol integration for Python using pylsp.
+;;      General eglot settings are in config/core-eglot.el
 
 (defvar config-load-start-time (current-time))
 (message "Loading lang-python-eglot.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Eglot LSP Python Development Environment
+;; Python-Specific Eglot Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Simple eglot activation that checks for system-wide pylsp only
@@ -30,30 +31,15 @@
 ;; Auto-start eglot for Python files
 (add-hook 'python-mode-hook #'python-eglot-maybe-start)
 
-(use-package
- eglot
- :defer t
- :config
- ;; Configure Python LSP server (requires system-wide pylsp: pip3.9 install python-lsp-server)
- (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
+;; Python-specific eglot server configuration
+(with-eval-after-load 'eglot
+  ;; Configure Python LSP server (requires system-wide pylsp: pip3.9 install python-lsp-server)
+  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
 
- ;; Use pylsp defaults for all plugins - no configuration overrides
- ;; This provides the cleanest, most maintainable setup
- (setq eglot-workspace-configuration '())
-
- ;; Performance and stability settings
- ;; Note: eglot-events-buffer-size is set to 0 in core-packages.el for performance
- ;; Use M-x eglot-events-buffer to view LSP messages (when enabled)
- ;; Use M-x eglot-stderr-buffer to view server stderr
- ;; Temporarily enable debugging: (setq eglot-events-buffer-size 200000)
- (setq eglot-sync-connect nil) ; Don't block on connection
- (setq eglot-autoshutdown t) ; Auto-shutdown when last buffer closed
- (setq eglot-send-changes-idle-time 0.5) ; Reduce change notification frequency
-
- ;; Use flymake as the diagnostic backend (eglot's default)
- ;; Eglot will automatically integrate LSP diagnostics with flymake
- ;; Performance settings are configured in core-packages.el
- )
+  ;; Use pylsp defaults for all plugins - no configuration overrides
+  ;; This provides the cleanest, most maintainable setup
+  ;; Python-specific workspace configuration can be added here if needed
+  )
 
 ;; Make this module available for loading with (require 'lang-python-eglot)
 (provide 'lang-python-eglot)
