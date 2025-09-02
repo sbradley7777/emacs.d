@@ -111,15 +111,13 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'core-package-manager "Package system setup") ; Package system setup first
 (safe-load-config 'core-packages "Package declarations") ; Package declarations and configurations
 (safe-load-config 'core-ui "Basic UI setup") ; Basic UI setup
+(safe-load-config 'core-themes "Theme configuration") ; Visual appearance
 (safe-load-config 'core-editing "Editing preferences") ; Editing preferences
 (safe-load-config 'core-files "File handling") ; File handling
 (safe-load-config 'core-flymake "Flymake configuration") ; Flymake diagnostic display
 (safe-load-config 'core-eglot "General LSP configuration") ; General eglot settings
 (safe-load-config 'core-completion "Auto-completion framework") ; Core completion system
 (safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
-
-;; Theme configuration
-(safe-load-config 'core-themes "Theme configuration")
 
 ;; Language-specific configurations
 (safe-load-config 'lang-lisp "Emacs Lisp development")
