@@ -17,7 +17,7 @@
 
 (defvar
  config-development-packages
- '(which-key pyvenv elisp-autofmt corfu)
+ '(which-key pyvenv elisp-autofmt corfu rainbow-delimiters)
  "Development and programming packages.")
 
 (defvar
@@ -97,6 +97,8 @@
  ;; Configure elisp-autofmt for consistent formatting
  (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
  (setq elisp-autofmt-parallel-jobs 1)) ; Single-threaded for consistency
+
+;; Note: Rainbow delimiters configuration moved to config/core-rainbow-delimiters.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Eglot Performance Settings (applied early before any LSP servers start)
