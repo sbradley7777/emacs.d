@@ -32,6 +32,9 @@
 ;; Secure keyring management - pin keyring updates to GNU ELPA for security
 (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
 
+;; Pin completion framework to stable version for reliability
+(add-to-list 'package-pinned-packages '("corfu" . "melpa-stable"))
+
 ;; Enhanced security configuration for package verification
 (setq
  package-check-signature 'allow-unsigned ; Verify signatures when available, allow unsigned
