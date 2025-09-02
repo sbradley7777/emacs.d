@@ -118,6 +118,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'core-eglot "General LSP configuration") ; General eglot settings
 (safe-load-config 'core-completion "Auto-completion framework") ; Core completion system
 (safe-load-config 'core-rainbow-delimiters "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
+(safe-load-config 'core-indent-guides "Visual indentation guides") ; Column-based indentation visualization
 (safe-load-config 'core-keybindings "Global keybindings") ; Global keybindings
 
 ;; Language-specific configurations
