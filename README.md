@@ -317,9 +317,8 @@ You can also manually control virtual environments within Emacs:
 #### Debugging Issues
 
 **Auto-completion troubleshooting**:
-1. **Check Corfu status**: `M-x corfu-debug-info` to see completion system status
-2. **Test manual completion**: Use `M-x completion-at-point` to verify completions are available
-3. **Verify key bindings**: Try different completion triggers (`C-c TAB`, `M-TAB`, `C-M-i`)
+1. **Test manual completion**: Use `M-x completion-at-point` to verify completions are available
+2. **Verify key bindings**: Try different completion triggers (`C-c TAB`, `M-TAB`, `C-M-i`)
 
 **LSP server issues**:
 1. **Check LSP events**: `M-x eglot-events-buffer` to see LSP communication

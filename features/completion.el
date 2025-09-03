@@ -76,23 +76,6 @@
 ;; Note: TAB behavior left to individual modes for proper indentation
 ;; Use M-TAB, C-c TAB, or C-M-i for manual completion instead
 
-;; Diagnostic function to check completion setup
-(defun
- corfu-debug-info
- ()
- "Display debug information about Corfu and completion setup."
- (interactive)
- (message "\n=== Corfu Debug Information ===")
- (message "🛠️  Global Corfu Mode: %s" (if (bound-and-true-p global-corfu-mode) "ENABLED" "DISABLED"))
- (message "🛠️  Local Corfu Mode: %s" (if (bound-and-true-p corfu-mode) "ENABLED" "DISABLED"))
- (message "🛠️  Corfu Auto: %s" (if (bound-and-true-p corfu-auto) "ENABLED" "DISABLED"))
- (message "🛠️  Corfu Auto Delay: %s" (if (boundp 'corfu-auto-delay) corfu-auto-delay "NOT SET"))
- (message "🛠️  Corfu Auto Prefix: %s" (if (boundp 'corfu-auto-prefix) corfu-auto-prefix "NOT SET"))
- (message "🛠️  Current Major Mode: %s" major-mode)
- (message "🛠️  Completion At Point Functions: %s" completion-at-point-functions)
- (message "🛠️  Eglot Mode: %s" (if (bound-and-true-p eglot--managed-mode) "ACTIVE" "INACTIVE"))
- (when (bound-and-true-p eglot--managed-mode) (message "🛠️  Eglot Server: %s" (eglot-current-server)))
- (message "==============================="))
 
 ;; Make this module available for loading with (require 'completion)
 (provide 'completion)
