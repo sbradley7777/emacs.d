@@ -97,9 +97,8 @@
 ;; Enhanced cursor and interaction behavior
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Better cursor and selection visibility
-(setq-default
- cursor-type 'box ; Box cursor for better visibility
- blink-cursor-mode nil) ; Non-blinking cursor
+(setq-default cursor-type 'box) ; Box cursor for better visibility
+(blink-cursor-mode -1) ; Disable cursor blinking
 (setq mouse-yank-at-point t) ; Paste at cursor, not mouse position
 
 ;; Make this module available for loading with (require 'ui)
