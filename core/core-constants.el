@@ -12,6 +12,29 @@
 (defconst
  core-minimum-emacs-version "26.0.50" "Minimum required Emacs version for this configuration.")
 
+(defvar
+ emacs-feature-tier
+ (cond
+  ((version<= "30.0" emacs-version)
+   'modern) ; 30.2+ features
+  ((version<= "27.0" emacs-version)
+   'current) ; 27.x features
+  ((version<= "26.0" emacs-version)
+   'stable) ; 26.x features
+  (t
+   'legacy)) ; 24.x fallback
+ "Feature tier based on Emacs version capabilities.")
+
+(defvar
+ emacs-supports-line-numbers
+ (fboundp 'global-display-line-numbers-mode)
+ "Whether modern line numbers are available.")
+
+(defvar
+ emacs-supports-native-comp
+ (and (fboundp 'native-comp-available-p) (native-comp-available-p))
+ "Whether native compilation is available.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Text and Editing Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,9 +50,23 @@
 ;; Garbage Collection Thresholds
 (defconst
  core-gc-startup-threshold most-positive-fixnum "GC threshold during startup (maximum possible).")
-(defconst core-gc-normal-threshold (* 2 1000 1000) "Normal GC threshold (2MB).")
 (defconst
- core-gc-long-session-threshold (* 100 1000 1000) "GC threshold for long sessions (100MB).")
+ core-gc-normal-threshold
+ (pcase emacs-feature-tier
+   ('modern (* 8 1000 1000)) ; 8MB for Emacs 30.2+
+   ('current (* 4 1000 1000)) ; 4MB for Emacs 27.x
+   ('stable (* 2 1000 1000)) ; 2MB for Emacs 26.x
+   ('legacy (* 1 1000 1000))) ; 1MB for Emacs 24.x
+ "Normal GC threshold based on Emacs version.")
+
+(defconst
+ core-gc-long-session-threshold
+ (pcase emacs-feature-tier
+   ('modern (* 200 1000 1000)) ; 200MB for modern Emacs
+   ('current (* 100 1000 1000)) ; 100MB for current Emacs
+   ('stable (* 50 1000 1000)) ; 50MB for stable Emacs
+   ('legacy (* 20 1000 1000))) ; 20MB for legacy Emacs
+ "Long session GC threshold based on Emacs version.")
 (defconst core-gc-check-threshold 800000 "Threshold for checking if GC optimization is needed.")
 
 ;; Garbage Collection Percentages

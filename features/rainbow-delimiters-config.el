@@ -1,4 +1,4 @@
-;;; rainbow-delimiters.el --- Rainbow Delimiters Configuration -*- lexical-binding: t -*-
+;;; rainbow-delimiters-config.el --- Rainbow Delimiters Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Enhanced rainbow delimiters configuration with bold, high-visibility colors.
 ;;      Provides color-coded parentheses, brackets, and braces for better code navigation.
@@ -6,14 +6,18 @@
 (require 'features-constants)
 
 (defvar config-load-start-time (current-time))
-(message "🔄  Loading rainbow-delimiters.el...")
+(message "🔄  Loading rainbow-delimiters-config.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rainbow Delimiters Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Ensure package system is initialized
+(unless package--initialized (package-initialize))
+
 (use-package
  rainbow-delimiters
+ :ensure t
  :hook (prog-mode . rainbow-delimiters-mode)
  :config
  ;; Rainbow delimiters provides color-coded parentheses, brackets, and braces
@@ -52,8 +56,8 @@
 
  (message "⚙️  Rainbow delimiters configured with enhanced bold visibility"))
 
-;; Make this module available for loading with (require 'rainbow-delimiters)
-(provide 'rainbow-delimiters)
+;; Make this module available for loading with (require 'rainbow-delimiters-config)
+(provide 'rainbow-delimiters-config)
 (message
- "rainbow-delimiters.el loaded (%.2fs)"
+ "rainbow-delimiters-config.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))

@@ -130,7 +130,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'completion "Auto-completion framework") ; Core completion system
 (safe-load-config 'lsp "General LSP configuration") ; General eglot settings
 (safe-load-config 'flymake-config "Flymake configuration") ; Flymake diagnostic display
-(safe-load-config 'rainbow-delimiters "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
+(safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
 (safe-load-config 'indent-guides "Visual indentation guides") ; Column-based indentation visualization
 
 ;; Language-specific configurations
@@ -158,6 +158,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display detailed loading diagnostics
 (show-config-diagnostics)
+
+;; Show version-aware configuration status
+(message "✅ Emacs feature tier: %s (version %s)" emacs-feature-tier emacs-version)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Memory Management Strategy

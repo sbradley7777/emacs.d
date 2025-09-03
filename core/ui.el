@@ -11,21 +11,40 @@
 ;; UI Elements Control:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Disable UI elements for cleaner interface
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+;; These functions exist in all supported Emacs versions (24.3+)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
 
-;; Modern line number display with performance optimizations
-;; Use visual line numbers for better performance with large files
-(when
- (version<= core-minimum-emacs-version emacs-version) (global-display-line-numbers-mode 1)
- (setq display-line-numbers-type 'visual) ; More efficient than 'relative
- (setq display-line-numbers-width-start t) ; Dynamic width calculation
- (setq display-line-numbers-grow-only t) ; Prevent width flickering
- ;; Disable line numbers in certain modes for better performance
- (dolist
-  (mode '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0)))))
+;; Version-aware line number display
+(cond
+ ;; Modern line numbers (Emacs 26+)
+ (emacs-supports-line-numbers
+  (global-display-line-numbers-mode 1)
+  (when
+   (memq emacs-feature-tier '(modern current))
+   ;; Advanced features for newer versions
+   (setq
+    display-line-numbers-type
+    'visual
+    display-line-numbers-width-start
+    t
+    display-line-numbers-grow-only
+    t))
+  ;; Disable in certain modes for performance
+  (dolist
+   (mode
+    '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
+   (add-hook mode (lambda () (display-line-numbers-mode 0)))))
+
+ ;; Fallback for Emacs 24.x
+ ((fboundp 'global-linum-mode)
+  (global-linum-mode 1)
+  (setq linum-format "%4d "))
+
+ ;; No line numbers available
+ (t
+  (message "Line numbers not available in this Emacs version")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load Misc Preferences:
