@@ -3,6 +3,8 @@
 ;;      Package manager setup, repository configuration, and use-package initialization.
 ;;      This file establishes the foundation for package management.
 
+(require 'core-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading package-manager.el...")
 
@@ -18,7 +20,11 @@
 
 ;; Set package archive priorities (higher number = higher priority)
 ;; Prefer stable packages, fallback to development versions
-(setq package-archive-priorities '(("melpa-stable" . 20) ("gnu" . 15) ("melpa" . 10)))
+(setq
+ package-archive-priorities
+ `(("melpa-stable" . ,core-melpa-stable-priority)
+   ("gnu" . ,core-gnu-priority)
+   ("melpa" . ,core-melpa-priority)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package System Initialization
@@ -69,7 +75,7 @@
  use-package-always-ensure t ; Always ensure packages are installed
  use-package-verbose t ; Show loading messages for debugging
  use-package-compute-statistics t ; Enable statistics collection
- use-package-minimum-reported-time 0.1) ; Report slow-loading packages
+ use-package-minimum-reported-time core-use-package-minimum-reported-time) ; Report slow-loading packages
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Management Utilities

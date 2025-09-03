@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Global Flymake configuration for diagnostic display and behavior
 
+(require 'features-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading flymake-config.el...")
 
@@ -14,7 +16,7 @@
  '("\\*Flymake diagnostics.*\\*"
    (display-buffer-in-side-window)
    (side . right)
-   (window-width . 100)
+   (window-width . ,features-flymake-window-width)
    (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
 
 ;; Make this module available for loading with (require 'flymake-config)

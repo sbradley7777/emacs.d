@@ -18,7 +18,7 @@
 ;; Modern line number display with performance optimizations
 ;; Use visual line numbers for better performance with large files
 (when
- (version<= "26.0.50" emacs-version) (global-display-line-numbers-mode 1)
+ (version<= core-minimum-emacs-version emacs-version) (global-display-line-numbers-mode 1)
  (setq display-line-numbers-type 'visual) ; More efficient than 'relative
  (setq display-line-numbers-width-start t) ; Dynamic width calculation
  (setq display-line-numbers-grow-only t) ; Prevent width flickering

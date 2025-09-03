@@ -6,6 +6,10 @@
 ;;      - Preventing UI element flashing
 ;;      - Package system configuration
 
+;; Early init constants (can't require core-constants since load path not set up yet)
+(defconst early-gc-percentage-startup 0.6 "GC percentage during startup (60% of heap).")
+(defconst early-idle-update-delay-startup 1.0 "Idle update delay during startup.")
+
 (message "🔄  Loading early-init.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -15,7 +19,7 @@
 ;; This will be restored to normal values in init.el after startup
 (setq
  gc-cons-threshold most-positive-fixnum ; Maximum possible value
- gc-cons-percentage 0.6) ; Allow 60% of heap for GC
+ gc-cons-percentage early-gc-percentage-startup) ; Allow % of heap for GC
 
 ;; Prevent premature redisplay during startup
 (setq redisplay-dont-pause t)
@@ -70,7 +74,7 @@
 ;; Completion and Input Optimizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Reduce input processing overhead during startup
-(setq idle-update-delay 1.0) ; Longer delay for idle updates during startup
+(setq idle-update-delay early-idle-update-delay-startup) ; Longer delay for idle updates during startup
 
 ;; Reduce startup noise and font cache overhead
 (setq

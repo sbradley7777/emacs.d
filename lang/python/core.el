@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Basic Python editing settings, indentation, and shell configuration.
 
+(require 'core-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading core.el...")
 
@@ -14,7 +16,7 @@
   () "Configure Python mode with project-specific indentation settings."
   (setq python-indent-guess-indent-offset t) ; Attempts to guess indentation offset based on existing file indentation
   (setq indent-tabs-mode nil) ; Use spaces
-  (setq python-indent 4))) ; 4 spaces for indentation
+  (setq python-indent core-tab-width))) ; Use standard tab width for indentation
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python shell integration improvements

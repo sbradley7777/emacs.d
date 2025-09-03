@@ -3,6 +3,8 @@
 ;;      Package installation and configuration using use-package.
 ;;      Note: Package manager setup is handled by package-manager.el
 
+(require 'core-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading packages.el...")
 
@@ -85,9 +87,9 @@
  which-key
  :config (which-key-mode 1)
  (setq
-  which-key-idle-delay 0.3 ; Faster response (was 0.5)
-  which-key-max-description-length 40 ; Longer descriptions
-  which-key-add-column-padding 1 ; Better spacing
+  which-key-idle-delay core-which-key-idle-delay ; Faster response
+  which-key-max-description-length core-which-key-max-description-length ; Longer descriptions
+  which-key-add-column-padding core-which-key-column-padding ; Better spacing
   which-key-separator " → "))
 
 (use-package
@@ -95,7 +97,7 @@
  :config
  ;; Configure elisp-autofmt for consistent formatting
  (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
- (setq elisp-autofmt-parallel-jobs 1)) ; Single-threaded for consistency
+ (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs)) ; Single-threaded for consistency
 
 ;; Note: Rainbow delimiters configuration moved to features/rainbow-delimiters.el
 

@@ -3,6 +3,8 @@
 ;;      General Eglot configuration that applies to all languages.
 ;;      Language-specific server configurations should be in lang/<language>/eglot-config.el files.
 
+(require 'features-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading lsp.el...")
 
@@ -21,7 +23,7 @@
  ;; Temporarily enable debugging: (setq eglot-events-buffer-size 200000)
  (setq eglot-sync-connect nil) ; Don't block on connection
  (setq eglot-autoshutdown t) ; Auto-shutdown when last buffer closed
- (setq eglot-send-changes-idle-time 0.5) ; Reduce change notification frequency
+ (setq eglot-send-changes-idle-time features-eglot-send-changes-idle-time) ; Reduce change notification frequency
 
  ;; Use flymake as the diagnostic backend (eglot's default)
  ;; Eglot will automatically integrate LSP diagnostics with flymake
