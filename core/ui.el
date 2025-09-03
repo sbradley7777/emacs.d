@@ -18,6 +18,8 @@
 (when
  (version<= "26.0.50" emacs-version) (global-display-line-numbers-mode 1)
  (setq display-line-numbers-type 'visual) ; More efficient than 'relative
+ (setq display-line-numbers-width-start t) ; Dynamic width calculation
+ (setq display-line-numbers-grow-only t) ; Prevent width flickering
  ;; Disable line numbers in certain modes for better performance
  (dolist
   (mode '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
