@@ -53,3 +53,18 @@ repos:
       - id: codespell
         description: "Fix common misspellings in text files (including source code)."
         args: ["-f"]
+
+  - repo: local
+    hooks:
+      - id: elisp-autofmt
+        name: elisp-autofmt
+        description: "Automatically format Emacs Lisp files using elisp-autofmt"
+        entry: scripts/elisp-autofmt-hook
+        language: script
+        files: '\.el$'
+        pass_filenames: true
+        # To use a custom path to elisp-autofmt.py, uncomment and modify:
+        # args: ["--bin", "/path/to/your/elisp-autofmt.py"]
+        #
+        # Default path: ~/github/elisp-autofmt/elisp-autofmt.py
+        # Repository: https://github.com/emacsmirror/elisp-autofmt

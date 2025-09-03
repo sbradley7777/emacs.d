@@ -1,0 +1,206 @@
+#!/usr/bin/env bash
+#
+# Description: Pre-commit hook wrapper for elisp-autofmt
+#
+# This script automatically formats Emacs Lisp files using elisp-autofmt and
+# detects when formatting changes are made by comparing md5sums before and after.
+# Returns exit code 1 if any files were changed, signaling pre-commit to halt
+# so the user can review and stage the formatting changes.
+#
+# Uses elisp-autofmt from: https://github.com/emacsmirror/elisp-autofmt
+# Direct link to script: https://github.com/emacsmirror/elisp-autofmt/blob/master/elisp-autofmt.py
+#
+
+set -euo pipefail
+
+# Default path to elisp-autofmt script
+DEFAULT_ELISP_AUTOFMT="$HOME/github/elisp-autofmt/elisp-autofmt.py"
+ELISP_AUTOFMT="$DEFAULT_ELISP_AUTOFMT"
+VERBOSE=false
+
+# Parse command line arguments
+show_help() {
+    cat << EOF
+Usage: $0 [OPTIONS] [FILES...]
+
+Pre-commit hook wrapper for elisp-autofmt that detects formatting changes.
+
+OPTIONS:
+    --bin PATH          Path to elisp-autofmt.py script (default: $DEFAULT_ELISP_AUTOFMT)
+    -v, --verbose       Show verbose output including files processed
+    -h, --help          Show this help message
+
+FILES:
+    List of .el files to format
+
+OUTPUT MODES:
+    Default: Only shows output when formatting changes are detected
+    Verbose: Shows all processing steps and file counts
+
+EXAMPLES:
+    $0 file1.el file2.el
+    $0 --bin /custom/path/elisp-autofmt.py *.el
+    $0 --verbose --bin /custom/path/elisp-autofmt.py *.el
+
+EOF
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --bin)
+            if [[ -n "${2:-}" ]]; then
+                ELISP_AUTOFMT="$2"
+                shift 2
+            else
+                echo "Error: --bin requires a path argument" >&2
+                exit 1
+            fi
+            ;;
+        -v|--verbose)
+            VERBOSE=true
+            shift
+            ;;
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            echo "Error: Unknown option $1" >&2
+            echo "Use --help for usage information" >&2
+            exit 1
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+# Check if elisp-autofmt script exists
+if [[ ! -f "$ELISP_AUTOFMT" ]]; then
+    cat << EOF >&2
+Error: elisp-autofmt script not found at: $ELISP_AUTOFMT
+
+Please install elisp-autofmt from: https://github.com/emacsmirror/elisp-autofmt
+
+You can either:
+1. Clone the repository to the default location:
+   git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
+
+2. Use a custom path with the --bin option:
+   args: ["--bin", "/path/to/your/elisp-autofmt.py"]
+
+EOF
+    exit 1
+fi
+
+# Check if we have files to process
+if [[ $# -eq 0 ]]; then
+    echo "No files provided" >&2
+    exit 0
+fi
+
+# Filter for existing .el files only
+el_files=()
+for file in "$@"; do
+    if [[ -f "$file" && "$file" =~ \.el$ ]]; then
+        el_files+=("$file")
+    fi
+done
+
+if [[ ${#el_files[@]} -eq 0 ]]; then
+    [[ "$VERBOSE" == "true" ]] && echo "No .el files to process"
+    exit 0
+fi
+
+# Create temporary files to store md5sums
+TEMP_MD5_BEFORE=$(mktemp)
+TEMP_MD5_AFTER=$(mktemp)
+
+# Cleanup function
+cleanup() {
+    # shellcheck disable=SC2317  # This function is called by trap on EXIT
+    rm -f "$TEMP_MD5_BEFORE" "$TEMP_MD5_AFTER"
+}
+trap cleanup EXIT
+
+# Calculate md5sum of all files before formatting
+for file in "${el_files[@]}"; do
+    md5sum "$file" >> "$TEMP_MD5_BEFORE"
+done
+
+# Run elisp-autofmt on all provided files
+if [[ "$VERBOSE" == "true" ]]; then
+    echo "Running elisp-autofmt on ${#el_files[@]} file(s)..."
+    python3 "$ELISP_AUTOFMT" "${el_files[@]}"
+else
+    # Suppress elisp-autofmt output by redirecting stdout
+    python3 "$ELISP_AUTOFMT" "${el_files[@]}" > /dev/null
+fi
+
+# Calculate md5sum of all files after formatting
+for file in "${el_files[@]}"; do
+    md5sum "$file" >> "$TEMP_MD5_AFTER"
+done
+
+# Compare md5sums to detect changes and build results
+changed_files=()
+unchanged_files=()
+
+# Read both md5sum files line by line and compare
+while IFS= read -r line_before && IFS= read -r line_after <&3; do
+    # Extract hash and filename from each line
+    hash_before=$(echo "$line_before" | cut -d' ' -f1-2)
+    hash_after=$(echo "$line_after" | cut -d' ' -f1-2)
+    filename=$(echo "$line_before" | cut -d' ' -f3-)
+
+    # Categorize files based on whether they changed
+    if [[ "$hash_before" != "$hash_after" ]]; then
+        changed_files+=("$filename")
+    else
+        unchanged_files+=("$filename")
+    fi
+done < "$TEMP_MD5_BEFORE" 3< "$TEMP_MD5_AFTER"
+
+# Output results based on mode and findings
+if [[ "$VERBOSE" == "true" ]]; then
+    # Verbose mode: show per-file status
+    for file in "${unchanged_files[@]}"; do
+        echo "$file: No formatting changes detected"
+    done
+    for file in "${changed_files[@]}"; do
+        echo "$file: The file has been modified to fix formatting issues"
+    done
+fi
+
+# Handle final output and exit
+if [[ ${#changed_files[@]} -gt 0 ]]; then
+    # Show summary and git command when there are changes (both modes)
+    echo ""
+    echo "elisp-autofmt made formatting changes to the following files:"
+    for file in "${changed_files[@]}"; do
+        echo "  - $file"
+    done
+    echo ""
+    echo "Files have been automatically formatted. Please review and stage the changes:"
+
+    # Show git add command for all changed files
+    if [[ ${#changed_files[@]} -eq 1 ]]; then
+        echo "  git add '${changed_files[0]}'"
+    else
+        # Quote each filename and join with spaces for a single git add command
+        printf "  git add"
+        for file in "${changed_files[@]}"; do
+            printf " '%s'" "$file"
+        done
+        printf "\n"
+    fi
+    exit 1
+else
+    # No changes - silent in non-verbose mode
+    exit 0
+fi
