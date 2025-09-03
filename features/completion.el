@@ -3,6 +3,8 @@
 ;;      Modern auto-completion framework using Corfu.
 ;;      Provides universal auto-completion for all modes and languages.
 
+(require 'features-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading completion.el...")
 
@@ -28,8 +30,8 @@
  ;; Auto-completion settings
  (setq
   corfu-auto t ; Enable automatic completion
-  corfu-auto-delay 0.2 ; Short delay before showing completions (200ms)
-  corfu-auto-prefix 1 ; Start completing after 1 character
+  corfu-auto-delay features-corfu-auto-delay ; Short delay before showing completions
+  corfu-auto-prefix features-corfu-auto-prefix ; Start completing after N characters
   corfu-cycle t ; Enable cycling through candidates with TAB
   corfu-preview-current 'insert ; Preview current candidate
   corfu-preselect 'prompt ; Preselect based on prompt
@@ -37,9 +39,9 @@
 
  ;; Performance optimizations
  (setq
-  corfu-min-width 20 ; Minimum popup width
-  corfu-max-width 100 ; Maximum popup width
-  corfu-count 10) ; Maximum number of candidates shown
+  corfu-min-width features-corfu-min-width ; Minimum popup width
+  corfu-max-width features-corfu-max-width ; Maximum popup width
+  corfu-count features-corfu-count) ; Maximum number of candidates shown
 
  ;; Key bindings using define-key (more reliable than :bind)
  (define-key corfu-map (kbd "TAB") #'corfu-next)

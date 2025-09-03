@@ -3,6 +3,8 @@
 ;;      Visual indentation guides using highlight-indent-guides.
 ;;      Provides column-based indentation visualization for better code structure understanding.
 
+(require 'features-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading indent-guides.el...")
 
@@ -26,20 +28,24 @@
 
  ;; Manual color configuration for better visibility
  ;; Set specific colors that work well with both light and dark themes
- (setq highlight-indent-guides-auto-character-face-perc 40) ; More visible base guides
- (setq highlight-indent-guides-auto-top-character-face-perc 80) ; Very visible current scope
+ (setq highlight-indent-guides-auto-character-face-perc features-indent-guides-auto-char-face-perc) ; More visible base guides
+ (setq
+  highlight-indent-guides-auto-top-character-face-perc
+  features-indent-guides-auto-top-char-face-perc) ; Very visible current scope
 
  ;; Define custom faces for better visibility
  (custom-set-faces
-  '(highlight-indent-guides-odd-face ((t (:background "#2a2a2a"))))
-  '(highlight-indent-guides-even-face ((t (:background "#3a3a3a"))))
-  '(highlight-indent-guides-character-face ((t (:foreground "#4a4a4a"))))
-  '(highlight-indent-guides-top-odd-face ((t (:background "#404040"))))
-  '(highlight-indent-guides-top-even-face ((t (:background "#505050"))))
-  '(highlight-indent-guides-top-character-face ((t (:foreground "#707070")))))
+  `(highlight-indent-guides-odd-face ((t (:background ,features-color-indent-guide-odd))))
+  `(highlight-indent-guides-even-face ((t (:background ,features-color-indent-guide-even))))
+  `(highlight-indent-guides-character-face ((t (:foreground ,features-color-indent-guide-char))))
+  `(highlight-indent-guides-top-odd-face ((t (:background ,features-color-indent-guide-top-odd))))
+  `(highlight-indent-guides-top-even-face
+    ((t (:background ,features-color-indent-guide-top-even))))
+  `(highlight-indent-guides-top-character-face
+    ((t (:foreground ,features-color-indent-guide-top-char)))))
 
  ;; Delay before updating guides (performance optimization)
- (setq highlight-indent-guides-delay 0.1)
+ (setq highlight-indent-guides-delay features-indent-guides-delay)
 
  ;; Enable guides to work properly with blank lines
  (setq highlight-indent-guides-suppress-auto-error t)
