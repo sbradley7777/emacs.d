@@ -16,7 +16,8 @@
   () "Configure Python mode with project-specific indentation settings."
   (setq python-indent-guess-indent-offset t) ; Attempts to guess indentation offset based on existing file indentation
   (setq indent-tabs-mode nil) ; Use spaces
-  (setq python-indent core-tab-width))) ; Use standard tab width for indentation
+  (setq python-indent core-tab-width) ; Use standard tab width for indentation
+  (electric-indent-mode 1))) ; Enable electric indentation for automatic formatting
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python shell integration improvements
