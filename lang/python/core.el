@@ -3,7 +3,7 @@
 ;;      Basic Python editing settings, indentation, and shell configuration.
 
 (defvar config-load-start-time (current-time))
-(message "Loading core.el...")
+(message "🔄  Loading core.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python-specific indentation settings

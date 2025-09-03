@@ -3,7 +3,7 @@
 ;;      Basic Python environment setup: interpreter detection and REPL configuration.
 
 (defvar config-load-start-time (current-time))
-(message "Loading tools.el...")
+(message "🔄  Loading tools.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python Environment and Tools Configuration

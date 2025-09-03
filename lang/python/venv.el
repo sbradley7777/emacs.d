@@ -4,7 +4,7 @@
 ;;      auto-activation, modeline display, and project detection.
 
 (defvar config-load-start-time (current-time))
-(message "Loading venv.el...")
+(message "🔄  Loading venv.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Virtual environment support
@@ -40,7 +40,7 @@
            (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
       (setq-default config-python-project-name project-name)
       (setq config-python-project-name project-name)
-      (message "Virtual environment activated for project: %s" project-name)
+      (message "ℹ️  Virtual environment activated for project: %s" project-name)
       (force-mode-line-update t))))))
 
 ;; Configure pyvenv when available
@@ -112,12 +112,12 @@
         (when
          (file-executable-p venv-python)
          (setq python-shell-interpreter venv-python)
-         (message "Python virtual environment activated: %s" project-name))
+         (message "ℹ️  Python virtual environment activated: %s" project-name))
         ;; Set the project name globally for modeline display and force update
         (setq-default config-python-project-name project-name)
         (setq config-python-project-name project-name)
         (force-mode-line-update t)))
-     (message "Warning: pyvenv-activate function not available")))))
+     (message "⚠️  Warning: pyvenv-activate function not available")))))
 
 ;; Auto-activate when opening Python files (only use python-mode-hook to avoid duplicates)
 (add-hook 'python-mode-hook #'pyvenv-auto-activate)

@@ -3,7 +3,7 @@
 ;;      Display preferences and UI behavior
 
 (defvar config-load-start-time (current-time))
-(message "Loading ui.el...")
+(message "🔄  Loading ui.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI Elements Control:

@@ -4,7 +4,7 @@
 ;;      Provides universal auto-completion for all modes and languages.
 
 (defvar config-load-start-time (current-time))
-(message "Loading completion.el...")
+(message "🔄  Loading completion.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Corfu Auto-Completion Framework
@@ -49,13 +49,13 @@
  (define-key corfu-map (kbd "RET") #'corfu-insert)
  (define-key corfu-map (kbd "<return>") #'corfu-insert)
 
- (message "Corfu auto-completion configured successfully")
+ (message "⚙️  Corfu auto-completion configured successfully")
 
  ;; Add debugging information
- (message "Corfu global mode enabled: %s" (if (bound-and-true-p global-corfu-mode) "YES" "NO"))
- (message "Corfu auto setting: %s" corfu-auto)
- (message "Corfu auto delay: %s" corfu-auto-delay)
- (message "Corfu auto prefix: %s" corfu-auto-prefix))
+ (message "🛠️  Corfu global mode enabled: %s" (if (bound-and-true-p global-corfu-mode) "YES" "NO"))
+ (message "🛠️  Corfu auto setting: %s" corfu-auto)
+ (message "🛠️  Corfu auto delay: %s" corfu-auto-delay)
+ (message "🛠️  Corfu auto prefix: %s" corfu-auto-prefix))
 
 ;; Global key bindings for manual completion trigger
 ;; Use different key combinations that work reliably
@@ -83,15 +83,15 @@
  "Display debug information about Corfu and completion setup."
  (interactive)
  (message "\n=== Corfu Debug Information ===")
- (message "Global Corfu Mode: %s" (if (bound-and-true-p global-corfu-mode) "ENABLED" "DISABLED"))
- (message "Local Corfu Mode: %s" (if (bound-and-true-p corfu-mode) "ENABLED" "DISABLED"))
- (message "Corfu Auto: %s" (if (bound-and-true-p corfu-auto) "ENABLED" "DISABLED"))
- (message "Corfu Auto Delay: %s" (if (boundp 'corfu-auto-delay) corfu-auto-delay "NOT SET"))
- (message "Corfu Auto Prefix: %s" (if (boundp 'corfu-auto-prefix) corfu-auto-prefix "NOT SET"))
- (message "Current Major Mode: %s" major-mode)
- (message "Completion At Point Functions: %s" completion-at-point-functions)
- (message "Eglot Mode: %s" (if (bound-and-true-p eglot--managed-mode) "ACTIVE" "INACTIVE"))
- (when (bound-and-true-p eglot--managed-mode) (message "Eglot Server: %s" (eglot-current-server)))
+ (message "🛠️  Global Corfu Mode: %s" (if (bound-and-true-p global-corfu-mode) "ENABLED" "DISABLED"))
+ (message "🛠️  Local Corfu Mode: %s" (if (bound-and-true-p corfu-mode) "ENABLED" "DISABLED"))
+ (message "🛠️  Corfu Auto: %s" (if (bound-and-true-p corfu-auto) "ENABLED" "DISABLED"))
+ (message "🛠️  Corfu Auto Delay: %s" (if (boundp 'corfu-auto-delay) corfu-auto-delay "NOT SET"))
+ (message "🛠️  Corfu Auto Prefix: %s" (if (boundp 'corfu-auto-prefix) corfu-auto-prefix "NOT SET"))
+ (message "🛠️  Current Major Mode: %s" major-mode)
+ (message "🛠️  Completion At Point Functions: %s" completion-at-point-functions)
+ (message "🛠️  Eglot Mode: %s" (if (bound-and-true-p eglot--managed-mode) "ACTIVE" "INACTIVE"))
+ (when (bound-and-true-p eglot--managed-mode) (message "🛠️  Eglot Server: %s" (eglot-current-server)))
  (message "==============================="))
 
 ;; Make this module available for loading with (require 'completion)

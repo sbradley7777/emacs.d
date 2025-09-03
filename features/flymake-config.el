@@ -3,7 +3,7 @@
 ;;      Global Flymake configuration for diagnostic display and behavior
 
 (defvar config-load-start-time (current-time))
-(message "Loading flymake-config.el...")
+(message "🔄  Loading flymake-config.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flymake Display Configuration

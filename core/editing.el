@@ -3,7 +3,7 @@
 ;;      Tabs, spaces, and general editing preferences
 
 (defvar config-load-start-time (current-time))
-(message "Loading editing.el...")
+(message "🔄  Loading editing.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced editing preferences

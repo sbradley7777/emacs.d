@@ -4,7 +4,7 @@
 ;;      Provides column-based indentation visualization for better code structure understanding.
 
 (defvar config-load-start-time (current-time))
-(message "Loading indent-guides.el...")
+(message "🔄  Loading indent-guides.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Highlight Indent Guides Configuration
@@ -44,7 +44,7 @@
  ;; Enable guides to work properly with blank lines
  (setq highlight-indent-guides-suppress-auto-error t)
 
- (message "Highlight indent guides configured with column method and responsive highlighting"))
+ (message "⚙️  Highlight indent guides configured with column method and responsive highlighting"))
 
 ;; Make this module available for loading with (require 'indent-guides)
 (provide 'indent-guides)

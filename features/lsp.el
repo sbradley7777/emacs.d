@@ -4,7 +4,7 @@
 ;;      Language-specific server configurations should be in lang/<language>/eglot-config.el files.
 
 (defvar config-load-start-time (current-time))
-(message "Loading lsp.el...")
+(message "🔄  Loading lsp.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Eglot LSP Configuration

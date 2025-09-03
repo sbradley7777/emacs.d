@@ -4,7 +4,7 @@
 ;;      Note: Package manager setup is handled by package-manager.el
 
 (defvar config-load-start-time (current-time))
-(message "Loading packages.el...")
+(message "🔄  Loading packages.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Essential Package Categories
@@ -36,7 +36,7 @@
        (installed-count 0)
        (skipped-count 0))
 
-   (message "Installing %d packages..." (length package-list))
+   (message "📦  Installing %d packages..." (length package-list))
 
    (dolist
     (package package-list)
@@ -44,7 +44,7 @@
      ;; Already installed
      ((package-installed-p package)
       (setq skipped-count (1+ skipped-count))
-      (message "✅ Already installed: %s" package))
+      (message "✅  Already installed: %s" package))
 
      ;; Install with error handling
      (t
@@ -52,20 +52,21 @@
           (progn
            (package-install package)
            (setq installed-count (1+ installed-count))
-           (message "✅ Installed: %s" package))
+           (message "✅  Installed: %s" package))
         (error
          (push package failed-packages)
-         (message "✗ Failed to install %s: %s" package (error-message-string err)))))))
+         (message "❌  Failed to install %s: %s" package (error-message-string err)))))))
 
    ;; Installation summary
    (message "\n=== Package Installation Summary ===")
-   (message "Installed: %d packages" installed-count)
-   (message "Already present: %d packages" skipped-count)
+   (message "    ℹ️  Installed: %d packages" installed-count)
+   (message "    ℹ️  Already present: %d packages" skipped-count)
    (when
     failed-packages
-    (message "❌ Failed: %d packages" (length failed-packages))
-    (dolist (pkg failed-packages) (message "  - %s" pkg))
-    (message "Consider running (package-refresh-contents) and retrying failed packages"))
+    (message "    ❌  Failed: %d packages" (length failed-packages))
+    (dolist (pkg failed-packages) (message "  ❌  %s" pkg))
+    (message "    ℹ️  Consider running (package-refresh-contents) and retrying failed packages"))
+   (message "===================================\n")
 
    ;; Return list of failed packages for further handling
    failed-packages))

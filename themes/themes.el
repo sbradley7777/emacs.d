@@ -3,7 +3,7 @@
 ;;      Core theme and visual appearance configuration
 
 (defvar config-load-start-time (current-time))
-(message "Loading themes.el...")
+(message "🔄  Loading themes.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configure the theme

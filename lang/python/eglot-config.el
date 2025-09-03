@@ -5,7 +5,7 @@
 ;;      General eglot settings are in features/lsp.el
 
 (defvar config-load-start-time (current-time))
-(message "Loading eglot-config.el...")
+(message "🔄  Loading eglot-config.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python-Specific Eglot Configuration
@@ -17,19 +17,19 @@
  ()
  "Start eglot for Python only if system-wide pylsp is available."
  (interactive)
- (message "EGLOT: Attempting to start eglot for Python...")
+ (message "ℹ️  EGLOT: Attempting to start eglot for Python...")
  (if
   (executable-find "pylsp")
   (progn
-   (message "EGLOT: Found pylsp at: %s" (executable-find "pylsp"))
+   (message "🔍  EGLOT: Found pylsp at: %s" (executable-find "pylsp"))
    (condition-case err
        (progn
          (require 'eglot) ; Ensure eglot is loaded before using it
          (eglot-ensure)
-         (message "EGLOT: Successfully started eglot for Python"))
+         (message "✅  EGLOT: Successfully started eglot for Python"))
      (error
-      (message "❌ EGLOT: Failed to start: %s" (error-message-string err)))))
-  (message "EGLOT: pylsp not found - install python-lsp-server for LSP features")))
+      (message "❌  EGLOT: Failed to start: %s" (error-message-string err)))))
+  (message "❌  EGLOT: pylsp not found - install python-lsp-server for LSP features")))
 
 ;; Auto-start eglot for Python files
 (add-hook 'python-mode-hook #'python-eglot-maybe-start)

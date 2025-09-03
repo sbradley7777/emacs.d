@@ -4,7 +4,7 @@
 ;;      for commonly used Emacs functions.
 
 (defvar config-load-start-time (current-time))
-(message "Loading aliases.el...")
+(message "🔄  Loading aliases.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive function aliases

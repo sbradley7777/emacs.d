@@ -3,7 +3,7 @@
 ;;      Emacs Lisp specific settings and formatting
 
 (defvar config-load-start-time (current-time))
-(message "Loading lisp.el...")
+(message "🔄  Loading lisp.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs Lisp indentation and formatting
@@ -25,7 +25,7 @@
  elisp-autofmt
  :hook (emacs-lisp-mode . elisp-autofmt-mode)
  :bind (:map emacs-lisp-mode-map ("C-c C-f" . elisp-autofmt-buffer))
- :config (message "elisp-autofmt configured for automatic formatting on save"))
+ :config (message "⚙️  elisp-autofmt configured for automatic formatting on save"))
 
 ;; Make this module available for loading with (require 'lisp)
 (provide 'lisp)

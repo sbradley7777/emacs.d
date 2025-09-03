@@ -6,7 +6,7 @@
 ;;      - Preventing UI element flashing
 ;;      - Package system configuration
 
-(message "Loading early-init.el...")
+(message "🔄  Loading early-init.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance Optimizations - Startup Phase
@@ -77,4 +77,4 @@
  inhibit-compacting-font-caches t ; Don't compact font caches during startup
  inhibit-startup-buffer-menu t) ; Don't show buffer menu at startup
 
-(message "early-init.el loaded successfully - performance optimizations active.")
+(message "✅  early-init.el loaded successfully - performance optimizations active.")

@@ -3,7 +3,7 @@
 ;;      User-defined custom functions
 
 (defvar config-load-start-time (current-time))
-(message "Loading functions.el...")
+(message "🔄  Loading functions.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Reload init.el on the Fly:
@@ -15,7 +15,7 @@
     (bufferp (get-file-buffer init-file))
     (save-buffer (get-buffer (file-name-nondirectory init-file))))
    (load-file init-file)
-   (message "init.el reloaded successfully")))
+   (message "✅  init.el reloaded successfully")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Copy Entire Buffer to Kill Ring:
@@ -27,7 +27,7 @@ This is equivalent to doing M-x mark-whole-buffer followed by M-w."
   (save-excursion
     (mark-whole-buffer)
     (kill-ring-save (point-min) (point-max)))
-  (message "Buffer copied to kill ring"))
+  (message "ℹ️  Buffer copied to kill ring"))
 
 ;; Make this module available for loading with (require 'functions)
 (provide 'functions)

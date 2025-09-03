@@ -4,7 +4,7 @@
 ;;      This file establishes the foundation for package management.
 
 (defvar config-load-start-time (current-time))
-(message "Loading package-manager.el...")
+(message "🔄  Loading package-manager.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Repository Configuration
@@ -46,7 +46,7 @@
  (package-installed-p 'gnu-elpa-keyring-update)
  (package-refresh-contents) ; Refresh package contents to get latest keyring info
  (package-install 'gnu-elpa-keyring-update) ; Install keyring update package from GNU ELPA
- (message "GNU ELPA keyring updated for secure package verification"))
+ (message "🔐  GNU ELPA keyring updated for secure package verification"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Content Management
@@ -79,7 +79,7 @@
  ()
  "Upgrade all installed packages to their latest versions."
  (interactive)
- (message "Checking for package upgrades...")
+ (message "🔍  Checking for package upgrades...")
  (package-refresh-contents)
  (let ((upgradeable-packages '())
        (failed-packages '())
@@ -111,18 +111,18 @@
           (progn
            (package-install pkg)
            (setq upgraded-count (1+ upgraded-count))
-           (message "✅ Upgraded: %s" pkg))
+           (message "✅  Upgraded: %s" pkg))
         (error
          (push pkg failed-packages)
-         (message "✗ Failed to upgrade %s: %s" pkg (error-message-string err)))))
+         (message "❌  Failed to upgrade %s: %s" pkg (error-message-string err)))))
 
      ;; Summary
      (message
       "Package upgrade complete: %d successful, %d failed" upgraded-count (length failed-packages))
      (when
       failed-packages
-      (message "❌ Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
-    (message "All packages are up to date"))))
+      (message "❌  Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
+    (message "✅  All packages are up to date"))))
 
 (defun
  package-cleanup-unused
@@ -130,7 +130,7 @@
  "Remove unused package dependencies."
  (interactive)
  (package-autoremove)
- (message "Cleaned up unused packages"))
+ (message "🧹  Cleaned up unused packages"))
 
 ;; Make this module available for loading with (require 'package-manager)
 (provide 'package-manager)

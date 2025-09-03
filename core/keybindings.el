@@ -3,7 +3,7 @@
 ;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
 (defvar config-load-start-time (current-time))
-(message "Loading keybindings.el...")
+(message "🔄  Loading keybindings.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keyboard behavior and Custom HotKeys (aka: keyboard-modifiers or shortcuts):

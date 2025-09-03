@@ -4,7 +4,7 @@
 ;;      Provides color-coded parentheses, brackets, and braces for better code navigation.
 
 (defvar config-load-start-time (current-time))
-(message "Loading rainbow-delimiters.el...")
+(message "🔄  Loading rainbow-delimiters.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rainbow Delimiters Configuration
@@ -42,7 +42,7 @@
   ;; Mismatched delimiter: Bold red background for high visibility
   '(rainbow-delimiters-mismatched-face ((t (:foreground "#ffffff" :background "#f44336" :weight bold)))))
 
- (message "Rainbow delimiters configured with enhanced bold visibility"))
+ (message "⚙️  Rainbow delimiters configured with enhanced bold visibility"))
 
 ;; Make this module available for loading with (require 'rainbow-delimiters)
 (provide 'rainbow-delimiters)

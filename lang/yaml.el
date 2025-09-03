@@ -3,7 +3,7 @@
 ;;      YAML mode support and configuration
 
 (defvar config-load-start-time (current-time))
-(message "Loading yaml.el...")
+(message "🔄  Loading yaml.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load yaml mode support

@@ -3,7 +3,7 @@
 ;;      File archiving, backups, and autosave settings
 
 (defvar config-load-start-time (current-time))
-(message "Loading files.el...")
+(message "🔄  Loading files.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Don't litter OS with autosaves (~) and backup (#) files. Based on:
@@ -64,11 +64,11 @@
  log-backup-operation
  (file)
  "Log when a backup file is created for FILE."
- (when file (message "💾 Backup created for: %s" (file-name-nondirectory file))))
+ (when file (message "💾  Backup created for: %s" (file-name-nondirectory file))))
 
 (defun
  log-auto-save-operation () "Log when an auto-save operation occurs."
- (when buffer-file-name (message "💾 Auto-saved: %s" (file-name-nondirectory buffer-file-name))))
+ (when buffer-file-name (message "💾  Auto-saved: %s" (file-name-nondirectory buffer-file-name))))
 
 ;; Hook into backup operations
 (add-hook

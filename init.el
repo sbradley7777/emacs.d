@@ -3,7 +3,7 @@
 ;;      Main entry point for Emacs configuration.
 ;;      Loads configuration modules in the correct order.
 
-(message "Loading init.el...")
+(message "🔄  Loading init.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package system configuration (Snap-compatible approach)
@@ -30,7 +30,7 @@
   ;; Restore normal input processing
   (setq idle-update-delay 0.5) ; Faster idle updates for responsiveness
 
-  (message "Emacs startup complete. Performance settings restored.")))
+  (message "✅  Emacs startup complete. Performance settings restored.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration Validation
@@ -77,14 +77,14 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
         (require config-name)
         (let ((elapsed (float-time (time-subtract (current-time) load-time))))
           (add-to-list 'config-load-results (list config-name 'success elapsed desc))
-          (message "✅ Loaded %s (%.3f seconds)" desc elapsed)
+          (message "✅  Loaded %s (%.3f seconds)" desc elapsed)
           t))
      (error
       (let ((elapsed (float-time (time-subtract (current-time) load-time))))
         (add-to-list
          'config-load-results (list config-name 'failed elapsed desc (error-message-string err)))
-        (message "✗ Failed to load %s: %s" desc (error-message-string err))
-        (message "  Consider checking: file exists, syntax is valid, dependencies available")
+        (message "❌  Failed to load %s: %s" desc (error-message-string err))
+        (message "ℹ️  Consider checking: file exists, syntax is valid, dependencies available")
         nil)))))
 
 (defun
@@ -101,10 +101,11 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
           (desc (nth 3 result)))
       (if
        (eq status 'success)
-       (progn (setq successful (1+ successful)) (message "  ✅ %s (%.3fs)" desc time))
+       (progn (setq successful (1+ successful)) (message "    ✅  %s (%.3fs)" desc time))
        (setq failed (1+ failed))
-       (message "  ✗ %s (%.3fs) - %s" desc time (nth 4 result)))))
-   (message "=== Total: %d successful, %d failed (%.3fs total) ===" successful failed total-time)))
+       (message "  ❌  %s (%.3fs) - %s" desc time (nth 4 result)))))
+   (message "    🛠️  Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
+   (message "====================================\n")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configuration modules in order with error handling
@@ -164,4 +165,4 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Run GC optimization every 15 minutes when idle to maintain performance
 (run-with-idle-timer 900 t #'optimize-gc-for-long-session)
 
-(message "init.el loaded successfully.")
+(message "✅  init.el loaded successfully.")
