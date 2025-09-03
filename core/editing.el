@@ -40,10 +40,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced editing behavior
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Better undo/redo behavior
+;; Better undo/redo behavior - comprehensive undo buffer configuration
 (setq
- undo-limit 6000000 ; Larger undo buffer (6MB)
- undo-strong-limit 9000000) ; Strong limit for undo (9MB)
+ undo-limit 6000000        ; Normal undo entries kept in memory (6MB)
+ undo-strong-limit 9000000 ; Strongly-held undo entries (9MB)
+ undo-outer-limit 12000000) ; Maximum undo data before old entries are discarded (12MB)
 
 ;; Smarter beginning-of-line behavior
 (defun

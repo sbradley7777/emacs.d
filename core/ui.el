@@ -9,19 +9,21 @@
 ;; UI Elements Control:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Disable UI elements for cleaner interface
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+(when (fboundp 'menu-bar-mode)
+  (menu-bar-mode -1))
 
 ;; Modern line number display with performance optimizations
 ;; Use visual line numbers for better performance with large files
-(when
- (version<= "26.0.50" emacs-version) (global-display-line-numbers-mode 1)
- (setq display-line-numbers-type 'visual) ; More efficient than 'relative
- ;; Disable line numbers in certain modes for better performance
- (dolist
-  (mode '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0)))))
+(when (version<= "26.0.50" emacs-version)
+  (global-display-line-numbers-mode 1)
+  (setq display-line-numbers-type 'visual) ; More efficient than 'relative
+  ;; Disable line numbers in certain modes for better performance
+  (dolist (mode '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load Misc Preferences:
@@ -30,10 +32,11 @@
 (display-time)
 ;; Don't show the GNU splash screen
 (setq inhibit-startup-message t)
-;; Search and line/column display preferences
-(setq case-fold-search t) ; Make searches case insensitive
-(line-number-mode 1) ; Current line number in mode line
-(setq column-number-mode t) ; Add column numbers
+;; Search and line/column display preferences - consolidated for efficiency
+(setq
+ case-fold-search t ; Make searches case insensitive
+ column-number-mode t) ; Add column numbers to mode line
+(line-number-mode 1) ; Show current line number in mode line (mode function, not variable)
 ;; Basic editor behavior
 (set-default 'truncate-lines t) ; Don't word wrap long lines
 (setq-default scroll-step 1) ; Turn off jumpy scroll
@@ -45,8 +48,7 @@
  kill-whole-line t ; ctrl-k kills whole line if at col 0
  show-trailing-whitespace t) ; Highlight trailing whitespaces
 ;; Enhanced title bar showing buffer name and file path with hostname
-(setq
- frame-title-format '("%b - " (:eval (or (file-remote-p default-directory 'host) system-name))))
+(setq frame-title-format '("%b - " (:eval (or (file-remote-p default-directory 'host) system-name))))
 ;; File handling preferences
 (setq
  diff-default-read-only nil ; Turn off read only mode with .patch files
@@ -86,7 +88,9 @@
 
 ;; Track recently opened files
 (recentf-mode 1)
-(setq recentf-max-saved-items 50 recentf-exclude '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
+(setq
+ recentf-max-saved-items 50
+ recentf-exclude '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
 
 (normal-erase-is-backspace-mode 0)
 
@@ -101,5 +105,4 @@
 
 ;; Make this module available for loading with (require 'ui)
 (provide 'ui)
-(message
- "ui.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+(message "ui.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
