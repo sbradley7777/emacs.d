@@ -2,6 +2,42 @@
 
 This document outlines the formatting and code style conventions used in this Emacs configuration.
 
+## Table of Contents
+
+- [General Principles](#general-principles)
+- [File Structure and Organization](#file-structure-and-organization)
+  - [Directory Layout](#directory-layout)
+  - [File Naming Convention](#file-naming-convention)
+- [Emacs Lisp Formatting Standards](#emacs-lisp-formatting-standards)
+  - [File Headers](#file-headers)
+  - [Indentation and Spacing](#indentation-and-spacing)
+  - [Line Length](#line-length)
+  - [Section Separators](#section-separators)
+  - [Comments](#comments)
+  - [Variables and Functions](#variables-and-functions)
+  - [Error Handling](#error-handling)
+- [Language-Specific Standards](#language-specific-standards)
+  - [Python Configuration](#python-configuration)
+  - [YAML Configuration](#yaml-configuration)
+- [Automated Formatting](#automated-formatting)
+  - [elisp-autofmt Configuration](#elisp-autofmt-configuration)
+  - [Tab to Space Conversion](#tab-to-space-conversion)
+- [Module Structure](#module-structure)
+  - [Module Template](#module-template)
+  - [Required Elements](#required-elements)
+- [Message Symbol Reference](#message-symbol-reference)
+  - [Symbol Categories and Usage](#symbol-categories-and-usage)
+  - [Message Formatting Standards](#message-formatting-standards)
+  - [Symbol Usage Guidelines](#symbol-usage-guidelines)
+  - [Benefits of the Symbol System](#benefits-of-the-symbol-system)
+- [Quality Assurance](#quality-assurance)
+  - [Pre-commit Hooks](#pre-commit-hooks)
+  - [Performance Considerations](#performance-considerations)
+- [Best Practices](#best-practices)
+  - [Configuration Loading](#configuration-loading)
+  - [Package Management](#package-management)
+  - [Performance](#performance)
+
 ## General Principles
 
 This configuration follows established Emacs Lisp community standards and best practices:

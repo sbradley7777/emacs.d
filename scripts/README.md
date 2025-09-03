@@ -2,6 +2,25 @@
 
 This directory contains scripts and utilities for managing the Emacs configuration.
 
+## Table of Contents
+
+- [Available Scripts](#available-scripts)
+- [elisp-autofmt Pre-commit Hook](#elisp-autofmt-pre-commit-hook)
+  - [Requirements](#requirements)
+  - [Usage](#usage)
+  - [Hook Options](#hook-options)
+  - [Configuration](#configuration)
+  - [Behavior](#behavior)
+  - [Example Output](#example-output)
+- [Installation Guide](#installation-guide)
+  - [Quick Start](#quick-start)
+  - [Installation Script Options](#installation-script-options)
+  - [Installation Examples](#installation-examples)
+  - [What the Installer Does](#what-the-installer-does)
+  - [Benefits of the Symlink Approach](#benefits-of-the-symlink-approach)
+  - [Manual Installation](#manual-installation)
+  - [Troubleshooting](#troubleshooting)
+
 ## Available Scripts
 
 ### Installation Script (`install.sh`)
