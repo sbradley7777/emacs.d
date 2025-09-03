@@ -160,16 +160,24 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (show-config-diagnostics)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Memory Management Optimization for Long-Running Sessions
+;; Memory Management Strategy
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Garbage collection optimization for long-running sessions
+;; Manual GC approach chosen for light usage patterns (typically < 10 buffers):
+;; - Automatic timers add unnecessary overhead for minimal memory pressure
+;; - Emacs' built-in GC triggers are sufficient for light buffer usage
+;; - Manual optimization available via M-x optimize-gc-for-long-session if needed
+;; - This approach avoids over-optimization complexity for predictable, light workflows
+
 (defun
- optimize-gc-for-long-session () "Optimize garbage collection for long-running sessions."
+ optimize-gc-for-long-session ()
+ "Optimize garbage collection for long-running sessions.
+Can be called manually when needed for intensive work sessions."
+ (interactive)
  (setq
   gc-cons-threshold core-gc-long-session-threshold ; Long session threshold
-  gc-cons-percentage core-gc-percentage-normal)) ; Normal GC percentage
-
-;; Run GC optimization timer using configured interval
-(run-with-idle-timer core-gc-timer-interval t #'optimize-gc-for-long-session)
+  gc-cons-percentage core-gc-percentage-normal) ; Normal GC percentage
+ (message
+  "✅ GC optimized for long session (threshold: %s)"
+  (format-bytes-to-string core-gc-long-session-threshold)))
 
 (message "✅  init.el loaded successfully.")
