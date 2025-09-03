@@ -28,7 +28,7 @@
          (eglot-ensure)
          (message "EGLOT: Successfully started eglot for Python"))
      (error
-      (message "EGLOT: Failed to start: %s" (error-message-string err)))))
+      (message "❌ EGLOT: Failed to start: %s" (error-message-string err)))))
   (message "EGLOT: pylsp not found - install python-lsp-server for LSP features")))
 
 ;; Auto-start eglot for Python files

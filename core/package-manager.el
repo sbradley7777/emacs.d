@@ -111,7 +111,7 @@
           (progn
            (package-install pkg)
            (setq upgraded-count (1+ upgraded-count))
-           (message "✓ Upgraded: %s" pkg))
+           (message "✅ Upgraded: %s" pkg))
         (error
          (push pkg failed-packages)
          (message "✗ Failed to upgrade %s: %s" pkg (error-message-string err)))))
@@ -121,7 +121,7 @@
       "Package upgrade complete: %d successful, %d failed" upgraded-count (length failed-packages))
      (when
       failed-packages
-      (message "Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
+      (message "❌ Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
     (message "All packages are up to date"))))
 
 (defun

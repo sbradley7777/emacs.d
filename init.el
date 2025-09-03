@@ -38,13 +38,13 @@
 ;; Validate that early-init.el properly set up required variables
 (unless
  (boundp 'default-file-name-handler-alist)
- (warn "default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
+ (warn "⚠️  default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
  (setq default-file-name-handler-alist file-name-handler-alist))
 
 ;; Validate that early-init performance optimizations were applied
 (unless
  (> gc-cons-threshold 800000)
- (warn "GC threshold not optimized by early-init.el - startup may be slower"))
+ (warn "⚠️  GC threshold not optimized by early-init.el - startup may be slower"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup configuration directories
@@ -77,7 +77,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
         (require config-name)
         (let ((elapsed (float-time (time-subtract (current-time) load-time))))
           (add-to-list 'config-load-results (list config-name 'success elapsed desc))
-          (message "✓ Loaded %s (%.3f seconds)" desc elapsed)
+          (message "✅ Loaded %s (%.3f seconds)" desc elapsed)
           t))
      (error
       (let ((elapsed (float-time (time-subtract (current-time) load-time))))
@@ -101,7 +101,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
           (desc (nth 3 result)))
       (if
        (eq status 'success)
-       (progn (setq successful (1+ successful)) (message "  ✓ %s (%.3fs)" desc time))
+       (progn (setq successful (1+ successful)) (message "  ✅ %s (%.3fs)" desc time))
        (setq failed (1+ failed))
        (message "  ✗ %s (%.3fs) - %s" desc time (nth 4 result)))))
    (message "=== Total: %d successful, %d failed (%.3fs total) ===" successful failed total-time)))

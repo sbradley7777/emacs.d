@@ -44,7 +44,7 @@
      ;; Already installed
      ((package-installed-p package)
       (setq skipped-count (1+ skipped-count))
-      (message "✓ Already installed: %s" package))
+      (message "✅ Already installed: %s" package))
 
      ;; Install with error handling
      (t
@@ -52,7 +52,7 @@
           (progn
            (package-install package)
            (setq installed-count (1+ installed-count))
-           (message "✓ Installed: %s" package))
+           (message "✅ Installed: %s" package))
         (error
          (push package failed-packages)
          (message "✗ Failed to install %s: %s" package (error-message-string err)))))))
@@ -63,7 +63,7 @@
    (message "Already present: %d packages" skipped-count)
    (when
     failed-packages
-    (message "Failed: %d packages" (length failed-packages))
+    (message "❌ Failed: %d packages" (length failed-packages))
     (dolist (pkg failed-packages) (message "  - %s" pkg))
     (message "Consider running (package-refresh-contents) and retrying failed packages"))
 
