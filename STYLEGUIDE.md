@@ -346,11 +346,22 @@ All message symbols follow a consistent spacing pattern:
 ### Pre-commit Hooks
 The configuration includes pre-commit hooks for quality assurance (see [.pre-commit-config.yaml](.pre-commit-config.yaml)):
 
+#### Code Quality Hooks
 - **Trailing whitespace** removal
 - **End-of-file** newline enforcement
 - **Large file** prevention
 - **Shell script** linting (shellcheck, bashate)
 - **Spell checking** (codespell)
+
+#### Emacs Lisp Formatting Hook
+- **elisp-autofmt** - Automatic formatting for `.el` files using [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
+  - Enforces consistent indentation and spacing
+  - Applies native Emacs Lisp formatting standards
+  - Automatically formats files on commit
+  - Provides clear feedback when changes are made
+  - Can be configured with custom binary path if needed
+
+The elisp-autofmt hook ensures all Emacs Lisp files follow the formatting standards defined in this style guide automatically.
 
 ### Performance Considerations
 - **Startup optimization** via early-init.el

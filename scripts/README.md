@@ -1,6 +1,129 @@
-# Installation Guide
+# Scripts Directory
 
-This directory contains the installation script and documentation for setting up the Emacs configuration.
+This directory contains scripts and utilities for managing the Emacs configuration.
+
+## Available Scripts
+
+### Installation Script (`install.sh`)
+Automated installation and setup script for the Emacs configuration.
+
+### Formatting Hook (`elisp-autofmt-hook`)
+Pre-commit hook wrapper for automatic Emacs Lisp code formatting.
+
+---
+
+## elisp-autofmt Pre-commit Hook
+
+The `elisp-autofmt-hook` script automatically formats Emacs Lisp files using [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt) during git commits.
+
+### Requirements
+
+1. **elisp-autofmt**: The formatting tool must be installed
+   ```bash
+   # Clone the elisp-autofmt repository
+   git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
+   ```
+
+2. **Python 3**: Required to run elisp-autofmt.py
+   ```bash
+   # Verify Python 3 is available
+   python3 --version
+   ```
+
+3. **pre-commit**: For automatic hook execution
+   ```bash
+   # Install pre-commit
+   pip install pre-commit
+
+   # Install hooks in your repository
+   pre-commit install
+   ```
+
+### Usage
+
+#### Automatic Usage (Recommended)
+The hook runs automatically during git commits when pre-commit is installed:
+```bash
+git add file.el
+git commit -m "Update configuration"
+# Hook runs automatically and formats files if needed
+```
+
+#### Manual Usage
+You can also run the hook manually:
+```bash
+# Format specific files
+./scripts/elisp-autofmt-hook user/functions.el themes/themes.el
+
+# Verbose mode for detailed output
+./scripts/elisp-autofmt-hook --verbose *.el
+
+# Custom elisp-autofmt path
+./scripts/elisp-autofmt-hook --bin /custom/path/elisp-autofmt.py *.el
+```
+
+### Hook Options
+
+| Option | Description |
+|--------|-------------|
+| `--bin PATH` | Custom path to elisp-autofmt.py script |
+| `-v, --verbose` | Show detailed processing information |
+| `-h, --help` | Display help message |
+
+### Configuration
+
+#### Default Path
+The hook expects elisp-autofmt at: `~/github/elisp-autofmt/elisp-autofmt.py`
+
+#### Custom Path
+To use a different location, configure in `.pre-commit-config.yaml`:
+```yaml
+- repo: local
+  hooks:
+    - id: elisp-autofmt
+      name: elisp-autofmt
+      description: "Automatically format Emacs Lisp files using elisp-autofmt"
+      entry: scripts/elisp-autofmt-hook
+      language: script
+      files: '\.el$'
+      pass_filenames: true
+      args: ["--bin", "/path/to/your/elisp-autofmt.py"]
+```
+
+### Behavior
+
+- **Silent Success**: No output when files are already properly formatted
+- **Change Detection**: Reports which files were modified with formatting changes
+- **Git Integration**: Provides `git add` commands for staging formatted files
+- **Exit Codes**: Returns 1 if changes were made (halting commit), 0 if no changes needed
+
+### Example Output
+
+**When changes are made:**
+```
+elisp-autofmt made formatting changes to the following files:
+  - user/functions.el
+  - themes/themes.el
+
+Files have been automatically formatted. Please review and stage the changes:
+  git add 'user/functions.el' 'themes/themes.el'
+```
+
+**Verbose mode:**
+```
+user/functions.el: The file has been modified to fix formatting issues
+themes/themes.el: No formatting changes detected
+
+elisp-autofmt made formatting changes to the following files:
+  - user/functions.el
+
+Files have been automatically formatted. Please review and stage the changes:
+  git add 'user/functions.el'
+```
+
+---
+
+## Installation Guide
 
 ## Quick Start
 

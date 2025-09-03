@@ -91,10 +91,11 @@ The configuration includes several performance enhancements:
 
 This configuration follows consistent formatting standards documented in [`STYLEGUIDE.md`](STYLEGUIDE.md):
 
-- Uses [`elisp-autofmt`](https://github.com/purcell/elisp-autofmt) for automated code formatting
+- Uses [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) for automated code formatting
 - Follows GNU Emacs Lisp conventions
 - Consistent file organization and naming
 - Standardized file headers and documentation
+- Pre-commit hooks enforce code quality and formatting automatically
 
 ## Usage
 
