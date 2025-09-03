@@ -10,18 +10,35 @@
 ;; Virtual environment support
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Variable to hold the project name for modeline display (global variable that persists across buffers)
+;; Variables to hold the project name and Python version for modeline display (global variables that persist across buffers)
 (defvar
  config-python-project-name nil "Name of the project containing the current virtual environment.")
 (setq-default config-python-project-name nil)
 
-;; Clear project name when deactivating virtual environment
+(defvar config-python-version nil "Python version of the current virtual environment.")
+(setq-default config-python-version nil)
+
+;; Function to detect Python version from virtual environment
+(defun config-get-python-version (venv-path)
+  "Get Python version from virtual environment."
+  (when venv-path
+    (let ((python-executable (expand-file-name "bin/python" venv-path)))
+      (when (file-executable-p python-executable)
+        (with-temp-buffer
+          (call-process python-executable nil t nil "--version")
+          (goto-char (point-min))
+          (when (re-search-forward "Python \\([0-9]+\\.[0-9]+\\)" nil t)
+            (match-string 1)))))))
+
+;; Clear project name and Python version when deactivating virtual environment
 (defun
  config-pyvenv-post-deactivate
  ()
- "Clear project name variables when deactivating virtual environment."
+ "Clear project name and Python version variables when deactivating virtual environment."
  (setq-default config-python-project-name nil)
  (setq config-python-project-name nil)
+ (setq-default config-python-version nil)
+ (setq config-python-version nil)
  (force-mode-line-update t))
 
 ;; Set project name when virtual environment is activated
@@ -35,12 +52,16 @@
   (run-with-timer
    0.1 nil
    (lambda
-    () "Update project name variables with extracted project name."
+    () "Update project name and Python version variables."
     (let* ((venv-parent-dir (file-name-directory (directory-file-name pyvenv-virtual-env)))
-           (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
+           (project-name (file-name-nondirectory (directory-file-name venv-parent-dir)))
+           (python-version (config-get-python-version pyvenv-virtual-env)))
       (setq-default config-python-project-name project-name)
       (setq config-python-project-name project-name)
-      (message "ℹ️  Virtual environment activated for project: %s" project-name)
+      (setq-default config-python-version python-version)
+      (setq config-python-version python-version)
+      (message "ℹ️  Virtual environment activated for project: %s (Python %s)"
+               project-name (or python-version "unknown"))
       (force-mode-line-update t))))))
 
 ;; Configure pyvenv when available
@@ -50,7 +71,9 @@
  ;; Show virtual environment in modeline with custom format
  (setq
   pyvenv-mode-line-indicator
-  '(pyvenv-virtual-env-name ("[venv: " config-python-project-name "] ")))
+  '(pyvenv-virtual-env-name
+    ("[venv: " config-python-project-name
+     (config-python-version (" (py" config-python-version ")")) "] ")))
  (add-hook 'pyvenv-post-deactivate-hooks #'config-pyvenv-post-deactivate)
  (add-hook 'pyvenv-post-activate-hooks #'config-pyvenv-post-activate))
 
@@ -63,7 +86,9 @@
   ;; Show virtual environment in modeline with custom format
   (setq
    pyvenv-mode-line-indicator
-   '(pyvenv-virtual-env-name ("[venv: " config-python-project-name "] ")))
+   '(pyvenv-virtual-env-name
+     ("[venv: " config-python-project-name
+      (config-python-version (" (py" config-python-version ")")) "] ")))
   (add-hook 'pyvenv-post-deactivate-hooks #'config-pyvenv-post-deactivate)
   (add-hook 'pyvenv-post-activate-hooks #'config-pyvenv-post-activate))
  ;; Fallback when use-package is not available
@@ -74,7 +99,9 @@
    ;; Show virtual environment in modeline with custom format
    (setq
     pyvenv-mode-line-indicator
-    '(pyvenv-virtual-env-name ("[venv: " config-python-project-name "] ")))
+    '(pyvenv-virtual-env-name
+      ("[venv: " config-python-project-name
+       (config-python-version (" (py" config-python-version ")")) "] ")))
    (add-hook 'pyvenv-post-deactivate-hooks #'config-pyvenv-post-deactivate)
    (add-hook 'pyvenv-post-activate-hooks #'config-pyvenv-post-activate))))
 
@@ -108,14 +135,18 @@
       ;; Update Python shell to use the virtual environment's Python
       (let* ((venv-python (expand-file-name "bin/python" venv-path))
              (venv-parent-dir (file-name-directory (directory-file-name venv-path)))
-             (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
+             (project-name (file-name-nondirectory (directory-file-name venv-parent-dir)))
+             (python-version (config-get-python-version venv-path)))
         (when
          (file-executable-p venv-python)
          (setq python-shell-interpreter venv-python)
-         (message "ℹ️  Python virtual environment activated: %s" project-name))
-        ;; Set the project name globally for modeline display and force update
+         (message "ℹ️  Python virtual environment activated: %s (Python %s)"
+                  project-name (or python-version "unknown")))
+        ;; Set the project name and Python version globally for modeline display and force update
         (setq-default config-python-project-name project-name)
         (setq config-python-project-name project-name)
+        (setq-default config-python-version python-version)
+        (setq config-python-version python-version)
         (force-mode-line-update t)))
      (message "⚠️  Warning: pyvenv-activate function not available")))))
 
