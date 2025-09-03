@@ -12,7 +12,7 @@
 ;; Organized package lists for better maintainability
 (defvar
  config-essential-packages
- '(spacemacs-theme zenburn-theme yaml-mode)
+ '(zenburn-theme yaml-mode)
  "Essential packages that must be installed.")
 
 (defvar
