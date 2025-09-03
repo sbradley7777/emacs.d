@@ -19,16 +19,17 @@
 (setq-default config-python-version nil)
 
 ;; Function to detect Python version from virtual environment
-(defun config-get-python-version (venv-path)
-  "Get Python version from virtual environment."
-  (when venv-path
-    (let ((python-executable (expand-file-name "bin/python" venv-path)))
-      (when (file-executable-p python-executable)
-        (with-temp-buffer
-          (call-process python-executable nil t nil "--version")
-          (goto-char (point-min))
-          (when (re-search-forward "Python \\([0-9]+\\.[0-9]+\\)" nil t)
-            (match-string 1)))))))
+(defun
+ config-get-python-version (venv-path) "Get Python version from virtual environment."
+ (when
+  venv-path
+  (let ((python-executable (expand-file-name "bin/python" venv-path)))
+    (when
+     (file-executable-p python-executable)
+     (with-temp-buffer
+      (call-process python-executable nil t nil "--version")
+      (goto-char (point-min))
+      (when (re-search-forward "Python \\([0-9]+\\.[0-9]+\\)" nil t) (match-string 1)))))))
 
 ;; Clear project name and Python version when deactivating virtual environment
 (defun
@@ -60,8 +61,10 @@
       (setq config-python-project-name project-name)
       (setq-default config-python-version python-version)
       (setq config-python-version python-version)
-      (message "ℹ️  Virtual environment activated for project: %s (Python %s)"
-               project-name (or python-version "unknown"))
+      (message
+       "ℹ️  Virtual environment activated for project: %s (Python %s)"
+       project-name
+       (or python-version "unknown"))
       (force-mode-line-update t))))))
 
 ;; Configure pyvenv when available
@@ -72,8 +75,10 @@
  (setq
   pyvenv-mode-line-indicator
   '(pyvenv-virtual-env-name
-    ("[venv: " config-python-project-name
-     (config-python-version (" (py" config-python-version ")")) "] ")))
+    ("[venv: "
+     config-python-project-name
+     (config-python-version (" (py" config-python-version ")"))
+     "] ")))
  (add-hook 'pyvenv-post-deactivate-hooks #'config-pyvenv-post-deactivate)
  (add-hook 'pyvenv-post-activate-hooks #'config-pyvenv-post-activate))
 
@@ -87,8 +92,10 @@
   (setq
    pyvenv-mode-line-indicator
    '(pyvenv-virtual-env-name
-     ("[venv: " config-python-project-name
-      (config-python-version (" (py" config-python-version ")")) "] ")))
+     ("[venv: "
+      config-python-project-name
+      (config-python-version (" (py" config-python-version ")"))
+      "] ")))
   (add-hook 'pyvenv-post-deactivate-hooks #'config-pyvenv-post-deactivate)
   (add-hook 'pyvenv-post-activate-hooks #'config-pyvenv-post-activate))
  ;; Fallback when use-package is not available
@@ -100,8 +107,10 @@
    (setq
     pyvenv-mode-line-indicator
     '(pyvenv-virtual-env-name
-      ("[venv: " config-python-project-name
-       (config-python-version (" (py" config-python-version ")")) "] ")))
+      ("[venv: "
+       config-python-project-name
+       (config-python-version (" (py" config-python-version ")"))
+       "] ")))
    (add-hook 'pyvenv-post-deactivate-hooks #'config-pyvenv-post-deactivate)
    (add-hook 'pyvenv-post-activate-hooks #'config-pyvenv-post-activate))))
 
@@ -138,10 +147,11 @@
              (project-name (file-name-nondirectory (directory-file-name venv-parent-dir)))
              (python-version (config-get-python-version venv-path)))
         (when
-         (file-executable-p venv-python)
-         (setq python-shell-interpreter venv-python)
-         (message "ℹ️  Python virtual environment activated: %s (Python %s)"
-                  project-name (or python-version "unknown")))
+         (file-executable-p venv-python) (setq python-shell-interpreter venv-python)
+         (message
+          "ℹ️  Python virtual environment activated: %s (Python %s)"
+          project-name
+          (or python-version "unknown")))
         ;; Set the project name and Python version globally for modeline display and force update
         (setq-default config-python-project-name project-name)
         (setq config-python-project-name project-name)
@@ -166,5 +176,4 @@
 ;; Make this module available for loading with (require 'venv)
 (provide 'venv)
 (message
- "venv.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+ "venv.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

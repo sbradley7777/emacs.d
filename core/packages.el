@@ -11,9 +11,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Organized package lists for better maintainability
 (defvar
- config-essential-packages
- '(zenburn-theme yaml-mode)
- "Essential packages that must be installed.")
+ config-essential-packages '(zenburn-theme yaml-mode) "Essential packages that must be installed.")
 
 (defvar
  config-development-packages
@@ -118,5 +116,4 @@
 ;; Make this module available for loading with (require 'packages)
 (provide 'packages)
 (message
- "packages.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+ "packages.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

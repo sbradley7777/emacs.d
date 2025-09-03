@@ -29,16 +29,17 @@
 
  ;; Customize eglot modeline to show simple [eglot] indicator instead of project name
  ;; This avoids redundancy with the detailed venv indicator while confirming LSP is active
- (with-eval-after-load 'eglot
-   ;; Override the mode line format function to show simple [eglot] indicator
-   (defun eglot--mode-line-format-advice (&rest _args)
-     "Show simple [eglot] indicator when LSP is active."
-     "eglot")
-   (advice-add 'eglot--mode-line-format :override #'eglot--mode-line-format-advice))
- )
+ (with-eval-after-load
+  'eglot
+  ;; Override the mode line format function to show simple [eglot] indicator
+  (defun
+   eglot--mode-line-format-advice
+   (&rest _args)
+   "Show simple [eglot] indicator when LSP is active."
+   "eglot")
+  (advice-add 'eglot--mode-line-format :override #'eglot--mode-line-format-advice)))
 
 ;; Make this module available for loading with (require 'lsp)
 (provide 'lsp)
 (message
- "lsp.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+ "lsp.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

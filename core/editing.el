@@ -42,7 +42,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Better undo/redo behavior - comprehensive undo buffer configuration
 (setq
- undo-limit 6000000        ; Normal undo entries kept in memory (6MB)
+ undo-limit 6000000 ; Normal undo entries kept in memory (6MB)
  undo-strong-limit 9000000 ; Strongly-held undo entries (9MB)
  undo-outer-limit 12000000) ; Maximum undo data before old entries are discarded (12MB)
 
@@ -59,5 +59,4 @@
 ;; Make this module available for loading with (require 'editing)
 (provide 'editing)
 (message
- "editing.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+ "editing.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

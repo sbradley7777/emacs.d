@@ -40,7 +40,8 @@
   ;; Unmatched delimiter: Bold red with underline for visibility
   '(rainbow-delimiters-unmatched-face ((t (:foreground "#f44336" :weight bold :underline t))))
   ;; Mismatched delimiter: Bold red background for high visibility
-  '(rainbow-delimiters-mismatched-face ((t (:foreground "#ffffff" :background "#f44336" :weight bold)))))
+  '(rainbow-delimiters-mismatched-face
+    ((t (:foreground "#ffffff" :background "#f44336" :weight bold)))))
 
  (message "⚙️  Rainbow delimiters configured with enhanced bold visibility"))
 

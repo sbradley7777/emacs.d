@@ -38,7 +38,8 @@
 ;; Validate that early-init.el properly set up required variables
 (unless
  (boundp 'default-file-name-handler-alist)
- (warn "⚠️  default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
+ (warn
+  "⚠️  default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
  (setq default-file-name-handler-alist file-name-handler-alist))
 
 ;; Validate that early-init performance optimizations were applied
@@ -57,7 +58,9 @@
 (defvar user-dir (expand-file-name "user" user-emacs-directory))
 
 ;; Add directories to load path (order matters - features before python-dir)
-(mapc (lambda (dir) (add-to-list 'load-path dir)) (list core-dir features-dir themes-dir user-dir lang-dir python-dir))
+(mapc
+ (lambda (dir) (add-to-list 'load-path dir))
+ (list core-dir features-dir themes-dir user-dir lang-dir python-dir))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Error handling and robustness

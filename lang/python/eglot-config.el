@@ -24,9 +24,8 @@
    (message "🔍  EGLOT: Found pylsp at: %s" (executable-find "pylsp"))
    (condition-case err
        (progn
-         (require 'eglot) ; Ensure eglot is loaded before using it
-         (eglot-ensure)
-         (message "✅  EGLOT: Successfully started eglot for Python"))
+        (require 'eglot) ; Ensure eglot is loaded before using it
+        (eglot-ensure) (message "✅  EGLOT: Successfully started eglot for Python"))
      (error
       (message "❌  EGLOT: Failed to start: %s" (error-message-string err)))))
   (message "❌  EGLOT: pylsp not found - install python-lsp-server for LSP features")))
@@ -35,14 +34,15 @@
 (add-hook 'python-mode-hook #'python-eglot-maybe-start)
 
 ;; Python-specific eglot server configuration
-(with-eval-after-load 'eglot
-  ;; Configure Python LSP server (requires system-wide pylsp: pip3.9 install python-lsp-server)
-  (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
+(with-eval-after-load
+ 'eglot
+ ;; Configure Python LSP server (requires system-wide pylsp: pip3.9 install python-lsp-server)
+ (add-to-list 'eglot-server-programs '(python-mode . ("pylsp")))
 
-  ;; Use pylsp defaults for all plugins - no configuration overrides
-  ;; This provides the cleanest, most maintainable setup
-  ;; Python-specific workspace configuration can be added here if needed
-  )
+ ;; Use pylsp defaults for all plugins - no configuration overrides
+ ;; This provides the cleanest, most maintainable setup
+ ;; Python-specific workspace configuration can be added here if needed
+ )
 
 ;; Make this module available for loading with (require 'eglot-config)
 (provide 'eglot-config)

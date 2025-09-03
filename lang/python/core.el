@@ -25,5 +25,4 @@
 ;; Make this module available for loading with (require 'core)
 (provide 'core)
 (message
- "core.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+ "core.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

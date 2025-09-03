@@ -80,5 +80,4 @@
 ;; Make this module available for loading with (require 'completion)
 (provide 'completion)
 (message
- "completion.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+ "completion.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

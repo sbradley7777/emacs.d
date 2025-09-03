@@ -26,8 +26,8 @@
 
  ;; Manual color configuration for better visibility
  ;; Set specific colors that work well with both light and dark themes
- (setq highlight-indent-guides-auto-character-face-perc 40)  ; More visible base guides
- (setq highlight-indent-guides-auto-top-character-face-perc 80)  ; Very visible current scope
+ (setq highlight-indent-guides-auto-character-face-perc 40) ; More visible base guides
+ (setq highlight-indent-guides-auto-top-character-face-perc 80) ; Very visible current scope
 
  ;; Define custom faces for better visibility
  (custom-set-faces

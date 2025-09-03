@@ -18,5 +18,4 @@
 ;; Make this module available for loading with (require 'tools)
 (provide 'tools)
 (message
- "tools.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+ "tools.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

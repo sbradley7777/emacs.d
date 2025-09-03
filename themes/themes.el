@@ -17,5 +17,4 @@
 ;; Make this module available for loading with (require 'themes)
 (provide 'themes)
 (message
- "themes.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+ "themes.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
