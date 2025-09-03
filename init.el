@@ -21,16 +21,34 @@
   ()
   ;; Restore normal garbage collection settings
   (setq
-   gc-cons-threshold (* 2 1000 1000) ; 2MB for normal operation
-   gc-cons-percentage 0.1) ; 10% of heap for GC
+   gc-cons-threshold core-gc-normal-threshold ; Normal operation threshold
+   gc-cons-percentage core-gc-percentage-normal) ; Normal GC percentage
 
   ;; Restore file name handlers (disabled in early-init.el for faster startup)
   (setq file-name-handler-alist default-file-name-handler-alist)
 
   ;; Restore normal input processing
-  (setq idle-update-delay 0.5) ; Faster idle updates for responsiveness
+  (setq idle-update-delay core-idle-update-delay-normal) ; Faster idle updates for responsiveness
 
   (message "✅  Emacs startup complete. Performance settings restored.")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Setup configuration directories (needed early for constants loading)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar core-dir (expand-file-name "core" user-emacs-directory))
+(defvar features-dir (expand-file-name "features" user-emacs-directory))
+(defvar lang-dir (expand-file-name "lang" user-emacs-directory))
+(defvar python-dir (expand-file-name "lang/python" user-emacs-directory))
+(defvar themes-dir (expand-file-name "themes" user-emacs-directory))
+(defvar user-dir (expand-file-name "user" user-emacs-directory))
+
+;; Add directories to load path (order matters - features before python-dir)
+(mapc
+ (lambda (dir) (add-to-list 'load-path dir))
+ (list core-dir features-dir themes-dir user-dir lang-dir python-dir))
+
+;; Load core constants early so they're available for validation
+(require 'core-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration Validation
@@ -44,23 +62,9 @@
 
 ;; Validate that early-init performance optimizations were applied
 (unless
- (> gc-cons-threshold 800000)
+ (> gc-cons-threshold core-gc-check-threshold)
  (warn "⚠️  GC threshold not optimized by early-init.el - startup may be slower"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Setup configuration directories
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar core-dir (expand-file-name "core" user-emacs-directory))
-(defvar features-dir (expand-file-name "features" user-emacs-directory))
-(defvar lang-dir (expand-file-name "lang" user-emacs-directory))
-(defvar python-dir (expand-file-name "lang/python" user-emacs-directory))
-(defvar themes-dir (expand-file-name "themes" user-emacs-directory))
-(defvar user-dir (expand-file-name "user" user-emacs-directory))
-
-;; Add directories to load path (order matters - features before python-dir)
-(mapc
- (lambda (dir) (add-to-list 'load-path dir))
- (list core-dir features-dir themes-dir user-dir lang-dir python-dir))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Error handling and robustness
@@ -162,10 +166,10 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (defun
  optimize-gc-for-long-session () "Optimize garbage collection for long-running sessions."
  (setq
-  gc-cons-threshold (* 100 1000 1000) ; 100MB threshold for normal operation
-  gc-cons-percentage 0.1)) ; 10% of heap for GC
+  gc-cons-threshold core-gc-long-session-threshold ; Long session threshold
+  gc-cons-percentage core-gc-percentage-normal)) ; Normal GC percentage
 
-;; Run GC optimization every 15 minutes when idle to maintain performance
-(run-with-idle-timer 900 t #'optimize-gc-for-long-session)
+;; Run GC optimization timer using configured interval
+(run-with-idle-timer core-gc-timer-interval t #'optimize-gc-for-long-session)
 
 (message "✅  init.el loaded successfully.")

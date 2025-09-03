@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
 
+(require 'core-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading files.el...")
 
@@ -42,16 +44,16 @@
  backup-by-copying-when-linked t ; Copy when file has multiple hard links
  version-control t ; Enable numbered backups
  delete-old-versions t ; Delete excess backup files silently
- kept-old-versions 2 ; Number of old versions to keep
- kept-new-versions 6) ; Number of new versions to keep (increased from 3)
+ kept-old-versions core-kept-old-versions ; Number of old versions to keep
+ kept-new-versions core-kept-new-versions) ; Number of new versions to keep
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced auto-save configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; More frequent auto-saving for better data protection
 (setq
- auto-save-interval 200 ; Auto-save every 200 keystrokes (default: 300)
- auto-save-timeout 20) ; Auto-save after 20 seconds of idle time (default: 30)
+ auto-save-interval core-auto-save-interval ; Auto-save every N keystrokes
+ auto-save-timeout core-auto-save-timeout) ; Auto-save after N seconds of idle time
 
 ;; Auto-save files in the same directory structure but in our autosaves folder
 

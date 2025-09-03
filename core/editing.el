@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Tabs, spaces, and general editing preferences
 
+(require 'core-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading editing.el...")
 
@@ -17,18 +19,18 @@
 ;; Better indentation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; - http://www.emacswiki.org/emacs/NoTabs
-(setq-default tab-width 4 standard-indent 4 indent-tabs-mode nil)
+(setq-default tab-width core-tab-width standard-indent core-standard-indent indent-tabs-mode nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Line length and fill column configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set maximum line length to 127 characters
-(setq-default fill-column 127)
+;; Set maximum line length using core constant
+(setq-default fill-column core-fill-column)
 
 ;; Enable visual line indicators for long lines
-(setq whitespace-line-column 127)
+(setq whitespace-line-column core-fill-column)
 
-;; Display fill column indicator (vertical line at column 127)
+;; Display fill column indicator (vertical line at configured column)
 (global-display-fill-column-indicator-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,9 +44,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Better undo/redo behavior - comprehensive undo buffer configuration
 (setq
- undo-limit 6000000 ; Normal undo entries kept in memory (6MB)
- undo-strong-limit 9000000 ; Strongly-held undo entries (9MB)
- undo-outer-limit 12000000) ; Maximum undo data before old entries are discarded (12MB)
+ undo-limit core-undo-limit ; Normal undo entries kept in memory
+ undo-strong-limit core-undo-strong-limit ; Strongly-held undo entries
+ undo-outer-limit core-undo-outer-limit) ; Maximum undo data before old entries are discarded
 
 ;; Smarter beginning-of-line behavior
 (defun

@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Display preferences and UI behavior
 
+(require 'core-constants)
+
 (defvar config-load-start-time (current-time))
 (message "🔄  Loading ui.el...")
 
@@ -39,7 +41,7 @@
 (line-number-mode 1) ; Show current line number in mode line (mode function, not variable)
 ;; Basic editor behavior
 (set-default 'truncate-lines t) ; Don't word wrap long lines
-(setq-default scroll-step 1) ; Turn off jumpy scroll
+(setq-default scroll-step core-scroll-step) ; Turn off jumpy scroll
 (setq ring-bell-function 'ignore) ; Better than visible-bell
 (global-hl-line-mode 1) ; Highlight current line
 ;; Additional editor preferences
@@ -66,12 +68,12 @@
 
 ;; Improved parentheses highlighting with better colors and delay
 (setq
- show-paren-delay 0.1 ; Faster highlighting
+ show-paren-delay core-show-paren-delay ; Faster highlighting
  show-paren-style 'parenthesis) ; Only highlight the parentheses themselves
 
 ;; Enhanced scrolling behavior
 (setq
- scroll-conservatively 10000 ; Smooth scrolling
+ scroll-conservatively core-scroll-conservatively ; Smooth scrolling
  scroll-preserve-screen-position t) ; Keep cursor position when scrolling
 
 ;; Better buffer switching
@@ -89,7 +91,11 @@
 
 ;; Track recently opened files
 (recentf-mode 1)
-(setq recentf-max-saved-items 50 recentf-exclude '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
+(setq
+ recentf-max-saved-items
+ core-recentf-max-items
+ recentf-exclude
+ '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
 
 (normal-erase-is-backspace-mode 0)
 
