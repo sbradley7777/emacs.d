@@ -128,18 +128,18 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 
 ;; Optional features (load eglot first before language-specific configs)
 (safe-load-config 'completion "Auto-completion framework") ; Core completion system
-(safe-load-config 'lsp "General LSP configuration") ; General eglot settings
+(safe-load-config 'lsp-config "General LSP configuration") ; General eglot settings
 (safe-load-config 'flymake-config "Flymake configuration") ; Flymake diagnostic display
 (safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
 (safe-load-config 'indent-guides "Visual indentation guides") ; Column-based indentation visualization
 
 ;; Language-specific configurations
-(safe-load-config 'lisp "Emacs Lisp development")
-(safe-load-config 'yaml "YAML file support")
+(safe-load-config 'lisp-config "Emacs Lisp development")
+(safe-load-config 'yaml-config "YAML file support")
 
 ;; Python configurations (load after general eglot)
 (safe-load-config 'core "Python core editing")
-(safe-load-config 'venv "Python virtual environments")
+(safe-load-config 'pyvenv-config "Python virtual environments")
 (safe-load-config 'eglot-config "Python LSP (eglot) configuration") ; This loads lang/python/eglot-config.el
 (safe-load-config 'tools "Python development tools")
 

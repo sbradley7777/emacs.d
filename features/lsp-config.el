@@ -1,4 +1,4 @@
-;;; lsp.el --- General Eglot LSP Configuration -*- lexical-binding: t -*-
+;;; lsp-config.el --- General Eglot LSP Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      General Eglot configuration that applies to all languages.
 ;;      Language-specific server configurations should be in lang/<language>/eglot-config.el files.
@@ -6,7 +6,7 @@
 (require 'features-constants)
 
 (defvar config-load-start-time (current-time))
-(message "🔄  Loading lsp.el...")
+(message "🔄  Loading lsp-config.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Eglot LSP Configuration
@@ -41,7 +41,7 @@
    "eglot")
   (advice-add 'eglot--mode-line-format :override #'eglot--mode-line-format-advice)))
 
-;; Make this module available for loading with (require 'lsp)
-(provide 'lsp)
+;; Make this module available for loading with (require 'lsp-config)
+(provide 'lsp-config)
 (message
- "lsp.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+ "lsp-config.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))

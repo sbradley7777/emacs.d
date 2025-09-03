@@ -1,10 +1,10 @@
-;;; venv.el --- Python Virtual Environment Management -*- lexical-binding: t -*-
+;;; pyvenv-config.el --- Python Virtual Environment Management -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Complete virtual environment management with pyvenv integration,
 ;;      auto-activation, modeline display, and project detection.
 
 (defvar config-load-start-time (current-time))
-(message "🔄  Loading venv.el...")
+(message "🔄  Loading pyvenv-config.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Virtual environment support
@@ -173,7 +173,8 @@
     (boundp 'pyvenv-virtual-env) pyvenv-virtual-env config-python-project-name)
    (force-mode-line-update))))
 
-;; Make this module available for loading with (require 'venv)
-(provide 'venv)
+;; Make this module available for loading with (require 'pyvenv-config)
+(provide 'pyvenv-config)
 (message
- "venv.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+ "pyvenv-config.el loaded (%.2fs)"
+ (float-time (time-subtract (current-time) config-load-start-time)))
