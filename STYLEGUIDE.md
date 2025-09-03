@@ -245,30 +245,30 @@ The configuration uses a comprehensive set of Unicode symbols to create a visual
 
 #### Process & Status Symbols
 
-| Symbol | Image | Purpose | Usage Examples |
-|--------|--------|---------|----------------|
-| 🔄 | ![Loading](https://github.githubassets.com/images/icons/emoji/unicode/1f504.png) | Loading/In Progress | Module loading messages: `"🔄  Loading init.el..."` |
-| ✅ | ![Success](https://github.githubassets.com/images/icons/emoji/unicode/2705.png) | Success/Completion | Successful operations: `"✅  early-init.el loaded successfully"` |
-| ❌ | ![Error](https://github.githubassets.com/images/icons/emoji/unicode/274c.png) | Errors/Failures | Failed operations: `"❌  Failed to load %s: %s"` |
-| ⚠️ | ![Warning](https://github.githubassets.com/images/icons/emoji/unicode/26a0.png) | Warnings | Configuration warnings: `"⚠️  GC threshold not optimized"` |
+| Symbol | Purpose |
+|--------|---------|
+| 🔄 | Loading/In Progress |
+| ✅ | Success/Completion |
+| ❌ | Errors/Failures |
+| ⚠️ | Warnings |
 
 #### Operation-Specific Symbols
 
-| Symbol | Image | Purpose | Usage Examples |
-|--------|--------|---------|----------------|
-| 📦 | ![Package](https://github.githubassets.com/images/icons/emoji/unicode/1f4e6.png) | Package Operations | Package installation: `"📦  Installing %d packages..."` |
-| 💾 | ![File](https://github.githubassets.com/images/icons/emoji/unicode/1f4be.png) | File/Backup Operations | File operations: `"💾  Backup created for: %s"` |
-| 🔍 | ![Search](https://github.githubassets.com/images/icons/emoji/unicode/1f50d.png) | Search/Discovery | Finding tools: `"🔍  EGLOT: Found pylsp at: %s"` |
-| 🔐 | ![Security](https://github.githubassets.com/images/icons/emoji/unicode/1f510.png) | Security Operations | Security updates: `"🔐  GNU ELPA keyring updated"` |
-| 🧹 | ![Cleanup](https://github.githubassets.com/images/icons/emoji/unicode/1f9f9.png) | Cleanup Operations | Maintenance: `"🧹  Cleaned up unused packages"` |
+| Symbol | Purpose |
+|--------|---------|
+| 📦 | Package Operations |
+| 💾 | File/Backup Operations |
+| 🔍 | Search/Discovery |
+| 🔐 | Security Operations |
+| 🧹 | Cleanup Operations |
 
 #### Information & Configuration Symbols
 
-| Symbol | Image | Purpose | Usage Examples |
-|--------|--------|---------|----------------|
-| ℹ️ | ![Info](https://github.githubassets.com/images/icons/emoji/unicode/2139.png) | Information/Details | Status information: `"ℹ️  Virtual environment activated"` |
-| ⚙️ | ![Config](https://github.githubassets.com/images/icons/emoji/unicode/2699.png) | Configuration Complete | Feature configured: `"⚙️  Corfu auto-completion configured"` |
-| 🛠️ | ![Debug](https://github.githubassets.com/images/icons/emoji/unicode/1f6e0.png) | Debug/Diagnostics | Debug information: `"🛠️  Global Corfu Mode: ENABLED"` |
+| Symbol | Purpose |
+|--------|---------|
+| ℹ️ | Information/Details |
+| ⚙️ | Configuration Complete |
+| 🛠️ | Debug/Diagnostics |
 
 ### Message Formatting Standards
 
