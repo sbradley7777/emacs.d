@@ -237,6 +237,110 @@ Each configuration module should follow this template:
 4. **Module provision** via `(provide 'module-name)`
 5. **Load completion** message with timing
 
+## Message Symbol Reference
+
+The configuration uses a comprehensive set of Unicode symbols to create a visual messaging system for status updates, diagnostics, and information display. This symbolic language makes the Messages buffer highly scannable and provides immediate visual feedback about configuration loading and system operations.
+
+### Symbol Categories and Usage
+
+#### Process & Status Symbols
+
+| Symbol | Image | Purpose | Usage Examples |
+|--------|--------|---------|----------------|
+| 🔄 | ![Loading](https://github.githubassets.com/images/icons/emoji/unicode/1f504.png) | Loading/In Progress | Module loading messages: `"🔄  Loading init.el..."` |
+| ✅ | ![Success](https://github.githubassets.com/images/icons/emoji/unicode/2705.png) | Success/Completion | Successful operations: `"✅  early-init.el loaded successfully"` |
+| ❌ | ![Error](https://github.githubassets.com/images/icons/emoji/unicode/274c.png) | Errors/Failures | Failed operations: `"❌  Failed to load %s: %s"` |
+| ⚠️ | ![Warning](https://github.githubassets.com/images/icons/emoji/unicode/26a0.png) | Warnings | Configuration warnings: `"⚠️  GC threshold not optimized"` |
+
+#### Operation-Specific Symbols
+
+| Symbol | Image | Purpose | Usage Examples |
+|--------|--------|---------|----------------|
+| 📦 | ![Package](https://github.githubassets.com/images/icons/emoji/unicode/1f4e6.png) | Package Operations | Package installation: `"📦  Installing %d packages..."` |
+| 💾 | ![File](https://github.githubassets.com/images/icons/emoji/unicode/1f4be.png) | File/Backup Operations | File operations: `"💾  Backup created for: %s"` |
+| 🔍 | ![Search](https://github.githubassets.com/images/icons/emoji/unicode/1f50d.png) | Search/Discovery | Finding tools: `"🔍  EGLOT: Found pylsp at: %s"` |
+| 🔐 | ![Security](https://github.githubassets.com/images/icons/emoji/unicode/1f510.png) | Security Operations | Security updates: `"🔐  GNU ELPA keyring updated"` |
+| 🧹 | ![Cleanup](https://github.githubassets.com/images/icons/emoji/unicode/1f9f9.png) | Cleanup Operations | Maintenance: `"🧹  Cleaned up unused packages"` |
+
+#### Information & Configuration Symbols
+
+| Symbol | Image | Purpose | Usage Examples |
+|--------|--------|---------|----------------|
+| ℹ️ | ![Info](https://github.githubassets.com/images/icons/emoji/unicode/2139.png) | Information/Details | Status information: `"ℹ️  Virtual environment activated"` |
+| ⚙️ | ![Config](https://github.githubassets.com/images/icons/emoji/unicode/2699.png) | Configuration Complete | Feature configured: `"⚙️  Corfu auto-completion configured"` |
+| 🛠️ | ![Debug](https://github.githubassets.com/images/icons/emoji/unicode/1f6e0.png) | Debug/Diagnostics | Debug information: `"🛠️  Global Corfu Mode: ENABLED"` |
+
+### Message Formatting Standards
+
+#### Symbol Spacing
+All message symbols follow a consistent spacing pattern:
+- **Two spaces** after the symbol: `"🔄  Loading init.el..."`
+- **Preserve indentation** before symbols: `"    ✅  %s (%.3fs)"`
+- **No trailing spaces** at end of messages
+
+#### Message Structure Examples
+
+```elisp
+;; Loading messages
+(message "🔄  Loading %s..." module-name)
+
+;; Success messages
+(message "✅  %s loaded successfully" module-name)
+(message "✅  Installed: %s" package-name)
+
+;; Error messages
+(message "❌  Failed to install %s: %s" package error)
+
+;; Configuration messages
+(message "⚙️  %s configured successfully" feature-name)
+
+;; Debug/diagnostic messages
+(message "🛠️  Current Major Mode: %s" major-mode)
+
+;; Information messages
+(message "ℹ️  Consider checking: %s" suggestion)
+```
+
+#### Context-Specific Usage
+
+**Module Loading Pattern:**
+```elisp
+(message "🔄  Loading module-name.el...")
+;; ... configuration code ...
+(message "✅  module-name.el loaded successfully")
+```
+
+**Package Installation Pattern:**
+```elisp
+(message "📦  Installing %d packages..." count)
+(message "✅  Already installed: %s" package)
+(message "✅  Installed: %s" package)
+(message "❌  Failed to install %s: %s" package error)
+```
+
+**Diagnostic Information Pattern:**
+```elisp
+(message "🛠️  Global Mode: %s" status)
+(message "🛠️  Configuration: %s" value)
+(message "🛠️  Current State: %s" state)
+```
+
+### Symbol Usage Guidelines
+
+1. **Consistency**: Always use the same symbol for the same type of operation
+2. **Semantic Meaning**: Choose symbols that logically represent the operation
+3. **Visual Hierarchy**: Use symbols to create scannable message categories
+4. **Spacing**: Maintain exactly two spaces after symbols
+5. **Context**: Preserve any indentation before symbols for alignment
+
+### Benefits of the Symbol System
+
+- **Quick Scanning**: Users can rapidly identify message types in the Messages buffer
+- **Visual Hierarchy**: Different symbol categories create clear information structure
+- **Status Recognition**: Immediate visual feedback on operation success/failure
+- **Professional Appearance**: Consistent symbolic language creates polished output
+- **Cross-Platform Compatibility**: Unicode symbols display consistently across systems
+
 ## Quality Assurance
 
 ### Pre-commit Hooks
