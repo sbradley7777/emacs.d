@@ -107,6 +107,16 @@ After installation, simply restart Emacs or reload your configuration with `M-x 
 
 - **Emacs 30.2** or later
 - Access to install Python packages (for Python development features)
+- **elisp-autofmt** (for automatic code formatting with pre-commit hooks)
+  ```bash
+  # Required for pre-commit formatting hooks
+  git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
+  ```
+- **pre-commit** (optional, for automatic code quality enforcement)
+  ```bash
+  pip install pre-commit
+  pre-commit install  # Run in repository root after cloning
+  ```
 
 ## Installation
 
