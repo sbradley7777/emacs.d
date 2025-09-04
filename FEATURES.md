@@ -185,7 +185,7 @@ This section provides a comprehensive reference for all keybindings available du
 - **Multiple keys:** Press in sequence (e.g., `C-c` `TAB` = Ctrl+c, then Tab)
 - **Context-dependent:** Some keys behave differently based on what's active
 
-### 1. Custom Function Key Shortcuts
+### Custom Function Key Shortcuts
 
 These are configuration-specific shortcuts designed for quick access to common operations:
 
@@ -202,7 +202,7 @@ These are configuration-specific shortcuts designed for quick access to common o
 | `F11` | Smart scroll down | Scroll with boundary handling |
 | `F12` | Smart scroll up | Scroll with boundary handling |
 
-### 2. Code Intelligence (LSP via Eglot)
+### Code Intelligence (LSP via Eglot)
 
 Advanced code navigation and analysis powered by [Eglot](https://github.com/joaotavora/eglot):
 
@@ -215,7 +215,7 @@ Advanced code navigation and analysis powered by [Eglot](https://github.com/joao
 | `C-c` `C-r` | `eglot-rename` | Rename symbol project-wide | LSP active |
 | `C-c` `C-a` | `eglot-code-actions` | Show quick fixes and refactoring | LSP active |
 
-### 3. Code Completion (Corfu)
+### Code Completion (Corfu)
 
 Intelligent auto-completion powered by [Corfu](https://github.com/minad/corfu):
 
@@ -229,7 +229,7 @@ Intelligent auto-completion powered by [Corfu](https://github.com/minad/corfu):
 | `S-TAB` | `python-dedent-line-function` | Decrease indentation | Normal editing |
 | `RET` | `corfu-insert` | Accept selected completion | Popup active |
 
-### 4. Python Development
+### Python Development
 
 Python-specific editing and REPL interaction using built-in Python-mode:
 
@@ -242,7 +242,7 @@ Python-specific editing and REPL interaction using built-in Python-mode:
 | `C-M-e` | `python-nav-forward-defun` | Jump to next function/class |
 | `C-M-u` | `python-nav-backward-up-list` | Move up one indentation level |
 
-### 5. Essential Emacs Operations
+### Essential Emacs Operations
 
 Core Emacs commands for file management and text editing:
 
@@ -259,7 +259,7 @@ Core Emacs commands for file management and text editing:
 | `C-y` | `yank` | Paste text from kill ring |
 | `C-/` | `undo` | Undo last action |
 
-### 6. Custom Navigation Shortcuts
+### Custom Navigation Shortcuts
 
 Additional navigation commands for efficient code browsing:
 
@@ -269,7 +269,7 @@ Additional navigation commands for efficient code browsing:
 | `ESC` `←` | `scroll-down` | Scroll buffer content down |
 | `ESC` `→` | `scroll-up` | Scroll buffer content up |
 
-### 7. YAML Development
+### YAML Development
 
 YAML-specific keybindings for configuration file editing:
 
@@ -277,7 +277,7 @@ YAML-specific keybindings for configuration file editing:
 |-----|----------|-------------|---------|
 | `C-m` | `newline-and-indent` | Insert newline with proper YAML indentation | YAML files |
 
-### 8. Virtual Environment Management
+### Virtual Environment Management
 
 Python virtual environment commands for project isolation:
 
@@ -287,7 +287,7 @@ Python virtual environment commands for project isolation:
 | `M-x pyvenv-deactivate` | Deactivate current virtual environment |
 | `M-x pyvenv-workon` | Switch to a different virtual environment |
 
-### 9. Code Formatting
+### Code Formatting
 
 Automated code formatting commands:
 
