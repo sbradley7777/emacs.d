@@ -71,8 +71,22 @@
    ;; Return list of failed packages for further handling
    failed-packages))
 
-;; Install packages using robust installation function
-(install-packages-safely config-packages)
+;; Add retry mechanism for automatic recovery from network failures
+(defun
+ install-packages-with-retry (package-list &optional max-retries)
+ "Install packages with automatic retry on network failures.
+PACKAGE-LIST is the list of packages to install.
+MAX-RETRIES is the maximum number of retry attempts (default: 2)."
+ (let ((max-retries (or max-retries 2))
+       (failed-packages (install-packages-safely package-list)))
+   (when
+    (and failed-packages (> max-retries 0))
+    (message "🔄 Retrying failed packages after network refresh...")
+    (package-refresh-contents)
+    (install-packages-with-retry failed-packages (1- max-retries)))))
+
+;; Install packages using robust installation function with retry
+(install-packages-with-retry config-packages)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package configurations using use-package
