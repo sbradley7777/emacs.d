@@ -50,32 +50,89 @@
 ;; This maintains security with signature verification
 (unless
  (package-installed-p 'gnu-elpa-keyring-update)
- (package-refresh-contents) ; Refresh package contents to get latest keyring info
- (package-install 'gnu-elpa-keyring-update) ; Install keyring update package from GNU ELPA
- (message "🔐  GNU ELPA keyring updated for secure package verification"))
+ (when
+  (network-responsive-p)
+  (safe-package-refresh-with-timeout) ; Network-aware refresh
+  (condition-case err
+      (progn
+       (package-install 'gnu-elpa-keyring-update)
+       (message "🔐  GNU ELPA keyring updated for secure package verification"))
+    (error
+     (message "⚠️  Failed to install keyring update: %s" (error-message-string err))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Network-Aware Package Management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ network-responsive-p () "Quick network connectivity check with minimal timeout."
+ (condition-case nil
+     (with-timeout
+      (3 nil) ; 3 second timeout
+      (url-retrieve-synchronously "https://elpa.gnu.org" nil nil 3))
+   (error
+    nil)))
+
+(defun
+ safe-package-refresh-with-timeout
+ ()
+ "Refresh package contents with timeout protection and error handling."
+ (condition-case err
+     (with-timeout
+      (15 (message "⚠️  Package refresh timed out, using cached data"))
+      (package-refresh-contents)
+      (message "✅  Package contents refreshed successfully"))
+   (error
+    (message "⚠️  Package refresh failed: %s" (error-message-string err)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Content Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; If there are no archived package contents, refresh them
-(when (not package-archive-contents) (package-refresh-contents))
+;; Network-aware package content refresh - only if network available and contents missing
+(when
+ (not package-archive-contents)
+ (if
+  (network-responsive-p)
+  (progn
+   (message "📡  Network available, refreshing package contents...")
+   (safe-package-refresh-with-timeout))
+  (message "⚠️  Network unavailable, proceeding with cached package data")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use-Package Bootstrap and Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Install use-package if not already present
+;; Install use-package if not already present with network-aware approach
 (unless
- (package-installed-p 'use-package) (package-refresh-contents) (package-install 'use-package))
+ (package-installed-p 'use-package)
+ (if
+  (network-responsive-p)
+  (progn
+   (message "📦  Installing use-package...") (safe-package-refresh-with-timeout)
+   (condition-case err
+       (progn (package-install 'use-package) (message "✅  use-package installed successfully"))
+     (error
+      (message "❌  Failed to install use-package: %s" (error-message-string err)))))
+  (message "⚠️  Network unavailable, use-package installation skipped")))
 
-;; Configure use-package for optimal package management
-(eval-when-compile (require 'use-package))
-
-;; Global use-package configuration
-(setq
- use-package-always-ensure t ; Always ensure packages are installed
- use-package-verbose t ; Show loading messages for debugging
- use-package-compute-statistics t ; Enable statistics collection
- use-package-minimum-reported-time core-use-package-minimum-reported-time) ; Report slow-loading packages
+;; Configure use-package for optimal package management with fallback
+(condition-case err
+    (progn
+     (eval-when-compile (require 'use-package))
+     ;; Global use-package configuration
+     (setq
+      use-package-always-ensure t ; Always ensure packages are installed
+      use-package-verbose t ; Show loading messages for debugging
+      use-package-compute-statistics t ; Enable statistics collection
+      use-package-minimum-reported-time core-use-package-minimum-reported-time) ; Report slow-loading packages
+     (message "✅  use-package configured successfully"))
+  (error
+   (message "⚠️  use-package unavailable: %s" (error-message-string err))
+   (message "ℹ️  Package-dependent features will be skipped")
+   ;; Provide minimal fallback macro to prevent errors
+   (defmacro
+    use-package
+    (name &rest args)
+    "Minimal fallback when use-package unavailable."
+    `(message "Skipping %s configuration (use-package unavailable)" ',name))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Management Utilities
@@ -86,7 +143,9 @@
  "Upgrade all installed packages to their latest versions."
  (interactive)
  (message "🔍  Checking for package upgrades...")
- (package-refresh-contents)
+ (unless
+  (network-responsive-p) (user-error "Network unavailable - cannot check for package upgrades"))
+ (safe-package-refresh-with-timeout)
  (let ((upgradeable-packages '())
        (failed-packages '())
        (upgraded-count 0))
