@@ -94,6 +94,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
         (message "ℹ️  Consider checking: file exists, syntax is valid, dependencies available")
         nil)))))
 
+
 (defun
  show-config-diagnostics () "Display configuration loading diagnostics."
  (let ((total-time (float-time (time-subtract (current-time) init-start-time)))
@@ -114,11 +115,17 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
    (message "    🛠️  Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
    (message "====================================\n")))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configuration modules in order with error handling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core configuration (order matters)
-(safe-load-config 'package-manager "Package system setup") ; Package system setup first
+(safe-load-config 'diagnostics "System and configuration diagnostics") ; System diagnostics (load first for early Messages buffer logging)
+
+;; Show system information immediately after diagnostics loads (before packages)
+(show-system-info)
+
+(safe-load-config 'package-manager "Package system setup") ; Package system setup
 (safe-load-config 'packages "Package declarations") ; Package declarations and configurations
 (safe-load-config 'ui "Basic UI setup") ; Basic UI setup
 (safe-load-config 'themes "Theme configuration") ; Visual appearance
@@ -152,6 +159,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set location of any changes to emacs while running. These changes are not loaded when emacs restarts.
 (setq custom-file "~/.emacs.d/custom_prefs.el")
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization complete - show diagnostics
