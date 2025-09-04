@@ -172,10 +172,13 @@ Comprehensive documentation is available in separate files:
 ## Quick Reference
 
 ### Essential Key Bindings
-- **Auto-completion**: `TAB` (smart), `C-c TAB` (manual), `M-TAB`, `C-M-i`
-- **Python LSP**: `M-.` (go to definition), `M-?` (find references), `C-c r` (rename), `C-c a` (code actions)
-- **Virtual environments**: `M-x pyvenv-activate`, `M-x pyvenv-deactivate`, `M-x pyvenv-workon`
-- **Code formatting**: `C-c C-f` (format buffer in emacs-lisp-mode)
+For comprehensive keybinding documentation, see the [Python Development Keybindings](FEATURES.md#python-development-keybindings) section in FEATURES.md.
+
+**Most Common:**
+- **Auto-completion**: `TAB` (smart), `C-c TAB` (manual trigger)
+- **Error checking**: `F1` (show diagnostics)
+- **Navigation**: `M-.` (go to definition), `M-,` (go back)
+- **File management**: `F4` (close buffer), `F7`/`F8` (switch buffers)
 
 ### Project Structure Detection
 The configuration automatically detects project roots by searching for:
