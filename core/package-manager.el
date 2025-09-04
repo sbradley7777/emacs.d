@@ -64,25 +64,58 @@
 ;; Network-Aware Package Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- network-responsive-p () "Quick network connectivity check with minimal timeout."
- (condition-case nil
-     (with-timeout
-      (3 nil) ; 3 second timeout
-      (url-retrieve-synchronously "https://elpa.gnu.org" nil nil 3))
-   (error
-    nil)))
+ network-responsive-p
+ ()
+ "Quick network connectivity check with diagnostic feedback."
+ (message "🔍  Testing connectivity to ELPA repositories...")
+ (message "ℹ️  This determines if packages can be downloaded or updated")
+ (let ((start-time (current-time))
+       (test-url "https://elpa.gnu.org")
+       (timeout-seconds 3))
+   (condition-case err
+       (with-timeout
+        (timeout-seconds
+         (message "❌  ELPA connectivity test timed out after %ds" timeout-seconds) nil)
+        (url-retrieve-synchronously test-url nil nil timeout-seconds)
+        (let ((elapsed (float-time (time-subtract (current-time) start-time))))
+          (message "✅  ELPA connectivity confirmed (%.2fs)" elapsed)
+          t))
+     (error
+      (let ((elapsed (float-time (time-subtract (current-time) start-time))))
+        (message "❌  ELPA connectivity failed after %.2fs: %s" elapsed (error-message-string err))
+        nil)))))
 
 (defun
  safe-package-refresh-with-timeout
  ()
- "Refresh package contents with timeout protection and error handling."
- (condition-case err
-     (with-timeout
-      (15 (message "⚠️  Package refresh timed out, using cached data"))
-      (package-refresh-contents)
-      (message "✅  Package contents refreshed successfully"))
-   (error
-    (message "⚠️  Package refresh failed: %s" (error-message-string err)))))
+ "Refresh package contents with comprehensive diagnostic feedback."
+ (message "📦  Refreshing package archive contents...")
+ (let ((start-time (current-time))
+       (timeout-seconds 15)
+       (archive-count (length package-archives)))
+   (message
+    "ℹ️  Contacting %d package archives to refresh metadata: %s"
+    archive-count
+    (mapconcat (lambda (archive) (cdr archive)) package-archives ", "))
+   (message "ℹ️  This updates available package lists and dependency information")
+   (condition-case err
+       (with-timeout
+        (timeout-seconds
+         (let ((elapsed (float-time (time-subtract (current-time) start-time))))
+           (message
+            "❌  Package refresh timed out after %.1fs (limit: %ds)" elapsed timeout-seconds)
+           (message "ℹ️  Using any cached package data available")))
+        (package-refresh-contents)
+        (let ((elapsed (float-time (time-subtract (current-time) start-time)))
+              (packages-count (length package-archive-contents)))
+          (message
+           "✅  Package refresh completed in %.2fs (%d packages available)"
+           elapsed
+           packages-count)))
+     (error
+      (let ((elapsed (float-time (time-subtract (current-time) start-time))))
+        (message "❌  Package refresh failed after %.2fs: %s" elapsed (error-message-string err))
+        (message "ℹ️  Will attempt to use cached package data if available"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Content Management
@@ -90,12 +123,19 @@
 ;; Network-aware package content refresh - only if network available and contents missing
 (when
  (not package-archive-contents)
+ (message "ℹ️  Package archive contents not loaded, determining loading strategy...")
+ (message "ℹ️  Need metadata to activate packages and resolve dependencies")
  (if
   (network-responsive-p)
   (progn
-   (message "📡  Network available, refreshing package contents...")
+   (message "📡  Network connectivity confirmed, proceeding with package refresh...")
    (safe-package-refresh-with-timeout))
-  (message "⚠️  Network unavailable, proceeding with cached package data")))
+  (progn
+   (message "⚠️  Network connectivity unavailable")
+   (message "ℹ️  Proceeding with offline mode - using any cached package data")
+   (when
+    (= (length package-archive-contents) 0)
+    (message "⚠️  No package data available - some features may be limited")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use-Package Bootstrap and Configuration
@@ -199,6 +239,7 @@
 
 ;; Make this module available for loading with (require 'package-manager)
 (provide 'package-manager)
+;; Test hook execution with trailing spaces
 (message
  "package-manager.el loaded (%.2fs)"
  (float-time (time-subtract (current-time) config-load-start-time)))
