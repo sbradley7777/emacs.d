@@ -13,6 +13,17 @@ This document provides comprehensive details about all features available in thi
   - [YAML Configuration](#yaml-configuration)
 - [Code Style and Standards](#code-style-and-standards)
 - [User Interface Enhancements](#user-interface-enhancements)
+- [Development Keybindings](#development-keybindings)
+  - [Custom Function Key Shortcuts](#custom-function-key-shortcuts)
+  - [Code Intelligence (LSP via Eglot)](#code-intelligence-lsp-via-eglot)
+  - [Code Completion (Corfu)](#code-completion-corfu)
+  - [Python Development](#python-development)
+  - [Essential Emacs Operations](#essential-emacs-operations)
+  - [Custom Navigation Shortcuts](#custom-navigation-shortcuts)
+  - [YAML Development](#yaml-development)
+  - [Virtual Environment Management](#virtual-environment-management)
+  - [Code Formatting](#code-formatting)
+  - [Diagnostic and Error Checking](#diagnostic-and-error-checking)
 - [Related Documentation](#related-documentation)
 
 ## Version-Aware Capabilities
@@ -173,9 +184,9 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 - **LSP Diagnostics**: Comprehensive error reporting and code intelligence
 - **Performance Monitoring**: Load time tracking for configuration modules
 
-## Python Development Keybindings
+## Development Keybindings
 
-This section provides a comprehensive reference for all keybindings available during Python development, organized by functionality category.
+This section provides a comprehensive reference for all keybindings available in this Emacs configuration, covering both general Emacs operations and language-specific development features.
 
 ### How to Use These Keybindings
 
@@ -279,7 +290,7 @@ YAML-specific keybindings for configuration file editing:
 
 ### Virtual Environment Management
 
-Python virtual environment commands for project isolation:
+Python virtual environment commands for project isolation using [pyvenv](https://github.com/jorgenschaefer/pyvenv):
 
 | Command | Description |
 |---------|-------------|
@@ -289,11 +300,22 @@ Python virtual environment commands for project isolation:
 
 ### Code Formatting
 
-Automated code formatting commands:
+Automated code formatting commands using [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt):
 
 | Key | Function | Description | Context |
 |-----|----------|-------------|---------|
 | `C-c` `C-f` | `elisp-autofmt-buffer` | Format Emacs Lisp buffer | Emacs Lisp files |
+
+### Diagnostic and Error Checking
+
+Built-in Emacs diagnostic tools (Flymake is built into Emacs):
+
+| Key | Function | Description | Context |
+|-----|----------|-------------|---------|
+| `F1` | `flymake-show-buffer-diagnostics` | Show diagnostics in side window | When Flymake active |
+| `M-g` `n` | `flymake-goto-next-error` | Jump to next diagnostic | When Flymake active |
+| `M-g` `p` | `flymake-goto-prev-error` | Jump to previous diagnostic | When Flymake active |
+| `C-h` `.` | `display-local-help` | Show diagnostic details at point | When Flymake active |
 
 ## Related Documentation
 
