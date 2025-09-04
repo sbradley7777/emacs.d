@@ -98,10 +98,11 @@ The modular design makes it easy to add support for additional languages.
 
 ### Q: How does the theme system work?
 
-**A:** The configuration includes theme support ([`themes/themes.el`](themes/themes.el)) with:
-- [Spacemacs theme](https://github.com/nashamri/spacemacs-theme) - Modern, clean appearance
-- [Zenburn theme](https://github.com/bbatsov/zenburn-emacs) - Low-contrast, eye-friendly colors
-- Automatic theme loading and customization
+**A:** The configuration uses the [Zenburn theme](https://github.com/bbatsov/zenburn-emacs) ([`themes/themes.el`](themes/themes.el)) with:
+- Low-contrast, eye-friendly colors optimized for long coding sessions
+- Custom black background override for enhanced contrast
+- Automatic theme loading during startup
+- Easy customization through Zenburn's color override system
 
 ### Q: Can I disable specific features?
 

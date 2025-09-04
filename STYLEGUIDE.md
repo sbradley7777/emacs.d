@@ -176,7 +176,7 @@ Use consistent section separators for organization:
 
 #### Configuration Variables
 ```elisp
-(defvar config-essential-packages '(spacemacs-theme zenburn-theme)
+(defvar config-essential-packages '(zenburn-theme yaml-mode)
   "Essential packages that must be installed.")
 ```
 

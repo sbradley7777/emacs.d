@@ -166,7 +166,7 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 ### Visual Improvements
 - **[Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters)** ([`features/rainbow-delimiters.el`](features/rainbow-delimiters.el)): Enhanced delimiter visibility with color coding
 - **[Indent Guides](https://github.com/DarthFennec/highlight-indent-guides)** ([`features/indent-guides.el`](features/indent-guides.el)): Visual indentation guides for better code structure
-- **Theme Support** ([`themes/themes.el`](themes/themes.el)): [Spacemacs](https://github.com/nashamri/spacemacs-theme) and [Zenburn](https://github.com/bbatsov/zenburn-emacs) themes
+- **Theme Support** ([`themes/themes.el`](themes/themes.el)): [Zenburn](https://github.com/bbatsov/zenburn-emacs) theme with custom black background
 
 ### Enhanced Diagnostics
 - **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake-config.el`](features/flymake-config.el)): Real-time syntax checking and linting
