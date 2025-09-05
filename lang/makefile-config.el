@@ -3,110 +3,108 @@
 ;;      Makefile mode support and configuration for Makefiles with proper tab handling
 
 (require 'core-constants)
+(require 'utils)
 
-(defvar config-load-start-time (current-time))
-(message "🔄  Loading makefile-config.el...")
+(with-load-timing
+ "makefile-config.el"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Makefile mode configuration (built-in mode)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Makefile mode configuration (built-in mode)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; File associations for Makefile variants
-(add-to-list 'auto-mode-alist '("\\(?:Makefile\\|makefile\\)\\'" . makefile-mode))
-(add-to-list 'auto-mode-alist '("\\.mk\\'" . makefile-mode))
-(add-to-list 'auto-mode-alist '("GNUmakefile\\'" . makefile-gmake-mode))
+ ;; File associations for Makefile variants
+ (add-to-list 'auto-mode-alist '("\\(?:Makefile\\|makefile\\)\\'" . makefile-mode))
+ (add-to-list 'auto-mode-alist '("\\.mk\\'" . makefile-mode))
+ (add-to-list 'auto-mode-alist '("GNUmakefile\\'" . makefile-gmake-mode))
 
-;; Makefile-specific configuration
-(add-hook
- 'makefile-mode-hook
- (lambda
-  ()
-  "Configure Makefile mode settings with proper tab handling."
-  ;; CRITICAL: Makefiles REQUIRE tabs for recipe indentation
-  (setq indent-tabs-mode t) ; Use tabs (required by Make syntax)
-  (setq tab-width 4) ; Set tab width to 4 for better readability
-
-  ;; Show tabs and trailing whitespace clearly
-  (setq show-trailing-whitespace t)
-  (setq whitespace-style '(face tabs trailing tab-mark))
-  (whitespace-mode 1)
-
-  ;; Electric indentation settings
-  (electric-indent-mode 1)
-
-  ;; Makefile-specific editing enhancements
-  (setq makefile-electric-keys t) ; Enable electric keys (automatic formatting)
-  (setq makefile-query-by-make-minus-q t) ; Use make -q for target queries
-
-  ;; Visual feedback for proper Make syntax
-  (when (fboundp 'highlight-indentation-mode) (highlight-indentation-mode 1))))
-
-;; Additional configuration for different Makefile variants
-(add-hook
- 'makefile-gmake-mode-hook
- (lambda
-  () "Configure GNU Make specific settings."
-  (setq indent-tabs-mode t) ; GNU Make also requires tabs
-  (setq tab-width 4) (setq show-trailing-whitespace t)))
-
-(add-hook
- 'makefile-bsdmake-mode-hook
- (lambda
-  () "Configure BSD Make specific settings."
-  (setq indent-tabs-mode t) ; BSD Make also requires tabs
-  (setq tab-width 4) (setq show-trailing-whitespace t)))
-
-;; Key bindings for common Makefile operations
-(with-eval-after-load
- 'make-mode
- ;; Bind common Make operations
- (define-key makefile-mode-map (kbd "C-c C-c") 'compile) ; Run make
- (define-key makefile-mode-map (kbd "C-c C-t") 'makefile-pickup-targets) ; Refresh target list
- (define-key makefile-mode-map (kbd "C-c C-f") 'makefile-pickup-filenames-as-targets)) ; Add files as targets
-
-;; Enhanced target navigation and compilation
-(with-eval-after-load
- 'make-mode
- ;; Set compilation command to use make
+ ;; Makefile-specific configuration
  (add-hook
   'makefile-mode-hook
   (lambda
-   () "Set up compilation for Makefiles." (set (make-local-variable 'compile-command) "make "))))
+   ()
+   "Configure Makefile mode settings with proper tab handling."
+   ;; CRITICAL: Makefiles REQUIRE tabs for recipe indentation
+   (setq indent-tabs-mode t) ; Use tabs (required by Make syntax)
+   (setq tab-width 4) ; Set tab width to 4 for better readability
 
-;; Function to validate Makefile syntax (tabs vs spaces)
-(defun
- makefile-validate-tabs
- ()
- "Check if Makefile uses proper tabs for recipe indentation."
- (interactive)
- (save-excursion
-  (goto-char (point-min))
-  (let ((tab-recipe-count 0)
-        (space-recipe-count 0))
-    ;; Look for recipe lines (lines that start with whitespace after a target)
-    (while
-     (re-search-forward "^\\([[:space:]]+\\)" nil t)
-     (let ((indent (match-string 1)))
-       (if
-        (string-match-p "\t" indent) (setq tab-recipe-count (1+ tab-recipe-count))
-        (when (string-match-p "^ +" indent) (setq space-recipe-count (1+ space-recipe-count))))))
+   ;; Show tabs and trailing whitespace clearly
+   (setq show-trailing-whitespace t)
+   (setq whitespace-style '(face tabs trailing tab-mark))
+   (whitespace-mode 1)
 
-    (cond
-     ((> space-recipe-count 0)
-      (message
-       "⚠️  Warning: Found %d recipe lines with spaces instead of tabs!" space-recipe-count))
-     ((> tab-recipe-count 0)
-      (message "✅  Makefile syntax valid: %d recipe lines properly use tabs" tab-recipe-count))
-     (t
-      (message "ℹ️  No recipe lines detected in this Makefile"))))))
+   ;; Electric indentation settings
+   (electric-indent-mode 1)
 
-;; Automatically validate Makefile syntax when opening
-(add-hook
- 'makefile-mode-hook
- (lambda () "Validate Makefile syntax on open." (run-with-timer 1 nil 'makefile-validate-tabs)))
+   ;; Makefile-specific editing enhancements
+   (setq makefile-electric-keys t) ; Enable electric keys (automatic formatting)
+   (setq makefile-query-by-make-minus-q t) ; Use make -q for target queries
 
-;; Make this module available for loading with (require 'makefile-config)
-(provide 'makefile-config)
-(message
- "makefile-config.el loaded (%.2fs)"
- (float-time (time-subtract (current-time) config-load-start-time)))
+   ;; Visual feedback for proper Make syntax
+   (when (fboundp 'highlight-indentation-mode) (highlight-indentation-mode 1))))
+
+ ;; Additional configuration for different Makefile variants
+ (add-hook
+  'makefile-gmake-mode-hook
+  (lambda
+   () "Configure GNU Make specific settings."
+   (setq indent-tabs-mode t) ; GNU Make also requires tabs
+   (setq tab-width 4) (setq show-trailing-whitespace t)))
+
+ (add-hook
+  'makefile-bsdmake-mode-hook
+  (lambda
+   () "Configure BSD Make specific settings."
+   (setq indent-tabs-mode t) ; BSD Make also requires tabs
+   (setq tab-width 4) (setq show-trailing-whitespace t)))
+
+ ;; Key bindings for common Makefile operations
+ (with-eval-after-load
+  'make-mode
+  ;; Bind common Make operations
+  (define-key makefile-mode-map (kbd "C-c C-c") 'compile) ; Run make
+  (define-key makefile-mode-map (kbd "C-c C-t") 'makefile-pickup-targets) ; Refresh target list
+  (define-key makefile-mode-map (kbd "C-c C-f") 'makefile-pickup-filenames-as-targets)) ; Add files as targets
+
+ ;; Enhanced target navigation and compilation
+ (with-eval-after-load
+  'make-mode
+  ;; Set compilation command to use make
+  (add-hook
+   'makefile-mode-hook
+   (lambda
+    () "Set up compilation for Makefiles." (set (make-local-variable 'compile-command) "make "))))
+
+ ;; Function to validate Makefile syntax (tabs vs spaces)
+ (defun
+  makefile-validate-tabs
+  ()
+  "Check if Makefile uses proper tabs for recipe indentation."
+  (interactive)
+  (save-excursion
+   (goto-char (point-min))
+   (let ((tab-recipe-count 0)
+         (space-recipe-count 0))
+     ;; Look for recipe lines (lines that start with whitespace after a target)
+     (while
+      (re-search-forward "^\\([[:space:]]+\\)" nil t)
+      (let ((indent (match-string 1)))
+        (if
+         (string-match-p "\t" indent) (setq tab-recipe-count (1+ tab-recipe-count))
+         (when (string-match-p "^ +" indent) (setq space-recipe-count (1+ space-recipe-count))))))
+
+     (cond
+      ((> space-recipe-count 0)
+       (message
+        "⚠️  Warning: Found %d recipe lines with spaces instead of tabs!" space-recipe-count))
+      ((> tab-recipe-count 0)
+       (message "✅  Makefile syntax valid: %d recipe lines properly use tabs" tab-recipe-count))
+      (t
+       (message "ℹ️  No recipe lines detected in this Makefile"))))))
+
+ ;; Automatically validate Makefile syntax when opening
+ (add-hook
+  'makefile-mode-hook
+  (lambda () "Validate Makefile syntax on open." (run-with-timer 1 nil 'makefile-validate-tabs)))
+
+ ;; Make this module available for loading with (require 'makefile-config)
+ (provide 'makefile-config))

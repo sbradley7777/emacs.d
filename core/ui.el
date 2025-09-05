@@ -3,129 +3,126 @@
 ;;      Display preferences and UI behavior
 
 (require 'core-constants)
+(require 'utils)
 
-(defvar config-load-start-time (current-time))
-(message "🔄  Loading ui.el...")
+(with-load-timing
+ "ui.el"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; UI Elements Control:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Disable UI elements for cleaner interface
-;; These functions exist in all supported Emacs versions (24.3+)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(menu-bar-mode -1)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; UI Elements Control:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Disable UI elements for cleaner interface
+ ;; These functions exist in all supported Emacs versions (24.3+)
+ (tool-bar-mode -1) (scroll-bar-mode -1) (menu-bar-mode -1)
 
-;; Version-aware line number display
-(cond
- ;; Modern line numbers (Emacs 26+)
- (emacs-supports-line-numbers
-  (global-display-line-numbers-mode 1)
-  (when
-   (memq emacs-feature-tier '(modern current))
-   ;; Advanced features for newer versions
-   (setq
-    display-line-numbers-type
-    'visual
-    display-line-numbers-width-start
-    t
-    display-line-numbers-grow-only
-    t))
-  ;; Disable in certain modes for performance
-  (dolist
-   (mode
-    '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
-   (add-hook mode (lambda () (display-line-numbers-mode 0)))))
+ ;; Version-aware line number display
+ (cond
+  ;; Modern line numbers (Emacs 26+)
+  (emacs-supports-line-numbers
+   (global-display-line-numbers-mode 1)
+   (when
+    (memq emacs-feature-tier '(modern current))
+    ;; Advanced features for newer versions
+    (setq
+     display-line-numbers-type
+     'visual
+     display-line-numbers-width-start
+     t
+     display-line-numbers-grow-only
+     t))
+   ;; Disable in certain modes for performance
+   (dolist
+    (mode
+     '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0)))))
 
- ;; Fallback for Emacs 24.x
- ((fboundp 'global-linum-mode)
-  (global-linum-mode 1)
-  (setq linum-format "%4d "))
+  ;; Fallback for Emacs 24.x
+  ((fboundp 'global-linum-mode)
+   (global-linum-mode 1)
+   (setq linum-format "%4d "))
 
- ;; No line numbers available
- (t
-  (message "Line numbers not available in this Emacs version")))
+  ;; No line numbers available
+  (t
+   (message "Line numbers not available in this Emacs version")))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load Misc Preferences:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Display the time
-(display-time)
-;; Don't show the GNU splash screen
-(setq inhibit-startup-message t)
-;; Search and line/column display preferences - consolidated for efficiency
-(setq
- case-fold-search t ; Make searches case insensitive
- column-number-mode t) ; Add column numbers to mode line
-(line-number-mode 1) ; Show current line number in mode line (mode function, not variable)
-;; Basic editor behavior
-(set-default 'truncate-lines t) ; Don't word wrap long lines
-(setq-default scroll-step core-scroll-step) ; Turn off jumpy scroll
-(setq ring-bell-function 'ignore) ; Better than visible-bell
-(global-hl-line-mode 1) ; Highlight current line
-;; Additional editor preferences
-(setq-default
- transient-mark-mode t ; Visual feedback on
- kill-whole-line t ; ctrl-k kills whole line if at col 0
- show-trailing-whitespace t) ; Highlight trailing whitespaces
-;; Enhanced title bar showing buffer name and file path with hostname
-(setq
- frame-title-format '("%b - " (:eval (or (file-remote-p default-directory 'host) system-name))))
-;; File handling preferences
-(setq
- diff-default-read-only nil ; Turn off read only mode with .patch files
- vc-follow-symlinks t ; Follow symlinks and don't ask
- require-final-newline t) ; Always end a file with a newline
-;; Show matching parenthesis
-(show-paren-mode 1)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Load Misc Preferences:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Display the time
+ (display-time)
+ ;; Don't show the GNU splash screen
+ (setq inhibit-startup-message t)
+ ;; Search and line/column display preferences - consolidated for efficiency
+ (setq
+  case-fold-search t ; Make searches case insensitive
+  column-number-mode t) ; Add column numbers to mode line
+ (line-number-mode 1) ; Show current line number in mode line (mode function, not variable)
+ ;; Basic editor behavior
+ (set-default 'truncate-lines t) ; Don't word wrap long lines
+ (setq-default scroll-step core-scroll-step) ; Turn off jumpy scroll
+ (setq ring-bell-function 'ignore) ; Better than visible-bell
+ (global-hl-line-mode 1) ; Highlight current line
+ ;; Additional editor preferences
+ (setq-default
+  transient-mark-mode t ; Visual feedback on
+  kill-whole-line t ; ctrl-k kills whole line if at col 0
+  show-trailing-whitespace t) ; Highlight trailing whitespaces
+ ;; Enhanced title bar showing buffer name and file path with hostname
+ (setq
+  frame-title-format '("%b - " (:eval (or (file-remote-p default-directory 'host) system-name))))
+ ;; File handling preferences
+ (setq
+  diff-default-read-only nil ; Turn off read only mode with .patch files
+  vc-follow-symlinks t ; Follow symlinks and don't ask
+  require-final-newline t) ; Always end a file with a newline
+ ;; Show matching parenthesis
+ (show-paren-mode 1)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Enhanced UI features
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Better window management with winner-mode (undo/redo window configurations)
-(winner-mode 1)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Enhanced UI features
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Better window management with winner-mode (undo/redo window configurations)
+ (winner-mode 1)
 
-;; Improved parentheses highlighting with better colors and delay
-(setq
- show-paren-delay core-show-paren-delay ; Faster highlighting
- show-paren-style 'parenthesis) ; Only highlight the parentheses themselves
+ ;; Improved parentheses highlighting with better colors and delay
+ (setq
+  show-paren-delay core-show-paren-delay ; Faster highlighting
+  show-paren-style 'parenthesis) ; Only highlight the parentheses themselves
 
-;; Enhanced scrolling behavior
-(setq
- scroll-conservatively core-scroll-conservatively ; Smooth scrolling
- scroll-preserve-screen-position t) ; Keep cursor position when scrolling
+ ;; Enhanced scrolling behavior
+ (setq
+  scroll-conservatively core-scroll-conservatively ; Smooth scrolling
+  scroll-preserve-screen-position t) ; Keep cursor position when scrolling
 
-;; Better buffer switching
-(setq switch-to-buffer-preserve-window-point t)
+ ;; Better buffer switching
+ (setq switch-to-buffer-preserve-window-point t)
 
-;; More informative mode line
-(setq size-indication-mode t) ; Show buffer size in mode line
+ ;; More informative mode line
+ (setq size-indication-mode t) ; Show buffer size in mode line
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Modern Emacs features
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Save command history
-(savehist-mode 1)
-(setq savehist-additional-variables '(search-ring regexp-search-ring))
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Modern Emacs features
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Save command history
+ (savehist-mode 1) (setq savehist-additional-variables '(search-ring regexp-search-ring))
 
-;; Track recently opened files
-(recentf-mode 1)
-(setq
- recentf-max-saved-items
- core-recentf-max-items
- recentf-exclude
- '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
+ ;; Track recently opened files
+ (recentf-mode 1)
+ (setq
+  recentf-max-saved-items
+  core-recentf-max-items
+  recentf-exclude
+  '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
 
-(normal-erase-is-backspace-mode 0)
+ (normal-erase-is-backspace-mode 0)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Enhanced cursor and interaction behavior
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Better cursor and selection visibility
-(setq-default cursor-type 'box) ; Box cursor for better visibility
-(blink-cursor-mode -1) ; Disable cursor blinking
-(setq mouse-yank-at-point t) ; Paste at cursor, not mouse position
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Enhanced cursor and interaction behavior
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Better cursor and selection visibility
+ (setq-default cursor-type 'box) ; Box cursor for better visibility
+ (blink-cursor-mode -1) ; Disable cursor blinking
+ (setq mouse-yank-at-point t) ; Paste at cursor, not mouse position
 
-;; Make this module available for loading with (require 'ui)
-(provide 'ui)
-(message "ui.el loaded (%.2fs)" (float-time (time-subtract (current-time) config-load-start-time)))
+ ;; Make this module available for loading with (require 'ui)
+ (provide 'ui))
