@@ -19,7 +19,8 @@
 
 (defvar
  config-development-packages
- '(which-key pyvenv elisp-autofmt corfu rainbow-delimiters highlight-indent-guides)
+ '(which-key
+   pyvenv elisp-autofmt corfu rainbow-delimiters highlight-indent-guides imenu-list)
  "Development and programming packages.")
 
 (defvar
