@@ -25,7 +25,7 @@
    "Configure Makefile mode settings with proper tab handling."
    ;; CRITICAL: Makefiles REQUIRE tabs for recipe indentation
    (setq indent-tabs-mode t) ; Use tabs (required by Make syntax)
-   (setq tab-width 4) ; Set tab width to 4 for better readability
+   (setq tab-width core-tab-width) ; Set tab width for better readability
 
    ;; Show tabs and trailing whitespace clearly
    (setq show-trailing-whitespace t)
@@ -48,14 +48,14 @@
   (lambda
    () "Configure GNU Make specific settings."
    (setq indent-tabs-mode t) ; GNU Make also requires tabs
-   (setq tab-width 4) (setq show-trailing-whitespace t)))
+   (setq tab-width core-tab-width) (setq show-trailing-whitespace t)))
 
  (add-hook
   'makefile-bsdmake-mode-hook
   (lambda
    () "Configure BSD Make specific settings."
    (setq indent-tabs-mode t) ; BSD Make also requires tabs
-   (setq tab-width 4) (setq show-trailing-whitespace t)))
+   (setq tab-width core-tab-width) (setq show-trailing-whitespace t)))
 
  ;; Key bindings for common Makefile operations
  (with-eval-after-load

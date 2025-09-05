@@ -24,6 +24,9 @@
 ;; Flymake Constants
 (defconst features-flymake-window-width 100 "Flymake popup window width.")
 
+;; Imenu-list Constants
+(defconst features-imenu-list-size 0.25 "Imenu-list sidebar width as fraction of frame width.")
+
 ;; Indent Guides Constants
 (defconst
  features-indent-guides-auto-char-face-perc 40 "Base visibility percentage for indent guides.")

@@ -16,7 +16,7 @@
   imenu-list
   :config
   ;; Display settings for terminal compatibility
-  (setq imenu-list-size 0.25) ; Sidebar width as fraction of frame width
+  (setq imenu-list-size features-imenu-list-size) ; Sidebar width as fraction of frame width
   (setq imenu-list-position 'right) ; Display sidebar on the right
   (setq imenu-list-auto-resize t) ; Automatically resize based on content
 
