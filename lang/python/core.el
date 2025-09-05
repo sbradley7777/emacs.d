@@ -17,7 +17,11 @@
   (setq python-indent-guess-indent-offset t) ; Attempts to guess indentation offset based on existing file indentation
   (setq indent-tabs-mode nil) ; Use spaces
   (setq python-indent core-tab-width) ; Use standard tab width for indentation
-  (electric-indent-mode 1))) ; Enable electric indentation for automatic formatting
+  (electric-indent-mode 1) ; Enable electric indentation for automatic formatting
+  ;; Enable eglot-powered imenu when eglot is active
+  (when
+   (and (featurep 'eglot) (eglot-managed-p))
+   (setq imenu-create-index-function 'eglot-imenu)))) ; Use LSP symbol information for better navigation
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python shell integration improvements
