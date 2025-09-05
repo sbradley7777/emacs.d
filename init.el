@@ -125,7 +125,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Show system information immediately after diagnostics loads (before packages)
 (show-system-info)
 
-(safe-load-config 'package-manager "Package system setup") ; Package system setup
+(safe-load-config 'package-system/manager "Package system setup") ; Package system setup
 (safe-load-config 'packages "Package declarations") ; Package declarations and configurations
 (safe-load-config 'ui "Basic UI setup") ; Basic UI setup
 (safe-load-config 'themes "Theme configuration") ; Visual appearance
