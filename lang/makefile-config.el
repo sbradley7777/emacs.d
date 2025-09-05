@@ -17,6 +17,16 @@
  (add-to-list 'auto-mode-alist '("\\.mk\\'" . makefile-mode))
  (add-to-list 'auto-mode-alist '("GNUmakefile\\'" . makefile-gmake-mode))
 
+ ;; Helper function for common Makefile settings
+ (defun
+  makefile-setup-common-settings
+  ()
+  "Configure common Makefile settings required by all Make variants."
+  (setq
+   indent-tabs-mode t ; Use tabs (required by Make syntax)
+   tab-width core-tab-width ; Set tab width for better readability
+   show-trailing-whitespace t)) ; Show trailing whitespace clearly
+
  ;; Makefile-specific configuration
  (add-hook
   'makefile-mode-hook
@@ -24,11 +34,7 @@
    ()
    "Configure Makefile mode settings with proper tab handling."
    ;; CRITICAL: Makefiles REQUIRE tabs for recipe indentation
-   (setq indent-tabs-mode t) ; Use tabs (required by Make syntax)
-   (setq tab-width core-tab-width) ; Set tab width for better readability
-
-   ;; Show tabs and trailing whitespace clearly
-   (setq show-trailing-whitespace t)
+   (makefile-setup-common-settings)
    (setq whitespace-style '(face tabs trailing tab-mark))
    (whitespace-mode 1)
 
@@ -45,17 +51,11 @@
  ;; Additional configuration for different Makefile variants
  (add-hook
   'makefile-gmake-mode-hook
-  (lambda
-   () "Configure GNU Make specific settings."
-   (setq indent-tabs-mode t) ; GNU Make also requires tabs
-   (setq tab-width core-tab-width) (setq show-trailing-whitespace t)))
+  (lambda () "Configure GNU Make specific settings." (makefile-setup-common-settings)))
 
  (add-hook
   'makefile-bsdmake-mode-hook
-  (lambda
-   () "Configure BSD Make specific settings."
-   (setq indent-tabs-mode t) ; BSD Make also requires tabs
-   (setq tab-width core-tab-width) (setq show-trailing-whitespace t)))
+  (lambda () "Configure BSD Make specific settings." (makefile-setup-common-settings)))
 
  ;; Key bindings for common Makefile operations
  (with-eval-after-load
