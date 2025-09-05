@@ -143,6 +143,8 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Language-specific configurations
 (safe-load-config 'lisp-config "Emacs Lisp development")
 (safe-load-config 'yaml-config "YAML file support")
+(safe-load-config 'toml-config "TOML file support")
+(safe-load-config 'markdown-config "Markdown file support")
 
 ;; Python configurations (load after general eglot)
 (safe-load-config 'core "Python core editing")
