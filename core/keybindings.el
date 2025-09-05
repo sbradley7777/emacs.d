@@ -20,6 +20,7 @@
 
 ;; Utility function keys
 (global-set-key [f1] 'flymake-show-buffer-diagnostics) ; Show Flymake diagnostics
+(global-set-key [f2] 'imenu-list-smart-toggle) ; Toggle imenu-list sidebar
 (global-set-key [f4] 'kill-this-buffer) ; Kill the buffer
 (global-set-key [f5] 'clipboard-kill-ring-save) ; Copy what is highlighted
 (global-set-key [f6] 'delete-trailing-whitespace) ; Delete trailing whitespace
