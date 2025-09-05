@@ -5,6 +5,7 @@ This directory contains scripts and utilities for managing the Emacs configurati
 ## Table of Contents
 
 - [Available Scripts](#available-scripts)
+- [Configuration Testing](#configuration-testing)
 - [elisp-autofmt Pre-commit Hook](#elisp-autofmt-pre-commit-hook)
   - [Requirements](#requirements)
   - [Usage](#usage)
@@ -26,8 +27,26 @@ This directory contains scripts and utilities for managing the Emacs configurati
 ### Installation Script (`install.sh`)
 Automated installation and setup script for the Emacs configuration.
 
+### Configuration Testing (`test-config.sh`)
+Comprehensive configuration testing script that validates your Emacs setup in batch mode. See [`TESTING.md`](TESTING.md) for detailed documentation.
+
 ### Formatting Hook (`elisp-autofmt-hook`)
 Pre-commit hook wrapper for automatic Emacs Lisp code formatting.
+
+---
+
+## Configuration Testing
+
+For comprehensive testing documentation including detailed usage examples, troubleshooting, limitations, and CI/CD integration, see [`TESTING.md`](TESTING.md).
+
+### Quick Start
+
+```bash
+# Run configuration test
+~/github/emacs.d/scripts/test-config.sh
+```
+
+The test script validates module loading, provides timing diagnostics, and detects version compatibility issues.
 
 ---
 

@@ -246,18 +246,43 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 
 ## Configuration Loading Problems
 
+### Testing Your Configuration
+
+**Before troubleshooting**, run the automated configuration test to get comprehensive diagnostics:
+
+```bash
+# Run comprehensive configuration test
+~/github/emacs.d/scripts/test-config.sh
+```
+
+This test will:
+- ✅ Show exactly which modules are failing and why
+- ✅ Verify your Emacs version and feature compatibility
+- ✅ Display detailed timing and loading information
+- ✅ Distinguish between real errors and expected version-related warnings
+
+**Manual testing commands**:
+```bash
+# Test configuration in batch mode
+emacs --batch --load ~/.emacs.d/early-init.el --load ~/.emacs.d/init.el --eval "(message \"Test complete\")"
+
+# Interactive debug mode (shows detailed errors)
+emacs --debug-init
+```
+
 ### Module Loading Failures
 
 **Symptoms**: Error messages during startup mentioning specific modules
 
 **Troubleshooting**:
-1. **Check error details**: Look at the `*Messages*` buffer for specific error information
-2. **Test individual modules**: Try loading modules manually:
+1. **Run configuration test first**: Use `~/github/emacs.d/scripts/test-config.sh` for detailed diagnostics
+2. **Check error details**: Look at the `*Messages*` buffer for specific error information
+3. **Test individual modules**: Try loading modules manually:
    ```elisp
    (require 'module-name)
    ```
-3. **Check file syntax**: Ensure Emacs Lisp syntax is correct in the failing module
-4. **Verify file paths**: Ensure all required files exist in the expected locations
+4. **Check file syntax**: Ensure Emacs Lisp syntax is correct in the failing module
+5. **Verify file paths**: Ensure all required files exist in the expected locations
 
 ### Version Compatibility Issues
 

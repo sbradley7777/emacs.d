@@ -62,7 +62,7 @@
  show-system-info () "Show system information in Messages buffer."
  (let ((timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
        (os-info (get-os-version-info))
-       (package-count (length package-activated-list))
+       (package-count (if (boundp 'package-activated-list) (length package-activated-list) 0))
        (load-path-count (length load-path)))
    (message "\n=== Emacs Startup Log - %s ===" timestamp)
    (message "Emacs version: %s" emacs-version)

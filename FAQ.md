@@ -59,6 +59,37 @@ This document answers common questions about the Emacs configuration, its featur
 2. Install this configuration
 3. If you want to revert, restore your backup
 
+### Q: How do I verify my installation is working correctly?
+
+**A:** Use the included configuration test script:
+
+```bash
+# Quick configuration test
+~/github/emacs.d/scripts/test-config.sh
+```
+
+**What the test shows:**
+- ✅ Which Emacs version is being used (important for alias detection)
+- ✅ Module loading status and timing information
+- ✅ Feature tier compatibility (modern/current/stable/legacy)
+- ✅ Detailed diagnostics for any failures
+
+**Expected results:**
+- **All modules successful**: Configuration is working perfectly
+- **Some version-related warnings**: Normal for older Emacs versions (configuration adapts automatically)
+- **Network/package warnings**: Normal in batch mode (packages work when needed)
+
+**Manual testing alternatives:**
+```bash
+# Interactive debug mode (shows detailed errors)
+emacs --debug-init
+
+# Simple batch test
+emacs --batch --load ~/.emacs.d/init.el --eval "(message \"Configuration loaded\")"
+```
+
+For comprehensive testing documentation and troubleshooting, see [`scripts/TESTING.md`](scripts/TESTING.md).
+
 ### Q: What if I want to use only parts of this configuration?
 
 **A:** The modular structure allows selective use:

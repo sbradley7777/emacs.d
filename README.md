@@ -10,6 +10,7 @@ Personal Emacs configuration files and customizations.
 - [Installation](#installation)
   - [Option 1: Development Installation (Symlinks)](#option-1-development-installation-symlinks)
   - [Option 2: Standard Installation (Copy)](#option-2-standard-installation-copy)
+- [Testing](#testing)
 - [Usage](#usage)
 - [Documentation](#documentation)
 - [Quick Reference](#quick-reference)
@@ -67,7 +68,9 @@ For detailed feature information, see [FEATURES.md](FEATURES.md).
   - [`aliases.el`](user/aliases.el) - Custom command aliases
 - **`scripts/`** - Installation and utility scripts
   - [`install.sh`](scripts/install.sh) - Automated installation script
-  - [`README.md`](scripts/README.md) - Detailed installation guide
+  - [`test-config.sh`](scripts/test-config.sh) - Configuration testing script
+  - [`README.md`](scripts/README.md) - Script overview and installation guide
+  - [`TESTING.md`](scripts/TESTING.md) - Comprehensive testing documentation
 
 ## Requirements
 
@@ -145,6 +148,19 @@ $ rm -rf ~/github/emacs.d
 ```
 
 With this method, the configuration files are copied directly to `~/.emacs.d/` and work independently of the repository.
+
+## Testing
+
+After installation, verify your configuration is working correctly:
+
+```bash
+# Quick configuration test
+~/github/emacs.d/scripts/test-config.sh
+```
+
+The test script validates that all modules load successfully and provides comprehensive diagnostics including timing information and version compatibility.
+
+For detailed testing documentation, troubleshooting, and limitations, see [`scripts/TESTING.md`](scripts/TESTING.md).
 
 ## Usage
 

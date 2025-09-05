@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Author: sbradley@redhat.com
 # Description: A script that create symlinks to the emacs configuration files.
 
 # Enhanced Emacs configuration installer with better error handling and validation
