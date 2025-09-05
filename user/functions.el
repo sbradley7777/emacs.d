@@ -31,5 +31,28 @@ This is equivalent to doing M-x mark-whole-buffer followed by M-w."
   (save-excursion (mark-whole-buffer) (kill-ring-save (point-min) (point-max)))
   (message "ℹ️  Buffer copied to kill ring"))
 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Smart Page Navigation Functions:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  smart-page-up ()
+  "Page up with smart boundary handling.
+When reaching the beginning of buffer, move point to beginning."
+  (interactive)
+  (condition-case nil
+      (scroll-down)
+    (beginning-of-buffer
+     (goto-char (point-min)))))
+
+ (defun
+  smart-page-down ()
+  "Page down with smart boundary handling.
+When reaching the end of buffer, move point to end."
+  (interactive)
+  (condition-case nil
+      (scroll-up)
+    (end-of-buffer
+     (goto-char (point-max)))))
+
  ;; Make this module available for loading with (require 'functions)
  (provide 'functions))

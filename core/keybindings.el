@@ -3,6 +3,7 @@
 ;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
 (require 'utils)
+(require 'functions)
 
 (with-load-timing
  "keybindings.el"
@@ -42,23 +43,8 @@
  ;; Page down/up move the point, not the screen. Can move point to beginning or end of buffer.
  ;; Reference: http://snarfed.org/emacs_page_up_page_down
  ;; Page down/up the buffer with smart boundaries
- (global-set-key
-  [f11]
-  (lambda
-   () (interactive)
-   (condition-case nil
-       (scroll-down)
-     (beginning-of-buffer
-      (goto-char (point-min))))))
-
- (global-set-key
-  [f12]
-  (lambda
-   () (interactive)
-   (condition-case nil
-       (scroll-up)
-     (end-of-buffer
-      (goto-char (point-max))))))
+ (global-set-key [f11] 'smart-page-up) ; Page up with smart boundary handling
+ (global-set-key [f12] 'smart-page-down) ; Page down with smart boundary handling
 
  ;; Make this module available for loading with (require 'keybindings)
  (provide 'keybindings))
