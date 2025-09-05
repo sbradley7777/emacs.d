@@ -47,11 +47,36 @@ Thumbs.db
 *~
 \#*\#
 *.elc
+.#*
+custom_prefs.el
+package-state-cache.el
 auto-save-list/
 eln-cache/
 elpa/
 history
 recentf
+places
+bookmarks
+abbrev_defs
+savehist
+session.*
+transient/
+url/
+forge-database.sqlite
+projectile*
+semanticdb/
+srecode-map.el
+eshell/
+request/
+anaconda-mode/
+.org-id-locations
+org-roam.db
+straight/
+var/
+etc/
+.cache/
+.local/
+network-security.data
 
 # Configuration files and caches.
 .mypy_cache/
