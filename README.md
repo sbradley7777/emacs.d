@@ -37,8 +37,8 @@ For detailed feature information, see [FEATURES.md](FEATURES.md).
 
 - **[`init.el`](init.el)** - Main Emacs initialization file that loads all configuration modules
 - **[`early-init.el`](early-init.el)** - Early initialization file for performance optimizations (Emacs 27+ feature)
-- **`core/`** - Essential Emacs functionality (loaded first in dependency order)
-  - **`package-system/`** - Modular package management system
+- **[`core/`](core/)** - Essential Emacs functionality (loaded first in dependency order)
+  - **[`package-system/`](core/package-system/)** - Modular package management system
     - [`manager.el`](core/package-system/manager.el) - Package system orchestration and module loading
     - [`bootstrap.el`](core/package-system/bootstrap.el) - Use-package installation and configuration
     - [`cache.el`](core/package-system/cache.el) - Package state caching system
@@ -51,30 +51,30 @@ For detailed feature information, see [FEATURES.md](FEATURES.md).
   - [`editing.el`](core/editing.el) - Editing preferences and behavior
   - [`files.el`](core/files.el) - File handling and backup settings
   - [`keybindings.el`](core/keybindings.el) - Global key bindings
-- **`features/`** - Optional enhancements (can be disabled independently)
+- **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`completion.el`](features/completion.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework
   - [`lsp.el`](features/lsp.el) - General LSP client configuration
   - [`flymake-config.el`](features/flymake-config.el) - Flymake diagnostic display configuration
   - [`rainbow-delimiters.el`](features/rainbow-delimiters.el) - Enhanced delimiter visibility
   - [`indent-guides.el`](features/indent-guides.el) - Visual indentation guides
   - [`features-constants.el`](features/features-constants.el) - Feature-specific constants
-- **`lang/`** - Language-specific configurations
+- **[`lang/`](lang/)** - Language-specific configurations
   - [`lisp-config.el`](lang/lisp-config.el) - Lisp/Elisp development settings
   - [`makefile-config.el`](lang/makefile-config.el) - Makefile development settings
   - [`markdown-config.el`](lang/markdown-config.el) - Markdown mode support and configuration
   - [`toml-config.el`](lang/toml-config.el) - TOML mode support for configuration files
   - [`yaml-config.el`](lang/yaml-config.el) - YAML file handling
-  - **`python/`** - Python development environment
+  - **[`python/`](lang/python/)** - Python development environment
     - [`core.el`](lang/python/core.el) - Core Python development settings
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
     - [`eglot-config.el`](lang/python/eglot-config.el) - Python-specific LSP server configuration
     - [`tools.el`](lang/python/tools.el) - Python development tools and packages
-- **`themes/`** - Theme and appearance configuration
+- **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes.el`](themes/themes.el) - [Zenburn](https://github.com/bbatsov/zenburn-emacs) theme configuration
-- **`user/`** - Personal customizations
+- **[`user/`](user/)** - Personal customizations
   - [`functions.el`](user/functions.el) - Custom helper functions
   - [`aliases.el`](user/aliases.el) - Custom command aliases
-- **`scripts/`** - Installation and utility scripts
+- **[`scripts/`](scripts/)** - Installation and utility scripts
   - [`install.sh`](scripts/install.sh) - Automated installation script
   - [`test-config.sh`](scripts/test-config.sh) - Configuration testing script
   - [`README.md`](scripts/README.md) - Script overview and installation guide
@@ -181,17 +181,6 @@ After installation, simply restart Emacs. The configuration is ready to use!
 - **Python development**: Open any `.py` file to automatically activate virtual environments
 - **Documentation**: See [FEATURES.md](FEATURES.md) for comprehensive feature documentation
 - **Issues**: Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common problems and solutions
-
-## Documentation
-
-Comprehensive documentation is available in separate files:
-
-- **[FEATURES.md](FEATURES.md)** - Detailed feature documentation, version-aware capabilities, and language support
-- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Solutions for common issues and debugging guides
-- **[FAQ.md](FAQ.md)** - Frequently asked questions about configuration and usage
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to the configuration
-- **[STYLEGUIDE.md](STYLEGUIDE.md)** - Code formatting and style standards
-- **[scripts/README.md](scripts/README.md)** - Installation script documentation
 
 ## Quick Reference
 

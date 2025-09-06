@@ -117,7 +117,7 @@ The configuration uses automated formatting tools:
 
 When adding new functionality, follow the modular structure:
 
-**Core Modules** (`core/`): Essential functionality loaded first
+**Core Modules** ([`core/`](core/)): Essential functionality loaded first
 - `package-system/` - Modular package management system
 - `packages.el` - Package declarations and configurations
 - `ui.el` - User interface settings
@@ -125,12 +125,12 @@ When adding new functionality, follow the modular structure:
 - `files.el` - File handling and backup settings
 - `keybindings.el` - Global key bindings
 
-**Feature Modules** (`features/`): Optional enhancements
+**Feature Modules** ([`features/`](features/)): Optional enhancements
 - Can be disabled independently
 - Should degrade gracefully if dependencies unavailable
 - Include comprehensive error handling
 
-**Language Modules** (`lang/`): Language-specific configurations
+**Language Modules** ([`lang/`](lang/)): Language-specific configurations
 - Organized by language in subdirectories
 - Include LSP configuration, tools, and language-specific settings
 - Follow the Python module structure as a template

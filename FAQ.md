@@ -93,7 +93,7 @@ For comprehensive testing documentation and troubleshooting, see [`scripts/TESTI
 ### Q: What if I want to use only parts of this configuration?
 
 **A:** The modular structure allows selective use:
-- Copy individual modules from `core/`, `features/`, or `lang/` directories
+- Copy individual modules from [`core/`](core/), [`features/`](features/), or [`lang/`](lang/) directories
 - Modify [`init.el`](init.el) to load only desired modules
 - See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance on customization
 
@@ -140,7 +140,7 @@ The modular design makes it easy to add support for additional languages.
 **A:** Yes! The modular structure allows easy feature control:
 - Comment out unwanted modules in [`init.el`](init.el)
 - Individual features can be disabled in their respective configuration files
-- Use [`use-package`](https://github.com/jwiegley/use-package) `:disabled t` to temporarily disable specific packages
+- Use [`use-package`](https://www.gnu.org/software/emacs/manual/html_mono/use-package.html) `:disabled t` to temporarily disable specific packages
 
 ## Python Development
 
@@ -216,14 +216,14 @@ See [FEATURES.md](FEATURES.md#python-development-environment) for detailed setup
 
 **A:** Yes, you can override settings in several ways:
 - **Modify configuration files**: Edit existing modules to change defaults
-- **Add local configuration**: Create additional files in the `user/` directory
+- **Add local configuration**: Create additional files in the [`user/`](user/) directory
 - **Use hooks**: Add customizations via mode hooks
 - **Override variables**: Set variables after package loading
 
 ### Q: How do I add support for a new programming language?
 
 **A:** To add language support:
-1. **Create language module**: Add a new file in the `lang/` directory
+1. **Create language module**: Add a new file in the [`lang/`](lang/) directory
 2. **Configure packages**: Add language-specific packages and configuration
 3. **Load module**: Add the new module to [`init.el`](init.el)
 4. **Follow conventions**: Use the style from existing language modules

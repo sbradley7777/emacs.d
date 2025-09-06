@@ -54,20 +54,20 @@ This configuration follows established Emacs Lisp community standards and best p
 emacs.d/
 ├── init.el                      # Main configuration entry point
 ├── early-init.el                # Early initialization and performance optimizations
-├── core/                        # Essential Emacs functionality (loaded first)
+├── [`core/`](core/)                        # Essential Emacs functionality (loaded first)
 │   ├── package-system/          # Modular package management system
 │   ├── packages.el              # Essential package installations and configurations
 │   ├── ui.el                    # User interface and visual settings
 │   ├── editing.el               # Text editing behavior and preferences
 │   ├── files.el                 # File handling, backup, and auto-save settings
 │   └── keybindings.el           # Global keybindings and shortcuts
-├── features/                    # Optional enhancements (can be disabled independently)
+├── [`features/`](features/)                    # Optional enhancements (can be disabled independently)
 │   ├── completion.el            # Core auto-completion framework
 │   ├── lsp.el                   # General LSP client configuration
 │   ├── flymake-config.el        # Flymake diagnostic display configuration
 │   ├── rainbow-delimiters.el    # Enhanced delimiter visibility
 │   └── indent-guides.el         # Visual indentation guides
-├── lang/                        # Language-specific configurations
+├── [`lang/`](lang/)                        # Language-specific configurations
 │   ├── lisp.el                  # Lisp and Emacs Lisp development settings
 │   ├── yaml.el                  # YAML file editing configuration
 │   └── python/                  # Python development environment
@@ -75,12 +75,12 @@ emacs.d/
 │       ├── venv.el              # Virtual environment management
 │       ├── eglot-config.el      # Python-specific LSP server configuration
 │       └── tools.el             # Python development tools and utilities
-├── themes/                      # Theme configurations
+├── [`themes/`](themes/)                      # Theme configurations
 │   └── themes.el                # Core theme and appearance configuration
-├── user/                        # Personal customizations
+├── [`user/`](user/)                        # Personal customizations
 │   ├── functions.el             # User-defined utility functions
 │   └── aliases.el               # Command aliases and shortcuts
-├── scripts/                     # Installation and utility scripts
+├── [`scripts/`](scripts/)                     # Installation and utility scripts
 │   ├── install.sh               # Automated configuration installation
 │   └── README.md                # Script documentation
 ├── STYLEGUIDE.md                # This document - formatting and style conventions
@@ -414,7 +414,7 @@ The elisp-autofmt hook ensures all Emacs Lisp files follow the formatting standa
 4. Use `safe-load-config` for robust error handling
 
 ### Package Management
-- Use [`use-package`](https://github.com/jwiegley/use-package) for all package declarations
+- Use [`use-package`](https://www.gnu.org/software/emacs/manual/html_mono/use-package.html) for all package declarations
 - Pin security-critical packages to trusted repositories
 - Enable package signature verification when available
 - Organize packages by category (essential, development)
