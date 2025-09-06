@@ -256,13 +256,13 @@ The installer script performs the following steps:
 
 1. **Check Emacs installation**: Verifies Emacs is available and checks version compatibility (26.1+ recommended)
 2. **Validate repository structure**: Ensures all required files and directories exist in the repository
-3. **Backup existing configuration**: Creates timestamped backups in `/tmp/` for any conflicting files (init.el, early-init.el, config/, lang/, themes/, custom/)
+3. **Backup existing configuration**: Creates timestamped backups in `/tmp/` for any conflicting files ([`init.el`](../init.el), [`early-init.el`](../early-init.el), [`core/`](../core/), [`lang/`](../lang/), [`themes/`](../themes/), custom/)
 4. **Create symlinks**:
    - `~/.emacs.d/init.el` → `~/github/emacs.d/init.el`
    - `~/.emacs.d/early-init.el` → `~/github/emacs.d/early-init.el`
    - `~/.emacs.d/config/` → `~/github/emacs.d/config/`
-   - `~/.emacs.d/lang/` → `~/github/emacs.d/lang/`
-   - `~/.emacs.d/themes/` → `~/github/emacs.d/themes/`
+   - `~/.emacs.d/`[`lang/`](../lang/) → `~/github/emacs.d/`[`lang/`](../lang/)
+   - `~/.emacs.d/`[`themes/`](../themes/) → `~/github/emacs.d/`[`themes/`](../themes/)
    - `~/.emacs.d/custom/` → `~/github/emacs.d/custom/`
 5. **Verify installation**: Confirms all symlinks are properly created and valid
 6. **Test configuration**: Attempts to load the configuration in batch mode and provides diagnostics
@@ -346,7 +346,7 @@ $ chmod +x install/install.sh
 
 **Repository validation fails:**
 - Ensure you're running the script from the repository root
-- Check that all required files exist: [`init.el`](../init.el), [`early-init.el`](../early-init.el), `core/`, etc.
+- Check that all required files exist: [`init.el`](../init.el), [`early-init.el`](../early-init.el), [`core/`](../core/), etc.
 - Use `--force` flag to bypass validation if you know what you're doing
 
 ## Related Documentation
