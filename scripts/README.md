@@ -37,7 +37,7 @@ Pre-commit hook wrapper for automatic Emacs Lisp code formatting.
 
 ## Configuration Testing
 
-For comprehensive testing documentation including detailed usage examples, troubleshooting, limitations, and CI/CD integration, see [`TESTING.md`](TESTING.md).
+For comprehensive testing documentation including detailed usage examples, troubleshooting, and limitations, see [`TESTING.md`](TESTING.md).
 
 ### Quick Start
 
