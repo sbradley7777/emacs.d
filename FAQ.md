@@ -277,6 +277,7 @@ If your question isn't answered here:
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
 - [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
 - [`README.md`](README.md) - Main project documentation and setup instructions
 - [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
 - [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides
