@@ -140,7 +140,7 @@ The modular design makes it easy to add support for additional languages.
 **A:** Yes! The modular structure allows easy feature control:
 - Comment out unwanted modules in [`init.el`](init.el)
 - Individual features can be disabled in their respective configuration files
-- Use `use-package` `:disabled t` to temporarily disable specific packages
+- Use [`use-package`](https://github.com/jwiegley/use-package) `:disabled t` to temporarily disable specific packages
 
 ## Python Development
 
@@ -265,14 +265,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 - **Community help**: Consider asking in Emacs community forums or channels
 - **Self-diagnosis**: Use built-in Emacs diagnostic tools
 
-## Related Documentation
-
-- **Installation**: See [README.md](README.md) for setup instructions
-- **Features**: See [FEATURES.md](FEATURES.md) for comprehensive feature documentation
-- **Troubleshooting**: See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for problem resolution
-- **Development**: See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines
-- **Style Guide**: See [STYLEGUIDE.md](STYLEGUIDE.md) for formatting standards
-
 ## Getting More Help
 
 If your question isn't answered here:
@@ -280,3 +272,11 @@ If your question isn't answered here:
 2. **Check configuration comments**: Many modules include inline documentation
 3. **Explore the code**: The modular structure makes it easy to understand specific features
 4. **Test incrementally**: Load modules individually to understand their behavior
+
+## Related Documentation
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`README.md`](README.md) - Main project documentation and setup instructions
+- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides

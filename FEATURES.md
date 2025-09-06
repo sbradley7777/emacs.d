@@ -381,8 +381,8 @@ Built-in Emacs diagnostic tools (Flymake is built into Emacs):
 
 ## Related Documentation
 
-- **Installation**: See [README.md](README.md#installation) for setup instructions
-- **Troubleshooting**: See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues and solutions
-- **Development**: See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines
-- **Style Guide**: See [STYLEGUIDE.md](STYLEGUIDE.md) for detailed formatting standards
-- **Common Questions**: See [FAQ.md](FAQ.md) for frequently asked questions
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
+- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
+- [`README.md`](README.md) - Main project documentation and setup instructions
+- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides

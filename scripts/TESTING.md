@@ -351,8 +351,4 @@ emacs --batch --load ~/github/emacs.d/core/package-system/manager.el --eval "(me
 
 ## Related Documentation
 
-- **Installation**: See [README.md](../README.md#installation) for setup instructions
-- **Script Details**: See [README.md](README.md#configuration-testing) for script overview
-- **Troubleshooting**: See [TROUBLESHOOTING.md](../TROUBLESHOOTING.md#testing-your-configuration) for issue resolution
-- **Features**: See [FEATURES.md](../FEATURES.md) for detailed feature documentation
-- **Development**: See [CONTRIBUTING.md](../CONTRIBUTING.md) for development guidelines
+- [`README.md`](README.md) - Script overview and installation guide

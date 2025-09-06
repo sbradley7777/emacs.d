@@ -48,7 +48,7 @@ This creates symlinks from `~/.emacs.d/` to your repository, allowing immediate 
 git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
 
 # Install pre-commit for quality assurance
-pip install pre-commit
+pip install pre-commit  # https://github.com/pre-commit/pre-commit
 pre-commit install
 ```
 
@@ -350,14 +350,6 @@ repos:
 - Review and update documentation for accuracy
 - Clean up any accumulated technical debt
 
-## Related Documentation
-
-- **Installation**: See [README.md](README.md) for setup instructions
-- **Features**: See [FEATURES.md](FEATURES.md) for feature documentation
-- **Troubleshooting**: See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues
-- **FAQ**: See [FAQ.md](FAQ.md) for frequently asked questions
-- **Style Guide**: See [STYLEGUIDE.md](STYLEGUIDE.md) for detailed formatting standards
-
 ## Getting Started with Contributions
 
 1. **Set up development environment**: Follow the development setup instructions
@@ -367,3 +359,11 @@ repos:
 5. **Follow the process**: Use the established workflow for quality and consistency
 
 Thank you for contributing to this Emacs configuration!
+
+## Related Documentation
+
+- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`README.md`](README.md) - Main project documentation and setup instructions
+- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides

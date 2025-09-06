@@ -71,7 +71,7 @@ The `elisp-autofmt-hook` script automatically formats Emacs Lisp files using [el
 3. **pre-commit**: For automatic hook execution
    ```bash
    # Install pre-commit
-   pip install pre-commit
+   pip install pre-commit  # https://github.com/pre-commit/pre-commit
 
    # Install hooks in your repository
    pre-commit install
@@ -346,5 +346,9 @@ $ chmod +x install/install.sh
 
 **Repository validation fails:**
 - Ensure you're running the script from the repository root
-- Check that all required files exist: `init.el`, `early-init.el`, `config/`, etc.
+- Check that all required files exist: [`init.el`](../init.el), [`early-init.el`](../early-init.el), `core/`, etc.
 - Use `--force` flag to bypass validation if you know what you're doing
+
+## Related Documentation
+
+- [`TESTING.md`](TESTING.md) - Comprehensive testing documentation

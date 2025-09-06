@@ -103,7 +103,7 @@ pip install python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
 git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
 
 # Optional: automatic code quality enforcement
-pip install pre-commit
+pip install pre-commit  # https://github.com/pre-commit/pre-commit
 pre-commit install  # Run in repository root after cloning
 ```
 
@@ -215,3 +215,11 @@ For automatic Python virtual environment detection:
 - Virtual environment must be named `venv` in project root
 - Project must contain one of the project markers above
 - Python files opened within the project will automatically activate the environment
+
+## Related Documentation
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
+- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides

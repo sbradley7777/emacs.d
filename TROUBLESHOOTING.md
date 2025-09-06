@@ -177,7 +177,7 @@ This guide helps resolve common issues you may encounter while using this Emacs 
    ```
 2. **Install pre-commit**:
    ```bash
-   pip install pre-commit
+   pip install pre-commit  # https://github.com/pre-commit/pre-commit
    pre-commit install
    ```
 3. **Skip hooks temporarily** (for urgent commits):
@@ -294,14 +294,6 @@ emacs --debug-init
 3. **Update Emacs**: Consider upgrading to a newer version for better feature support
 4. **Check feature availability**: Some features require specific Emacs versions
 
-## Related Documentation
-
-- **Features**: See [FEATURES.md](FEATURES.md) for detailed feature documentation
-- **Installation**: See [README.md](README.md#installation) for setup instructions
-- **Development**: See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines
-- **Common Questions**: See [FAQ.md](FAQ.md) for frequently asked questions
-- **Style Guide**: See [STYLEGUIDE.md](STYLEGUIDE.md) for formatting standards
-
 ## Getting Additional Help
 
 If you continue to experience issues:
@@ -309,5 +301,13 @@ If you continue to experience issues:
 1. **Check the Messages buffer**: `M-x view-echo-area-messages` for detailed error information
 2. **Enable debug mode**: Add `(setq debug-on-error t)` to your configuration temporarily
 3. **Test with minimal config**: Start Emacs with `emacs -Q` to test without this configuration
-4. **Check system requirements**: Ensure your system meets all requirements in [README.md](README.md#requirements)
+4. **Check system requirements**: Ensure your system meets all requirements in [`README.md`](README.md#requirements)
 5. **Report issues**: Consider creating an issue in the repository if problems persist
+
+## Related Documentation
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
+- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`README.md`](README.md) - Main project documentation and setup instructions
+- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards

@@ -414,7 +414,7 @@ The elisp-autofmt hook ensures all Emacs Lisp files follow the formatting standa
 4. Use `safe-load-config` for robust error handling
 
 ### Package Management
-- Use `use-package` for all package declarations
+- Use [`use-package`](https://github.com/jwiegley/use-package) for all package declarations
 - Pin security-critical packages to trusted repositories
 - Enable package signature verification when available
 - Organize packages by category (essential, development)
@@ -424,6 +424,14 @@ The elisp-autofmt hook ensures all Emacs Lisp files follow the formatting standa
 - Use deferred loading (`:defer t`) for optional packages
 - Measure and monitor configuration load times
 - Avoid blocking operations during startup
+
+## Related Documentation
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
+- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`README.md`](README.md) - Main project documentation and setup instructions
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides
 
 ---
 
