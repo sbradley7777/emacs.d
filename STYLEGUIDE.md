@@ -44,7 +44,7 @@ This configuration follows established Emacs Lisp community standards and best p
 
 - **Consistency**: All files follow the same formatting conventions
 - **Readability**: Code is formatted for clarity and maintainability
-- **Standards Compliance**: Adheres to GNU Emacs Lisp conventions
+- **Standards Compliance**: Adheres to [GNU Emacs Lisp conventions](https://www.gnu.org/software/emacs/manual/html_node/elisp/Tips.html)
 - **Automated Formatting**: Uses `elisp-autofmt` for consistent formatting
 
 ## File Structure and Organization
@@ -88,7 +88,7 @@ emacs.d/
 ```
 
 ### File Naming Convention
-- Use kebab-case for file names: `eglot-config.el`, `markdown-config.el`
+- Use [kebab-case](https://en.wikipedia.org/wiki/Letter_case#Kebab_case) for file names: `eglot-config.el`, `markdown-config.el`
 - Directory structure provides categorization (no prefixes needed)
 - Use descriptive names that indicate purpose
 - Add `-config` suffix for configuration files that might conflict with built-in packages
@@ -170,7 +170,7 @@ Use consistent section separators for organization:
 ### Variables and Functions
 
 #### Naming Conventions
-- Use `kebab-case` for all identifiers
+- Use [`kebab-case`](https://en.wikipedia.org/wiki/Letter_case#Kebab_case) for all identifiers
 - Prefix custom variables with project/config identifier
 - Use descriptive names that indicate purpose
 
@@ -209,7 +209,7 @@ Use `condition-case` for robust error handling:
 - **Auto-detection**: Enable indent guessing (`python-indent-guess-indent-offset t`)
 
 ### YAML Configuration
-- **Indentation**: 2 spaces (YAML standard)
+- **Indentation**: 2 spaces ([YAML standard](https://yaml.org/))
 - **Auto-indent**: Enabled on newline
 
 ## Automated Formatting
@@ -227,13 +227,13 @@ The configuration uses [`elisp-autofmt`](https://github.com/emacsmirror/elisp-au
 ```
 
 #### Key Features
-- **Automatic formatting on save** for Emacs Lisp files
+- **Automatic formatting on save** for [Emacs Lisp](https://www.gnu.org/software/emacs/manual/html_node/elisp/) files
 - **Manual formatting** via `C-c C-f` keybinding
 - **Native Emacs style** using built-in indentation rules
 - **Single-threaded** processing for consistency
 
 ### Tab to Space Conversion
-Automatic conversion of tabs to spaces in Emacs Lisp files:
+Automatic conversion of tabs to spaces in [Emacs Lisp](https://www.gnu.org/software/emacs/manual/html_node/elisp/) files:
 
 ```elisp
 (add-hook 'emacs-lisp-mode-hook
@@ -392,12 +392,12 @@ The configuration includes [`pre-commit`](https://github.com/pre-commit/pre-comm
 #### Emacs Lisp Formatting Hook
 - **elisp-autofmt** - Automatic formatting for `.el` files using [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
   - Enforces consistent indentation and spacing
-  - Applies native Emacs Lisp formatting standards
+  - Applies native [Emacs Lisp formatting standards](https://www.gnu.org/software/emacs/manual/html_node/elisp/Tips.html)
   - Automatically formats files on commit
   - Provides clear feedback when changes are made
   - Can be configured with custom binary path if needed
 
-The elisp-autofmt hook ensures all Emacs Lisp files follow the formatting standards defined in this style guide automatically.
+The elisp-autofmt hook ensures all [Emacs Lisp](https://www.gnu.org/software/emacs/manual/html_node/elisp/) files follow the formatting standards defined in this style guide automatically.
 
 ### Performance Considerations
 - **Startup optimization** via early-init.el
@@ -436,4 +436,4 @@ The elisp-autofmt hook ensures all Emacs Lisp files follow the formatting standa
 
 ---
 
-*This style guide is automatically enforced by elisp-autofmt and [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks.*
+*This style guide is automatically enforced by [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) and [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks.*

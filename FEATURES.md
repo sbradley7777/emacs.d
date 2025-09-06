@@ -131,13 +131,13 @@ Enhanced support for Lisp programming with comprehensive development tools:
 
 **Features** ([`lang/lisp-config.el`](lang/lisp-config.el)):
 - **Intelligent completion** for functions, variables, and macros
-- **[SLIME](https://github.com/slime/slime) integration** for Common Lisp development (when available)
+- **[SLIME](https://github.com/slime/slime) integration** for [Common Lisp](https://common-lisp.net/) development (when available)
 - **Enhanced evaluation** with inline result display
 - **Auto-formatting** via [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) integration
 
 ### Makefile Development
 
-Professional Makefile editing support with intelligent features:
+Professional [Makefile](https://www.gnu.org/software/make/manual/make.html) editing support with intelligent features:
 
 **Features** ([`lang/makefile-config.el`](lang/makefile-config.el)):
 - **Smart indentation** respecting Makefile tab requirements
@@ -147,17 +147,17 @@ Professional Makefile editing support with intelligent features:
 
 ### Markdown Support
 
-Enhanced Markdown editing for documentation and content creation:
+Enhanced [Markdown](https://daringfireball.net/projects/markdown/) editing for documentation and content creation:
 
 **Features** ([`lang/markdown-config.el`](lang/markdown-config.el)):
-- **Syntax highlighting** with GitHub Flavored Markdown support
+- **Syntax highlighting** with [GitHub Flavored Markdown](https://github.github.com/gfm/) support
 - **Live preview** capabilities (when markdown processors are available)
 - **Table editing** assistance
 - **Header navigation** and structure management
 
 ### TOML Configuration
 
-Comprehensive TOML support for modern configuration management:
+Comprehensive [TOML](https://toml.io/) support for modern configuration management:
 
 **Features** ([`lang/toml-config.el`](lang/toml-config.el)):
 - **Syntax highlighting** for TOML configuration files
@@ -167,11 +167,11 @@ Comprehensive TOML support for modern configuration management:
 
 ### YAML Configuration
 
-Specialized handling for YAML files with structure-aware features:
+Specialized handling for [YAML](https://yaml.org/) files with structure-aware features:
 
 **Features** ([`lang/yaml-config.el`](lang/yaml-config.el)):
 - **Structure-aware completion** for YAML hierarchies
-- **Indentation management** (2 spaces, YAML standard)
+- **Indentation management** (2 spaces, [YAML standard](https://yaml.org/))
 - **Syntax highlighting** with nested structure visualization
 - **Auto-indent on newline** for consistent formatting
 
@@ -187,7 +187,7 @@ This configuration enforces consistent code style through automated tools:
 - **Pre-commit integration** for quality assurance
 
 **Standards Compliance:**
-- **GNU Emacs Lisp conventions** for all configuration files
+- **[GNU Emacs Lisp conventions](https://www.gnu.org/software/emacs/manual/html_node/elisp/Tips.html)** for all configuration files
 - **Consistent file organization** and naming conventions
 - **Standardized file headers** and documentation format
 - **Automated quality checks** via [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks

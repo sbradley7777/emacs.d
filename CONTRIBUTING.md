@@ -39,8 +39,8 @@ This creates symlinks from `~/.emacs.d/` to your repository, allowing immediate 
 
 **Core Requirements:**
 - **Emacs 26.0.50+**: For testing configuration compatibility
-- **Git**: For version control and pre-commit hooks
-- **Python 3**: Required for elisp-autofmt and pre-commit
+- **Git**: For version control and [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks
+- **Python 3**: Required for [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) and [`pre-commit`](https://github.com/pre-commit/pre-commit)
 
 **Code Quality Tools:**
 ```bash
@@ -107,7 +107,7 @@ All contributions must follow the established coding standards documented in [`S
 ### Automated Formatting
 
 The configuration uses automated formatting tools:
-- **elisp-autofmt**: Automatically formats Emacs Lisp files on save
+- **[`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt)**: Automatically formats Emacs Lisp files on save
 - **Pre-commit hooks**: Enforce quality standards before commits
 - **Manual formatting**: Use `C-c C-f` in emacs-lisp-mode
 
@@ -213,7 +213,7 @@ git diff --cached
 - **Related issues**: Reference any related issues or discussions
 
 **Code Review Process:**
-1. **Automated checks**: Ensure all pre-commit hooks pass
+1. **Automated checks**: Ensure all [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks pass
 2. **Manual review**: Code style, logic, and best practices
 3. **Testing verification**: Confirm reported testing was adequate
 4. **Documentation review**: Ensure documentation is complete and accurate

@@ -171,7 +171,7 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 **Symptoms**: Git commits fail due to [`pre-commit`](https://github.com/pre-commit/pre-commit) hook errors
 
 **Solutions**:
-1. **Install elisp-autofmt**:
+1. **Install [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt)**:
    ```bash
    git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
    ```
