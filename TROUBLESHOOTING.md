@@ -164,18 +164,18 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 1. **Check network connectivity**: Ensure internet access to package repositories
 2. **Update package archives**: `M-x package-refresh-contents`
 3. **Manual package installation**: `M-x package-install` for specific packages
-4. **Check package repositories**: Verify MELPA and GNU repositories are accessible
+4. **Check package repositories**: Verify [MELPA](https://melpa.org/) and [GNU ELPA](https://elpa.gnu.org/) repositories are accessible
 
 ### Pre-commit Hook Issues
 
-**Symptoms**: Git commits fail due to pre-commit hook errors
+**Symptoms**: Git commits fail due to [`pre-commit`](https://github.com/pre-commit/pre-commit) hook errors
 
 **Solutions**:
 1. **Install elisp-autofmt**:
    ```bash
    git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
    ```
-2. **Install pre-commit**:
+2. **Install [`pre-commit`](https://github.com/pre-commit/pre-commit)**:
    ```bash
    pip install pre-commit  # https://github.com/pre-commit/pre-commit
    pre-commit install

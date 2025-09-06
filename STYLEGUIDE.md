@@ -31,7 +31,7 @@ This document outlines the formatting and code style conventions used in this Em
   - [Symbol Usage Guidelines](#symbol-usage-guidelines)
   - [Benefits of the Symbol System](#benefits-of-the-symbol-system)
 - [Quality Assurance](#quality-assurance)
-  - [Pre-commit Hooks](#pre-commit-hooks)
+  - [`pre-commit` Hooks](#pre-commit-hooks)
   - [Performance Considerations](#performance-considerations)
 - [Best Practices](#best-practices)
   - [Configuration Loading](#configuration-loading)
@@ -379,8 +379,8 @@ All message symbols follow a consistent spacing pattern:
 
 ## Quality Assurance
 
-### Pre-commit Hooks
-The configuration includes pre-commit hooks for quality assurance (see [.pre-commit-config.yaml](.pre-commit-config.yaml)):
+### `pre-commit` Hooks
+The configuration includes [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks for quality assurance (see [.pre-commit-config.yaml](.pre-commit-config.yaml)):
 
 #### Code Quality Hooks
 - **Trailing whitespace** removal
@@ -436,4 +436,4 @@ The elisp-autofmt hook ensures all Emacs Lisp files follow the formatting standa
 
 ---
 
-*This style guide is automatically enforced by elisp-autofmt and pre-commit hooks.*
+*This style guide is automatically enforced by elisp-autofmt and [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks.*

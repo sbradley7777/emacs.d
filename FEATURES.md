@@ -63,7 +63,7 @@ Powered by [Corfu](https://github.com/minad/corfu) for comprehensive auto-comple
 
 **Features:**
 - **Automatic completion** appears after typing 1 character (200ms delay)
-- **Smart TAB behavior** - completes when possible, indents otherwise
+- **Smart `TAB` behavior** - completes when possible, indents otherwise
 - **Multiple trigger options**:
   - `TAB` - Smart completion/indentation
   - `C-c TAB` - Manual completion trigger (reliable in all environments)
@@ -190,7 +190,7 @@ This configuration enforces consistent code style through automated tools:
 - **GNU Emacs Lisp conventions** for all configuration files
 - **Consistent file organization** and naming conventions
 - **Standardized file headers** and documentation format
-- **Automated quality checks** via pre-commit hooks
+- **Automated quality checks** via [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks
 
 For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 

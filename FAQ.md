@@ -112,8 +112,8 @@ See [README.md](README.md#requirements) for complete requirements.
 
 **A:** The configuration uses [Corfu](https://github.com/minad/corfu) for universal completion:
 - **Automatic triggers**: Completion appears after 1 character (200ms delay)
-- **Multiple activation methods**: TAB, C-c TAB, M-TAB, C-M-i
-- **Smart behavior**: TAB completes when possible, indents otherwise
+- **Multiple activation methods**: `TAB`, `C-c TAB`, `M-TAB`, `C-M-i`
+- **Smart behavior**: `TAB` completes when possible, indents otherwise
 - **Context-aware**: Uses LSP servers, built-in completion, and mode-specific sources
 
 See [FEATURES.md](FEATURES.md#auto-completion-system) for detailed information.
@@ -164,8 +164,8 @@ The modular design makes it easy to add support for additional languages.
 **A:** The [Eglot](https://github.com/joaotavora/eglot) + [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) integration provides:
 - **Intelligent completion**: Context-aware suggestions with type hints
 - **Real-time diagnostics**: Syntax errors, linting, and type checking
-- **Code navigation**: Go to definition (M-.), find references (M-?)
-- **Refactoring**: Symbol renaming (C-c r), code actions (C-c a)
+- **Code navigation**: Go to definition (`M-.`), find references (`M-?`)
+- **Refactoring**: Symbol renaming (`C-c C-r`), code actions (`C-c C-a`)
 - **Documentation**: Hover information and signature help
 
 ### Q: How do I configure linting tools (mypy, ruff)?

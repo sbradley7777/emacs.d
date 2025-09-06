@@ -250,9 +250,9 @@ git diff --cached
 ### Managing Dependencies
 
 **Version Pinning** ([`core/package-system/repositories.el`](core/package-system/repositories.el)):
-- **MELPA Stable**: Priority 20 (preferred for stability)
-- **GNU ELPA**: Priority 15 (official packages)
-- **MELPA**: Priority 10 (latest development versions)
+- **[MELPA Stable](https://stable.melpa.org/)**: Priority 20 (preferred for stability)
+- **[GNU ELPA](https://elpa.gnu.org/)**: Priority 15 (official packages)
+- **[MELPA](https://melpa.org/)**: Priority 10 (latest development versions)
 
 **Dependency Resolution:**
 - Check for conflicting packages before adding new ones
@@ -288,11 +288,11 @@ git diff --cached
 ### Documentation Requirements
 
 **All changes must include appropriate documentation updates:**
-- **README.md**: Update if installation or requirements change
-- **FEATURES.md**: Document new features or capabilities
-- **TROUBLESHOOTING.md**: Add solutions for new potential issues
-- **FAQ.md**: Add answers for likely questions
-- **STYLEGUIDE.md**: Update for any style guideline changes
+- **[`README.md`](README.md)**: Update if installation or requirements change
+- **[`FEATURES.md`](FEATURES.md)**: Document new features or capabilities
+- **[`TROUBLESHOOTING.md`](TROUBLESHOOTING.md)**: Add solutions for new potential issues
+- **[`FAQ.md`](FAQ.md)**: Add answers for likely questions
+- **[`STYLEGUIDE.md`](STYLEGUIDE.md)**: Update for any style guideline changes
 
 ### Documentation Style
 
@@ -313,17 +313,17 @@ git diff --cached
 
 ### Pre-commit Hooks
 
-The repository uses pre-commit hooks to maintain code quality:
+The repository uses [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks to maintain code quality:
 
 **Enabled Hooks:**
-- **elisp-autofmt**: Automatic Emacs Lisp formatting
-- **trailing-whitespace**: Remove trailing whitespace
-- **end-of-file-fixer**: Ensure files end with newlines
-- **check-large-files**: Prevent accidentally large files
-- **shellcheck**: Shell script linting
-- **codespell**: Spell checking
+- **[`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt)**: Automatic Emacs Lisp formatting
+- **[`trailing-whitespace`](https://github.com/pre-commit/pre-commit-hooks#trailing-whitespace)**: Remove trailing whitespace
+- **[`end-of-file-fixer`](https://github.com/pre-commit/pre-commit-hooks#end-of-file-fixer)**: Ensure files end with newlines
+- **[`check-large-files`](https://github.com/pre-commit/pre-commit-hooks#check-large-files)**: Prevent accidentally large files
+- **[`shellcheck`](https://github.com/koalaman/shellcheck)**: Shell script linting
+- **[`codespell`](https://github.com/codespell-project/codespell)**: Spell checking
 
-**Hook Configuration** (`.pre-commit-config.yaml`):
+**Hook Configuration** ([`.pre-commit-config.yaml`](.pre-commit-config.yaml)):
 ```yaml
 repos:
   - repo: local
