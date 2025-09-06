@@ -20,12 +20,12 @@ Personal Emacs configuration files and customizations.
 This Emacs configuration provides a professional development environment with intelligent completion, LSP integration, and version-aware optimizations.
 
 **Key Features:**
-- 🚀 **Fast startup** with version-aware performance optimizations
-- 🧠 **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types
-- 🐍 **Python development** with [Eglot](https://github.com/joaotavora/eglot) LSP and automatic virtual environment management
-- 📝 **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
-- 📏 **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
-- 🎯 **Version compatibility** from Emacs 26.0.50 to latest versions
+- **Fast startup** with version-aware performance optimizations
+- **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types
+- **Python development** with [Eglot](https://github.com/joaotavora/eglot) LSP and automatic virtual environment management
+- **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
+- **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
+- **Version compatibility** from Emacs 26.0.50 to latest versions
 
 **Get Started in 2 Steps:**
 1. **Install**: Run the installation script (see [Installation](#installation))
