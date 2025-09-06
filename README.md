@@ -23,6 +23,7 @@ This Emacs configuration provides a professional development environment with in
 - 🚀 **Fast startup** with version-aware performance optimizations
 - 🧠 **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types
 - 🐍 **Python development** with [Eglot](https://github.com/joaotavora/eglot) LSP and automatic virtual environment management
+- 📝 **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
 - 📏 **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
 - 🎯 **Version compatibility** from Emacs 26.0.50 to latest versions
 
@@ -37,10 +38,14 @@ For detailed feature information, see [FEATURES.md](FEATURES.md).
 - **[`init.el`](init.el)** - Main Emacs initialization file that loads all configuration modules
 - **[`early-init.el`](early-init.el)** - Early initialization file for performance optimizations (Emacs 27+ feature)
 - **`core/`** - Essential Emacs functionality (loaded first in dependency order)
-  - [`package-manager.el`](core/package-manager.el) - Package management and setup
+  - **`package-system/`** - Modular package management system
+    - [`manager.el`](core/package-system/manager.el) - Package system orchestration and module loading
+    - [`bootstrap.el`](core/package-system/bootstrap.el) - Use-package installation and configuration
+    - [`cache.el`](core/package-system/cache.el) - Package state caching system
+    - [`network.el`](core/package-system/network.el) - Network-aware package operations
+    - [`repositories.el`](core/package-system/repositories.el) - Repository configuration and security
+    - [`maintenance.el`](core/package-system/maintenance.el) - Package upgrade and cleanup utilities
   - [`core-constants.el`](core/core-constants.el) - Version-aware constants and feature detection
-  - [`package-cache.el`](core/package-cache.el) - Package caching for network resilience
-  - [`package-network.el`](core/package-network.el) - Network connectivity management
   - [`packages.el`](core/packages.el) - Package declarations and configurations
   - [`ui.el`](core/ui.el) - Basic UI configuration
   - [`editing.el`](core/editing.el) - Editing preferences and behavior
@@ -55,6 +60,9 @@ For detailed feature information, see [FEATURES.md](FEATURES.md).
   - [`features-constants.el`](features/features-constants.el) - Feature-specific constants
 - **`lang/`** - Language-specific configurations
   - [`lisp-config.el`](lang/lisp-config.el) - Lisp/Elisp development settings
+  - [`makefile-config.el`](lang/makefile-config.el) - Makefile development settings
+  - [`markdown-config.el`](lang/markdown-config.el) - Markdown mode support and configuration
+  - [`toml-config.el`](lang/toml-config.el) - TOML mode support for configuration files
   - [`yaml-config.el`](lang/yaml-config.el) - YAML file handling
   - **`python/`** - Python development environment
     - [`core.el`](lang/python/core.el) - Core Python development settings

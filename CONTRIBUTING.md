@@ -99,10 +99,10 @@ All contributions must follow the established coding standards documented in [`S
 - = Loading/In Progress
 -  Success/Completion
 - L Errors/Failures
--   Warnings
-- =æ Package Operations
+- ï¿½ Warnings
+- =ï¿½ Package Operations
 - 9 Information/Details
-- ™ Configuration Complete
+- ï¿½ Configuration Complete
 
 ### Automated Formatting
 
@@ -118,7 +118,7 @@ The configuration uses automated formatting tools:
 When adding new functionality, follow the modular structure:
 
 **Core Modules** (`core/`): Essential functionality loaded first
-- `package-manager.el` - Package repositories and management
+- `package-system/` - Modular package management system
 - `packages.el` - Package declarations and configurations
 - `ui.el` - User interface settings
 - `editing.el` - Text editing behavior
@@ -249,7 +249,7 @@ git diff --cached
 
 ### Managing Dependencies
 
-**Version Pinning** ([`core/package-manager.el`](core/package-manager.el)):
+**Version Pinning** ([`core/package-system/repositories.el`](core/package-system/repositories.el)):
 - **MELPA Stable**: Priority 20 (preferred for stability)
 - **GNU ELPA**: Priority 15 (official packages)
 - **MELPA**: Priority 10 (latest development versions)

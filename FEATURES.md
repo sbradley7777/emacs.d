@@ -10,6 +10,9 @@ This document provides comprehensive details about all features available in thi
 - [Language Support](#language-support)
   - [Python Development Environment](#python-development-environment)
   - [Lisp/Elisp Development](#lispellisp-development)
+  - [Makefile Development](#makefile-development)
+  - [Markdown Support](#markdown-support)
+  - [TOML Configuration](#toml-configuration)
   - [YAML Configuration](#yaml-configuration)
 - [Code Style and Standards](#code-style-and-standards)
 - [User Interface Enhancements](#user-interface-enhancements)
@@ -20,6 +23,9 @@ This document provides comprehensive details about all features available in thi
   - [Python Development](#python-development)
   - [Essential Emacs Operations](#essential-emacs-operations)
   - [Custom Navigation Shortcuts](#custom-navigation-shortcuts)
+  - [Makefile Development](#makefile-development-1)
+  - [Markdown Support](#markdown-support-1)
+  - [TOML Configuration](#toml-configuration-1)
   - [YAML Development](#yaml-development)
   - [Virtual Environment Management](#virtual-environment-management)
   - [Code Formatting](#code-formatting)
@@ -142,6 +148,36 @@ Enhanced support for Lisp programming with comprehensive development tools:
 - **[SLIME](https://github.com/slime/slime) integration** for Common Lisp development (when available)
 - **Enhanced evaluation** with inline result display
 - **Auto-formatting** via [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) integration
+
+### Makefile Development
+
+Professional Makefile editing support with intelligent features:
+
+**Features** ([`lang/makefile-config.el`](lang/makefile-config.el)):
+- **Smart indentation** respecting Makefile tab requirements
+- **Target completion** and navigation
+- **Variable highlighting** and substitution awareness
+- **Make command integration** for rapid build testing
+
+### Markdown Support
+
+Enhanced Markdown editing for documentation and content creation:
+
+**Features** ([`lang/markdown-config.el`](lang/markdown-config.el)):
+- **Syntax highlighting** with GitHub Flavored Markdown support
+- **Live preview** capabilities (when markdown processors are available)
+- **Table editing** assistance
+- **Header navigation** and structure management
+
+### TOML Configuration
+
+Comprehensive TOML support for modern configuration management:
+
+**Features** ([`lang/toml-config.el`](lang/toml-config.el)):
+- **Syntax highlighting** for TOML configuration files
+- **Project integration** with `pyproject.toml` support
+- **Structure validation** with error highlighting
+- **Auto-completion** for common TOML keys and values
 
 ### YAML Configuration
 
@@ -280,6 +316,31 @@ Additional navigation commands for efficient code browsing:
 | `C-a` | `smart-beginning-of-line` | Jump to first non-whitespace or line start | - |
 | `ESC` `←` | `scroll-down` | Scroll buffer content down | - |
 | `ESC` `→` | `scroll-up` | Scroll buffer content up | - |
+
+### Makefile Development
+
+Makefile-specific keybindings for build system editing:
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `TAB` | `makefile-tab` | Insert proper tab character (required for Makefile syntax) | Makefile mode |
+
+### Markdown Support
+
+Markdown-specific keybindings for documentation editing:
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `C-c C-c` | `markdown-command` | Preview markdown file | Markdown files |
+| `C-c C-p` | `markdown-preview` | Live preview in browser | Markdown files |
+
+### TOML Configuration
+
+TOML-specific keybindings for configuration file editing:
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `C-m` | `newline-and-indent` | Insert newline with proper TOML indentation | TOML files |
 
 ### YAML Development
 

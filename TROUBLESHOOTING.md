@@ -242,7 +242,7 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 **Solutions**:
 1. **Update all packages**: `M-x package-list-packages`, then `U` followed by `x`
 2. **Clear package cache**: Delete `~/.emacs.d/elpa/` and restart Emacs
-3. **Check package pinning**: Review package-archive-priorities in [`core/package-manager.el`](core/package-manager.el)
+3. **Check package pinning**: Review package-archive-priorities in [`core/package-system/repositories.el`](core/package-system/repositories.el)
 
 ## Configuration Loading Problems
 

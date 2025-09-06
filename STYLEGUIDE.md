@@ -55,7 +55,7 @@ emacs.d/
 ├── init.el                      # Main configuration entry point
 ├── early-init.el                # Early initialization and performance optimizations
 ├── core/                        # Essential Emacs functionality (loaded first)
-│   ├── package-manager.el       # Package repositories and use-package setup
+│   ├── package-system/          # Modular package management system
 │   ├── packages.el              # Essential package installations and configurations
 │   ├── ui.el                    # User interface and visual settings
 │   ├── editing.el               # Text editing behavior and preferences
@@ -88,7 +88,7 @@ emacs.d/
 ```
 
 ### File Naming Convention
-- Use kebab-case for file names: `package-manager.el`, `eglot-config.el`
+- Use kebab-case for file names: `eglot-config.el`, `markdown-config.el`
 - Directory structure provides categorization (no prefixes needed)
 - Use descriptive names that indicate purpose
 - Add `-config` suffix for configuration files that might conflict with built-in packages
