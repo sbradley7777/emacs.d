@@ -12,38 +12,23 @@
  ;; UI Elements Control:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Disable UI elements for cleaner interface
- ;; These functions exist in all supported Emacs versions (24.3+)
+ ;; Disable UI elements for cleaner interface
  (tool-bar-mode -1) (scroll-bar-mode -1) (menu-bar-mode -1)
 
- ;; Version-aware line number display
- (cond
-  ;; Modern line numbers (Emacs 26+)
-  (emacs-supports-line-numbers
-   (global-display-line-numbers-mode 1)
-   (when
-    (memq emacs-feature-tier '(modern current))
-    ;; Advanced features for newer versions
-    (setq
-     display-line-numbers-type
-     'visual
-     display-line-numbers-width-start
-     t
-     display-line-numbers-grow-only
-     t))
-   ;; Disable in certain modes for performance
-   (dolist
-    (mode
-     '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0)))))
+ ;; Modern line number display (Emacs 30.2+)
+ (global-display-line-numbers-mode 1)
+ (setq
+  display-line-numbers-type
+  'visual
+  display-line-numbers-width-start
+  t
+  display-line-numbers-grow-only
+  t)
 
-  ;; Fallback for Emacs 24.x
-  ((fboundp 'global-linum-mode)
-   (global-linum-mode 1)
-   (setq linum-format "%4d "))
-
-  ;; No line numbers available
-  (t
-   (message "Line numbers not available in this Emacs version")))
+ ;; Disable in certain modes for performance
+ (dolist
+  (mode '(org-mode-hook term-mode-hook shell-mode-hook eshell-mode-hook treemacs-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load Misc Preferences:

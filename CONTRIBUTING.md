@@ -38,7 +38,7 @@ This creates symlinks from `~/.emacs.d/` to your repository, allowing immediate 
 ### Required Development Tools
 
 **Core Requirements:**
-- **Emacs 26.0.50+**: For testing configuration compatibility
+- **Emacs 30.2+**: Required for this configuration
 - **Git**: For version control and [`pre-commit`](https://github.com/pre-commit/pre-commit) hooks
 - **Python 3**: Required for [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) and [`pre-commit`](https://github.com/pre-commit/pre-commit)
 
@@ -160,25 +160,24 @@ When adding new functionality, follow the modular structure:
 4. **Performance check**: Ensure no significant startup delay
 
 **Comprehensive Testing:**
-1. **Multiple Emacs versions**: Test on supported versions when possible
+1. **Emacs 30.2+ verification**: Ensure proper functionality on target version
 2. **Different environments**: Test with/without optional dependencies
 3. **Error conditions**: Test error handling with missing packages
 4. **Performance impact**: Monitor startup times and memory usage
 
-### Version Compatibility Testing
+### Emacs 30.2+ Testing
 
-Test with different Emacs versions to ensure proper version-aware behavior:
-- **Modern (30.2+)**: Full feature set
-- **Current (27.x)**: Feature compatibility
-- **Stable (26.x)**: Core functionality
-- **Legacy (24.x)**: Basic operation (when applicable)
+This configuration targets Emacs 30.2+ exclusively:
+- **Target Platform**: Emacs 30.2+ with full modern feature utilization
+- **Modern Design**: Built specifically for Emacs 30.2+ capabilities
+- **Complete Feature Set**: Utilizes all available Emacs 30.2+ features
 
 ### Python Development Testing
 
 For Python-related changes:
 1. **Virtual environment detection**: Test with various project structures
 2. **LSP functionality**: Verify completion, diagnostics, and navigation
-3. **Multiple Python versions**: Test with different Python versions
+3. **Python versions**: Test with different Python versions
 4. **Error handling**: Test with missing or corrupted virtual environments
 
 ## Submission Process
@@ -208,7 +207,7 @@ git diff --cached
 **PR Description Should Include:**
 - **Purpose**: Clear description of what the change accomplishes
 - **Testing**: Details of testing performed
-- **Compatibility**: Any version-specific considerations
+- **Requirements**: Emacs 30.2+ specific considerations
 - **Breaking changes**: If any, with migration guidance
 - **Related issues**: Reference any related issues or discussions
 
@@ -225,7 +224,7 @@ git diff --cached
 **Package Selection Criteria:**
 - **Necessity**: Package provides significant value
 - **Maintenance**: Package is actively maintained
-- **Compatibility**: Works across supported Emacs versions
+- **Requirements**: Works with Emacs 30.2+
 - **Security**: Package comes from trusted sources
 - **Performance**: Minimal impact on startup time
 
@@ -252,7 +251,7 @@ git diff --cached
 **Version Pinning** ([`core/package-system/repositories.el`](core/package-system/repositories.el)):
 - **[MELPA Stable](https://stable.melpa.org/)**: Priority 20 (preferred for stability)
 - **[GNU ELPA](https://elpa.gnu.org/)**: Priority 15 (official packages)
-- **[MELPA](https://melpa.org/)**: Priority 10 (latest development versions)
+- **[MELPA](https://melpa.org/)**: Priority 10 (latest packages)
 
 **Dependency Resolution:**
 - Check for conflicting packages before adding new ones
@@ -346,7 +345,7 @@ repos:
 
 **Periodic Reviews:**
 - Review startup performance regularly
-- Update package versions and test compatibility
+- Update packages and test functionality
 - Review and update documentation for accuracy
 - Clean up any accumulated technical debt
 
@@ -363,7 +362,7 @@ Thank you for contributing to this Emacs configuration!
 ## Related Documentation
 
 - [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
-- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, modern Emacs 30.2+ capabilities, and language support
 - [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
 - [`README.md`](README.md) - Main project documentation and setup instructions
 - [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards

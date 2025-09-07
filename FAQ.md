@@ -18,7 +18,7 @@ This document answers common questions about the Emacs configuration, its featur
 ### Q: What makes this configuration different from others?
 
 **A:** This configuration focuses on several key principles:
-- **Version-aware adaptation**: Automatically optimizes features based on your Emacs version
+- **Modern optimization**: Full utilization of Emacs 30.2+ features
 - **Minimal dependencies**: Uses built-in Emacs features when possible
 - **Performance optimization**: Startup times optimized for daily use
 - **Professional development**: Comprehensive Python development environment with LSP integration
@@ -26,19 +26,18 @@ This document answers common questions about the Emacs configuration, its featur
 
 ### Q: What Emacs versions are supported?
 
-**A:** The configuration supports Emacs 26.0.50 and later, with automatic feature detection:
-- **Modern (30.2+)**: Full feature set with maximum performance
-- **Current (27.x)**: Modern features with compatibility adjustments
-- **Stable (26.x)**: Core features with conservative settings
-- **Legacy (24.x)**: Basic functionality (limited support)
+**A:** This configuration requires Emacs 30.2+ exclusively, providing:
+- **Full Modern Feature Set**: Utilizes all Emacs 30.2+ capabilities
+- **Maximum Performance**: Optimized for modern Emacs
+- **Clean Codebase**: Designed specifically for Emacs 30.2+
 
-### Q: How does the configuration determine my Emacs capabilities?
+### Q: How is the configuration optimized for Emacs 30.2+?
 
-**A:** The configuration uses version-aware feature detection ([`core/core-constants.el`](core/core-constants.el)) to automatically set:
-- Garbage collection thresholds optimized for your version
-- UI features (line numbers, native compilation)
-- Performance optimizations
-- Memory management settings
+**A:** The configuration directly utilizes modern Emacs features ([`core/core-constants.el`](core/core-constants.el)) with:
+- Optimized garbage collection thresholds (8MB normal, 200MB long sessions)
+- Modern UI features (global-display-line-numbers-mode, native compilation)
+- Maximum performance optimizations
+- Efficient memory management for modern Emacs
 
 ### Q: Is this configuration suitable for beginners?
 
@@ -71,12 +70,12 @@ This document answers common questions about the Emacs configuration, its featur
 **What the test shows:**
 - ✅ Which Emacs version is being used (important for alias detection)
 - ✅ Module loading status and timing information
-- ✅ Feature tier compatibility (modern/current/stable/legacy)
+- ✅ Modern Emacs 30.2+ feature utilization
 - ✅ Detailed diagnostics for any failures
 
 **Expected results:**
 - **All modules successful**: Configuration is working perfectly
-- **Some version-related warnings**: Normal for older Emacs versions (configuration adapts automatically)
+- **Feature availability**: All modern features should be available in Emacs 30.2+
 - **Network/package warnings**: Normal in batch mode (packages work when needed)
 
 **Manual testing alternatives:**
@@ -150,7 +149,7 @@ The modular design makes it easy to add support for additional languages.
 1. **Project root detection**: Searches upward for `.git/`, `pyproject.toml`, or `requirements.txt`
 2. **Virtual environment location**: Looks for `venv/` directory in project root
 3. **Automatic activation**: Activates environment when opening Python files
-4. **Version detection**: Displays Python version in modeline
+4. **Python version detection**: Displays Python version in modeline
 
 ### Q: Can I use different virtual environment names or locations?
 
@@ -185,13 +184,13 @@ See [FEATURES.md](FEATURES.md#python-development-environment) for detailed setup
 - **Early initialization** ([`early-init.el`](early-init.el)): Optimizations before package loading
 - **Garbage collection tuning**: Deferred GC during startup
 - **Deferred loading**: Non-essential packages loaded on-demand
-- **Version-aware optimization**: Settings optimized for your Emacs version
+- **Modern optimization**: Settings optimized for Emacs 30.2+
 
 ### Q: How does the configuration handle long-running Emacs sessions?
 
 **A:** The configuration includes long-session optimizations:
 - **Dynamic GC adjustment**: Automatically increases GC thresholds for long sessions
-- **Memory management**: Version-aware heap optimization
+- **Memory management**: Modern heap optimization
 - **Performance monitoring**: Load time tracking for configuration modules
 
 ### Q: Can I monitor performance and resource usage?
@@ -252,7 +251,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 **A:** When reporting issues:
 1. **Reproduce the issue**: Ensure you can consistently reproduce the problem
-2. **Gather information**: Include Emacs version, OS, and error messages
+2. **Gather information**: Include OS and error messages (Emacs 30.2+ required)
 3. **Check existing issues**: Search for similar reported problems
 4. **Provide context**: Include relevant configuration details
 5. **Follow guidelines**: See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines
@@ -276,7 +275,7 @@ If your question isn't answered here:
 ## Related Documentation
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
-- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, modern Emacs 30.2+ capabilities, and language support
 - [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
 - [`README.md`](README.md) - Main project documentation and setup instructions
 - [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards

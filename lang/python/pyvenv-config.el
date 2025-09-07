@@ -20,6 +20,11 @@
  (defvar config-python-version nil "Python version of the current virtual environment.")
  (setq-default config-python-version nil)
 
+ (defvar
+  config-python-last-activated-project
+  nil
+  "Track the last activated project to avoid duplicate logging.")
+
  ;; Function to detect Python version from virtual environment
  (defun
   config-get-python-version (venv-path) "Get Python version from virtual environment."
@@ -63,10 +68,14 @@
        (setq config-python-project-name project-name)
        (setq-default config-python-version python-version)
        (setq config-python-version python-version)
-       (message
-        "ℹ️  Virtual environment activated for project: %s (Python %s)"
-        project-name
-        (or python-version "unknown"))
+       ;; Only log if this is a new project activation
+       (unless
+        (string-equal project-name config-python-last-activated-project)
+        (setq config-python-last-activated-project project-name)
+        (message
+         "ℹ️  Virtual environment activated for project: %s (Python %s)"
+         project-name
+         (or python-version "unknown")))
        (force-mode-line-update t))))))
 
  ;; Configure pyvenv when available
@@ -150,10 +159,14 @@
               (python-version (config-get-python-version venv-path)))
          (when
           (file-executable-p venv-python) (setq python-shell-interpreter venv-python)
-          (message
-           "ℹ️  Python virtual environment activated: %s (Python %s)"
-           project-name
-           (or python-version "unknown")))
+          ;; Only log if this is a new project activation
+          (unless
+           (string-equal project-name config-python-last-activated-project)
+           (setq config-python-last-activated-project project-name)
+           (message
+            "ℹ️  Python virtual environment activated: %s (Python %s)"
+            project-name
+            (or python-version "unknown"))))
          ;; Set the project name and Python version globally for modeline display and force update
          (setq-default config-python-project-name project-name)
          (setq config-python-project-name project-name)

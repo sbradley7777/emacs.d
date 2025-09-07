@@ -46,7 +46,7 @@
    (setq makefile-query-by-make-minus-q t) ; Use make -q for target queries
 
    ;; Visual feedback for proper Make syntax
-   (when (fboundp 'highlight-indentation-mode) (highlight-indentation-mode 1))))
+   (highlight-indentation-mode 1)))
 
  ;; Additional configuration for different Makefile variants
  (add-hook

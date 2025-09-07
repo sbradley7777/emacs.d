@@ -28,7 +28,7 @@ This guide provides comprehensive information about testing your Emacs configura
 - ✅ Loads your complete configuration in batch mode
 - ✅ Reports which modules loaded successfully and which failed
 - ✅ Shows detailed timing information for performance analysis
-- ✅ Provides comprehensive diagnostics and version information
+- ✅ Provides comprehensive diagnostics and Emacs 30.2+ verification
 - ✅ Returns proper exit codes (0 = success, 1 = failure) for automation
 
 ## Test Script Features
@@ -40,18 +40,18 @@ The script automatically sources your shell configuration to detect aliases:
 - Shows exactly which Emacs binary is being used
 - Handles snap packages, custom installations, and system packages
 
-### Version Compatibility
-- **Modern (30.2+)**: Full feature set with optimized performance
-- **Current (27.x)**: Modern features with compatibility adjustments
-- **Stable (26.x)**: Core features with conservative settings
-- **Legacy (24.x)**: Basic functionality for older installations
+### Emacs 30.2+ Requirements
+- **Target Platform**: Emacs 30.2+ with full modern feature utilization
+- **Modern Design**: Built specifically for Emacs 30.2+ capabilities
+- **Modern Features**: Assumes all Emacs 30.2+ capabilities are available
+- **Optimized Performance**: Maximum performance without compatibility overhead
 
 ### Comprehensive Diagnostics
 - System information (OS, architecture)
 - Load path verification
 - Package availability and status
 - Module loading results with timing
-- Feature tier detection
+- Modern feature verification
 - Performance benchmarks
 
 ## Usage Examples
@@ -129,7 +129,7 @@ fi
     🛠️  Total: 21 successful, 0 failed (0.326s total)
 ====================================
 
-✅ Emacs feature tier: modern (version 30.2)
+✅ Emacs 30.2+ verified: modern features available
 ✅  init.el loaded successfully.
 
 === CONFIGURATION TEST COMPLETE ===
@@ -150,11 +150,11 @@ Failed to download 'gnu' archive.
 - **Impact**: None - packages are already installed locally
 - **Action**: No action needed
 
-**Version compatibility issues:**
+**Emacs version requirement issues:**
 ```
 ❌  Failed to load Editing preferences: Symbol's function definition is void: global-display-fill-column-indicator-mode
 ```
-- **Why**: Feature requires Emacs 27+ but you're running 26.x
+- **Why**: Configuration requires Emacs 30.2+ but you're running an incompatible version
 - **Impact**: Configuration adapts automatically
 - **Action**: Consider upgrading Emacs for full feature set
 
@@ -295,7 +295,7 @@ Understanding what the test script **cannot** validate is crucial for comprehens
 
 ### Wrong Emacs Version Being Used
 
-**Problem**: Test shows system Emacs (e.g., 26.1) instead of your preferred version (e.g., 30.2)
+**Problem**: Test shows incompatible Emacs instead of required 30.2+
 
 **Solution**:
 1. **Check your alias**: `alias | grep emacs`
@@ -314,21 +314,20 @@ Understanding what the test script **cannot** validate is crucial for comprehens
 
 **Action**: No action needed unless you see actual module loading failures
 
-### Version Compatibility Issues
+### Emacs Version Requirement Issues
 
-**Problem**: Features fail due to Emacs version differences
+**Problem**: Features fail due to using incompatible Emacs versions
 
 **Analysis**:
-- Check which tier your version provides: `emacs --version`
-- Modern (30.2+): Full features
-- Current (27.x): Most features with compatibility
-- Stable (26.x): Core features only
-- Legacy (24.x): Basic functionality
+- Check your version: `emacs --version` - must be 30.2+
+- This configuration requires Emacs 30.2+ exclusively
+- Designed specifically for modern Emacs features
+- Utilizes all Emacs 30.2+ capabilities
 
 **Solutions**:
-- **Upgrade Emacs**: For full feature set
-- **Accept limitations**: Configuration adapts automatically
-- **Check alternatives**: Some features have fallbacks
+- **Upgrade to Emacs 30.2+**: Required for this configuration
+- **Emacs 30.2+ only**: Designed exclusively for modern Emacs
+- **Full modern feature set**: Only available with Emacs 30.2+
 
 ### Performance Issues
 

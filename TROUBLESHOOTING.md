@@ -83,7 +83,7 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 
 **Solutions**:
 1. **Check server logs**: `M-x eglot-stderr-buffer` for error details
-2. **Update pylsp**: Ensure you have the latest version
+2. **Update pylsp**: Ensure you have the latest python-lsp-server version
 3. **Check file permissions**: Ensure Python files and project directories are readable
 4. **Restart Emacs**: Sometimes a complete restart resolves persistent issues
 
@@ -113,13 +113,13 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 
 ### Wrong Python Version Displayed
 
-**Symptoms**: Modeline shows incorrect Python version
+**Symptoms**: Modeline shows incorrect Python interpreter version
 
 **Solutions**:
 1. **Refresh environment**: Deactivate and reactivate the virtual environment:
    - `M-x pyvenv-deactivate`
    - `M-x pyvenv-activate`
-2. **Check venv Python**: Verify the virtual environment's Python version:
+2. **Check venv Python**: Verify the virtual environment's Python interpreter:
    ```bash
    venv/bin/python --version
    ```
@@ -206,7 +206,7 @@ This guide helps resolve common issues you may encounter while using this Emacs 
    ```
 
 **Common Solutions**:
-1. **Update Emacs**: Newer versions often have better performance
+1. **Use Emacs 30.2+**: This configuration requires Emacs 30.2+ for optimal performance
 2. **Check system resources**: Ensure adequate RAM and CPU availability
 3. **Disable unnecessary packages**: Comment out optional packages in [`core/packages.el`](core/packages.el)
 4. **Check network**: Slow package loading may indicate network issues
@@ -235,7 +235,7 @@ This guide helps resolve common issues you may encounter while using this Emacs 
    ```
 3. **Use HTTPS repositories**: Ensure package repositories use secure connections
 
-### Package Version Conflicts
+### Package Conflicts
 
 **Symptoms**: Package installation fails due to dependency conflicts
 
@@ -257,9 +257,9 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 
 This test will:
 - ✅ Show exactly which modules are failing and why
-- ✅ Verify your Emacs version and feature compatibility
+- ✅ Verify you're using Emacs 30.2+ as required
 - ✅ Display detailed timing and loading information
-- ✅ Distinguish between real errors and expected version-related warnings
+- ✅ Distinguish between real errors and informational messages
 
 **Manual testing commands**:
 ```bash
@@ -284,15 +284,15 @@ emacs --debug-init
 4. **Check file syntax**: Ensure Emacs Lisp syntax is correct in the failing module
 5. **Verify file paths**: Ensure all required files exist in the expected locations
 
-### Version Compatibility Issues
+### Emacs Version Requirements
 
-**Symptoms**: Features don't work as expected, version-related errors
+**Symptoms**: Features don't work as expected, configuration errors
 
 **Solutions**:
-1. **Check Emacs version**: `M-x emacs-version`
-2. **Verify feature tier**: Check the `*Messages*` buffer for feature tier information
-3. **Update Emacs**: Consider upgrading to a newer version for better feature support
-4. **Check feature availability**: Some features require specific Emacs versions
+1. **Check Emacs version**: `M-x emacs-version` - must be 30.2+
+2. **Verify modern features**: Check the `*Messages*` buffer for feature loading information
+3. **Upgrade Emacs**: This configuration requires Emacs 30.2+ exclusively
+4. **Check installation**: Ensure you have a complete Emacs 30.2+ installation
 
 ## Getting Additional Help
 
@@ -308,7 +308,7 @@ If you continue to experience issues:
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
 - [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
-- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, modern Emacs 30.2+ capabilities, and language support
 - [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
 - [`README.md`](README.md) - Main project documentation and setup instructions
 - [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards

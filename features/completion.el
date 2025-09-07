@@ -15,11 +15,11 @@
 
  ;; Define helper function for TAB behavior
  (defun
-  corfu-insert-or-complete () "Insert completion or trigger completion-at-point." (interactive)
-  (if
-   (and
-    (bound-and-true-p corfu-mode) (not (and (fboundp 'corfu--popup-p) (corfu--popup-p))))
-   (completion-at-point) (indent-for-tab-command)))
+  corfu-insert-or-complete
+  ()
+  "Insert completion or trigger completion-at-point."
+  (interactive)
+  (if (and corfu-mode (not (corfu--popup-p))) (completion-at-point) (indent-for-tab-command)))
 
  (use-package
   corfu
@@ -55,8 +55,7 @@
   (message "⚙️  Corfu auto-completion configured successfully")
 
   ;; Add debugging information
-  (message
-   "🛠️  Corfu global mode enabled: %s" (if (bound-and-true-p global-corfu-mode) "YES" "NO"))
+  (message "🛠️  Corfu global mode enabled: %s" (if global-corfu-mode "YES" "NO"))
   (message "🛠️  Corfu auto setting: %s" corfu-auto)
   (message "🛠️  Corfu auto delay: %s" corfu-auto-delay)
   (message "🛠️  Corfu auto prefix: %s" corfu-auto-prefix))
@@ -72,10 +71,7 @@
   smart-tab () "Smart TAB: complete if possible, otherwise indent." (interactive)
   (if
    (minibufferp) (minibuffer-complete)
-   (if
-    (and (boundp 'corfu-mode) corfu-mode)
-    (or (completion-at-point) (indent-for-tab-command))
-    (indent-for-tab-command))))
+   (if corfu-mode (or (completion-at-point) (indent-for-tab-command)) (indent-for-tab-command))))
 
  ;; Note: TAB behavior left to individual modes for proper indentation
  ;; Use M-TAB, C-c TAB, or C-M-i for manual completion instead

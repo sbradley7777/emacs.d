@@ -172,7 +172,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (show-config-diagnostics)
 
 ;; Show version-aware configuration status
-(message "✅ Emacs feature tier: %s (version %s)" emacs-feature-tier emacs-version)
+(message "✅ Emacs 30.2+ configuration loaded successfully")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Memory Management Strategy

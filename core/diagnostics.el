@@ -72,7 +72,7 @@
     (message "OS: %s" os-info)
     (message "Load path entries: %d" load-path-count)
     (message "Installed packages: %d" package-count)
-    (message "Feature tier: %s\n" (if (boundp 'emacs-feature-tier) emacs-feature-tier "unknown"))
+    (message "Configuration: Modern Emacs 30.2+\n")
     (message "")))
 
 

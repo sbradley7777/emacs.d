@@ -17,15 +17,15 @@ Personal Emacs configuration files and customizations.
 
 ## Quick Start
 
-This Emacs configuration provides a professional development environment with intelligent completion, LSP integration, and version-aware optimizations.
+This Emacs configuration provides a professional development environment with intelligent completion, LSP integration, and modern Emacs 30.2+ optimizations.
 
 **Key Features:**
-- **Fast startup** with version-aware performance optimizations
+- **Fast startup** with modern performance optimizations
 - **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types
 - **Python development** with [Eglot](https://github.com/joaotavora/eglot) LSP and automatic virtual environment management
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
 - **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
-- **Version compatibility** from Emacs 26.0.50 to latest versions
+- **Modern Emacs 30.2+** - Optimized for the latest Emacs features
 
 **Get Started in 2 Steps:**
 1. **Install**: Run the installation script (see [Installation](#installation))
@@ -36,7 +36,7 @@ For detailed feature information, see [FEATURES.md](FEATURES.md).
 ## Configuration Structure
 
 - **[`init.el`](init.el)** - Main Emacs initialization file that loads all configuration modules
-- **[`early-init.el`](early-init.el)** - Early initialization file for performance optimizations (Emacs 27+ feature)
+- **[`early-init.el`](early-init.el)** - Early initialization file for performance optimizations
 - **[`core/`](core/)** - Essential Emacs functionality (loaded first in dependency order)
   - **[`package-system/`](core/package-system/)** - Modular package management system
     - [`manager.el`](core/package-system/manager.el) - Package system orchestration and module loading
@@ -45,7 +45,7 @@ For detailed feature information, see [FEATURES.md](FEATURES.md).
     - [`network.el`](core/package-system/network.el) - Network-aware package operations
     - [`repositories.el`](core/package-system/repositories.el) - Repository configuration and security
     - [`maintenance.el`](core/package-system/maintenance.el) - Package upgrade and cleanup utilities
-  - [`core-constants.el`](core/core-constants.el) - Version-aware constants and feature detection
+  - [`core-constants.el`](core/core-constants.el) - Modern Emacs 30.2+ constants and configuration values
   - [`packages.el`](core/packages.el) - Package declarations and configurations
   - [`ui.el`](core/ui.el) - Basic UI configuration
   - [`editing.el`](core/editing.el) - Editing preferences and behavior
@@ -82,12 +82,9 @@ For detailed feature information, see [FEATURES.md](FEATURES.md).
 
 ## Requirements
 
-- **Emacs 26.0.50** or later (automatically detected)
-- **Version-aware features**: Configuration automatically adapts based on your Emacs version
-  - **Modern (30.2+)**: Full feature set with optimized performance and latest capabilities
-  - **Current (27.x)**: Modern features with compatibility adjustments
-  - **Stable (26.x)**: Core features with conservative settings
-  - **Legacy (24.x)**: Basic functionality for older installations
+- **Emacs 30.2 or later** (required)
+
+> **⚠️ Important:** This configuration requires Emacs 30.2+ and will not work with earlier versions.
 
 ### Optional Dependencies
 
@@ -166,7 +163,7 @@ After installation, verify your configuration is working correctly:
 ~/github/emacs.d/scripts/test-config.sh
 ```
 
-The test script validates that all modules load successfully and provides comprehensive diagnostics including timing information and version compatibility.
+The test script validates that all modules load successfully and provides comprehensive diagnostics including timing information and modern Emacs 30.2+ feature verification.
 
 For detailed testing documentation, troubleshooting, and limitations, see [`scripts/TESTING.md`](scripts/TESTING.md).
 
@@ -200,7 +197,7 @@ For automatic Python virtual environment detection:
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
 - [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
-- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, version-aware capabilities, and language support
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, modern Emacs 30.2+ capabilities, and language support
 - [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
 - [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
 - [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides

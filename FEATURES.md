@@ -1,10 +1,10 @@
 # Emacs Configuration Features
 
-This document provides comprehensive details about all features available in this Emacs configuration, including version-aware capabilities and language-specific enhancements.
+This document provides comprehensive details about all features available in this Emacs configuration, targeting Emacs 30.2+ exclusively with modern language-specific enhancements.
 
 ## Table of Contents
 
-- [Version-Aware Capabilities](#version-aware-capabilities)
+- [Modern Emacs 30.2+ Features](#modern-emacs-302-features)
 - [Performance Optimizations](#performance-optimizations)
 - [Auto-Completion System](#auto-completion-system)
 - [Language Support](#language-support)
@@ -18,30 +18,21 @@ This document provides comprehensive details about all features available in thi
 - [User Interface Enhancements](#user-interface-enhancements)
 - [Related Documentation](#related-documentation)
 
-## Version-Aware Capabilities
+## Modern Emacs 30.2+ Features
 
-The configuration automatically adapts based on your Emacs version, providing optimized features and performance for each version tier:
+This configuration is designed exclusively for Emacs 30.2+ and utilizes all modern features without compatibility overhead:
 
-### Feature Tiers
-
-| Tier | Emacs Version | Capabilities |
-|------|---------------|-------------|
-| **Modern** | 30.2+ | Full feature set with maximum performance optimizations |
-| **Current** | 27.x | Modern features with compatibility adjustments |
-| **Stable** | 26.x | Core features with conservative settings |
-| **Legacy** | 24.x | Basic functionality for older installations |
-
-### Version-Specific Optimizations
+### Exclusive Modern Features
 
 **Performance Tuning** ([`core/core-constants.el`](core/core-constants.el)):
-- **Garbage Collection**: Dynamically adjusted thresholds (8MB for modern, 1MB for legacy)
-- **Memory Management**: Version-aware heap optimization for long-running sessions
-- **Loading Performance**: Optimized startup sequences based on version capabilities
+- **Garbage Collection**: Optimized thresholds (8MB normal, 200MB long sessions)
+- **Memory Management**: Modern heap optimization for efficient long-running sessions
+- **Loading Performance**: Maximum startup optimization utilizing all Emacs 30.2+ features
 
 **UI Features** ([`core/ui.el`](core/ui.el)):
-- **Line Numbers**: Native `display-line-numbers-mode` for Emacs 26+, fallback for older versions
-- **Native Compilation**: Automatic detection and utilization when available (Emacs 28+)
-- **Advanced Display**: Enhanced visual features for modern Emacs versions
+- **Line Numbers**: Native `global-display-line-numbers-mode` with visual line support
+- **Native Compilation**: Full utilization of built-in native compilation features
+- **Advanced Display**: Complete modern Emacs visual feature set
 
 ## Performance Optimizations
 
@@ -83,7 +74,7 @@ Powered by [Corfu](https://github.com/minad/corfu) for comprehensive auto-comple
 Comprehensive Python development setup with intelligent environment management:
 
 #### Core Features
-- **[Eglot](https://github.com/joaotavora/eglot) LSP integration** using [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) (pylsp)
+- **Modern [Eglot](https://github.com/joaotavora/eglot) LSP integration** using [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) (pylsp)
 - **Automatic virtual environment detection and activation** ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el))
 - **Enhanced modeline display** showing active virtual environment and Python version
 - **Project-aware environment switching** with automatic detection

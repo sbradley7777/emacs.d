@@ -33,7 +33,7 @@
    (lambda
     ()
     "Update imenu-list when eglot provides new symbol information."
-    (when (and (featurep 'eglot) (eglot-managed-p)) (imenu-list-update-safe))))
+    (when (eglot-managed-p) (imenu-list-update-safe))))
 
   ;; Key bindings for the imenu-list buffer
   (with-eval-after-load

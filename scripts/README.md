@@ -46,7 +46,7 @@ For comprehensive testing documentation including detailed usage examples, troub
 ~/github/emacs.d/scripts/test-config.sh
 ```
 
-The test script validates module loading, provides timing diagnostics, and detects version compatibility issues.
+The test script validates module loading, provides timing diagnostics, and verifies Emacs 30.2+ requirements.
 
 ---
 
@@ -254,7 +254,7 @@ $ ./scripts/install.sh --no-backup --force
 
 The installer script performs the following steps:
 
-1. **Check Emacs installation**: Verifies Emacs is available and checks version compatibility (26.1+ recommended)
+1. **Check Emacs installation**: Verifies Emacs is available and checks version requirements (30.2+ required)
 2. **Validate repository structure**: Ensures all required files and directories exist in the repository
 3. **Backup existing configuration**: Creates timestamped backups in `/tmp/` for any conflicting files ([`init.el`](../init.el), [`early-init.el`](../early-init.el), [`core/`](../core/), [`lang/`](../lang/), [`themes/`](../themes/), custom/)
 4. **Create symlinks**:
@@ -338,7 +338,7 @@ $ chmod +x install/install.sh
 
 **Emacs not found:**
 - Ensure Emacs is installed and in your PATH
-- Check with: `which emacs` or `emacs --version`
+- Check with: `which emacs` or `emacs --version` (must be 30.2+)
 
 **Symlink conflicts:**
 - The installer will backup existing files automatically
