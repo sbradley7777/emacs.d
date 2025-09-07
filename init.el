@@ -150,6 +150,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 
 ;; Python configurations (load after general eglot)
 (safe-load-config 'core "Python core editing")
+(safe-load-config 'python-constants "Python configuration constants")
 (safe-load-config 'pyvenv-config "Python virtual environments")
 (safe-load-config 'eglot-config "Python LSP (eglot) configuration") ; This loads lang/python/eglot-config.el
 (safe-load-config 'tools "Python development tools")
