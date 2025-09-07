@@ -23,10 +23,10 @@ log() {
     local level=$1
     shift
     case $level in
-        INFO) echo -e "${BLUE}[INFO]${NC} $*" ;;
-        WARN) echo -e "${YELLOW}[WARN]${NC} $*" ;;
-        ERROR) echo -e "${RED}[ERROR]${NC} $*" >&2 ;;
-        SUCCESS) echo -e "${GREEN}[SUCCESS]${NC} $*" ;;
+        INFO) printf "${BLUE}[INFO]${NC} %s\n" "$*" ;;
+        WARN) printf "${YELLOW}[WARN]${NC} %s\n" "$*" ;;
+        ERROR) printf "${RED}[ERROR]${NC} %s\n" "$*" >&2 ;;
+        SUCCESS) printf "${GREEN}[SUCCESS]${NC} %s\n" "$*" ;;
     esac
 }
 
