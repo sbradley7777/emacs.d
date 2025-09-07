@@ -74,7 +74,7 @@ Powered by [Corfu](https://github.com/minad/corfu) for comprehensive auto-comple
 Comprehensive Python development setup with intelligent environment management:
 
 #### Core Features
-- **Modern [Eglot](https://github.com/joaotavora/eglot) LSP integration** using [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) (pylsp)
+- **Modern [Eglot](https://github.com/joaotavora/eglot) LSP integration** using [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) (pylsp) at `~/.local/bin/pylsp`
 - **Automatic virtual environment detection and activation** ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el))
 - **Enhanced modeline display** showing active virtual environment and Python version
 - **Project-aware environment switching** with automatic detection
@@ -93,15 +93,20 @@ Comprehensive Python development setup with intelligent environment management:
 
 #### LSP Configuration
 **Default Setup** ([`lang/python/eglot-config.el`](lang/python/eglot-config.el)):
+- Uses hard-coded path `~/.local/bin/pylsp` for reliable user pip installations ([`lang/python/python-constants.el`](lang/python/python-constants.el))
 - Clean, maintainable configuration without complex overrides
-- Automatic tool detection and prioritization
 - Enhanced linting with [`ruff`](https://github.com/astral-sh/ruff) when available
 - Static type checking with [`mypy`](https://github.com/python/mypy) integration
 
+**Path Configuration:**
+- LSP server path is defined in [`lang/python/python-constants.el`](lang/python/python-constants.el) for centralized configuration
+- Uses `~/.local/bin/pylsp` which is the standard location for user pip installations
+- This provides more predictable behavior than system-wide detection methods
+
 **Required Dependencies:**
 ```bash
-# Core LSP server and enhanced tools
-pip install python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
+# Install LSP server with user pip (installs to ~/.local/bin/pylsp)
+pip install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
 ```
 
 **Tool Hierarchy:**

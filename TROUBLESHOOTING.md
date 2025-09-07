@@ -80,19 +80,22 @@ M-x emacs-version
 **Diagnostic Steps**:
 1. **Check LSP events**: `M-x eglot-events-buffer` to see LSP communication
 2. **View server errors**: `M-x eglot-stderr-buffer` to see server error messages
-3. **Verify pylsp installation**: Ensure `pylsp` is available:
+3. **Verify pylsp installation**: The configuration uses a hard-coded path `~/.local/bin/pylsp`:
    ```bash
-   # Check if pylsp is installed
-   which pylsp
+   # Check if pylsp is installed at the expected location
+   ls -la ~/.local/bin/pylsp
 
    # Test pylsp directly
-   pylsp --help
+   ~/.local/bin/pylsp --help
+
+   # Check if it's in your PATH (optional)
+   which pylsp
    ```
 
 **Common Solutions**:
 1. **Install/reinstall pylsp**:
    ```bash
-   # User installation
+   # User installation (recommended - installs to ~/.local/bin/pylsp)
    pip3 install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
 
    # System installation (if you have admin privileges)

@@ -54,8 +54,8 @@ pre-commit install
 
 **Python Development Tools** (for Python-related changes):
 ```bash
-# Install LSP server and tools for testing Python features
-pip install python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
+# Install LSP server with user pip for testing Python features (installs to ~/.local/bin/pylsp)
+pip install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
 ```
 
 ### Development Workflow

@@ -66,6 +66,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md).
   - [`yaml-config.el`](lang/yaml-config.el) - YAML file handling
   - **[`python/`](lang/python/)** - Python development environment
     - [`core.el`](lang/python/core.el) - Core Python development settings
+    - [`python-constants.el`](lang/python/python-constants.el) - Python configuration constants (LSP paths, etc.)
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
     - [`eglot-config.el`](lang/python/eglot-config.el) - Python-specific LSP server configuration
     - [`tools.el`](lang/python/tools.el) - Python development tools and packages
@@ -90,8 +91,8 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md).
 
 **For Python Development:**
 ```bash
-# Install LSP server and enhanced tools
-pip install python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
+# Install LSP server with user pip (installs to ~/.local/bin/pylsp)
+pip install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
 ```
 
 **For Code Quality (Development):**
