@@ -1,7 +1,6 @@
 ;;; packages.el --- Package Declarations and Configurations -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Package installation and configuration using use-package.
-;;      Note: Package manager setup is handled by package-manager.el
 
 (require 'core-constants)
 (require 'utils)
@@ -100,7 +99,6 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  (use-package toml-mode :mode ("\\.toml\\'" . toml-mode)) ; TOML file support
  (use-package markdown-mode :mode ("\\.md\\'" . markdown-mode)) ; Markdown file support
 
- ;; Note: Python development configuration in lang/ directory (eglot-based setup)
 
  (use-package
   which-key
@@ -118,7 +116,6 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
   (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
   (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs)) ; Single-threaded for consistency
 
- ;; Note: Rainbow delimiters configuration moved to features/rainbow-delimiters.el
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Performance Settings (applied early before any LSP servers start)

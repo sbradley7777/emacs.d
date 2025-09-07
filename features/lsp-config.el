@@ -18,7 +18,6 @@
   :defer t
   :config
   ;; Performance and stability settings that apply to all language servers
-  ;; Note: eglot-events-buffer-size is set to 0 in packages.el for performance
   ;; Use M-x eglot-events-buffer to view LSP messages (when enabled)
   ;; Use M-x eglot-stderr-buffer to view server stderr
   ;; Temporarily enable debugging: (setq eglot-events-buffer-size 200000)

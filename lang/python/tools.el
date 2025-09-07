@@ -14,7 +14,6 @@
  (setq
   python-shell-interpreter (or (executable-find "python3") (executable-find "python") "python3"))
 
- ;; Note: Native completion disabled in core.el to prevent REPL hangs
 
  ;; Make this module available for loading with (require 'tools)
  (provide 'tools))
