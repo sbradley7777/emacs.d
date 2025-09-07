@@ -122,8 +122,7 @@ Enhanced support for Lisp programming with comprehensive development tools:
 
 **Features** ([`lang/lisp-config.el`](lang/lisp-config.el)):
 - **Intelligent completion** for functions, variables, and macros
-- **[SLIME](https://github.com/slime/slime) integration** for [Common Lisp](https://common-lisp.net/) development (when available)
-- **Enhanced evaluation** with inline result display
+- **Enhanced evaluation** with inline result display for Emacs Lisp development
 - **Auto-formatting** via [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) integration
 
 ### Makefile Development
