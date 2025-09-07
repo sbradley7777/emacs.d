@@ -51,6 +51,8 @@ This document answers common questions about the Emacs configuration, its featur
 - **Development installation (symlinks)**: Use if you want to modify the configuration itself, test changes, or contribute improvements
 - **Standard installation (copy)**: Use for regular daily use without configuration development
 
+For detailed installation instructions, see [`scripts/install.sh`](scripts/install.sh), [`scripts/README.md`](scripts/README.md), or the main [`README.md`](README.md) installation section.
+
 ### Q: Can I install this alongside my existing Emacs configuration?
 
 **A:** Not directly. This is a complete configuration replacement. To test:

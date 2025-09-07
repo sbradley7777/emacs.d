@@ -5,21 +5,17 @@ This document provides a comprehensive reference for all keybindings and executa
 ## Table of Contents
 
 - [How to Use This Guide](#how-to-use-this-guide)
-- [Function Keys](#function-keys)
-- [Code Intelligence (LSP via Eglot)](#code-intelligence-lsp-via-eglot)
-- [Code Completion (Corfu)](#code-completion-corfu)
-- [Essential Emacs Operations](#essential-emacs-operations)
-- [Custom Navigation](#custom-navigation)
-- [Language-Specific Keybindings](#language-specific-keybindings)
-  - [Python Development](#python-development)
-  - [Makefile Development](#makefile-development)
-  - [Markdown Support](#markdown-support)
-  - [TOML Configuration](#toml-configuration)
-  - [YAML Development](#yaml-development)
-- [Code Formatting](#code-formatting)
-- [Commands Without Keybindings (M-x Commands)](#commands-without-keybindings-m-x-commands)
+- [Keybindings](#keybindings)
+  - [Function Keys](#function-keys)
+  - [Code Intelligence (LSP via Eglot)](#code-intelligence-lsp-via-eglot)
+  - [Code Completion (Corfu)](#code-completion-corfu)
+  - [Essential Emacs Operations](#essential-emacs-operations)
+  - [Custom Navigation](#custom-navigation)
+  - [Language-Specific Keybindings](#language-specific-keybindings)
+  - [Code Formatting](#code-formatting)
+  - [Diagnostic and Error Checking](#diagnostic-and-error-checking)
+- [Functions](#functions)
   - [Virtual Environment Management](#virtual-environment-management)
-- [Diagnostic and Error Checking](#diagnostic-and-error-checking)
 - [Related Documentation](#related-documentation)
 
 ## How to Use This Guide
@@ -36,6 +32,17 @@ This document provides a comprehensive reference for all keybindings and executa
 
 ### Commands Without Keybindings
 For functions without keybindings, use `M-x function-name` (hold `Alt`+`x`, then type the function name).
+
+## Keybindings
+
+This section contains all commands that have keyboard shortcuts assigned. These keybindings allow you to quickly access functionality without having to type command names. Each keybinding shows the key combination to press and describes what action it performs.
+
+**How to use keybindings:**
+- Press the key combinations as shown (e.g., `C-x C-f` means hold Ctrl, press x, release, then hold Ctrl and press f)
+- Most keybindings work immediately when you press them
+- Some are context-dependent and only work in specific modes or situations
+
+**Example to try:** Press `F1` to display syntax errors and warnings in the current buffer.
 
 ## Function Keys
 
@@ -163,9 +170,28 @@ Automated code formatting commands using [elisp-autofmt](https://github.com/emac
 |:------------|:---------|:------------|:--------|
 | `C-c` `C-f` | `elisp-autofmt-buffer` | Format Emacs Lisp buffer | Emacs Lisp files |
 
-## Commands Without Keybindings (M-x Commands)
+### Diagnostic and Error Checking
 
-These functions don't have direct keybindings but can be executed using `M-x function-name`:
+Built-in Emacs diagnostic tools (Flymake is built into Emacs):
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `F1` | `flymake-show-buffer-diagnostics` | Show diagnostics in side window | Flymake active |
+| `M-g` `n` | `flymake-goto-next-error` | Jump to next diagnostic | Flymake active |
+| `M-g` `p` | `flymake-goto-prev-error` | Jump to previous diagnostic | Flymake active |
+| `C-h` `.` | `display-local-help` | Show diagnostic details at point | Flymake active |
+
+## Functions
+
+This section contains commands that don't have keyboard shortcuts but can be executed by typing their names. These functions provide additional functionality that you can access when needed.
+
+**How to use functions:**
+- Press `M-x` (hold Alt and press x) to open the command prompt
+- Type the function name exactly as shown in the tables below
+- Press Enter to execute the function
+- Most functions will provide feedback about what they did
+
+**Example to try:** Press `M-x pyvenv-activate` to manually activate a Python virtual environment.
 
 ### Virtual Environment Management
 
@@ -176,17 +202,6 @@ Python virtual environment commands for project isolation using [pyvenv](https:/
 | `pyvenv-activate` | Manually activate a virtual environment |
 | `pyvenv-deactivate` | Deactivate current virtual environment |
 | `pyvenv-workon` | Switch to a different virtual environment |
-
-## Diagnostic and Error Checking
-
-Built-in Emacs diagnostic tools (Flymake is built into Emacs):
-
-| Key Binding | Function | Description | Context |
-|:------------|:---------|:------------|:--------|
-| `F1` | `flymake-show-buffer-diagnostics` | Show diagnostics in side window | Flymake active |
-| `M-g` `n` | `flymake-goto-next-error` | Jump to next diagnostic | Flymake active |
-| `M-g` `p` | `flymake-goto-prev-error` | Jump to previous diagnostic | Flymake active |
-| `C-h` `.` | `display-local-help` | Show diagnostic details at point | Flymake active |
 
 ## Related Documentation
 

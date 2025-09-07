@@ -4,6 +4,7 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 
 ## Table of Contents
 
+- [Emacs Version Requirements](#emacs-version-requirements)
 - [Auto-completion Issues](#auto-completion-issues)
 - [LSP Server Problems](#lsp-server-problems)
 - [Virtual Environment Issues](#virtual-environment-issues)
@@ -12,6 +13,37 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 - [Package Management Issues](#package-management-issues)
 - [Configuration Loading Problems](#configuration-loading-problems)
 - [Related Documentation](#related-documentation)
+
+## Emacs Version Requirements
+
+**⚠️ FIRST STEP: Verify your Emacs version before troubleshooting anything else.**
+
+This configuration requires **Emacs 30.2 or later** and will not work with earlier versions. This is the only version tested, and using previous versions of Emacs will trigger errors, warnings, fail to load modules or packages, or fail to load the configuration entirely.
+
+### Check Your Emacs Version
+
+**Before troubleshooting any issues, verify you're running Emacs 30.2+:**
+
+```bash
+# Check Emacs version from command line
+emacs --version
+
+# Or from within Emacs
+M-x emacs-version
+```
+
+**Expected output:** Should show `GNU Emacs 30.2` or higher.
+
+### Common Version-Related Problems
+
+**Symptoms of using an incompatible Emacs version:**
+- Configuration fails to load completely
+- Error messages during startup about missing functions or features
+- Packages fail to install or load properly
+- Modern features like LSP, completion, or diagnostics don't work
+- Warning messages about deprecated or unavailable functionality
+
+**Solution:** Upgrade to Emacs 30.2 or later. This configuration is designed exclusively for modern Emacs and utilizes features only available in Emacs 30.2+.
 
 ## Auto-completion Issues
 
