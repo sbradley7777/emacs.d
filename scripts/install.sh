@@ -33,7 +33,7 @@ log() {
 
 # Verifies Emacs is installed and checks version compatibility
 # Exits with error code 1 if Emacs not found in PATH
-# Warns if version is below recommended 26.1 but continues installation
+# Exits with error code 1 if version is below required 30.2
 check_emacs() {
     if ! command -v emacs &> /dev/null; then
         log ERROR "Emacs is not installed or not in PATH"
@@ -42,11 +42,13 @@ check_emacs() {
     local version
     version=$(emacs --version | head -n1 | grep -oE '[0-9]+\.[0-9]+')
     log INFO "Found Emacs version: $version"
-    # Check for minimum version (26.1)
-    if printf '%s\n' "26.1" "$version" | sort -V | head -n1 | grep -q "26.1"; then
+    # Check for minimum version (30.2)
+    if printf '%s\n' "30.2" "$version" | sort -V | head -n1 | grep -q "30.2"; then
         log SUCCESS "Emacs version is compatible"
     else
-        log WARN "Emacs version $version may not be compatible (recommended: 26.1+)"
+        log ERROR "Emacs version $version is not compatible (required: 30.2+)"
+        log ERROR "This configuration requires Emacs 30.2 or later"
+        exit 1
     fi
 }
 

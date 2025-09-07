@@ -170,7 +170,7 @@ Files have been automatically formatted. Please review and stage the changes:
 $ cd ~/github/emacs.d
 
 # Make the installer executable and run it
-$ chmod +x install/install.sh
+$ chmod +x scripts/install.sh
 $ ./scripts/install.sh
 ```
 
@@ -256,14 +256,15 @@ The installer script performs the following steps:
 
 1. **Check Emacs installation**: Verifies Emacs is available and checks version requirements (30.2+ required)
 2. **Validate repository structure**: Ensures all required files and directories exist in the repository
-3. **Backup existing configuration**: Creates timestamped backups in `/tmp/` for any conflicting files ([`init.el`](../init.el), [`early-init.el`](../early-init.el), [`core/`](../core/), [`lang/`](../lang/), [`themes/`](../themes/), custom/)
+3. **Backup existing configuration**: Creates timestamped backups in `/tmp/` for any conflicting files ([`init.el`](../init.el), [`early-init.el`](../early-init.el), [`core/`](../core/), [`features/`](../features/), [`lang/`](../lang/), [`themes/`](../themes/), [`user/`](../user/))
 4. **Create symlinks**:
    - `~/.emacs.d/init.el` → `~/github/emacs.d/init.el`
    - `~/.emacs.d/early-init.el` → `~/github/emacs.d/early-init.el`
-   - `~/.emacs.d/config/` → `~/github/emacs.d/config/`
+   - `~/.emacs.d/core/` → `~/github/emacs.d/core/`
+   - `~/.emacs.d/features/` → `~/github/emacs.d/features/`
    - `~/.emacs.d/`[`lang/`](../lang/) → `~/github/emacs.d/`[`lang/`](../lang/)
    - `~/.emacs.d/`[`themes/`](../themes/) → `~/github/emacs.d/`[`themes/`](../themes/)
-   - `~/.emacs.d/custom/` → `~/github/emacs.d/custom/`
+   - `~/.emacs.d/user/` → `~/github/emacs.d/user/`
 5. **Verify installation**: Confirms all symlinks are properly created and valid
 6. **Test configuration**: Attempts to load the configuration in batch mode and provides diagnostics
 
@@ -282,15 +283,16 @@ If you prefer to set up the symlinks manually:
 
 ```bash
 # Remove existing directories/files (be careful!)
-$ rm -rf ~/.emacs.d/init.el ~/.emacs.d/early-init.el ~/.emacs.d/config ~/.emacs.d/lang ~/.emacs.d/themes ~/.emacs.d/custom
+$ rm -rf ~/.emacs.d/init.el ~/.emacs.d/early-init.el ~/.emacs.d/core ~/.emacs.d/features ~/.emacs.d/lang ~/.emacs.d/themes ~/.emacs.d/user
 
 # Create symlinks
 $ ln -s ~/github/emacs.d/init.el ~/.emacs.d/init.el
 $ ln -s ~/github/emacs.d/early-init.el ~/.emacs.d/early-init.el
-$ ln -s ~/github/emacs.d/config ~/.emacs.d/config
+$ ln -s ~/github/emacs.d/core ~/.emacs.d/core
+$ ln -s ~/github/emacs.d/features ~/.emacs.d/features
 $ ln -s ~/github/emacs.d/lang ~/.emacs.d/lang
 $ ln -s ~/github/emacs.d/themes ~/.emacs.d/themes
-$ ln -s ~/github/emacs.d/custom ~/.emacs.d/custom
+$ ln -s ~/github/emacs.d/user ~/.emacs.d/user
 ```
 
 ## Troubleshooting
@@ -333,7 +335,7 @@ $ cp -r /tmp/emacs.d.backup.TIMESTAMP/* ~/.emacs.d/
 **Permission errors:**
 ```bash
 # Make sure the script is executable
-$ chmod +x install/install.sh
+$ chmod +x scripts/install.sh
 ```
 
 **Emacs not found:**
@@ -346,7 +348,7 @@ $ chmod +x install/install.sh
 
 **Repository validation fails:**
 - Ensure you're running the script from the repository root
-- Check that all required files exist: [`init.el`](../init.el), [`early-init.el`](../early-init.el), [`core/`](../core/), etc.
+- Check that all required files exist: [`init.el`](../init.el), [`early-init.el`](../early-init.el), [`core/`](../core/), [`features/`](../features/), [`lang/`](../lang/), [`themes/`](../themes/), [`user/`](../user/), etc.
 - Use `--force` flag to bypass validation if you know what you're doing
 
 ## Related Documentation
