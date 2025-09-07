@@ -48,18 +48,18 @@ This section contains all commands that have keyboard shortcuts assigned. These 
 
 These are configuration-specific shortcuts designed for quick access to common operations:
 
-| Key Binding | Function | Description |
-|:------------|:---------|:------------|
-| `F1` | `flymake-show-buffer-diagnostics` | Display syntax errors and warnings |
-| `F4` | `kill-this-buffer` | Close current buffer |
-| `F5` | `clipboard-kill-ring-save` | Copy to system clipboard |
-| `F6` | `delete-trailing-whitespace` | Clean up line endings |
-| `F7` | `previous-buffer` | Switch to previous buffer |
-| `F8` | `next-buffer` | Switch to next buffer |
-| `F9` | `beginning-of-buffer` | Jump to file start |
-| `F10` | `end-of-buffer` | Jump to file end |
-| `F11` | Smart scroll down | Scroll with boundary handling |
-| `F12` | Smart scroll up | Scroll with boundary handling |
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `F1` | `flymake-show-buffer-diagnostics` | Display syntax errors and warnings | - |
+| `F4` | `kill-this-buffer` | Close current buffer | - |
+| `F5` | `clipboard-kill-ring-save` | Copy to system clipboard | - |
+| `F6` | `delete-trailing-whitespace` | Clean up line endings | - |
+| `F7` | `previous-buffer` | Switch to previous buffer | - |
+| `F8` | `next-buffer` | Switch to next buffer | - |
+| `F9` | `beginning-of-buffer` | Jump to file start | - |
+| `F10` | `end-of-buffer` | Jump to file end | - |
+| `F11` | Smart scroll down | Scroll with boundary handling | - |
+| `F12` | Smart scroll up | Scroll with boundary handling | - |
 
 ## Code Intelligence (LSP via Eglot)
 
@@ -91,28 +91,28 @@ Intelligent auto-completion powered by [Corfu](https://github.com/minad/corfu):
 
 Core Emacs commands for file management and text editing:
 
-| Key Binding | Function | Description |
-|:------------|:---------|:------------|
-| `C-x` `C-f` | `find-file` | Open file browser to select file |
-| `C-x` `C-s` | `save-buffer` | Save current file to disk |
-| `C-x` `b` | `switch-to-buffer` | Switch between open buffers |
-| `C-s` | `isearch-forward` | Interactive search forward |
-| `C-r` | `isearch-backward` | Interactive search backward |
-| `M-%` | `query-replace` | Find and replace with confirmation |
-| `C-w` | `kill-region` | Cut selected text |
-| `M-w` | `kill-ring-save` | Copy selected text |
-| `C-y` | `yank` | Paste text from kill ring |
-| `C-/` | `undo` | Undo last action |
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `C-x` `C-f` | `find-file` | Open file browser to select file | - |
+| `C-x` `C-s` | `save-buffer` | Save current file to disk | - |
+| `C-x` `b` | `switch-to-buffer` | Switch between open buffers | - |
+| `C-s` | `isearch-forward` | Interactive search forward | - |
+| `C-r` | `isearch-backward` | Interactive search backward | - |
+| `M-%` | `query-replace` | Find and replace with confirmation | - |
+| `C-w` | `kill-region` | Cut selected text | - |
+| `M-w` | `kill-ring-save` | Copy selected text | - |
+| `C-y` | `yank` | Paste text from kill ring | - |
+| `C-/` | `undo` | Undo last action | - |
 
 ## Custom Navigation
 
 Additional navigation commands for efficient code browsing:
 
-| Key Binding | Function | Description |
-|:------------|:---------|:------------|
-| `C-a` | `smart-beginning-of-line` | Jump to first non-whitespace or line start |
-| `ESC` `←` | `scroll-down` | Scroll buffer content down |
-| `ESC` `→` | `scroll-up` | Scroll buffer content up |
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `C-a` | `smart-beginning-of-line` | Jump to first non-whitespace or line start | - |
+| `ESC` `←` | `scroll-down` | Scroll buffer content down | - |
+| `ESC` `→` | `scroll-up` | Scroll buffer content up | - |
 
 ## Language-Specific Keybindings
 
