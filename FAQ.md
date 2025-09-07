@@ -96,7 +96,7 @@ For comprehensive testing documentation and troubleshooting, see [`scripts/TESTI
 **A:** The modular structure allows selective use:
 - Copy individual modules from [`core/`](core/), [`features/`](features/), or [`lang/`](lang/) directories
 - Modify [`init.el`](init.el) to load only desired modules
-- See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance on customization
+- See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidance on customization
 
 ### Q: Do I need to install external dependencies?
 
@@ -105,7 +105,7 @@ For comprehensive testing documentation and troubleshooting, see [`scripts/TESTI
 - **Code formatting**: Requires [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt)
 - **Pre-commit hooks**: Requires `pre-commit` Python package
 
-See [README.md](README.md#requirements) for complete requirements.
+See [`README.md`](README.md#requirements) for complete requirements.
 
 ## Features and Functionality
 
@@ -117,7 +117,7 @@ See [README.md](README.md#requirements) for complete requirements.
 - **Smart behavior**: `TAB` completes when possible, indents otherwise
 - **Context-aware**: Uses LSP servers, built-in completion, and mode-specific sources
 
-See [FEATURES.md](FEATURES.md#auto-completion-system) for detailed information.
+See [`FEATURES.md`](FEATURES.md#auto-completion-system) for detailed information.
 
 ### Q: What programming languages are supported?
 
@@ -176,7 +176,7 @@ The modular design makes it easy to add support for additional languages.
 2. **Automatic detection**: Tools are automatically prioritized when available
 3. **Configuration**: Use standard config files (`~/.mypy.ini`, `pyproject.toml`)
 
-See [FEATURES.md](FEATURES.md#python-development-environment) for detailed setup.
+See [`FEATURES.md`](FEATURES.md#python-development-environment) for detailed setup.
 
 ## Performance and Optimization
 
@@ -229,7 +229,7 @@ See [FEATURES.md](FEATURES.md#python-development-environment) for detailed setup
 3. **Load module**: Add the new module to [`init.el`](init.el)
 4. **Follow conventions**: Use the style from existing language modules
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for detailed guidelines.
 
 ### Q: Can I use a different completion framework?
 
@@ -246,7 +246,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 1. **Check the Messages buffer**: Look for error messages and warnings
 2. **Verify requirements**: Ensure all dependencies are installed
 3. **Test in isolation**: Try the problematic feature in isolation
-4. **Consult documentation**: Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for specific issues
+4. **Consult documentation**: Check [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) for specific issues
 5. **Start with minimal config**: Test with `emacs -Q` to isolate issues
 
 ### Q: How do I report bugs or request features?
@@ -256,7 +256,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 2. **Gather information**: Include OS and error messages (Emacs 30.2+ required)
 3. **Check existing issues**: Search for similar reported problems
 4. **Provide context**: Include relevant configuration details
-5. **Follow guidelines**: See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines
+5. **Follow guidelines**: See [`CONTRIBUTING.md`](CONTRIBUTING.md) for contribution guidelines
 
 ### Q: Can I get help with specific problems?
 

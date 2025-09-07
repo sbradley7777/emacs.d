@@ -31,7 +31,7 @@ This Emacs configuration provides a professional development environment with in
 1. **Install**: Run the installation script (see [Installation](#installation))
 2. **Restart Emacs**: Your configuration is ready to use!
 
-For detailed feature information, see [FEATURES.md](FEATURES.md).
+For detailed feature information, see [`FEATURES.md`](FEATURES.md).
 
 ## Configuration Structure
 
@@ -176,8 +176,8 @@ After installation, simply restart Emacs. The configuration is ready to use!
 **Quick Start Tips:**
 - **Auto-completion**: Use `TAB` for smart completion, `C-c TAB` for manual trigger
 - **Python development**: Open any `.py` file to automatically activate virtual environments
-- **Documentation**: See [FEATURES.md](FEATURES.md) for comprehensive feature documentation
-- **Issues**: Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common problems and solutions
+- **Documentation**: See [`FEATURES.md`](FEATURES.md) for comprehensive feature documentation
+- **Issues**: Check [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) for common problems and solutions
 
 ## Quick Reference
 
