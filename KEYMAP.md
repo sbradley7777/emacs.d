@@ -7,10 +7,13 @@ This document provides a comprehensive reference for all keybindings and executa
 - [How to Use This Guide](#how-to-use-this-guide)
 - [Keybindings](#keybindings)
   - [Function Keys](#function-keys)
+  - [Special Keys](#special-keys)
   - [Code Intelligence (LSP via Eglot)](#code-intelligence-lsp-via-eglot)
   - [Code Completion (Corfu)](#code-completion-corfu)
   - [Essential Emacs Operations](#essential-emacs-operations)
+  - [Which-Key System](#which-key-system)
   - [Custom Navigation](#custom-navigation)
+  - [Imenu-List Navigation](#imenu-list-navigation)
   - [Language-Specific Keybindings](#language-specific-keybindings)
   - [Code Formatting](#code-formatting)
   - [Diagnostic and Error Checking](#diagnostic-and-error-checking)
@@ -51,6 +54,7 @@ These are configuration-specific shortcuts designed for quick access to common o
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
 | `F1` | `flymake-show-buffer-diagnostics` | Display syntax errors and warnings | - |
+| `F2` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
 | `F4` | `kill-this-buffer` | Close current buffer | - |
 | `F5` | `clipboard-kill-ring-save` | Copy to system clipboard | - |
 | `F6` | `delete-trailing-whitespace` | Clean up line endings | - |
@@ -60,6 +64,15 @@ These are configuration-specific shortcuts designed for quick access to common o
 | `F10` | `end-of-buffer` | Jump to file end | - |
 | `F11` | Smart scroll down | Scroll with boundary handling | - |
 | `F12` | Smart scroll up | Scroll with boundary handling | - |
+
+## Special Keys
+
+Additional keyboard mappings for improved functionality:
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `Delete` | `delete-char` | Delete character under cursor | - |
+| `Keypad Delete` | `delete-char` | Delete character under cursor | - |
 
 ## Code Intelligence (LSP via Eglot)
 
@@ -82,6 +95,7 @@ Intelligent auto-completion powered by [Corfu](https://github.com/minad/corfu):
 |:------------|:---------|:------------|:--------|
 | `C-c` `TAB` | `completion-at-point` | Manually trigger completion | Always |
 | `M-TAB` | `completion-at-point` | Alternative completion trigger | Always |
+| `C-M-i` | `completion-at-point` | Traditional completion trigger | Always |
 | `TAB` | `python-indent-line-function` | Auto-indent line | Normal editing |
 | `S-TAB` | `corfu-previous` | Navigate to previous candidate | Popup active |
 | `S-TAB` | `python-dedent-line-function` | Decrease indentation | Normal editing |
@@ -104,6 +118,54 @@ Core Emacs commands for file management and text editing:
 | `C-y` | `yank` | Paste text from kill ring | - |
 | `C-/` | `undo` | Undo last action | - |
 
+## Which-Key System
+
+[Which-key](https://github.com/justbur/emacs-which-key) is an interactive keybinding discovery system that displays available key combinations in a popup window. This configuration has which-key enabled with a 0.3-second delay for faster response.
+
+### How Which-Key Works
+
+When you press a prefix key (like `C-x` or `C-c`), which-key automatically shows you all available completions after a short delay. This makes discovering and learning keybindings much easier.
+
+### Basic Usage Examples
+
+| Prefix Key | What Happens | Common Completions |
+|:-----------|:-------------|:-------------------|
+| `C-x` | Shows file and buffer operations | `C-f` (find-file), `C-s` (save), `b` (switch-buffer) |
+| `C-c` | Shows mode-specific commands | `C-c` (compile/send-buffer), `C-r` (rename/send-region) |
+| `M-g` | Shows goto and navigation commands | `n` (next-error), `p` (prev-error), `g` (goto-line) |
+| `C-h` | Shows help system commands | `.` (local-help), `f` (describe-function), `k` (describe-key) |
+
+### Interactive Discovery Process
+
+1. **Start with a prefix:** Press any prefix key like `C-x`
+2. **Wait briefly:** Which-key popup appears after 0.3 seconds
+3. **Browse options:** See all available key combinations with descriptions
+4. **Complete or cancel:** Press a key to execute, or `ESC`/`C-g` to cancel
+
+### Common Which-Key Patterns
+
+| Pattern | Description | Example |
+|:--------|:------------|:--------|
+| **File Operations** | `C-x` + file letter | `C-x C-f` (find), `C-x C-s` (save) |
+| **Mode Commands** | `C-c` + function key | `C-c C-c` (compile), `C-c C-r` (rename) |
+| **Navigation** | `M-g` + direction | `M-g n` (next), `M-g p` (previous) |
+| **Help System** | `C-h` + help type | `C-h f` (function), `C-h k` (key) |
+
+### Which-Key Configuration Details
+
+This setup uses these which-key settings:
+- **Delay:** 0.3 seconds (faster than default)
+- **Description length:** 40 characters maximum
+- **Separator:** " → " between key and description
+- **Column padding:** 1 space for better readability
+
+### Tips for Using Which-Key
+
+- **Don't memorize everything:** Let which-key guide you to commands
+- **Learn patterns:** Most modes follow similar `C-c` prefix conventions
+- **Use help system:** `C-h` prefix shows extensive help options
+- **Cancel safely:** `C-g` or `ESC` cancels any incomplete key sequence
+
 ## Custom Navigation
 
 Additional navigation commands for efficient code browsing:
@@ -113,6 +175,32 @@ Additional navigation commands for efficient code browsing:
 | `C-a` | `smart-beginning-of-line` | Jump to first non-whitespace or line start | - |
 | `ESC` `←` | `scroll-down` | Scroll buffer content down | - |
 | `ESC` `→` | `scroll-up` | Scroll buffer content up | - |
+
+## Imenu-List Navigation
+
+Symbol navigation and outline sidebar powered by [imenu-list](https://github.com/bmag/imenu-list):
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `F2` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
+| `C-c` `i` `l` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar (alternative) | - |
+| `C-c` `i` `s` | `imenu-list-show-current-symbol` | Show current symbol in sidebar | - |
+| `C-c` `i` `r` | `imenu-list-refresh` | Refresh symbol list | - |
+
+### Imenu-List Sidebar Navigation
+
+When the imenu-list sidebar is active, these keys work within the sidebar:
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `RET` | `imenu-list-goto-entry` | Jump to selected symbol | Imenu sidebar |
+| `TAB` | `hs-toggle-hiding` | Expand/collapse symbol groups | Imenu sidebar |
+| `n` | `imenu-list-next-line` | Move to next symbol | Imenu sidebar |
+| `p` | `imenu-list-prev-line` | Move to previous symbol | Imenu sidebar |
+| `q` | `imenu-list-quit-window` | Close sidebar | Imenu sidebar |
+| `r` | `imenu-list-refresh` | Refresh symbol list | Imenu sidebar |
+| `f` | `imenu-list-find-symbol` | Find symbol in buffer | Imenu sidebar |
+| `s` | `imenu-list-show-current-symbol` | Highlight current symbol | Imenu sidebar |
 
 ## Language-Specific Keybindings
 
@@ -131,11 +219,14 @@ Python-specific editing and REPL interaction using built-in Python-mode:
 
 ### Makefile Development
 
-Makefile-specific keybindings for build system editing:
+Makefile-specific keybindings for build system editing and compilation:
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
 | `TAB` | `makefile-tab` | Insert proper tab character (required for Makefile syntax) | Makefile mode |
+| `C-c` `C-c` | `compile` (make) | Run make (compile) | Makefile mode |
+| `C-c` `C-t` | `makefile-pickup-targets` | Refresh target list | Makefile mode |
+| `C-c` `C-f` | `makefile-pickup-filenames-as-targets` | Add files as targets | Makefile mode |
 
 ### Markdown Support
 
@@ -145,6 +236,11 @@ Markdown-specific keybindings for documentation editing:
 |:------------|:---------|:------------|:--------|
 | `C-c` `C-c` | `markdown-command` | Preview markdown file | Markdown files |
 | `C-c` `C-p` | `markdown-preview` | Live preview in browser | Markdown files |
+| `C-c` `C-l` | `markdown-insert-link` | Insert markdown link | Markdown files |
+| `C-c` `C-i` | `markdown-insert-image` | Insert markdown image | Markdown files |
+| `C-c` `C-c` `b` | `markdown-insert-bold` | Insert bold formatting | Markdown files |
+| `C-c` `C-c` `i` | `markdown-insert-italic` | Insert italic formatting | Markdown files |
+| `C-c` `C-c` `c` | `markdown-insert-code` | Insert code formatting | Markdown files |
 
 ### TOML Configuration
 

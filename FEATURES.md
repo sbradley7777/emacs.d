@@ -16,6 +16,9 @@ This document provides comprehensive details about all features available in thi
   - [YAML Configuration](#yaml-configuration)
 - [Code Style and Standards](#code-style-and-standards)
 - [User Interface Enhancements](#user-interface-enhancements)
+  - [Navigation and Discovery](#navigation-and-discovery)
+  - [Visual Improvements](#visual-improvements)
+  - [Enhanced Diagnostics](#enhanced-diagnostics)
 - [Related Documentation](#related-documentation)
 
 ## Modern Emacs 30.2+ Features
@@ -75,7 +78,7 @@ Comprehensive Python development setup with intelligent environment management:
 
 #### Core Features
 - **Modern [Eglot](https://github.com/joaotavora/eglot) LSP integration** using [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) (pylsp) at `~/.local/bin/pylsp`
-- **Automatic virtual environment detection and activation** ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el))
+- **Automatic virtual environment detection and activation** using [pyvenv](https://github.com/jorgenschaefer/pyvenv) ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el))
 - **Enhanced modeline display** showing active virtual environment and Python version
 - **Project-aware environment switching** with automatic detection
 
@@ -142,7 +145,7 @@ Professional [Makefile](https://www.gnu.org/software/make/manual/make.html) edit
 
 ### Markdown Support
 
-Enhanced [Markdown](https://daringfireball.net/projects/markdown/) editing for documentation and content creation:
+Enhanced [Markdown](https://daringfireball.net/projects/markdown/) editing for documentation and content creation using [markdown-mode](https://github.com/jrblevin/markdown-mode):
 
 **Features** ([`lang/markdown-config.el`](lang/markdown-config.el)):
 - **Syntax highlighting** with [GitHub Flavored Markdown](https://github.github.com/gfm/) support
@@ -152,7 +155,7 @@ Enhanced [Markdown](https://daringfireball.net/projects/markdown/) editing for d
 
 ### TOML Configuration
 
-Comprehensive [TOML](https://toml.io/) support for modern configuration management:
+Comprehensive [TOML](https://toml.io/) support for modern configuration management using [toml-mode](https://github.com/dryman/toml-mode.el):
 
 **Features** ([`lang/toml-config.el`](lang/toml-config.el)):
 - **Syntax highlighting** for TOML configuration files
@@ -162,7 +165,7 @@ Comprehensive [TOML](https://toml.io/) support for modern configuration manageme
 
 ### YAML Configuration
 
-Specialized handling for [YAML](https://yaml.org/) files with structure-aware features:
+Specialized handling for [YAML](https://yaml.org/) files with structure-aware features using [yaml-mode](https://github.com/yoshiki/yaml-mode):
 
 **Features** ([`lang/yaml-config.el`](lang/yaml-config.el)):
 - **Structure-aware completion** for YAML hierarchies
@@ -190,6 +193,20 @@ This configuration enforces consistent code style through automated tools:
 For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 
 ## User Interface Enhancements
+
+### Navigation and Discovery
+- **[Which-Key](https://github.com/justbur/emacs-which-key)** ([`core/packages.el`](core/packages.el)): Interactive keybinding discovery system that displays available key combinations in popup windows
+  - **0.3-second delay** for faster response than default settings
+  - **40 character descriptions** with improved readability
+  - **Smart column padding** and arrow separators (" → ")
+  - **Automatic mode detection** showing context-appropriate keybindings
+
+- **[Imenu-List](https://github.com/bmag/imenu-list)** ([`features/imenu-list-config.el`](features/imenu-list-config.el)): Symbol navigation sidebar for code structure visualization
+  - **Toggle sidebar** with `F2` or `C-c i l` for quick access
+  - **Real-time symbol updates** showing functions, classes, and variables
+  - **Interactive navigation** with dedicated sidebar keybindings
+  - **Project structure overview** for large codebases
+  - **Auto-refresh** when switching between files and buffers
 
 ### Visual Improvements
 - **[Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters)** ([`features/rainbow-delimiters.el`](features/rainbow-delimiters.el)): Enhanced delimiter visibility with color coding
