@@ -220,9 +220,10 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 
 ## Related Documentation
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
-- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
-- [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
-- [`README.md`](README.md) - Main project documentation and setup instructions
-- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
-- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides
+**For Using These Features:**
+- [`KEYMAP.md`](KEYMAP.md) - Complete keybinding reference for all features
+- [`FAQ.md`](FAQ.md) - Common questions about feature usage
+
+**For Setup and Issues:**
+- [`README.md`](README.md) - Installation and requirements
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Feature-specific troubleshooting

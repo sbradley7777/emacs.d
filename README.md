@@ -194,11 +194,14 @@ For automatic Python virtual environment detection:
 - Project must contain one of the project markers above
 - Python files opened within the project will automatically activate the environment
 
-## Related Documentation
+## Documentation
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
-- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
-- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, modern Emacs 30.2+ capabilities, and language support
-- [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
-- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
-- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides
+**Essential References:**
+- [`FAQ.md`](FAQ.md) - Frequently asked questions about features and usage
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging
+- [`FEATURES.md`](FEATURES.md) - Complete feature documentation and capabilities
+
+**Additional Resources:**
+- [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Development and contribution guidelines
+- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting standards

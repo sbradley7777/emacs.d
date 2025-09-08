@@ -360,9 +360,9 @@ repos:
 
 ## Related Documentation
 
-- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
-- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, modern Emacs 30.2+ capabilities, and language support
-- [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
-- [`README.md`](README.md) - Main project documentation and setup instructions
-- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
-- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides
+**Essential for Contributors:**
+- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards (required reading)
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Testing and debugging procedures
+
+**Configuration Reference:**
+- [`README.md`](README.md) - Project setup and requirements

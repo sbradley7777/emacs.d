@@ -301,9 +301,9 @@ Python virtual environment commands for project isolation using [pyvenv](https:/
 
 ## Related Documentation
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
-- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
-- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, modern Emacs 30.2+ capabilities, and language support
-- [`README.md`](README.md) - Main project documentation and setup instructions
-- [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting and style standards
-- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides
+**For Understanding Features:**
+- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation and capabilities
+- [`FAQ.md`](FAQ.md) - Common questions about using features
+
+**For Setup Help:**
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions when keybindings don't work

@@ -427,12 +427,9 @@ The elisp-autofmt hook ensures all [Emacs Lisp](https://www.gnu.org/software/ema
 
 ## Related Documentation
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines for contributing to the configuration
-- [`FAQ.md`](FAQ.md) - Frequently asked questions about configuration and usage
-- [`FEATURES.md`](FEATURES.md) - Detailed feature documentation, modern Emacs 30.2+ capabilities, and language support
-- [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference and command documentation
-- [`README.md`](README.md) - Main project documentation and setup instructions
-- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging guides
+**For Development:**
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - Guidelines using this style guide
+- [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Development and testing procedures
 
 ---
 
