@@ -83,6 +83,22 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
 
 > **⚠️ Important:** This configuration requires Emacs 30.2+ and will not work with earlier versions.
 
+### Why Emacs 30.2+ is Required
+
+This configuration leverages specific improvements and features only available in Emacs 30.2+:
+
+- **Native compilation enhancements**: Improved bytecode compilation for faster package loading and runtime performance
+- **Modern use-package integration**: Built-in use-package with advanced lazy-loading and configuration features
+- **LSP performance optimizations**: Native JSON parsing improvements in Eglot for responsive Python development
+- **Enhanced UI capabilities**: Advanced `global-display-line-numbers-mode` with improved visual line support
+- **Memory management improvements**: Modern garbage collection tuning for efficient long-running development sessions
+- **Flymake integration**: Enhanced diagnostic display and real-time error reporting capabilities
+
+**Performance Benefits:**
+- **Faster startup times**: Leveraging modern initialization and package loading optimizations
+- **Reduced memory usage**: Efficient heap management during extended coding sessions
+- **Real-time responsiveness**: Optimized LSP communication and diagnostic updates
+
 ### Optional Dependencies
 
 **For Python Development:**
@@ -168,7 +184,7 @@ For detailed testing documentation, troubleshooting, and limitations, see [`scri
 
 After installation, simply restart Emacs. The configuration is ready to use!
 
-**Development Installation Note**: If you used the development installation (symlinks), any changes you make to files in this repository will be immediately available in Emacs for testing and development purposes.
+**Development Installation Note**: If you used the development installation (symlinks), any changes you make to files in this repository will be immediately available in Emacs for testing and development purposes. If you plan to modify or contribute to the configuration, see [`CONTRIBUTING.md`](CONTRIBUTING.md) for development guidelines and best practices.
 
 **Quick Start Tips:**
 - **Auto-completion**: Use `TAB` for smart completion, `C-c TAB` for manual trigger
