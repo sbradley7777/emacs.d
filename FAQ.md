@@ -15,6 +15,8 @@ This document answers common questions about the Emacs configuration, its featur
 
 ## General Configuration
 
+*Questions about the overall design philosophy and approach of this configuration.*
+
 ### Q: What makes this configuration different from others?
 
 **A:** This configuration focuses on several key principles:
@@ -44,6 +46,8 @@ This document answers common questions about the Emacs configuration, its featur
 **A:** Yes! The configuration is designed to work out-of-the-box with sensible defaults. However, it's also comprehensive enough for professional development. New users can start with basic features and gradually explore advanced capabilities.
 
 ## Installation and Setup
+
+*Questions about getting the configuration installed and running on your system.*
 
 ### Q: Should I use the development installation (symlinks) or standard installation (copy)?
 
@@ -109,6 +113,8 @@ See [`README.md`](README.md#requirements) for complete requirements.
 
 ## Features and Functionality
 
+*Questions about using the various features and capabilities provided by this configuration.*
+
 ### Q: How does the auto-completion system work?
 
 **A:** The configuration uses [Corfu](https://github.com/minad/corfu) for universal completion:
@@ -144,6 +150,8 @@ The modular design makes it easy to add support for additional languages.
 - Use [`use-package`](https://www.gnu.org/software/emacs/manual/html_mono/use-package.html) `:disabled t` to temporarily disable specific packages
 
 ## Python Development
+
+*Questions specific to Python programming and development environment setup.*
 
 ### Q: How does virtual environment detection work?
 
@@ -204,6 +212,8 @@ See [`FEATURES.md`](FEATURES.md#python-development-environment) for detailed set
 - **Profiling**: Use Emacs built-in profiler for detailed analysis
 
 ## Customization
+
+*Questions about modifying and extending the configuration for your specific needs.*
 
 ### Q: How do I add my own customizations?
 

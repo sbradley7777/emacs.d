@@ -151,6 +151,8 @@ When adding new functionality, follow the modular structure:
 
 ## Testing Procedures
 
+**For comprehensive testing documentation, including automated scripts and detailed procedures, see [`scripts/TESTING.md`](scripts/TESTING.md).**
+
 ### Manual Testing
 
 **Basic Testing:**

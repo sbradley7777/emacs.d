@@ -4,7 +4,7 @@ Personal Emacs configuration files and customizations.
 
 ## Table of Contents
 
-- [Quick Start](#quick-start)
+- [Overview](#overview)
 - [Configuration Structure](#configuration-structure)
 - [Requirements](#requirements)
 - [Installation](#installation)
@@ -15,7 +15,7 @@ Personal Emacs configuration files and customizations.
 - [Documentation](#documentation)
 - [Quick Reference](#quick-reference)
 
-## Quick Start
+## Overview
 
 This Emacs configuration provides a professional development environment with intelligent completion, LSP integration, and modern Emacs 30.2+ optimizations.
 
@@ -25,13 +25,9 @@ This Emacs configuration provides a professional development environment with in
 - **Python development** with [Eglot](https://github.com/joaotavora/eglot) LSP and automatic virtual environment management
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
 - **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
-- **Modern Emacs 30.2+** - Optimized for the latest Emacs features
+- **Modern Emacs 30.2+** - Exclusively optimized for the latest Emacs features
 
-**Get Started in 2 Steps:**
-1. **Install**: Run the installation script (see [Installation](#installation))
-2. **Restart Emacs**: Your configuration is ready to use!
-
-For detailed feature information, see [`FEATURES.md`](FEATURES.md).
+For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installation instructions, see the [Installation](#installation) section below.
 
 ## Configuration Structure
 

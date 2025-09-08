@@ -36,6 +36,9 @@ This document provides a comprehensive reference for all keybindings and executa
 ### Commands Without Keybindings
 For functions without keybindings, use `M-x function-name` (hold `Alt`+`x`, then type the function name).
 
+### Understanding Output Symbols
+This configuration uses visual symbols in messages and output (like ✅, 🔄, ❌). For a complete reference of these symbols and their meanings, see [`STYLEGUIDE.md`](STYLEGUIDE.md#message-symbol-reference).
+
 ## Keybindings
 
 This section contains all commands that have keyboard shortcuts assigned. These keybindings allow you to quickly access functionality without having to type command names. Each keybinding shows the key combination to press and describes what action it performs.
