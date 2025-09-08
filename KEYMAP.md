@@ -43,12 +43,12 @@ This configuration uses visual symbols in messages and output (like ✅, 🔄, �
 
 This section contains all commands that have keyboard shortcuts assigned. These keybindings allow you to quickly access functionality without having to type command names. Each keybinding shows the key combination to press and describes what action it performs.
 
-**How to use keybindings:**
+**How to use keybindings**:
 - Press the key combinations as shown (e.g., `C-x C-f` means hold Ctrl, press x, release, then hold Ctrl and press f)
 - Most keybindings work immediately when you press them
 - Some are context-dependent and only work in specific modes or situations
 
-**Example to try:** Press `F1` to display syntax errors and warnings in the current buffer.
+**Example to try**: Press `F1` to display syntax errors and warnings in the current buffer.
 
 ## Function Keys
 
