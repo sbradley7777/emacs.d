@@ -120,8 +120,9 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Performance Settings (applied early before any LSP servers start)
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Disable event logging for better performance and memory usage
- (setq eglot-events-buffer-size 0) ; Disable for performance
+ ;; Enable event logging for debugging (reduces performance slightly)
+ ;; Note: This must be set early before eglot loads, so it cannot use a constant from features-constants.el
+ (setq eglot-events-buffer-size 200000) ; Enable event logging for debugging
  ;; Use asynchronous connection for better responsiveness
  (setq eglot-sync-connect nil)
  ;; Additional stability settings for Emacs 30.x

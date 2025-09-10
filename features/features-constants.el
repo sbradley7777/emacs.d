@@ -18,8 +18,6 @@
 
 ;; LSP Constants
 (defconst features-eglot-send-changes-idle-time 0.5 "Eglot change notification frequency.")
-(defconst
- features-eglot-events-buffer-size 0 "Eglot events buffer size (0 = disabled for performance).")
 
 ;; Flymake Constants
 (defconst features-flymake-window-width 100 "Flymake popup window width.")
