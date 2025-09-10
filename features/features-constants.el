@@ -19,8 +19,9 @@
 ;; LSP Constants
 (defconst features-eglot-send-changes-idle-time 0.5 "Eglot change notification frequency.")
 
-;; Flymake Constants
-(defconst features-flymake-window-width 100 "Flymake popup window width.")
+;; Window Constants
+(defconst
+ window-width-percentage 0.3 "Window width as fraction of frame width for diagnostic buffers.")
 
 ;; Imenu-list Constants
 (defconst features-imenu-list-size 0.25 "Imenu-list sidebar width as fraction of frame width.")

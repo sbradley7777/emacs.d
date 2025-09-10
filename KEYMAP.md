@@ -48,7 +48,7 @@ This section contains all commands that have keyboard shortcuts assigned. These 
 - Most keybindings work immediately when you press them
 - Some are context-dependent and only work in specific modes or situations
 
-**Example to try**: Press `F1` to display syntax errors and warnings in the current buffer.
+**Example to try**: Press `F1` to toggle the imenu-list sidebar, or `F2` to show Flymake diagnostics in a side window.
 
 ## Function Keys
 
@@ -56,9 +56,10 @@ These are configuration-specific shortcuts designed for quick access to common o
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
-| `F1` | `flymake-show-buffer-diagnostics` | Display syntax errors and warnings | - |
-| `F2` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
-| `F4` | `kill-this-buffer` | Close current buffer | - |
+| `F1` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
+| `F2` | `flymake-show-buffer-diagnostics` | Show Flymake diagnostics in side window | - |
+| `F3` | `flymake-goto-prev-error` | Go to previous flymake error | Flymake active |
+| `F4` | `flymake-goto-next-error` | Go to next flymake error | Flymake active |
 | `F5` | `clipboard-kill-ring-save` | Copy to system clipboard | - |
 | `F6` | `delete-trailing-whitespace` | Clean up line endings | - |
 | `F7` | `previous-buffer` | Switch to previous buffer | - |
@@ -185,7 +186,7 @@ Symbol navigation and outline sidebar powered by [imenu-list](https://github.com
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
-| `F2` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
+| `F1` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
 | `C-c` `i` `l` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar (alternative) | - |
 | `C-c` `i` `s` | `imenu-list-show-current-symbol` | Show current symbol in sidebar | - |
 | `C-c` `i` `r` | `imenu-list-refresh` | Refresh symbol list | - |
@@ -275,9 +276,11 @@ Built-in Emacs diagnostic tools (Flymake is built into Emacs):
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
-| `F1` | `flymake-show-buffer-diagnostics` | Show diagnostics in side window | Flymake active |
-| `M-g` `n` | `flymake-goto-next-error` | Jump to next diagnostic | Flymake active |
-| `M-g` `p` | `flymake-goto-prev-error` | Jump to previous diagnostic | Flymake active |
+| `F2` | `flymake-show-buffer-diagnostics` | Show diagnostics in side window | Flymake active |
+| `F3` | `flymake-goto-prev-error` | Go to previous diagnostic | Flymake active |
+| `F4` | `flymake-goto-next-error` | Go to next diagnostic | Flymake active |
+| `M-g` `n` | `flymake-goto-next-error` | Jump to next diagnostic (alternative) | Flymake active |
+| `M-g` `p` | `flymake-goto-prev-error` | Jump to previous diagnostic (alternative) | Flymake active |
 | `C-h` `.` | `display-local-help` | Show diagnostic details at point | Flymake active |
 
 ## Functions
