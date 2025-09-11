@@ -76,6 +76,10 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`test-config.sh`](scripts/test-config.sh) - Configuration testing script
   - [`README.md`](scripts/README.md) - Script overview and installation guide
   - [`TESTING.md`](scripts/TESTING.md) - Comprehensive testing documentation
+- **[`examples/`](examples/)** - Example configuration files for local customization
+  - [`local.el`](examples/local.el) - Template for user-specific, non-versioned configuration
+  - [`custom.el`](examples/custom.el) - Example of Emacs customize system output
+  - [`README.md`](examples/README.md) - Detailed guide for local configuration
 
 ## Requirements
 

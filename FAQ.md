@@ -263,6 +263,14 @@ See [`FEATURES.md`](FEATURES.md#python-development-environment) for detailed set
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for detailed guidelines.
 
+### Q: How do I add local configuration that won't be committed to git?
+
+**A:** Use the optional configuration files for local, machine-specific settings:
+- **`~/.emacs.d/local.el`**: Hand-written local configuration that loads after all main config
+- **`~/.emacs.d/custom.el`**: Settings from Emacs' customize system (automatically created)
+
+Both files are automatically loaded if they exist and can override any main configuration settings. See [`examples/`](examples/) for detailed templates and documentation.
+
 ### Q: Can I use a different completion framework?
 
 **A:** While the configuration is optimized for [Corfu](https://github.com/minad/corfu), you can switch to alternatives:
