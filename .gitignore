@@ -48,7 +48,7 @@ Thumbs.db
 \#*\#
 *.elc
 .#*
-custom_prefs.el
+custom.el
 package-state-cache.el
 auto-save-list/
 eln-cache/

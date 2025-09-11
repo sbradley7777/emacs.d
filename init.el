@@ -158,10 +158,13 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'aliases "Function aliases and shortcuts")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; UI tweaks via emacs menu:
+;; Custom settings via emacs menu system
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set location of any changes to emacs while running. These changes are not loaded when emacs restarts.
-(setq custom-file "~/.emacs.d/custom_prefs.el")
+;; Use standard Emacs convention for custom settings
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+;; Load custom settings if the file exists
+(when (file-exists-p custom-file) (load custom-file 'noerror))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
