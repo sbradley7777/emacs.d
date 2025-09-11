@@ -4,7 +4,7 @@
 ;;      Provides language server protocol integration for Python using pylsp.
 ;;      General eglot settings are in features/lsp.el
 
-(require 'utils)
+(require 'core-utils)
 (require 'python-constants)
 
 (with-load-timing

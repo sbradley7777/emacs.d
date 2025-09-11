@@ -5,7 +5,7 @@
 
 (require 'core-constants)
 (require 'package-system/cache)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "network.el"

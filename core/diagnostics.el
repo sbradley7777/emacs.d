@@ -4,7 +4,7 @@
 ;;      Provides detailed system context and startup logging for debugging
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "diagnostics.el"

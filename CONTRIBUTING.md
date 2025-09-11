@@ -119,10 +119,10 @@ When adding new functionality, follow the modular structure:
 
 **Core Modules** ([`core/`](core/)): Essential functionality loaded first
 - `package-system/` - Modular package management system
-- `packages.el` - Package declarations and configurations
+- `core-packages.el` - Package declarations and configurations
 - `ui.el` - User interface settings
 - `editing.el` - Text editing behavior
-- `files.el` - File handling and backup settings
+- `core-files.el` - File handling and backup settings
 - `keybindings.el` - Global key bindings
 
 **Feature Modules** ([`features/`](features/)): Optional enhancements
@@ -231,7 +231,7 @@ git diff --cached
 - **Performance**: Minimal impact on startup time
 
 **Package Addition Process:**
-1. **Add to packages.el**: Include package declaration with configuration
+1. **Add to core-packages.el**: Include package declaration with configuration
 2. **Update documentation**: Add to appropriate documentation files
 3. **Test thoroughly**: Ensure package works and doesn't conflict
 4. **Consider alternatives**: Evaluate if existing solutions could work

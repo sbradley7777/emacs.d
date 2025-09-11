@@ -91,7 +91,7 @@ git commit -m "Update configuration"
 You can also run the hook manually:
 ```bash
 # Format specific files
-./scripts/elisp-autofmt-hook user/functions.el themes/themes.el
+./scripts/elisp-autofmt-hook user/functions.el themes/themes-config.el
 
 # Verbose mode for detailed output
 ./scripts/elisp-autofmt-hook --verbose *.el
@@ -141,16 +141,16 @@ To use a different location, configure in `.pre-commit-config.yaml`:
 ```
 elisp-autofmt made formatting changes to the following files:
   - user/functions.el
-  - themes/themes.el
+  - themes/themes-config.el
 
 Files have been automatically formatted. Please review and stage the changes:
-  git add 'user/functions.el' 'themes/themes.el'
+  git add 'user/functions.el' 'themes/themes-config.el'
 ```
 
 **Verbose mode:**
 ```
 user/functions.el: The file has been modified to fix formatting issues
-themes/themes.el: No formatting changes detected
+themes/themes-config.el: No formatting changes detected
 
 elisp-autofmt made formatting changes to the following files:
   - user/functions.el

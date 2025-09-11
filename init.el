@@ -124,15 +124,15 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (show-system-info)
 
 (safe-load-config 'package-system/manager "Package system setup") ; Package system setup
-(safe-load-config 'packages "Package declarations") ; Package declarations and configurations
+(safe-load-config 'core-packages "Package declarations") ; Package declarations and configurations
 (safe-load-config 'ui "Basic UI setup") ; Basic UI setup
-(safe-load-config 'themes "Theme configuration") ; Visual appearance
+(safe-load-config 'themes-config "Theme configuration") ; Visual appearance
 (safe-load-config 'editing "Editing preferences") ; Editing preferences
 (safe-load-config 'core-files "File handling") ; File handling
 (safe-load-config 'keybindings "Global keybindings") ; Global keybindings
 
 ;; Optional features (load eglot first before language-specific configs)
-(safe-load-config 'completion "Auto-completion framework") ; Core completion system
+(safe-load-config 'completion-config "Auto-completion framework") ; Core completion system
 (safe-load-config 'lsp-config "General LSP configuration") ; General eglot settings
 (safe-load-config 'flymake-config "Flymake configuration") ; Flymake diagnostic display
 (safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
@@ -147,11 +147,11 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'makefile-config "Makefile support")
 
 ;; Python configurations (load after general eglot)
-(safe-load-config 'core "Python core editing")
+(safe-load-config 'python-core "Python core editing")
 (safe-load-config 'python-constants "Python configuration constants")
 (safe-load-config 'pyvenv-config "Python virtual environments")
 (safe-load-config 'eglot-config "Python LSP (eglot) configuration") ; This loads lang/python/eglot-config.el
-(safe-load-config 'tools "Python development tools")
+(safe-load-config 'python-tools "Python development tools")
 
 ;; User functions and aliases
 (safe-load-config 'functions "Custom helper functions")

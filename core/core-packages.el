@@ -1,12 +1,12 @@
-;;; packages.el --- Package Declarations and Configurations -*- lexical-binding: t -*-
+;;; core-packages.el --- Package Declarations and Configurations -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Package installation and configuration using use-package.
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
- "packages.el"
+ "core-packages.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Essential Package Categories
@@ -132,5 +132,5 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  (setq eglot-report-progress nil) ; Reduce progress notification noise
 
 
- ;; Make this module available for loading with (require 'packages)
- (provide 'packages))
+ ;; Make this module available for loading with (require 'core-packages)
+ (provide 'core-packages))

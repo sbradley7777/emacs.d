@@ -232,7 +232,7 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 ## User Interface Enhancements
 
 ### Navigation and Discovery
-- **[Which-Key](https://github.com/justbur/emacs-which-key)** ([`core/packages.el`](core/packages.el)): Interactive keybinding discovery system that displays available key combinations in popup windows
+- **[Which-Key](https://github.com/justbur/emacs-which-key)** ([`core/core-packages.el`](core/core-packages.el)): Interactive keybinding discovery system that displays available key combinations in popup windows
   - **0.3-second delay** for faster response than default settings
   - **40 character descriptions** with improved readability
   - **Smart column padding** and arrow separators (" → ")
@@ -248,7 +248,7 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 ### Visual Improvements
 - **[Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters)** ([`features/rainbow-delimiters.el`](features/rainbow-delimiters.el)): Enhanced delimiter visibility with color coding
 - **[Indent Guides](https://github.com/DarthFennec/highlight-indent-guides)** ([`features/indent-guides.el`](features/indent-guides.el)): Visual indentation guides for better code structure
-- **Theme Support** ([`themes/themes.el`](themes/themes.el)): [Zenburn](https://github.com/bbatsov/zenburn-emacs) theme with custom black background
+- **Theme Support** ([`themes/themes-config.el`](themes/themes-config.el)): [Zenburn](https://github.com/bbatsov/zenburn-emacs) theme with custom black background
 
 ### Enhanced Diagnostics
 - **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake-config.el`](features/flymake-config.el)): Real-time syntax checking and linting

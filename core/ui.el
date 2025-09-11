@@ -3,7 +3,7 @@
 ;;      Display preferences and UI behavior
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "ui.el"

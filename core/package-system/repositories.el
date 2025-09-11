@@ -5,7 +5,7 @@
 
 (require 'core-constants)
 (require 'package-system/network)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "repositories.el"

@@ -158,7 +158,7 @@ The modular design makes it easy to add support for additional languages.
 
 ### Q: How does the theme system work?
 
-**A:** The configuration uses the [Zenburn theme](https://github.com/bbatsov/zenburn-emacs) ([`themes/themes.el`](themes/themes.el)) with:
+**A:** The configuration uses the [Zenburn theme](https://github.com/bbatsov/zenburn-emacs) ([`themes/themes-config.el`](themes/themes-config.el)) with:
 - Low-contrast, eye-friendly colors optimized for long coding sessions
 - Custom black background override for enhanced contrast
 - Automatic theme loading during startup
@@ -242,7 +242,7 @@ See [`FEATURES.md`](FEATURES.md#python-development-environment) for detailed set
 **A:** The configuration provides several customization points:
 - **User directory**: Add personal functions to [`user/functions.el`](user/functions.el)
 - **Aliases**: Add command aliases to [`user/aliases.el`](user/aliases.el)
-- **Package additions**: Add packages to [`core/packages.el`](core/packages.el)
+- **Package additions**: Add packages to [`core/core-packages.el`](core/core-packages.el)
 - **Key bindings**: Extend [`core/keybindings.el`](core/keybindings.el)
 
 ### Q: Can I override default settings?
@@ -274,7 +274,7 @@ Both files are automatically loaded if they exist and can override any main conf
 ### Q: Can I use a different completion framework?
 
 **A:** While the configuration is optimized for [Corfu](https://github.com/minad/corfu), you can switch to alternatives:
-- **Disable Corfu**: Comment out the corfu configuration in [`features/completion.el`](features/completion.el)
+- **Disable Corfu**: Comment out the corfu configuration in [`features/completion-config.el`](features/completion-config.el)
 - **Add alternative**: Configure your preferred completion framework
 - **Test thoroughly**: Ensure LSP integration works with your chosen framework
 

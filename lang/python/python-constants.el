@@ -4,7 +4,7 @@
 ;;      This file contains paths, settings, and other constants used
 ;;      across multiple Python-related configuration files.
 
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "python-constants.el"

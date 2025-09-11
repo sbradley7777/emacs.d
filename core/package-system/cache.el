@@ -4,7 +4,7 @@
 ;;      Provides intelligent cache management with freshness validation.
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "cache.el"

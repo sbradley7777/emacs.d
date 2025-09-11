@@ -56,13 +56,13 @@ emacs.d/
 ├── early-init.el                # Early initialization and performance optimizations
 ├── [`core/`](core/)                        # Essential Emacs functionality (loaded first)
 │   ├── package-system/          # Modular package management system
-│   ├── packages.el              # Essential package installations and configurations
+│   ├── core-packages.el         # Essential package installations and configurations
 │   ├── ui.el                    # User interface and visual settings
 │   ├── editing.el               # Text editing behavior and preferences
-│   ├── files.el                 # File handling, backup, and auto-save settings
+│   ├── core-files.el            # File handling, backup, and auto-save settings
 │   └── keybindings.el           # Global keybindings and shortcuts
 ├── [`features/`](features/)                    # Optional enhancements (can be disabled independently)
-│   ├── completion.el            # Core auto-completion framework
+│   ├── completion-config.el     # Core auto-completion framework
 │   ├── lsp.el                   # General LSP client configuration
 │   ├── flymake-config.el        # Flymake diagnostic display configuration
 │   ├── rainbow-delimiters.el    # Enhanced delimiter visibility
@@ -71,12 +71,12 @@ emacs.d/
 │   ├── lisp.el                  # Lisp and Emacs Lisp development settings
 │   ├── yaml.el                  # YAML file editing configuration
 │   └── python/                  # Python development environment
-│       ├── core.el              # Basic Python mode settings and indentation
+│       ├── python-core.el       # Basic Python mode settings and indentation
 │       ├── venv.el              # Virtual environment management
 │       ├── eglot-config.el      # Python-specific LSP server configuration
-│       └── tools.el             # Python development tools and utilities
+│       └── python-tools.el      # Python development tools and utilities
 ├── [`themes/`](themes/)                      # Theme configurations
-│   └── themes.el                # Core theme and appearance configuration
+│   └── themes-config.el         # Core theme and appearance configuration
 ├── [`user/`](user/)                        # Personal customizations
 │   ├── functions.el             # User-defined utility functions
 │   └── aliases.el               # Command aliases and shortcuts

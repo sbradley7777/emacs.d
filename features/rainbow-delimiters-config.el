@@ -4,7 +4,7 @@
 ;;      Provides color-coded parentheses, brackets, and braces for better code navigation.
 
 (require 'features-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "rainbow-delimiters-config.el"

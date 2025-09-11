@@ -3,7 +3,7 @@
 ;;      TOML mode support and configuration for .toml files including pyproject.toml
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "toml-config.el"

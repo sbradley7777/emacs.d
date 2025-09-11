@@ -3,7 +3,7 @@
 ;;      Function aliases to improve usability and provide shortcuts
 ;;      for commonly used Emacs functions.
 
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "aliases.el"

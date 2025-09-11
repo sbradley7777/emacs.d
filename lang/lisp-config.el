@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;      Emacs Lisp specific settings and formatting
 
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "lisp-config.el"

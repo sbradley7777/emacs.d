@@ -1,12 +1,12 @@
-;;; core.el --- Core Python Language Configuration -*- lexical-binding: t -*-
+;;; python-core.el --- Core Python Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Basic Python editing settings, indentation, and shell configuration.
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
- "core.el"
+ "python-core.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python-specific indentation settings
@@ -31,4 +31,4 @@
  (setq python-shell-completion-native-enable nil python-shell-prompt-detect-failure-warning nil)
 
  ;; Make this module available for loading with (require 'core)
- (provide 'core))
+ (provide 'python-core))

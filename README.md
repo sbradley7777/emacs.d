@@ -42,13 +42,13 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`repositories.el`](core/package-system/repositories.el) - Repository configuration and security
     - [`maintenance.el`](core/package-system/maintenance.el) - Package upgrade and cleanup utilities
   - [`core-constants.el`](core/core-constants.el) - Modern Emacs 30.2+ constants and configuration values
-  - [`packages.el`](core/packages.el) - Package declarations and configurations
+  - [`core-packages.el`](core/core-packages.el) - Package declarations and configurations
   - [`ui.el`](core/ui.el) - Basic UI configuration
   - [`editing.el`](core/editing.el) - Editing preferences and behavior
-  - [`files.el`](core/files.el) - File handling and backup settings
+  - [`core-files.el`](core/core-files.el) - File handling and backup settings
   - [`keybindings.el`](core/keybindings.el) - Global key bindings
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
-  - [`completion.el`](features/completion.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework
+  - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework
   - [`lsp.el`](features/lsp.el) - General LSP client configuration
   - [`flymake-config.el`](features/flymake-config.el) - Flymake diagnostic display configuration
   - [`rainbow-delimiters.el`](features/rainbow-delimiters.el) - Enhanced delimiter visibility
@@ -61,13 +61,13 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`toml-config.el`](lang/toml-config.el) - TOML mode support for configuration files
   - [`yaml-config.el`](lang/yaml-config.el) - YAML file handling
   - **[`python/`](lang/python/)** - Python development environment
-    - [`core.el`](lang/python/core.el) - Core Python development settings
+    - [`python-core.el`](lang/python/python-core.el) - Core Python development settings
     - [`python-constants.el`](lang/python/python-constants.el) - Python configuration constants (LSP paths, etc.)
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
     - [`eglot-config.el`](lang/python/eglot-config.el) - Python-specific LSP server configuration
-    - [`tools.el`](lang/python/tools.el) - Python development tools and packages
+    - [`python-tools.el`](lang/python/python-tools.el) - Python development tools and packages
 - **[`themes/`](themes/)** - Theme and appearance configuration
-  - [`themes.el`](themes/themes.el) - [Zenburn](https://github.com/bbatsov/zenburn-emacs) theme configuration
+  - [`themes-config.el`](themes/themes-config.el) - [Zenburn](https://github.com/bbatsov/zenburn-emacs) theme configuration
 - **[`user/`](user/)** - Personal customizations
   - [`functions.el`](user/functions.el) - Custom helper functions
   - [`aliases.el`](user/aliases.el) - Custom command aliases

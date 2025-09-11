@@ -3,7 +3,7 @@
 ;;      Complete virtual environment management with pyvenv integration,
 ;;      auto-activation, modeline display, and project detection.
 
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "pyvenv-config.el"

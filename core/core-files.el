@@ -1,12 +1,12 @@
-;;; files.el --- File Handling Configuration -*- lexical-binding: t -*-
+;;; core-files.el --- File Handling Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
- "files.el"
+ "core-files.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Don't litter OS with autosaves (~) and backup (#) files. Based on:

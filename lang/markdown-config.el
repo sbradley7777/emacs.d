@@ -3,7 +3,7 @@
 ;;      Markdown mode support and configuration for .md files
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "markdown-config.el"

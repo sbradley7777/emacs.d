@@ -1,11 +1,11 @@
-;;; tools.el --- Python Environment and REPL Configuration -*- lexical-binding: t -*-
+;;; python-tools.el --- Python Environment and REPL Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Basic Python environment setup: interpreter detection and REPL configuration.
 
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
- "tools.el"
+ "python-tools.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python Environment and Tools Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16,4 +16,4 @@
 
 
  ;; Make this module available for loading with (require 'tools)
- (provide 'tools))
+ (provide 'python-tools))

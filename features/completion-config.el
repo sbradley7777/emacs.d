@@ -1,13 +1,13 @@
-;;; completion.el --- Core Auto-Completion Configuration -*- lexical-binding: t -*-
+;;; completion-config.el --- Core Auto-Completion Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Modern auto-completion framework using Corfu.
 ;;      Provides universal auto-completion for all modes and languages.
 
 (require 'features-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
- "completion.el"
+ "completion-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Corfu Auto-Completion Framework
@@ -77,5 +77,5 @@
  ;; Use M-TAB, C-c TAB, or C-M-i for manual completion instead
 
 
- ;; Make this module available for loading with (require 'completion)
- (provide 'completion))
+ ;; Make this module available for loading with (require 'completion-config)
+ (provide 'completion-config))

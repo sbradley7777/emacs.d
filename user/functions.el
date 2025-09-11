@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;      User-defined custom functions
 
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "functions.el"

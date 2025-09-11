@@ -4,7 +4,7 @@
 ;;      Language-specific server configurations should be in lang/<language>/eglot-config.el files.
 
 (require 'features-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "lsp-config.el"

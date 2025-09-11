@@ -243,7 +243,7 @@ M-x emacs-version
 **Common Solutions**:
 1. **Use Emacs 30.2+**: This configuration requires Emacs 30.2+ for optimal performance
 2. **Check system resources**: Ensure adequate RAM and CPU availability
-3. **Disable unnecessary packages**: Comment out optional packages in [`core/packages.el`](core/packages.el)
+3. **Disable unnecessary packages**: Comment out optional packages in [`core/core-packages.el`](core/core-packages.el)
 4. **Check network**: Slow package loading may indicate network issues
 
 ### High Memory Usage

@@ -3,7 +3,7 @@
 ;;      Makefile mode support and configuration for Makefiles with proper tab handling
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "makefile-config.el"

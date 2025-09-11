@@ -1,11 +1,11 @@
-;;; themes.el --- Core Theme Configuration -*- lexical-binding: t -*-
+;;; themes-config.el --- Core Theme Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Core theme and visual appearance configuration
 
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
- "themes.el"
+ "themes-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Configure the theme
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -15,5 +15,5 @@
  ;; Load the zenburn theme
  (load-theme 'zenburn t)
 
- ;; Make this module available for loading with (require 'themes)
- (provide 'themes))
+ ;; Make this module available for loading with (require 'themes-config)
+ (provide 'themes-config))

@@ -3,7 +3,7 @@
 ;;      Tabs, spaces, and general editing preferences
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "editing.el"

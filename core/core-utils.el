@@ -1,4 +1,4 @@
-;;; utils.el --- Configuration Utilities -*- lexical-binding: t -*-
+;;; core-utils.el --- Configuration Utilities -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; Utility functions and macros for configuration loading and management.
@@ -19,6 +19,6 @@ MODULE-NAME should be a string identifying the module being loaded."
      "%s loaded (%.2fs)" ,module-name (float-time (time-subtract (current-time) start-time)))))
 
 ;;; Provide this module
-(provide 'utils)
+(provide 'core-utils)
 
-;;; utils.el ends here
+;;; core-utils.el ends here

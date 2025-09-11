@@ -4,7 +4,7 @@
 ;;      Central entry point for the modular package management system.
 
 (require 'core-constants)
-(require 'utils)
+(require 'core-utils)
 
 (with-load-timing
  "manager.el"
