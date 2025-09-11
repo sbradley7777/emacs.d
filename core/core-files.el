@@ -86,4 +86,6 @@
  (add-hook 'auto-save-hook 'log-auto-save-operation)
 
  ;; Make this module available for loading with (require 'files)
- (provide 'files))
+ )
+
+(provide 'core-files)
