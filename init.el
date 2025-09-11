@@ -166,6 +166,17 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load custom settings if the file exists
 (when (file-exists-p custom-file) (load custom-file 'noerror))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Local user configuration (not version controlled)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load optional local configuration file for user-specific settings
+(let ((local-config (expand-file-name "local.el" user-emacs-directory)))
+  (when
+   (file-exists-p local-config)
+   (message "🔄  Loading local.el...")
+   (load local-config 'noerror)
+   (message "✅  local.el loaded successfully")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization complete - show diagnostics
