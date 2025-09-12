@@ -17,12 +17,7 @@
  ;; Modern line number display (Emacs 30.2+)
  (global-display-line-numbers-mode 1)
  (setq
-  display-line-numbers-type
-  'visual
-  display-line-numbers-width-start
-  t
-  display-line-numbers-grow-only
-  t)
+  display-line-numbers-type t display-line-numbers-width-start t display-line-numbers-grow-only t)
 
  ;; Disable in certain modes for performance
  (dolist
