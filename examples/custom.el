@@ -17,12 +17,17 @@
 ;;      Real customize changes will overwrite this content automatically.
 
 (custom-set-variables
- ;; Test variable to show custom.el was loaded
- '(initial-scratch-message
-   ";; Custom.el was loaded successfully!\n;; This confirms menu customizations will work.\n\n"))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 (custom-set-faces
- ;; No custom faces for this test
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
 ;; Display a message to confirm loading
