@@ -12,8 +12,7 @@
  ;; UI Elements Control:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Disable UI elements for cleaner interface
- ;; Disable UI elements for cleaner interface
- (tool-bar-mode -1) (scroll-bar-mode -1) (menu-bar-mode -1)
+ (tool-bar-mode -1) (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) (menu-bar-mode -1)
 
  ;; Modern line number display (Emacs 30.2+)
  (global-display-line-numbers-mode 1)
