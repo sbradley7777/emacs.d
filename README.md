@@ -67,7 +67,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`eglot-config.el`](lang/python/eglot-config.el) - Python-specific LSP server configuration
     - [`python-tools.el`](lang/python/python-tools.el) - Python development tools and packages
 - **[`themes/`](themes/)** - Theme and appearance configuration
-  - [`themes-config.el`](themes/themes-config.el) - [Zenburn](https://github.com/bbatsov/zenburn-emacs) theme configuration
+  - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
 - **[`user/`](user/)** - Personal customizations
   - [`functions.el`](user/functions.el) - Custom helper functions
   - [`aliases.el`](user/aliases.el) - Custom command aliases

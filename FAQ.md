@@ -158,11 +158,19 @@ The modular design makes it easy to add support for additional languages.
 
 ### Q: How does the theme system work?
 
-**A:** The configuration uses the [Zenburn theme](https://github.com/bbatsov/zenburn-emacs) ([`themes/themes-config.el`](themes/themes-config.el)) with:
-- Low-contrast, eye-friendly colors optimized for long coding sessions
-- Custom black background override for enhanced contrast
-- Automatic theme loading during startup
-- Easy customization through Zenburn's color override system
+**A:** The configuration uses [Doom Themes](https://github.com/doomemacs/themes) ([`themes/themes-config.el`](themes/themes-config.el)) with:
+- **Default theme**: `doom-zenburn` for optimal terminal compatibility
+- **40+ professional themes**: Comprehensive collection from the Doom Emacs ecosystem
+- **Terminal optimization**: Automatic adjustments to reduce warnings in terminal mode
+- **Interactive switching**: Use `M-x switch-theme` to preview and change themes
+- **Local customization**: Override theme preferences in `local.el`
+
+**Popular theme options:**
+- **Terminal-friendly**: `doom-zenburn`, `doom-gruvbox`, `doom-molokai`
+- **GUI-optimized**: `doom-one`, `doom-material`, `doom-dracula`
+- **Built-in fallbacks**: `wombat`, `tango-dark`
+
+See [`examples/local.el`](examples/local.el) for customization examples.
 
 ### Q: Can I disable specific features?
 

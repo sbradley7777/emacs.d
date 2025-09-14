@@ -14,7 +14,7 @@
  ;; Organized package lists for better maintainability
  (defvar
   config-essential-packages
-  '(zenburn-theme yaml-mode toml-mode markdown-mode)
+  '(doom-themes yaml-mode toml-mode markdown-mode)
   "Essential packages that must be installed.")
 
  (defvar
@@ -94,7 +94,7 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package configurations using use-package
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (use-package zenburn-theme :defer t) ; Deferred loading for zenburn theme
+ (use-package doom-themes :defer t) ; Deferred loading for doom themes collection
  (use-package yaml-mode :mode ("\\.ya?ml\\'" . yaml-mode)) ; YAML file support
  (use-package toml-mode :mode ("\\.toml\\'" . toml-mode)) ; TOML file support
  (use-package markdown-mode :mode ("\\.md\\'" . markdown-mode)) ; Markdown file support

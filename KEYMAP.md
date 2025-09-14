@@ -305,6 +305,23 @@ Python virtual environment commands for project isolation using [pyvenv](https:/
 | `pyvenv-deactivate` | Deactivate current virtual environment |
 | `pyvenv-workon` | Switch to a different virtual environment |
 
+### Theme Management
+
+Theme selection and customization using [Doom Themes](https://github.com/doomemacs/themes):
+
+| Function | Description |
+|:---------|:------------|
+| `switch-theme` | Interactive theme selection with real-time preview |
+
+**Using `switch-theme`:**
+- Press `M-x switch-theme` to open interactive theme selector
+- Choose from 40+ professionally designed themes
+- **Terminal-optimized**: `doom-zenburn` (default), `doom-gruvbox`, `doom-molokai`, `doom-ir-black`
+- **GUI-optimized**: `doom-one`, `doom-material`, `doom-dracula`, `doom-palenight`
+- **Built-in fallbacks**: `wombat`, `tango-dark`
+- Changes apply immediately for real-time preview
+- Set permanent preferences in `local.el` (see [`examples/local.el`](examples/local.el))
+
 ## Related Documentation
 
 **For Understanding Features:**

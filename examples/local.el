@@ -23,14 +23,65 @@
 ;;
 ;; EXAMPLES:
 ;; ---------
-;; ;; Override theme
-;; (load-theme 'wombat t)
+;; Theme Configuration
+;; Set your preferred theme - will be loaded automatically after initialization
+(message "📝 === local.el: Theme configuration starting ===")
+(message "📝 Display type: %s" (if (display-graphic-p) "GUI" "Terminal"))
+(message
+ "📝 Before setting: user-preferred-theme = %s"
+ (if (boundp 'user-preferred-theme) user-preferred-theme 'unbound))
+(setq user-preferred-theme 'doom-material) ; Active: doom-material (terminal-friendly)
+(message "📝 After setting: user-preferred-theme = %s" user-preferred-theme)
+(message
+ "📝 Current active theme: %s"
+ (if
+  (boundp 'custom-enabled-themes)
+  (if custom-enabled-themes (car custom-enabled-themes) 'none)
+  'unbound))
+(message
+ "📝 Theme system status: %s"
+ (if
+  (boundp 'themes-config--user-theme-loaded)
+  (if themes-config--user-theme-loaded "ready for override" "pending reload")
+  "not initialized"))
+(message "📝 === local.el: Theme configuration finished ===")
+(message
+ "📝 Note: Your preferred theme (%s) will be applied after all configuration modules load"
+ user-preferred-theme)
+
+;; Available Doom Theme Options:
+;; See https://github.com/doomemacs/themes for full collection
+
+;; Terminal-optimized themes (minimal warnings):
+;; (setq user-preferred-theme 'doom-zenburn)      ; Default - Low-contrast, easy on eyes
+;; (setq user-preferred-theme 'doom-gruvbox)      ; Retro groove colors
+;; (setq user-preferred-theme 'doom-molokai)      ; Classic Molokai colors
+;; (setq user-preferred-theme 'doom-ir-black)     ; High contrast black theme
+;; (setq user-preferred-theme 'doom-tomorrow-night) ; Clean, minimal design
+
+;; GUI-optimized themes (more warnings in terminal):
+;; (setq user-preferred-theme 'doom-one)          ; Modern blue theme
+;; (setq user-preferred-theme 'doom-dracula)      ; Dark theme with purple accents
+;; (setq user-preferred-theme 'doom-material)     ; Material design inspired
+;; (setq user-preferred-theme 'doom-palenight)    ; Material design variant
+;; (setq user-preferred-theme 'doom-tokyo-night)  ; Dark blue theme
+
+;; Built-in theme alternatives:
+;; (setq user-preferred-theme 'wombat)            ; Built-in dark theme
+;; (setq user-preferred-theme 'tango-dark)        ; Built-in tango variant
+
+;; Theme-specific customizations (optional)
+;; (setq user-theme-customizations
+;;       '((wombat . ((custom-safe-themes . t)))                     ; Allow wombat without confirmation
+;;         (doom-zenburn . ((doom-themes-enable-bold . t)))          ; Enable bold fonts for doom-zenburn
+;;         (doom-material . ((doom-themes-enable-italic . t)))))     ; Enable italics for doom-material
 ;;
 ;; ;; Machine-specific paths
 ;; (setq python-shell-interpreter "/usr/local/bin/python3")
 ;;
 ;; ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)
+;; (global-set-key (kbd "C-c t") 'switch-theme)  ; Quick theme switching
 ;;
 ;; ;; Private settings
 ;; (setq user-full-name "Your Full Name"

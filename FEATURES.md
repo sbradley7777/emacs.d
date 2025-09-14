@@ -16,6 +16,7 @@ This document provides comprehensive details about all features available in thi
   - [YAML Configuration](#yaml-configuration)
 - [Code Style and Standards](#code-style-and-standards)
 - [User Interface Enhancements](#user-interface-enhancements)
+  - [Theme System](#theme-system)
   - [Navigation and Discovery](#navigation-and-discovery)
   - [Visual Improvements](#visual-improvements)
   - [Enhanced Diagnostics](#enhanced-diagnostics)
@@ -231,6 +232,38 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 
 ## User Interface Enhancements
 
+### Theme System
+
+Modern theme management powered by [Doom Themes](https://github.com/doomemacs/themes) with extensive customization support:
+
+**Features** ([`themes/themes-config.el`](themes/themes-config.el)):
+- **Default Theme**: `doom-zenburn` - low-contrast, easy on eyes, excellent for terminal use
+- **Rich Theme Collection**: 40+ professionally designed themes from the Doom Emacs ecosystem
+- **Terminal Compatibility**: Automatic adjustments for terminal vs GUI environments
+- **Interactive Switching**: Use `M-x switch-theme` for real-time theme preview
+- **Local Customization**: Override themes in `local.el` for personal preferences
+
+**Available Themes**:
+- **Terminal-Optimized**: `doom-zenburn`, `doom-gruvbox`, `doom-molokai`, `doom-ir-black`
+- **GUI-Optimized**: `doom-one`, `doom-dracula`, `doom-material`, `doom-palenight`
+- **Built-in Fallbacks**: `wombat`, `tango-dark` for system compatibility
+
+**Customization** ([`examples/local.el`](examples/local.el)):
+```elisp
+;; Set your preferred theme in local.el
+(setq user-preferred-theme 'doom-material)
+
+;; Theme-specific customizations
+(setq user-theme-customizations
+      '((doom-zenburn . ((doom-themes-enable-bold . t)))))
+```
+
+**Why Doom Themes?**
+- **Professional Quality**: Carefully crafted color schemes designed for long coding sessions
+- **Comprehensive Coverage**: Support for all major programming languages and modes
+- **Active Maintenance**: Regular updates and community support
+- **Performance**: Optimized for both GUI and terminal environments
+
 ### Navigation and Discovery
 - **[Which-Key](https://github.com/justbur/emacs-which-key)** ([`core/core-packages.el`](core/core-packages.el)): Interactive keybinding discovery system that displays available key combinations in popup windows
   - **0.3-second delay** for faster response than default settings
@@ -248,7 +281,7 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 ### Visual Improvements
 - **[Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters)** ([`features/rainbow-delimiters.el`](features/rainbow-delimiters.el)): Enhanced delimiter visibility with color coding
 - **[Indent Guides](https://github.com/DarthFennec/highlight-indent-guides)** ([`features/indent-guides.el`](features/indent-guides.el)): Visual indentation guides for better code structure
-- **Theme Support** ([`themes/themes-config.el`](themes/themes-config.el)): [Zenburn](https://github.com/bbatsov/zenburn-emacs) theme with custom black background
+- **Theme Support** ([`themes/themes-config.el`](themes/themes-config.el)): [Doom Themes](https://github.com/doomemacs/themes) with doom-zenburn default and terminal compatibility
 
 ### Enhanced Diagnostics
 - **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake-config.el`](features/flymake-config.el)): Real-time syntax checking and linting
