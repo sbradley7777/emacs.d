@@ -79,6 +79,82 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  (defun
+  get-available-doom-themes () "Get a list of all available doom themes."
+  (sort
+   (seq-filter
+    (lambda (theme) (string-match-p "^doom-" (symbol-name theme))) (custom-available-themes))
+   (lambda (a b) (string< (symbol-name a) (symbol-name b)))))
+
+ (defun
+  get-other-themes
+  ()
+  "Get a list of other (non-doom) themes that work well."
+  '(wombat tango-dark leuven))
+
+ (defun
+  preview-theme (theme) "Preview THEME temporarily without changing user preference."
+  (let ((original-theme (car custom-enabled-themes)))
+    (condition-case err
+        (progn
+         (mapc #'disable-theme custom-enabled-themes)
+         (load-theme theme t)
+         (message "🎨 Previewing theme: %s (Press RET to apply, C-g to cancel)" theme)
+         (sit-for 0.5))
+      (error
+       (message "❌ Failed to preview theme '%s': %s" theme (error-message-string err))
+       (when original-theme (load-theme original-theme t))))))
+
+ (defun
+  list-doom-themes () "List all available doom themes in a selectable buffer." (interactive)
+  (let* ((doom-themes (get-available-doom-themes))
+         (other-themes (get-other-themes))
+         (current-theme (car custom-enabled-themes))
+         (buffer-name "*Doom Themes*"))
+    (with-output-to-temp-buffer
+     buffer-name
+     (princ "Available Doom Themes:\n")
+     (princ "======================\n\n")
+     (princ "Click on a theme name or press 'RET' to select it, 'q' to quit.\n\n")
+     (princ "DOOM THEMES:\n")
+     (dolist
+      (theme doom-themes)
+      (if
+       (eq theme current-theme)
+       (princ (format "-> %s (current)\n" theme))
+       (princ (format "   %s\n" theme))))
+     (princ "\nOTHER THEMES:\n")
+     (dolist
+      (theme other-themes)
+      (if
+       (eq theme current-theme)
+       (princ (format "-> %s (current)\n" theme))
+       (princ (format "   %s\n" theme)))))
+    (with-current-buffer
+     buffer-name (goto-char (point-min))
+
+     ;; Function to select theme from current line
+     (let ((select-theme-fn
+            (lambda
+             () (interactive)
+             (let ((line (thing-at-point 'line t)))
+               (when
+                (string-match "\\(?:-> \\|   \\)\\([a-z0-9-]+\\)" line)
+                (let ((theme (intern (match-string 1 line))))
+                  (setq user-preferred-theme theme)
+                  (load-configured-theme)
+                  (message "🎨 Switched to theme: %s (buffer stays open for testing)" theme)
+                  ;; Update the buffer to show new current theme
+                  (list-doom-themes)))))))
+
+       ;; Keyboard bindings
+       (local-set-key (kbd "RET") select-theme-fn)
+       (local-set-key (kbd "q") 'quit-window)
+       (local-set-key (kbd "C-g") 'quit-window)
+
+       (setq buffer-read-only t)
+       (goto-char (point-min))))))
+
+ (defun
   apply-theme-customizations (theme) "Apply customizations for the specified THEME."
   ;; Apply doom-themes configuration for all themes (since we're doom-themes focused)
   (apply-doom-themes-customizations)
@@ -132,28 +208,10 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
     (intern
      (completing-read
       "Select theme: "
-      (if
-       (display-graphic-p)
-       ;; GUI mode - all themes available
-       '("doom-zenburn"
-         "doom-one"
-         "doom-dracula"
-         "doom-gruvbox"
-         "doom-monokai-pro"
-         "doom-palenight"
-         "doom-tokyo-night"
-         "wombat"
-         "tango-dark")
-       ;; Terminal mode - prioritize terminal-friendly themes
-       '("doom-zenburn"
-         "doom-gruvbox"
-         "doom-molokai"
-         "doom-ir-black"
-         "doom-tomorrow-night"
-         "doom-one"
-         "wombat"
-         "tango-dark"))
-      nil nil nil nil "doom-zenburn"))))
+      (append
+       (mapcar #'symbol-name (get-available-doom-themes))
+       (mapcar #'symbol-name (get-other-themes)))
+      nil t nil nil "doom-zenburn"))))
   (message "🎨 Interactive theme switch requested: %s" theme)
   (setq user-preferred-theme theme)
   (load-configured-theme))

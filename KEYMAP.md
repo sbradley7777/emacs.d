@@ -307,19 +307,35 @@ Python virtual environment commands for project isolation using [pyvenv](https:/
 
 ### Theme Management
 
-Theme selection and customization using [Doom Themes](https://github.com/doomemacs/themes):
+Interactive theme selection and customization using [Doom Themes](https://github.com/doomemacs/themes):
 
 | Function | Description |
 |:---------|:------------|
-| `switch-theme` | Interactive theme selection with real-time preview |
+| `switch-theme` | Quick theme selection with tab completion |
+| `list-doom-themes` | Interactive theme browser with live testing |
 
 **Using `switch-theme`:**
-- Press `M-x switch-theme` to open interactive theme selector
-- Choose from 40+ professionally designed themes
+- Press `M-x switch-theme` to open theme selector with tab completion
+- Type to filter from 68+ doom themes plus other terminal-friendly themes
+- Press `TAB` to see all available options
+- Changes apply immediately when you select a theme
+
+**Using `list-doom-themes` (Recommended for theme browsing):**
+- Press `M-x list-doom-themes` to open dedicated theme browser
+- **Navigation**: Use arrow keys to move between themes
+- **Selection**: Press `RET` (Enter) on any theme to apply it instantly
+- **Testing**: Buffer stays open so you can test multiple themes easily
+- **Current theme**: Marked with `->` indicator
+- **Exit**: Press `q` or `C-g` to close the browser when done
+
+**Available Themes:**
+- **68+ Doom Themes**: All doom-themes dynamically discovered and sorted alphabetically
+- **Popular choices**: `doom-zenburn`, `doom-gruvbox`, `doom-one`, `doom-material`, `doom-dracula`
 - **Terminal-optimized**: `doom-zenburn` (default), `doom-gruvbox`, `doom-molokai`, `doom-ir-black`
-- **GUI-optimized**: `doom-one`, `doom-material`, `doom-dracula`, `doom-palenight`
-- **Built-in fallbacks**: `wombat`, `tango-dark`
-- Changes apply immediately for real-time preview
+- **Other options**: `wombat`, `tango-dark`, `leuven`
+
+**Theme Persistence:**
+- Your selected theme preference is automatically saved
 - Set permanent preferences in `local.el` (see [`examples/local.el`](examples/local.el))
 
 ## Related Documentation

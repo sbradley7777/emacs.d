@@ -234,19 +234,32 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 
 ### Theme System
 
-Modern theme management powered by [Doom Themes](https://github.com/doomemacs/themes) with extensive customization support:
+Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/themes) with dynamic discovery and interactive browsing:
 
 **Features** ([`themes/themes-config.el`](themes/themes-config.el)):
 - **Default Theme**: `doom-zenburn` - low-contrast, easy on eyes, excellent for terminal use
-- **Rich Theme Collection**: 40+ professionally designed themes from the Doom Emacs ecosystem
+- **Dynamic Discovery**: Automatically finds all 68+ available doom themes at runtime
+- **Interactive Browser**: Dedicated theme testing interface with live preview
 - **Terminal Compatibility**: Automatic adjustments for terminal vs GUI environments
-- **Interactive Switching**: Use `M-x switch-theme` for real-time theme preview
+- **Persistent Selection**: Automatically saves and remembers your theme preference
 - **Local Customization**: Override themes in `local.el` for personal preferences
 
-**Available Themes**:
+**Theme Selection Methods**:
+- **`M-x switch-theme`**: Quick selection with tab completion from all available themes
+- **`M-x list-doom-themes`**: Interactive browser for testing multiple themes (recommended)
+
+**Interactive Theme Browser Features**:
+- **Live Testing**: Apply themes instantly without closing the browser
+- **Visual Navigation**: Arrow keys to browse, Enter to apply, q to quit
+- **Current Theme Indicator**: Shows active theme with `->` marker
+- **Persistent Browser**: Stay open for easy theme comparison and testing
+- **Full Collection**: Access to all 68+ doom themes plus additional options
+
+**Available Themes** (Dynamically Discovered):
+- **68+ Doom Themes**: Complete collection including `doom-1337`, `doom-acario-dark`, `doom-ayu-dark`, etc.
+- **Popular Choices**: `doom-zenburn`, `doom-gruvbox`, `doom-one`, `doom-material`, `doom-dracula`
 - **Terminal-Optimized**: `doom-zenburn`, `doom-gruvbox`, `doom-molokai`, `doom-ir-black`
-- **GUI-Optimized**: `doom-one`, `doom-dracula`, `doom-material`, `doom-palenight`
-- **Built-in Fallbacks**: `wombat`, `tango-dark` for system compatibility
+- **Built-in Fallbacks**: `wombat`, `tango-dark`, `leuven` for system compatibility
 
 **Customization** ([`examples/local.el`](examples/local.el)):
 ```elisp
