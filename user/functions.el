@@ -54,5 +54,21 @@ When reaching the end of buffer, move point to end."
     (end-of-buffer
      (goto-char (point-max)))))
 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Smart TAB Completion Functions:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  smart-tab () "Smart TAB: complete if possible, otherwise indent." (interactive)
+  (if
+   (minibufferp) (minibuffer-complete)
+   (if corfu-mode (or (completion-at-point) (indent-for-tab-command)) (indent-for-tab-command))))
+
+ (defun
+  completion-or-indent
+  ()
+  "Trigger completion or indent, depending on context."
+  (interactive)
+  (if (and corfu-mode (not (corfu--popup-p))) (completion-at-point) (indent-for-tab-command)))
+
  ;; Make this module available for loading with (require 'functions)
  (provide 'functions))

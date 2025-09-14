@@ -13,13 +13,6 @@
  ;; Corfu Auto-Completion Framework
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Define helper function for TAB behavior
- (defun
-  corfu-insert-or-complete
-  ()
-  "Insert completion or trigger completion-at-point."
-  (interactive)
-  (if (and corfu-mode (not (corfu--popup-p))) (completion-at-point) (indent-for-tab-command)))
 
  (use-package
   corfu
@@ -66,15 +59,7 @@
  (global-set-key (kbd "M-TAB") #'completion-at-point) ; Alt+TAB (traditional)
  (global-set-key (kbd "C-M-i") #'completion-at-point) ; Ctrl+Alt+i (traditional alternative)
 
- ;; For regular TAB to trigger completion when not in completion mode
- (defun
-  smart-tab () "Smart TAB: complete if possible, otherwise indent." (interactive)
-  (if
-   (minibufferp) (minibuffer-complete)
-   (if corfu-mode (or (completion-at-point) (indent-for-tab-command)) (indent-for-tab-command))))
-
- ;; Note: TAB behavior left to individual modes for proper indentation
- ;; Use M-TAB, C-c TAB, or C-M-i for manual completion instead
+ ;; Use M-TAB, C-c TAB, or C-M-i for manual completion
 
 
  ;; Make this module available for loading with (require 'completion-config)
