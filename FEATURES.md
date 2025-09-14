@@ -237,7 +237,7 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/themes) with dynamic discovery and interactive browsing:
 
 **Features** ([`themes/themes-config.el`](themes/themes-config.el)):
-- **Default Theme**: `doom-zenburn` - low-contrast, easy on eyes, excellent for terminal use
+- **Default Theme**: `doom-zenburn` - classic zenburn theme with excellent terminal compatibility
 - **Dynamic Discovery**: Automatically finds all 68+ available doom themes at runtime
 - **Interactive Browser**: Dedicated theme testing interface with live preview
 - **Terminal Compatibility**: Automatic adjustments for terminal vs GUI environments
@@ -256,15 +256,15 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
 - **Full Collection**: Access to all 68+ doom themes plus additional options
 
 **Available Themes** (Dynamically Discovered):
-- **68+ Doom Themes**: Complete collection including `doom-1337`, `doom-acario-dark`, `doom-ayu-dark`, etc.
-- **Popular Choices**: `doom-zenburn`, `doom-gruvbox`, `doom-one`, `doom-material`, `doom-dracula`
-- **Terminal-Optimized**: `doom-zenburn`, `doom-gruvbox`, `doom-molokai`, `doom-ir-black`
+- **68+ Doom Themes**: Complete collection including `doom-zenburn`, `doom-1337`, `doom-acario-dark`, `doom-ayu-dark`, etc.
+- **Popular Choices**: `doom-zenburn` (default), `doom-1337`, `doom-Iosvkem`, `doom-gruvbox`, `doom-material-dark`, `doom-monokai-machine`
+- **Terminal-Optimized**: `doom-zenburn` (default), `doom-1337`, `doom-gruvbox`, `doom-material-dark`, `doom-tomorrow-night`
 - **Built-in Fallbacks**: `wombat`, `tango-dark`, `leuven` for system compatibility
 
 **Customization** ([`examples/local.el`](examples/local.el)):
 ```elisp
-;; Set your preferred theme in local.el
-(setq user-preferred-theme 'doom-material)
+;; Set your preferred theme in local.el to override the default doom-zenburn
+(setq user-preferred-theme 'doom-1337)  ; Example override from examples/local.el
 
 ;; Theme-specific customizations
 (setq user-theme-customizations

@@ -30,7 +30,7 @@
 (message
  "📝 Before setting: user-preferred-theme = %s"
  (if (boundp 'user-preferred-theme) user-preferred-theme 'unbound))
-(setq user-preferred-theme 'doom-material) ; Active: doom-material (terminal-friendly)
+(setq user-preferred-theme 'doom-1337) ; Active: doom-material (terminal-friendly)
 (message "📝 After setting: user-preferred-theme = %s" user-preferred-theme)
 (message
  "📝 Current active theme: %s"
@@ -52,19 +52,14 @@
 ;; Available Doom Theme Options:
 ;; See https://github.com/doomemacs/themes for full collection
 
-;; Terminal-optimized themes (minimal warnings):
-;; (setq user-preferred-theme 'doom-zenburn)      ; Default - Low-contrast, easy on eyes
-;; (setq user-preferred-theme 'doom-gruvbox)      ; Retro groove colors
-;; (setq user-preferred-theme 'doom-molokai)      ; Classic Molokai colors
-;; (setq user-preferred-theme 'doom-ir-black)     ; High contrast black theme
+;; Recommended themes:
+;; (setq user-preferred-theme 'doom-1337)           ; Hacker-inspired dark theme
+;; (setq user-preferred-theme 'doom-Iosvkem)        ; Clean, modern dark theme
+;; (setq user-preferred-theme 'doom-gruvbox)        ; Retro groove colors
+;; (setq user-preferred-theme 'doom-material-dark)  ; Material design dark variant
+;; (setq user-preferred-theme 'doom-monokai-machine) ; Enhanced Monokai colors
 ;; (setq user-preferred-theme 'doom-tomorrow-night) ; Clean, minimal design
-
-;; GUI-optimized themes (more warnings in terminal):
-;; (setq user-preferred-theme 'doom-one)          ; Modern blue theme
-;; (setq user-preferred-theme 'doom-dracula)      ; Dark theme with purple accents
-;; (setq user-preferred-theme 'doom-material)     ; Material design inspired
-;; (setq user-preferred-theme 'doom-palenight)    ; Material design variant
-;; (setq user-preferred-theme 'doom-tokyo-night)  ; Dark blue theme
+;; (setq user-preferred-theme 'doom-peacock)        ; Vibrant, colorful theme
 
 ;; Built-in theme alternatives:
 ;; (setq user-preferred-theme 'wombat)            ; Built-in dark theme
@@ -101,11 +96,31 @@
 
 ;;; Code:
 
-(message "🔄  Loading local user configuration...")
+(message "📝 === local.el: Loading local user configuration ===")
 
 ;; Add your local configuration below this line
 ;; ============================================
 
+;; Font Configuration
+;; ------------------
+;; Set default font size for GUI mode
+;; Common sizes: 60 (6pt), 90 (9pt), 100 (10pt), 110 (11pt), 120 (12pt), 140 (14pt)
+(when
+ (display-graphic-p)
+ (set-face-attribute 'default nil :height 90)) ; Height is in 1/10th points, so 90 = 9pt
+
+;; macOS XQuartz Key Mapping Fix
+;; -----------------------------
+;; In XQuartz make sure that the following is enabled in "Settings"-> "Input" -> "Option key sends Alt_L and Alt_R".
+;;
+;; Fix Command/Alt key swapping when using Emacs GUI over SSH from macOS with XQuartz
+(when
+ (and (display-graphic-p) (eq system-type 'gnu/linux))
+ ;; Make Option key work as Meta in GUI mode (instead of printing special characters)
+ (setq x-alt-keysym 'meta)
+ ;; Also try setting the meta keysym
+ (setq x-meta-keysym 'alt))
+(message "📝 === local.el: The loading of local user configuration finished ===")
 
 ;; ============================================
 ;; End of local configuration
