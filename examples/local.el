@@ -30,7 +30,7 @@
 (message
  "📝 Before setting: user-preferred-theme = %s"
  (if (boundp 'user-preferred-theme) user-preferred-theme 'unbound))
-(setq user-preferred-theme 'doom-1337) ; Active: doom-material (terminal-friendly)
+(setq user-preferred-theme 'doom-1337) ; Active: doom-1337 (hacker-inspired dark theme)
 (message "📝 After setting: user-preferred-theme = %s" user-preferred-theme)
 (message
  "📝 Current active theme: %s"
