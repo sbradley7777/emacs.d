@@ -246,7 +246,7 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
 
 **Theme Selection Methods**:
 - **`M-x switch-theme`**: Quick selection with tab completion from all available themes
-- **`M-x list-doom-themes`**: Interactive browser for testing multiple themes (recommended)
+- **`M-x list-themes`**: Interactive browser for testing multiple themes (recommended)
 
 **Interactive Theme Browser Features**:
 - **Live Testing**: Apply themes instantly without closing the browser

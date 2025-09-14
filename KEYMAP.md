@@ -312,7 +312,7 @@ Interactive theme selection and customization using [Doom Themes](https://github
 | Function | Description |
 |:---------|:------------|
 | `switch-theme` | Quick theme selection with tab completion |
-| `list-doom-themes` | Interactive theme browser with live testing |
+| `list-themes` | Interactive theme browser with live testing |
 
 **Using `switch-theme`:**
 - Press `M-x switch-theme` to open theme selector with tab completion
@@ -320,8 +320,8 @@ Interactive theme selection and customization using [Doom Themes](https://github
 - Press `TAB` to see all available options
 - Changes apply immediately when you select a theme
 
-**Using `list-doom-themes` (Recommended for theme browsing):**
-- Press `M-x list-doom-themes` to open dedicated theme browser
+**Using `list-themes` (Recommended for theme browsing):**
+- Press `M-x list-themes` to open dedicated theme browser
 - **Navigation**: Use arrow keys to move between themes
 - **Selection**: Press `RET` (Enter) on any theme to apply it instantly
 - **Testing**: Buffer stays open so you can test multiple themes easily

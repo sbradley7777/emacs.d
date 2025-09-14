@@ -1,7 +1,15 @@
 ;;; themes-config.el --- Core Theme Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      Core theme and visual appearance configuration
-;;      Supports configurable themes via user variables
+;; WHAT: Basic theme loading and doom-themes setup
+;; WHY:  Provides essential theme functionality for startup
+;; PROVIDES: load-configured-theme, basic theme variables
+;;
+;; Core theme and visual appearance configuration
+;; Advanced theme utilities are in theme-utils.el
+
+;;; Dependencies:
+;; - core-utils (for with-load-timing)
+;; - doom-themes package
 
 (require 'core-utils)
 
@@ -9,7 +17,7 @@
  "themes-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Theme Configuration System
+ ;; Theme Configuration Variables
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; User-configurable theme variables (can be set in local.el)
@@ -29,7 +37,6 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; Doom themes configuration - applied before theme loading
- ;; Documentation: https://github.com/doomemacs/themes#configuration
  (defvar
   doom-themes-default-customizations
   '((doom-themes-enable-bold . t)
@@ -45,118 +52,23 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
   (dolist (custom doom-themes-default-customizations) (set (car custom) (cdr custom)))
 
   ;; Terminal-specific adjustments to prevent nil attribute warnings
-  (when
-   (not (display-graphic-p))
-   ;; Additional terminal compatibility settings
-   (setq doom-themes-enable-italic nil))
+  (when (not (display-graphic-p)) (setq doom-themes-enable-italic nil))
 
   ;; Enable doom-themes enhancements (with error handling for terminal compatibility)
   (condition-case err
-      (progn
-       ;; Enable flashing mode-line on errors (may not work in all terminals)
-       (doom-themes-visual-bell-config)
-       ;; Corrects (and improves) org-mode's native fontification
-       (doom-themes-org-config))
+      (progn (doom-themes-visual-bell-config) (doom-themes-org-config))
     (error
      (message
       "⚠️  Some doom-themes features disabled for terminal compatibility: %s"
       (error-message-string err)))))
 
- (defun
-  doom-themes-terminal-fixes () "Apply fixes for doom themes in terminal mode to reduce warnings."
-  (when
-   (not (display-graphic-p))
-   ;; Simple approach: just disable the problematic features
-   (condition-case err
-       (progn
-        ;; Disable features that cause nil attribute warnings in terminal
-        (setq doom-themes-enable-italic nil))
-     (error
-      (message "⚠️  Terminal fixes failed: %s" (error-message-string err))))))
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Theme Management Functions
+ ;; Core Theme Loading
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
- (defun
-  get-available-doom-themes () "Get a list of all available doom themes."
-  (sort
-   (seq-filter
-    (lambda (theme) (string-match-p "^doom-" (symbol-name theme))) (custom-available-themes))
-   (lambda (a b) (string< (symbol-name a) (symbol-name b)))))
-
- (defun
-  get-other-themes
-  ()
-  "Get a list of other (non-doom) themes that work well."
-  '(wombat tango-dark leuven))
-
- (defun
-  preview-theme (theme) "Preview THEME temporarily without changing user preference."
-  (let ((original-theme (car custom-enabled-themes)))
-    (condition-case err
-        (progn
-         (mapc #'disable-theme custom-enabled-themes)
-         (load-theme theme t)
-         (message "🎨 Previewing theme: %s (Press RET to apply, C-g to cancel)" theme)
-         (sit-for 0.5))
-      (error
-       (message "❌ Failed to preview theme '%s': %s" theme (error-message-string err))
-       (when original-theme (load-theme original-theme t))))))
-
- (defun
-  list-doom-themes () "List all available doom themes in a selectable buffer." (interactive)
-  (let* ((doom-themes (get-available-doom-themes))
-         (other-themes (get-other-themes))
-         (current-theme (car custom-enabled-themes))
-         (buffer-name "*Doom Themes*"))
-    (with-output-to-temp-buffer
-     buffer-name
-     (princ "Available Doom Themes:\n")
-     (princ "======================\n\n")
-     (princ "Click on a theme name or press 'RET' to select it, 'q' to quit.\n\n")
-     (princ "DOOM THEMES:\n")
-     (dolist
-      (theme doom-themes)
-      (if
-       (eq theme current-theme)
-       (princ (format "-> %s (current)\n" theme))
-       (princ (format "   %s\n" theme))))
-     (princ "\nOTHER THEMES:\n")
-     (dolist
-      (theme other-themes)
-      (if
-       (eq theme current-theme)
-       (princ (format "-> %s (current)\n" theme))
-       (princ (format "   %s\n" theme)))))
-    (with-current-buffer
-     buffer-name (goto-char (point-min))
-
-     ;; Function to select theme from current line
-     (let ((select-theme-fn
-            (lambda
-             () (interactive)
-             (let ((line (thing-at-point 'line t)))
-               (when
-                (string-match "\\(?:-> \\|   \\)\\([a-z0-9-]+\\)" line)
-                (let ((theme (intern (match-string 1 line))))
-                  (setq user-preferred-theme theme)
-                  (load-configured-theme)
-                  (message "🎨 Switched to theme: %s (buffer stays open for testing)" theme)
-                  ;; Update the buffer to show new current theme
-                  (list-doom-themes)))))))
-
-       ;; Keyboard bindings
-       (local-set-key (kbd "RET") select-theme-fn)
-       (local-set-key (kbd "q") 'quit-window)
-       (local-set-key (kbd "C-g") 'quit-window)
-
-       (setq buffer-read-only t)
-       (goto-char (point-min))))))
 
  (defun
   apply-theme-customizations (theme) "Apply customizations for the specified THEME."
-  ;; Apply doom-themes configuration for all themes (since we're doom-themes focused)
+  ;; Apply doom-themes configuration for all themes
   (apply-doom-themes-customizations)
   ;; Apply any user customizations from local.el
   (when-let ((customs (cdr (assq theme user-theme-customizations))))
@@ -187,10 +99,7 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
             ;; Apply post-load fixes for terminal compatibility
             (when
              (and (not (display-graphic-p)) (string-match-p "^doom-" (symbol-name theme)))
-             (doom-themes-terminal-fixes)
-             (message "🎨 Applied terminal compatibility fixes for %s" theme)
-             (message
-              "ℹ️  Note: Any theme-related warning messages about 'nil value is invalid' can be safely ignored - they are expected when using doom themes in terminal mode")))
+             (message "🎨 Applied terminal compatibility fixes for %s" theme)))
          (error
           (message "❌ Failed to load theme '%s': %s" theme (error-message-string err))
           ;; Fallback to doom-zenburn
@@ -199,30 +108,11 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
           (load-theme 'doom-zenburn t)
           (message "✅ Loaded fallback theme: doom-zenburn"))))))))
 
- (defun
-  switch-theme
-  (theme)
-  "Interactively switch to a different THEME."
-  (interactive
-   (list
-    (intern
-     (completing-read
-      "Select theme: "
-      (append
-       (mapcar #'symbol-name (get-available-doom-themes))
-       (mapcar #'symbol-name (get-other-themes)))
-      nil t nil nil "doom-zenburn"))))
-  (message "🎨 Interactive theme switch requested: %s" theme)
-  (setq user-preferred-theme theme)
-  (load-configured-theme))
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Load Theme
+ ;; Load Theme on Startup
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load user's preferred theme after all configuration is complete
- ;; This ensures local.el preferences are respected without double-loading
- (add-hook 'emacs-startup-hook #'load-configured-theme)) ; Close with-load-timing
-
+ (add-hook 'emacs-startup-hook #'load-configured-theme))
 
 ;; Make this module available for loading with (require 'themes-config)
 (provide 'themes-config)
