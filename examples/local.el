@@ -142,6 +142,13 @@
 ;; (setq tramp-verbose 6)
 ;; (setq tramp-debug-buffer t)
 
+;; Python Virtual Environment Debugging
+;; ------------------------------------
+;; Uncomment to enable debugging for pyvenv remote/TRAMP issues
+;; When enabled, detailed debug messages will appear in the *Messages* buffer
+;; to help diagnose virtual environment activation problems
+;; (setq pyvenv-remote-debug t)
+
 (message "📝 === local.el: The loading of local user configuration finished ===")
 
 ;; ============================================
