@@ -130,6 +130,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'theme-utils "Theme utilities") ; Interactive theme tools
 (safe-load-config 'editing "Editing preferences") ; Editing preferences
 (safe-load-config 'core-files "File handling") ; File handling
+(safe-load-config 'tramp-config "TRAMP remote file access") ; Remote file access
 (safe-load-config 'keybindings "Global keybindings") ; Global keybindings
 
 ;; Optional features (load eglot first before language-specific configs)

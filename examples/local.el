@@ -72,6 +72,7 @@
 (when
  (bound-and-true-p global-whitespace-mode) (global-whitespace-mode -1) (global-whitespace-mode 1))
 
+
 ;; Allow all themes without confirmation
 (setq custom-safe-themes t)
 
@@ -134,6 +135,13 @@
  (setq x-alt-keysym 'meta)
  ;; Also try setting the meta keysym
  (setq x-meta-keysym 'alt))
+
+;; TRAMP Configuration
+;; -------------------
+;; Uncomment to enable TRAMP debugging when troubleshooting remote connections
+;; (setq tramp-verbose 6)
+;; (setq tramp-debug-buffer t)
+
 (message "📝 === local.el: The loading of local user configuration finished ===")
 
 ;; ============================================
@@ -143,3 +151,9 @@
 
 (provide 'local)
 ;;; local.el ends here
+
+;; This is a test comment with trailing spaces
+(setq test-variable 'value)
+
+
+;; Multiple blank lines above
