@@ -66,10 +66,21 @@
 ;; (setq user-preferred-theme 'tango-dark)        ; Built-in tango variant
 
 ;; Theme-specific customizations (optional)
-;; (setq user-theme-customizations
-;;       '((wombat . ((custom-safe-themes . t)))                     ; Allow wombat without confirmation
-;;         (doom-zenburn . ((doom-themes-enable-bold . t)))          ; Enable bold fonts for doom-zenburn
-;;         (doom-material . ((doom-themes-enable-italic . t)))))     ; Enable italics for doom-material
+(setq
+ user-theme-customizations
+ '((doom-1337 . ((whitespace-style . (face trailing tabs tab-mark)))) ; Disable line length highlighting for doom-1337
+   (wombat . ((custom-safe-themes . t))) ; Allow wombat without confirmation
+   (doom-zenburn . ((doom-themes-enable-bold . t))) ; Enable bold fonts for doom-zenburn
+   (doom-material . ((doom-themes-enable-italic . t))))) ; Enable italics for doom-material
+
+;; Hook to refresh whitespace-mode after theme changes for doom-1337
+(defun
+ refresh-whitespace-for-doom-1337
+ (theme)
+ "Refresh whitespace-mode when doom-1337 theme is loaded."
+ (when (eq theme 'doom-1337) (global-whitespace-mode -1) (global-whitespace-mode 1)))
+
+(add-hook 'enable-theme-functions 'refresh-whitespace-for-doom-1337)
 ;;
 ;; ;; Machine-specific paths
 ;; (setq python-shell-interpreter "/usr/local/bin/python3")
