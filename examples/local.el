@@ -65,22 +65,25 @@
 ;; (setq user-preferred-theme 'wombat)            ; Built-in dark theme
 ;; (setq user-preferred-theme 'tango-dark)        ; Built-in tango variant
 
-;; Theme-specific customizations (optional)
-(setq
- user-theme-customizations
- '((doom-1337 . ((whitespace-style . (face trailing tabs tab-mark)))) ; Disable line length highlighting for doom-1337
-   (wombat . ((custom-safe-themes . t))) ; Allow wombat without confirmation
-   (doom-zenburn . ((doom-themes-enable-bold . t))) ; Enable bold fonts for doom-zenburn
-   (doom-material . ((doom-themes-enable-italic . t))))) ; Enable italics for doom-material
+;; Global customizations - applies to all themes
+;; Disable line length highlighting for all themes by removing 'lines-tail from whitespace-style
+(setq whitespace-style '(face trailing tabs tab-mark))
+;; Refresh whitespace-mode to apply the new style
+(when
+ (bound-and-true-p global-whitespace-mode) (global-whitespace-mode -1) (global-whitespace-mode 1))
 
-;; Hook to refresh whitespace-mode after theme changes for doom-1337
-(defun
- refresh-whitespace-for-doom-1337
- (theme)
- "Refresh whitespace-mode when doom-1337 theme is loaded."
- (when (eq theme 'doom-1337) (global-whitespace-mode -1) (global-whitespace-mode 1)))
+;; Allow all themes without confirmation
+(setq custom-safe-themes t)
 
-(add-hook 'enable-theme-functions 'refresh-whitespace-for-doom-1337)
+;; Enable bold fonts for all doom themes
+(setq doom-themes-enable-bold t)
+
+;; Enable italic fonts for all doom themes
+(setq doom-themes-enable-italic t)
+
+;; Theme-specific customizations (optional - for exceptions to global settings)
+;; (setq user-theme-customizations
+;;       '((some-theme . ((custom-setting . custom-value)))))      ; Example theme-specific override
 ;;
 ;; ;; Machine-specific paths
 ;; (setq python-shell-interpreter "/usr/local/bin/python3")
