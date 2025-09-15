@@ -80,7 +80,11 @@
  (setq size-indication-mode t) ; Show buffer size in mode line
 
  ;; Add username and hostname to mode line (non-destructive approach)
- (add-to-list 'mode-line-misc-info '(:eval (concat "[" (user-login-name) "@" (system-name) "] ")))
+ (add-to-list
+  'mode-line-misc-info
+  '(:eval
+    (concat
+     "[" (user-login-name) "@" (or (file-remote-p default-directory 'host) (system-name)) "] ")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Modern Emacs features
