@@ -35,24 +35,22 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; Auto-detected project tracking (shared between local and remote)
- (defvar
-  config-python-detected-project-root nil "Auto-detected project root - set once and remembered.")
+ (defvar pyvenv-project-root nil "Auto-detected project root - set once and remembered.")
 
- (defvar
-  config-python-detected-project-name nil "Auto-detected project name for modeline display.")
+ (defvar pyvenv-project-name nil "Auto-detected project name for modeline display.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Shared Modeline Variables
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; Runtime variables for modeline display (buffer-local)
- (defvar config-python-project-name "inactive" "Current project status for modeline.")
- (make-variable-buffer-local 'config-python-project-name)
- (setq-default config-python-project-name "inactive")
+ (defvar pyvenv-current-project-name "inactive" "Current project status for modeline.")
+ (make-variable-buffer-local 'pyvenv-current-project-name)
+ (setq-default pyvenv-current-project-name "inactive")
 
- (defvar config-python-version nil "Python version of the detected virtual environment.")
- (make-variable-buffer-local 'config-python-version)
- (setq-default config-python-version nil)
+ (defvar pyvenv-current-version nil "Python version of the detected virtual environment.")
+ (make-variable-buffer-local 'pyvenv-current-version)
+ (setq-default pyvenv-current-version nil)
 
  ;; Make this module available for loading with (require 'python-constants)
  (provide 'python-constants))

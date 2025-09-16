@@ -102,7 +102,7 @@
       pyvenv-virtual-env
       (when
        pyvenv-remote-debug (message "🐛 [pyvenv] About to fix interpreter and update modeline"))
-      (fix-remote-python-interpreter) (update-python-modeline))
+      (fix-remote-python-interpreter) (pyvenv-update-modeline))
      (when
       (not pyvenv-virtual-env)
       (when
@@ -155,7 +155,7 @@
   (when pyvenv-remote-debug (message "🐛 [pyvenv] === FIX-REMOTE-PYTHON-INTERPRETER DONE ===")))
 
  (defun
-  update-python-modeline
+  pyvenv-update-modeline
   ()
   "Update modeline with project info after venv activation."
   (when pyvenv-remote-debug (message "🐛 [pyvenv] === UPDATE-PYTHON-MODELINE ==="))
@@ -167,24 +167,24 @@
   (when
    pyvenv-remote-debug
    (message
-    "🐛 [pyvenv] config-python-project-name bound?: %s" (boundp 'config-python-project-name)))
+    "🐛 [pyvenv] pyvenv-current-project-name bound?: %s" (boundp 'pyvenv-current-project-name)))
   (when
    pyvenv-virtual-env
    (let* ((venv-parent-dir (file-name-directory (directory-file-name pyvenv-virtual-env)))
           (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
      (when pyvenv-remote-debug (message "🐛 [pyvenv] Calculated project name: %s" project-name))
      (when pyvenv-remote-debug (message "🐛 [pyvenv] venv-parent-dir: %s" venv-parent-dir))
-     (setq config-python-project-name project-name)
-     (setq-default config-python-project-name project-name)
+     (setq pyvenv-current-project-name project-name)
+     (setq-default pyvenv-current-project-name project-name)
      (when
       pyvenv-remote-debug
       (message
-       "🐛 [pyvenv] config-python-project-name after setting: %s" config-python-project-name))
+       "🐛 [pyvenv] pyvenv-current-project-name after setting: %s" pyvenv-current-project-name))
      (when
       pyvenv-remote-debug
       (message
-       "🐛 [pyvenv] default config-python-project-name: %s"
-       (default-value 'config-python-project-name)))
+       "🐛 [pyvenv] default pyvenv-current-project-name: %s"
+       (default-value 'pyvenv-current-project-name)))
      (force-mode-line-update t)
      (when pyvenv-remote-debug (message "🐛 [pyvenv] Called force-mode-line-update"))))
   (when
@@ -209,7 +209,7 @@
    (when
     pyvenv-remote-debug
     (message "🐛 [pyvenv] Post-activate processing venv: %s" pyvenv-virtual-env))
-   (fix-remote-python-interpreter) (update-python-modeline))
+   (fix-remote-python-interpreter) (pyvenv-update-modeline))
   (when
    (not pyvenv-virtual-env)
    (when
@@ -233,7 +233,7 @@
  (when
   pyvenv-remote-debug
   (message
-   "🐛 [pyvenv] config-python-project-name bound?: %s" (boundp 'config-python-project-name)))
+   "🐛 [pyvenv] pyvenv-current-project-name bound?: %s" (boundp 'pyvenv-current-project-name)))
  (message "🔧 Remote pyvenv TRAMP support loaded (DEBUG MODE ENABLED)"))
 
 (provide 'pyvenv-remote)

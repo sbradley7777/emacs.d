@@ -15,9 +15,7 @@
 
  ;; Utility function for path normalization (TRAMP-ready)
  (defun
-  normalize-path-for-comparison
-  (path)
-  "Normalize path for comparison. Handles both local and TRAMP paths."
+  pyvenv-normalize-path (path) "Normalize path for comparison. Handles both local and TRAMP paths."
   (if
    (file-remote-p path)
    (file-local-name path) ; Strip TRAMP prefix for comparison
@@ -25,7 +23,7 @@
 
  ;; Function to detect Python version from virtual environment
  (defun
-  config-get-python-version (venv-path) "Get Python version from virtual environment."
+  pyvenv-get-python-version (venv-path) "Get Python version from virtual environment."
   (when
    venv-path
    (let ((python-executable (expand-file-name "bin/python" venv-path)))
@@ -38,7 +36,7 @@
 
  ;; Function to find virtual environment in current directory or parents
  (defun
-  find-venv-in-parents
+  pyvenv-find-venv
   (&optional start-dir)
   "Find virtual environment by searching current directory and parents."
   (let ((current-dir (or start-dir default-directory)))
@@ -58,23 +56,21 @@
 
  ;; Function to update modeline based on current file location
  (defun
-  update-python-modeline () "Update modeline based on whether current file is in detected project."
+  pyvenv-update-modeline () "Update modeline based on whether current file is in detected project."
   (let ((is-in-project
          (and
-          config-python-detected-project-root
+          pyvenv-project-root
           (string-prefix-p
-           (normalize-path-for-comparison
-            config-python-detected-project-root)
-           (normalize-path-for-comparison default-directory)))))
+           (pyvenv-normalize-path pyvenv-project-root)
+           (pyvenv-normalize-path default-directory)))))
+    (setq-local pyvenv-current-project-name (if is-in-project pyvenv-project-name "inactive"))
     (setq-local
-     config-python-project-name (if is-in-project config-python-detected-project-name "inactive"))
-    (setq-local
-     config-python-version (if is-in-project (default-value 'config-python-version) nil))
+     pyvenv-current-version (if is-in-project (default-value 'pyvenv-current-version) nil))
     (force-mode-line-update)))
 
  ;; Debug function to check modeline variables (shared utility)
  (defun
-  debug-python-modeline
+  pyvenv-debug-modeline
   ()
   "Debug function to check modeline variables in current buffer."
   (interactive)
@@ -84,16 +80,13 @@
   (message "Remote: %s" (if (file-remote-p default-directory) "YES" "NO"))
   (message
    "Project name: %s (local: %s)"
-   config-python-project-name
-   (local-variable-p 'config-python-project-name))
+   pyvenv-current-project-name
+   (local-variable-p 'pyvenv-current-project-name))
   (message
    "Python version: %s (local: %s)"
-   config-python-version
-   (local-variable-p 'config-python-version))
-  (message
-   "Detected project root: %s | name: %s"
-   config-python-detected-project-root
-   config-python-detected-project-name)
+   pyvenv-current-version
+   (local-variable-p 'pyvenv-current-version))
+  (message "Detected project root: %s | name: %s" pyvenv-project-root pyvenv-project-name)
   (message "=============================="))
 
  (provide 'pyvenv-utils))

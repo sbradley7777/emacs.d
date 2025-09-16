@@ -27,47 +27,47 @@
   "Auto-detect virtual environment once, then update modeline based on file location."
   (interactive)
   (if
-   config-python-detected-project-root
+   pyvenv-project-root
    ;; Project already detected - just update modeline
-   (update-python-modeline)
+   (pyvenv-update-modeline)
    ;; First time - auto-detect project
    (message "🚀 Auto-detecting Python virtual environment...")
-   (let ((detected-venv (find-venv-in-parents)))
+   (let ((detected-venv (pyvenv-find-venv)))
      (if
       detected-venv
       (progn
        ;; Store detected project info
        (setq
-        config-python-detected-project-root
+        pyvenv-project-root
         (file-name-directory (directory-file-name detected-venv))
-        config-python-detected-project-name
-        (file-name-nondirectory (directory-file-name config-python-detected-project-root)))
+        pyvenv-project-name
+        (file-name-nondirectory (directory-file-name pyvenv-project-root)))
 
        ;; Activate the virtual environment
        (if
         (fboundp 'pyvenv-activate)
         (progn
          (pyvenv-activate detected-venv)
-         (message "✅ Activated Python venv for project: %s" config-python-detected-project-name)
+         (message "✅ Activated Python venv for project: %s" pyvenv-project-name)
 
          ;; Get Python version and store globally, then update modeline
-         (setq config-python-version (config-get-python-version detected-venv))
-         (setq-default config-python-version config-python-version)
-         (update-python-modeline)
+         (setq pyvenv-current-version (pyvenv-get-python-version detected-venv))
+         (setq-default pyvenv-current-version pyvenv-current-version)
+         (pyvenv-update-modeline)
 
          ;; Update Python shell interpreter
          (let ((venv-python (expand-file-name "bin/python" detected-venv)))
            (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python))))
         (message "⚠️  Warning: pyvenv-activate function not available")))
-      (progn (message "❌ No Python virtual environment found") (update-python-modeline))))))
+      (progn (message "❌ No Python virtual environment found") (pyvenv-update-modeline))))))
 
  ;; Configure pyvenv modeline
  (setq
   pyvenv-mode-line-indicator
-  '(config-python-project-name
+  '(pyvenv-current-project-name
     ("[venv: "
-     config-python-project-name
-     (config-python-version (" (py" config-python-version ")"))
+     pyvenv-current-project-name
+     (pyvenv-current-version (" (py" pyvenv-current-version ")"))
      "] ")))
 
  ;; Initialize pyvenv
