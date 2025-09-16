@@ -15,7 +15,26 @@
 
  ;; LSP Server Configuration
  (defconst
-  python-eglot-pylsp-path "~/.local/bin/pylsp" "Path to the pylsp (Python LSP Server) executable.")
+  eglot-pylsp-path "~/.local/bin/pylsp" "Path to the pylsp (Python LSP Server) executable.")
+
+ ;; Remote pylsp path resolution (priority-ordered)
+ (defconst
+  eglot-remote-pylsp-paths
+  '("/home/sbradley/.local/bin/pylsp" ; User-specific absolute path
+    "~/.local/bin/pylsp" ; Expandable user path
+    "pylsp") ; PATH lookup fallback
+  "Priority-ordered paths for remote pylsp executable detection.")
+
+ ;; Eglot connection settings for remote development
+ (defconst eglot-connect-timeout 180 "Eglot connection timeout in seconds for remote servers.")
+
+ (defconst
+  eglot-sync-connect nil "Whether to block Emacs during eglot connection (nil for async).")
+
+ (defconst
+  eglot-send-changes-idle-time
+  2
+  "Idle time in seconds before sending changes to remote LSP server.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Virtual Environment Constants

@@ -5,6 +5,7 @@
 
 (require 'features-constants)
 (require 'core-utils)
+(require 'python-constants)
 
 (with-load-timing
  "lsp-config.el"
@@ -23,7 +24,7 @@
   ;; Temporarily enable debugging: (setq eglot-events-buffer-size 200000)
   (setq eglot-sync-connect nil) ; Don't block on connection
   (setq eglot-autoshutdown t) ; Auto-shutdown when last buffer closed
-  (setq eglot-send-changes-idle-time features-eglot-send-changes-idle-time) ; Reduce change notification frequency
+  (setq eglot-send-changes-idle-time eglot-send-changes-idle-time) ; Reduce change notification frequency
 
   ;; Use flymake as the diagnostic backend (eglot's default)
   ;; Eglot will automatically integrate LSP diagnostics with flymake

@@ -16,9 +16,6 @@
 (defconst features-corfu-max-width 100 "Maximum corfu popup width.")
 (defconst features-corfu-count 10 "Maximum number of completion candidates shown.")
 
-;; LSP Constants
-(defconst features-eglot-send-changes-idle-time 0.5 "Eglot change notification frequency.")
-
 ;; Window Constants
 (defconst
  window-width-percentage 0.3 "Window width as fraction of frame width for diagnostic buffers.")

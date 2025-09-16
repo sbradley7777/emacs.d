@@ -25,6 +25,43 @@
     (setq imenu-create-index-function 'eglot-imenu)))) ; Use LSP symbol information for better navigation
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Eglot LSP Integration
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  eglot-ensure-python
+  ()
+  "Ensure eglot is started for Python files, independent of virtual environment status."
+  (condition-case err
+      (progn (eglot-ensure) (message "✅ EGLOT: Started for %s" (buffer-name)))
+    (error
+     (message "❌ EGLOT: Failed to start for %s: %s" (buffer-name) (error-message-string err)))))
+
+ (defun
+  eglot-server-contact
+  (&optional interactive)
+  "Server contact function using TRAMP utilities for remote and local pylsp."
+  (require 'tramp-utils)
+
+  (let ((result
+         (if
+          (file-remote-p default-directory)
+          ;; Remote file: use TRAMP utilities
+          (let ((remote-contact (eglot-remote-server-contact)))
+            (or
+             remote-contact
+             ;; Fallback to absolute path if detection fails
+             (progn
+              (message "⚠️ EGLOT: Using fallback pylsp path for remote")
+              (list "/home/sbradley/.local/bin/pylsp"))))
+          ;; Local file: use existing constant
+          (progn (list eglot-pylsp-path)))))
+    result))
+
+ ;; Add eglot activation to python-mode-hook (independent of pyvenv)
+ (add-hook 'python-mode-hook #'eglot-ensure-python)
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python shell integration improvements
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python shell improvements: disable native completion (prevents hangs) and prompt detection warnings (cleaner REPL)

@@ -11,41 +11,32 @@
  "eglot-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Python-Specific Eglot Configuration
+ ;; Python Eglot Configuration with TRAMP Support
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Simple eglot activation that uses the configured pylsp path
  (defun
-  python-eglot-maybe-start
+  eglot-configure-server
   ()
-  "Start eglot for Python using the configured pylsp server."
-  (interactive)
-  ;; Only start eglot once per buffer
-  (unless
-   (bound-and-true-p python-eglot-started)
-   (message "ℹ️  EGLOT: Attempting to start eglot for Python...")
-   (message "🔧  EGLOT: Using pylsp at: %s" python-eglot-pylsp-path)
-   (condition-case err
-       (progn
-        (eglot-ensure)
-        (setq-local python-eglot-started t)
-        (message "✅  EGLOT: Successfully started eglot for Python"))
-     (error
-      (message "❌  EGLOT: Failed to start: %s" (error-message-string err))))))
+  "Configure eglot server with TRAMP support."
+  (require 'python-core)
+  ;; Remove existing python-mode configuration
+  (setq eglot-server-programs (assq-delete-all 'python-mode eglot-server-programs))
+  ;; Add enhanced configuration using the new server contact function
+  (add-to-list 'eglot-server-programs `(python-mode . eglot-server-contact))
+  (message "✅ Enhanced Python eglot server configuration activated"))
 
- ;; Auto-start eglot for Python files
- (add-hook 'python-mode-hook #'python-eglot-maybe-start)
+ (defun
+  eglot-apply-remote-settings
+  ()
+  "Apply enhanced settings for remote eglot connections."
+  (require 'python-constants)
+  (setq eglot-connect-timeout eglot-connect-timeout)
+  (setq eglot-sync-connect eglot-sync-connect)
+  (setq eglot-send-changes-idle-time eglot-send-changes-idle-time)
+  (message "✅ Enhanced eglot remote settings applied"))
 
- ;; Python-specific eglot server configuration
- (with-eval-after-load
-  'eglot
-  ;; Configure Python LSP server using the defined constant path
-  (add-to-list 'eglot-server-programs `(python-mode . (,python-eglot-pylsp-path)))
-
-  ;; Use pylsp defaults for all plugins - no configuration overrides
-  ;; This provides the cleanest, most maintainable setup
-  ;; Python-specific workspace configuration can be added here if needed
-  )
+ ;; Activate enhanced configuration after eglot loads
+ (with-eval-after-load 'eglot (eglot-configure-server) (eglot-apply-remote-settings))
 
  ;; Make this module available for loading with (require 'eglot-config)
  (provide 'eglot-config))
