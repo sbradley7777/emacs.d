@@ -31,6 +31,32 @@
   pyvenv-venv-directory-name "venv" "Default virtual environment directory name to search for.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; TRAMP Remote Development Constants
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; Common Python installation paths on remote systems
+ (defconst
+  python-tramp-remote-bin-paths
+  '("~/venv/bin" ; Standard venv location
+    "~/.venv/bin" ; Alternative venv location
+    "~/env/bin" ; Another common location
+    "~/.local/bin" ; User local packages
+    "~/.pyenv/shims" ; pyenv support
+    "/opt/conda/bin" ; Conda installations
+    "/usr/local/python/bin") ; System Python installs
+  "Common Python binary paths on remote systems.")
+
+ ;; Python-specific environment variables for remote development
+ (defconst
+  python-tramp-environment-vars
+  '("PYTHONIOENCODING=utf-8"
+    "PYTHONUNBUFFERED=1"
+    "PYTHONDONTWRITEBYTECODE=1"
+    "VIRTUAL_ENV_DISABLE_PROMPT=1"
+    "PIP_DISABLE_PIP_VERSION_CHECK=1")
+  "Python environment variables for remote TRAMP connections.")
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Shared Project State Variables
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

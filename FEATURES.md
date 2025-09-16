@@ -115,8 +115,9 @@ Comprehensive Python development setup with intelligent environment management:
 #### Core Features
 - **Modern [Eglot](https://github.com/joaotavora/eglot) LSP integration** using [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) (pylsp) at `~/.local/bin/pylsp`
 - **Automatic virtual environment detection and activation** using [pyvenv](https://github.com/jorgenschaefer/pyvenv) ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el))
+- **Remote development support** with [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects ([`lang/python/pyvenv-remote.el`](lang/python/pyvenv-remote.el))
 - **Enhanced modeline display** showing active virtual environment and Python version
-- **Project-aware environment switching** with automatic detection
+- **Project-aware environment switching** with automatic detection for both local and remote files
 
 #### Virtual Environment Management
 **Automatic Detection** ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el)):
@@ -124,6 +125,14 @@ Comprehensive Python development setup with intelligent environment management:
 - Project root determined by `.git/`, `pyproject.toml`, or `requirements.txt`
 - Automatic activation when opening Python files
 - Python version detection and display
+
+**Remote Development** ([`lang/python/pyvenv-remote.el`](lang/python/pyvenv-remote.el)):
+- **TRAMP-aware virtual environment detection** for SSH-based remote development
+- **Seamless remote project support** using [TRAMP connection-local variables](https://www.gnu.org/software/emacs/manual/html_node/tramp/Connection-local-variables.html)
+- **Fallback detection** to local equivalent when remote virtual environment not found
+- **Unified modeline display** showing remote virtual environment status
+- **Pre-configured remote paths** automatically searches common Python installation locations ([`lang/python/python-constants.el`](lang/python/python-constants.el))
+- **Optimized environment variables** for Python development over TRAMP connections
 
 **Manual Control:**
 - `M-x pyvenv-activate` - Manually activate a virtual environment

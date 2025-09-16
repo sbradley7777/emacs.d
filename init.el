@@ -153,8 +153,11 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'python-constants "Python configuration constants")
 (safe-load-config 'pyvenv-utils "Python virtual environment utilities")
 (safe-load-config 'pyvenv-config "Python virtual environments")
-;; (safe-load-config 'pyvenv-remote "Python virtual environments TRAMP support") ; Disabled - using auto-detect approach in pyvenv-config
-(safe-load-config 'eglot-config "Python LSP (eglot) configuration") ; This loads lang/python/eglot-config.el
+;; TRAMP and Python virtual environment support
+(safe-load-config 'tramp-utils "TRAMP utility functions")
+(safe-load-config 'tramp-config "TRAMP remote file access configuration")
+(safe-load-config 'pyvenv-remote "Python virtual environments TRAMP support")
+;; (safe-load-config 'eglot-config "Python LSP (eglot) configuration") ; Disabled for TRAMP testing
 (safe-load-config 'python-tools "Python development tools")
 
 ;; User functions and aliases

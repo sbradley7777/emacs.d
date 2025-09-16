@@ -1,5 +1,4 @@
 ;;; local.el --- Local User Configuration (Not Version Controlled) -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;
 ;; This file is for local, user-specific Emacs configuration that should NOT be
@@ -21,9 +20,11 @@
 ;; • Customize keybindings
 ;; • Set machine-specific variables
 ;;
-;; EXAMPLES:
-;; ---------
-;; Theme Configuration
+(message "📝 === local.el: Loading local user configuration ===")
+;; ============================================
+;; 1. THEME CONFIGURATION
+;; ============================================
+;; Theme Configuration (with example debug output)
 ;; Set your preferred theme - will be loaded automatically after initialization
 (message "📝 === local.el: Theme configuration starting ===")
 (message "📝 Display type: %s" (if (display-graphic-p) "GUI" "Terminal"))
@@ -51,8 +52,7 @@
 
 ;; Available Doom Theme Options:
 ;; See https://github.com/doomemacs/themes for full collection
-
-;; Recommended themes:
+;; Recommended themes (uncomment one line to change the theme):
 ;; (setq user-preferred-theme 'doom-1337)           ; Hacker-inspired dark theme
 ;; (setq user-preferred-theme 'doom-Iosvkem)        ; Clean, modern dark theme
 ;; (setq user-preferred-theme 'doom-gruvbox)        ; Retro groove colors
@@ -61,18 +61,11 @@
 ;; (setq user-preferred-theme 'doom-tomorrow-night) ; Clean, minimal design
 ;; (setq user-preferred-theme 'doom-peacock)        ; Vibrant, colorful theme
 
-;; Built-in theme alternatives:
+;; Built-in theme alternatives (uncomment one line to use):
 ;; (setq user-preferred-theme 'wombat)            ; Built-in dark theme
 ;; (setq user-preferred-theme 'tango-dark)        ; Built-in tango variant
 
-;; Global customizations - applies to all themes
-;; Disable line length highlighting for all themes by removing 'lines-tail from whitespace-style
-(setq whitespace-style '(face trailing tabs tab-mark))
-;; Refresh whitespace-mode to apply the new style
-(when
- (bound-and-true-p global-whitespace-mode) (global-whitespace-mode -1) (global-whitespace-mode 1))
-
-
+;; Global Theme Customizations
 ;; Allow all themes without confirmation
 (setq custom-safe-themes t)
 
@@ -82,50 +75,26 @@
 ;; Enable italic fonts for all doom themes
 (setq doom-themes-enable-italic t)
 
-;; Theme-specific customizations (optional - for exceptions to global settings)
-;; (setq user-theme-customizations
-;;       '((some-theme . ((custom-setting . custom-value)))))      ; Example theme-specific override
-;;
-;; ;; Machine-specific paths
-;; (setq python-shell-interpreter "/usr/local/bin/python3")
-;;
-;; ;; Personal keybindings
-;; (global-set-key (kbd "C-c p") 'my-personal-function)
-;; (global-set-key (kbd "C-c t") 'switch-theme)  ; Quick theme switching
-;;
-;; ;; Private settings
-;; (setq user-full-name "Your Full Name"
-;;       user-mail-address "your.email@example.com")
-;;
-;; LOCATION:
-;; ---------
-;; This file should be placed at: ~/.emacs.d/local.el
-;; It is automatically loaded by init.el if it exists.
-;;
-;; IMPORTANT:
-;; ----------
-;; • This file should be added to .gitignore to prevent accidental commits
-;; • Keep sensitive information out of version-controlled config files
-;; • Use this file sparingly - most configuration should go in the main config
-;;
+;; Global whitespace customizations - applies to all themes
+;; Disable line length highlighting for all themes by removing 'lines-tail from whitespace-style
+(setq whitespace-style '(face trailing tabs tab-mark))
+;; Refresh whitespace-mode to apply the new style
+(when
+ (bound-and-true-p global-whitespace-mode) (global-whitespace-mode -1) (global-whitespace-mode 1))
 
-;;; Code:
-
-(message "📝 === local.el: Loading local user configuration ===")
-
-;; Add your local configuration below this line
 ;; ============================================
-
-;; Font Configuration
-;; ------------------
+;; 2. FONT CONFIGURATION
+;; ============================================
 ;; Set default font size for GUI mode
 ;; Common sizes: 60 (6pt), 90 (9pt), 100 (10pt), 110 (11pt), 120 (12pt), 140 (14pt)
 (when
  (display-graphic-p)
  (set-face-attribute 'default nil :height 90)) ; Height is in 1/10th points, so 90 = 9pt
 
+;; ============================================
+;; 3. PLATFORM-SPECIFIC CONFIGURATION
+;; ============================================
 ;; macOS XQuartz Key Mapping Fix
-;; -----------------------------
 ;; In XQuartz make sure that the following is enabled in "Settings"-> "Input" -> "Option key sends Alt_L and Alt_R".
 ;;
 ;; Fix Command/Alt key swapping when using Emacs GUI over SSH from macOS with XQuartz
@@ -136,31 +105,51 @@
  ;; Also try setting the meta keysym
  (setq x-meta-keysym 'alt))
 
-;; TRAMP Configuration
-;; -------------------
-;; Uncomment to enable TRAMP debugging when troubleshooting remote connections
+;; ============================================
+;; 4. REMOTE DEVELOPMENT (TRAMP) CONFIGURATION
+;; ============================================
+;; Prevent TRAMP from creating empty connection buffers (reduces buffer clutter)
+;; NOTE: Set to t if you need to see TRAMP connection buffers for debugging
+(setq tramp-ssh-controlmaster-options nil)
+
+;; Uncomment the lines below to enable TRAMP debugging when troubleshooting remote connections
 ;; (setq tramp-verbose 6)
 ;; (setq tramp-debug-buffer t)
 
-;; Python Virtual Environment Debugging
-;; ------------------------------------
-;; Uncomment to enable debugging for pyvenv remote/TRAMP issues
-;; When enabled, detailed debug messages will appear in the *Messages* buffer
-;; to help diagnose virtual environment activation problems
-;; (setq pyvenv-remote-debug t)
+;; ============================================
+;; 5. PYTHON VIRTUAL ENVIRONMENT CONFIGURATION
+;; ============================================
+;; The new TRAMP+pyvenv integration provides minimal logging by default.
+;; Essential messages like "✅ Activated remote Python venv: project-name"
+;; and "🔍 Falling back to local venv search for remote file" are always shown.
 
-(message "📝 === local.el: The loading of local user configuration finished ===")
+;; Uncomment the lines below to override TRAMP Python paths (if your setup is non-standard)
+;; (setq python-tramp-remote-bin-paths
+;;       '("~/custom-venv/bin" "~/.local/bin" "/opt/python/bin"))
+
+;; Uncomment the lines below to add custom Python environment variables for remote development
+;; (setq python-tramp-environment-vars
+;;       '("PYTHONPATH=/custom/path" "DJANGO_SETTINGS_MODULE=myproject.settings"))
 
 ;; ============================================
-;; End of local configuration
+;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; ============================================
+;; Theme-specific customizations (optional - for exceptions to global settings)
+;; (setq user-theme-customizations
+;;       '((some-theme . ((custom-setting . custom-value)))))      ; Example theme-specific override
 
+;; Machine-specific paths
+;; (setq python-shell-interpreter "/usr/local/bin/python3")
+
+;; Personal keybindings
+;; (global-set-key (kbd "C-c p") 'my-personal-function)
+;; (global-set-key (kbd "C-c t") 'switch-theme)  ; Quick theme switching
+
+;; Private settings
+;; (setq user-full-name "Your Full Name"
+;;       user-mail-address "your.email@example.com")
+
+(message "📝 === local.el: The loading of local user configuration finished ===")
 (message "✅  Local user configuration loaded successfully")
 
 (provide 'local)
-;;; local.el ends here
-
-;; This is a test comment with trailing spaces
-(setq test-variable 'value)
-
-
-;; Multiple blank lines above

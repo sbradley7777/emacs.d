@@ -150,7 +150,7 @@ See [`FEATURES.md`](FEATURES.md#auto-completion-system) for detailed information
 ### Q: What programming languages are supported?
 
 **A:** Current language support includes:
-- **Python**: Full development environment with LSP, virtual environments, and debugging
+- **Python**: Full development environment with LSP, virtual environments, remote development via TRAMP, and debugging
 - **Emacs Lisp**: Enhanced development with formatting and evaluation
 - **YAML**: Structure-aware editing and completion
 
@@ -185,11 +185,19 @@ The modular design makes it easy to add support for additional languages.
 
 ### Q: How does virtual environment detection work?
 
-**A:** Virtual environment detection ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el)) works by:
+**A:** Virtual environment detection works for both local and remote files:
+
+**Local Detection** ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el)):
 1. **Project root detection**: Searches upward for `.git/`, `pyproject.toml`, or `requirements.txt`
 2. **Virtual environment location**: Looks for `venv/` directory in project root
 3. **Automatic activation**: Activates environment when opening Python files
 4. **Python version detection**: Displays Python version in modeline
+
+**Remote Detection** ([`lang/python/pyvenv-remote.el`](lang/python/pyvenv-remote.el)):
+1. **TRAMP-aware detection**: Searches remote filesystem for virtual environments
+2. **Fallback to local**: Uses local project structure when remote venv not found
+3. **Connection-local variables**: Uses official TRAMP mechanisms for remote configuration
+4. **Unified experience**: Same modeline display and activation behavior for remote files
 
 ### Q: Can I use different virtual environment names or locations?
 
@@ -211,6 +219,54 @@ The modular design makes it easy to add support for additional languages.
 - Use `M-x pyvenv-activate` to manually switch projects
 - Restart Emacs to change the primary project context
 - Run separate Emacs instances for different projects
+
+### Q: Does remote development work with TRAMP?
+
+**A:** Yes, the configuration includes comprehensive TRAMP support for SSH-based remote Python development:
+
+**Features:**
+- **Seamless virtual environment detection** for remote Python projects
+- **TRAMP connection-local variables** for proper remote Python configuration
+- **Unified modeline display** showing remote virtual environment status
+- **Fallback detection** using local project structure when remote venv not found
+
+**Setup:**
+1. **Remote paths**: Python virtual environments automatically detected in standard locations
+2. **SSH configuration**: Uses standard SSH settings, no special TRAMP configuration required
+3. **Local customization**: Override remote Python paths in [`examples/local.el`](examples/local.el) if needed
+
+**Default Configuration** ([`core/tramp-config.el`](core/tramp-config.el)):
+```elisp
+;; Connection settings
+(setq tramp-default-method "ssh")              ; Use SSH for remote connections
+(setq tramp-default-remote-shell "/bin/bash")  ; Use bash as remote shell
+(setq tramp-verbose 1)                         ; Minimal logging (errors only)
+
+;; Performance optimizations
+(setq tramp-use-ssh-controlmaster-options nil) ; Disable SSH control master
+(setq tramp-completion-reread-directory-timeout nil) ; Faster completion
+```
+
+**Python Remote Paths** ([`lang/python/python-constants.el`](lang/python/python-constants.el)):
+```elisp
+;; Standard Python installation locations searched automatically
+python-tramp-remote-bin-paths:
+  ~/venv/bin ~/.venv/bin ~/env/bin ~/.local/bin
+  ~/.pyenv/shims /opt/conda/bin /usr/local/python/bin
+
+;; Environment variables set for remote Python processes
+python-tramp-environment-vars:
+  PYTHONIOENCODING=utf-8 PYTHONUNBUFFERED=1
+  PYTHONDONTWRITEBYTECODE=1 VIRTUAL_ENV_DISABLE_PROMPT=1
+  PIP_DISABLE_PIP_VERSION_CHECK=1
+```
+
+**Usage:**
+```elisp
+C-x C-f /ssh:user@hostname:/path/to/project/file.py
+```
+
+The configuration automatically detects and activates the appropriate virtual environment for remote Python files.
 
 ### Q: What LSP features are available for Python?
 

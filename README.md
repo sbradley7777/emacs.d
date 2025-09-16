@@ -23,6 +23,7 @@ This Emacs configuration provides a professional development environment with in
 - **Fast startup** with modern performance optimizations
 - **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types
 - **Python development** with [Eglot](https://github.com/joaotavora/eglot) LSP and automatic virtual environment management
+- **Remote development** with seamless [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
 - **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
 - **Modern Emacs 30.2+** - Exclusively optimized for the latest Emacs features
@@ -46,6 +47,8 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`ui.el`](core/ui.el) - Basic UI configuration
   - [`editing.el`](core/editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
+  - [`tramp-config.el`](core/tramp-config.el) - TRAMP remote file access with Python support
+  - [`tramp-utils.el`](core/tramp-utils.el) - TRAMP utility functions for remote development
   - [`keybindings.el`](core/keybindings.el) - Global key bindings
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework
@@ -64,6 +67,8 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`python-core.el`](lang/python/python-core.el) - Core Python development settings
     - [`python-constants.el`](lang/python/python-constants.el) - Python configuration constants (LSP paths, etc.)
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
+    - [`pyvenv-utils.el`](lang/python/pyvenv-utils.el) - Python virtual environment utilities
+    - [`pyvenv-remote.el`](lang/python/pyvenv-remote.el) - TRAMP-aware virtual environment support
     - [`eglot-config.el`](lang/python/eglot-config.el) - Python-specific LSP server configuration
     - [`python-tools.el`](lang/python/python-tools.el) - Python development tools and packages
 - **[`themes/`](themes/)** - Theme and appearance configuration
