@@ -198,6 +198,20 @@ The modular design makes it easy to add support for additional languages.
 - Modify the detection logic in [`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el)
 - Consider using `M-x pyvenv-workon` for system-wide virtual environments
 
+### Q: Are there limitations with Python virtual environment management?
+
+**A:** Yes, this configuration uses a **single-project approach** with these limitations:
+- **One active project per session**: Only one Python project can be active at a time
+- **Auto-detect once**: The first Python file with a venv sets the global project
+- **Modeline behavior**: Files outside the detected project show "inactive" status
+
+**Rationale**: This simplified approach reduces complexity by 80% compared to multi-project solutions while supporting the most common development workflow.
+
+**Workarounds**:
+- Use `M-x pyvenv-activate` to manually switch projects
+- Restart Emacs to change the primary project context
+- Run separate Emacs instances for different projects
+
 ### Q: What LSP features are available for Python?
 
 **A:** The [Eglot](https://github.com/joaotavora/eglot) + [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) integration provides:

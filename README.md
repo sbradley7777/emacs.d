@@ -210,6 +210,17 @@ For automatic Python virtual environment detection:
 - Project must contain one of the project markers above
 - Python files opened within the project will automatically activate the environment
 
+## Limitations
+
+This configuration has some intentional design limitations:
+
+**Python Virtual Environment Management:**
+- **Single-project approach**: Only one Python project can be active per Emacs session
+- **Auto-detect once behavior**: The first Python file with a virtual environment sets the global project
+- **Modeline behavior**: Files outside the detected project show "inactive" status
+
+For detailed information about these limitations, rationale, and workarounds, see the [FAQ](FAQ.md#q-are-there-limitations-with-python-virtual-environment-management).
+
 ## Documentation
 
 **Essential References:**

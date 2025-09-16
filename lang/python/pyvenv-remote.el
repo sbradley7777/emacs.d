@@ -5,183 +5,237 @@
 ;;      pyvenv when working with remote files via TRAMP.
 
 (require 'core-utils)
+(require 'pyvenv-config)
 
 (with-load-timing
  "pyvenv-remote.el"
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Debugging support for remote pyvenv issues
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defvar pyvenv-remote-debug t "Enable debugging output for remote pyvenv operations.")
 
- (defvar
-  pyvenv-remote-debug nil
-  "Enable debugging output for remote pyvenv operations.
-Set to t to enable detailed logging of remote pyvenv activation attempts.")
-
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Remote-aware virtual environment functions
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
- ;; Universal virtual environment activation for both local and remote (TRAMP) environments
  (defun
-  force-remote-pyvenv-activation
+  smart-pyvenv-activate
   ()
-  "Force activation of virtual environment with proper modeline display for both local and remote files."
-  (interactive)
+  "TRAMP-aware pyvenv activation with modeline support."
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] ========== STARTING ACTIVATION =========="))
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] Current directory: %s" default-directory))
+  (when
+   pyvenv-remote-debug (message "🐛 [pyvenv] File remote?: %s" (file-remote-p default-directory)))
   (when
    pyvenv-remote-debug
-   (message "🐛 [pyvenv-remote] Checking for pyvenv activation in: %s" default-directory))
-  (let* ((current-dir (expand-file-name default-directory))
-         (project-root
-          (or
-           (locate-dominating-file current-dir ".git")
-           (locate-dominating-file current-dir "pyproject.toml")
-           (locate-dominating-file current-dir "requirements.txt")
-           current-dir))
-         (venv-path (when project-root (expand-file-name "venv" project-root))))
+   (message
+    "🐛 [pyvenv] Current pyvenv-virtual-env: %s"
+    (if (boundp 'pyvenv-virtual-env) pyvenv-virtual-env "UNBOUND")))
 
-    (when
-     pyvenv-remote-debug
-     (message "🐛 [pyvenv-remote] Project root: %s, venv path: %s" project-root venv-path))
-    (when
-     venv-path
+  (if
+   (file-remote-p default-directory)
+   ;; Remote file handling
+   (let ((local-dir (file-local-name default-directory)))
      (when
-      pyvenv-remote-debug
-      (message
-       "🐛 [pyvenv-remote] Venv exists: %s, is remote: %s"
-       (file-directory-p venv-path)
-       (file-remote-p venv-path))))
+      pyvenv-remote-debug (message "🐛 [pyvenv] REMOTE MODE: %s -> %s" default-directory local-dir))
 
-    (when
-     (and
-      venv-path (file-directory-p venv-path)
-      (or
-       (not (boundp 'pyvenv-virtual-env))
-       (not pyvenv-virtual-env)
-       (not (string-equal pyvenv-virtual-env venv-path))))
+     (let ((default-directory local-dir))
+       (when
+        pyvenv-remote-debug
+        (message
+         "🐛 [pyvenv] About to call pyvenv-auto-activate with local-dir: %s" default-directory))
+       (when pyvenv-remote-debug (message "🐛 [pyvenv] Checking project markers:"))
+       (when
+        pyvenv-remote-debug
+        (message "🐛 [pyvenv]   .git: %s" (locate-dominating-file default-directory ".git")))
+       (when
+        pyvenv-remote-debug
+        (message
+         "🐛 [pyvenv]   pyproject.toml: %s"
+         (locate-dominating-file default-directory "pyproject.toml")))
+       (when
+        pyvenv-remote-debug
+        (message
+         "🐛 [pyvenv]   requirements.txt: %s"
+         (locate-dominating-file default-directory "requirements.txt")))
 
-     (when
-      pyvenv-remote-debug
-      (message
-       "🐛 [pyvenv-remote] Activating %s venv: %s"
-       (if (file-remote-p venv-path) "remote" "local")
-       venv-path))
-     (when
-      (fboundp 'pyvenv-activate)
-      (pyvenv-activate venv-path)
-      (when pyvenv-remote-debug (message "🐛 [pyvenv-remote] pyvenv-activate completed"))
-
-      ;; Set Python interpreter (handle both local and remote paths)
-      (let* ((venv-python-full-path (expand-file-name "bin/python" venv-path))
-             (venv-python-local-path
-              (if
-               (file-remote-p venv-python-full-path)
-               (file-local-name venv-python-full-path)
-               venv-python-full-path)))
+       (when
+        (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate)
         (when
          pyvenv-remote-debug
          (message
-          "🐛 [pyvenv-remote] Setting python interpreter: %s -> %s"
-          venv-python-full-path
-          venv-python-local-path))
-        (setq python-shell-interpreter venv-python-local-path))
-
-      ;; Force update of modeline variables after a brief delay
-      (run-with-timer
-       0.2 nil
-       (lambda
-        ()
+          "🐛 [pyvenv] After pyvenv-auto-activate: %s"
+          (if (boundp 'pyvenv-virtual-env) pyvenv-virtual-env "STILL UNBOUND")))
+        ;; If original failed, try enhanced search
         (when
-         pyvenv-remote-debug
-         (message "🐛 [pyvenv-remote] Timer callback: updating modeline variables"))
-        (when
-         (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
-         (let* ((venv-parent-dir (file-name-directory (directory-file-name pyvenv-virtual-env)))
-                (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
+         (not pyvenv-virtual-env)
+         (when
+          pyvenv-remote-debug (message "🐛 [pyvenv] Original failed, trying enhanced search..."))
+         (let ((venv-location (locate-dominating-file default-directory "venv")))
            (when
             pyvenv-remote-debug
-            (message "🐛 [pyvenv-remote] Setting project name: %s" project-name))
-           (setq config-python-project-name project-name)
-           (setq-default config-python-project-name project-name)
-           (force-mode-line-update t)))))))))
+            (message "🐛 [pyvenv] Enhanced search - venv location: %s" venv-location))
+           (when
+            venv-location
+            (let ((venv-path (expand-file-name "venv" venv-location)))
+              (when
+               pyvenv-remote-debug
+               (message "🐛 [pyvenv] Enhanced search - full venv path: %s" venv-path))
+              (when
+               pyvenv-remote-debug
+               (message
+                "🐛 [pyvenv] Enhanced search - venv exists?: %s" (file-directory-p venv-path)))
+              (when
+               (and venv-path (file-directory-p venv-path))
+               (when
+                pyvenv-remote-debug
+                (message "🐛 [pyvenv] Enhanced search - activating venv: %s" venv-path))
+               (when
+                (fboundp 'pyvenv-activate) (pyvenv-activate venv-path)
+                (when
+                 pyvenv-remote-debug
+                 (message
+                  "🐛 [pyvenv] Enhanced search result: %s"
+                  (if (boundp 'pyvenv-virtual-env) pyvenv-virtual-env "FAILED")))))))))))
 
- ;; Fix for handling remote Python interpreter paths
+     ;; Fix interpreter path and update modeline
+     (when
+      pyvenv-remote-debug
+      (message
+       "🐛 [pyvenv] Final pyvenv-virtual-env check: %s"
+       (if (boundp 'pyvenv-virtual-env) pyvenv-virtual-env "UNBOUND")))
+     (when
+      pyvenv-virtual-env
+      (when
+       pyvenv-remote-debug (message "🐛 [pyvenv] About to fix interpreter and update modeline"))
+      (fix-remote-python-interpreter) (update-python-modeline))
+     (when
+      (not pyvenv-virtual-env)
+      (when
+       pyvenv-remote-debug
+       (message "🐛 [pyvenv] WARNING: No virtual environment found in remote mode!"))))
+
+   ;; Local file: normal activation
+   (progn
+    (when pyvenv-remote-debug (message "🐛 [pyvenv] LOCAL MODE: calling pyvenv-auto-activate"))
+    (when
+     (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate)
+     (when
+      pyvenv-remote-debug
+      (message
+       "🐛 [pyvenv] Local mode result: %s"
+       (if (boundp 'pyvenv-virtual-env) pyvenv-virtual-env "UNBOUND"))))))
+
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] ========== ACTIVATION COMPLETE ==========")))
+
  (defun
-  fix-remote-python-interpreter () "Fix python-shell-interpreter if it's set to a remote path."
+  fix-remote-python-interpreter
+  ()
+  "Convert remote Python interpreter to local path."
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] === FIX-REMOTE-PYTHON-INTERPRETER ==="))
+  (when
+   pyvenv-remote-debug
+   (message "🐛 [pyvenv] python-shell-interpreter bound?: %s" (boundp 'python-shell-interpreter)))
+  (when
+   pyvenv-remote-debug
+   (message
+    "🐛 [pyvenv] python-shell-interpreter value: %s"
+    (if (boundp 'python-shell-interpreter) python-shell-interpreter "UNBOUND")))
   (when
    (and
     (boundp 'python-shell-interpreter)
     python-shell-interpreter
     (file-remote-p python-shell-interpreter))
-   (when
-    pyvenv-remote-debug
-    (message
-     "🐛 [pyvenv-remote] Fixing remote python interpreter: %s -> %s"
-     python-shell-interpreter
-     (file-local-name python-shell-interpreter)))
-   (setq python-shell-interpreter (file-local-name python-shell-interpreter))))
-
- ;; Safe version of pyvenv post-activate that doesn't break on remote files
- (defun
-  safe-pyvenv-post-activate
-  ()
-  "Safe version of pyvenv post-activate that doesn't break on remote files."
-  (when
-   pyvenv-remote-debug
-   (message
-    "🐛 [pyvenv-remote] Safe post-activate called with venv: %s"
-    (when (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)))
-  (when
-   pyvenv-virtual-env
-   (let* ((venv-parent-dir (file-name-directory (directory-file-name pyvenv-virtual-env)))
-          (project-name (file-name-nondirectory (directory-file-name venv-parent-dir)))
-          (venv-python (expand-file-name "bin/python" pyvenv-virtual-env)))
+   (let ((local-interpreter (file-local-name python-shell-interpreter)))
      (when
       pyvenv-remote-debug
       (message
-       "🐛 [pyvenv-remote] Project: %s, Python path: %s, is remote: %s"
-       project-name
-       venv-python
-       (file-remote-p venv-python)))
-     ;; Only set interpreter if it's not remote or convert to local path
-     (when
-      (file-exists-p venv-python)
-      (let ((interpreter
-             (if (file-remote-p venv-python) (file-local-name venv-python) venv-python)))
-        (when
-         pyvenv-remote-debug (message "🐛 [pyvenv-remote] Setting interpreter: %s" interpreter))
-        (setq python-shell-interpreter interpreter)))
-     ;; Set project name for modeline
+       "🐛 [pyvenv] Converting remote interpreter: %s -> %s"
+       python-shell-interpreter
+       local-interpreter))
+     (setq-local python-shell-interpreter local-interpreter)
      (when
       pyvenv-remote-debug
-      (message "🐛 [pyvenv-remote] Setting modeline project name: %s" project-name))
+      (message
+       "🐛 [pyvenv] python-shell-interpreter after conversion: %s" python-shell-interpreter))))
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] === FIX-REMOTE-PYTHON-INTERPRETER DONE ===")))
+
+ (defun
+  update-python-modeline
+  ()
+  "Update modeline with project info after venv activation."
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] === UPDATE-PYTHON-MODELINE ==="))
+  (when
+   pyvenv-remote-debug
+   (message
+    "🐛 [pyvenv] pyvenv-virtual-env: %s"
+    (if (boundp 'pyvenv-virtual-env) pyvenv-virtual-env "UNBOUND")))
+  (when
+   pyvenv-remote-debug
+   (message
+    "🐛 [pyvenv] config-python-project-name bound?: %s" (boundp 'config-python-project-name)))
+  (when
+   pyvenv-virtual-env
+   (let* ((venv-parent-dir (file-name-directory (directory-file-name pyvenv-virtual-env)))
+          (project-name (file-name-nondirectory (directory-file-name venv-parent-dir))))
+     (when pyvenv-remote-debug (message "🐛 [pyvenv] Calculated project name: %s" project-name))
+     (when pyvenv-remote-debug (message "🐛 [pyvenv] venv-parent-dir: %s" venv-parent-dir))
      (setq config-python-project-name project-name)
      (setq-default config-python-project-name project-name)
-     (force-mode-line-update t))))
+     (when
+      pyvenv-remote-debug
+      (message
+       "🐛 [pyvenv] config-python-project-name after setting: %s" config-python-project-name))
+     (when
+      pyvenv-remote-debug
+      (message
+       "🐛 [pyvenv] default config-python-project-name: %s"
+       (default-value 'config-python-project-name)))
+     (force-mode-line-update t)
+     (when pyvenv-remote-debug (message "🐛 [pyvenv] Called force-mode-line-update"))))
+  (when
+   (not pyvenv-virtual-env)
+   (when
+    pyvenv-remote-debug
+    (message "🐛 [pyvenv] WARNING: pyvenv-virtual-env is nil, cannot update modeline")))
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] === UPDATE-PYTHON-MODELINE DONE ===")))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Hook management for remote pyvenv support
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  safe-pyvenv-post-activate
+  ()
+  "Safe post-activate hook for remote environments."
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] === SAFE-PYVENV-POST-ACTIVATE ==="))
+  (when
+   pyvenv-remote-debug
+   (message
+    "🐛 [pyvenv] pyvenv-virtual-env in post-activate: %s"
+    (if (boundp 'pyvenv-virtual-env) pyvenv-virtual-env "UNBOUND")))
+  (when
+   pyvenv-virtual-env
+   (when
+    pyvenv-remote-debug
+    (message "🐛 [pyvenv] Post-activate processing venv: %s" pyvenv-virtual-env))
+   (fix-remote-python-interpreter) (update-python-modeline))
+  (when
+   (not pyvenv-virtual-env)
+   (when
+    pyvenv-remote-debug
+    (message "🐛 [pyvenv] WARNING: Post-activate called but pyvenv-virtual-env is nil")))
+  (when pyvenv-remote-debug (message "🐛 [pyvenv] === SAFE-PYVENV-POST-ACTIVATE DONE ===")))
 
- ;; Remove the original auto-activation that causes problems with remote files
+ ;; Hook management
  (when (fboundp 'pyvenv-auto-activate) (remove-hook 'python-mode-hook #'pyvenv-auto-activate))
+ (add-hook 'python-mode-hook #'smart-pyvenv-activate)
 
- ;; Add our remote-aware activation function
- (add-hook 'python-mode-hook #'force-remote-pyvenv-activation)
- (add-hook 'python-mode-hook #'fix-remote-python-interpreter)
-
- ;; Replace the problematic post-activate hook with our safe version
  (when
   (fboundp 'config-pyvenv-post-activate)
   (remove-hook 'pyvenv-post-activate-hooks #'config-pyvenv-post-activate))
  (add-hook 'pyvenv-post-activate-hooks #'safe-pyvenv-post-activate)
 
- (when pyvenv-remote-debug (message "🐛 [pyvenv-remote] Hook management completed"))
- (message "🔧 Remote pyvenv TRAMP support loaded"))
+ (when pyvenv-remote-debug (message "🐛 [pyvenv] Hook management completed"))
+ (when
+  pyvenv-remote-debug
+  (message "🐛 [pyvenv] pyvenv-auto-activate available?: %s" (fboundp 'pyvenv-auto-activate)))
+ (when
+  pyvenv-remote-debug
+  (message
+   "🐛 [pyvenv] config-python-project-name bound?: %s" (boundp 'config-python-project-name)))
+ (message "🔧 Remote pyvenv TRAMP support loaded (DEBUG MODE ENABLED)"))
 
-
-;; Make this module available for loading with (require 'pyvenv-remote)
 (provide 'pyvenv-remote)
 
 ;;; pyvenv-remote.el ends here
