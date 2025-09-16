@@ -57,6 +57,8 @@ elpa/
 history
 recentf
 places
+tramp-autosave/
+tramp-cache
 bookmarks
 abbrev_defs
 savehist
