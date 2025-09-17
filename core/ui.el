@@ -117,7 +117,7 @@
   recentf-max-saved-items
   core-recentf-max-items
   recentf-exclude
-  '("~/.emacs.d/elpa/.*" "/tmp/.*" "/ssh:.*"))
+  `(,(expand-file-name "~/.emacs.d/elpa/.*") "/tmp/.*" "/ssh:.*"))
 
  (normal-erase-is-backspace-mode 0)
 
