@@ -67,23 +67,23 @@ PYTHON-PATH: Optional additional Python path"
      (cl-some
       (lambda
        (path)
-       (let ((full-path (expand-file-name path dir)))
-         ;; Test actual remote execution instead of file-executable-p
-         (let* ((test-cmd (format "command -v %s || test -x %s" path path))
-                (result
-                 (condition-case err
-                     (string-trim (shell-command-to-string test-cmd))
-                   (error
-                    nil))))
-           (when
-            (and
-             result
-             (not (string-empty-p result))
-             (not (string-match-p "not found\\|No such file" result)))
-            (let ((user (file-remote-p dir 'user))
-                  (host (file-remote-p dir 'host)))
-              (message "✅ Found working pylsp (remote): %s@%s:%s" user host path))
-            full-path))))
+       ;; Test actual remote execution using TRAMP
+       (let* ((default-directory dir) ; Set remote directory for TRAMP execution
+              (test-cmd (format "command -v %s || test -x %s" path path))
+              (result
+               (condition-case err
+                   (string-trim (shell-command-to-string test-cmd))
+                 (error
+                  nil))))
+         (when
+          (and
+           result
+           (not (string-empty-p result))
+           (not (string-match-p "not found\\|No such file" result)))
+          (let ((user (file-remote-p dir 'user))
+                (host (file-remote-p dir 'host)))
+            (message "✅ Found working pylsp (remote): %s@%s:%s" user host path))
+          (expand-file-name path dir)))) ; Return the properly expanded TRAMP path
       eglot-remote-pylsp-paths))))
 
  (defun
@@ -91,7 +91,10 @@ PYTHON-PATH: Optional additional Python path"
   "Create eglot server contact for remote pylsp with proper TRAMP integration.
  Returns list suitable for eglot-server-programs or nil if not found."
   (let ((pylsp-path (eglot-remote-find-pylsp remote-dir)))
-    (if pylsp-path (list pylsp-path) (progn (message "⚠️ No remote pylsp found") nil))))
+    (if
+     pylsp-path
+     (list (file-name-nondirectory pylsp-path)) ; Use just the program name for TRAMP
+     (progn (message "⚠️ No remote pylsp found") nil))))
 
  (defun
   eglot-remote-test-pylsp

@@ -4,6 +4,8 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'python-constants)
+(require 'python-utils)
 
 (with-load-timing
  "python-core.el"
@@ -40,32 +42,22 @@
  (defun
   eglot-server-contact
   (&optional interactive)
-  "Server contact function using TRAMP utilities for remote and local pylsp."
+  "Server contact function using unified pylsp detection."
   (require 'tramp-utils)
 
-  (let ((result
-         (if
-          (file-remote-p default-directory)
-          ;; Remote file: use TRAMP utilities
-          (let ((remote-contact (eglot-remote-server-contact)))
-            (or
-             remote-contact
-             ;; Fallback to absolute path if detection fails
-             (progn
-              (message "⚠️ EGLOT: Using fallback pylsp path for remote")
-              (list "/home/sbradley/.local/bin/pylsp"))))
-          ;; Local file: use existing constant
-          (progn (list eglot-pylsp-path)))))
+  (let ((result (eglot-find-pylsp)))
     (if
      (file-remote-p default-directory)
      (let ((user (file-remote-p default-directory 'user))
            (host (file-remote-p default-directory 'host))
            (path (car result)))
-       (message "🔧 EGLOT: Server contact (remote) for %s: %s@%s:%s" (buffer-name) user host path))
+       (message
+        "🔧 EGLOT: Server contact (remote) for %s: %s@%s:%s" (buffer-file-name) user host path))
      (let ((user (user-login-name))
            (host (system-name))
            (path (car result)))
-       (message "🔧 EGLOT: Server contact (local) for %s: %s@%s:%s" (buffer-name) user host path)))
+       (message
+        "🔧 EGLOT: Server contact (local) for %s: %s@%s:%s" (buffer-file-name) user host path)))
     result))
 
  ;; Add eglot activation to python-mode-hook (independent of pyvenv)
@@ -75,7 +67,7 @@
  ;; Python shell integration improvements
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python shell improvements: disable native completion (prevents hangs) and prompt detection warnings (cleaner REPL)
- (setq python-shell-completion-native-enable nil python-shell-prompt-detect-failure-warning nil)
+ (setq python-shell-completion-native-enable nil python-shell-prompt-detect-failure-warning nil))
 
- ;; Make this module available for loading with (require 'core)
- (provide 'python-core))
+;; Make this module available for loading with (require 'core)
+(provide 'python-core)

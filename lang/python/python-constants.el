@@ -15,14 +15,14 @@
 
  ;; LSP Server Configuration
  (defconst
-  eglot-pylsp-path "~/.local/bin/pylsp" "Path to the pylsp (Python LSP Server) executable.")
+  eglot-pylsp-path
+  (expand-file-name "~/.local/bin/pylsp")
+  "Path to the pylsp (Python LSP Server) executable.")
 
  ;; Remote pylsp path resolution (priority-ordered)
  (defconst
   eglot-remote-pylsp-paths
-  '("/home/sbradley/.local/bin/pylsp" ; User-specific absolute path
-    "~/.local/bin/pylsp" ; Expandable user path
-    "pylsp") ; PATH lookup fallback
+  '("pylsp") ; PATH lookup only
   "Priority-ordered paths for remote pylsp executable detection.")
 
  ;; Eglot connection settings for remote development
