@@ -67,7 +67,13 @@
  ;; Python shell integration improvements
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python shell improvements: disable native completion (prevents hangs) and prompt detection warnings (cleaner REPL)
- (setq python-shell-completion-native-enable nil python-shell-prompt-detect-failure-warning nil))
+ (setq
+  python-shell-completion-native-enable
+  nil
+  python-shell-prompt-detect-failure-warning
+  nil
+  python-shell-interpreter
+  (or (executable-find "python3") (executable-find "python") "python3")))
 
 ;; Make this module available for loading with (require 'core)
 (provide 'python-core)
