@@ -56,6 +56,16 @@
               (list "/home/sbradley/.local/bin/pylsp"))))
           ;; Local file: use existing constant
           (progn (list eglot-pylsp-path)))))
+    (if
+     (file-remote-p default-directory)
+     (let ((user (file-remote-p default-directory 'user))
+           (host (file-remote-p default-directory 'host))
+           (path (car result)))
+       (message "🔧 EGLOT: Server contact (remote) for %s: %s@%s:%s" (buffer-name) user host path))
+     (let ((user (user-login-name))
+           (host (system-name))
+           (path (car result)))
+       (message "🔧 EGLOT: Server contact (local) for %s: %s@%s:%s" (buffer-name) user host path)))
     result))
 
  ;; Add eglot activation to python-mode-hook (independent of pyvenv)
