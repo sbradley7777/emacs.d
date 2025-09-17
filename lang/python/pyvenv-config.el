@@ -61,14 +61,8 @@
         (message "⚠️  Warning: pyvenv-activate function not available")))
       (progn (message "❌ No Python virtual environment found") (pyvenv-update-modeline))))))
 
- ;; Configure pyvenv modeline
- (setq
-  pyvenv-mode-line-indicator
-  '(pyvenv-current-project-name
-    ("[venv: "
-     pyvenv-current-project-name
-     (pyvenv-current-version (" (py" pyvenv-current-version ")"))
-     "] ")))
+ ;; Disable pyvenv modeline completely - we handle it ourselves via hooks
+ (setq pyvenv-mode-line-indicator nil)
 
  ;; Initialize pyvenv
  (if

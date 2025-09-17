@@ -79,6 +79,19 @@
  ;; More informative mode line
  (setq size-indication-mode t) ; Show buffer size in mode line
 
+ ;; Add custom Python virtual environment indicator to mode line
+ (add-to-list
+  'mode-line-misc-info
+  '(:eval
+    (when
+     (and
+      (local-variable-p 'pyvenv-current-project-name)
+      pyvenv-current-project-name
+      (not (string= pyvenv-current-project-name "inactive")))
+     (concat
+      "[venv: " pyvenv-current-project-name
+      (when pyvenv-current-version (concat " (py" pyvenv-current-version ")")) "] "))))
+
  ;; Add username and hostname to mode line (non-destructive approach)
  (add-to-list
   'mode-line-misc-info

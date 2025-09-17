@@ -89,9 +89,8 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; Runtime variables for modeline display (buffer-local)
- (defvar pyvenv-current-project-name "inactive" "Current project status for modeline.")
+ (defvar pyvenv-current-project-name nil "Current project status for modeline.")
  (make-variable-buffer-local 'pyvenv-current-project-name)
- (setq-default pyvenv-current-project-name "inactive")
 
  (defvar pyvenv-current-version nil "Python version of the detected virtual environment.")
  (make-variable-buffer-local 'pyvenv-current-version)
