@@ -116,7 +116,7 @@ Comprehensive Python development setup with intelligent environment management:
 - **Modern [Eglot](https://github.com/joaotavora/eglot) LSP integration** using [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) (pylsp) at `~/.local/bin/pylsp`
 - **Automatic virtual environment detection and activation** using [pyvenv](https://github.com/jorgenschaefer/pyvenv) ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el))
 - **Remote development support** with [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects ([`lang/python/pyvenv-remote.el`](lang/python/pyvenv-remote.el))
-- **Enhanced modeline display** showing active virtual environment and Python version
+- **Enhanced modeline display** showing active virtual environment and `python` version with optional color customization
 - **Project-aware environment switching** with automatic detection for both local and remote files
 
 #### Virtual Environment Management
@@ -139,12 +139,37 @@ Comprehensive Python development setup with intelligent environment management:
 - `M-x pyvenv-deactivate` - Deactivate current virtual environment
 - `M-x pyvenv-workon` - Switch to a different virtual environment
 
+#### Enhanced Virtual Environment Display
+
+**Project-Scoped Modeline Indicator** ([`core/ui.el`](core/ui.el)):
+- **Conditional display** - `[venv: project-name (pyX.X)]` indicator only appears for files within the detected project root directory
+- **Path-based filtering** - indicator is completely hidden when file path does not start with the project root path
+- **Optional color customization** via `pyvenv-modeline-color` variable in [`local.el`](examples/local.el)
+- **Clean modeline** - files outside the project show no virtual environment information
+
+**Example Configuration** ([`examples/local.el`](examples/local.el)):
+```elisp
+;; Set custom modeline color for Python virtual environment indicator
+(setq pyvenv-modeline-color "lightcoral")  ; Options: "red", "green", "blue", "#ff7f7f", etc.
+```
+
+**Behavior**: The `[venv: project-name]` indicator will only be displayed when editing files located within the active `python` virtual environment and truly project-scoped and path-dependent. Files or buffers that do not meet this requirement will show no virtual environment status in the modeline at all.
+
 #### LSP Configuration
 **Default Setup** ([`lang/python/eglot-config.el`](lang/python/eglot-config.el)):
 - Uses hard-coded path `~/.local/bin/pylsp` for reliable user pip installations ([`lang/python/python-constants.el`](lang/python/python-constants.el))
 - Clean, maintainable configuration without complex overrides
 - Enhanced linting with [`ruff`](https://github.com/astral-sh/ruff) when available
 - Static type checking with [`mypy`](https://github.com/python/mypy) integration
+
+#### Improved LSP Server Detection
+
+**Robust pylsp Detection** ([`lang/python/python-utils.el`](lang/python/python-utils.el), [`lang/python/python-core.el`](lang/python/python-core.el)):
+- **Unified detection system** for both local and remote `python` development
+- **Automatic fallback paths** when pylsp not found in PATH
+- **Enhanced error messaging** with clear status indicators
+- **TRAMP-aware detection** automatically handles remote server discovery
+- **Consistent behavior** between local `~/.local/bin/pylsp` and remote installations
 
 **Path Configuration:**
 - LSP server path is defined in [`lang/python/python-constants.el`](lang/python/python-constants.el) for centralized configuration

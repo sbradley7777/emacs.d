@@ -268,6 +268,43 @@ C-x C-f /ssh:user@hostname:/path/to/project/file.py
 
 The configuration automatically detects and activates the appropriate virtual environment for remote Python files.
 
+### Q: How reliable is the Python LSP server detection?
+
+**A:** The configuration uses a robust, unified detection system that works consistently across both local and remote development environments:
+
+**Local Detection** ([`lang/python/python-utils.el`](lang/python/python-utils.el)):
+1. **PATH search first**: Checks if `pylsp` is available in your system PATH
+2. **Fallback to user installation**: Uses `~/.local/bin/pylsp` as defined in [`python-constants.el`](lang/python/python-constants.el)
+3. **Clear status messages**: Shows exactly which pylsp path is being used
+
+**Remote Detection** ([`lang/python/python-core.el`](lang/python/python-core.el)):
+1. **TRAMP-aware discovery**: Automatically searches remote system for pylsp installation
+2. **Graceful fallback**: Uses program name `"pylsp"` if not found, allowing remote PATH resolution
+3. **Unified behavior**: Same detection logic applies whether working locally or remotely
+
+**If LSP features aren't working**, check [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md#python-lsp-server-problems) for detailed solutions.
+
+### Q: Can I customize the Python virtual environment indicator in the modeline?
+
+**A:** Yes! You can customize the color of the `[venv: project-name (pyX.X)]` indicator, but first understand when it appears:
+
+**When the indicator appears**:
+- Only for files located within the active `python` virtual environment and truly project-scoped and path-dependent
+- Files or buffers that do not meet this requirement show no virtual environment indicator at all
+
+**To customize the color** ([`examples/local.el`](examples/local.el)):
+```elisp
+;; Add this to your local.el file
+(setq pyvenv-modeline-color "lightcoral")  ; Use any valid color name or hex code
+```
+
+**Available color options**:
+- **Named colors**: `"red"`, `"green"`, `"blue"`, `"orange"`, `"purple"`, `"lightcoral"`
+- **Hex colors**: `"#ff7f7f"`, `"#90ee90"`, `"#87ceeb"`
+- **Default**: `nil` or unset (uses normal modeline text color)
+
+**Important**: The entire `[venv: project-name]` indicator is only displayed for files within the active `python` virtual environment project scope.
+
 ### Q: What LSP features are available for Python?
 
 **A:** The [Eglot](https://github.com/joaotavora/eglot) + [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) integration provides:
