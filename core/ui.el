@@ -88,9 +88,15 @@
       (local-variable-p 'pyvenv-current-project-name)
       pyvenv-current-project-name
       (not (string= pyvenv-current-project-name "inactive")))
-     (concat
-      "[venv: " pyvenv-current-project-name
-      (when pyvenv-current-version (concat " (py" pyvenv-current-version ")")) "] "))))
+     (propertize
+      (concat
+       "[venv: " pyvenv-current-project-name
+       (when pyvenv-current-version (concat " (py" pyvenv-current-version ")")) "] ")
+      'face
+      (when
+       (and
+        (boundp 'pyvenv-modeline-color) pyvenv-modeline-color)
+       `(:foreground ,pyvenv-modeline-color))))))
 
  ;; Add username and hostname to mode line (non-destructive approach)
  (add-to-list

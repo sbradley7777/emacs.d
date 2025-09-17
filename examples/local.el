@@ -131,6 +131,12 @@
 ;; (setq python-tramp-environment-vars
 ;;       '("PYTHONPATH=/custom/path" "DJANGO_SETTINGS_MODULE=myproject.settings"))
 
+;; Python virtual environment modeline color (optional)
+;; Customize the color of the [venv: project-name] indicator in the modeline
+;; By default, no special color is applied (uses normal modeline text color)
+;; Options: "lightcoral", "red", "orange", "green", "blue", "purple", "#ff7f7f", etc.
+(setq pyvenv-modeline-color "lightcoral")
+
 ;; ============================================
 ;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
