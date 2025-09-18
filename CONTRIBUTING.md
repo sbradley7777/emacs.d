@@ -52,12 +52,6 @@ pip install pre-commit  # https://github.com/pre-commit/pre-commit
 pre-commit install
 ```
 
-**Python Development Tools** (for Python-related changes):
-```bash
-# Install LSP server with user pip for testing Python features (installs to ~/.local/bin/pylsp)
-pip install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
-```
-
 ### Development Workflow
 
 1. **Create feature branch**: `git checkout -b feature/description`
@@ -173,14 +167,6 @@ This configuration targets Emacs 30.2+ exclusively:
 - **Target Platform**: Emacs 30.2+ with full modern feature utilization
 - **Modern Design**: Built specifically for Emacs 30.2+ capabilities
 - **Complete Feature Set**: Utilizes all available Emacs 30.2+ features
-
-### Python Development Testing
-
-For Python-related changes:
-1. **Virtual environment detection**: Test with various project structures
-2. **LSP functionality**: Verify completion, diagnostics, and navigation
-3. **Python versions**: Test with different Python versions
-4. **Error handling**: Test with missing or corrupted virtual environments
 
 ## Submission Process
 

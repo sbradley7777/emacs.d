@@ -86,7 +86,7 @@ emacs.d/
 ```
 
 ### File Naming Convention
-- Use [kebab-case](https://en.wikipedia.org/wiki/Letter_case#Kebab_case) for file names: `eglot-config.el`, `markdown-config.el`
+- Use [kebab-case](https://en.wikipedia.org/wiki/Letter_case#Kebab_case) for file names: `python-config.el`, `markdown-config.el`
 - Directory structure provides categorization (no prefixes needed)
 - Use descriptive names that indicate purpose
 - Add `-config` suffix for configuration files that might conflict with built-in packages

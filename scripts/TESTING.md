@@ -122,7 +122,6 @@ fi
     ✅  YAML file support (0.001s)
     ✅  Python core editing (0.000s)
     ✅  Python virtual environments (0.027s)
-    ✅  Python LSP (eglot) configuration (0.000s)
     ✅  Python development tools (0.000s)
     ✅  Custom helper functions (0.000s)
     ✅  Function aliases and shortcuts (0.002s)

@@ -162,7 +162,6 @@ Additional navigation commands for efficient code browsing:
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
-| `C-a` | `smart-beginning-of-line` | Jump to first non-whitespace or line start | - |
 | `ESC` `←` | `scroll-down` | Scroll buffer content down | - |
 | `ESC` `→` | `scroll-up` | Scroll buffer content up | - |
 
