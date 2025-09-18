@@ -68,7 +68,7 @@ When reaching the end of buffer, move point to end."
   ()
   "Trigger completion or indent, depending on context."
   (interactive)
-  (if (and corfu-mode (not (corfu--popup-p))) (completion-at-point) (indent-for-tab-command)))
+  (if (and corfu-mode (not corfu--visible)) (completion-at-point) (indent-for-tab-command)))
 
  ;; Make this module available for loading with (require 'functions)
  (provide 'functions))
