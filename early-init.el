@@ -21,8 +21,6 @@
  gc-cons-threshold most-positive-fixnum ; Maximum possible value
  gc-cons-percentage early-gc-percentage-startup) ; Allow % of heap for GC
 
-;; Prevent premature redisplay during startup
-(setq redisplay-dont-pause t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package System Early Configuration
