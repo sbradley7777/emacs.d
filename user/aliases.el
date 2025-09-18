@@ -5,7 +5,7 @@
 
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "aliases.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Interactive function aliases

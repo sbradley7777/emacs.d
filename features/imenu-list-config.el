@@ -5,7 +5,7 @@
 (require 'features-constants)
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "imenu-list-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

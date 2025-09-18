@@ -7,7 +7,7 @@
 (require 'pyvenv-config)
 (require 'tramp-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "pyvenv-remote.el"
 
  (defun

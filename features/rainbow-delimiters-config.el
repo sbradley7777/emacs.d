@@ -6,7 +6,7 @@
 (require 'features-constants)
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "rainbow-delimiters-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

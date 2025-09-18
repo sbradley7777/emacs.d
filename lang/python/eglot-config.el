@@ -4,6 +4,6 @@
 
 (require 'core-utils)
 
-(with-load-timing "eglot-config.el" (message "Loading Python LSP configuration..."))
+(core-utils-with-load-timing "eglot-config.el" (message "Loading Python LSP configuration..."))
 
 (provide 'eglot-config)

@@ -13,7 +13,7 @@
 (require 'python-constants)
 (require 'pyvenv-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "pyvenv-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

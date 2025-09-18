@@ -121,7 +121,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'diagnostics "System and configuration diagnostics") ; System diagnostics (load first for early Messages buffer logging)
 
 ;; Show system information immediately after diagnostics loads (before packages)
-(show-system-info)
+(diagnostics-show-system-info)
 
 (safe-load-config 'package-system/manager "Package system setup") ; Package system setup
 (safe-load-config 'core-packages "Package declarations") ; Package declarations and configurations
@@ -202,7 +202,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; - This approach avoids over-optimization complexity for predictable, light workflows
 
 (defun
- optimize-gc-for-long-session ()
+ init-optimize-gc-for-long-session ()
  "Optimize garbage collection for long-running sessions.
 Can be called manually when needed for intensive work sessions."
  (interactive)

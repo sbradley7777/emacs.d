@@ -5,7 +5,7 @@
 (require 'core-constants)
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "toml-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load TOML mode support

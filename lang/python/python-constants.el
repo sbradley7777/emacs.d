@@ -12,7 +12,7 @@
 (make-variable-buffer-local 'pyvenv-current-project-name)
 (make-variable-buffer-local 'pyvenv-current-version)
 
-(with-load-timing
+(core-utils-with-load-timing
  "python-constants.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Virtual Environment Constants

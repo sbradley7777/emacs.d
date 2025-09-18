@@ -6,7 +6,7 @@
 (require 'core-utils)
 (require 'tramp)
 
-(with-load-timing
+(core-utils-with-load-timing
  "tramp-utils.el"
 
  (defun

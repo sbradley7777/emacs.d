@@ -20,7 +20,7 @@
 (require 'core-utils)
 (require 'tramp-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "TRAMP remote file access with Python support"
 
  ;; Load TRAMP

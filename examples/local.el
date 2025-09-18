@@ -30,9 +30,9 @@
 (message "📝 Display type: %s" (if (display-graphic-p) "GUI" "Terminal"))
 (message
  "📝 Before setting: user-preferred-theme = %s"
- (if (boundp 'user-preferred-theme) user-preferred-theme 'unbound))
-(setq user-preferred-theme 'doom-1337) ; Active: doom-1337 (hacker-inspired dark theme)
-(message "📝 After setting: user-preferred-theme = %s" user-preferred-theme)
+ (if (boundp 'themes-config-preferred-theme) themes-config-preferred-theme 'unbound))
+(setq themes-config-preferred-theme 'doom-1337) ; Active: doom-1337 (hacker-inspired dark theme)
+(message "📝 After setting: user-preferred-theme = %s" themes-config-preferred-theme)
 (message
  "📝 Current active theme: %s"
  (if
@@ -48,22 +48,22 @@
 (message "📝 === local.el: Theme configuration finished ===")
 (message
  "📝 Note: Your preferred theme (%s) will be applied after all configuration modules load"
- user-preferred-theme)
+ themes-config-preferred-theme)
 
 ;; Available Doom Theme Options:
 ;; See https://github.com/doomemacs/themes for full collection
 ;; Recommended themes (uncomment one line to change the theme):
-;; (setq user-preferred-theme 'doom-1337)           ; Hacker-inspired dark theme
-;; (setq user-preferred-theme 'doom-Iosvkem)        ; Clean, modern dark theme
-;; (setq user-preferred-theme 'doom-gruvbox)        ; Retro groove colors
-;; (setq user-preferred-theme 'doom-material-dark)  ; Material design dark variant
-;; (setq user-preferred-theme 'doom-monokai-machine) ; Enhanced Monokai colors
-;; (setq user-preferred-theme 'doom-tomorrow-night) ; Clean, minimal design
-;; (setq user-preferred-theme 'doom-peacock)        ; Vibrant, colorful theme
+;; (setq themes-config-preferred-theme 'doom-1337)           ; Hacker-inspired dark theme
+;; (setq themes-config-preferred-theme 'doom-Iosvkem)        ; Clean, modern dark theme
+;; (setq themes-config-preferred-theme 'doom-gruvbox)        ; Retro groove colors
+;; (setq themes-config-preferred-theme 'doom-material-dark)  ; Material design dark variant
+;; (setq themes-config-preferred-theme 'doom-monokai-machine) ; Enhanced Monokai colors
+;; (setq themes-config-preferred-theme 'doom-tomorrow-night) ; Clean, minimal design
+;; (setq themes-config-preferred-theme 'doom-peacock)        ; Vibrant, colorful theme
 
 ;; Built-in theme alternatives (uncomment one line to use):
-;; (setq user-preferred-theme 'wombat)            ; Built-in dark theme
-;; (setq user-preferred-theme 'tango-dark)        ; Built-in tango variant
+;; (setq themes-config-preferred-theme 'wombat)            ; Built-in dark theme
+;; (setq themes-config-preferred-theme 'tango-dark)        ; Built-in tango variant
 
 ;; Global Theme Customizations
 ;; Allow all themes without confirmation
@@ -130,7 +130,7 @@
 ;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Theme-specific customizations (optional - for exceptions to global settings)
-;; (setq user-theme-customizations
+;; (setq themes-config-customizations
 ;;       '((some-theme . ((custom-setting . custom-value)))))      ; Example theme-specific override
 
 ;; Machine-specific paths

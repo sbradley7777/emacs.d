@@ -5,7 +5,7 @@
 (require 'features-constants)
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "flymake-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19,7 +19,7 @@
     (side . right)
     (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
 
- (setq syntax-checking-window-width window-width-percentage)
+ (setq syntax-checking-window-width features-window-width-percentage)
 
  ;; Make this module available for loading with (require 'flymake-config)
  (provide 'flymake-config))

@@ -4,20 +4,22 @@
 
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "lisp-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Emacs Lisp indentation and formatting
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Function to convert tabs to spaces in buffer
  (defun
-  untabify-buffer
+  lisp-config-untabify-buffer
   ()
   "Convert all tabs to spaces in the current buffer."
   (untabify (point-min) (point-max)))
 
  ;; Add hook to convert tabs to spaces when saving Emacs Lisp files
- (add-hook 'emacs-lisp-mode-hook (lambda () (add-hook 'before-save-hook 'untabify-buffer nil t)))
+ (add-hook
+  'emacs-lisp-mode-hook
+  (lambda () (add-hook 'before-save-hook 'lisp-config-untabify-buffer nil t)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Automatic formatting with elisp-autofmt

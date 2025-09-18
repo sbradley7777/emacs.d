@@ -4,14 +4,14 @@
 
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "functions.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Reload init.el on the Fly:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  reload-init-file () (interactive)
+  user-reload-init-file () (interactive)
   (let ((init-file (expand-file-name "init.el" user-emacs-directory)))
     (if
      (bufferp (get-file-buffer init-file))
@@ -23,7 +23,7 @@
  ;; Copy Entire Buffer to Kill Ring:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  copy-whole-buffer
+  user-copy-whole-buffer
   ()
   "Copy the entire buffer to the kill ring.
 This is equivalent to doing M-x mark-whole-buffer followed by M-w."
@@ -35,7 +35,7 @@ This is equivalent to doing M-x mark-whole-buffer followed by M-w."
  ;; Smart Page Navigation Functions:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  smart-page-up ()
+  user-smart-page-up ()
   "Page up with smart boundary handling.
 When reaching the beginning of buffer, move point to beginning."
   (interactive)
@@ -45,7 +45,7 @@ When reaching the beginning of buffer, move point to beginning."
      (goto-char (point-min)))))
 
  (defun
-  smart-page-down ()
+  user-smart-page-down ()
   "Page down with smart boundary handling.
 When reaching the end of buffer, move point to end."
   (interactive)
@@ -58,13 +58,13 @@ When reaching the end of buffer, move point to end."
  ;; Smart TAB Completion Functions:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  smart-tab () "Smart TAB: complete if possible, otherwise indent." (interactive)
+  user-smart-tab () "Smart TAB: complete if possible, otherwise indent." (interactive)
   (if
    (minibufferp) (minibuffer-complete)
    (if corfu-mode (or (completion-at-point) (indent-for-tab-command)) (indent-for-tab-command))))
 
  (defun
-  completion-or-indent
+  user-completion-or-indent
   ()
   "Trigger completion or indent, depending on context."
   (interactive)

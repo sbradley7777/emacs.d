@@ -6,7 +6,7 @@
 (require 'core-utils)
 (require 'python-constants)
 
-(with-load-timing
+(core-utils-with-load-timing
  "pyvenv-utils.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

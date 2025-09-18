@@ -8,7 +8,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmacro
- with-load-timing (module-name &rest body)
+ core-utils-with-load-timing (module-name &rest body)
  "Execute BODY and report loading time for MODULE-NAME.
 MODULE-NAME should be a string identifying the module being loaded."
  (declare (indent 1))

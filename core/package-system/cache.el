@@ -5,8 +5,9 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'package)
 
-(with-load-timing
+(core-utils-with-load-timing
  "cache.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

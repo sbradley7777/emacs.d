@@ -7,7 +7,7 @@
 (require 'make-mode)
 (require 'highlight-indent-guides)
 
-(with-load-timing
+(core-utils-with-load-timing
  "makefile-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

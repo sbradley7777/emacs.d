@@ -17,14 +17,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun
- get-available-doom-themes () "Get a list of all available doom themes."
+ theme-utils-get-available-doom-themes () "Get a list of all available doom themes."
  (sort
   (seq-filter
    (lambda (theme) (string-match-p "^doom-" (symbol-name theme))) (custom-available-themes))
   (lambda (a b) (string< (symbol-name a) (symbol-name b)))))
 
 (defun
- get-other-themes
+ theme-utils-get-other-themes
  ()
  "Get a list of other (non-doom) themes that work well."
  '(wombat tango-dark leuven))
@@ -35,7 +35,7 @@
 
 ;;;###autoload
 (defun
- switch-theme
+ theme-utils-switch-theme
  (theme)
  "Interactively switch to a different THEME."
  (interactive
@@ -44,18 +44,19 @@
     (completing-read
      "Select theme: "
      (append
-      (mapcar #'symbol-name (get-available-doom-themes)) (mapcar #'symbol-name (get-other-themes)))
+      (mapcar #'symbol-name (theme-utils-get-available-doom-themes))
+      (mapcar #'symbol-name (theme-utils-get-other-themes)))
      nil t nil nil "doom-zenburn"))))
  (message "🎨 Interactive theme switch requested: %s" theme)
- (setq user-preferred-theme theme)
- (load-configured-theme)
+ (setq themes-config-preferred-theme theme)
+ (themes-config-load-configured-theme)
  (message "✅ Theme switched to: %s" theme))
 
 ;;;###autoload
 (defun
- list-themes () "List all available themes in a selectable buffer." (interactive)
- (let* ((doom-themes (get-available-doom-themes))
-        (other-themes (get-other-themes))
+ theme-utils-list-themes () "List all available themes in a selectable buffer." (interactive)
+ (let* ((doom-themes (theme-utils-get-available-doom-themes))
+        (other-themes (theme-utils-get-other-themes))
         (current-theme (car custom-enabled-themes))
         (buffer-name "*Available Themes*")
         (lines '())
@@ -122,11 +123,11 @@
                (string-match "\\(?:-> \\|   \\)\\([a-z0-9-]+\\)" line)
                (let ((theme (intern (match-string 1 line))))
                  (message "🎨 Theme selection: %s" theme)
-                 (setq user-preferred-theme theme)
-                 (load-configured-theme)
+                 (setq themes-config-preferred-theme theme)
+                 (themes-config-load-configured-theme)
                  (message "✅ Switched to theme: %s (buffer stays open for testing)" theme)
                  ;; Update the buffer to show new current theme
-                 (list-themes)))))))
+                 (theme-utils-list-themes)))))))
 
       ;; Keyboard bindings
       (local-set-key (kbd "RET") select-theme-fn)

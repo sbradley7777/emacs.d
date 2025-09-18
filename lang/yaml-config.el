@@ -4,7 +4,7 @@
 
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "yaml-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load yaml mode support

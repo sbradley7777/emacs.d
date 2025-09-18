@@ -5,7 +5,7 @@
 (require 'core-constants)
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "core-packages.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -13,26 +13,26 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Organized package lists for better maintainability
  (defvar
-  config-essential-packages
+  core-packages-essential
   '(doom-themes yaml-mode toml-mode markdown-mode)
   "Essential packages that must be installed.")
 
  (defvar
-  config-development-packages
+  core-packages-development
   '(which-key
     pyvenv elisp-autofmt corfu rainbow-delimiters highlight-indent-guides imenu-list)
   "Development and programming packages.")
 
  (defvar
-  config-packages
-  (append config-essential-packages config-development-packages)
+  core-packages-all
+  (append core-packages-essential core-packages-development)
   "Complete list of packages to install.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Robust Package Installation
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  install-packages-safely
+  core-packages-install-safely
   (package-list)
   "Install packages from PACKAGE-LIST with comprehensive error handling."
   (let ((failed-packages '())
@@ -76,20 +76,20 @@
 
  ;; Add retry mechanism for automatic recovery from network failures
  (defun
-  install-packages-with-retry (package-list &optional max-retries)
+  core-packages-install-with-retry (package-list &optional max-retries)
   "Install packages with automatic retry on network failures.
 PACKAGE-LIST is the list of packages to install.
 MAX-RETRIES is the maximum number of retry attempts (default: 2)."
   (let ((max-retries (or max-retries 2))
-        (failed-packages (install-packages-safely package-list)))
+        (failed-packages (core-packages-install-safely package-list)))
     (when
      (and failed-packages (> max-retries 0))
      (message "🔄 Retrying failed packages after network refresh...")
      (package-refresh-contents)
-     (install-packages-with-retry failed-packages (1- max-retries)))))
+     (core-packages-install-with-retry failed-packages (1- max-retries)))))
 
  ;; Install packages using robust installation function with retry
- (install-packages-with-retry config-packages)
+ (core-packages-install-with-retry core-packages-all)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package configurations using use-package

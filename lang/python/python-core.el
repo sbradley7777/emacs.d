@@ -8,7 +8,7 @@
 (require 'python-utils)
 (require 'python)
 
-(with-load-timing
+(core-utils-with-load-timing
  "python-core.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

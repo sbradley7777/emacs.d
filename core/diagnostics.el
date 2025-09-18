@@ -6,7 +6,7 @@
 (require 'core-constants)
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "diagnostics.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -14,7 +14,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  (defun
-  get-os-version-info () "Get operating system version information."
+  diagnostics-get-os-version-info () "Get operating system version information."
   (cond
    ;; Linux - try multiple sources for version info
    ((eq system-type 'gnu/linux)
@@ -61,9 +61,9 @@
 
 
  (defun
-  show-system-info () "Show system information in Messages buffer."
+  diagnostics-show-system-info () "Show system information in Messages buffer."
   (let ((timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
-        (os-info (get-os-version-info))
+        (os-info (diagnostics-get-os-version-info))
         (package-count (if (boundp 'package-activated-list) (length package-activated-list) 0))
         (load-path-count (length load-path)))
     (message "\n=== Emacs Startup Log - %s ===" timestamp)

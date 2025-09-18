@@ -8,12 +8,12 @@
 ;; Advanced theme utilities are in theme-utils.el
 
 ;;; Dependencies:
-;; - core-utils (for with-load-timing)
+;; - core-utils (for core-utils-with-load-timing)
 ;; - doom-themes package
 
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "themes-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,12 +22,12 @@
 
  ;; User-configurable theme variables (can be set in local.el)
  (defvar
-  user-preferred-theme 'doom-zenburn
+  themes-config-preferred-theme 'doom-zenburn
   "User's preferred theme. Can be overridden in local.el.
 Examples: 'doom-zenburn, 'doom-one, 'doom-gruvbox, 'wombat")
 
  (defvar
-  user-theme-customizations nil
+  themes-config-customizations nil
   "User's theme-specific customizations. Can be overridden in local.el.
 Format: ((theme-name . ((var1 . value1) (var2 . value2))) ...)
 Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
@@ -38,18 +38,18 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
 
  ;; Doom themes configuration - applied before theme loading
  (defvar
-  doom-themes-default-customizations
+  themes-config-doom-default-customizations
   '((doom-themes-enable-bold . t)
     (doom-themes-enable-italic . nil) ; Disable italic in terminal to avoid issues
     (doom-themes-treemacs-theme . "doom-atom") (doom-themes-treemacs-enable-variable-pitch . nil))
   "Default doom themes customizations.")
 
  (defun
-  apply-doom-themes-customizations
+  themes-config-apply-doom-customizations
   ()
   "Apply doom-themes-specific customizations."
   (require 'doom-themes)
-  (dolist (custom doom-themes-default-customizations) (set (car custom) (cdr custom)))
+  (dolist (custom themes-config-doom-default-customizations) (set (car custom) (cdr custom)))
 
   ;; Terminal-specific adjustments to prevent nil attribute warnings
   (when (not (display-graphic-p)) (setq doom-themes-enable-italic nil))
@@ -67,16 +67,18 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  (defun
-  apply-theme-customizations (theme) "Apply customizations for the specified THEME."
+  themes-config-apply-customizations (theme) "Apply customizations for the specified THEME."
   ;; Apply doom-themes configuration for all themes
-  (apply-doom-themes-customizations)
+  (themes-config-apply-doom-customizations)
   ;; Apply any user customizations from local.el
-  (when-let ((customs (cdr (assq theme user-theme-customizations))))
+  (when-let ((customs (cdr (assq theme themes-config-customizations))))
     (dolist (custom customs) (set (car custom) (cdr custom)))))
 
  (defun
-  load-configured-theme () "Load the user's preferred theme with appropriate customizations."
-  (let ((theme user-preferred-theme)
+  themes-config-load-configured-theme
+  ()
+  "Load the user's preferred theme with appropriate customizations."
+  (let ((theme themes-config-preferred-theme)
         (current-theme (car custom-enabled-themes)))
     (message
      "🎨 Current theme: %s | Preferred theme: %s" (or current-theme "none") (or theme "none"))
@@ -87,7 +89,7 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
       (progn
        (message "🎨 Loading theme: %s" theme)
        ;; Apply theme-specific customizations before loading
-       (apply-theme-customizations theme)
+       (themes-config-apply-customizations theme)
 
        ;; Load the theme
        (condition-case err
@@ -104,7 +106,7 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
           (message "❌ Failed to load theme '%s': %s" theme (error-message-string err))
           ;; Fallback to doom-zenburn
           (message "🎨 Loading fallback theme: doom-zenburn")
-          (apply-theme-customizations 'doom-zenburn)
+          (themes-config-apply-customizations 'doom-zenburn)
           (load-theme 'doom-zenburn t)
           (message "✅ Loaded fallback theme: doom-zenburn"))))))))
 
@@ -112,7 +114,7 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  ;; Load Theme on Startup
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load user's preferred theme after all configuration is complete
- (add-hook 'emacs-startup-hook #'load-configured-theme))
+ (add-hook 'emacs-startup-hook #'themes-config-load-configured-theme))
 
 ;; Make this module available for loading with (require 'themes-config)
 (provide 'themes-config)

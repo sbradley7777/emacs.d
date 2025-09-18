@@ -6,8 +6,8 @@
 (require 'core-utils)
 (require 'python-constants)
 
-(with-load-timing
- "python-utils.el") ;; End of with-load-timing
+(core-utils-with-load-timing
+ "python-utils.el") ;; End of core-utils-with-load-timing
 
 ;; Make this module available for loading
 (provide 'python-utils)

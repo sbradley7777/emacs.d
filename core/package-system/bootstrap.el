@@ -7,7 +7,7 @@
 (require 'package-system/network)
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "bootstrap.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

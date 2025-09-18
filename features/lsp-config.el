@@ -7,7 +7,7 @@
 (require 'core-utils)
 (require 'python-constants)
 
-(with-load-timing "lsp-config.el" (message "Loading general LSP configuration..."))
+(core-utils-with-load-timing "lsp-config.el" (message "Loading general LSP configuration..."))
 
 ;; Make this module available for loading with (require 'lsp-config)
 (provide 'lsp-config)

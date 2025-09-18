@@ -5,7 +5,7 @@
 (require 'core-constants)
 (require 'core-utils)
 
-(with-load-timing
+(core-utils-with-load-timing
  "core-files.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -23,19 +23,19 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Autosave files (example: #foo#) -> ~/.emacs.d/autosaves/
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defvar autosave-dir (expand-file-name "~/.emacs.d/autosaves/"))
- (setq auto-save-list-file-prefix autosave-dir)
- (setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
+ (defvar core-files-autosave-dir (expand-file-name "~/.emacs.d/autosaves/"))
+ (setq auto-save-list-file-prefix core-files-autosave-dir)
+ (setq auto-save-file-name-transforms `((".*" ,core-files-autosave-dir t)))
  ;; Create the autosave directory if it does not exist.
- (make-directory autosave-dir t)
+ (make-directory core-files-autosave-dir t)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Backup files (example: foo~) -> ~/.emacs.d/backups/
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defvar backup-dir (expand-file-name "~/.emacs.d/backups/"))
- (setq backup-directory-alist (list (cons ".*" backup-dir)))
+ (defvar core-files-backup-dir (expand-file-name "~/.emacs.d/backups/"))
+ (setq backup-directory-alist (list (cons ".*" core-files-backup-dir)))
  ;; Create the backups directory if it does not exist.
- (make-directory backup-dir t)
+ (make-directory core-files-backup-dir t)
 
  ;; Enhanced backup preferences configuration
  (setq
@@ -65,13 +65,13 @@
  ;; Add helpful logging messages for backup and auto-save operations
 
  (defun
-  log-backup-operation
+  core-files-log-backup-operation
   (file)
   "Log when a backup file is created for FILE."
   (when file (message "💾  Backup created for: %s" (file-name-nondirectory file))))
 
  (defun
-  log-auto-save-operation () "Log when an auto-save operation occurs."
+  core-files-log-auto-save-operation () "Log when an auto-save operation occurs."
   (when buffer-file-name (message "💾  Auto-saved: %s" (file-name-nondirectory buffer-file-name))))
 
  ;; Hook into backup operations
@@ -81,10 +81,10 @@
    ()
    (when
     (and buffer-file-name make-backup-files (file-exists-p buffer-file-name))
-    (log-backup-operation buffer-file-name))))
+    (core-files-log-backup-operation buffer-file-name))))
 
  ;; Hook into auto-save operations
- (add-hook 'auto-save-hook 'log-auto-save-operation)
+ (add-hook 'auto-save-hook 'core-files-log-auto-save-operation)
 
  ;; Make this module available for loading with (require 'files)
  )
