@@ -209,8 +209,6 @@ Can be called manually when needed for intensive work sessions."
  (setq
   gc-cons-threshold core-gc-long-session-threshold ; Long session threshold
   gc-cons-percentage core-gc-percentage-normal) ; Normal GC percentage
- (message
-  "✅ GC optimized for long session (threshold: %s)"
-  (format-bytes-to-string core-gc-long-session-threshold)))
+ )
 
 (message "✅  init.el loaded successfully.")
