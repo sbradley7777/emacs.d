@@ -47,7 +47,7 @@
   delete-old-versions t ; Delete excess backup files silently
   kept-old-versions core-kept-old-versions ; Number of old versions to keep
   kept-new-versions core-kept-new-versions ; Number of new versions to keep
-  backup-enable-predicate (lambda (name) t)) ; Always enable backups for all files
+  backup-enable-predicate (lambda (_) t)) ; Always enable backups for all files
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Enhanced auto-save configuration

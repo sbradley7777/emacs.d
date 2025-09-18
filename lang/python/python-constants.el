@@ -6,6 +6,12 @@
 
 (require 'core-utils)
 
+(defvar pyvenv-current-project-name nil "Current project status for modeline.")
+(defvar pyvenv-current-version nil "Python version of the detected virtual environment.")
+
+(make-variable-buffer-local 'pyvenv-current-project-name)
+(make-variable-buffer-local 'pyvenv-current-version)
+
 (with-load-timing
  "python-constants.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -34,11 +40,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; Runtime variables for modeline display (buffer-local)
- (defvar pyvenv-current-project-name nil "Current project status for modeline.")
- (make-variable-buffer-local 'pyvenv-current-project-name)
-
- (defvar pyvenv-current-version nil "Python version of the detected virtual environment.")
- (make-variable-buffer-local 'pyvenv-current-version)
  (setq-default pyvenv-current-version nil)
 
  ;; Make this module available for loading with (require 'python-constants)

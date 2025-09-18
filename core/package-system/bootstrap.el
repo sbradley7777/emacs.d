@@ -45,6 +45,7 @@
      use-package
      (name &rest args)
      "Minimal fallback when use-package unavailable."
+     (declare (ignorable args))
      `(message "Skipping %s configuration (use-package unavailable)" ',name))))
 
  ;; Make this module available for loading with (require 'package-system/bootstrap)
