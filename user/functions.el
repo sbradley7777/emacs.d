@@ -28,7 +28,7 @@
   "Copy the entire buffer to the kill ring.
 This is equivalent to doing M-x mark-whole-buffer followed by M-w."
   (interactive)
-  (save-excursion (mark-whole-buffer) (kill-ring-save (point-min) (point-max)))
+  (kill-ring-save (point-min) (point-max))
   (message "ℹ️  Buffer copied to kill ring"))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
