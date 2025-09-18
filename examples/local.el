@@ -108,9 +108,10 @@
 ;; ============================================
 ;; 4. REMOTE DEVELOPMENT (TRAMP) CONFIGURATION
 ;; ============================================
-;; Prevent TRAMP from creating empty connection buffers (reduces buffer clutter)
-;; NOTE: Set to t if you need to see TRAMP connection buffers for debugging
-(setq tramp-ssh-controlmaster-options nil)
+;; For debugging TRAMP connections, you might need to re-enable SSH ControlMaster.
+;; Your main config disables this for performance, but it can be useful for troubleshooting.
+;; Uncomment the line below to enable it.
+;; (setq tramp-use-ssh-controlmaster-options t)
 
 ;; Uncomment the lines below to enable TRAMP debugging when troubleshooting remote connections
 ;; (setq tramp-verbose 6)
