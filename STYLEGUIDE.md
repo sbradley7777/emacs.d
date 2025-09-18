@@ -63,7 +63,6 @@ emacs.d/
 │   └── keybindings.el           # Global keybindings and shortcuts
 ├── [`features/`](features/)                    # Optional enhancements (can be disabled independently)
 │   ├── completion-config.el     # Core auto-completion framework
-│   ├── lsp.el                   # General LSP client configuration
 │   ├── flymake-config.el        # Flymake diagnostic display configuration
 │   ├── rainbow-delimiters.el    # Enhanced delimiter visibility
 │   └── indent-guides.el         # Visual indentation guides
@@ -73,7 +72,6 @@ emacs.d/
 │   └── python/                  # Python development environment
 │       ├── python-core.el       # Basic Python mode settings and indentation
 │       ├── venv.el              # Virtual environment management
-│       ├── eglot-config.el      # Python-specific LSP server configuration
 │       └── python-tools.el      # Python development tools and utilities
 ├── [`themes/`](themes/)                      # Theme configurations
 │   └── themes-config.el         # Core theme and appearance configuration

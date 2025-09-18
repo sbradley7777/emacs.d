@@ -48,7 +48,6 @@ This configuration is designed exclusively for Emacs 30.2+ and utilizes specific
 - **Memory pressure handling**: Intelligent collection scheduling during intensive operations
 
 **LSP and Development Optimizations**:
-- **Native JSON parsing**: Faster Eglot communication with Python LSP servers
 - **Real-time diagnostics**: Improved Flymake integration with immediate error display
 - **Process optimization**: Better subprocess management for development tools
 
@@ -113,11 +112,12 @@ Powered by [Corfu](https://github.com/minad/corfu) for comprehensive auto-comple
 Comprehensive Python development setup with intelligent environment management:
 
 #### Core Features
-- **Modern [Eglot](https://github.com/joaotavora/eglot) LSP integration** using [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) (pylsp) at `~/.local/bin/pylsp`
 - **Automatic virtual environment detection and activation** using [pyvenv](https://github.com/jorgenschaefer/pyvenv) ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el))
 - **Remote development support** with [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects ([`lang/python/pyvenv-remote.el`](lang/python/pyvenv-remote.el))
 - **Enhanced modeline display** showing active virtual environment and `python` version with optional color customization
 - **Project-aware environment switching** with automatic detection for both local and remote files
+
+> **Note:** LSP (Language Server Protocol) integration for Python using Eglot and pylsp is temporarily disabled and is planned to be re-introduced in a future update.
 
 #### Virtual Environment Management
 **Automatic Detection** ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el)):
@@ -155,46 +155,9 @@ Comprehensive Python development setup with intelligent environment management:
 
 **Behavior**: The `[venv: project-name]` indicator will only be displayed when editing files located within the active `python` virtual environment and truly project-scoped and path-dependent. Files or buffers that do not meet this requirement will show no virtual environment status in the modeline at all.
 
-#### LSP Configuration
-**Default Setup** ([`lang/python/eglot-config.el`](lang/python/eglot-config.el)):
-- Uses hard-coded path `~/.local/bin/pylsp` for reliable user pip installations ([`lang/python/python-constants.el`](lang/python/python-constants.el))
-- Clean, maintainable configuration without complex overrides
-- Enhanced linting with [`ruff`](https://github.com/astral-sh/ruff) when available
-- Static type checking with [`mypy`](https://github.com/python/mypy) integration
-
-#### Improved LSP Server Detection
-
-**Robust pylsp Detection** ([`lang/python/python-utils.el`](lang/python/python-utils.el), [`lang/python/python-core.el`](lang/python/python-core.el)):
-- **Unified detection system** for both local and remote `python` development
-- **Automatic fallback paths** when pylsp not found in PATH
-- **Enhanced error messaging** with clear status indicators
-- **TRAMP-aware detection** automatically handles remote server discovery
-- **Consistent behavior** between local `~/.local/bin/pylsp` and remote installations
-
-**Path Configuration:**
-- LSP server path is defined in [`lang/python/python-constants.el`](lang/python/python-constants.el) for centralized configuration
-- Uses `~/.local/bin/pylsp` which is the standard location for user pip installations
-- This provides more predictable behavior than system-wide detection methods
-
-**Required Dependencies:**
-```bash
-# Install LSP server with user pip (installs to ~/.local/bin/pylsp)
-pip install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
-```
-
-**If Python features don't work as expected, see [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md#python-lsp-server-problems) for detailed solutions.**
-
-**Tool Hierarchy:**
-1. **[Ruff](https://github.com/astral-sh/ruff)**: Fast linting and formatting (overrides built-in pycodestyle, pyflakes)
-2. **[MyPy](https://github.com/python/mypy)**: Static type checking (enhanced type analysis)
-3. **Built-in linters**: Fallback when external tools unavailable
-
 #### Development Tools
 - **Real-time diagnostics** via [Flymake](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html) integration
-- **Go to definition** - `M-.` to jump to function/class definitions
-- **Find references** - `M-?` to find all references to a symbol
-- **Symbol renaming** - `C-c r` to rename symbols across the project
-- **Code actions** - `C-c a` for available code fixes and refactoring
+- Basic code navigation and editing features.
 
 ### Lisp/Elisp Development
 

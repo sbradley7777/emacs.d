@@ -119,18 +119,6 @@
 ;; ============================================
 ;; 5. PYTHON VIRTUAL ENVIRONMENT CONFIGURATION
 ;; ============================================
-;; The new TRAMP+pyvenv integration provides minimal logging by default.
-;; Essential messages like "✅ Activated remote Python venv: project-name"
-;; and "🔍 Falling back to local venv search for remote file" are always shown.
-
-;; Uncomment the lines below to override TRAMP Python paths (if your setup is non-standard)
-;; (setq python-tramp-remote-bin-paths
-;;       '("~/custom-venv/bin" "~/.local/bin" "/opt/python/bin"))
-
-;; Uncomment the lines below to add custom Python environment variables for remote development
-;; (setq python-tramp-environment-vars
-;;       '("PYTHONPATH=/custom/path" "DJANGO_SETTINGS_MODULE=myproject.settings"))
-
 ;; Python virtual environment modeline color (optional)
 ;; Customize the color of the [venv: project-name] indicator in the modeline
 ;; By default, no special color is applied (uses normal modeline text color)

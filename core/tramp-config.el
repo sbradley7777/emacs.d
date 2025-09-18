@@ -30,10 +30,6 @@
  (setq tramp-default-method "ssh")
  (setq tramp-default-remote-shell "/bin/bash")
 
- ;; Setup Python-specific paths and environment
- (tramp-setup-python-paths)
- (tramp-setup-python-environment)
-
  ;; Minimal logging (errors only) - can be overridden in local.el
  (setq tramp-verbose 1)
 

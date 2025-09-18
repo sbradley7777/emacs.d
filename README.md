@@ -22,11 +22,13 @@ This Emacs configuration provides a professional development environment with in
 **Key Features:**
 - **Fast startup** with modern performance optimizations
 - **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types
-- **Python development** with [Eglot](https://github.com/joaotavora/eglot) LSP and automatic virtual environment management
+- **Python development** with automatic virtual environment management
 - **Remote development** with seamless [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
 - **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
 - **Modern Emacs 30.2+** - Exclusively optimized for the latest Emacs features
+
+> **Note:** LSP (Language Server Protocol) integration for Python using Eglot and pylsp is temporarily disabled and is planned to be re-introduced in a future update.
 
 For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installation instructions, see the [Installation](#installation) section below.
 
@@ -52,7 +54,6 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`keybindings.el`](core/keybindings.el) - Global key bindings
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework
-  - [`lsp.el`](features/lsp.el) - General LSP client configuration
   - [`flymake-config.el`](features/flymake-config.el) - Flymake diagnostic display configuration
   - [`rainbow-delimiters.el`](features/rainbow-delimiters.el) - Enhanced delimiter visibility
   - [`indent-guides.el`](features/indent-guides.el) - Visual indentation guides
@@ -69,7 +70,6 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
     - [`pyvenv-utils.el`](lang/python/pyvenv-utils.el) - Python virtual environment utilities
     - [`pyvenv-remote.el`](lang/python/pyvenv-remote.el) - TRAMP-aware virtual environment support
-    - [`eglot-config.el`](lang/python/eglot-config.el) - Python-specific LSP server configuration
     - [`python-tools.el`](lang/python/python-tools.el) - Python development tools and packages
 - **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
@@ -98,7 +98,6 @@ This configuration leverages specific improvements and features only available i
 
 - **Native compilation enhancements**: Improved bytecode compilation for faster package loading and runtime performance
 - **Modern use-package integration**: Built-in use-package with advanced lazy-loading and configuration features
-- **LSP performance optimizations**: Native JSON parsing improvements in Eglot for responsive Python development
 - **Enhanced UI capabilities**: Advanced `global-display-line-numbers-mode` with improved visual line support
 - **Memory management improvements**: Modern garbage collection tuning for efficient long-running development sessions
 - **Flymake integration**: Enhanced diagnostic display and real-time error reporting capabilities
@@ -106,15 +105,9 @@ This configuration leverages specific improvements and features only available i
 **Performance Benefits:**
 - **Faster startup times**: Leveraging modern initialization and package loading optimizations
 - **Reduced memory usage**: Efficient heap management during extended coding sessions
-- **Real-time responsiveness**: Optimized LSP communication and diagnostic updates
+- **Real-time responsiveness**: Optimized diagnostic updates
 
 ### Optional Dependencies
-
-**For Python Development:**
-```bash
-# Install LSP server with user pip (installs to ~/.local/bin/pylsp)
-pip install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
-```
 
 **For Code Quality (Development):**
 ```bash
@@ -126,11 +119,7 @@ pip install pre-commit  # https://github.com/pre-commit/pre-commit
 pre-commit install  # Run in repository root after cloning
 ```
 
-**Important**: Ensure your `~/.bash_profile` includes `$HOME/.local/bin` in your PATH:
-```bash
-# Add to ~/.bash_profile for user-installed Python packages
-export PATH="$HOME/.local/bin:$PATH"
-```
+**Important**: Ensure your `~/.bash_profile` includes `$HOME/.local/bin` in your PATH, if you plan on using user-local packages.
 
 ## Installation
 

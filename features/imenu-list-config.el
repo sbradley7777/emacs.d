@@ -8,9 +8,9 @@
 (with-load-timing
  "imenu-list-config.el"
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Imenu-List Configuration
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  (use-package
   imenu-list
@@ -26,14 +26,6 @@
 
   ;; Terminal-friendly display options
   (setq imenu-list-mode-line-format '("%e" mode-line-front-space "Symbols")) ; Simple modeline
-
-  ;; Integration with eglot - automatic updates when LSP provides new symbols
-  (add-hook
-   'imenu-list-update-hook
-   (lambda
-    ()
-    "Update imenu-list when eglot provides new symbol information."
-    (when (eglot-managed-p) (imenu-list-update-safe))))
 
   ;; Key bindings for the imenu-list buffer
   (with-eval-after-load

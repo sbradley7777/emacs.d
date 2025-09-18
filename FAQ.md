@@ -33,12 +33,10 @@ This document answers common questions about the Emacs configuration, its featur
 **Core Requirements:**
 - **Native compilation improvements**: Enhanced bytecode generation for package performance
 - **Built-in use-package enhancements**: Modern lazy-loading and configuration capabilities
-- **LSP performance optimizations**: Native JSON parsing in Eglot for real-time Python development
 - **Memory management**: Advanced garbage collection tuning not available in earlier versions
 
 **Why older versions won't work:**
 - Missing native compilation optimizations cause startup performance issues
-- LSP communication inefficiencies lead to poor development experience
 - UI feature limitations prevent proper line number and diagnostic display
 - Package loading mechanisms lack modern reliability features
 
@@ -55,12 +53,11 @@ This document answers common questions about the Emacs configuration, its featur
 **Modern UI Features:**
 - **Enhanced line numbers**: `global-display-line-numbers-mode` with visual line support
 - **Improved diagnostics**: Advanced Flymake integration with real-time updates
-- **LSP responsiveness**: Native Eglot optimizations for instant code intelligence
 - **Visual enhancements**: Modern theme and display capabilities
 
 **Development Features:**
 - **Package management**: Reliable use-package with modern dependency resolution
-- **Python integration**: Optimized virtual environment detection and LSP communication
+- **Python integration**: Optimized virtual environment detection
 - **Code quality**: Enhanced formatting and linting tool integration
 
 ### Q: Is this configuration suitable for beginners?
@@ -127,7 +124,6 @@ For comprehensive testing documentation and troubleshooting, see [`scripts/TESTI
 ### Q: Do I need to install external dependencies?
 
 **A:** For basic functionality, no external dependencies are required. For enhanced features:
-- **Python development**: Requires `python-lsp-server` and related tools
 - **Code formatting**: Requires [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt)
 - **Pre-commit hooks**: Requires `pre-commit` Python package
 
@@ -143,14 +139,14 @@ See [`README.md`](README.md#requirements) for complete requirements.
 - **Automatic triggers**: Completion appears after 1 character (200ms delay)
 - **Multiple activation methods**: `TAB`, `C-c TAB`, `M-TAB`, `C-M-i`
 - **Smart behavior**: `TAB` completes when possible, indents otherwise
-- **Context-aware**: Uses LSP servers, built-in completion, and mode-specific sources
+- **Context-aware**: Uses built-in completion and mode-specific sources
 
 See [`FEATURES.md`](FEATURES.md#auto-completion-system) for detailed information and [`KEYMAP.md`](KEYMAP.md#code-completion-corfu) for complete keybinding reference.
 
 ### Q: What programming languages are supported?
 
 **A:** Current language support includes:
-- **Python**: Full development environment with LSP, virtual environments, remote development via TRAMP, and debugging
+- **Python**: Full development environment with virtual environments, remote development via TRAMP, and debugging
 - **Emacs Lisp**: Enhanced development with formatting and evaluation
 - **YAML**: Structure-aware editing and completion
 
@@ -182,6 +178,8 @@ The modular design makes it easy to add support for additional languages.
 ## Python Development
 
 *Questions specific to Python programming and development environment setup.*
+
+> **Note:** LSP (Language Server Protocol) integration for Python using Eglot and pylsp is temporarily disabled and is planned to be re-introduced in a future update.
 
 ### Q: How does virtual environment detection work?
 
@@ -267,61 +265,6 @@ C-x C-f /ssh:user@hostname:/path/to/project/file.py
 ```
 
 The configuration automatically detects and activates the appropriate virtual environment for remote Python files.
-
-### Q: How reliable is the Python LSP server detection?
-
-**A:** The configuration uses a robust, unified detection system that works consistently across both local and remote development environments:
-
-**Local Detection** ([`lang/python/python-utils.el`](lang/python/python-utils.el)):
-1. **PATH search first**: Checks if `pylsp` is available in your system PATH
-2. **Fallback to user installation**: Uses `~/.local/bin/pylsp` as defined in [`python-constants.el`](lang/python/python-constants.el)
-3. **Clear status messages**: Shows exactly which pylsp path is being used
-
-**Remote Detection** ([`lang/python/python-core.el`](lang/python/python-core.el)):
-1. **TRAMP-aware discovery**: Automatically searches remote system for pylsp installation
-2. **Graceful fallback**: Uses program name `"pylsp"` if not found, allowing remote PATH resolution
-3. **Unified behavior**: Same detection logic applies whether working locally or remotely
-
-**If LSP features aren't working**, check [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md#python-lsp-server-problems) for detailed solutions.
-
-### Q: Can I customize the Python virtual environment indicator in the modeline?
-
-**A:** Yes! You can customize the color of the `[venv: project-name (pyX.X)]` indicator, but first understand when it appears:
-
-**When the indicator appears**:
-- Only for files located within the active `python` virtual environment and truly project-scoped and path-dependent
-- Files or buffers that do not meet this requirement show no virtual environment indicator at all
-
-**To customize the color** ([`examples/local.el`](examples/local.el)):
-```elisp
-;; Add this to your local.el file
-(setq pyvenv-modeline-color "lightcoral")  ; Use any valid color name or hex code
-```
-
-**Available color options**:
-- **Named colors**: `"red"`, `"green"`, `"blue"`, `"orange"`, `"purple"`, `"lightcoral"`
-- **Hex colors**: `"#ff7f7f"`, `"#90ee90"`, `"#87ceeb"`
-- **Default**: `nil` or unset (uses normal modeline text color)
-
-**Important**: The entire `[venv: project-name]` indicator is only displayed for files within the active `python` virtual environment project scope.
-
-### Q: What LSP features are available for Python?
-
-**A:** The [Eglot](https://github.com/joaotavora/eglot) + [`python-lsp-server`](https://github.com/python-lsp/python-lsp-server) integration provides:
-- **Intelligent completion**: Context-aware suggestions with type hints
-- **Real-time diagnostics**: Syntax errors, linting, and type checking
-- **Code navigation**: Go to definition (`M-.`), find references (`M-?`)
-- **Refactoring**: Symbol renaming (`C-c C-r`), code actions (`C-c C-a`)
-- **Documentation**: Hover information and signature help
-
-### Q: How do I configure linting tools (mypy, ruff)?
-
-**A:** The configuration automatically detects and uses installed tools:
-1. **Install tools**: `pip install mypy ruff pylsp-mypy python-lsp-ruff`
-2. **Automatic detection**: Tools are automatically prioritized when available
-3. **Configuration**: Use standard config files (`~/.mypy.ini`, `pyproject.toml`)
-
-See [`FEATURES.md`](FEATURES.md#python-development-environment) for detailed setup.
 
 ## Performance and Optimization
 

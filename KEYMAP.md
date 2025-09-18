@@ -8,7 +8,6 @@ This document provides a comprehensive reference for all keybindings and executa
 - [Keybindings](#keybindings)
   - [Function Keys](#function-keys)
   - [Special Keys](#special-keys)
-  - [Code Intelligence (LSP via Eglot)](#code-intelligence-lsp-via-eglot)
   - [Code Completion (Corfu)](#code-completion-corfu)
   - [Essential Emacs Operations](#essential-emacs-operations)
   - [Which-Key System](#which-key-system)
@@ -77,19 +76,6 @@ Additional keyboard mappings for improved functionality:
 |:------------|:---------|:------------|:--------|
 | `Delete` | `delete-char` | Delete character under cursor | - |
 | `Keypad Delete` | `delete-char` | Delete character under cursor | - |
-
-## Code Intelligence (LSP via Eglot)
-
-Advanced code navigation and analysis powered by [Eglot](https://github.com/joaotavora/eglot):
-
-| Key Binding | Function | Description | Context |
-|:------------|:---------|:------------|:--------|
-| `M-.` | `xref-find-definitions` | Jump to function/class/variable definition | LSP active |
-| `M-,` | `xref-go-back` | Return from definition jump | LSP active |
-| `M-?` | `xref-find-references` | Find all references to symbol | LSP active |
-| `C-h` `.` | `display-local-help` | Show documentation in echo area | LSP active |
-| `C-c` `C-r` | `eglot-rename` | Rename symbol project-wide | LSP active |
-| `C-c` `C-a` | `eglot-code-actions` | Show quick fixes and refactoring | LSP active |
 
 ## Code Completion (Corfu)
 

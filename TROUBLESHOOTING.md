@@ -6,7 +6,6 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 
 - [Emacs Version Requirements](#emacs-version-requirements)
 - [Auto-completion Issues](#auto-completion-issues)
-- [LSP Server Problems](#lsp-server-problems)
 - [Virtual Environment Issues](#virtual-environment-issues)
 - [Installation Problems](#installation-problems)
 - [Performance Issues](#performance-issues)
@@ -66,61 +65,8 @@ M-x emacs-version
 **Symptoms**: Long delays before completion suggestions appear
 
 **Solutions**:
-1. **Check LSP server**: Slow completion often indicates LSP server issues
-2. **Verify virtual environment**: Ensure correct Python environment is active
-3. **Restart LSP**: Use `M-x eglot-shutdown` followed by reopening the file
-4. **Check system resources**: High CPU/memory usage may impact performance
-
-## LSP Server Problems
-
-### Python LSP Server Not Working
-
-**Symptoms**: No intelligent completion, diagnostics, or go-to-definition in Python files
-
-**Diagnostic Steps**:
-1. **Check LSP events**: `M-x eglot-events-buffer` to see LSP communication
-2. **View server errors**: `M-x eglot-stderr-buffer` to see server error messages
-3. **Verify pylsp installation**: The configuration uses a hard-coded path `~/.local/bin/pylsp`:
-   ```bash
-   # Check if pylsp is installed at the expected location
-   ls -la ~/.local/bin/pylsp
-
-   # Test pylsp directly
-   ~/.local/bin/pylsp --help
-
-   # Check if it's in your PATH (optional)
-   which pylsp
-   ```
-
-**Common Solutions**:
-1. **Install/reinstall pylsp**:
-   ```bash
-   # User installation (recommended - installs to ~/.local/bin/pylsp)
-   pip3 install --user python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
-
-   # System installation (if you have admin privileges)
-   sudo pip3 install python-lsp-server pylsp-mypy python-lsp-ruff mypy ruff
-   ```
-
-2. **Check PATH**: Ensure `~/.local/bin` is in your PATH:
-   ```bash
-   # Add to ~/.bash_profile
-   export PATH="$HOME/.local/bin:$PATH"
-   ```
-
-3. **Restart LSP server**: `M-x eglot-shutdown` followed by `M-x eglot` or reopening the file
-
-4. **Check virtual environment**: Ensure pylsp is installed in the active virtual environment
-
-### LSP Server Crashes
-
-**Symptoms**: LSP server stops working, frequent error messages
-
-**Solutions**:
-1. **Check server logs**: `M-x eglot-stderr-buffer` for error details
-2. **Update pylsp**: Ensure you have the latest python-lsp-server version
-3. **Check file permissions**: Ensure Python files and project directories are readable
-4. **Restart Emacs**: Sometimes a complete restart resolves persistent issues
+1. **Verify virtual environment**: Ensure correct Python environment is active
+2. **Check system resources**: High CPU/memory usage may impact performance
 
 ## Virtual Environment Issues
 

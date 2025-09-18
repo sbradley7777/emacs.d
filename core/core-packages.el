@@ -8,9 +8,9 @@
 (with-load-timing
  "core-packages.el"
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Essential Package Categories
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Organized package lists for better maintainability
  (defvar
   config-essential-packages
@@ -28,9 +28,9 @@
   (append config-essential-packages config-development-packages)
   "Complete list of packages to install.")
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Robust Package Installation
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
   install-packages-safely
   (package-list)
@@ -91,9 +91,9 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  ;; Install packages using robust installation function with retry
  (install-packages-with-retry config-packages)
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package configurations using use-package
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (use-package doom-themes :defer t) ; Deferred loading for doom themes collection
  (use-package yaml-mode :mode ("\\.ya?ml\\'" . yaml-mode)) ; YAML file support
  (use-package toml-mode :mode ("\\.toml\\'" . toml-mode)) ; TOML file support
@@ -115,22 +115,6 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
   ;; Configure elisp-autofmt for consistent formatting
   (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
   (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs)) ; Single-threaded for consistency
-
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Eglot Performance Settings (applied early before any LSP servers start)
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Enable event logging for debugging (reduces performance slightly)
- ;; Note: This must be set early before eglot loads, so it cannot use a constant from features-constants.el
- (setq eglot-events-buffer-size 200000) ; Enable event logging for debugging
- ;; Use asynchronous connection for better responsiveness
- (setq eglot-sync-connect nil)
- ;; Additional stability settings for Emacs 30.x
- (setq eglot-extend-to-xref nil) ; Prevent xref conflicts
- (setq eglot-confirm-server-initiated-edits nil) ; Reduce confirmation prompts
- ;; Suppress some common error messages that don't affect functionality
- (setq eglot-report-progress nil) ; Reduce progress notification noise
-
 
  ;; Make this module available for loading with (require 'core-packages)
  (provide 'core-packages))
