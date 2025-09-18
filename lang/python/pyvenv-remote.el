@@ -10,11 +10,6 @@
 (with-load-timing
  "pyvenv-remote.el"
 
- (defvar
-  pyvenv-remote-venv-cache
-  (make-hash-table :test 'equal)
-  "Cache of virtual environments per TRAMP connection.")
-
  (defun
   pyvenv-remote-find-venv (remote-dir)
   "Find virtual environment for remote directory.

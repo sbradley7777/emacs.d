@@ -37,8 +37,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Show whitespace and long lines
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (setq whitespace-style '(face trailing tabs tab-mark lines-tail))
- (global-whitespace-mode 1)
+ (setq whitespace-style '(face trailing tabs tab-mark lines-tail)) (global-whitespace-mode 1)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Enhanced editing behavior
@@ -48,16 +47,6 @@
   undo-limit core-undo-limit ; Normal undo entries kept in memory
   undo-strong-limit core-undo-strong-limit ; Strongly-held undo entries
   undo-outer-limit core-undo-outer-limit) ; Maximum undo data before old entries are discarded
-
- ;; Smarter beginning-of-line behavior
- (defun
-  smart-beginning-of-line () "Move to beginning of line or indentation." (interactive)
-  (let ((oldpos (point)))
-    (back-to-indentation)
-    (and (= oldpos (point)) (beginning-of-line))))
-
- (global-set-key (kbd "C-a") 'smart-beginning-of-line)
-
 
  ;; Make this module available for loading with (require 'editing)
  (provide 'editing))

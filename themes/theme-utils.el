@@ -51,19 +51,6 @@
  (load-configured-theme)
  (message "✅ Theme switched to: %s" theme))
 
-(defun
- preview-theme (theme) "Preview THEME temporarily without changing user preference."
- (let ((original-theme (car custom-enabled-themes)))
-   (condition-case err
-       (progn
-        (mapc #'disable-theme custom-enabled-themes)
-        (load-theme theme t)
-        (message "🎨 Previewing theme: %s (Press RET to apply, C-g to cancel)" theme)
-        (sit-for 0.5))
-     (error
-      (message "❌ Failed to preview theme '%s': %s" theme (error-message-string err))
-      (when original-theme (load-theme original-theme t))))))
-
 ;;;###autoload
 (defun
  list-themes () "List all available themes in a selectable buffer." (interactive)

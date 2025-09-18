@@ -35,13 +35,10 @@
 (defconst core-gc-check-threshold 800000 "Threshold for checking if GC optimization is needed.")
 
 ;; Garbage Collection Percentages
-(defconst core-gc-percentage-startup 0.6 "GC percentage during startup (60% of heap).")
 (defconst core-gc-percentage-normal 0.1 "Normal GC percentage (10% of heap).")
 
 ;; Timing Constants
-(defconst core-idle-update-delay-startup 1.0 "Idle update delay during startup.")
 (defconst core-idle-update-delay-normal 0.5 "Normal idle update delay.")
-(defconst core-gc-timer-interval 900 "GC optimization timer interval (15 minutes).")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI and Display Constants
