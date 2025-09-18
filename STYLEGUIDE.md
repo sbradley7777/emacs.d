@@ -64,15 +64,14 @@ emacs.d/
 ├── [`features/`](features/)                    # Optional enhancements (can be disabled independently)
 │   ├── completion-config.el     # Core auto-completion framework
 │   ├── flymake-config.el        # Flymake diagnostic display configuration
-│   ├── rainbow-delimiters.el    # Enhanced delimiter visibility
+│   ├── rainbow-delimiters-config.el    # Enhanced delimiter visibility
 │   └── indent-guides.el         # Visual indentation guides
 ├── [`lang/`](lang/)                        # Language-specific configurations
-│   ├── lisp.el                  # Lisp and Emacs Lisp development settings
-│   ├── yaml.el                  # YAML file editing configuration
+│   ├── lisp-config.el                  # Lisp and Emacs Lisp development settings
+│   ├── yaml-config.el                  # YAML file editing configuration
 │   └── python/                  # Python development environment
 │       ├── python-core.el       # Basic Python mode settings and indentation
-│       ├── venv.el              # Virtual environment management
-│       └── python-tools.el      # Python development tools and utilities
+│       ├── pyvenv-config.el              # Virtual environment management
 ├── [`themes/`](themes/)                      # Theme configurations
 │   └── themes-config.el         # Core theme and appearance configuration
 ├── [`user/`](user/)                        # Personal customizations

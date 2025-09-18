@@ -42,6 +42,7 @@
   (message "✅  Imenu-list configured for terminal-based symbol navigation"))
 
  ;; Global key bindings for quick access
+ (global-set-key (kbd "<f1>") 'imenu-list-smart-toggle) ; Toggle imenu-list sidebar
  (global-set-key (kbd "C-c i l") 'imenu-list-smart-toggle) ; Toggle imenu-list sidebar
  (global-set-key (kbd "C-c i s") 'imenu-list-show-current-symbol) ; Show current symbol in sidebar
  (global-set-key (kbd "C-c i r") 'imenu-list-refresh) ; Refresh symbol list
@@ -73,9 +74,6 @@
          0.5 nil
          (lambda
           () (when (window-live-p (get-buffer-window (current-buffer))) (other-window 1))))))))))
-
- ;; Replace the default binding with our enhanced version
- (global-set-key (kbd "C-c i l") 'imenu-list-smart-toggle-with-focus)
 
  ;; Make this module available for loading with (require 'imenu-list-config)
  (provide 'imenu-list-config))

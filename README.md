@@ -70,7 +70,6 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
     - [`pyvenv-utils.el`](lang/python/pyvenv-utils.el) - Python virtual environment utilities
     - [`pyvenv-remote.el`](lang/python/pyvenv-remote.el) - TRAMP-aware virtual environment support
-    - [`python-tools.el`](lang/python/python-tools.el) - Python development tools and packages
 - **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
 - **[`user/`](user/)** - Personal customizations

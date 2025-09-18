@@ -22,7 +22,6 @@
 
 
  ;; Utility function keys
- (global-set-key [f1] 'imenu-list-smart-toggle) ; Toggle imenu-list sidebar
  (global-set-key [f2] 'flymake-show-buffer-diagnostics) ; Show Flymake diagnostics
  (global-set-key [f3] 'flymake-goto-prev-error) ; Go to previous flymake error
  (global-set-key [f4] 'flymake-goto-next-error) ; Go to next flymake error
