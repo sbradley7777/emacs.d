@@ -113,7 +113,6 @@ First tries to find it remotely, falls back to local equivalent if needed."
 
  ;; Replace existing hooks
  (remove-hook 'python-mode-hook #'pyvenv-auto-activate)
- (remove-hook 'python-mode-hook #'smart-pyvenv-activate)
  ;; Add pyvenv-remote-activate back for virtual environment detection and modeline
  (add-hook 'python-mode-hook #'pyvenv-remote-activate)
 
