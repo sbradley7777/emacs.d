@@ -4,6 +4,8 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'make-mode)
+(require 'highlight-indent-guides)
 
 (with-load-timing
  "makefile-config.el"
@@ -44,9 +46,14 @@
    ;; Makefile-specific editing enhancements
    (setq makefile-electric-keys t) ; Enable electric keys (automatic formatting)
    (setq makefile-query-by-make-minus-q t) ; Use make -q for target queries
+   ))
 
-   ;; Visual feedback for proper Make syntax
-   (highlight-indentation-mode 1)))
+ ;; Defer loading of indentation guides until makefile-mode is active
+ (with-eval-after-load
+  'make-mode
+  (add-hook
+   'makefile-mode-hook
+   (lambda () "Enable visual feedback for proper Make syntax." (highlight-indentation-mode 1))))
 
  ;; Additional configuration for different Makefile variants
  (add-hook

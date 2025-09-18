@@ -6,6 +6,7 @@
 (require 'core-utils)
 (require 'python-constants)
 (require 'python-utils)
+(require 'python)
 
 (with-load-timing
  "python-core.el"
