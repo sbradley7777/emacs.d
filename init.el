@@ -26,7 +26,7 @@
   (setq file-name-handler-alist default-file-name-handler-alist)
 
   ;; Restore normal input processing
-  (setq idle-update-delay core-idle-update-delay-normal) ; Faster idle updates for responsiveness
+  (setq which-func-update-delay core-idle-update-delay-normal) ; Faster idle updates for responsiveness
 
   (message "✅  Emacs startup complete. Performance settings restored.")))
 

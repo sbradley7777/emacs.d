@@ -72,7 +72,7 @@
 ;; Completion and Input Optimizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Reduce input processing overhead during startup
-(setq idle-update-delay early-idle-update-delay-startup) ; Longer delay for idle updates during startup
+(setq which-func-update-delay early-idle-update-delay-startup) ; Longer delay for idle updates during startup
 
 ;; Reduce startup noise and font cache overhead
 (setq
