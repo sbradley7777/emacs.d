@@ -120,4 +120,3 @@ First tries to find it remotely, falls back to local equivalent if needed."
  (message "🔧 TRAMP-aware pyvenv support loaded"))
 
 (provide 'pyvenv-remote)
-;;; pyvenv-remote.el ends here
