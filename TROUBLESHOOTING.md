@@ -275,6 +275,25 @@ emacs --debug-init
 3. **Upgrade Emacs**: This configuration requires Emacs 30.2+ exclusively
 4. **Check installation**: Ensure you have a complete Emacs 30.2+ installation
 
+## Snap Installation Issues
+
+### Native Compilation Errors
+
+**Symptoms**:
+- Persistent startup errors
+- `*Async-native-compile-log*` buffer appears on every launch
+
+**Cause**:
+Snap-based Emacs installations have sandbox permission issues that prevent native compilation from working correctly.
+
+**Solution**:
+This configuration automatically handles this issue by:
+- Setting a Snap-compatible native compilation cache path (`~/eln-cache`).
+- Disabling deferred compilation to ensure the configuration is loaded before async compilation starts.
+- Adding the read-only `/snap/emacs/.*` directory to the `native-comp-deferred-compilation-deny-list` to prevent pointless recompilation attempts.
+
+If you are still experiencing issues, ensure that you have the latest version of this configuration.
+
 ## Getting Additional Help
 
 If you continue to experience issues:

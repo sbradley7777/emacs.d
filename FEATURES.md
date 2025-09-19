@@ -282,7 +282,7 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
   - **Automatic mode detection** showing context-appropriate keybindings
 
 - **[Imenu-List](https://github.com/bmag/imenu-list)** ([`features/imenu-list-config.el`](features/imenu-list-config.el)): Symbol navigation sidebar for code structure visualization
-  - **Toggle sidebar** with `F2` or `C-c i l` for quick access
+  - **Toggle sidebar** with `F1` or `C-c i l` for quick access
   - **Real-time symbol updates** showing functions, classes, and variables
   - **Interactive navigation** with dedicated sidebar keybindings
   - **Project structure overview** for large codebases

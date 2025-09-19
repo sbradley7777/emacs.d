@@ -35,7 +35,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
 ## Configuration Structure
 
 - **[`init.el`](init.el)** - Main Emacs initialization file that loads all configuration modules
-- **[`early-init.el`](early-init.el)** - Early initialization file for performance optimizations
+- **[`early-init.el`](early-init.el)** - Early initialization for performance optimizations and directory setup
 - **[`core/`](core/)** - Essential Emacs functionality (loaded first in dependency order)
   - **[`package-system/`](core/package-system/)** - Modular package management system
     - [`manager.el`](core/package-system/manager.el) - Package system orchestration and module loading

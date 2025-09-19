@@ -238,7 +238,7 @@ The modular design makes it easy to add support for additional languages.
 ;; Connection settings
 (setq tramp-default-method "ssh")              ; Use SSH for remote connections
 (setq tramp-default-remote-shell "/bin/bash")  ; Use bash as remote shell
-(setq tramp-verbose 1)                         ; Minimal logging (errors only)
+(setq tramp-verbose 0)                         ; Silent operation by default
 
 ;; Performance optimizations
 (setq tramp-use-ssh-controlmaster-options nil) ; Disable SSH control master
