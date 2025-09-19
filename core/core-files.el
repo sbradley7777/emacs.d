@@ -26,16 +26,12 @@
  (defvar core-files-autosave-dir (expand-file-name "~/.emacs.d/autosaves/"))
  (setq auto-save-list-file-prefix core-files-autosave-dir)
  (setq auto-save-file-name-transforms `((".*" ,core-files-autosave-dir t)))
- ;; Create the autosave directory if it does not exist.
- (make-directory core-files-autosave-dir t)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Backup files (example: foo~) -> ~/.emacs.d/backups/
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defvar core-files-backup-dir (expand-file-name "~/.emacs.d/backups/"))
  (setq backup-directory-alist (list (cons ".*" core-files-backup-dir)))
- ;; Create the backups directory if it does not exist.
- (make-directory core-files-backup-dir t)
 
  ;; Enhanced backup preferences configuration
  (setq

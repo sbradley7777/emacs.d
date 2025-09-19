@@ -79,4 +79,15 @@
  inhibit-compacting-font-caches t ; Don't compact font caches during startup
  inhibit-startup-buffer-menu t) ; Don't show buffer menu at startup
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ensure all essential directories exist on startup
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(let ((dirs-to-create
+       (list
+        (expand-file-name "eln-cache" user-emacs-directory)
+        (expand-file-name "tramp-autosave" user-emacs-directory)
+        (expand-file-name "autosaves" user-emacs-directory)
+        (expand-file-name "backups" user-emacs-directory))))
+  (dolist (dir dirs-to-create) (unless (file-directory-p dir) (make-directory dir t))))
+
 (message "✅  early-init.el loaded successfully - performance optimizations active.")
