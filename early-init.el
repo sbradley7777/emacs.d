@@ -80,6 +80,24 @@
  inhibit-startup-buffer-menu t) ; Don't show buffer menu at startup
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Native Compilation Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; The native-comp-never-compile-file-patterns variable is not available in
+;; early-init, so we must set it after the native compilation system has been
+;; loaded.
+(setq comp-deferred-compilation nil)
+(setq native-comp-deferred-compilation nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configure native compilation cache path for Snap compatibility
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; The default location in user-emacs-directory can have permissions issues
+;; with Snap's sandboxing. Setting it to a known-writable location inside
+;; the Snap home directory can resolve this.
+(setq native-comp-eln-load-path (list (expand-file-name "eln-cache" (getenv "HOME"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure all essential directories exist on startup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (let ((dirs-to-create
