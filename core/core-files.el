@@ -61,14 +61,14 @@
  ;; Add helpful logging messages for backup and auto-save operations
 
  (defun
-  core-files-log-backup-operation
-  (file)
-  "Log when a backup file is created for FILE."
-  (when file (message "💾  Backup created for: %s" (file-name-nondirectory file))))
+  core-files-log-backup-operation (file) "Log when a backup file is created for FILE."
+  ; (when file (message "💾  Backup created for: %s" (file-name-nondirectory file)))
+  )
 
  (defun
   core-files-log-auto-save-operation () "Log when an auto-save operation occurs."
-  (when buffer-file-name (message "💾  Auto-saved: %s" (file-name-nondirectory buffer-file-name))))
+  ; (when buffer-file-name (message "💾  Auto-saved: %s" (file-name-nondirectory buffer-file-name)))
+  )
 
  ;; Hook into backup operations
  (add-hook
