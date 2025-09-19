@@ -16,18 +16,16 @@
 
  ;; Set up the keyboard so the delete key on both regular keyboard and keypad delete the character under the cursor
  ;; and to the right under X, instead of the default backspace behavior.
- (global-set-key [delete] 'delete-char)
- (global-set-key [kp-delete] 'delete-char)
+ (global-set-key (kbd "<delete>") 'delete-char)
+ (global-set-key (kbd "<kp-delete>") 'delete-char)
  (setq delete-key-deletes-forward t)
 
-
  ;; Utility function keys
- (global-set-key [f2] 'flymake-show-buffer-diagnostics) ; Show Flymake diagnostics
- (global-set-key [f3] 'flymake-goto-prev-error) ; Go to previous flymake error
- (global-set-key [f4] 'flymake-goto-next-error) ; Go to next flymake error
- (global-set-key [f5] 'clipboard-kill-ring-save) ; Copy what is highlighted
- (global-set-key [f6] 'delete-trailing-whitespace) ; Delete trailing whitespace
-
+ (global-set-key (kbd "<f2>") 'flymake-show-buffer-diagnostics) ; Show Flymake diagnostics
+ (global-set-key (kbd "<f3>") 'flymake-goto-prev-error) ; Go to previous flymake error
+ (global-set-key (kbd "<f4>") 'flymake-goto-next-error) ; Go to next flymake error
+ (global-set-key (kbd "<f5>") 'clipboard-kill-ring-save) ; Copy what is highlighted
+ (global-set-key (kbd "<f6>") 'delete-trailing-whitespace) ; Delete trailing whitespace
 
  ;; Keyboard commands for controlling the buffer.
  ;;
@@ -35,16 +33,16 @@
  (global-set-key (kbd "ESC <left>") 'scroll-down) ; Scroll buffer down
  (global-set-key (kbd "ESC <right>") 'scroll-up) ; Scroll buffer up
  ;; Buffer navigation
- (global-set-key [f7] 'previous-buffer) ; Cycle to previous buffer
- (global-set-key [f8] 'next-buffer) ; Cycle to next buffer
- (global-set-key [f9] 'beginning-of-buffer) ; Goto top of buffer
- (global-set-key [f10] 'end-of-buffer) ; Goto end of buffer
+ (global-set-key (kbd "<f7>") 'previous-buffer) ; Cycle to previous buffer
+ (global-set-key (kbd "<f8>") 'next-buffer) ; Cycle to next buffer
+ (global-set-key (kbd "<f9>") 'beginning-of-buffer) ; Goto top of buffer
+ (global-set-key (kbd "<f10>") 'end-of-buffer) ; Goto end of buffer
 
  ;; Page down/up move the point, not the screen. Can move point to beginning or end of buffer.
  ;; Reference: http://snarfed.org/emacs_page_up_page_down
  ;; Page down/up the buffer with smart boundaries
- (global-set-key [f11] 'user-smart-page-up) ; Page up with smart boundary handling
- (global-set-key [f12] 'user-smart-page-down) ; Page down with smart boundary handling
+ (global-set-key (kbd "<f11>") 'user-smart-page-up) ; Page up with smart boundary handling
+ (global-set-key (kbd "<f12>") 'user-smart-page-down) ; Page down with smart boundary handling
 
  ;; Make this module available for loading with (require 'keybindings)
  (provide 'keybindings))
