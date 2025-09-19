@@ -20,26 +20,24 @@
 (require 'core-utils)
 (require 'tramp-utils)
 
-(core-utils-with-load-timing
- "TRAMP remote file access with Python support"
+;; Load TRAMP
+(require 'tramp)
 
- ;; Load TRAMP
- (require 'tramp)
+;; Default connection method and shell
+(setq tramp-default-method "ssh")
+(setq tramp-default-remote-shell "/bin/bash")
 
- ;; Default connection method and shell
- (setq tramp-default-method "ssh")
- (setq tramp-default-remote-shell "/bin/bash")
+;; Silent operation by default - this prevents the connection buffer from appearing.
+;; Can be overridden in local.el for debugging.
+(setq tramp-verbose 0)
 
- ;; Minimal logging (errors only) - can be overridden in local.el
- (setq tramp-verbose 1)
+;; Cache and auto-save locations
+(setq tramp-persistency-file-name (expand-file-name "tramp-cache" user-emacs-directory))
+(setq tramp-auto-save-directory (expand-file-name "tramp-autosave" user-emacs-directory))
 
- ;; Cache and auto-save locations
- (setq tramp-persistency-file-name (expand-file-name "tramp-cache" user-emacs-directory))
- (setq tramp-auto-save-directory (expand-file-name "tramp-autosave" user-emacs-directory))
-
- ;; Performance optimizations
- (setq tramp-use-ssh-controlmaster-options nil)
- (setq tramp-completion-reread-directory-timeout nil))
+;; Performance optimizations
+(setq tramp-use-ssh-controlmaster-options nil)
+(setq tramp-completion-reread-directory-timeout nil)
 
 (provide 'tramp-config)
 

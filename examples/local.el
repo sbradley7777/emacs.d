@@ -108,14 +108,21 @@
 ;; ============================================
 ;; 4. REMOTE DEVELOPMENT (TRAMP) CONFIGURATION
 ;; ============================================
-;; For debugging TRAMP connections, you might need to re-enable SSH ControlMaster.
-;; Your main config disables this for performance, but it can be useful for troubleshooting.
-;; Uncomment the line below to enable it.
-;; (setq tramp-use-ssh-controlmaster-options t)
+;; The core configuration is set to be completely silent and NEVER show the
+;; TRAMP connection buffer (`*tramp/ssh...*`) by default. Use the settings
+;; below to see debugging information.
 
-;; Uncomment the lines below to enable TRAMP debugging when troubleshooting remote connections
+;; --- TRAMP Verbosity Level ---
+;; To see debugging output, you must increase the verbosity level.
+;; Uncomment the line below.
+;; - A value of `3` shows basic connection messages.
+;; - A value of `6` provides detailed debugging, which is recommended
+;;   for troubleshooting.
+;;
+;; Setting this to any value greater than 2 will cause the TRAMP
+;; connection buffer to appear.
+;;
 ;; (setq tramp-verbose 6)
-;; (setq tramp-debug-buffer t)
 
 ;; ============================================
 ;; 5. PYTHON VIRTUAL ENVIRONMENT CONFIGURATION
