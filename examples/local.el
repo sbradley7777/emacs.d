@@ -83,16 +83,7 @@
  (bound-and-true-p global-whitespace-mode) (global-whitespace-mode -1) (global-whitespace-mode 1))
 
 ;; ============================================
-;; 2. FONT CONFIGURATION
-;; ============================================
-;; Set default font size for GUI mode
-;; Common sizes: 60 (6pt), 90 (9pt), 100 (10pt), 110 (11pt), 120 (12pt), 140 (14pt)
-(when
- (display-graphic-p)
- (set-face-attribute 'default nil :height 90)) ; Height is in 1/10th points, so 90 = 9pt
-
-;; ============================================
-;; 3. PLATFORM-SPECIFIC CONFIGURATION
+;; 2. PLATFORM-SPECIFIC CONFIGURATION
 ;; ============================================
 ;; macOS XQuartz Key Mapping Fix
 ;; In XQuartz make sure that the following is enabled in "Settings"-> "Input" -> "Option key sends Alt_L and Alt_R".
@@ -106,7 +97,7 @@
  (setq x-meta-keysym 'alt))
 
 ;; ============================================
-;; 4. REMOTE DEVELOPMENT (TRAMP) CONFIGURATION
+;; 3. REMOTE DEVELOPMENT (TRAMP) CONFIGURATION
 ;; ============================================
 ;; The core configuration is set to be completely silent and NEVER show the
 ;; TRAMP connection buffer (`*tramp/ssh...*`) by default. Use the settings
@@ -125,7 +116,7 @@
 ;; (setq tramp-verbose 6)
 
 ;; ============================================
-;; 5. PYTHON VIRTUAL ENVIRONMENT CONFIGURATION
+;; 4. PYTHON VIRTUAL ENVIRONMENT CONFIGURATION
 ;; ============================================
 ;; Python virtual environment modeline color (optional)
 ;; Customize the color of the [venv: project-name] indicator in the modeline
@@ -134,7 +125,7 @@
 (setq pyvenv-modeline-color "lightcoral")
 
 ;; ============================================
-;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 5. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Theme-specific customizations (optional - for exceptions to global settings)
 ;; (setq themes-config-customizations
