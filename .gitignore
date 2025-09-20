@@ -43,6 +43,19 @@ Thumbs.db
 *.orig
 *.rej
 
+# Configuration files and caches.
+.mypy_cache/
+.ruff_cache/
+.pytype/
+monkeytype.sqlite3
+.coverage/
+.vscode/
+
+# Claude Code project configuration
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
 # Emacs artifacts or files created by emacs
 *~
 \#*\#
@@ -81,12 +94,3 @@ etc/
 .cache/
 .local/
 network-security.data
-
-# Configuration files and caches.
-.mypy_cache/
-.ruff_cache/
-.pytype/
-monkeytype.sqlite3
-.coverage/
-.vscode/
-.claude/
