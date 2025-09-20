@@ -149,9 +149,8 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'tramp-config "TRAMP remote file access") ; Remote file access
 (safe-load-config 'keybindings "Global keybindings") ; Global keybindings
 
-;; Optional features (load eglot first before language-specific configs)
+;; Optional features
 (safe-load-config 'completion-config "Auto-completion framework") ; Core completion system
-(safe-load-config 'lsp-config "General LSP configuration") ; General eglot settings
 (safe-load-config 'flymake-config "Flymake configuration") ; Flymake diagnostic display
 (safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
 (safe-load-config 'indent-guides "Visual indentation guides") ; Column-based indentation visualization
@@ -164,14 +163,13 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'markdown-config "Markdown file support")
 (safe-load-config 'makefile-config "Makefile support")
 
-;; Python configurations (load after general eglot)
+;; Python configurations
 (safe-load-config 'python-core "Python core editing")
 (safe-load-config 'python-constants "Python configuration constants")
 (safe-load-config 'pyvenv-utils "Python virtual environment utilities")
 (safe-load-config 'pyvenv-config "Python virtual environments")
 ;; TRAMP and Python virtual environment support
 (safe-load-config 'pyvenv-remote "Python virtual environments TRAMP support")
-(safe-load-config 'eglot-config "Python LSP (eglot) configuration")
 
 ;; User functions and aliases
 (safe-load-config 'functions "Custom helper functions")

@@ -117,8 +117,6 @@ Comprehensive Python development setup with intelligent environment management:
 - **Enhanced modeline display** showing active virtual environment and `python` version with optional color customization
 - **Project-aware environment switching** with automatic detection for both local and remote files
 
-> **Note:** LSP (Language Server Protocol) integration for Python using Eglot and pylsp is temporarily disabled and is planned to be re-introduced in a future update.
-
 #### Virtual Environment Management
 **Automatic Detection** ([`lang/python/pyvenv-config.el`](lang/python/pyvenv-config.el)):
 - Detects `venv/` directories in project roots

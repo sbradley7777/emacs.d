@@ -179,8 +179,6 @@ The modular design makes it easy to add support for additional languages.
 
 *Questions specific to Python programming and development environment setup.*
 
-> **Note:** LSP (Language Server Protocol) integration for Python using Eglot and pylsp is temporarily disabled and is planned to be re-introduced in a future update.
-
 ### Q: How does virtual environment detection work?
 
 **A:** Virtual environment detection works for both local and remote files:

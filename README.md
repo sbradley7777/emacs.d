@@ -28,8 +28,6 @@ This Emacs configuration provides a professional development environment with in
 - **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
 - **Modern Emacs 30.2+** - Exclusively optimized for the latest Emacs features
 
-> **Note:** LSP (Language Server Protocol) integration for Python using Eglot and pylsp is temporarily disabled and is planned to be re-introduced in a future update.
-
 For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installation instructions, see the [Installation](#installation) section below.
 
 ## Configuration Structure

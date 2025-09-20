@@ -24,20 +24,21 @@
 ;;      `cape-dabbrev` provides completions from words already present in your
 ;;      open buffers.
 ;;
-;; 4. Eglot + Pylsp (The Language Specialist Backend):
-;;    - Eglot is a client for the Language Server Protocol (LSP) that
-;;      communicates with a language server like `pylsp` (for Python). This
-;;      backend provides intelligent, context-aware completions based on a
-;;      deep understanding of the code.
+;; 4. Language-Specific Backends (Optional Language Intelligence):
+;;    - Various packages can provide intelligent, context-aware completions
+;;      for specific programming languages. Examples include LSP clients
+;;      (like eglot), dedicated language packages (like jedi.el for Python),
+;;      or IDE-like packages (like elpy). These backends provide completions
+;;      based on a deep understanding of the code structure and semantics.
 ;;
-;; --- Completion Flow with Eglot ---
+;; --- Completion Flow with Language Backends ---
 ;;
-;; When Eglot and a language server are active, the completion process is:
+;; When a language-specific backend is active, the completion process is:
 ;; 1. User presses TAB, triggering `completion-at-point`.
 ;; 2. `completion-at-point` asks all backends for suggestions.
-;; 3. Eglot asks the language server (e.g., `pylsp`) for intelligent completions.
+;; 3. Language backend provides intelligent completions based on code analysis.
 ;; 4. Cape provides simple text-based completions from the buffer.
-;; 5. Emacs combines the results, prioritizing the language server's suggestions.
+;; 5. Emacs combines the results, prioritizing the language-specific suggestions.
 ;; 6. Corfu displays the final, context-aware list to the user.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
