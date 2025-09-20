@@ -170,6 +170,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'pyvenv-config "Python virtual environments")
 ;; TRAMP and Python virtual environment support
 (safe-load-config 'pyvenv-remote "Python virtual environments TRAMP support")
+(safe-load-config 'flymake-ruff-config "Flymake Ruff integration")
 
 ;; User functions and aliases
 (safe-load-config 'functions "Custom helper functions")

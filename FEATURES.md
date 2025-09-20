@@ -154,8 +154,20 @@ Comprehensive Python development setup with intelligent environment management:
 **Behavior**: The `[venv: project-name]` indicator will only be displayed when editing files located within the active `python` virtual environment and truly project-scoped and path-dependent. Files or buffers that do not meet this requirement will show no virtual environment status in the modeline at all.
 
 #### Development Tools
-- **Real-time diagnostics** via [Flymake](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html) integration
-- Basic code navigation and editing features.
+- **Advanced Python Linting** via [flymake-ruff](https://github.com/erickgnavar/flymake-ruff) integration ([`lang/python/flymake-ruff-config.el`](lang/python/flymake-ruff-config.el))
+  - **Real-time error detection** using [Ruff](https://github.com/astral-sh/ruff) - the fastest Python linter
+  - **Custom diagnostics buffer** with enhanced column layout for better error analysis
+  - **Error code extraction** - separate "Code" column showing rule identifiers (F401, I001, E402, etc.)
+  - **User-friendly backend names** - "Ruff" instead of cryptic internal identifiers
+  - **Comprehensive rule coverage** - style, imports, complexity, and syntax checking
+  - **Optimized performance** - single backend configuration eliminates duplicate diagnostics
+- Basic code navigation and editing features
+
+**Enhanced Diagnostics Display:**
+- **Custom Column Layout**: Line, Col, Type, Code, Backend, Message
+- **Sortable columns** for efficient error prioritization
+- **Error code identification** for quick rule lookup and configuration
+- **Clean, professional interface** replacing cryptic backend identifiers
 
 ### Lisp/Elisp Development
 

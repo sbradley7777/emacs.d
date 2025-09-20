@@ -20,7 +20,14 @@
  (defvar
   core-packages-development
   '(which-key
-    pyvenv elisp-autofmt corfu rainbow-delimiters highlight-indent-guides imenu-list cape)
+    pyvenv
+    elisp-autofmt
+    corfu
+    rainbow-delimiters
+    highlight-indent-guides
+    imenu-list
+    cape
+    flymake-ruff)
   "Development and programming packages.")
 
  (defvar
@@ -98,6 +105,7 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  (use-package yaml-mode :mode ("\\.ya?ml\\'" . yaml-mode)) ; YAML file support
  (use-package toml-mode :mode ("\\.toml\\'" . toml-mode)) ; TOML file support
  (use-package markdown-mode :mode ("\\.md\\'" . markdown-mode)) ; Markdown file support
+ (use-package flymake-ruff :defer t) ; Deferred loading for ruff integration
 
 
  (use-package
