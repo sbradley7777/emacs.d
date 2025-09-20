@@ -50,6 +50,7 @@ Thumbs.db
 .#*
 /custom.el
 /local.el
+/dev.el
 package-state-cache.el
 auto-save-list/
 eln-cache/

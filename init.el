@@ -197,6 +197,17 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
    (load local-config 'noerror)
    (message "✅  local.el loaded successfully")))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Development configuration (not version controlled)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load optional development configuration file for testing new configurations
+(let ((dev-config (expand-file-name "dev.el" user-emacs-directory)))
+  (when
+   (file-exists-p dev-config)
+   (message "🔧  Loading dev.el...")
+   (load dev-config 'noerror)
+   (message "✅  dev.el loaded successfully")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization complete - show diagnostics

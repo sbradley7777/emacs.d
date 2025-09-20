@@ -82,6 +82,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`TESTING.md`](scripts/TESTING.md) - Comprehensive testing documentation
 - **[`examples/`](examples/)** - Example configuration files for local customization
   - [`local.el`](examples/local.el) - Template for user-specific, non-versioned configuration
+  - [`dev.el`](examples/dev.el) - Template for temporary development and testing configuration
   - [`custom.el`](examples/custom.el) - Example of Emacs customize system output
   - [`README.md`](examples/README.md) - Detailed guide for local configuration
 

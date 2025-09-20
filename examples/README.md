@@ -13,11 +13,24 @@ This directory contains example configuration files that demonstrate how to use 
 **Usage**:
 - Machine-specific settings (paths, system-dependent configurations)
 - Personal preferences that differ from the shared configuration
-- Experimental settings you want to test without affecting the main config
 - Private or sensitive configuration (API keys, personal info, etc.)
 - Override any settings from the main configuration
 
 **Loading**: Automatically loaded by `init.el` if the file exists. Loaded AFTER all main configuration modules, so it can override any settings.
+
+### [`dev.el`](./dev.el)
+
+**Purpose**: Template for temporary development and testing of new Emacs configurations.
+
+**Location**: `~/.emacs.d/dev.el`
+
+**Usage**:
+- Testing new packages, features, or configuration changes
+- Temporary modifications for development work
+- Experimenting with settings before adding them to the main config
+- Quick configuration testing without committing to permanent changes
+
+**Loading**: Automatically loaded by `init.el` if the file exists. Loaded AFTER `custom.el` and `local.el`, making it ideal for testing overrides.
 
 **Key Features**:
 - Comprehensive commentary explaining purpose and usage patterns
@@ -57,15 +70,22 @@ This directory contains example configuration files that demonstrate how to use 
    ```
    Then edit `~/.emacs.d/local.el` to add your local settings.
 
-2. **For custom configuration**:
+2. **For development/testing configuration**:
+   ```bash
+   cp examples/dev.el ~/.emacs.d/dev.el
+   ```
+   Then edit `~/.emacs.d/dev.el` to test new configurations.
+
+3. **For custom configuration**:
    The `custom.el` file is automatically created when you use Emacs' customize system. You don't need to copy it manually.
 
 ## Important Notes
 
-- Both files should be added to `.gitignore` to prevent accidental commits
-- `local.el` is for hand-written configuration
+- All files should be added to `.gitignore` to prevent accidental commits
+- `local.el` is for permanent hand-written configuration
+- `dev.el` is for temporary testing and development
 - `custom.el` is for Emacs customize system settings
-- Both files are optional - the configuration works without them
+- All files are optional - the configuration works without them
 - Settings in these files can override anything in the main configuration
 
 ## Python Development Customizations
@@ -92,7 +112,7 @@ This directory contains example configuration files that demonstrate how to use 
 
 These files integrate seamlessly with the main Emacs configuration:
 
-1. **Loading Order**: Main config → `custom.el` → `local.el`
+1. **Loading Order**: Main config → `custom.el` → `local.el` → `dev.el`
 2. **Error Handling**: Safe loading with error messages if files have issues
 3. **Logging**: Loading messages integrate with the main config's diagnostic system
 4. **Override Capability**: Can override any setting from the main configuration
