@@ -47,7 +47,7 @@ This section contains all commands that have keyboard shortcuts assigned. These 
 - Most keybindings work immediately when you press them
 - Some are context-dependent and only work in specific modes or situations
 
-**Example to try**: Press `F1` to toggle the imenu-list sidebar, or `F2` to show Flymake diagnostics in a side window.
+**Example to try**: Press `F1` to toggle the imenu-list sidebar, or `F2` to toggle the Flymake diagnostics window.
 
 ## Function Keys
 
@@ -56,7 +56,7 @@ These are configuration-specific shortcuts designed for quick access to common o
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
 | `F1` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
-| `F2` | `flymake-show-buffer-diagnostics` | Show Flymake diagnostics in side window | - |
+| `F2` | `toggle-flymake-diagnostics-window` | Toggle Flymake diagnostics window | - |
 | `F3` | `flymake-goto-prev-error` | Go to previous flymake error | Flymake active |
 | `F4` | `flymake-goto-next-error` | Go to next flymake error | Flymake active |
 | `F5` | `clipboard-kill-ring-save` | Copy to system clipboard | - |
@@ -261,7 +261,7 @@ Built-in Emacs diagnostic tools (Flymake is built into Emacs):
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
-| `F2` | `flymake-show-buffer-diagnostics` | Show diagnostics in side window | Flymake active |
+| `F2` | `toggle-flymake-diagnostics-window` | Toggle diagnostics window | Flymake active |
 | `F3` | `flymake-goto-prev-error` | Go to previous diagnostic | Flymake active |
 | `F4` | `flymake-goto-next-error` | Go to next diagnostic | Flymake active |
 | `M-g` `n` | `flymake-goto-next-error` | Jump to next diagnostic (alternative) | Flymake active |

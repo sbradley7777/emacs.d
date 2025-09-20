@@ -21,7 +21,7 @@
  (setq delete-key-deletes-forward t)
 
  ;; Utility function keys
- (global-set-key (kbd "<f2>") 'flymake-show-buffer-diagnostics) ; Show Flymake diagnostics
+ (global-set-key (kbd "<f2>") 'toggle-flymake-diagnostics-window) ; Show Flymake diagnostics
  (global-set-key (kbd "<f3>") 'flymake-goto-prev-error) ; Go to previous flymake error
  (global-set-key (kbd "<f4>") 'flymake-goto-next-error) ; Go to next flymake error
  (global-set-key (kbd "<f5>") 'clipboard-kill-ring-save) ; Copy what is highlighted
