@@ -14,8 +14,8 @@
  ;; Conditional UI settings based on display type
  (if
   (display-graphic-p)
-  ;; For GUI frames, enable all graphical UI elements
-  (progn (menu-bar-mode 1) (tool-bar-mode 1) (scroll-bar-mode 1))
+  ;; For GUI frames, enable menu and scroll bar but disable tool bar
+  (progn (menu-bar-mode 1) (tool-bar-mode -1) (scroll-bar-mode 1))
   ;; For terminal frames, disable the menu bar. Tool and scroll bars are graphical-only and don't exist in terminals.
   (menu-bar-mode -1))
 
