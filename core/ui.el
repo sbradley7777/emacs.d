@@ -118,11 +118,25 @@
 
  ;; Track recently opened files
  (recentf-mode 1)
+ ;; Ensure recentf loads existing list on startup
+ (recentf-load-list)
  (setq
   recentf-max-saved-items
   core-recentf-max-items
   recentf-exclude
   `(,(expand-file-name "~/.emacs.d/elpa/.*") "/tmp/.*"))
+
+ ;; Auto-save recentf list every 30 seconds when idle
+ (setq recentf-auto-cleanup 'never)
+ (setq
+  recentf-auto-save-timer
+  (run-with-idle-timer
+   30 t
+   (lambda
+    ()
+    (let ((recentf-auto-cleanup 'never))
+      (recentf-save-list)))))
+
 
  (normal-erase-is-backspace-mode 0)
 
