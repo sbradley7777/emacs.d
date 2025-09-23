@@ -146,5 +146,8 @@
 
  (add-hook 'window-size-change-functions (lambda (&rest args) (auto-redraw-after-fullscreen)))
 
+ ;; Also trigger redraw on focus events for immediate response
+ (add-hook 'focus-in-hook 'auto-redraw-after-fullscreen)
+
  ;; Make this module available for loading with (require 'ui)
  (provide 'ui))
