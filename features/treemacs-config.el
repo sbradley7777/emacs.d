@@ -75,7 +75,9 @@
    treemacs-is-never-other-window
    nil
    treemacs-goto-tag-strategy
-   'refetch-index)
+   'refetch-index
+   treemacs-project-follow-cleanup
+   t)
 
   ;; Configure icons and display
   (when (display-graphic-p) (treemacs-load-theme "Default"))
@@ -84,9 +86,34 @@
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
   (treemacs-fringe-indicator-mode 'always)
+  (treemacs-project-follow-mode t)
+
+  ;; Custom function to intelligently toggle treemacs for current project
+  (defun
+   treemacs-smart-toggle
+   ()
+   "Toggle Treemacs, switching to current project if needed."
+   (interactive)
+   (if
+    (and (treemacs-get-local-window) (treemacs-is-treemacs-window-selected?))
+    ;; If currently in treemacs window, close it
+    (delete-window)
+    (if
+     (treemacs-get-local-window)
+     ;; If treemacs is visible but not selected, close it (simple toggle)
+     (treemacs--select-not-visible)
+     ;; Treemacs not visible, open with current project
+     (when
+      (buffer-file-name)
+      (let ((project-root
+             (or
+              (when (featurep 'projectile) (projectile-project-root))
+              (vc-root-dir)
+              (file-name-directory (buffer-file-name)))))
+        (when project-root (treemacs-add-and-display-current-project-exclusively)))))))
 
   ;; Global keybindings for treemacs
-  (global-set-key (kbd "<f5>") 'treemacs)
+  (global-set-key (kbd "<f5>") 'treemacs-smart-toggle)
   (global-set-key (kbd "C-x t 1") 'treemacs-delete-other-windows)
   (global-set-key (kbd "C-x t t") 'treemacs)
   (global-set-key (kbd "C-x t C-t") 'treemacs-find-file)
