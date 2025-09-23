@@ -31,7 +31,7 @@
    ;; Project already detected - just update modeline
    (pyvenv-update-modeline)
    ;; First time - auto-detect project
-   (message "🚀 Auto-detecting Python virtual environment...")
+   (message "ℹ️  Auto-detecting Python virtual environment...")
    (let ((detected-venv (pyvenv-find-venv)))
      (if
       detected-venv
@@ -59,7 +59,7 @@
          (let ((venv-python (expand-file-name "bin/python" detected-venv)))
            (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python))))
         (message "⚠️  Warning: pyvenv-activate function not available")))
-      (progn (message "❌ No Python virtual environment found") (pyvenv-update-modeline))))))
+      (progn (message "⚠️  No Python virtual environment found") (pyvenv-update-modeline))))))
 
  ;; Disable pyvenv modeline completely - we handle it ourselves via hooks
  (setq pyvenv-mode-line-indicator nil)

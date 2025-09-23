@@ -20,35 +20,31 @@
 ;; • Customize keybindings
 ;; • Set machine-specific variables
 ;;
-(message "📝 === local.el: Loading local user configuration ===")
+(message "🔄 === local.el: Loading local user configuration ===")
 ;; ============================================
 ;; 1. THEME CONFIGURATION
 ;; ============================================
 ;; Theme Configuration (with example debug output)
 ;; Set your preferred theme - will be loaded automatically after initialization
-(message "📝 === local.el: Theme configuration starting ===")
-(message "📝 Display type: %s" (if (display-graphic-p) "GUI" "Terminal"))
+(message "🔄 === local.el: Theme configuration starting ===")
+(message "🎨 Display type: %s" (if (display-graphic-p) "GUI" "Terminal"))
 (message
- "📝 Before setting: user-preferred-theme = %s"
+ "🎨 Before setting: user-preferred-theme = %s"
  (if (boundp 'themes-config-preferred-theme) themes-config-preferred-theme 'unbound))
 (setq themes-config-preferred-theme 'doom-1337) ; Active: doom-1337 (hacker-inspired dark theme)
-(message "📝 After setting: user-preferred-theme = %s" themes-config-preferred-theme)
+(message "🎨 After setting: user-preferred-theme = %s" themes-config-preferred-theme)
 (message
- "📝 Current active theme: %s"
+ "🎨 Current active theme: %s"
  (if
   (boundp 'custom-enabled-themes)
   (if custom-enabled-themes (car custom-enabled-themes) 'none)
   'unbound))
 (message
- "📝 Theme system status: %s"
+ "🎨 Theme system status: %s"
  (if
   (boundp 'themes-config--user-theme-loaded)
   (if themes-config--user-theme-loaded "ready for override" "pending reload")
   "not initialized"))
-(message "📝 === local.el: Theme configuration finished ===")
-(message
- "📝 Note: Your preferred theme (%s) will be applied after all configuration modules load"
- themes-config-preferred-theme)
 
 ;; Available Doom Theme Options:
 ;; See https://github.com/doomemacs/themes for full collection
@@ -81,6 +77,10 @@
 ;; Refresh whitespace-mode to apply the new style
 (when
  (bound-and-true-p global-whitespace-mode) (global-whitespace-mode -1) (global-whitespace-mode 1))
+(message
+ "ℹ️  The preferred theme (%s) will be applied after all configuration modules ared loaded"
+ themes-config-preferred-theme)
+(message "ℹ️  === local.el: Theme configuration finished ===")
 
 ;; ============================================
 ;; 2. PLATFORM-SPECIFIC CONFIGURATION
@@ -142,7 +142,7 @@
 ;; (setq user-full-name "Your Full Name"
 ;;       user-mail-address "your.email@example.com")
 
-(message "📝 === local.el: The loading of local user configuration finished ===")
+(message "ℹ️  === local.el: The loading of local user configuration finished ===")
 (message "✅  Local user configuration loaded successfully")
 
 (provide 'local)

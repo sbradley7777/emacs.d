@@ -51,7 +51,7 @@
          (if
           (file-directory-p venv-path)
           (progn (message "✅ Found Python venv at: %s" venv-path) venv-path)
-          (message "❌ No venv directory found at: %s" venv-path)
+          (message "⚠️  No venv directory found at: %s" venv-path)
           nil))))))
 
  ;; Function to update modeline based on current file location

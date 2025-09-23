@@ -87,7 +87,7 @@
 
    ;; Fresh cache available - skip network operations
    ((and (not package-archive-contents) (package-cache-fresh-p))
-    (message "📁  Fresh package cache found, skipping network refresh...")
+    (message "ℹ️  Fresh package cache found, skipping network refresh...")
     (message "ℹ️  Using existing package installations (fast startup mode)"))
 
    ;; Network available - refresh and cache for future

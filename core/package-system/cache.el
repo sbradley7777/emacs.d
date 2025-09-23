@@ -55,7 +55,7 @@
           (insert (format "(setq package-cache-timestamp '%S)\n" cache-timestamp))
           (insert (format "(setq package-cache-count %d)\n" package-count))
           (insert ";; Note: Actual package data loaded from built-in archives\n"))
-         (message "📁  Package state cached (%d packages)" package-count))
+         (message "ℹ️  Package state cached (%d packages)" package-count))
      (error
       (message "⚠️  Failed to save package cache: %s" (error-message-string err))))))
 
@@ -77,7 +77,7 @@
                   (current-time)
                   (file-attribute-modification-time (file-attributes package-state-cache-file))))))
            (message
-            "📁  Using cached package activation (%d packages, %.1f days old)"
+            "ℹ️  Using cached package activation (%d packages, %.1f days old)"
             (length package-alist)
             (/ cache-age 86400)))))
      (error
@@ -97,18 +97,18 @@
             (file-attribute-modification-time (file-attributes package-state-cache-file)))))
          (file-size (file-attribute-size (file-attributes package-state-cache-file))))
      (message
-      "📁  Package cache: %.1f days old, %d bytes, %s"
+      "ℹ️  Package cache: %.1f days old, %d bytes, %s"
       (/ cache-age 86400)
       file-size
       (if (package-cache-fresh-p) "FRESH" "STALE")))
-   (message "📁  No package cache found")))
+   (message "ℹ️  No package cache found")))
 
  (defun
   package-cache-clear () "Clear the package cache file." (interactive)
   (when
    (file-exists-p package-state-cache-file)
    (delete-file package-state-cache-file)
-   (message "📁  Package cache cleared")))
+   (message "ℹ️  Package cache cleared")))
 
  ;; Make this module available for loading with (require 'package-system/cache)
  (provide 'package-system/cache))
