@@ -65,15 +65,64 @@
   (let ((timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
         (os-info (diagnostics-get-os-version-info))
         (package-count (if (boundp 'package-activated-list) (length package-activated-list) 0))
-        (load-path-count (length load-path)))
+        (load-path-count (length load-path))
+        ;; Additional diagnostic information
+        (user-info
+         (concat (user-login-name) "@" (or (file-remote-p default-directory 'host) (system-name))))
+        (emacs-pid (emacs-pid))
+        (startup-time
+         (if
+          (boundp 'before-init-time)
+          (format
+           "%.3fs" (float-time (time-subtract after-init-time before-init-time)))
+          "unknown"))
+        ;; Calculate maximum label width for alignment
+        (max-width
+         (apply
+          'max
+          (mapcar
+           'length
+           '("Emacs version"
+             "System"
+             "OS"
+             "Display mode"
+             "User@Host"
+             "Process ID"
+             "Startup time"
+             "Load path entries"
+             "Installed packages"
+             "Configuration")))))
     (message "\n=== Emacs Startup Log - %s ===" timestamp)
-    (message "Emacs version: %s" emacs-version)
-    (message "System: %s %s" system-type system-configuration)
-    (message "OS: %s" os-info)
-    (message "Load path entries: %d" load-path-count)
-    (message "Installed packages: %d" package-count)
-    (message "Configuration: Modern Emacs 30.2+\n")
-    (message "")))
+    (message "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "OS") os-info)
+    (message
+     "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "User@Host") user-info)
+    (message
+     "%s: %d" (format (concat "%-" (number-to-string max-width) "s") "Process ID") emacs-pid)
+    (message
+     "%s: %s"
+     (format (concat "%-" (number-to-string max-width) "s") "Emacs version")
+     emacs-version)
+    (message
+     "%s: Modern Emacs 30.2+"
+     (format (concat "%-" (number-to-string max-width) "s") "Configuration"))
+    (message "")
+    (message
+     "%s: %s %s"
+     (format (concat "%-" (number-to-string max-width) "s") "System")
+     system-type
+     system-configuration)
+    (message
+     "%s: %s"
+     (format (concat "%-" (number-to-string max-width) "s") "Display mode")
+     (if (display-graphic-p) "GUI" "Terminal"))
+    (message
+     "%s: %d"
+     (format (concat "%-" (number-to-string max-width) "s") "Load path entries")
+     load-path-count)
+    (message
+     "%s: %d\n"
+     (format (concat "%-" (number-to-string max-width) "s") "Installed packages")
+     package-count)))
 
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
