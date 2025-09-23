@@ -134,5 +134,17 @@
  (blink-cursor-mode -1) ; Disable cursor blinking
  (setq mouse-yank-at-point t) ; Paste at cursor, not mouse position
 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Window state management
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Auto-redraw after fullscreen/maximize on all platforms
+ (defun
+  auto-redraw-after-fullscreen
+  ()
+  "Automatically redraw display after window state changes."
+  (run-with-timer 0.1 nil (lambda () (redraw-display) (force-window-update))))
+
+ (add-hook 'window-size-change-functions (lambda (&rest args) (auto-redraw-after-fullscreen)))
+
  ;; Make this module available for loading with (require 'ui)
  (provide 'ui))
