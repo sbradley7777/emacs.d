@@ -27,7 +27,10 @@
     highlight-indent-guides
     imenu-list
     cape
-    flymake-ruff)
+    flymake-ruff
+    treemacs
+    all-the-icons
+    treemacs-all-the-icons)
   "Development and programming packages.")
 
  (defvar

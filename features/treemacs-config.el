@@ -10,42 +10,9 @@
  "treemacs-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Treemacs Package Installation
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
- ;; Add treemacs packages to the development package list
- (when
-  (boundp 'core-packages-development)
-  (add-to-list 'core-packages-development 'treemacs)
-  (add-to-list 'core-packages-development 'treemacs-projectile)
-  (add-to-list 'core-packages-development 'treemacs-icons-dired))
-
- ;; Ensure MELPA is available for Treemacs packages
- (require 'package)
- (unless
-  (assoc "melpa" package-archives)
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
-
- ;; Install treemacs packages if not already installed
- (unless
-  (package-installed-p 'treemacs)
-  (message "🔄  Refreshing package contents for Treemacs installation...")
-  (message "ℹ️  Available archives: %s" (mapcar 'car package-archives))
-  (package-refresh-contents))
-
- (dolist
-  (pkg '(treemacs treemacs-projectile treemacs-icons-dired))
-  (unless
-   (package-installed-p pkg)
-   (condition-case err
-       (progn
-        (message "📦  Installing %s..." pkg) (package-install pkg) (message "✅  Installed %s" pkg))
-     (error
-      (message "❌  Failed to install %s: %s" pkg (error-message-string err))))))
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Treemacs Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Note: Treemacs packages are now installed via the core package system in core-packages.el
 
  ;; Load and configure Treemacs immediately
  (when
@@ -79,8 +46,20 @@
    treemacs-project-follow-cleanup
    t)
 
-  ;; Configure icons and display
-  (when (display-graphic-p) (treemacs-load-theme "Default"))
+  ;; Configure icons and display - all-the-icons works in both GUI and terminal (iTerm2)
+  (when
+   (package-installed-p 'treemacs-all-the-icons)
+   (require 'all-the-icons)
+   (require 'treemacs-all-the-icons)
+
+   ;; Auto-install fonts if they're not already installed
+   (unless
+    (find-font (font-spec :name "all-the-icons"))
+    (message "📦  Installing all-the-icons fonts automatically...")
+    (all-the-icons-install-fonts t))
+
+   (treemacs-load-theme "all-the-icons")
+   (message "📦  all-the-icons theme loaded with fonts installed"))
 
   ;; Enable useful modes
   (treemacs-follow-mode t)
