@@ -305,8 +305,8 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
 
 ### Enhanced Diagnostics
 - **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake-config.el`](features/flymake-config.el)): Real-time syntax checking and linting
-- **LSP Diagnostics**: Comprehensive error reporting and code intelligence
-- **Performance Monitoring**: Load time tracking for configuration modules
+- **System Diagnostics** ([`core/diagnostics.el`](core/diagnostics.el)): OS detection, startup logging, and configuration diagnostics
+- **Performance Monitoring**: Load time tracking for configuration modules with detailed startup information
 
 ## Related Documentation
 

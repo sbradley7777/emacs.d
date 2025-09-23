@@ -49,6 +49,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
   - [`tramp-config.el`](core/tramp-config.el) - TRAMP remote file access with Python support
   - [`tramp-utils.el`](core/tramp-utils.el) - TRAMP utility functions for remote development
+  - [`diagnostics.el`](core/diagnostics.el) - System information and configuration diagnostics
   - [`keybindings.el`](core/keybindings.el) - Global key bindings
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework
@@ -68,6 +69,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
     - [`pyvenv-utils.el`](lang/python/pyvenv-utils.el) - Python virtual environment utilities
     - [`pyvenv-remote.el`](lang/python/pyvenv-remote.el) - TRAMP-aware virtual environment support
+    - [`flymake-ruff-config.el`](lang/python/flymake-ruff-config.el) - Advanced Python linting with Ruff integration
 - **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
 - **[`user/`](user/)** - Personal customizations
