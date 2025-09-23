@@ -24,7 +24,6 @@
  (global-set-key (kbd "<f2>") 'toggle-flymake-diagnostics-window) ; Show Flymake diagnostics
  (global-set-key (kbd "<f3>") 'flymake-goto-prev-error) ; Go to previous flymake error
  (global-set-key (kbd "<f4>") 'flymake-goto-next-error) ; Go to next flymake error
- (global-set-key (kbd "<f5>") 'clipboard-kill-ring-save) ; Copy what is highlighted
  (global-set-key (kbd "<f6>") 'delete-trailing-whitespace) ; Delete trailing whitespace
 
  ;; Keyboard commands for controlling the buffer.
