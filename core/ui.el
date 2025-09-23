@@ -114,7 +114,8 @@
  ;; Modern Emacs features
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Save command history
- (savehist-mode 1) (setq savehist-additional-variables '(search-ring regexp-search-ring))
+ (savehist-mode 1)
+ (setq savehist-additional-variables '(search-ring regexp-search-ring))
 
  ;; Track recently opened files
  (recentf-mode 1)
@@ -151,17 +152,17 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Window state management
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Auto-redraw after fullscreen/maximize on all platforms
+ ;; Enhanced window refresh system for GUI mode
  (defun
-  auto-redraw-after-fullscreen
-  ()
-  "Automatically redraw display after window state changes."
-  (run-with-timer 0.1 nil (lambda () (redraw-display) (force-window-update))))
+  ui-auto-refresh ()
+  "Automatically refresh display after any window changes.
+Triggers on resize, fullscreen, maximize, minimize, and focus events."
+  (redraw-display) (force-window-update) (redraw-frame (selected-frame)))
 
- (add-hook 'window-size-change-functions (lambda (&rest args) (auto-redraw-after-fullscreen)))
+ (add-hook 'window-size-change-functions 'ui-auto-refresh)
+ (add-hook 'window-state-change-hook 'ui-auto-refresh)
 
- ;; Also trigger redraw on focus events for immediate response
- (add-hook 'focus-in-hook 'auto-redraw-after-fullscreen)
+ (add-hook 'focus-in-hook 'ui-auto-refresh)
 
  ;; Make this module available for loading with (require 'ui)
  (provide 'ui))
