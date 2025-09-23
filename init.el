@@ -155,6 +155,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
 (safe-load-config 'indent-guides "Visual indentation guides") ; Column-based indentation visualization
 (safe-load-config 'imenu-list-config "Symbol sidebar navigation") ; Imenu-list for file structure sidebar
+(safe-load-config 'treemacs-config "Project tree navigation") ; Treemacs file and project tree sidebar
 
 ;; Language-specific configurations
 (safe-load-config 'lisp-config "Emacs Lisp development")
