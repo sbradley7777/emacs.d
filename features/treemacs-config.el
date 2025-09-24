@@ -96,11 +96,10 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;; Configure dired integration
-  (with-eval-after-load
-   'dired
-   (when
-    (featurep 'treemacs-icons-dired)
-    (add-hook 'dired-mode-hook 'treemacs-icons-dired-enable-once))))
+  (when
+   (package-installed-p 'treemacs-icons-dired)
+   (require 'treemacs-icons-dired)
+   (add-hook 'dired-mode-hook 'treemacs-icons-dired-enable-once)))
 
  ;; Ensure F5 binding is always set
  (unless
