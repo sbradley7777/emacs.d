@@ -52,14 +52,9 @@
    (require 'all-the-icons)
    (require 'treemacs-all-the-icons)
 
-   ;; Auto-install fonts if they're not already installed
-   (unless
-    (find-font (font-spec :name "all-the-icons"))
-    (message "📦  Installing all-the-icons fonts automatically...")
-    (all-the-icons-install-fonts t))
-
+   ;; Load all-the-icons theme (fonts handled by core/fonts.el)
    (treemacs-load-theme "all-the-icons")
-   (message "📦  all-the-icons theme loaded with fonts installed"))
+   (message "📦  all-the-icons theme loaded"))
 
   ;; Enable useful modes
   (treemacs-follow-mode t)

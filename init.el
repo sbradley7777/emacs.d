@@ -140,6 +140,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (diagnostics-show-system-info)
 
 (safe-load-config 'core-packages "Package declarations") ; Package declarations and configurations
+(safe-load-config 'core-fonts "Font management") ; Font installation and management
 (safe-load-config 'ui "Basic UI setup") ; Basic UI setup
 (safe-load-config 'themes-config "Theme configuration") ; Visual appearance
 (safe-load-config 'theme-utils "Theme utilities") ; Interactive theme tools
