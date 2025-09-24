@@ -6,6 +6,14 @@
 ;;      IMPORTANT: Package installation (via package.el) only installs Emacs Lisp code.
 ;;      Font installation is a separate step that downloads actual font files (.ttf, .otf)
 ;;      to your system font directory (~/.local/share/fonts/) so icons are visible.
+;;
+;;      FONT INSTALLATION DETAILS:
+;;      - Fonts are installed SYSTEM-WIDE, not just for Emacs
+;;      - Location: ~/.local/share/fonts/ (Linux) or ~/Library/Fonts/ (macOS)
+;;      - Available to ALL applications after installation (terminals, browsers, etc.)
+;;      - Your terminal can use these fonts if configured (e.g., set iTerm2 font to "Hack Nerd Font")
+;;      - Emacs uses fonts directly for icon display in buffers and UI elements
+;;      - Terminal integration requires manual font configuration in terminal settings
 
 (require 'core-constants)
 (require 'core-utils)
