@@ -13,6 +13,14 @@
  ;; Treemacs Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Note: Treemacs packages are now installed via the core package system in core-packages.el
+ ;;
+ ;; Available Themes:
+ ;; - "Default" : Built-in theme with simple text indicators (works everywhere)
+ ;; - "all-the-icons" : Graphical icons (requires all-the-icons fonts, GUI only)
+ ;; - "nerd-icons" : Nerd Font symbols (requires Nerd Fonts installation)
+ ;;
+ ;; Icon themes require specific fonts and work best in GUI mode.
+ ;; Terminal mode automatically uses "Default" theme for maximum compatibility.
 
  ;; Load and configure Treemacs immediately
  (when
@@ -46,15 +54,18 @@
    treemacs-project-follow-cleanup
    t)
 
-  ;; Configure icons and display - all-the-icons works in both GUI and terminal (iTerm2)
-  (when
-   (package-installed-p 'treemacs-all-the-icons)
-   (require 'all-the-icons)
-   (require 'treemacs-all-the-icons)
-
-   ;; Load all-the-icons theme (fonts handled by core/fonts.el)
-   (treemacs-load-theme "all-the-icons")
-   (message "📦  all-the-icons theme loaded"))
+  ;; Configure icons and display based on environment
+  (if
+   (display-graphic-p)
+   ;; GUI mode - use all-the-icons theme
+   (when
+    (package-installed-p 'treemacs-all-the-icons)
+    (require 'all-the-icons)
+    (require 'treemacs-all-the-icons)
+    (treemacs-load-theme "all-the-icons")
+    (message "📦  all-the-icons theme loaded for GUI"))
+   ;; Terminal mode - use Default theme (built-in, no font dependencies)
+   (treemacs-load-theme "Default") (message "📦  Default theme loaded for terminal"))
 
   ;; Enable useful modes
   (treemacs-follow-mode t)
@@ -95,9 +106,9 @@
   ;; Dired Integration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  ;; Configure dired integration
+  ;; Configure dired integration - only in GUI mode (icon fonts don't display properly in terminal)
   (when
-   (package-installed-p 'treemacs-icons-dired)
+   (and (display-graphic-p) (package-installed-p 'treemacs-icons-dired))
    (require 'treemacs-icons-dired)
    (add-hook 'dired-mode-hook 'treemacs-icons-dired-enable-once)))
 

@@ -125,7 +125,23 @@
 (setq pyvenv-modeline-color "lightcoral")
 
 ;; ============================================
-;; 5. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 5. TREEMACS ICON THEME OVERRIDE (OPTIONAL)
+;; ============================================
+;; By default, treemacs uses:
+;; - GUI mode: "all-the-icons" theme (colorful graphical icons)
+;; - Terminal mode: "Default" theme (simple text indicators)
+;;
+;; Uncomment the section below to override the default GUI theme with nerd-icons:
+
+;; ;; Override treemacs theme in GUI mode to use nerd-icons instead of all-the-icons
+;; (with-eval-after-load 'treemacs
+;;   (when (and (display-graphic-p) (package-installed-p 'treemacs-nerd-icons))
+;;     (require 'treemacs-nerd-icons)
+;;     (treemacs-load-theme "nerd-icons")
+;;     (message "✅  Treemacs nerd-icons theme loaded (overriding default GUI theme)")))
+
+;; ============================================
+;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Theme-specific customizations (optional - for exceptions to global settings)
 ;; (setq themes-config-customizations
