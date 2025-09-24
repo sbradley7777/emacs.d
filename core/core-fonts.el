@@ -22,20 +22,41 @@
  "core-fonts.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Font Path and Caching Functions
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defvar
+  fonts-system-font-directory
+  (cond
+   ((eq system-type 'darwin)
+    "~/Library/Fonts/")
+   ((or (eq system-type 'gnu/linux) (eq system-type 'linux))
+    "~/.local/share/fonts/")
+   (t
+    "~/.fonts/"))
+  "System font installation directory.")
+
+ (defun
+  fonts-file-exists-p (filename)
+  "Check if font file exists in system font directory.
+FILENAME should be the font file name (e.g., 'all-the-icons.ttf')."
+  (file-exists-p (expand-file-name filename fonts-system-font-directory)))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Font Installation Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  (defun
   fonts-install-all-the-icons ()
   "Install all-the-icons fonts if not already installed.
-Checks for font availability before installation to avoid duplicates."
+Uses fast file-based check instead of font system queries."
   (when
    (package-installed-p 'all-the-icons)
    (condition-case err
        (progn
         (require 'all-the-icons)
         (unless
-         (find-font (font-spec :name "all-the-icons"))
+         (fonts-file-exists-p "all-the-icons.ttf")
          (message "📦  Installing all-the-icons fonts...")
          (all-the-icons-install-fonts t)
          (message "✅  all-the-icons fonts installed successfully")))
@@ -47,21 +68,21 @@ Checks for font availability before installation to avoid duplicates."
  (defun
   fonts-check-all-the-icons () "Check if all-the-icons fonts are properly installed."
   (if
-   (find-font (font-spec :name "all-the-icons"))
+   (fonts-file-exists-p "all-the-icons.ttf")
    (message "✅  all-the-icons fonts are available")
    (message "⚠️  all-the-icons fonts not found - may need installation")))
 
  (defun
   fonts-install-nerd-icons ()
   "Install nerd-icons fonts if not already installed.
-Required for treemacs-nerd-icons package."
+Uses fast file-based check instead of font system queries."
   (when
    (package-installed-p 'nerd-icons)
    (condition-case err
        (progn
         (require 'nerd-icons)
         (unless
-         (find-font (font-spec :name "Symbols Nerd Font Mono"))
+         (fonts-file-exists-p "NFM.ttf")
          (message "📦  Installing nerd-icons fonts...")
          (nerd-icons-install-fonts t)
          (message "✅  nerd-icons fonts installed successfully")))
@@ -72,7 +93,7 @@ Required for treemacs-nerd-icons package."
  (defun
   fonts-check-nerd-icons () "Check if nerd-icons fonts are properly installed."
   (if
-   (find-font (font-spec :name "Symbols Nerd Font Mono"))
+   (fonts-file-exists-p "NFM.ttf")
    (message "✅  nerd-icons fonts are available")
    (message "⚠️  nerd-icons fonts not found - may need installation")))
 
