@@ -154,11 +154,17 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Enhanced window refresh system for GUI mode
  (defun
-  ui-auto-refresh (&optional frame)
+  ui-auto-refresh (&rest args)
   "Automatically refresh display after any window changes.
 Triggers on resize, fullscreen, maximize, minimize, and focus events.
-FRAME is optional parameter passed by some hooks."
-  (redraw-display) (force-window-update) (redraw-frame (or frame (selected-frame))))
+ARGS can contain frame parameter from various hooks, handled safely."
+  (condition-case err
+      (let ((frame (if (and args (framep (car args))) (car args) (selected-frame))))
+        (redraw-display)
+        (force-window-update)
+        (redraw-frame frame))
+    (error
+     (message "❌  UI refresh failed: %s" (error-message-string err)))))
 
  (add-hook 'window-size-change-functions 'ui-auto-refresh)
  (add-hook 'window-state-change-hook 'ui-auto-refresh)
