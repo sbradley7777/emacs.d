@@ -4,6 +4,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'package-system/repositories)
 
 (core-utils-with-load-timing
  "core-packages.el"
@@ -30,7 +31,9 @@
     flymake-ruff
     treemacs
     all-the-icons
-    treemacs-all-the-icons)
+    treemacs-all-the-icons
+    treemacs-icons-dired
+    treemacs-nerd-icons)
   "Development and programming packages.")
 
  (defvar

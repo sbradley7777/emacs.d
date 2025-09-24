@@ -16,16 +16,24 @@
  (require 'cl-lib)
  (require 'package)
 
- ;; Enable both MELPA repositories for maximum package availability
- (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+ ;; Enable package repositories with priority fallback system
  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+ (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
  ;; Set package archive priorities (higher number = higher priority)
- ;; Prefer stable packages, fallback to development versions
+ ;;
+ ;; Search order for packages (Emacs tries highest priority first):
+ ;; 1. GNU ELPA (20)     - Official GNU packages with FSF copyright assignment (https://elpa.gnu.org/)
+ ;; 2. NonGNU ELPA (15)  - Semi-official packages without copyright assignment (https://elpa.nongnu.org/)
+ ;; 3. MELPA-stable (12) - Stable releases from community packages (https://stable.melpa.org/)
+ ;; 4. MELPA (10)        - Latest development versions from community (https://melpa.org/)
+ ;;
+ ;; This ensures maximum security: official → semi-official → stable community → bleeding-edge
  (setq
   package-archive-priorities
-  `(("melpa-stable" . ,core-melpa-stable-priority)
-    ("gnu" . ,core-gnu-priority)
+  `(("gnu" . 20) ; Highest priority for official packages
+    ("nongnu" . 15) ; Semi-official packages
+    ("melpa-stable" . 12) ; Stable community packages
     ("melpa" . ,core-melpa-priority)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
