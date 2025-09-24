@@ -62,29 +62,26 @@
   (treemacs-fringe-indicator-mode 'always)
   (treemacs-project-follow-mode t)
 
-  ;; Custom function to intelligently toggle treemacs for current project
+  ;; Simplified treemacs toggle function
   (defun
    treemacs-smart-toggle
    ()
    "Toggle Treemacs, switching to current project if needed."
    (interactive)
-   (if
-    (and (treemacs-get-local-window) (treemacs-is-treemacs-window-selected?))
-    ;; If currently in treemacs window, close it
-    (delete-window)
-    (if
-     (treemacs-get-local-window)
-     ;; If treemacs is visible but not selected, close it (simple toggle)
-     (treemacs--select-not-visible)
-     ;; Treemacs not visible, open with current project
-     (when
-      (buffer-file-name)
-      (let ((project-root
-             (or
-              (when (featurep 'projectile) (projectile-project-root))
-              (vc-root-dir)
-              (file-name-directory (buffer-file-name)))))
-        (when project-root (treemacs-add-and-display-current-project-exclusively)))))))
+   (cond
+    ;; If treemacs window is selected, close it
+    ((and (treemacs-get-local-window) (treemacs-is-treemacs-window-selected?))
+     (delete-window))
+    ;; If treemacs is visible but not selected, select it
+    ((treemacs-get-local-window)
+     (treemacs-select-window))
+    ;; Treemacs not visible, open it
+    (t
+     (treemacs)))
+   ;; Gentle refresh only if in GUI mode to prevent flicker
+   (when
+    (and (display-graphic-p) (fboundp 'ui-force-refresh))
+    (run-with-timer 0.02 nil 'ui-force-refresh)))
 
   ;; Global keybindings for treemacs
   (global-set-key (kbd "<f5>") 'treemacs-smart-toggle)
@@ -92,17 +89,30 @@
   (global-set-key (kbd "C-x t t") 'treemacs)
   (global-set-key (kbd "C-x t C-t") 'treemacs-find-file)
 
-  (message "✅  Treemacs loaded and configured successfully"))
+  (message "✅  Treemacs loaded and configured successfully")
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Dired Integration
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Dired Integration
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Configure dired integration
- (with-eval-after-load
-  'dired
-  (when
-   (featurep 'treemacs-icons-dired)
-   (add-hook 'dired-mode-hook 'treemacs-icons-dired-enable-once))))
+  ;; Configure dired integration
+  (with-eval-after-load
+   'dired
+   (when
+    (featurep 'treemacs-icons-dired)
+    (add-hook 'dired-mode-hook 'treemacs-icons-dired-enable-once))))
+
+ ;; Ensure F5 binding is always set
+ (unless
+  (fboundp 'treemacs-smart-toggle)
+  (defun
+   treemacs-smart-toggle
+   ()
+   "Fallback function when treemacs is not available."
+   (interactive)
+   (message "❌  Treemacs not available - package not installed")))
+
+ ;; Always bind F5 to treemacs-smart-toggle
+ (global-set-key (kbd "<f5>") 'treemacs-smart-toggle)) ;; End of core-utils-with-load-timing
 
 (provide 'treemacs-config)
