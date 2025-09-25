@@ -32,8 +32,8 @@
  (global-set-key (kbd "ESC <left>") 'scroll-down) ; Scroll buffer down
  (global-set-key (kbd "ESC <right>") 'scroll-up) ; Scroll buffer up
  ;; Buffer navigation
- (global-set-key (kbd "<f7>") 'previous-buffer) ; Cycle to previous buffer
- (global-set-key (kbd "<f8>") 'next-buffer) ; Cycle to next buffer
+ (global-set-key (kbd "<f7>") 'user-previous-buffer) ; Cycle to previous buffer
+ (global-set-key (kbd "<f8>") 'user-next-buffer) ; Cycle to next buffer
  (global-set-key (kbd "<f9>") 'beginning-of-buffer) ; Goto top of buffer
  (global-set-key (kbd "<f10>") 'end-of-buffer) ; Goto end of buffer
 

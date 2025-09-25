@@ -3,6 +3,7 @@
 ;;      User-defined custom functions
 
 (require 'core-utils)
+(require 'cl-lib)
 
 (core-utils-with-load-timing
  "functions.el"
@@ -70,5 +71,72 @@ When reaching the end of buffer, move point to end."
   (interactive)
   (if (and corfu-mode (not corfu--visible)) (completion-at-point) (indent-for-tab-command)))
 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Custom Buffer Cycling Functions:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defconst
+  user-buffer-filter-patterns
+  '("^\\*\\(debug \\)?tramp/ssh "
+    "^\\*scratch\\*$"
+    "^\\*Help\\*$"
+    "^\\*Completions\\*$"
+    "^\\*Backtrace\\*$")
+  "List of regex patterns for buffers to filter out during cycling.")
+
+ (defun
+  user-buffer-should-skip-p (buffer-name) "Return t if BUFFER-NAME matches any filter pattern."
+  (or
+   (string-prefix-p " " buffer-name) ; Skip hidden buffers (starting with space)
+   (cl-some (lambda (pattern) (string-match-p pattern buffer-name)) user-buffer-filter-patterns)))
+
+ (defun
+  user-cycle-buffer (direction)
+  "Cycle through buffers in DIRECTION (:forward or :backward).
+Skips buffers that match patterns in `user-buffer-filter-patterns'."
+  (let ((buffer-list (if (eq direction :forward) (buffer-list) (reverse (buffer-list))))
+        (current-buffer (current-buffer))
+        (found-current nil)
+        (target-buffer nil))
+    ;; First pass: look for next buffer after current
+    (cl-dolist
+     (buffer buffer-list)
+     (let ((buffer-name (buffer-name buffer)))
+       (cond
+        ;; Skip the current buffer until we find it
+        ((and (not found-current) (eq buffer current-buffer))
+         (setq found-current t))
+        ;; Once we've found current buffer, look for next valid buffer
+        ((and found-current (not (user-buffer-should-skip-p buffer-name)))
+         (setq target-buffer buffer)
+         (cl-return)))))
+    ;; If no target found after current, wrap to beginning/end
+    (unless
+     target-buffer
+     (cl-dolist
+      (buffer buffer-list)
+      (let ((buffer-name (buffer-name buffer)))
+        (when
+         (and (not (eq buffer current-buffer)) (not (user-buffer-should-skip-p buffer-name)))
+         (setq target-buffer buffer)
+         (cl-return)))))
+    ;; Switch to target buffer if found
+    (when target-buffer (switch-to-buffer target-buffer))))
+
+ (defun
+  user-next-buffer
+  ()
+  "Switch to the next buffer, skipping filtered buffers."
+  (interactive)
+  (user-cycle-buffer :forward))
+
+ (defun
+  user-previous-buffer
+  ()
+  "Switch to the previous buffer, skipping filtered buffers."
+  (interactive)
+  (user-cycle-buffer :backward))
+
  ;; Make this module available for loading with (require 'functions)
- (provide 'functions))
+ )
+
+(provide 'functions)
