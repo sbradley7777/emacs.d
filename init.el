@@ -133,49 +133,112 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configuration modules in order with error handling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Core configuration (order matters)
-(safe-load-config 'diagnostics "System and configuration diagnostics") ; System diagnostics (load first for early Messages buffer logging)
+;; CRITICAL LOADING ORDER: Dependencies must be satisfied before dependent modules load.
+;; Changing this order may cause configuration failures or missing functionality.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Phase 1: Foundation Layer - System Infrastructure
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load diagnostics FIRST - provides early error logging and system info for troubleshooting
+(safe-load-config 'diagnostics "System and configuration diagnostics")
 
 ;; Show system information immediately after diagnostics loads (before packages)
 (diagnostics-show-system-info)
 
-(safe-load-config 'core-packages "Package declarations") ; Package declarations and configurations
-(safe-load-config 'core-fonts "Font management") ; Font installation and management
-(safe-load-config 'ui "Basic UI setup") ; Basic UI setup
-(safe-load-config 'themes-config "Theme configuration") ; Visual appearance
-(safe-load-config 'theme-utils "Theme utilities") ; Interactive theme tools
-(safe-load-config 'editing "Editing preferences") ; Editing preferences
-(safe-load-config 'core-files "File handling") ; File handling
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Phase 2: Package and Resource Management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load package system BEFORE any packages are used - establishes repositories and use-package
+(safe-load-config 'core-packages "Package declarations")
+
+;; Load font management BEFORE UI - ensures fonts are available for interface setup
+(safe-load-config 'core-fonts "Font management")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Phase 3: User Interface Layer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load UI foundation BEFORE themes - establishes basic interface elements
+(safe-load-config 'ui "Basic UI setup")
+
+;; Load theme configuration BEFORE theme utilities - establishes theme system
+(safe-load-config 'themes-config "Theme configuration")
+
+;; Load theme utilities AFTER theme configuration - provides interactive theme switching
+(safe-load-config 'theme-utils "Theme utilities")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Phase 4: Core Editing and File Management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load editing preferences BEFORE file handling - establishes basic editing behavior
+(safe-load-config 'editing "Editing preferences")
+
+;; Load file handling BEFORE TRAMP - establishes local file management
+(safe-load-config 'core-files "File handling")
+
+;; Load TRAMP utilities BEFORE TRAMP config - provides helper functions for remote access
 (safe-load-config 'tramp-utils "TRAMP utility functions")
-(safe-load-config 'tramp-config "TRAMP remote file access") ; Remote file access
-(safe-load-config 'keybindings "Global keybindings") ; Global keybindings
 
-;; Optional features
-(safe-load-config 'completion-config "Auto-completion framework") ; Core completion system
-(safe-load-config 'flymake-config "Flymake configuration") ; Flymake diagnostic display
-(safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability") ; Enhanced delimiter visibility
-(safe-load-config 'indent-guides "Visual indentation guides") ; Column-based indentation visualization
-(safe-load-config 'imenu-list-config "Symbol sidebar navigation") ; Imenu-list for file structure sidebar
-(safe-load-config 'treemacs-config "Project tree navigation") ; Treemacs file and project tree sidebar
+;; Load TRAMP config AFTER utilities - establishes remote file access using helper functions
+(safe-load-config 'tramp-config "TRAMP remote file access")
 
-;; Language-specific configurations
+;; Load keybindings LAST in core phase - allows binding to all previously loaded functionality
+(safe-load-config 'keybindings "Global keybindings")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Phase 5: Enhanced Features (Optional Components)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load completion framework FIRST in features - provides foundation for other enhanced features
+(safe-load-config 'completion-config "Auto-completion framework")
+
+;; Load diagnostics BEFORE language modes - provides error reporting for code files
+(safe-load-config 'flymake-config "Flymake configuration")
+
+;; Load visual enhancements - order independent within this group
+(safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability")
+(safe-load-config 'indent-guides "Visual indentation guides")
+
+;; Load navigation tools AFTER completion - may integrate with completion system
+(safe-load-config 'imenu-list-config "Symbol sidebar navigation")
+(safe-load-config 'treemacs-config "Project tree navigation")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Phase 6: Language-Specific Configurations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load general language modes - order independent, no cross-dependencies
 (safe-load-config 'lisp-config "Emacs Lisp development")
 (safe-load-config 'yaml-config "YAML file support")
 (safe-load-config 'toml-config "TOML file support")
 (safe-load-config 'markdown-config "Markdown file support")
 (safe-load-config 'makefile-config "Makefile support")
 
-;; Python configurations
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Phase 7: Python Development Stack (Complex Dependencies)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load Python core FIRST - establishes basic Python editing capabilities
 (safe-load-config 'python-core "Python core editing")
+
+;; Load Python constants AFTER core - provides configuration values for other Python modules
 (safe-load-config 'python-constants "Python configuration constants")
+
+;; Load pyvenv utilities BEFORE pyvenv config - provides helper functions for virtual environments
 (safe-load-config 'pyvenv-utils "Python virtual environment utilities")
+
+;; Load pyvenv config AFTER utilities - establishes virtual environment management using helpers
 (safe-load-config 'pyvenv-config "Python virtual environments")
-;; TRAMP and Python virtual environment support
+
+;; Load pyvenv remote AFTER local pyvenv - extends virtual environment support to TRAMP sessions
 (safe-load-config 'pyvenv-remote "Python virtual environments TRAMP support")
+
+;; Load Ruff integration LAST - requires Python core, flymake, and pyvenv to be established
 (safe-load-config 'flymake-ruff-config "Flymake Ruff integration")
 
-;; User functions and aliases
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Phase 8: User Customizations (Final Layer)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load user functions BEFORE aliases - aliases may reference custom functions
 (safe-load-config 'functions "Custom helper functions")
+
+;; Load aliases LAST - may reference any previously loaded functionality
 (safe-load-config 'aliases "Function aliases and shortcuts")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
