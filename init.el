@@ -184,6 +184,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load keybindings LAST in core phase - allows binding to all previously loaded functionality
 (safe-load-config 'keybindings "Global keybindings")
 
+;; Load logging system AFTER file handling - establishes message logging with rotation
+(safe-load-config 'logging "Message logging and log rotation")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
