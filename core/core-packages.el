@@ -130,5 +130,46 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
   (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
   (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs)) ; Single-threaded for consistency
 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Periodic Package Update Check
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; Automatically check for package updates once per week during interactive Emacs sessions.
+ ;; This provides awareness of available updates without automatically installing them.
+ ;;
+ ;; How it works:
+ ;; - Runs only during interactive sessions (not batch mode)
+ ;; - Checks if 7 days have passed since last package list refresh
+ ;; - Refreshes package contents from repositories (MELPA, GNU ELPA, etc.)
+ ;; - Notifies user if updates are available but does NOT install them
+ ;; - User must manually review and install updates via M-x package-list-packages
+ ;;
+ ;; Benefits:
+ ;; - Stay informed about available updates (like the doom-themes fix we just applied)
+ ;; - Maintains stability by requiring manual approval before installing updates
+ ;; - Prevents surprise breakage from automatic updates
+ ;; - Weekly frequency avoids slowing down daily startup times
+ (when
+  (and
+   ;; Check if more than 7 days have passed since last refresh
+   (>
+    (float-time (time-subtract (current-time) (or (get 'package-last-refresh 'timestamp) 0)))
+    (* 7 24 60 60)) ; 7 days in seconds
+   ;; Only during interactive sessions, not batch mode
+   (not noninteractive))
+  (message "📦  Checking for package updates (weekly check)...")
+  ;; Refresh package contents from all configured repositories
+  (package-refresh-contents)
+  ;; Remember when we last did this check
+  (put 'package-last-refresh 'timestamp (current-time))
+  ;; Check what packages have available updates
+  (let ((upgrades (package-menu--find-upgrades)))
+    (if
+     upgrades
+     (message
+      "📦  %d package updates available. Run M-x package-list-packages to review and install them."
+      (length upgrades))
+     (message "📦  All packages up to date."))))
+
  ;; Make this module available for loading with (require 'core-packages)
  (provide 'core-packages))
