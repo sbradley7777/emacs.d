@@ -24,6 +24,9 @@ This Emacs configuration provides a professional development environment with in
 - **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types
 - **Python development** with automatic virtual environment management
 - **Remote development** with seamless [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects
+- **Project navigation** with [Treemacs](https://github.com/Alexander-Miller/treemacs) file tree sidebar and project management
+- **Automatic font management** for icon packages with system-wide font installation
+- **Message logging** with automatic log rotation and session history
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
 - **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
 - **Modern Emacs 30.2+** - Exclusively optimized for the latest Emacs features
@@ -44,18 +47,23 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`maintenance.el`](core/package-system/maintenance.el) - Package upgrade and cleanup utilities
   - [`core-constants.el`](core/core-constants.el) - Modern Emacs 30.2+ constants and configuration values
   - [`core-packages.el`](core/core-packages.el) - Package declarations and configurations
+  - [`core-fonts.el`](core/core-fonts.el) - Automatic font management for icon packages
+  - [`core-utils.el`](core/core-utils.el) - Utility functions and load timing system
   - [`ui.el`](core/ui.el) - Basic UI configuration
   - [`editing.el`](core/editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
   - [`tramp-config.el`](core/tramp-config.el) - TRAMP remote file access with Python support
   - [`tramp-utils.el`](core/tramp-utils.el) - TRAMP utility functions for remote development
+  - [`logging.el`](core/logging.el) - Message logging and log rotation system
   - [`diagnostics.el`](core/diagnostics.el) - System information and configuration diagnostics
   - [`keybindings.el`](core/keybindings.el) - Global key bindings
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework
   - [`flymake-config.el`](features/flymake-config.el) - Flymake diagnostic display configuration
-  - [`rainbow-delimiters.el`](features/rainbow-delimiters.el) - Enhanced delimiter visibility
+  - [`imenu-list-config.el`](features/imenu-list-config.el) - Symbol navigation sidebar for code structure
+  - [`rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el) - Enhanced delimiter visibility
   - [`indent-guides.el`](features/indent-guides.el) - Visual indentation guides
+  - [`treemacs-config.el`](features/treemacs-config.el) - File tree navigation and project management
   - [`features-constants.el`](features/features-constants.el) - Feature-specific constants
 - **[`lang/`](lang/)** - Language-specific configurations
   - [`lisp-config.el`](lang/lisp-config.el) - Lisp/Elisp development settings
@@ -72,6 +80,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`flymake-ruff-config.el`](lang/python/flymake-ruff-config.el) - Advanced Python linting with Ruff integration
 - **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
+  - [`theme-utils.el`](themes/theme-utils.el) - Theme utilities and helper functions
 - **[`user/`](user/)** - Personal customizations
   - [`functions.el`](user/functions.el) - Custom helper functions
   - [`aliases.el`](user/aliases.el) - Custom command aliases

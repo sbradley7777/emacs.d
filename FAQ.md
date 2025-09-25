@@ -7,6 +7,9 @@ This document answers common questions about the Emacs configuration, its featur
 - [General Configuration](#general-configuration)
 - [Installation and Setup](#installation-and-setup)
 - [Features and Functionality](#features-and-functionality)
+- [Font and Icon Management](#font-and-icon-management)
+- [Project Navigation with Treemacs](#project-navigation-with-treemacs)
+- [Message Logging and Session History](#message-logging-and-session-history)
 - [Python Development](#python-development)
 - [Performance and Optimization](#performance-and-optimization)
 - [Customization](#customization)
@@ -174,6 +177,247 @@ The modular design makes it easy to add support for additional languages.
 - Comment out unwanted modules in [`init.el`](init.el)
 - Individual features can be disabled in their respective configuration files
 - Use [`use-package`](https://www.gnu.org/software/emacs/manual/html_mono/use-package.html) `:disabled t` to temporarily disable specific packages
+
+## Font and Icon Management
+
+*Questions about automatic font installation and icon display.*
+
+### Q: How does automatic font installation work?
+
+**A:** The configuration includes automatic font management ([`core/core-fonts.el`](core/core-fonts.el)) that:
+- **Detects installed packages**: Automatically installs fonts when icon packages are present
+- **System-wide installation**: Installs fonts to `~/.local/share/fonts/` (Linux) or `~/Library/Fonts/` (macOS)
+- **Fast verification**: Uses file-based checks instead of slow font system queries
+- **Cross-application availability**: Fonts work in Emacs, terminals, browsers, and other applications
+
+**Supported Font Packages:**
+- **all-the-icons**: Comprehensive icon collection for UI elements
+- **nerd-icons (NFM.ttf)**: Nerd Font symbols for enhanced display
+
+### Q: Why do I see boxes or missing icons?
+
+**A:** Icon display issues typically have these causes:
+
+**In GUI mode:**
+1. **Missing fonts**: Fonts may not be installed correctly
+2. **Font cache**: System font cache may need refreshing
+3. **Package issues**: Icon packages may not be fully loaded
+
+**In terminal mode:**
+1. **Expected behavior**: Terminal mode uses text-based `Default` theme by design
+2. **Terminal font**: Your terminal needs a Nerd Font configured to display icons
+3. **Terminal limitations**: Some terminals don't support advanced font features
+
+**Solutions:**
+- **Force font installation**: `M-x all-the-icons-install-fonts` or `M-x nerd-icons-install-fonts`
+- **Refresh font cache**: `fc-cache -fv` (Linux)
+- **Terminal setup**: Install and configure a Nerd Font in your terminal settings
+- **Restart applications**: Restart Emacs and terminal after font installation
+
+### Q: Can I use these fonts in my terminal?
+
+**A:** Yes! The fonts are installed system-wide and available to all applications:
+
+**Terminal Setup:**
+1. **Install fonts**: The configuration automatically installs Nerd Fonts
+2. **Configure terminal**: Set your terminal to use a Nerd Font (e.g., "Hack Nerd Font", "FiraCode Nerd Font")
+3. **Restart terminal**: Required for font changes to take effect
+4. **Test display**: Icons should display properly in terminal applications
+
+**Popular Nerd Font Options:**
+- **Hack Nerd Font**: Good readability and icon support
+- **FiraCode Nerd Font**: Programming ligatures plus icons
+- **JetBrains Mono Nerd Font**: Professional appearance
+
+### Q: How do I check if fonts are installed correctly?
+
+**A:** Several verification methods:
+
+**File-based check:**
+```bash
+# Linux
+ls ~/.local/share/fonts/ | grep -E '(all-the-icons|NFM)'
+
+# macOS
+ls ~/Library/Fonts/ | grep -E '(all-the-icons|NFM)'
+```
+
+**Emacs verification:**
+```elisp
+M-x fonts-check-all-the-icons
+M-x fonts-check-nerd-icons
+```
+
+**Expected files:**
+- `all-the-icons.ttf` - all-the-icons package fonts
+- `NFM.ttf` - Nerd Font symbols
+
+## Project Navigation with Treemacs
+
+*Questions about the file tree sidebar and project management.*
+
+### Q: How do I use the Treemacs file tree?
+
+**A:** Treemacs provides a comprehensive file tree sidebar ([`features/treemacs-config.el`](features/treemacs-config.el)):
+
+**Basic Usage:**
+- **Toggle sidebar**: Press `F5` to open/close/focus Treemacs
+- **Navigate files**: Use arrow keys or `n`/`p` to move between items
+- **Open files**: Press `RET` (Enter) to open files or expand directories
+- **Project context**: Automatically shows project structure with git integration
+
+**Key Features:**
+- **Smart theming**: Uses `all-the-icons` in GUI mode, `Default` theme in terminal
+- **Git integration**: Shows file status (modified, staged, untracked) with visual indicators
+- **Project following**: Automatically tracks current file location in tree
+- **File watching**: Real-time updates when files change on disk
+
+### Q: Why do I see different icons in GUI vs terminal mode?
+
+**A:** This is intentional design for optimal compatibility:
+
+**GUI Mode:**
+- Uses `all-the-icons` theme with rich graphical icons
+- Requires `all-the-icons` fonts to be installed
+- Provides the best visual experience with color-coded file types
+
+**Terminal Mode:**
+- Uses `Default` theme with text-based symbols (ASCII characters)
+- Works in any terminal without font dependencies
+- Ensures compatibility across different terminal environments
+
+**Benefits:**
+- **Consistent functionality**: Same navigation and features in both modes
+- **Universal compatibility**: Terminal mode works everywhere
+- **Optimal experience**: GUI mode provides enhanced visuals when available
+
+### Q: What keybindings are available in Treemacs?
+
+**A:** Comprehensive keybinding support ([`KEYMAP.md`](KEYMAP.md#treemacs-project-navigation)):
+
+**Global bindings:**
+- **F5**: Smart toggle (open/close/focus Treemacs)
+- **C-x t t**: Open Treemacs
+- **C-x t C-t**: Find current file in Treemacs
+- **C-x t 1**: Keep only Treemacs and current window
+
+**Within Treemacs sidebar:**
+- **RET**: Open file or expand/collapse directory
+- **TAB**: Expand/collapse without opening
+- **o**: Open in other window
+- **cf**: Create file
+- **cd**: Create directory
+- **R**: Rename file/directory
+- **d**: Delete file/directory
+- **r**: Refresh
+- **q**: Quit Treemacs
+
+### Q: How do I customize Treemacs behavior?
+
+**A:** Treemacs offers extensive customization options:
+
+**Common settings (in [`features/treemacs-config.el`](features/treemacs-config.el)):**
+- **Width**: `treemacs-width` (default: 30)
+- **Indentation**: `treemacs-indentation` (default: 2)
+- **Hidden files**: `treemacs-show-hidden-files` (default: t)
+- **Sorting**: `treemacs-sorting` (default: alphabetic-case-insensitive-asc)
+
+**Git integration:**
+- **Enable/disable**: `treemacs-git-integration` (default: t)
+- **File watching**: `treemacs-filewatch-mode` (default: enabled)
+
+**Override in local.el:**
+```elisp
+;; Example customizations
+(setq treemacs-width 40)                    ; Wider sidebar
+(setq treemacs-show-hidden-files nil)       ; Hide dotfiles
+(setq treemacs-collapse-dirs 5)             ; Collapse more levels
+```
+
+## Message Logging and Session History
+
+*Questions about automatic message logging and debugging support.*
+
+### Q: How does message logging work?
+
+**A:** The configuration includes automatic message logging ([`core/logging.el`](core/logging.el)) that:
+- **Saves on exit**: Automatically saves Messages buffer content when Emacs exits
+- **Log rotation**: Maintains up to 5 log files with automatic rotation
+- **Timestamped entries**: Adds session end timestamps for debugging
+- **Organized storage**: Stores logs in `~/.emacs.d/log/` directory
+
+**Log File Structure:**
+- **Current session**: `~/.emacs.d/log/messages.log`
+- **Previous sessions**: `messages.log.1`, `messages.log.2`, etc.
+- **Automatic cleanup**: Removes oldest logs when exceeding retention limit
+
+### Q: What information is captured in logs?
+
+**A:** The logs capture complete Messages buffer content including:
+- **Startup messages**: Module loading times and status
+- **Error messages**: Package failures and configuration issues
+- **Warning messages**: Performance and compatibility warnings
+- **Debug output**: Development and troubleshooting information
+- **Session markers**: Clear separation between different Emacs sessions
+
+**Benefits for development:**
+- **Debugging support**: Preserve error messages across sessions
+- **Performance analysis**: Review startup timing and load patterns
+- **Development tracking**: Maintain history of configuration changes
+- **Troubleshooting**: Access complete message history for problem diagnosis
+
+### Q: How can I access log files?
+
+**A:** Several methods to access logs:
+
+**Direct file access:**
+```bash
+# View current session log
+less ~/.emacs.d/log/messages.log
+
+# View previous session
+less ~/.emacs.d/log/messages.log.1
+
+# List all logs
+ls -la ~/.emacs.d/log/
+```
+
+**From within Emacs:**
+```elisp
+# View current Messages buffer
+M-x view-echo-area-messages
+
+# Open log directory
+C-x C-f ~/.emacs.d/log/
+
+# Force save current messages
+M-x core-save-messages-log
+```
+
+### Q: Can I customize logging behavior?
+
+**A:** Yes, several customization options ([`core/logging.el`](core/logging.el)):
+
+**Configuration variables:**
+- **`core-log-max-files`**: Number of rotated logs to keep (default: 5)
+- **`core-log-directory`**: Directory for log storage (default: `~/.emacs.d/log`)
+- **`core-messages-log-file`**: Base filename (default: `messages.log`)
+
+**Override in local.el:**
+```elisp
+;; Example customizations
+(setq core-log-max-files 10)                 ; Keep more log files
+(setq core-log-directory "~/emacs-logs")     ; Different directory
+```
+
+**Manual control:**
+```elisp
+;; Force log save
+(core-save-messages-log)
+
+;; Rotate logs manually
+(core-rotate-log-files "messages.log")
+```
 
 ## Python Development
 

@@ -6,6 +6,9 @@ This document provides comprehensive details about all features available in thi
 
 - [Modern Emacs 30.2+ Features](#modern-emacs-302-features)
 - [Performance Optimizations](#performance-optimizations)
+- [System Management](#system-management)
+  - [Message Logging System](#message-logging-system)
+  - [Font Management](#font-management)
 - [Auto-Completion System](#auto-completion-system)
 - [Language Support](#language-support)
   - [Python Development Environment](#python-development-environment)
@@ -17,6 +20,7 @@ This document provides comprehensive details about all features available in thi
 - [Code Style and Standards](#code-style-and-standards)
 - [User Interface Enhancements](#user-interface-enhancements)
   - [Theme System](#theme-system)
+  - [Project Navigation](#project-navigation)
   - [Navigation and Discovery](#navigation-and-discovery)
   - [Visual Improvements](#visual-improvements)
   - [Enhanced Diagnostics](#enhanced-diagnostics)
@@ -84,6 +88,60 @@ This configuration is designed exclusively for Emacs 30.2+ and utilizes specific
 - **Intelligent GC management**: Automatic threshold adjustment based on session length
 - **Deferred loading**: Optional packages loaded only when needed
 - **Native compilation support**: Automatic utilization when available
+
+## System Management
+
+### Message Logging System
+
+Automatic message logging with rotation for session history and debugging:
+
+**Features** ([`core/logging.el`](core/logging.el)):
+- **Automatic log saving** on Emacs exit to preserve session messages
+- **Log rotation** with configurable file retention (default: 5 files)
+- **Timestamped entries** with session end markers for debugging
+- **Organized storage** in `~/.emacs.d/log/` directory with automatic creation
+- **Error handling** with graceful fallbacks for filesystem issues
+
+**Log Management:**
+- **Primary log**: `~/.emacs.d/log/messages.log` - current session messages
+- **Rotated logs**: `messages.log.1`, `messages.log.2`, etc. - previous sessions
+- **Automatic cleanup** removes oldest logs when exceeding retention limit
+- **Session markers** help identify different Emacs sessions in logs
+
+**Benefits:**
+- **Debugging support** - preserve error messages and warnings across sessions
+- **Development tracking** - maintain history of configuration changes and issues
+- **Performance analysis** - review startup timing and load messages
+- **Troubleshooting** - access complete message history for problem diagnosis
+
+### Font Management
+
+Automatic system-wide font installation for icon packages:
+
+**Features** ([`core/core-fonts.el`](core/core-fonts.el)):
+- **Automatic font installation** for [all-the-icons](https://github.com/domtronn/all-the-icons.el) and [nerd-icons](https://github.com/rainstormstudio/nerd-icons.el) packages
+- **System-wide availability** installs fonts to `~/.local/share/fonts/` (Linux) or `~/Library/Fonts/` (macOS)
+- **Cross-application support** fonts available to terminals, browsers, and other applications
+- **Fast verification** uses file-based checks instead of slow font system queries
+- **Automatic detection** only installs fonts when packages are present and fonts missing
+
+**Supported Font Packages:**
+- **all-the-icons fonts** - comprehensive icon collection for UI elements
+- **nerd-icons fonts (NFM.ttf)** - Nerd Font symbols for enhanced terminal and GUI display
+- **Platform detection** automatically uses correct font directory for your system
+
+**Font Installation Process:**
+1. **Package verification** - checks if icon packages are installed
+2. **Font detection** - fast file-based check for existing fonts
+3. **Automatic installation** - downloads and installs missing fonts
+4. **System integration** - fonts immediately available to all applications
+5. **Terminal compatibility** - configure your terminal to use installed fonts manually
+
+**Benefits:**
+- **Zero configuration** - fonts installed automatically when needed
+- **Cross-application icons** - use the same icons in terminal, IDE, and browser
+- **Development workflow** - enhanced file explorers and project managers with consistent icons
+- **Visual consistency** - unified icon experience across your development environment
 
 ## Auto-Completion System
 
@@ -284,6 +342,36 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
 - **Active Maintenance**: Regular updates and community support
 - **Performance**: Optimized for both GUI and terminal environments
 
+### Project Navigation
+
+Comprehensive project management and file tree navigation:
+
+**[Treemacs](https://github.com/Alexander-Miller/treemacs) Integration** ([`features/treemacs-config.el`](features/treemacs-config.el)):
+- **File tree sidebar** with project structure visualization and git integration
+- **Smart theming** - automatically uses `all-the-icons` in GUI mode, `Default` theme in terminal
+- **Project management** with automatic root detection and directory navigation
+- **Git integration** shows file status and changes directly in the tree
+- **Intelligent display** with collapsible directories and sorting options
+
+**Key Features:**
+- **F5 toggle** - smart treemacs toggle that opens, closes, or switches focus
+- **Project following** - automatically tracks current file location in tree
+- **File watching** - real-time updates when files change on disk
+- **Workspace persistence** - remembers project layout between sessions
+- **Dired integration** - enhanced directory browsing with icons (GUI mode only)
+
+**Navigation Keybindings:**
+- **F5** - Toggle treemacs sidebar (smart focus management)
+- **C-x t t** - Open treemacs
+- **C-x t C-t** - Find current file in treemacs
+- **C-x t 1** - Delete other windows, keep treemacs
+
+**Display Optimization:**
+- **Terminal compatibility** - uses text-based Default theme for maximum compatibility
+- **GUI enhancement** - leverages all-the-icons for rich visual experience
+- **Performance tuning** - optimized refresh rates and minimal resource usage
+- **Responsive design** - adapts to window size changes and split configurations
+
 ### Navigation and Discovery
 - **[Which-Key](https://github.com/justbur/emacs-which-key)** ([`core/core-packages.el`](core/core-packages.el)): Interactive keybinding discovery system that displays available key combinations in popup windows
   - **0.3-second delay** for faster response than default settings
@@ -299,7 +387,7 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
   - **Auto-refresh** when switching between files and buffers
 
 ### Visual Improvements
-- **[Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters)** ([`features/rainbow-delimiters-config.el`](features/rainbow-delimiters.el)): Enhanced delimiter visibility with color coding
+- **[Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters)** ([`features/rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el)): Enhanced delimiter visibility with color coding
 - **[Indent Guides](https://github.com/DarthFennec/highlight-indent-guides)** ([`features/indent-guides.el`](features/indent-guides.el)): Visual indentation guides for better code structure
 - **Theme Support** ([`themes/themes-config.el`](themes/themes-config.el)): [Doom Themes](https://github.com/doomemacs/themes) with doom-zenburn default and terminal compatibility
 

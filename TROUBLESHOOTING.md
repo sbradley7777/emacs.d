@@ -7,6 +7,9 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 - [Emacs Version Requirements](#emacs-version-requirements)
 - [Auto-completion Issues](#auto-completion-issues)
 - [Virtual Environment Issues](#virtual-environment-issues)
+- [Font and Icon Issues](#font-and-icon-issues)
+- [Treemacs Navigation Issues](#treemacs-navigation-issues)
+- [Message Logging Issues](#message-logging-issues)
 - [Installation Problems](#installation-problems)
 - [Performance Issues](#performance-issues)
 - [Package Management Issues](#package-management-issues)
@@ -121,6 +124,219 @@ M-x emacs-version
 
 2. **Permission issues**: Check directory permissions
 3. **Path issues**: Ensure virtual environment path doesn't contain spaces or special characters
+
+## Font and Icon Issues
+
+### Icons Not Displaying Properly
+
+**Symptoms**: Boxes, question marks, or missing icons in GUI or terminal mode
+
+**Troubleshooting Steps**:
+1. **Check font installation**: Verify fonts are installed in system directory:
+   ```bash
+   # Linux
+   ls ~/.local/share/fonts/ | grep -E '(all-the-icons|NFM)'
+
+   # macOS
+   ls ~/Library/Fonts/ | grep -E '(all-the-icons|NFM)'
+   ```
+
+2. **Force font installation**: Manually trigger font installation:
+   ```elisp
+   M-x all-the-icons-install-fonts
+   M-x nerd-icons-install-fonts
+   ```
+
+3. **Check terminal configuration**: For terminal mode, ensure your terminal uses a Nerd Font:
+   - Install a Nerd Font (e.g., "Hack Nerd Font", "FiraCode Nerd Font")
+   - Configure your terminal to use the Nerd Font
+   - Restart your terminal application
+
+4. **Restart applications**: After font installation, restart:
+   - Emacs (to reload font cache)
+   - Terminal application (to recognize new fonts)
+   - Font cache system: `fc-cache -fv` (Linux)
+
+### Font Installation Fails
+
+**Symptoms**: Error messages during automatic font installation
+
+**Solutions**:
+1. **Check directory permissions**: Ensure font directory is writable:
+   ```bash
+   # Linux
+   mkdir -p ~/.local/share/fonts
+   chmod 755 ~/.local/share/fonts
+
+   # macOS
+   mkdir -p ~/Library/Fonts
+   chmod 755 ~/Library/Fonts
+   ```
+
+2. **Manual font installation**: Download fonts manually:
+   - Visit [all-the-icons fonts](https://github.com/domtronn/all-the-icons.el/tree/master/fonts)
+   - Visit [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
+   - Copy `.ttf` files to your system font directory
+
+3. **Network issues**: Check internet connectivity for font downloads
+
+### GUI vs Terminal Icon Differences
+
+**Symptoms**: Icons work in GUI but not terminal, or vice versa
+
+**Explanation**: This is expected behavior:
+- **GUI mode**: Uses `all-the-icons` theme with graphical icons
+- **Terminal mode**: Uses `Default` theme with text-based symbols
+
+**Solutions**:
+1. **For better terminal icons**: Install and configure a Nerd Font in your terminal
+2. **For GUI consistency**: Ensure `all-the-icons` fonts are properly installed
+3. **Theme troubleshooting**: Check which theme is loaded:
+   ```elisp
+   M-x describe-variable treemacs-theme
+   ```
+
+## Treemacs Navigation Issues
+
+### Treemacs Sidebar Not Opening
+
+**Symptoms**: F5 key doesn't open Treemacs, or "Treemacs not available" message
+
+**Troubleshooting Steps**:
+1. **Check package installation**: Verify Treemacs packages are installed:
+   ```elisp
+   M-x package-list-packages
+   ```
+   Look for: `treemacs`, `treemacs-all-the-icons`, `treemacs-icons-dired`
+
+2. **Manual package installation**: Install missing packages:
+   ```elisp
+   M-x package-install RET treemacs
+   M-x package-install RET treemacs-all-the-icons
+   ```
+
+3. **Force load Treemacs**: Manually load the configuration:
+   ```elisp
+   M-x require RET treemacs-config
+   ```
+
+4. **Check function binding**: Verify F5 is bound correctly:
+   ```elisp
+   M-x describe-key RET F5
+   ```
+
+### Treemacs Icons Missing or Corrupted
+
+**Symptoms**: File tree shows text symbols instead of icons in GUI mode
+
+**Solutions**:
+1. **Check icon theme**: Verify current theme:
+   ```elisp
+   M-x describe-variable treemacs-theme
+   ```
+
+2. **Reinstall fonts**: See [Font and Icon Issues](#font-and-icon-issues) section
+
+3. **Force theme reload**: Manually set icon theme:
+   ```elisp
+   M-x treemacs-load-theme RET all-the-icons
+   ```
+
+4. **Fallback to default**: Use text-based theme if icons don't work:
+   ```elisp
+   M-x treemacs-load-theme RET Default
+   ```
+
+### Treemacs Performance Issues
+
+**Symptoms**: Slow file tree updates, laggy navigation
+
+**Solutions**:
+1. **Check project size**: Large projects with many files may be slow
+2. **Disable file watching**: Temporarily disable for large projects:
+   ```elisp
+   M-x treemacs-filewatch-mode
+   ```
+3. **Adjust refresh settings**: Increase refresh intervals in Treemacs settings
+4. **Exclude large directories**: Add `.gitignore` patterns to exclude build directories
+
+### Treemacs Git Integration Issues
+
+**Symptoms**: Git status not showing in file tree
+
+**Solutions**:
+1. **Check Git repository**: Ensure you're in a valid Git repository
+2. **Verify Git installation**: `git --version` should work from terminal
+3. **Refresh project**: `r` key in Treemacs sidebar to refresh
+4. **Check Git integration setting**:
+   ```elisp
+   M-x describe-variable treemacs-git-integration
+   ```
+
+## Message Logging Issues
+
+### Log Files Not Created
+
+**Symptoms**: No message logs in `~/.emacs.d/log/` directory
+
+**Troubleshooting Steps**:
+1. **Check log directory**: Verify directory exists and is writable:
+   ```bash
+   ls -la ~/.emacs.d/log/
+   mkdir -p ~/.emacs.d/log
+   ```
+
+2. **Check permissions**: Ensure Emacs can write to log directory:
+   ```bash
+   chmod 755 ~/.emacs.d/log
+   ```
+
+3. **Test manual logging**: Force a log save:
+   ```elisp
+   M-x core-save-messages-log
+   ```
+
+4. **Check hook installation**: Verify logging hook is installed:
+   ```elisp
+   M-x describe-variable kill-emacs-hook
+   ```
+
+### Log Rotation Not Working
+
+**Symptoms**: Old log files not rotated, or too many log files
+
+**Solutions**:
+1. **Check log file count**: Verify rotation settings:
+   ```elisp
+   M-x describe-variable core-log-max-files
+   ```
+
+2. **Manual rotation test**: Test rotation manually:
+   ```elisp
+   M-x core-rotate-log-files RET messages.log
+   ```
+
+3. **File permissions**: Ensure Emacs can rename/move log files:
+   ```bash
+   chmod 644 ~/.emacs.d/log/messages.log*
+   ```
+
+### Missing Log Content
+
+**Symptoms**: Log files exist but don't contain expected messages
+
+**Solutions**:
+1. **Check Messages buffer**: Verify messages exist:
+   ```elisp
+   M-x view-echo-area-messages
+   ```
+
+2. **Force buffer save**: Manually save Messages buffer:
+   ```elisp
+   M-x core-save-messages-log
+   ```
+
+3. **Check buffer content**: Ensure Messages buffer has content before Emacs exit
 
 ## Installation Problems
 

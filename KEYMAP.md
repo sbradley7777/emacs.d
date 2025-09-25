@@ -13,6 +13,7 @@ This document provides a comprehensive reference for all keybindings and executa
   - [Which-Key System](#which-key-system)
   - [Custom Navigation](#custom-navigation)
   - [Imenu-List Navigation](#imenu-list-navigation)
+  - [Treemacs Project Navigation](#treemacs-project-navigation)
   - [Language-Specific Keybindings](#language-specific-keybindings)
   - [Code Formatting](#code-formatting)
   - [Diagnostic and Error Checking](#diagnostic-and-error-checking)
@@ -47,7 +48,7 @@ This section contains all commands that have keyboard shortcuts assigned. These 
 - Most keybindings work immediately when you press them
 - Some are context-dependent and only work in specific modes or situations
 
-**Example to try**: Press `F1` to toggle the imenu-list sidebar, or `F2` to toggle the Flymake diagnostics window.
+**Example to try**: Press `F1` to toggle the imenu-list sidebar, `F2` to toggle the Flymake diagnostics window, or `F5` to toggle the Treemacs file tree.
 
 ## Function Keys
 
@@ -59,7 +60,7 @@ These are configuration-specific shortcuts designed for quick access to common o
 | `F2` | `toggle-flymake-diagnostics-window` | Toggle Flymake diagnostics window | - |
 | `F3` | `flymake-goto-prev-error` | Go to previous flymake error | Flymake active |
 | `F4` | `flymake-goto-next-error` | Go to next flymake error | Flymake active |
-| `F5` | `clipboard-kill-ring-save` | Copy to system clipboard | - |
+| `F5` | `treemacs-smart-toggle` | Smart toggle Treemacs file tree sidebar | - |
 | `F6` | `delete-trailing-whitespace` | Clean up line endings | - |
 | `F7` | `previous-buffer` | Switch to previous buffer | - |
 | `F8` | `next-buffer` | Switch to next buffer | - |
@@ -190,6 +191,38 @@ When the imenu-list sidebar is active, these keys work within the sidebar:
 | `r` | `imenu-list-refresh` | Refresh symbol list | Imenu sidebar |
 | `f` | `imenu-list-find-symbol` | Find symbol in buffer | Imenu sidebar |
 | `s` | `imenu-list-show-current-symbol` | Highlight current symbol | Imenu sidebar |
+
+### Treemacs Project Navigation
+
+Project file tree navigation powered by [Treemacs](https://github.com/Alexander-Miller/treemacs):
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `F5` | `treemacs-smart-toggle` | Smart toggle Treemacs (open/close/focus) | - |
+| `C-x` `t` `t` | `treemacs` | Open Treemacs sidebar | - |
+| `C-x` `t` `C-t` | `treemacs-find-file` | Find current file in Treemacs | - |
+| `C-x` `t` `1` | `treemacs-delete-other-windows` | Keep only Treemacs and current window | - |
+
+#### Treemacs Sidebar Navigation
+
+When the Treemacs sidebar is active, these keys work within the sidebar:
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `RET` | Open file/expand directory | Open selected file or expand/collapse directory | Treemacs sidebar |
+| `TAB` | Expand/collapse directory | Toggle directory expansion without opening | Treemacs sidebar |
+| `o` | Open file in other window | Open file while keeping focus in Treemacs | Treemacs sidebar |
+| `n` | Next line | Move to next item | Treemacs sidebar |
+| `p` | Previous line | Move to previous item | Treemacs sidebar |
+| `q` | Quit Treemacs | Close Treemacs sidebar | Treemacs sidebar |
+| `w` | Set width | Change sidebar width | Treemacs sidebar |
+| `r` | Refresh | Refresh current directory | Treemacs sidebar |
+| `cf` | Create file | Create new file in current directory | Treemacs sidebar |
+| `cd` | Create directory | Create new directory | Treemacs sidebar |
+| `R` | Rename | Rename file or directory | Treemacs sidebar |
+| `d` | Delete | Delete file or directory | Treemacs sidebar |
+| `s` | Sort | Change sorting method | Treemacs sidebar |
+| `h` | Show/hide hidden files | Toggle hidden file visibility | Treemacs sidebar |
 
 ## Language-Specific Keybindings
 
