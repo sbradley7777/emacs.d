@@ -9,6 +9,10 @@
 ;; Early init constants (can't require core-constants since load path not set up yet)
 (defconst early-gc-percentage-startup 0.6 "GC percentage during startup (60% of heap).")
 (defconst early-idle-update-delay-startup 1.0 "Idle update delay during startup.")
+(defconst
+ emacs-local-dir
+ (expand-file-name "local/" user-emacs-directory)
+ "Path to ~/.emacs.d/local/ directory.")
 
 (message "🔄  Loading early-init.el...")
 
@@ -121,9 +125,11 @@
        (list
         (expand-file-name "eln-cache" user-emacs-directory)
         (expand-file-name "tramp-autosave" user-emacs-directory)
-        (expand-file-name "local/autosaves" user-emacs-directory)
-        (expand-file-name "local/backups" user-emacs-directory)
-        (expand-file-name "local/auto-save-list" user-emacs-directory))))
+        (expand-file-name "autosaves" emacs-local-dir)
+        (expand-file-name "backups" emacs-local-dir)
+        (expand-file-name "auto-save-list" emacs-local-dir))))
   (dolist (dir dirs-to-create) (unless (file-directory-p dir) (make-directory dir t))))
 
 (message "✅  early-init.el loaded successfully - performance optimizations active.")
+
+(provide 'early-init)
