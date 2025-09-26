@@ -200,10 +200,10 @@ Comprehensive Python development setup with intelligent environment management:
 **Project-Scoped Modeline Indicator** ([`core/ui.el`](core/ui.el)):
 - **Conditional display** - `[venv: project-name (pyX.X)]` indicator only appears for files within the detected project root directory
 - **Path-based filtering** - indicator is completely hidden when file path does not start with the project root path
-- **Optional color customization** via `pyvenv-modeline-color` variable in [`local.el`](examples/local.el)
+- **Optional color customization** via `pyvenv-modeline-color` variable in [`local.el`](configs/local.el)
 - **Clean modeline** - files outside the project show no virtual environment information
 
-**Example Configuration** ([`examples/local.el`](examples/local.el)):
+**Example Configuration** ([`configs/local.el`](configs/local.el)):
 ```elisp
 ;; Set custom modeline color for Python virtual environment indicator
 (setq pyvenv-modeline-color "lightcoral")  ; Options: "red", "green", "blue", "#ff7f7f", etc.
@@ -326,10 +326,10 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
 - **Terminal-Optimized**: `doom-zenburn` (default), `doom-1337`, `doom-gruvbox`, `doom-material-dark`, `doom-tomorrow-night`
 - **Built-in Fallbacks**: `wombat`, `tango-dark`, `leuven` for system compatibility
 
-**Customization** ([`examples/local.el`](examples/local.el)):
+**Customization** ([`configs/local.el`](configs/local.el)):
 ```elisp
 ;; Set your preferred theme in local.el to override the default doom-zenburn
-(setq user-preferred-theme 'doom-1337)  ; Example override from examples/local.el
+(setq user-preferred-theme 'doom-1337)  ; Example override from configs/local.el
 
 ;; Theme-specific customizations
 (setq user-theme-customizations

@@ -354,7 +354,7 @@ Interactive theme selection and customization using [Doom Themes](https://github
 
 **Theme Persistence:**
 - Your selected theme preference is automatically saved
-- Set permanent preferences in `local.el` (see [`examples/local.el`](examples/local.el))
+- Set permanent preferences in `local.el` (see [`configs/local.el`](configs/local.el))
 
 ## Related Documentation
 

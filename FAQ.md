@@ -169,7 +169,7 @@ The modular design makes it easy to add support for additional languages.
 - **GUI-optimized**: `doom-Iosvkem`, `doom-monokai-machine`, `doom-peacock`
 - **Built-in fallbacks**: `wombat`, `tango-dark`
 
-**Example override:** The [`examples/local.el`](examples/local.el) demonstrates setting `doom-1337` as an alternative theme preference.
+**Example override:** The [`configs/local.el`](configs/local.el) demonstrates setting `doom-1337` as an alternative theme preference.
 
 ### Q: Can I disable specific features?
 
@@ -473,7 +473,7 @@ M-x core-save-messages-log
 **Setup:**
 1. **Remote paths**: Python virtual environments automatically detected in standard locations
 2. **SSH configuration**: Uses standard SSH settings, no special TRAMP configuration required
-3. **Local customization**: Override remote Python paths in [`examples/local.el`](examples/local.el) if needed
+3. **Local customization**: Override remote Python paths in [`configs/local.el`](configs/local.el) if needed
 
 **Default Configuration** ([`core/tramp-config.el`](core/tramp-config.el)):
 ```elisp
@@ -569,7 +569,7 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for detailed guidelines.
 - **`~/.emacs.d/local.el`**: Hand-written local configuration that loads after all main config
 - **`~/.emacs.d/custom.el`**: Settings from Emacs' customize system (automatically created)
 
-Both files are automatically loaded if they exist and can override any main configuration settings. See [`examples/`](examples/) for detailed templates and documentation.
+Both files are automatically loaded if they exist and can override any main configuration settings. See [`configs/`](configs/) for detailed templates and documentation.
 
 ### Q: Can I use a different completion framework?
 
