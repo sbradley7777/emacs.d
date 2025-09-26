@@ -103,27 +103,47 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Native Compilation Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; The native-comp-never-compile-file-patterns variable is not available in
-;; early-init, so we must set it after the native compilation system has been
-;; loaded.
-(setq comp-deferred-compilation nil)
-(setq native-comp-deferred-compilation nil)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Configure native compilation cache path for Snap compatibility
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Snap packages have library compatibility issues with native compilation due to:
+;; 1. Host system libraries vs Snap's bundled libraries (Ubuntu-based)
+;; 2. Linker errors with .relr.dyn sections (newer ELF feature incompatibility)
+;; 3. Library path conflicts between /var/lib/snapd/snap/.../lib and system libs
 ;;
-;; The default location in user-emacs-directory can have permissions issues
-;; with Snap's sandboxing. Setting it to a known-writable location inside
-;; the Snap home directory can resolve this.
-(setq native-comp-eln-load-path (list (expand-file-name "eln-cache" (getenv "HOME"))))
+;; Detection: Snap installations run from /var/lib/snapd/snap/emacs/*/usr/bin/
+;; Solution: Disable native compilation for Snap, enable for other platforms (macOS, Linux, etc.)
+;;
+;; KNOWN ISSUE: Even with comprehensive disabling (deferred, JIT, and trampolines all set to nil),
+;; Snap's Emacs may still attempt some background compilation. This appears to be hardcoded
+;; behavior in the Snap package itself, not user configuration. The compilation attempts can
+;; be safely ignored as they don't affect functionality, but may generate background noise
+;; in compilation buffers. This is an acceptable limitation for Snap environments.
+
+(defun
+ running-in-snap-p
+ ()
+ "Return non-nil if Emacs is running from a Snap package."
+ (string-match-p "/snap/" invocation-directory))
+
+(if
+ (running-in-snap-p)
+ (progn
+  ;; Disable native compilation for Snap due to library compatibility issues
+  (setq native-comp-deferred-compilation nil)
+  (setq native-comp-jit-compilation nil)
+  (setq native-comp-enable-subr-trampolines nil)
+  (setq native-comp-eln-load-path (list (expand-file-name "eln-cache" emacs-local-dir)))
+  (message "⚠️  Native compilation disabled (running in Snap environment)"))
+ (progn
+  ;; Enable native compilation for non-Snap installations (macOS, Linux, etc.)
+  (setq native-comp-deferred-compilation t)
+  (setq native-comp-eln-load-path (list (expand-file-name "eln-cache" emacs-local-dir)))
+  (message "✅  Native compilation enabled (standard installation)")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure all essential directories exist on startup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (let ((dirs-to-create
        (list
-        (expand-file-name "eln-cache" user-emacs-directory)
+        (expand-file-name "eln-cache" emacs-local-dir)
         (expand-file-name "tramp-autosave" emacs-local-dir)
         (expand-file-name "autosaves" emacs-local-dir)
         (expand-file-name "backups" emacs-local-dir)
