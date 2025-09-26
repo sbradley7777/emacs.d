@@ -29,6 +29,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package System Early Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configure package directory to use emacs-local-dir
+(setq package-user-dir (expand-file-name "elpa" emacs-local-dir))
+
 ;; Disable package.el auto-initialization to prevent loading warnings
 ;; This must be done very early, before any package loading attempts
 (setq package-enable-at-startup nil package-quickstart nil)
@@ -147,7 +150,8 @@
         (expand-file-name "tramp-autosave" emacs-local-dir)
         (expand-file-name "autosaves" emacs-local-dir)
         (expand-file-name "backups" emacs-local-dir)
-        (expand-file-name "auto-save-list" emacs-local-dir))))
+        (expand-file-name "auto-save-list" emacs-local-dir)
+        (expand-file-name "elpa" emacs-local-dir))))
   (dolist (dir dirs-to-create) (unless (file-directory-p dir) (make-directory dir t))))
 
 (message "✅  early-init.el loaded successfully - performance optimizations active.")

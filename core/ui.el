@@ -127,7 +127,7 @@
   recentf-max-saved-items
   core-recentf-max-items
   recentf-exclude
-  `(,(expand-file-name "~/.emacs.d/elpa/.*") "/tmp/.*"))
+  `(,(expand-file-name "elpa/.*" emacs-local-dir) "/tmp/.*"))
 
  ;; Auto-save recentf list every 30 seconds when idle
  (setq recentf-auto-cleanup 'never)
