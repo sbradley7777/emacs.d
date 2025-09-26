@@ -65,7 +65,7 @@ CLAUDE.local.md
 /local.el
 /dev.el
 package-state-cache.el
-auto-save-list/
+local/
 eln-cache/
 elpa/
 history

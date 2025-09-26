@@ -121,8 +121,9 @@
        (list
         (expand-file-name "eln-cache" user-emacs-directory)
         (expand-file-name "tramp-autosave" user-emacs-directory)
-        (expand-file-name "autosaves" user-emacs-directory)
-        (expand-file-name "backups" user-emacs-directory))))
+        (expand-file-name "local/autosaves" user-emacs-directory)
+        (expand-file-name "local/backups" user-emacs-directory)
+        (expand-file-name "local/auto-save-list" user-emacs-directory))))
   (dolist (dir dirs-to-create) (unless (file-directory-p dir) (make-directory dir t))))
 
 (message "✅  early-init.el loaded successfully - performance optimizations active.")
