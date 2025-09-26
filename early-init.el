@@ -124,7 +124,7 @@
 (let ((dirs-to-create
        (list
         (expand-file-name "eln-cache" user-emacs-directory)
-        (expand-file-name "tramp-autosave" user-emacs-directory)
+        (expand-file-name "tramp-autosave" emacs-local-dir)
         (expand-file-name "autosaves" emacs-local-dir)
         (expand-file-name "backups" emacs-local-dir)
         (expand-file-name "auto-save-list" emacs-local-dir))))

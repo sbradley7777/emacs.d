@@ -17,6 +17,7 @@
 
 ;;; Code:
 
+(require 'core-constants)
 (require 'core-utils)
 (require 'tramp-utils)
 
@@ -32,8 +33,8 @@
 (setq tramp-verbose 0)
 
 ;; Cache and auto-save locations
-(setq tramp-persistency-file-name (expand-file-name "tramp-cache" user-emacs-directory))
-(setq tramp-auto-save-directory (expand-file-name "tramp-autosave" user-emacs-directory))
+(setq tramp-persistency-file-name (expand-file-name "tramp" emacs-local-dir))
+(setq tramp-auto-save-directory (expand-file-name "tramp-autosave" emacs-local-dir))
 
 ;; Performance optimizations
 (setq tramp-use-ssh-controlmaster-options nil)
