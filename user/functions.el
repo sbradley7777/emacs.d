@@ -80,7 +80,9 @@ When reaching the end of buffer, move point to end."
     "^\\*scratch\\*$"
     "^\\*Help\\*$"
     "^\\*Completions\\*$"
-    "^\\*Backtrace\\*$")
+    "^\\*Backtrace\\*$"
+    "^\\*.*compile.*\\*$"
+    "^\\*Async-native-compile-log\\*$")
   "List of regex patterns for buffers to filter out during cycling.")
 
  (defun
