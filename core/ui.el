@@ -119,6 +119,7 @@
  (setq savehist-additional-variables '(search-ring regexp-search-ring))
 
  ;; Track recently opened files
+ (setq recentf-save-file (expand-file-name "recentf" emacs-local-dir))
  (recentf-mode 1)
  ;; Ensure recentf loads existing list on startup
  (recentf-load-list)
