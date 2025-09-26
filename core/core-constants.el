@@ -76,6 +76,12 @@
 (defconst core-gnu-priority 15 "Priority for GNU packages.")
 (defconst core-melpa-priority 10 "Priority for MELPA packages.")
 
+;; Network Timeouts
+(defconst
+ core-package-refresh-timeout
+ 60
+ "Timeout in seconds for package repository refresh operations (downloads metadata from GNU, NonGNU, MELPA).")
+
 ;; Performance Reporting
 (defconst
  core-use-package-minimum-reported-time 0.1 "Report packages taking longer than this to load.")

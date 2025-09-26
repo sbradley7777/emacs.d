@@ -153,16 +153,22 @@ TIMEOUT-SECONDS specifies how long to wait before timing out."
       nil))))
 
  (defun
-  show-package-upgrades ()
+  show-package-upgrades
+  ()
   "Show only installed packages that have available upgrades.
 Refreshes package contents and displays a list of packages with available updates,
 showing current version -> new version for each package."
-  (interactive) (message "📦  Checking for package updates...")
-  (let ((upgrades (core-packages-safe-refresh-and-check 15)))
+  (interactive)
+  (message "📦  Checking for package updates (manual check)...")
+  (message "🔍  Configured repositories: %s" (mapcar 'car package-archives))
+  (let ((upgrades (core-packages-safe-refresh-and-check core-package-refresh-timeout)))
     (if
      upgrades
      (progn
-      (message "📦  Packages with updates available:")
+      (message
+       "✅  Package refresh completed successfully - contacted %d repositories"
+       (length package-archives))
+      (message "📦  Found %d packages with updates available:" (length upgrades))
       (dolist
        (pkg upgrades)
        (let ((pkg-name (car pkg))
@@ -174,18 +180,62 @@ showing current version -> new version for each package."
           (package-desc-version current-desc)
           (package-desc-version new-desc))))
       (message "📦  Run M-x package-list-packages, then 'U' and 'x' to install updates"))
-     (message "📦  All packages are up to date."))))
+     (progn
+      (message
+       "✅  Package refresh completed successfully - contacted %d repositories"
+       (length package-archives))
+      (message "📦  No package updates available - all packages are up to date.")))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Automatic Weekly Update Check
+ ;; Automatic Weekly Update Check with Persistent Storage
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  core-packages-read-last-check-timestamp ()
+  "Read the last package check timestamp from persistent storage.
+Returns the timestamp as a float, or 0 if no previous check recorded."
+  (let ((timestamp-file (expand-file-name "package-last-refresh" emacs-local-dir)))
+    (if
+     (file-exists-p timestamp-file)
+     (condition-case err
+         (with-temp-buffer
+          (insert-file-contents timestamp-file)
+          (let ((content (string-trim (buffer-string))))
+            (cond
+             ;; New format: ISO 8601 datetime string
+             ((string-match
+               "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\}$"
+               content)
+              (float-time (date-to-time content)))
+             ;; Legacy format: numeric timestamp
+             ((string-match "^[0-9]+\\.?[0-9]*$" content)
+              (string-to-number content))
+             ;; Unknown format
+             (t
+              (message "⚠️  Invalid timestamp format in file, resetting to 0")
+              0))))
+       (error
+        (message "⚠️  Failed to read package timestamp file: %s" (error-message-string err))
+        0))
+     0)))
+
+ (defun
+  core-packages-write-last-check-timestamp (timestamp)
+  "Write the package check timestamp to persistent storage in human-readable format.
+TIMESTAMP should be a float from (float-time (current-time))."
+  (let ((timestamp-file (expand-file-name "package-last-refresh" emacs-local-dir))
+        (human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
+    (condition-case err
+        (with-temp-file timestamp-file (insert human-readable))
+      (error
+       (message "⚠️  Failed to write package timestamp file: %s" (error-message-string err))))))
 
  ;; Automatically check for package updates once per week during interactive Emacs sessions.
  ;; This provides awareness of available updates without automatically installing them.
  ;;
  ;; How it works:
  ;; - Runs only during interactive sessions (not batch mode)
- ;; - Checks if 7 days have passed since last package list refresh
+ ;; - Checks if 7 days have passed since last package list refresh (persistent across sessions)
  ;; - Refreshes package contents from repositories (MELPA, GNU ELPA, etc.)
  ;; - Notifies user if updates are available but does NOT install them
  ;; - User can run M-x show-package-upgrades for details or M-x package-list-packages to install
@@ -195,38 +245,66 @@ showing current version -> new version for each package."
  ;; - Maintains stability by requiring manual approval before installing updates
  ;; - Prevents surprise breakage from automatic updates
  ;; - Weekly frequency avoids slowing down daily startup times
- (when
-  (and
-   ;; Check if more than 7 days have passed since last refresh
-   (>
-    (float-time (time-subtract (current-time) (or (get 'package-last-refresh 'timestamp) 0)))
-    (* 7 24 60 60)) ; 7 days in seconds
-   ;; Only during interactive sessions, not batch mode
-   (not noninteractive)
-   ;; Only if network is available
-   (require 'package-system/network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
-  (message "📦  Checking for package updates (weekly check)...")
-  ;; Refresh package contents with timeout protection
-  (condition-case err
-      (progn
-       (with-timeout
-        (10 ; 10 second timeout
-         (message "⚠️  Package update check timed out - skipping"))
-        (package-refresh-contents))
-       ;; Remember when we last did this check
-       (put 'package-last-refresh 'timestamp (current-time))
-       ;; Check what packages have available updates
-       (let ((upgrades (package-menu--find-upgrades)))
-         (if
-          upgrades
-          (message
-           "📦  %d package updates available. Run M-x show-package-upgrades for details."
-           (length upgrades))
-          (message "📦  All packages up to date."))))
-    (error
-     (message "⚠️  Package update check failed: %s" (error-message-string err))
-     ;; Still mark as checked to prevent repeated attempts
-     (put 'package-last-refresh 'timestamp (current-time)))))
+ ;; - Persistent storage prevents duplicate checks across Emacs restarts
+ (let ((last-check-timestamp (core-packages-read-last-check-timestamp))
+       (days-since-last-check
+        (/
+         (float-time
+          (time-subtract
+           (current-time) (seconds-to-time (core-packages-read-last-check-timestamp))))
+         (* 24 60 60))))
+   (if
+    (and
+     ;; Check if more than 7 days have passed since last refresh
+     (>
+      (float-time (time-subtract (current-time) (seconds-to-time last-check-timestamp)))
+      (* 7 24 60 60)) ; 7 days in seconds
+     ;; Only during interactive sessions, not batch mode
+     (not noninteractive)
+     ;; Only if network is available
+     (require 'package-system/network nil t)
+     (fboundp 'network-responsive-p)
+     (network-responsive-p))
+    ;; Perform weekly check
+    (progn
+     (message "📦  Checking for package updates (weekly check)...")
+     (message "🔍  Configured repositories: %s" (mapcar 'car package-archives))
+     ;; Refresh package contents with timeout protection
+     (condition-case err
+         (progn
+          (let ((refresh-successful nil))
+            (with-timeout
+             (core-package-refresh-timeout
+              (message "⚠️  Package update check timed out - skipping")
+              (setq refresh-successful nil))
+             (package-refresh-contents) (setq refresh-successful t))
+            (if
+             refresh-successful
+             (progn
+              (message
+               "✅  Package refresh completed successfully - contacted %d repositories"
+               (length package-archives))
+              ;; Check what packages have available updates
+              (let ((upgrades (package-menu--find-upgrades)))
+                (if
+                 upgrades
+                 (message
+                  "📦  Found %d package updates available. Run M-x show-package-upgrades for details."
+                  (length upgrades))
+                 (message "📦  No package updates available - all packages are up to date.")))
+              ;; Only update timestamp after EVERYTHING completed successfully
+              (core-packages-write-last-check-timestamp (float-time (current-time))))
+             (message "⚠️  Package refresh incomplete - will retry next startup"))))
+       (error
+        (message "❌  Package refresh failed: %s" (error-message-string err))
+        ;; Still mark as checked to prevent repeated attempts
+        (core-packages-write-last-check-timestamp (float-time (current-time))))))
+    ;; Skip check and inform user
+    (when
+     (not noninteractive)
+     (message
+      "📦  Skipping package check (%.1f days since last check, checking weekly)"
+      days-since-last-check))))
 
  ;; Make this module available for loading with (require 'core-packages)
  (provide 'core-packages))
