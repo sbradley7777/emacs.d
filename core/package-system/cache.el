@@ -15,7 +15,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defvar
   package-state-cache-file
-  (expand-file-name "package-state-cache.el" user-emacs-directory)
+  (expand-file-name "package-state-cache.el" emacs-local-dir)
   "File to cache working package archive contents.")
 
  (defvar
