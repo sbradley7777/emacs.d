@@ -128,7 +128,8 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
   :config
   ;; Configure elisp-autofmt for consistent formatting
   (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
-  (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs)) ; Single-threaded for consistency
+  (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs) ; Single-threaded for consistency
+  (setq elisp-autofmt-cache-directory (expand-file-name "elisp-autofmt-cache" emacs-local-dir))) ; Use local directory
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package Update Functions
