@@ -13,11 +13,9 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package Repository Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (require 'cl-lib)
- (require 'package)
+ (require 'cl-lib) (require 'package)
 
- ;; Enable package repositories with priority fallback system
- (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+ ;; Enable package repositories - MELPA only for latest packages with fixes
  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
  ;; Set package archive priorities (higher number = higher priority)
@@ -25,15 +23,13 @@
  ;; Search order for packages (Emacs tries highest priority first):
  ;; 1. GNU ELPA (20)     - Official GNU packages with FSF copyright assignment (https://elpa.gnu.org/)
  ;; 2. NonGNU ELPA (15)  - Semi-official packages without copyright assignment (https://elpa.nongnu.org/)
- ;; 3. MELPA-stable (12) - Stable releases from community packages (https://stable.melpa.org/)
- ;; 4. MELPA (10)        - Latest development versions from community (https://melpa.org/)
+ ;; 3. MELPA (10)        - Latest development versions from community (https://melpa.org/)
  ;;
- ;; This ensures maximum security: official → semi-official → stable community → bleeding-edge
+ ;; This ensures we get the latest fixes (like doom-themes issue #793) while maintaining security
  (setq
   package-archive-priorities
   `(("gnu" . 20) ; Highest priority for official packages
     ("nongnu" . 15) ; Semi-official packages
-    ("melpa-stable" . 12) ; Stable community packages
     ("melpa" . ,core-melpa-priority)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -41,9 +37,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Secure keyring management - pin keyring updates to GNU ELPA for security
  (add-to-list 'package-pinned-packages '("gnu-elpa-keyring-update" . "gnu"))
-
- ;; Pin completion framework to stable version for reliability
- (add-to-list 'package-pinned-packages '("corfu" . "melpa-stable"))
 
  ;; Enhanced security configuration for package verification
  (setq

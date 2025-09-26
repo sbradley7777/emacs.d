@@ -131,7 +131,53 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
   (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs)) ; Single-threaded for consistency
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Periodic Package Update Check
+ ;; Package Update Functions
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  core-packages-safe-refresh-and-check (timeout-seconds)
+  "Safely refresh package contents and return available upgrades.
+Returns a list of available upgrades or nil if failed/no upgrades.
+TIMEOUT-SECONDS specifies how long to wait before timing out."
+  (when
+   (and
+    (require 'package-system/network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
+   (condition-case err
+       (progn
+        (with-timeout
+         (timeout-seconds (message "⚠️  Package update check timed out"))
+         (package-refresh-contents))
+        (package-menu--find-upgrades))
+     (error
+      (message "⚠️  Package update check failed: %s" (error-message-string err))
+      nil))))
+
+ (defun
+  show-package-upgrades ()
+  "Show only installed packages that have available upgrades.
+Refreshes package contents and displays a list of packages with available updates,
+showing current version -> new version for each package."
+  (interactive) (message "📦  Checking for package updates...")
+  (let ((upgrades (core-packages-safe-refresh-and-check 15)))
+    (if
+     upgrades
+     (progn
+      (message "📦  Packages with updates available:")
+      (dolist
+       (pkg upgrades)
+       (let ((pkg-name (car pkg))
+             (current-desc (cadr pkg))
+             (new-desc (caddr pkg)))
+         (message
+          "  📦  %s: %s → %s"
+          pkg-name
+          (package-desc-version current-desc)
+          (package-desc-version new-desc))))
+      (message "📦  Run M-x package-list-packages, then 'U' and 'x' to install updates"))
+     (message "📦  All packages are up to date."))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Automatic Weekly Update Check
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; Automatically check for package updates once per week during interactive Emacs sessions.
@@ -142,7 +188,7 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  ;; - Checks if 7 days have passed since last package list refresh
  ;; - Refreshes package contents from repositories (MELPA, GNU ELPA, etc.)
  ;; - Notifies user if updates are available but does NOT install them
- ;; - User must manually review and install updates via M-x package-list-packages
+ ;; - User can run M-x show-package-upgrades for details or M-x package-list-packages to install
  ;;
  ;; Benefits:
  ;; - Stay informed about available updates (like the doom-themes fix we just applied)
@@ -156,20 +202,31 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
     (float-time (time-subtract (current-time) (or (get 'package-last-refresh 'timestamp) 0)))
     (* 7 24 60 60)) ; 7 days in seconds
    ;; Only during interactive sessions, not batch mode
-   (not noninteractive))
+   (not noninteractive)
+   ;; Only if network is available
+   (require 'package-system/network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
   (message "📦  Checking for package updates (weekly check)...")
-  ;; Refresh package contents from all configured repositories
-  (package-refresh-contents)
-  ;; Remember when we last did this check
-  (put 'package-last-refresh 'timestamp (current-time))
-  ;; Check what packages have available updates
-  (let ((upgrades (package-menu--find-upgrades)))
-    (if
-     upgrades
-     (message
-      "📦  %d package updates available. Run M-x package-list-packages to review and install them."
-      (length upgrades))
-     (message "📦  All packages up to date."))))
+  ;; Refresh package contents with timeout protection
+  (condition-case err
+      (progn
+       (with-timeout
+        (10 ; 10 second timeout
+         (message "⚠️  Package update check timed out - skipping"))
+        (package-refresh-contents))
+       ;; Remember when we last did this check
+       (put 'package-last-refresh 'timestamp (current-time))
+       ;; Check what packages have available updates
+       (let ((upgrades (package-menu--find-upgrades)))
+         (if
+          upgrades
+          (message
+           "📦  %d package updates available. Run M-x show-package-upgrades for details."
+           (length upgrades))
+          (message "📦  All packages up to date."))))
+    (error
+     (message "⚠️  Package update check failed: %s" (error-message-string err))
+     ;; Still mark as checked to prevent repeated attempts
+     (put 'package-last-refresh 'timestamp (current-time)))))
 
  ;; Make this module available for loading with (require 'core-packages)
  (provide 'core-packages))

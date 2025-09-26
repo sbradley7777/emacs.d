@@ -21,14 +21,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(package-selected-packages nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(highlight-indent-guides-character-face ((t (:foreground "#4a4a4a"))))
+ '(highlight-indent-guides-even-face ((t (:background "#3a3a3a"))))
+ '(highlight-indent-guides-odd-face ((t (:background "#2a2a2a"))))
+ '(highlight-indent-guides-top-character-face ((t (:foreground "#707070"))))
+ '(highlight-indent-guides-top-even-face ((t (:background "#505050"))))
+ '(highlight-indent-guides-top-odd-face ((t (:background "#404040")))))
 
 ;; Display a message to confirm loading
 (message "✅ custom.el loaded - menu customizations are working!")
