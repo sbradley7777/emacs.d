@@ -114,6 +114,7 @@
  ;; Modern Emacs features
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Save command history
+ (setq savehist-file (expand-file-name "history" emacs-local-dir))
  (savehist-mode 1)
  (setq savehist-additional-variables '(search-ring regexp-search-ring))
 
