@@ -4,6 +4,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'package-system/metadata)
 (require 'package-system/repositories)
 
 (core-utils-with-load-timing
@@ -191,45 +192,6 @@ showing current version -> new version for each package."
  ;; Automatic Weekly Update Check with Persistent Storage
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- (defun
-  core-packages-read-last-check-timestamp ()
-  "Read the last package check timestamp from persistent storage.
-Returns the timestamp as a float, or 0 if no previous check recorded."
-  (let ((timestamp-file (expand-file-name "package-last-refresh" emacs-local-dir)))
-    (if
-     (file-exists-p timestamp-file)
-     (condition-case err
-         (with-temp-buffer
-          (insert-file-contents timestamp-file)
-          (let ((content (string-trim (buffer-string))))
-            (cond
-             ;; New format: ISO 8601 datetime string
-             ((string-match
-               "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\}$"
-               content)
-              (float-time (date-to-time content)))
-             ;; Legacy format: numeric timestamp
-             ((string-match "^[0-9]+\\.?[0-9]*$" content)
-              (string-to-number content))
-             ;; Unknown format
-             (t
-              (message "⚠️  Invalid timestamp format in file, resetting to 0")
-              0))))
-       (error
-        (message "⚠️  Failed to read package timestamp file: %s" (error-message-string err))
-        0))
-     0)))
-
- (defun
-  core-packages-write-last-check-timestamp (timestamp)
-  "Write the package check timestamp to persistent storage in human-readable format.
-TIMESTAMP should be a float from (float-time (current-time))."
-  (let ((timestamp-file (expand-file-name "package-last-refresh" emacs-local-dir))
-        (human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
-    (condition-case err
-        (with-temp-file timestamp-file (insert human-readable))
-      (error
-       (message "⚠️  Failed to write package timestamp file: %s" (error-message-string err))))))
 
  ;; Automatically check for package updates once per week during interactive Emacs sessions.
  ;; This provides awareness of available updates without automatically installing them.
@@ -247,12 +209,12 @@ TIMESTAMP should be a float from (float-time (current-time))."
  ;; - Prevents surprise breakage from automatic updates
  ;; - Weekly frequency avoids slowing down daily startup times
  ;; - Persistent storage prevents duplicate checks across Emacs restarts
- (let ((last-check-timestamp (core-packages-read-last-check-timestamp))
+ (let ((last-check-timestamp (package-metadata-read-refresh-timestamp))
        (days-since-last-check
         (/
          (float-time
           (time-subtract
-           (current-time) (seconds-to-time (core-packages-read-last-check-timestamp))))
+           (current-time) (seconds-to-time (package-metadata-read-refresh-timestamp))))
          (* 24 60 60))))
    (if
     (and
@@ -294,12 +256,12 @@ TIMESTAMP should be a float from (float-time (current-time))."
                   (length upgrades))
                  (message "📦  No package updates available - all packages are up to date.")))
               ;; Only update timestamp after EVERYTHING completed successfully
-              (core-packages-write-last-check-timestamp (float-time (current-time))))
+              (package-metadata-write-refresh-timestamp (float-time (current-time))))
              (message "⚠️  Package refresh incomplete - will retry next startup"))))
        (error
         (message "❌  Package refresh failed: %s" (error-message-string err))
         ;; Still mark as checked to prevent repeated attempts
-        (core-packages-write-last-check-timestamp (float-time (current-time))))))
+        (package-metadata-write-refresh-timestamp (float-time (current-time))))))
     ;; Skip check and inform user
     (when
      (not noninteractive)

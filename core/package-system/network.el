@@ -5,6 +5,7 @@
 
 (require 'core-constants)
 (require 'package-system/cache)
+(require 'package-system/metadata)
 (require 'core-utils)
 (require 'url)
 
@@ -97,7 +98,9 @@
     (save-package-state))
 
    ;; Network down, stale cache available - inform user
-   ((and (not package-archive-contents) (file-exists-p package-state-cache-file))
+   ((and
+     (not package-archive-contents)
+     (> (plist-get (package-metadata-read-cache-info) :timestamp) 0))
     (message "⚠️  Network unavailable, using offline mode...")
     (load-cached-package-state)
     (message "ℹ️  Consider refreshing when network returns"))
