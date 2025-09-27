@@ -54,11 +54,11 @@ check_emacs() {
 
 
 # Validates that all required repository files and directories exist
-# Checks for essential structure: init.el, core/, features/, lang/, themes/, user/
+# Checks for essential structure: init.el, core/, features/, lang/, themes/, user/, configs/
 # Exits with error code 1 if any required components are missing
 validate_repo() {
     log INFO "Validating repository structure..."
-    local required_files=("init.el" "early-init.el" "core" "features" "lang" "themes" "user")
+    local required_files=("init.el" "early-init.el" "core" "features" "lang" "themes" "user" "configs")
     local missing_files=()
     for file in "${required_files[@]}"; do
         if [[ ! -e "$REPO_DIR/$file" ]]; then
@@ -79,7 +79,7 @@ validate_repo() {
 # Places backups in /tmp directory with timestamp to avoid conflicts
 # Preserves unmanaged files in ~/.emacs.d that don't conflict with repo structure
 backup_existing() {
-    local files_to_backup=("init.el" "early-init.el" "core" "features" "lang" "themes" "user")
+    local files_to_backup=("init.el" "early-init.el" "core" "features" "lang" "themes" "user" "custom.el" "dev.el" "local.el")
     local backed_up_files=()
     local backup_needed=false
 
@@ -144,6 +144,9 @@ create_symlinks() {
         "lang:lang"
         "themes:themes"
         "user:user"
+        "configs/custom.el:custom.el"
+        "configs/dev.el:dev.el"
+        "configs/local.el:local.el"
     )
     for link in "${links[@]}"; do
         local src="${link%%:*}"
@@ -170,7 +173,7 @@ create_symlinks() {
 # Exits with error code 1 if any symlinks are broken (point to non-existent targets)
 verify_installation() {
     log INFO "Verifying installation..."
-    local expected_links=("init.el" "early-init.el" "core" "features" "lang" "themes" "user")
+    local expected_links=("init.el" "early-init.el" "core" "features" "lang" "themes" "user" "custom.el" "dev.el" "local.el")
     local broken_links=()
     for link in "${expected_links[@]}"; do
         local link_path="$EMACS_DIR/$link"
@@ -247,12 +250,13 @@ This script will:
 1. Check for Emacs installation
 2. Validate repository structure
 3. Backup conflicting files to /tmp (unless --no-backup)
-4. Create symlinks from ~/.emacs.d to this repository (init.el, early-init.el, core/, features/, lang/, themes/, user/)
+4. Create symlinks from ~/.emacs.d to this repository (init.el, early-init.el, core/, features/, lang/, themes/, user/, config templates)
 5. Verify the installation
 6. Test configuration loading (unless --no-test)
 
 Note: This script preserves existing ~/.emacs.d and only backs up files
-that would conflict with the repository symlinks (init.el, early-init.el, core/, features/, etc.).
+that would conflict with the repository symlinks (init.el, early-init.el, core/, features/, config templates, etc.).
+The ~/.emacs.d/local/ directory for package cache and user data is automatically created at runtime.
 
 EOF
 }
