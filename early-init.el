@@ -47,17 +47,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GUI Element Suppression - Prevents UI Flashing
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Disable GUI elements in default-frame-alist to prevent them from appearing
-;; even briefly during startup (eliminates the "flash" effect)
-;; Consolidated GUI element suppression (single operation for better performance)
-(setq
- default-frame-alist
- (append
-  default-frame-alist
-  '((tool-bar-lines . 0)
-    (menu-bar-lines . 0)
-    (vertical-scroll-bars . nil)
-    (horizontal-scroll-bars . nil))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File Handling Optimizations

@@ -8,16 +8,6 @@
 (core-utils-with-load-timing
  "ui.el"
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; UI Elements Control:
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Conditional UI settings based on display type
- (if
-  (display-graphic-p)
-  ;; For GUI frames, enable menu and scroll bar but disable tool bar
-  (progn (menu-bar-mode 1) (tool-bar-mode -1) (scroll-bar-mode 1))
-  ;; For terminal frames, disable the menu bar. Tool and scroll bars are graphical-only and don't exist in terminals.
-  (menu-bar-mode -1))
 
  ;; Modern line number display (Emacs 30.2+)
  (global-display-line-numbers-mode 1)
@@ -151,48 +141,6 @@
  (blink-cursor-mode -1) ; Disable cursor blinking
  (setq mouse-yank-at-point t) ; Paste at cursor, not mouse position
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Window state management
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Enhanced window refresh system for GUI mode
- (defun
-  ui-auto-refresh (&rest args)
-  "Automatically refresh display after any window changes.
-Triggers on resize, fullscreen, maximize, minimize, and focus events.
-ARGS can contain frame parameter from various hooks, handled safely."
-  (condition-case err
-      (let ((frame (if (and args (framep (car args))) (car args) (selected-frame))))
-        (when
-         (display-graphic-p)
-         ;; In GUI mode, use faster refresh with minimal delay
-         (run-with-timer 0.05 nil (lambda () (redraw-frame frame) (force-window-update frame))))
-        (unless
-         (display-graphic-p)
-         ;; In terminal mode, immediate refresh is fine
-         (redraw-display) (force-window-update) (redraw-frame frame)))
-    (error
-     (message "❌  UI refresh failed: %s" (error-message-string err)))))
-
- (add-hook 'window-size-change-functions 'ui-auto-refresh)
- (add-hook 'window-state-change-hook 'ui-auto-refresh)
-
- (add-hook 'focus-in-hook 'ui-auto-refresh)
-
- ;; Manual refresh function for explicit calls (like F5 treemacs toggle)
- (defun
-  ui-force-refresh () "Force an immediate UI refresh for manual triggers." (interactive)
-  (condition-case err
-      (let ((frame (selected-frame)))
-        (if
-         (display-graphic-p)
-         ;; In GUI mode, minimal delay to prevent flicker
-         (run-with-timer
-          0.02 nil
-          (lambda () (redraw-frame frame) (force-window-update frame) (redraw-display)))
-         ;; In terminal mode, immediate refresh
-         (redraw-display) (force-window-update) (redraw-frame frame)))
-    (error
-     (message "❌  Manual UI refresh failed: %s" (error-message-string err)))))
 
  ;; Make this module available for loading with (require 'ui)
  (provide 'ui))

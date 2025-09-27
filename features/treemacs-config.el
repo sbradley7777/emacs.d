@@ -5,6 +5,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'gui-mode-functions)
 
 (core-utils-with-load-timing
  "treemacs-config.el"
