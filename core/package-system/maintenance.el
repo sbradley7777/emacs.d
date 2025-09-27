@@ -51,7 +51,7 @@
        (condition-case err
            (progn
             (package-install pkg)
-            (setq upgraded-count (1+ upgraded-count))
+            (core-utils-increment-counter upgraded-count)
             (message "✅  Upgraded: %s" pkg))
          (error
           (push pkg failed-packages)

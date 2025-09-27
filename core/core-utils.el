@@ -33,6 +33,16 @@ Returns t if command is found, nil otherwise."
     (message "⚠️  Command '%s' not found in PATH" command)
     nil)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Counter Utilities
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro
+ core-utils-increment-counter
+ (counter-var)
+ "Increment COUNTER-VAR and return new value."
+ `(setq ,counter-var (1+ ,counter-var)))
+
 ;;; Provide this module
 (provide 'core-utils)
 

@@ -60,7 +60,7 @@
      (cond
       ;; Already installed
       ((package-installed-p package)
-       (setq skipped-count (1+ skipped-count))
+       (core-utils-increment-counter skipped-count)
        (message "✅  Already installed: %s" package))
 
       ;; Install with error handling
@@ -68,7 +68,7 @@
        (condition-case err
            (progn
             (package-install package)
-            (setq installed-count (1+ installed-count))
+            (core-utils-increment-counter installed-count)
             (message "✅  Installed: %s" package))
          (error
           (push package failed-packages)

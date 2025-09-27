@@ -130,8 +130,8 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
           (desc (nth 3 result)))
       (if
        (eq status 'success)
-       (progn (setq successful (1+ successful)) (message "    ✅  %s (%.3fs)" desc time))
-       (setq failed (1+ failed))
+       (progn (core-utils-increment-counter successful) (message "    ✅  %s (%.3fs)" desc time))
+       (core-utils-increment-counter failed)
        (message "  ❌  %s (%.3fs) - %s" desc time (nth 4 result)))))
    (message "    🛠️  Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
    (message "====================================\n")))
