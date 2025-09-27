@@ -4,7 +4,6 @@
 
 (require 'core-constants)
 (require 'core-utils)
-(require 'gui-mode-functions)
 
 (core-utils-with-load-timing
  "gui-mode.el"
@@ -36,11 +35,18 @@
   (menu-bar-mode -1))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Window State Management Hook Registration
+ ;; macOS Native Fullscreen Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (add-hook 'window-size-change-functions 'ui-auto-refresh)
- (add-hook 'window-state-change-hook 'ui-auto-refresh)
- (add-hook 'focus-in-hook 'ui-auto-refresh)
+ ;; Use macOS native fullscreen instead of fighting display refresh
+ (when
+  (eq system-type 'darwin)
+  ;; Enable native fullscreen support for macOS
+  (setq ns-use-native-fullscreen t)
+  ;; Ensure proper frame parameters for fullscreen
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
+  (message "🍎  macOS native fullscreen enabled"))
+
 
  ;; Make this module available for loading with (require 'gui-mode)
  (provide 'gui-mode))

@@ -5,7 +5,6 @@
 
 (require 'core-constants)
 (require 'core-utils)
-(require 'gui-mode-functions)
 
 (core-utils-with-load-timing
  "treemacs-config.el"
@@ -89,11 +88,7 @@
      (treemacs-select-window))
     ;; Treemacs not visible, open it
     (t
-     (treemacs)))
-   ;; Gentle refresh only if in GUI mode to prevent flicker
-   (when
-    (and (display-graphic-p) (fboundp 'ui-force-refresh))
-    (run-with-timer 0.02 nil 'ui-force-refresh)))
+     (treemacs))))
 
   ;; Global keybindings for treemacs
   (global-set-key (kbd "<f5>") 'treemacs-smart-toggle)
