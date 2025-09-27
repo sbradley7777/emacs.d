@@ -4,6 +4,7 @@
 
 (require 'features-constants)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "imenu-list-config.el"
@@ -37,7 +38,7 @@
   (define-key imenu-list-major-mode-map (kbd "f") 'imenu-list-find-symbol)
   (define-key imenu-list-major-mode-map (kbd "s") 'imenu-list-show-current-symbol)
 
-  (message "✅  Imenu-list configured for terminal-based symbol navigation"))
+  (core-message-success "Imenu-list configured for terminal-based symbol navigation"))
 
  ;; Global key bindings for quick access
  ;; The 'imenu-list-focus-after-activation' setting handles focus correctly.

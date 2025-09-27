@@ -3,14 +3,15 @@
 ;;      Main entry point for Emacs configuration.
 ;;      Loads configuration modules in the correct order.
 
-(message "🔄  Loading init.el...")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure early-init.el is loaded (for batch mode compatibility)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; In interactive mode, early-init.el loads automatically before init.el
 ;; In batch mode, it doesn't load automatically, so we load it here if needed
 (unless (boundp 'emacs-local-dir) (load (expand-file-name "early-init.el" user-emacs-directory)))
+
+;; Note: logging utilities are now loaded in early-init.el, so we can use them immediately
+(core-message-loading "Loading init.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package system configuration (Snap-compatible approach)
@@ -35,7 +36,7 @@
   ;; Restore normal input processing
   (setq which-func-update-delay core-idle-update-delay-normal) ; Faster idle updates for responsiveness
 
-  (message "✅  Emacs startup complete. Performance settings restored.")))
+  (core-message-success "Emacs startup complete. Performance settings restored.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup configuration directories (needed early for constants loading)
@@ -61,14 +62,14 @@
 ;; Validate that early-init.el properly set up required variables
 (unless
  (boundp 'default-file-name-handler-alist)
- (warn
-  "⚠️  default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
+ (core-message-warning
+  "default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
  (setq default-file-name-handler-alist file-name-handler-alist))
 
 ;; Validate that early-init performance optimizations were applied
 (unless
  (> gc-cons-threshold core-gc-check-threshold)
- (warn "⚠️  GC threshold not optimized by early-init.el - startup may be slower"))
+ (core-message-warning "GC threshold not optimized by early-init.el - startup may be slower"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -105,14 +106,15 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
         (require config-name)
         (let ((elapsed (float-time (time-subtract (current-time) load-time))))
           (add-to-list 'config-load-results (list config-name 'success elapsed desc))
-          (message "✅  Loaded %s (%.3f seconds)" desc elapsed)
+          (core-message-success "Loaded %s (%.3f seconds)" desc elapsed)
           t))
      (error
       (let ((elapsed (float-time (time-subtract (current-time) load-time))))
         (add-to-list
          'config-load-results (list config-name 'failed elapsed desc (error-message-string err)))
-        (message "❌  Failed to load %s: %s" desc (error-message-string err))
-        (message "ℹ️  Consider checking: file exists, syntax is valid, dependencies available")
+        (core-message-error "Failed to load %s: %s" desc (error-message-string err))
+        (core-message-info
+         "Consider checking: file exists, syntax is valid, dependencies available")
         nil)))))
 
 
@@ -121,7 +123,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
  (let ((total-time (float-time (time-subtract (current-time) init-start-time)))
        (successful 0)
        (failed 0))
-   (message "\n=== Configuration Loading Summary ===")
+   (core-message-plain "\n=== Configuration Loading Summary ====")
    (dolist
     (result (reverse config-load-results))
     (let ((name (nth 0 result))
@@ -130,11 +132,13 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
           (desc (nth 3 result)))
       (if
        (eq status 'success)
-       (progn (core-utils-increment-counter successful) (message "    ✅  %s (%.3fs)" desc time))
+       (progn
+        (core-utils-increment-counter successful) (core-message-success "%s (%.3fs)" desc time))
        (core-utils-increment-counter failed)
-       (message "  ❌  %s (%.3fs) - %s" desc time (nth 4 result)))))
-   (message "    🛠️  Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
-   (message "====================================\n")))
+       (core-message-error "%s (%.3fs) - %s" desc time (nth 4 result)))))
+   (core-message-debug
+    "Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
+   (core-message-plain "====================================\n")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -192,8 +196,8 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load keybindings LAST in core phase - allows binding to all previously loaded functionality
 (safe-load-config 'keybindings "Global keybindings")
 
-;; Load logging system AFTER file handling - establishes message logging with rotation
-(safe-load-config 'logging "Message logging and log rotation")
+;; Load log writer system AFTER file handling - establishes message logging with rotation
+(safe-load-config 'log-writer "Message logging and log rotation")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)
@@ -268,9 +272,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (let ((local-config (expand-file-name "local.el" user-emacs-directory)))
   (when
    (file-exists-p local-config)
-   (message "🔄  Loading local.el...")
+   (core-message-loading "Loading local.el...")
    (load local-config 'noerror)
-   (message "✅  local.el loaded successfully")))
+   (core-message-success "local.el loaded successfully")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Development configuration (not version controlled)
@@ -279,9 +283,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (let ((dev-config (expand-file-name "dev.el" user-emacs-directory)))
   (when
    (file-exists-p dev-config)
-   (message "🔧  Loading dev.el...")
+   (core-message-debug "Loading dev.el...")
    (load dev-config 'noerror)
-   (message "✅  dev.el loaded successfully")))
+   (core-message-success "dev.el loaded successfully")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -291,7 +295,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (show-config-diagnostics)
 
 ;; Show version-aware configuration status
-(message "✅ Emacs 30.2+ configuration loaded successfully")
+(core-message-success "Emacs 30.2+ configuration loaded successfully")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Memory Management Strategy
@@ -312,4 +316,4 @@ Can be called manually when needed for intensive work sessions."
   gc-cons-percentage core-gc-percentage-normal) ; Normal GC percentage
  )
 
-(message "✅  init.el loaded successfully.")
+(core-message-success "init.el loaded successfully.")

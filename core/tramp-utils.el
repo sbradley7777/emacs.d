@@ -4,6 +4,7 @@
 ;;      specifically for Python development support.
 
 (require 'core-utils)
+(require 'logging)
 (require 'tramp)
 
 (core-utils-with-load-timing
@@ -34,7 +35,7 @@ PYTHON-PATH: Optional additional Python path"
   (&optional file)
   "Check if FILE (or current buffer file) is accessed via TRAMP."
   (file-remote-p (or file default-directory)))
- (message "🔧 TRAMP utilities loaded"))
+ (core-message-debug "TRAMP utilities loaded"))
 
 (provide 'tramp-utils)
 ;;; tramp-utils.el ends here

@@ -4,6 +4,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'logging)
 (require 'make-mode)
 (require 'highlight-indent-guides)
 
@@ -101,12 +102,13 @@
 
      (cond
       ((> space-recipe-count 0)
-       (message
-        "⚠️  Warning: Found %d recipe lines with spaces instead of tabs!" space-recipe-count))
+       (core-message-warning
+        "Warning: Found %d recipe lines with spaces instead of tabs!" space-recipe-count))
       ((> tab-recipe-count 0)
-       (message "✅  Makefile syntax valid: %d recipe lines properly use tabs" tab-recipe-count))
+       (core-message-success
+        "Makefile syntax valid: %d recipe lines properly use tabs" tab-recipe-count))
       (t
-       (message "ℹ️  No recipe lines detected in this Makefile"))))))
+       (core-message-info "No recipe lines detected in this Makefile"))))))
 
  ;; Automatically validate Makefile syntax when opening
  (add-hook

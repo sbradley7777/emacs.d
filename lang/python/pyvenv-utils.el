@@ -4,6 +4,7 @@
 ;;      pyvenv-remote.el for Python virtual environment management.
 
 (require 'core-utils)
+(require 'logging)
 (require 'python-constants)
 
 (core-utils-with-load-timing
@@ -40,7 +41,7 @@
   (&optional start-dir)
   "Find virtual environment by searching current directory and parents."
   (let ((current-dir (or start-dir default-directory)))
-    (message "🔍 Searching for Python venv starting from: %s" current-dir)
+    (core-message-loading "Searching for Python venv starting from: %s" current-dir)
     ;; Look for project markers first to establish project root
     (let ((project-root
            (cl-some
@@ -50,8 +51,8 @@
        (let ((venv-path (expand-file-name pyvenv-venv-directory-name project-root)))
          (if
           (file-directory-p venv-path)
-          (progn (message "✅ Found Python venv at: %s" venv-path) venv-path)
-          (message "⚠️  No venv directory found at: %s" venv-path)
+          (progn (core-message-success "Found Python venv at: %s" venv-path) venv-path)
+          (core-message-warning "No venv directory found at: %s" venv-path)
           nil))))))
 
  ;; Function to update modeline based on current file location
@@ -74,20 +75,21 @@
   ()
   "Debug function to check modeline variables in current buffer."
   (interactive)
-  (message "=== DEBUG PYTHON MODELINE ===")
-  (message "Buffer: %s | File: %s" (buffer-name) (or buffer-file-name "NO FILE"))
-  (message "Directory: %s" default-directory)
-  (message "Remote: %s" (if (file-remote-p default-directory) "YES" "NO"))
-  (message
+  (core-message-plain "=== DEBUG PYTHON MODELINE ===")
+  (core-message-plain "Buffer: %s | File: %s" (buffer-name) (or buffer-file-name "NO FILE"))
+  (core-message-plain "Directory: %s" default-directory)
+  (core-message-plain "Remote: %s" (if (file-remote-p default-directory) "YES" "NO"))
+  (core-message-plain
    "Project name: %s (local: %s)"
    pyvenv-current-project-name
    (local-variable-p 'pyvenv-current-project-name))
-  (message
+  (core-message-plain
    "Python version: %s (local: %s)"
    pyvenv-current-version
    (local-variable-p 'pyvenv-current-version))
-  (message "Detected project root: %s | name: %s" pyvenv-project-root pyvenv-project-name)
-  (message "=============================="))
+  (core-message-plain
+   "Detected project root: %s | name: %s" pyvenv-project-root pyvenv-project-name)
+  (core-message-plain "=============================="))
 
  (provide 'pyvenv-utils))
 

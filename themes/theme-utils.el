@@ -10,6 +10,7 @@
 ;;; Dependencies:
 ;; - themes-config (for theme variables and core functions)
 
+(require 'logging)
 (require 'themes-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -47,10 +48,10 @@
       (mapcar #'symbol-name (theme-utils-get-available-doom-themes))
       (mapcar #'symbol-name (theme-utils-get-other-themes)))
      nil t nil nil "doom-zenburn"))))
- (message "🎨 Interactive theme switch requested: %s" theme)
+ (core-message-theme "Interactive theme switch requested: %s" theme)
  (setq themes-config-preferred-theme theme)
  (themes-config-load-configured-theme)
- (message "✅ Theme switched to: %s" theme))
+ (core-message-success "Theme switched to: %s" theme))
 
 ;;;###autoload
 (defun
@@ -61,7 +62,7 @@
         (buffer-name "*Available Themes*")
         (lines '())
         (max-width 0))
-   (message "🎨 Opening theme browser...")
+   (core-message-theme "Opening theme browser...")
 
    ;; Collect all lines and calculate max width
    (push "Available Themes:" lines)
@@ -122,10 +123,11 @@
               (when
                (string-match "\\(?:-> \\|   \\)\\([a-z0-9-]+\\)" line)
                (let ((theme (intern (match-string 1 line))))
-                 (message "🎨 Theme selection: %s" theme)
+                 (core-message-theme "Theme selection: %s" theme)
                  (setq themes-config-preferred-theme theme)
                  (themes-config-load-configured-theme)
-                 (message "✅ Switched to theme: %s (buffer stays open for testing)" theme)
+                 (core-message-success
+                  "Switched to theme: %s (buffer stays open for testing)" theme)
                  ;; Update the buffer to show new current theme
                  (theme-utils-list-themes)))))))
 

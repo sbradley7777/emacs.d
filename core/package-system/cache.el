@@ -7,6 +7,7 @@
 (require 'core-utils)
 (require 'package)
 (require 'package-system/metadata)
+(require 'logging)
 
 (core-utils-with-load-timing
  "cache.el"
@@ -41,9 +42,9 @@
        (let ((cache-timestamp (float-time (current-time)))
              (package-count (length package-archive-contents)))
          (package-metadata-write-cache-info cache-timestamp package-count)
-         (message "ℹ️  Package state cached (%d packages)" package-count))
+         (core-message-info "Package state cached (%d packages)" package-count))
      (error
-      (message "⚠️  Failed to save package cache: %s" (error-message-string err))))))
+      (core-message-warning "Failed to save package cache: %s" (error-message-string err))))))
 
  (defun
   load-cached-package-state () "Load cached package state using built-in package system."
@@ -60,12 +61,12 @@
                   (float-time
                    (time-subtract
                     (current-time) (seconds-to-time (plist-get cache-info :timestamp))))))
-             (message
-              "ℹ️  Using cached package activation (%d packages, %.1f days old)"
+             (core-message-info
+              "Using cached package activation (%d packages, %.1f days old)"
               (length package-alist)
               (/ cache-age 86400)))))
        (error
-        (message "⚠️  Failed to load package cache: %s" (error-message-string err)))))))
+        (core-message-warning "Failed to load package cache: %s" (error-message-string err)))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Cache Utility Functions

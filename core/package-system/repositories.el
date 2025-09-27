@@ -6,6 +6,7 @@
 (require 'core-constants)
 (require 'package-system/network)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "repositories.el"
@@ -53,9 +54,9 @@
    (condition-case err
        (progn
         (package-install 'gnu-elpa-keyring-update)
-        (message "🔐  GNU ELPA keyring updated for secure package verification"))
+        (core-message-success "GNU ELPA keyring updated for secure package verification"))
      (error
-      (message "⚠️  Failed to install keyring update: %s" (error-message-string err))))))
+      (core-message-warning "Failed to install keyring update: %s" (error-message-string err))))))
 
  ;; Make this module available for loading with (require 'package-system/repositories)
  (provide 'package-system/repositories))

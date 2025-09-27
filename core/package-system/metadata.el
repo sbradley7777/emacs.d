@@ -6,6 +6,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "metadata.el"
@@ -47,7 +48,7 @@ Returns t if file was loaded successfully, nil otherwise."
    (condition-case err
        (progn (load package-metadata-file) t)
      (error
-      (message "⚠️  Failed to load package metadata: %s" (error-message-string err))
+      (core-message-warning "Failed to load package metadata: %s" (error-message-string err))
       nil))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -71,10 +72,10 @@ Returns the timestamp as a float, or 0 if no previous check recorded."
          package-last-refresh-timestamp)
         ;; Unknown format
         (t
-         (message "⚠️  Invalid refresh timestamp format, resetting to 0")
+         (core-message-warning "Invalid refresh timestamp format, resetting to 0")
          0))
      (error
-      (message "⚠️  Failed to parse refresh timestamp: %s" (error-message-string err))
+      (core-message-warning "Failed to parse refresh timestamp: %s" (error-message-string err))
       0))
    0))
 
@@ -175,7 +176,7 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
          (insert "\n")
          (insert ";;; package-metadata.el ends here\n"))
       (error
-       (message "❌  Failed to save package metadata: %s" (error-message-string err))))))
+       (core-message-error "Failed to save package metadata: %s" (error-message-string err))))))
 
  (defun
   package-metadata-reset () "Delete the metadata file to reset all package system state."
@@ -183,9 +184,10 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
    (file-exists-p package-metadata-file)
    (condition-case err
        (progn
-        (delete-file package-metadata-file) (message "✅  Package metadata reset successfully"))
+        (delete-file package-metadata-file)
+        (core-message-success "Package metadata reset successfully"))
      (error
-      (message "❌  Failed to delete metadata file: %s" (error-message-string err))))))
+      (core-message-error "Failed to delete metadata file: %s" (error-message-string err))))))
 
  (defun
   package-metadata-info () "Display current package metadata information."
@@ -197,11 +199,11 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
            (when (boundp 'package-last-refresh-timestamp) package-last-refresh-timestamp))
           (cache-ts (when (boundp 'package-cache-timestamp) package-cache-timestamp))
           (cache-count (when (boundp 'package-cache-count) package-cache-count)))
-      (message "📦  Package Metadata:")
-      (message "    Last refresh: %s" (or refresh-ts "Never"))
-      (message "    Cache created: %s" (or cache-ts "Never"))
-      (message "    Package count: %s" (or cache-count "Unknown"))))
-   (message "📦  No package metadata found"))))
+      (core-message-package "Package Metadata:")
+      (core-message-plain "    Last refresh: %s" (or refresh-ts "Never"))
+      (core-message-plain "    Cache created: %s" (or cache-ts "Never"))
+      (core-message-plain "    Package count: %s" (or cache-count "Unknown"))))
+   (core-message-package "No package metadata found"))))
 
 (provide 'package-system/metadata)
 

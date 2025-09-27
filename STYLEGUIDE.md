@@ -270,109 +270,119 @@ Each configuration module should follow this template:
 4. **Module provision** via `(provide 'module-name)`
 5. **Load completion** message with timing
 
-## Message Symbol Reference
+## Message Utilities Reference
 
-The configuration uses a comprehensive set of Unicode symbols to create a visual messaging system for status updates, diagnostics, and information display. This symbolic language makes the Messages buffer highly scannable and provides immediate visual feedback about configuration loading and system operations.
+**REQUIRED:** All user-facing messages must use the centralized message utilities from `core/logging.el` instead of direct `(message)` calls.
 
-### Symbol Categories and Usage
-
-#### Process & Status Symbols
-
-| Symbol | Purpose |
-|--------|---------|
-| 🔄 | Loading/In Progress |
-| ✅ | Success/Completion |
-| ❌ | Errors/Failures |
-| ⚠️ | Warnings |
-
-#### Operation-Specific Symbols
-
-| Symbol | Purpose |
-|--------|---------|
-| 📦 | Package Operations |
-| 💾 | File/Backup Operations |
-| 🔍 | Search/Discovery |
-| 🔐 | Security Operations |
-| 🧹 | Cleanup Operations |
-
-#### Information & Configuration Symbols
-
-| Symbol | Purpose |
-|--------|---------|
-| ℹ️ | Information/Details |
-| ⚙️ | Configuration Complete |
-| 🛠️ | Debug/Diagnostics |
-
-### Message Formatting Standards
-
-#### Symbol Spacing
-All message symbols follow a consistent spacing pattern:
-- **Two spaces** after the symbol: `"🔄  Loading init.el..."`
-- **Preserve indentation** before symbols: `"    ✅  %s (%.3fs)"`
-- **No trailing spaces** at end of messages
-
-#### Message Structure Examples
+### Message Utility Functions
+The configuration provides standardized message functions for consistent, professional output:
 
 ```elisp
-;; Loading messages
-(message "🔄  Loading %s..." module-name)
+;; Always require logging at the top of your file
+(require 'logging)
 
-;; Success messages
-(message "✅  %s loaded successfully" module-name)
-(message "✅  Installed: %s" package-name)
+;; Unicode message functions (preferred for operational status)
+(core-message-loading "Loading %s..." module-name)    ; 🔄  Loading...
+(core-message-success "Loaded %s successfully" name)  ; ✅  Success
+(core-message-error "Failed: %s" error-msg)           ; ❌  Failed
+(core-message-warning "Warning: %s" warning-msg)      ; ⚠️  Warning
+(core-message-package "Installing %s" pkg-name)       ; 📦  Package
+(core-message-config "Configured %s" feature)         ; ⚙️  Config
+(core-message-debug "Debug info: %s" info)            ; 🛠️  Debug
+(core-message-info "Information: %s" info)            ; ℹ️  Info
+(core-message-theme "Theme: %s" theme-name)           ; 🎨  Theme
 
-;; Error messages
-(message "❌  Failed to install %s: %s" package error)
-
-;; Configuration messages
-(message "⚙️  %s configured successfully" feature-name)
-
-;; Debug/diagnostic messages
-(message "🛠️  Current Major Mode: %s" major-mode)
-
-;; Information messages
-(message "ℹ️  Consider checking: %s" suggestion)
+;; Plain message function (for system diagnostics, section headers)
+(core-message-plain "=== Section Header ===")        ; No Unicode prefix
 ```
 
-#### Context-Specific Usage
+### Message Categories and Usage Guidelines
+
+#### Unicode Messages (Operational Status)
+Use for user feedback, progress indicators, and operational status:
+- **Loading operations**: `core-message-loading`
+- **Success/completion**: `core-message-success`
+- **Errors/failures**: `core-message-error`
+- **Warnings**: `core-message-warning`
+- **Package operations**: `core-message-package`
+- **Configuration complete**: `core-message-config`
+- **Debug/diagnostics**: `core-message-debug`
+- **Information**: `core-message-info`
+- **Theme operations**: `core-message-theme`
+
+#### Plain Messages (System Information)
+Use for system diagnostics and configuration summaries:
+- System startup information
+- Configuration section headers
+- Debug output without visual emphasis
+- Performance statistics
+
+### Legacy Code Migration
+When updating existing code, replace direct message calls:
+
+```elisp
+;; OLD - Don't do this
+(message "🔄  Loading %s..." name)
+(message "✅  Success: %s" result)
+(message "❌  Failed: %s" error)
+
+;; NEW - Use utilities
+(core-message-loading "Loading %s..." name)
+(core-message-success "Success: %s" result)
+(core-message-error "Failed: %s" error)
+```
+
+### Symbol Categories and Technical Reference
+
+#### Process & Status Symbols
+| Symbol | Function | Purpose |
+|--------|----------|---------|
+| 🔄 | `core-message-loading` | Loading/In Progress |
+| ✅ | `core-message-success` | Success/Completion |
+| ❌ | `core-message-error` | Errors/Failures |
+| ⚠️ | `core-message-warning` | Warnings |
+| ℹ️ | `core-message-info` | Information/Details |
+
+#### Operation-Specific Symbols
+| Symbol | Function | Purpose |
+|--------|----------|---------|
+| 📦 | `core-message-package` | Package Operations |
+| ⚙️ | `core-message-config` | Configuration Complete |
+| 🛠️ | `core-message-debug` | Debug/Diagnostics |
+| 🎨 | `core-message-theme` | Theme Operations |
+
+### Context-Specific Usage Patterns
 
 **Module Loading Pattern:**
 ```elisp
-(message "🔄  Loading module-name.el...")
+(core-message-loading "Loading module-name.el...")
 ;; ... configuration code ...
-(message "✅  module-name.el loaded successfully")
+(core-message-success "module-name.el loaded successfully")
 ```
 
 **Package Installation Pattern:**
 ```elisp
-(message "📦  Installing %d packages..." count)
-(message "✅  Already installed: %s" package)
-(message "✅  Installed: %s" package)
-(message "❌  Failed to install %s: %s" package error)
+(core-message-package "Installing %d packages..." count)
+(core-message-success "Already installed: %s" package)
+(core-message-success "Installed: %s" package)
+(core-message-error "Failed to install %s: %s" package error)
 ```
 
-**Diagnostic Information Pattern:**
+**Configuration Pattern:**
 ```elisp
-(message "🛠️  Global Mode: %s" status)
-(message "🛠️  Configuration: %s" value)
-(message "🛠️  Current State: %s" state)
+(core-message-config "%s configured successfully" feature-name)
+(core-message-debug "Global Mode: %s" status)
+(core-message-info "Consider checking: %s" suggestion)
 ```
 
-### Symbol Usage Guidelines
+### Implementation Benefits
 
-1. **Consistency**: Always use the same symbol for the same type of operation
-2. **Semantic Meaning**: Choose symbols that logically represent the operation
-3. **Visual Hierarchy**: Use symbols to create scannable message categories
-4. **Spacing**: Maintain exactly two spaces after symbols
-5. **Context**: Preserve any indentation before symbols for alignment
-
-### Benefits of the Symbol System
-
-- **Quick Scanning**: Users can rapidly identify message types in the Messages buffer
-- **Visual Hierarchy**: Different symbol categories create clear information structure
-- **Status Recognition**: Immediate visual feedback on operation success/failure
-- **Professional Appearance**: Consistent symbolic language creates polished output
-- **Cross-Platform Compatibility**: Unicode symbols display consistently across systems
+- **Consistency**: Standardized message format across all modules
+- **Maintainability**: Centralized message formatting logic
+- **Visual Hierarchy**: Unicode symbols create scannable message categories
+- **Professional Output**: Consistent spacing and formatting
+- **Easy Updates**: Change message format in one place
+- **Error Prevention**: No more manual Unicode symbol management
 
 ## Quality Assurance
 

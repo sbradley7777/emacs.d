@@ -12,6 +12,7 @@
 ;; - doom-themes package
 
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "themes-config.el"
@@ -58,8 +59,8 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
   (condition-case err
       (progn (doom-themes-visual-bell-config) (doom-themes-org-config))
     (error
-     (message
-      "⚠️  Some doom-themes features disabled for terminal compatibility: %s"
+     (core-message-warning
+      "Some doom-themes features disabled for terminal compatibility: %s"
       (error-message-string err)))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -80,14 +81,14 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
   "Load the user's preferred theme with appropriate customizations."
   (let ((theme themes-config-preferred-theme)
         (current-theme (car custom-enabled-themes)))
-    (message
-     "🎨 Current theme: %s | Preferred theme: %s" (or current-theme "none") (or theme "none"))
+    (core-message-theme
+     "Current theme: %s | Preferred theme: %s" (or current-theme "none") (or theme "none"))
     (if
-     (not theme) (message "🎨 No theme preference set, skipping")
+     (not theme) (core-message-theme "No theme preference set, skipping")
      (if
-      (eq theme current-theme) (message "🎨 Theme %s already loaded" theme)
+      (eq theme current-theme) (core-message-theme "Theme %s already loaded" theme)
       (progn
-       (message "🎨 Loading theme: %s" theme)
+       (core-message-theme "Loading theme: %s" theme)
        ;; Apply theme-specific customizations before loading
        (themes-config-apply-customizations theme)
 
@@ -97,18 +98,18 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
             ;; Clear all existing themes to prevent background conflicts
             (mapc #'disable-theme custom-enabled-themes)
             (load-theme theme t)
-            (message "✅ Successfully loaded theme: %s" theme)
+            (core-message-success "Successfully loaded theme: %s" theme)
             ;; Apply post-load fixes for terminal compatibility
             (when
              (and (not (display-graphic-p)) (string-match-p "^doom-" (symbol-name theme)))
-             (message "🎨 Applied terminal compatibility fixes for %s" theme)))
+             (core-message-theme "Applied terminal compatibility fixes for %s" theme)))
          (error
-          (message "❌ Failed to load theme '%s': %s" theme (error-message-string err))
+          (core-message-error "Failed to load theme '%s': %s" theme (error-message-string err))
           ;; Fallback to doom-zenburn
-          (message "🎨 Loading fallback theme: doom-zenburn")
+          (core-message-theme "Loading fallback theme: doom-zenburn")
           (themes-config-apply-customizations 'doom-zenburn)
           (load-theme 'doom-zenburn t)
-          (message "✅ Loaded fallback theme: doom-zenburn"))))))))
+          (core-message-success "Loaded fallback theme: doom-zenburn"))))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load Theme on Startup

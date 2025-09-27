@@ -4,6 +4,7 @@
 ;;      Provides seamless Python virtual environment support for remote files.
 
 (require 'core-utils)
+(require 'logging)
 (require 'pyvenv-config)
 (require 'tramp-utils)
 
@@ -25,7 +26,7 @@ First tries to find it remotely, falls back to local equivalent if needed."
              (default-directory local-dir))
         (when
          (file-exists-p local-dir)
-         (message "🔍 Falling back to local venv search for remote file")
+         (core-message-loading "Falling back to local venv search for remote file")
          (pyvenv-find-venv)))))
    ;; Local directory - use existing function
    (pyvenv-find-venv)))
@@ -93,8 +94,8 @@ First tries to find it remotely, falls back to local equivalent if needed."
            (setq pyvenv-project-name project-name)
            (setq pyvenv-current-project-name project-name))
 
-         (message
-          "✅ Activated remote Python venv: %s"
+         (core-message-success
+          "Activated remote Python venv: %s"
           (file-name-nondirectory (directory-file-name venv-path)))
          (pyvenv-update-modeline))
         ;; No venv found
@@ -116,6 +117,6 @@ First tries to find it remotely, falls back to local equivalent if needed."
  ;; Add pyvenv-remote-activate back for virtual environment detection and modeline
  (add-hook 'python-mode-hook #'pyvenv-remote-activate)
 
- (message "🔧 TRAMP-aware pyvenv support loaded"))
+ (core-message-debug "TRAMP-aware pyvenv support loaded"))
 
 (provide 'pyvenv-remote)

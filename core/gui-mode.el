@@ -4,6 +4,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "gui-mode.el"
@@ -45,7 +46,7 @@
   ;; Ensure proper frame parameters for fullscreen
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
-  (message "🍎  macOS native fullscreen enabled"))
+  (core-message-info "macOS native fullscreen enabled"))
 
 
  ;; Make this module available for loading with (require 'gui-mode)

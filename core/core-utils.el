@@ -3,6 +3,9 @@
 ;;; Commentary:
 ;; Utility functions and macros for configuration loading and management.
 
+(require 'logging)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load Timing Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -13,7 +16,7 @@
 MODULE-NAME should be a string identifying the module being loaded."
  (declare (indent 1))
  `(let ((start-time (current-time)))
-    (message "🔄  Loading %s..." ,module-name)
+    (core-message-loading "Loading %s..." ,module-name)
     ,@body
     (message
      "%s loaded (%.2fs)" ,module-name (float-time (time-subtract (current-time) start-time)))))
@@ -29,8 +32,8 @@ Returns t if command is found, nil otherwise."
  (let ((command-path (executable-find command)))
    (if
     command-path
-    (progn (message "✅  Command '%s' found at %s" command command-path) t)
-    (message "⚠️  Command '%s' not found in PATH" command)
+    (progn (core-message-success "Command '%s' found at %s" command command-path) t)
+    (core-message-warning "Command '%s' not found in PATH" command)
     nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -57,9 +60,12 @@ Returns t if directory exists/was created, nil if creation failed."
     t ; Directory already exists
     (condition-case err
         (progn
-         (make-directory expanded-path t) (message "📦  Created directory: %s" expanded-path) t)
+         (make-directory expanded-path t)
+         (core-message-package "Created directory: %s" expanded-path)
+         t)
       (error
-       (message "❌  Failed to create directory %s: %s" expanded-path (error-message-string err))
+       (core-message-error
+        "Failed to create directory %s: %s" expanded-path (error-message-string err))
        nil)))))
 
 ;;; Provide this module

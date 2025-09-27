@@ -17,6 +17,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "core-fonts.el"
@@ -57,20 +58,19 @@ Uses fast file-based check instead of font system queries."
         (require 'all-the-icons)
         (unless
          (fonts-file-exists-p "all-the-icons.ttf")
-         (message "📦  Installing all-the-icons fonts...")
+         (core-message-package "Installing all-the-icons fonts...")
          (all-the-icons-install-fonts t)
-         (message "✅  all-the-icons fonts installed successfully")))
+         (core-message-success "all-the-icons fonts installed successfully")))
      (error
-      (message
-       "⚠️  all-the-icons package not ready for font installation: %s"
-       (error-message-string err))))))
+      (core-message-warning
+       "all-the-icons package not ready for font installation: %s" (error-message-string err))))))
 
  (defun
   fonts-check-all-the-icons () "Check if all-the-icons fonts are properly installed."
   (if
    (fonts-file-exists-p "all-the-icons.ttf")
-   (message "✅  all-the-icons fonts are available")
-   (message "⚠️  all-the-icons fonts not found - may need installation")))
+   (core-message-success "all-the-icons fonts are available")
+   (core-message-warning "all-the-icons fonts not found - may need installation")))
 
  (defun
   fonts-install-nerd-icons ()
@@ -83,19 +83,19 @@ Uses fast file-based check instead of font system queries."
         (require 'nerd-icons)
         (unless
          (fonts-file-exists-p "NFM.ttf")
-         (message "📦  Installing nerd-icons fonts...")
+         (core-message-package "Installing nerd-icons fonts...")
          (nerd-icons-install-fonts t)
-         (message "✅  nerd-icons fonts installed successfully")))
+         (core-message-success "nerd-icons fonts installed successfully")))
      (error
-      (message
-       "⚠️  nerd-icons package not ready for font installation: %s" (error-message-string err))))))
+      (core-message-warning
+       "nerd-icons package not ready for font installation: %s" (error-message-string err))))))
 
  (defun
   fonts-check-nerd-icons () "Check if nerd-icons fonts are properly installed."
   (if
    (fonts-file-exists-p "NFM.ttf")
-   (message "✅  nerd-icons fonts are available")
-   (message "⚠️  nerd-icons fonts not found - may need installation")))
+   (core-message-success "nerd-icons fonts are available")
+   (core-message-warning "nerd-icons fonts not found - may need installation")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Automatic Font Installation
@@ -104,6 +104,6 @@ Uses fast file-based check instead of font system queries."
  ;; Install fonts automatically after packages are available
  (fonts-install-all-the-icons) (fonts-install-nerd-icons)
 
- (message "⚙️  Font management system loaded - supports all-the-icons and nerd-icons"))
+ (core-message-config "Font management system loaded - supports all-the-icons and nerd-icons"))
 
 (provide 'core-fonts)

@@ -1,94 +1,72 @@
-;;; logging.el --- Message Logging and Log Rotation -*- lexical-binding: t -*-
+;;; logging.el --- Message Utility Functions -*- lexical-binding: t -*-
 
 ;;; Commentary:
-;; This file provides functionality for logging the Messages buffer to files
-;; with automatic log rotation support.
+;; Lightweight message utility functions with Unicode prefixes.
+;; This file has no dependencies to avoid circular dependency issues.
 
-(require 'core-constants)
-(require 'core-utils)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Message Utility Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(core-utils-with-load-timing
- "logging.el"
+(defun
+ core-message-success
+ (format-string &rest args)
+ "Display success message with ✅ prefix."
+ (apply #'message (concat "✅  " format-string) args))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Logging Constants
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-message-error
+ (format-string &rest args)
+ "Display error message with ❌ prefix."
+ (apply #'message (concat "❌  " format-string) args))
 
- (defconst core-log-max-files 5 "Maximum number of rotated log files to keep.")
- (defconst core-log-directory "~/.emacs.d/log" "Directory for storing log files.")
- (defconst core-messages-log-file "messages.log" "Base name for messages log file.")
+(defun
+ core-message-warning
+ (format-string &rest args)
+ "Display warning message with ⚠️ prefix."
+ (apply #'message (concat "⚠️  " format-string) args))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Log Directory Management
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-message-info
+ (format-string &rest args)
+ "Display info message with ℹ️ prefix."
+ (apply #'message (concat "ℹ️  " format-string) args))
 
- (defun
-  core-ensure-log-directory
-  ()
-  "Ensure the log directory exists, creating it if necessary."
-  (core-utils-ensure-directory core-log-directory))
+(defun
+ core-message-loading
+ (format-string &rest args)
+ "Display loading message with 🔄 prefix."
+ (apply #'message (concat "🔄  " format-string) args))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Log File Rotation
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-message-package
+ (format-string &rest args)
+ "Display package message with 📦 prefix."
+ (apply #'message (concat "📦  " format-string) args))
 
- (defun
-  core-rotate-log-files (base-filename)
-  "Rotate log files, keeping up to `core-log-max-files' files.
-BASE-FILENAME is the base name without directory."
-  (let ((log-dir (expand-file-name core-log-directory))
-        (base-path (expand-file-name base-filename core-log-directory)))
-    (when
-     (file-exists-p base-path)
-     ;; Move existing numbered files up
-     (dotimes
-      (i (1- core-log-max-files))
-      (let ((from-file (format "%s.%d" base-path (- core-log-max-files i 1)))
-            (to-file (format "%s.%d" base-path (- core-log-max-files i))))
-        (when
-         (file-exists-p from-file)
-         (condition-case err
-             (rename-file from-file to-file t)
-           (error
-            (message
-             "⚠️  Failed to rotate log file %s: %s" from-file (error-message-string err)))))))
-     ;; Move current log to .1
-     (condition-case err
-         (rename-file base-path (format "%s.1" base-path) t)
-       (error
-        (message "⚠️  Failed to rotate current log file: %s" (error-message-string err)))))))
+(defun
+ core-message-config
+ (format-string &rest args)
+ "Display config message with ⚙️ prefix."
+ (apply #'message (concat "⚙️  " format-string) args))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Messages Buffer Logging
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-message-debug
+ (format-string &rest args)
+ "Display debug message with 🛠️ prefix."
+ (apply #'message (concat "🛠️  " format-string) args))
 
- (defun
-  core-save-messages-log () "Save Messages buffer to log file with rotation and timestamp."
-  (condition-case err
-      (progn
-       (core-ensure-log-directory)
-       (let ((log-file (expand-file-name core-messages-log-file core-log-directory)))
-         ;; Rotate existing log files
-         (core-rotate-log-files core-messages-log-file)
-         ;; Save current Messages buffer contents
-         (with-current-buffer
-          "*Messages*"
-          (let ((contents (buffer-string)))
-            (with-temp-file
-             log-file
-             (insert contents)
-             (goto-char (point-max))
-             (insert (format "\n;; Session ended: %s\n" (current-time-string))))))
-         (message "✅  Messages log saved to %s" log-file)))
-    (error
-     (message "❌  Failed to save messages log: %s" (error-message-string err)))))
+(defun
+ core-message-theme
+ (format-string &rest args)
+ "Display theme message with 🎨 prefix."
+ (apply #'message (concat "🎨  " format-string) args))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Hook Setup
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
- (add-hook 'kill-emacs-hook 'core-save-messages-log)
- (message "⚙️  Message logging configured with %d file rotation" core-log-max-files))
+(defun
+ core-message-plain (format-string &rest args)
+ "Display plain message without Unicode prefix.
+Useful for system diagnostics, debug output, and structured information that doesn't need visual emphasis."
+ (apply #'message format-string args))
 
 (provide 'logging)
 

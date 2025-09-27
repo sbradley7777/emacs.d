@@ -5,6 +5,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "treemacs-config.el"
@@ -65,9 +66,9 @@
     (require 'all-the-icons)
     (require 'treemacs-all-the-icons)
     (treemacs-load-theme "all-the-icons")
-    (message "📦  all-the-icons theme loaded for GUI"))
+    (core-message-package "all-the-icons theme loaded for GUI"))
    ;; Terminal mode - use Default theme (built-in, no font dependencies)
-   (treemacs-load-theme "Default") (message "📦  Default theme loaded for terminal"))
+   (treemacs-load-theme "Default") (core-message-package "Default theme loaded for terminal"))
 
   ;; Enable useful modes
   (treemacs-follow-mode t)
@@ -98,7 +99,7 @@
   (global-set-key (kbd "C-x t t") 'treemacs)
   (global-set-key (kbd "C-x t C-t") 'treemacs-find-file)
 
-  (message "✅  Treemacs loaded and configured successfully")
+  (core-message-success "Treemacs loaded and configured successfully")
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Dired Integration
@@ -118,7 +119,7 @@
    ()
    "Fallback function when treemacs is not available."
    (interactive)
-   (message "❌  Treemacs not available - package not installed")))
+   (core-message-error "Treemacs not available - package not installed")))
 
  ;; Always bind F5 to treemacs-smart-toggle
  (global-set-key (kbd "<f5>") 'treemacs-smart-toggle)) ;; End of core-utils-with-load-timing

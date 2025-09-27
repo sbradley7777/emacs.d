@@ -6,6 +6,7 @@
 (require 'core-constants)
 (require 'package-system/network)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "maintenance.el"
@@ -18,9 +19,10 @@
   ()
   "Upgrade all installed packages to their latest versions."
   (interactive)
-  (message "🔍  Checking for package upgrades...")
+  (core-message-debug "Checking for package upgrades...")
   (unless
-   (network-responsive-p) (user-error "Network unavailable - cannot check for package upgrades"))
+   (network-responsive-p)
+   (core-message-error "Network unavailable - cannot check for package upgrades"))
   (safe-package-refresh-with-timeout)
   (let ((upgradeable-packages '())
         (failed-packages '())
@@ -52,10 +54,10 @@
            (progn
             (package-install pkg)
             (core-utils-increment-counter upgraded-count)
-            (message "✅  Upgraded: %s" pkg))
+            (core-message-success "Upgraded: %s" pkg))
          (error
           (push pkg failed-packages)
-          (message "❌  Failed to upgrade %s: %s" pkg (error-message-string err)))))
+          (core-message-error "Failed to upgrade %s: %s" pkg (error-message-string err)))))
 
       ;; Summary
       (message
@@ -64,8 +66,8 @@
        (length failed-packages))
       (when
        failed-packages
-       (message "❌  Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
-     (message "✅  All packages are up to date"))))
+       (core-message-error "Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
+     (core-message-success "All packages are up to date"))))
 
  (defun
   package-cleanup-unused
@@ -73,7 +75,7 @@
   "Remove unused package dependencies."
   (interactive)
   (package-autoremove)
-  (message "🧹  Cleaned up unused packages"))
+  (core-message-package "Cleaned up unused packages"))
 
  ;; Make this module available for loading with (require 'package-system/maintenance)
  (provide 'package-system/maintenance))

@@ -10,6 +10,7 @@
 ;;      but the modeline reflects whether the current file is part of the project.
 
 (require 'core-utils)
+(require 'logging)
 (require 'python-constants)
 (require 'pyvenv-utils)
 
@@ -31,7 +32,7 @@
    ;; Project already detected - just update modeline
    (pyvenv-update-modeline)
    ;; First time - auto-detect project
-   (message "ℹ️  Auto-detecting Python virtual environment...")
+   (core-message-info "Auto-detecting Python virtual environment...")
    (let ((detected-venv (pyvenv-find-venv)))
      (if
       detected-venv
@@ -48,7 +49,7 @@
         (fboundp 'pyvenv-activate)
         (progn
          (pyvenv-activate detected-venv)
-         (message "✅ Activated Python venv for project: %s" pyvenv-project-name)
+         (core-message-success "Activated Python venv for project: %s" pyvenv-project-name)
 
          ;; Get Python version and store globally, then update modeline
          (setq pyvenv-current-version (pyvenv-get-python-version detected-venv))
@@ -58,22 +59,22 @@
          ;; Update Python shell interpreter
          (let ((venv-python (expand-file-name "bin/python" detected-venv)))
            (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python))))
-        (message "⚠️  Warning: pyvenv-activate function not available")))
-      (progn (message "⚠️  No Python virtual environment found") (pyvenv-update-modeline))))))
+        (core-message-warning "Warning: pyvenv-activate function not available")))
+      (progn
+       (core-message-warning "No Python virtual environment found") (pyvenv-update-modeline)))))
 
- ;; Disable pyvenv modeline completely - we handle it ourselves via hooks
- (setq pyvenv-mode-line-indicator nil)
+  ;; Disable pyvenv modeline completely - we handle it ourselves via hooks
+  (setq pyvenv-mode-line-indicator nil)
 
- ;; Initialize pyvenv
- (if
-  (fboundp 'use-package) (use-package pyvenv :config (pyvenv-mode 1))
-  ;; Fallback when use-package is not available
-  (when (require 'pyvenv nil t) (pyvenv-mode 1)))
+  ;; Initialize pyvenv
+  (if
+   (fboundp 'use-package) (use-package pyvenv :config (pyvenv-mode 1))
+   ;; Fallback when use-package is not available
+   (when (require 'pyvenv nil t) (pyvenv-mode 1)))
 
- ;; Auto-activate when opening Python files
- (add-hook 'python-mode-hook #'pyvenv-auto-activate)
+  ;; Auto-activate when opening Python files
+  (add-hook 'python-mode-hook #'pyvenv-auto-activate)))
 
- ;; Make this module available for loading
- (provide 'pyvenv-config))
+(provide 'pyvenv-config)
 
 ;;; pyvenv-config.el ends here

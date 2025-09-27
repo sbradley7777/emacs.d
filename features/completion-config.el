@@ -45,6 +45,7 @@
 
 (require 'features-constants)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "completion-config.el"
@@ -93,13 +94,13 @@
   (global-set-key (kbd "M-TAB") #'completion-at-point) ; Alt+TAB (traditional)
   (global-set-key (kbd "C-M-i") #'completion-at-point) ; Ctrl+Alt+i (traditional alternative)
 
-  (message "⚙️  Corfu auto-completion configured successfully")
+  (core-message-config "Corfu auto-completion configured successfully")
 
   ;; Add debugging information
-  (message "🛠️  Corfu global mode enabled: %s" (if global-corfu-mode "YES" "NO"))
-  (message "🛠️  Corfu auto setting: %s" corfu-auto)
-  (message "🛠️  Corfu auto delay: %s" corfu-auto-delay)
-  (message "🛠️  Corfu auto prefix: %s" corfu-auto-prefix))
+  (core-message-debug "Corfu global mode enabled: %s" (if global-corfu-mode "YES" "NO"))
+  (core-message-debug "Corfu auto setting: %s" corfu-auto)
+  (core-message-debug "Corfu auto delay: %s" corfu-auto-delay)
+  (core-message-debug "Corfu auto prefix: %s" corfu-auto-prefix))
 
  ;; Add cape backends for in-buffer completion
  (add-hook 'completion-at-point-functions #'cape-dabbrev)

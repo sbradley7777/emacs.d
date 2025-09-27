@@ -6,6 +6,7 @@
 (require 'core-constants)
 (require 'package-system/network)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "bootstrap.el"
@@ -16,7 +17,7 @@
  ;; Install use-package if not already present
  (unless
   (package-installed-p 'use-package)
-  (message "📦  Installing use-package...")
+  (core-message-package "Installing use-package...")
   (package-install 'use-package))
 
  ;; Configure use-package for optimal package management

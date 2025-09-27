@@ -5,6 +5,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "diagnostics.el"
@@ -92,8 +93,9 @@
              "Load path entries"
              "Installed packages"
              "Configuration")))))
-    (message "\n=== Emacs Startup Log - %s ===" timestamp)
-    (message "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "OS") os-info)
+    (core-message-plain "\n=== Emacs Startup Log - %s ===" timestamp)
+    (core-message-plain
+     "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "OS") os-info)
     (message
      "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "User@Host") user-info)
     (message
@@ -105,7 +107,7 @@
     (message
      "%s: Modern Emacs 30.2+"
      (format (concat "%-" (number-to-string max-width) "s") "Configuration"))
-    (message "")
+    (core-message-plain "")
     (message
      "%s: %s %s"
      (format (concat "%-" (number-to-string max-width) "s") "System")

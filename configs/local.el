@@ -20,27 +20,28 @@
 ;; • Customize keybindings
 ;; • Set machine-specific variables
 ;;
-(message "🔄 === local.el: Loading local user configuration ===")
+(require 'logging)
+(core-message-loading "=== local.el: Loading local user configuration ===")
 ;; ============================================
 ;; 1. THEME CONFIGURATION
 ;; ============================================
 ;; Theme Configuration (with example debug output)
 ;; Set your preferred theme - will be loaded automatically after initialization
-(message "🔄 === local.el: Theme configuration starting ===")
-(message "🎨 Display type: %s" (if (display-graphic-p) "GUI" "Terminal"))
-(message
- "🎨 Before setting: user-preferred-theme = %s"
+(core-message-loading "=== local.el: Theme configuration starting ===")
+(core-message-theme "Display type: %s" (if (display-graphic-p) "GUI" "Terminal"))
+(core-message-theme
+ "Before setting: user-preferred-theme = %s"
  (if (boundp 'themes-config-preferred-theme) themes-config-preferred-theme 'unbound))
 (setq themes-config-preferred-theme 'doom-1337) ; Active: doom-1337 (hacker-inspired dark theme)
-(message "🎨 After setting: user-preferred-theme = %s" themes-config-preferred-theme)
-(message
- "🎨 Current active theme: %s"
+(core-message-theme "After setting: user-preferred-theme = %s" themes-config-preferred-theme)
+(core-message-theme
+ "Current active theme: %s"
  (if
   (boundp 'custom-enabled-themes)
   (if custom-enabled-themes (car custom-enabled-themes) 'none)
   'unbound))
-(message
- "🎨 Theme system status: %s"
+(core-message-theme
+ "Theme system status: %s"
  (if
   (boundp 'themes-config--user-theme-loaded)
   (if themes-config--user-theme-loaded "ready for override" "pending reload")
@@ -77,10 +78,10 @@
 ;; Refresh whitespace-mode to apply the new style
 (when
  (bound-and-true-p global-whitespace-mode) (global-whitespace-mode -1) (global-whitespace-mode 1))
-(message
- "ℹ️  The preferred theme (%s) will be applied after all configuration modules ared loaded"
+(core-message-info
+ "The preferred theme (%s) will be applied after all configuration modules ared loaded"
  themes-config-preferred-theme)
-(message "ℹ️  === local.el: Theme configuration finished ===")
+(core-message-info "=== local.el: Theme configuration finished ===")
 
 ;; ============================================
 ;; 2. PLATFORM-SPECIFIC CONFIGURATION
@@ -138,7 +139,7 @@
 ;;   (when (and (display-graphic-p) (package-installed-p 'treemacs-nerd-icons))
 ;;     (require 'treemacs-nerd-icons)
 ;;     (treemacs-load-theme "nerd-icons")
-;;     (message "✅  Treemacs nerd-icons theme loaded (overriding default GUI theme)")))
+;;     (core-message-success "Treemacs nerd-icons theme loaded (overriding default GUI theme)")))
 
 ;; ============================================
 ;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
@@ -158,7 +159,7 @@
 ;; (setq user-full-name "Your Full Name"
 ;;       user-mail-address "your.email@example.com")
 
-(message "ℹ️  === local.el: The loading of local user configuration finished ===")
-(message "✅  Local user configuration loaded successfully")
+(core-message-info "=== local.el: The loading of local user configuration finished ===")
+(core-message-success "Local user configuration loaded successfully")
 
 (provide 'local)

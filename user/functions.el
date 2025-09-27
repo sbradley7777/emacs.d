@@ -4,6 +4,7 @@
 
 (require 'core-utils)
 (require 'cl-lib)
+(require 'logging)
 
 (core-utils-with-load-timing
  "functions.el"
@@ -18,7 +19,7 @@
      (bufferp (get-file-buffer init-file))
      (save-buffer (get-buffer (file-name-nondirectory init-file))))
     (load-file init-file)
-    (message "✅  init.el reloaded successfully")))
+    (core-message-success "init.el reloaded successfully")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Copy Entire Buffer to Kill Ring:
@@ -30,7 +31,7 @@
 This is equivalent to doing M-x mark-whole-buffer followed by M-w."
   (interactive)
   (kill-ring-save (point-min) (point-max))
-  (message "ℹ️  Buffer copied to kill ring"))
+  (core-message-info "Buffer copied to kill ring"))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Smart Page Navigation Functions:

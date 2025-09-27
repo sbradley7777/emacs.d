@@ -5,6 +5,7 @@
 
 (require 'features-constants)
 (require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "indent-guides.el"
@@ -53,8 +54,7 @@
   ;; Enable guides to work properly with blank lines
   (setq highlight-indent-guides-suppress-auto-error t)
 
-  (message
-   "⚙️  Highlight indent guides configured with column method and responsive highlighting"))
+  (core-message-config
+   "Highlight indent guides configured with column method and responsive highlighting")))
 
- ;; Make this module available for loading with (require 'indent-guides)
- (provide 'indent-guides))
+(provide 'indent-guides)

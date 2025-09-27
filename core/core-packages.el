@@ -4,6 +4,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'logging)
 (require 'package-system/metadata)
 (require 'package-system/repositories)
 
@@ -53,7 +54,7 @@
         (installed-count 0)
         (skipped-count 0))
 
-    (message "📦  Installing %d packages..." (length package-list))
+    (core-message-package "Installing %d packages..." (length package-list))
 
     (dolist
      (package package-list)
@@ -61,7 +62,7 @@
       ;; Already installed
       ((package-installed-p package)
        (core-utils-increment-counter skipped-count)
-       (message "✅  Already installed: %s" package))
+       (core-message-success "Already installed: %s" package))
 
       ;; Install with error handling
       (t
@@ -69,21 +70,22 @@
            (progn
             (package-install package)
             (core-utils-increment-counter installed-count)
-            (message "✅  Installed: %s" package))
+            (core-message-success "Installed: %s" package))
          (error
           (push package failed-packages)
-          (message "❌  Failed to install %s: %s" package (error-message-string err)))))))
+          (core-message-error "Failed to install %s: %s" package (error-message-string err)))))))
 
     ;; Installation summary
-    (message "\n=== Package Installation Summary ===")
-    (message "    ℹ️  Installed: %d packages" installed-count)
-    (message "    ℹ️  Already present: %d packages" skipped-count)
+    (core-message-plain "\n=== Package Installation Summary ====")
+    (core-message-info "    Installed: %d packages" installed-count)
+    (core-message-info "    Already present: %d packages" skipped-count)
     (when
      failed-packages
-     (message "    ❌  Failed: %d packages" (length failed-packages))
-     (dolist (pkg failed-packages) (message "  ❌  %s" pkg))
-     (message "    ℹ️  Consider running (package-refresh-contents) and retrying failed packages"))
-    (message "===================================\n")
+     (core-message-error "    Failed: %d packages" (length failed-packages))
+     (dolist (pkg failed-packages) (core-message-error "  %s" pkg))
+     (core-message-info
+      "    Consider running (package-refresh-contents) and retrying failed packages"))
+    (core-message-plain "===================================\n")
 
     ;; Return list of failed packages for further handling
     failed-packages))
@@ -98,7 +100,7 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
         (failed-packages (core-packages-install-safely package-list)))
     (when
      (and failed-packages (> max-retries 0))
-     (message "🔄 Retrying failed packages after network refresh...")
+     (core-message-loading "Retrying failed packages after network refresh...")
      (package-refresh-contents)
      (core-packages-install-with-retry failed-packages (1- max-retries)))))
 
@@ -147,11 +149,12 @@ TIMEOUT-SECONDS specifies how long to wait before timing out."
    (condition-case err
        (progn
         (with-timeout
-         (timeout-seconds (message "⚠️  Package update check timed out"))
+         (timeout-seconds
+          (core-message-warning "Package update check timed out"))
          (package-refresh-contents))
         (package-menu--find-upgrades))
      (error
-      (message "⚠️  Package update check failed: %s" (error-message-string err))
+      (core-message-warning "Package update check failed: %s" (error-message-string err))
       nil))))
 
  (defun
@@ -161,32 +164,32 @@ TIMEOUT-SECONDS specifies how long to wait before timing out."
 Refreshes package contents and displays a list of packages with available updates,
 showing current version -> new version for each package."
   (interactive)
-  (message "📦  Checking for package updates (manual check)...")
-  (message "🔍  Configured repositories: %s" (mapcar 'car package-archives))
+  (core-message-package "Checking for package updates (manual check)...")
+  (core-message-debug "Configured repositories: %s" (mapcar 'car package-archives))
   (let ((upgrades (core-packages-safe-refresh-and-check core-package-refresh-timeout)))
     (if
      upgrades
      (progn
-      (message
-       "✅  Package refresh completed successfully - contacted %d repositories"
+      (core-message-success
+       "Package refresh completed successfully - contacted %d repositories"
        (length package-archives))
-      (message "📦  Found %d packages with updates available:" (length upgrades))
+      (core-message-package "Found %d packages with updates available:" (length upgrades))
       (dolist
        (pkg upgrades)
        (let ((pkg-name (car pkg))
              (current-desc (cadr pkg))
              (new-desc (caddr pkg)))
-         (message
-          "  📦  %s: %s → %s"
+         (core-message-package
+          "  %s: %s → %s"
           pkg-name
           (package-desc-version current-desc)
           (package-desc-version new-desc))))
-      (message "📦  Run M-x package-list-packages, then 'U' and 'x' to install updates"))
+      (core-message-package "Run M-x package-list-packages, then 'U' and 'x' to install updates"))
      (progn
-      (message
-       "✅  Package refresh completed successfully - contacted %d repositories"
+      (core-message-success
+       "Package refresh completed successfully - contacted %d repositories"
        (length package-archives))
-      (message "📦  No package updates available - all packages are up to date.")))))
+      (core-message-package "No package updates available - all packages are up to date.")))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Automatic Weekly Update Check with Persistent Storage
@@ -230,44 +233,47 @@ showing current version -> new version for each package."
      (network-responsive-p))
     ;; Perform weekly check
     (progn
-     (message "📦  Checking for package updates (weekly check)...")
-     (message "🔍  Configured repositories: %s" (mapcar 'car package-archives))
+     (core-message-package "Checking for package updates (weekly check)...")
+     (core-message-debug "Configured repositories: %s" (mapcar 'car package-archives))
      ;; Refresh package contents with timeout protection
      (condition-case err
          (progn
           (let ((refresh-successful nil))
             (with-timeout
              (core-package-refresh-timeout
-              (message "⚠️  Package update check timed out - skipping")
+              (core-message-warning "Package update check timed out - skipping")
               (setq refresh-successful nil))
              (package-refresh-contents) (setq refresh-successful t))
             (if
              refresh-successful
              (progn
-              (message
-               "✅  Package refresh completed successfully - contacted %d repositories"
+              (core-message-success
+               "Package refresh completed successfully - contacted %d repositories"
                (length package-archives))
               ;; Check what packages have available updates
               (let ((upgrades (package-menu--find-upgrades)))
                 (if
                  upgrades
-                 (message
-                  "📦  Found %d package updates available. Run M-x show-package-upgrades for details."
+                 (core-message-package
+                  "Found %d package updates available. Run M-x show-package-upgrades for details."
                   (length upgrades))
-                 (message "📦  No package updates available - all packages are up to date.")))
+                 (core-message-package
+                  "No package updates available - all packages are up to date.")))
               ;; Only update timestamp after EVERYTHING completed successfully
               (package-metadata-write-refresh-timestamp (float-time (current-time))))
-             (message "⚠️  Package refresh incomplete - will retry next startup"))))
+             (core-message-warning "Package refresh incomplete - will retry next startup"))))
        (error
-        (message "❌  Package refresh failed: %s" (error-message-string err))
+        (core-message-error "Package refresh failed: %s" (error-message-string err))
         ;; Still mark as checked to prevent repeated attempts
         (package-metadata-write-refresh-timestamp (float-time (current-time))))))
     ;; Skip check and inform user
     (when
      (not noninteractive)
-     (message
-      "📦  Skipping package check (%.1f days since last check, checking weekly)"
+     (core-message-package
+      "Skipping package check (%.1f days since last check, checking weekly)"
       days-since-last-check))))
 
  ;; Make this module available for loading with (require 'core-packages)
- (provide 'core-packages))
+ )
+
+(provide 'core-packages)

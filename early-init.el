@@ -14,7 +14,13 @@
  (expand-file-name "local/" user-emacs-directory)
  "Path to ~/.emacs.d/local/ directory.")
 
-(message "🔄  Loading early-init.el...")
+;; Set up minimal load path for loading message utilities early
+(add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
+
+;; Load message utilities for consistent logging
+(require 'logging)
+
+(core-message-loading "Loading early-init.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance Optimizations - Startup Phase
@@ -123,12 +129,12 @@
   (setq native-comp-jit-compilation nil)
   (setq native-comp-enable-subr-trampolines nil)
   (setq native-comp-eln-load-path (list (expand-file-name "eln-cache" emacs-local-dir)))
-  (message "⚠️  Native compilation disabled (running in Snap environment)"))
+  (core-message-warning "Native compilation disabled (running in Snap environment)"))
  (progn
   ;; Enable native compilation for non-Snap installations (macOS, Linux, etc.)
   (setq native-comp-deferred-compilation t)
   (setq native-comp-eln-load-path (list (expand-file-name "eln-cache" emacs-local-dir)))
-  (message "✅  Native compilation enabled (standard installation)")))
+  (core-message-success "Native compilation enabled (standard installation)")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure all essential directories exist on startup
@@ -148,6 +154,6 @@
         (expand-file-name "elpa" emacs-local-dir))))
   (dolist (dir dirs-to-create) (core-utils-ensure-directory dir)))
 
-(message "✅  early-init.el loaded successfully - performance optimizations active.")
+(core-message-success "early-init.el loaded successfully - performance optimizations active.")
 
 (provide 'early-init)
