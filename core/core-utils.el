@@ -43,6 +43,25 @@ Returns t if command is found, nil otherwise."
  "Increment COUNTER-VAR and return new value."
  `(setq ,counter-var (1+ ,counter-var)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Directory Management Utilities
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun
+ core-utils-ensure-directory (dir-path)
+ "Ensure DIR-PATH exists, creating it if necessary.
+Returns t if directory exists/was created, nil if creation failed."
+ (let ((expanded-path (expand-file-name dir-path)))
+   (if
+    (file-exists-p expanded-path)
+    t ; Directory already exists
+    (condition-case err
+        (progn
+         (make-directory expanded-path t) (message "📦  Created directory: %s" expanded-path) t)
+      (error
+       (message "❌  Failed to create directory %s: %s" expanded-path (error-message-string err))
+       nil)))))
+
 ;;; Provide this module
 (provide 'core-utils)
 

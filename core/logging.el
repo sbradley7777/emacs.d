@@ -23,15 +23,10 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  (defun
-  core-ensure-log-directory () "Ensure the log directory exists, creating it if necessary."
-  (let ((log-dir (expand-file-name core-log-directory)))
-    (unless
-     (file-exists-p log-dir)
-     (condition-case err
-         (progn (make-directory log-dir t) (message "📦  Created log directory: %s" log-dir))
-       (error
-        (message
-         "❌  Failed to create log directory %s: %s" log-dir (error-message-string err)))))))
+  core-ensure-log-directory
+  ()
+  "Ensure the log directory exists, creating it if necessary."
+  (core-utils-ensure-directory core-log-directory))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Log File Rotation

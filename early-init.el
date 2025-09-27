@@ -133,6 +133,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure all essential directories exist on startup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Load core utilities for directory creation
+(add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
+(require 'core-utils)
+
 (let ((dirs-to-create
        (list
         (expand-file-name "eln-cache" emacs-local-dir)
@@ -141,7 +146,7 @@
         (expand-file-name "backups" emacs-local-dir)
         (expand-file-name "auto-save-list" emacs-local-dir)
         (expand-file-name "elpa" emacs-local-dir))))
-  (dolist (dir dirs-to-create) (unless (file-directory-p dir) (make-directory dir t))))
+  (dolist (dir dirs-to-create) (core-utils-ensure-directory dir)))
 
 (message "✅  early-init.el loaded successfully - performance optimizations active.")
 
