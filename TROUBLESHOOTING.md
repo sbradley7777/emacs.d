@@ -441,6 +441,35 @@ M-x emacs-version
 2. **Clear package cache**: Delete `~/.emacs.d/elpa/` and restart Emacs
 3. **Check package pinning**: Review package-archive-priorities in [`core/package-system/repositories.el`](core/package-system/repositories.el)
 
+### Package Metadata Cache Issues
+
+**Symptoms**: Packages fail to install, outdated package lists, or repository errors
+
+**About the Package Metadata Cache**:
+The configuration maintains package system state in `~/.emacs.d/local/package-metadata.el`, which stores:
+- **package-last-refresh-timestamp**: When package catalogs were last downloaded from repositories (MELPA, GNU ELPA, etc.)
+- **package-cache-timestamp**: When the local metadata cache was created
+- **package-cache-count**: Number of packages available in the cached catalog
+
+**Solutions**:
+1. **Reset package cache**: Delete the metadata file to force fresh repository downloads:
+   ```bash
+   rm ~/.emacs.d/local/package-metadata.el
+   ```
+   This is **completely safe** - the file will be automatically recreated on next startup.
+
+2. **Manual refresh**: Force package catalog refresh:
+   ```elisp
+   M-x package-refresh-contents
+   ```
+
+3. **Full package reset**: For persistent issues, reset both cache and packages:
+   ```bash
+   rm ~/.emacs.d/local/package-metadata.el
+   rm -rf ~/.emacs.d/local/elpa/
+   ```
+   Then restart Emacs to download fresh packages.
+
 ## Configuration Loading Problems
 
 ### Testing Your Configuration

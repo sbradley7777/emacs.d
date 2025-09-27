@@ -89,6 +89,12 @@ This configuration is designed exclusively for Emacs 30.2+ and utilizes specific
 - **Deferred loading**: Optional packages loaded only when needed
 - **Native compilation support**: Automatic utilization when available
 
+### Package Management Performance
+- **Intelligent package caching**: Package catalog metadata cached in `~/.emacs.d/local/package-metadata.el`
+- **Repository refresh optimization**: Only downloads catalogs when needed, avoiding unnecessary network calls
+- **Fast startup**: Skips package refresh during startup when recent cache exists
+- **Safe cache reset**: Delete `~/.emacs.d/local/package-metadata.el` to force fresh repository downloads
+
 ## System Management
 
 ### Message Logging System

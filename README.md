@@ -41,7 +41,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - **[`package-system/`](core/package-system/)** - Modular package management system
     - [`manager.el`](core/package-system/manager.el) - Package system orchestration and module loading
     - [`bootstrap.el`](core/package-system/bootstrap.el) - Use-package installation and configuration
-    - [`cache.el`](core/package-system/cache.el) - Package state caching system
+    - [`cache.el`](core/package-system/cache.el) - Package state caching system (stores cache in `~/.emacs.d/local/package-metadata.el`)
     - [`network.el`](core/package-system/network.el) - Network-aware package operations
     - [`repositories.el`](core/package-system/repositories.el) - Repository configuration and security
     - [`maintenance.el`](core/package-system/maintenance.el) - Package upgrade and cleanup utilities

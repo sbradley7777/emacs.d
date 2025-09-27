@@ -589,6 +589,30 @@ Both files are automatically loaded if they exist and can override any main conf
 4. **Consult documentation**: Check [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) for specific issues
 5. **Start with minimal config**: Test with `emacs -Q` to isolate issues
 
+### Q: How do I reset the package system if it's having issues?
+
+**A:** The configuration uses a package metadata cache that can be safely reset:
+
+**Quick Reset** (most common solution):
+```bash
+rm ~/.emacs.d/local/package-metadata.el
+```
+This file stores package catalog timestamps and counts. Deleting it forces fresh repository downloads on next startup.
+
+**Full Package Reset** (for persistent issues):
+```bash
+rm ~/.emacs.d/local/package-metadata.el
+rm -rf ~/.emacs.d/local/elpa/
+```
+This removes both the cache and all installed packages, forcing a complete reinstall.
+
+**What the cache contains:**
+- **Repository refresh timestamps**: When catalogs were last downloaded from MELPA, GNU ELPA, etc.
+- **Package count**: Number of available packages in the cached catalog
+- **Performance optimization**: Avoids unnecessary network calls during startup
+
+Both reset methods are completely safe - all files will be automatically recreated when Emacs restarts.
+
 ### Q: How do I report bugs or request features?
 
 **A:** When reporting issues:
