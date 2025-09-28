@@ -14,6 +14,11 @@
  (expand-file-name "local/" user-emacs-directory)
  "Path to ~/.emacs.d/local/ directory.")
 
+;; Load Path Auto-Detection Configuration
+(defconst
+ ignore-on-load '("configs" "local" "log") "Directories to ignore when auto-detecting load paths.")
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Early Startup Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

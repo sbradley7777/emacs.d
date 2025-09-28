@@ -95,6 +95,27 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`custom.el`](configs/custom.el) - Template for Emacs customize system output
   - [`README.md`](configs/README.md) - Detailed guide for local configuration
 
+## Load Path Auto-Detection
+
+The configuration uses an intelligent auto-detection system in [`init.el`](init.el) that automatically discovers and adds configuration directories to Emacs' load-path. This eliminates the need to manually maintain directory lists when adding new modules.
+
+### How It Works
+
+1. **Scans** all directories in `~/.emacs.d/` for `.el` files
+2. **Includes** nested directories (e.g., `lang/python/`, `core/package-system/`)
+3. **Excludes** runtime directories that shouldn't be in load-path
+4. **Adds** discovered directories automatically
+
+### Excluded Directories
+
+The following directories are **not** added to load-path:
+
+- **`~/.emacs.d/configs/`** - Template configuration files, not active modules
+- **`~/.emacs.d/local/`** - Runtime data (package cache, recentf, auto-save files, etc.)
+- **`~/.emacs.d/log/`** - Runtime log files from the message logging system
+
+These exclusions prevent runtime data and template files from interfering with module loading while ensuring all actual configuration modules are automatically discovered.
+
 ## Requirements
 
 - **Emacs 30.2 or later** (required)

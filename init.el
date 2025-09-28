@@ -39,22 +39,50 @@
   (core-message-success "Emacs startup complete. Performance settings restored.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Setup configuration directories (needed early for constants loading)
+;; Load Path Auto-Detection System
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar core-dir (expand-file-name "core" user-emacs-directory))
-(defvar features-dir (expand-file-name "features" user-emacs-directory))
-(defvar lang-dir (expand-file-name "lang" user-emacs-directory))
-(defvar python-dir (expand-file-name "lang/python" user-emacs-directory))
-(defvar themes-dir (expand-file-name "themes" user-emacs-directory))
-(defvar user-dir (expand-file-name "user" user-emacs-directory))
+;; This system automatically discovers and adds configuration directories to Emacs' load-path.
+;; It eliminates the need to manually maintain a list of directories when new modules are added.
+;;
+;; Process:
+;; 1. Load core constants first to access ignore-on-load list
+;; 2. Scan all directories in user-emacs-directory for .el files
+;; 3. Include nested directories (e.g., lang/python, core/package-system)
+;; 4. Exclude runtime directories defined in ignore-on-load constant:
+;;    - "configs"  : Template configuration files, not active modules
+;;    - "local"    : Runtime data (package cache, recentf, etc.)
+;;    - "log"      : Runtime log files from message logging system
+;; 5. Add discovered directories to load-path for module loading
 
-;; Add directories to load path (order matters - features before python-dir)
-(mapc
- (lambda (dir) (add-to-list 'load-path dir))
- (list core-dir features-dir themes-dir user-dir lang-dir python-dir))
-
-;; Load core constants early so they're available for validation
+;; Load core constants (core directory already in load-path from early-init.el)
 (require 'core-constants)
+
+;; Directory auto-detection function
+(defun
+ auto-detect-config-directories ()
+ "Automatically detect all directories containing .el files for load-path.
+Recursively searches subdirectories and excludes directories in ignore-on-load.
+Returns a list of absolute directory paths suitable for adding to load-path."
+ (let ((all-dirs '()))
+   (dolist
+    (dir (directory-files user-emacs-directory t "^[^.]"))
+    (when
+     (file-directory-p dir)
+     (let ((dir-name (file-name-nondirectory dir)))
+       (unless
+        (member dir-name ignore-on-load)
+        ;; Check if this directory has .el files
+        (when (directory-files dir t "\\.el$") (push dir all-dirs))
+        ;; Recursively check subdirectories for .el files
+        (dolist
+         (subdir (directory-files dir t "^[^.]"))
+         (when
+          (and (file-directory-p subdir) (directory-files subdir t "\\.el$"))
+          (push subdir all-dirs)))))))
+   (nreverse all-dirs)))
+
+;; Apply auto-detection: discover and add configuration directories to load-path
+(mapc (lambda (dir) (add-to-list 'load-path dir)) (auto-detect-config-directories))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration Validation
