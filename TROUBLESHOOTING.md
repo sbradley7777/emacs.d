@@ -200,7 +200,7 @@ M-x emacs-version
 
 ### Treemacs Sidebar Not Opening
 
-**Symptoms**: F5 key doesn't open Treemacs, or "Treemacs not available" message
+**Symptoms**: F4 key doesn't open Treemacs, or "Treemacs not available" message
 
 **Troubleshooting Steps**:
 1. **Check package installation**: Verify Treemacs packages are installed:
@@ -220,9 +220,9 @@ M-x emacs-version
    M-x require RET treemacs-config
    ```
 
-4. **Check function binding**: Verify F5 is bound correctly:
+4. **Check function binding**: Verify F4 is bound correctly:
    ```elisp
-   M-x describe-key RET F5
+   M-x describe-key RET F4
    ```
 
 ### Treemacs Icons Missing or Corrupted

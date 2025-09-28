@@ -42,7 +42,7 @@
 
  ;; Global key bindings for quick access
  ;; The 'imenu-list-focus-after-activation' setting handles focus correctly.
- (global-set-key (kbd "<f1>") 'imenu-list-smart-toggle)
+ (global-set-key (kbd "<f5>") 'imenu-list-smart-toggle)
  (global-set-key (kbd "C-c i l") 'imenu-list-smart-toggle)
  (global-set-key (kbd "C-c i s") 'imenu-list-show-current-symbol)
  (global-set-key (kbd "C-c i r") 'imenu-list-refresh)

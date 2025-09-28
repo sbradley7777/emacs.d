@@ -94,7 +94,7 @@
      (treemacs))))
 
   ;; Global keybindings for treemacs
-  (global-set-key (kbd "<f5>") 'treemacs-smart-toggle)
+  (global-set-key (kbd "<f4>") 'treemacs-smart-toggle)
   (global-set-key (kbd "C-x t 1") 'treemacs-delete-other-windows)
   (global-set-key (kbd "C-x t t") 'treemacs)
   (global-set-key (kbd "C-x t C-t") 'treemacs-find-file)
@@ -111,7 +111,7 @@
    (require 'treemacs-icons-dired)
    (add-hook 'dired-mode-hook 'treemacs-icons-dired-enable-once)))
 
- ;; Ensure F5 binding is always set
+ ;; Ensure F4 binding is always set
  (unless
   (fboundp 'treemacs-smart-toggle)
   (defun
@@ -121,7 +121,7 @@
    (interactive)
    (core-message-error "Treemacs not available - package not installed")))
 
- ;; Always bind F5 to treemacs-smart-toggle
- (global-set-key (kbd "<f5>") 'treemacs-smart-toggle)) ;; End of core-utils-with-load-timing
+ ;; Always bind F4 to treemacs-smart-toggle
+ (global-set-key (kbd "<f4>") 'treemacs-smart-toggle)) ;; End of core-utils-with-load-timing
 
 (provide 'treemacs-config)

@@ -21,9 +21,10 @@
  (setq delete-key-deletes-forward t)
 
  ;; Utility function keys
- (global-set-key (kbd "<f2>") 'toggle-flymake-diagnostics-window) ; Show Flymake diagnostics
- (global-set-key (kbd "<f3>") 'flymake-goto-prev-error) ; Go to previous flymake error
- (global-set-key (kbd "<f4>") 'flymake-goto-next-error) ; Go to next flymake error
+ (global-set-key (kbd "<f1>") 'toggle-flymake-diagnostics-window) ; Show Flymake diagnostics
+ (global-set-key (kbd "<f2>") 'flymake-goto-prev-error) ; Go to previous flymake error
+ (global-set-key (kbd "<f3>") 'flymake-goto-next-error) ; Go to next flymake error
+ (global-set-key (kbd "<f4>") 'treemacs-smart-toggle) ; Smart toggle Treemacs file tree
  (global-set-key (kbd "<f6>") 'delete-trailing-whitespace) ; Delete trailing whitespace
 
  ;; Keyboard commands for controlling the buffer.

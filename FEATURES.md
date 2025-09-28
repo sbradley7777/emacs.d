@@ -360,14 +360,14 @@ Comprehensive project management and file tree navigation:
 - **Intelligent display** with collapsible directories and sorting options
 
 **Key Features:**
-- **F5 toggle** - smart treemacs toggle that opens, closes, or switches focus
+- **F4 toggle** - smart treemacs toggle that opens, closes, or switches focus
 - **Project following** - automatically tracks current file location in tree
 - **File watching** - real-time updates when files change on disk
 - **Workspace persistence** - remembers project layout between sessions
 - **Dired integration** - enhanced directory browsing with icons (GUI mode only)
 
 **Navigation Keybindings:**
-- **F5** - Toggle treemacs sidebar (smart focus management)
+- **F4** - Toggle treemacs sidebar (smart focus management)
 - **C-x t t** - Open treemacs
 - **C-x t C-t** - Find current file in treemacs
 - **C-x t 1** - Delete other windows, keep treemacs
@@ -386,7 +386,7 @@ Comprehensive project management and file tree navigation:
   - **Automatic mode detection** showing context-appropriate keybindings
 
 - **[Imenu-List](https://github.com/bmag/imenu-list)** ([`features/imenu-list-config.el`](features/imenu-list-config.el)): Symbol navigation sidebar for code structure visualization
-  - **Toggle sidebar** with `F1` or `C-c i l` for quick access
+  - **Toggle sidebar** with `F5` or `C-c i l` for quick access
   - **Real-time symbol updates** showing functions, classes, and variables
   - **Interactive navigation** with dedicated sidebar keybindings
   - **Project structure overview** for large codebases

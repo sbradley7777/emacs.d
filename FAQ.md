@@ -261,7 +261,7 @@ M-x fonts-check-nerd-icons
 **A:** Treemacs provides a comprehensive file tree sidebar ([`features/treemacs-config.el`](features/treemacs-config.el)):
 
 **Basic Usage:**
-- **Toggle sidebar**: Press `F5` to open/close/focus Treemacs
+- **Toggle sidebar**: Press `F4` to open/close/focus Treemacs
 - **Navigate files**: Use arrow keys or `n`/`p` to move between items
 - **Open files**: Press `RET` (Enter) to open files or expand directories
 - **Project context**: Automatically shows project structure with git integration
@@ -296,7 +296,7 @@ M-x fonts-check-nerd-icons
 **A:** Comprehensive keybinding support ([`KEYMAP.md`](KEYMAP.md#treemacs-project-navigation)):
 
 **Global bindings:**
-- **F5**: Smart toggle (open/close/focus Treemacs)
+- **F4**: Smart toggle (open/close/focus Treemacs)
 - **C-x t t**: Open Treemacs
 - **C-x t C-t**: Find current file in Treemacs
 - **C-x t 1**: Keep only Treemacs and current window
