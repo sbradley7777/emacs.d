@@ -17,11 +17,9 @@
  ;;
  ;; Available Themes:
  ;; - "Default" : Built-in theme with simple text indicators (works everywhere)
- ;; - "all-the-icons" : Graphical icons (requires all-the-icons fonts, GUI only)
  ;; - "nerd-icons" : Nerd Font symbols (requires Nerd Fonts installation)
  ;;
- ;; Icon themes require specific fonts and work best in GUI mode.
- ;; Terminal mode automatically uses "Default" theme for maximum compatibility.
+ ;; Note: User can override the default theme in local.el
 
  ;; Load and configure Treemacs immediately
  (when
@@ -57,24 +55,26 @@
    treemacs-project-follow-cleanup
    t)
 
-  ;; Configure icons and display based on environment
-  (if
-   (display-graphic-p)
-   ;; GUI mode - use all-the-icons theme
-   (when
-    (package-installed-p 'treemacs-all-the-icons)
-    (require 'all-the-icons)
-    (require 'treemacs-all-the-icons)
-    (treemacs-load-theme "all-the-icons")
-    (core-message-package "all-the-icons theme loaded for GUI"))
-   ;; Terminal mode - use Default theme (built-in, no font dependencies)
-   (treemacs-load-theme "Default") (core-message-package "Default theme loaded for terminal"))
+  ;; Use Default theme for all environments (user can override in local.el)
+  (treemacs-load-theme "Default")
+  (core-message-package "Default theme loaded (user can override in local.el)")
 
   ;; Enable useful modes
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
   (treemacs-fringe-indicator-mode 'always)
   (treemacs-project-follow-mode t)
+  (treemacs-indent-guide-mode t)
+
+  ;; Update modeline to show correct theme
+  (add-hook
+   'treemacs-mode-hook
+   (lambda
+    ()
+    (setq
+     mode-line-format
+     `("%e" mode-line-front-space
+       ,(format "Treemacs: %s" (treemacs-theme->name treemacs--current-theme))))))
 
   ;; Simplified treemacs toggle function
   (defun

@@ -135,15 +135,14 @@ M-x emacs-version
 1. **Check font installation**: Verify fonts are installed in system directory:
    ```bash
    # Linux
-   ls ~/.local/share/fonts/ | grep -E '(all-the-icons|NFM)'
+   ls ~/.local/share/fonts/ | grep NFM
 
    # macOS
-   ls ~/Library/Fonts/ | grep -E '(all-the-icons|NFM)'
+   ls ~/Library/Fonts/ | grep NFM
    ```
 
 2. **Force font installation**: Manually trigger font installation:
    ```elisp
-   M-x all-the-icons-install-fonts
    M-x nerd-icons-install-fonts
    ```
 
@@ -174,7 +173,6 @@ M-x emacs-version
    ```
 
 2. **Manual font installation**: Download fonts manually:
-   - Visit [all-the-icons fonts](https://github.com/domtronn/all-the-icons.el/tree/master/fonts)
    - Visit [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
    - Copy `.ttf` files to your system font directory
 
@@ -185,12 +183,12 @@ M-x emacs-version
 **Symptoms**: Icons work in GUI but not terminal, or vice versa
 
 **Explanation**: This is expected behavior:
-- **GUI mode**: Uses `all-the-icons` theme with graphical icons
+- **GUI mode**: Uses `nerd-icons` theme with graphical icons
 - **Terminal mode**: Uses `Default` theme with text-based symbols
 
 **Solutions**:
 1. **For better terminal icons**: Install and configure a Nerd Font in your terminal
-2. **For GUI consistency**: Ensure `all-the-icons` fonts are properly installed
+2. **For GUI consistency**: Ensure `nerd-icons` fonts are properly installed
 3. **Theme troubleshooting**: Check which theme is loaded:
    ```elisp
    M-x describe-variable treemacs-theme
@@ -207,12 +205,12 @@ M-x emacs-version
    ```elisp
    M-x package-list-packages
    ```
-   Look for: `treemacs`, `treemacs-all-the-icons`, `treemacs-icons-dired`
+   Look for: `treemacs`, `treemacs-nerd-icons`, `treemacs-icons-dired`
 
 2. **Manual package installation**: Install missing packages:
    ```elisp
    M-x package-install RET treemacs
-   M-x package-install RET treemacs-all-the-icons
+   M-x package-install RET treemacs-nerd-icons
    ```
 
 3. **Force load Treemacs**: Manually load the configuration:
@@ -239,7 +237,7 @@ M-x emacs-version
 
 3. **Force theme reload**: Manually set icon theme:
    ```elisp
-   M-x treemacs-load-theme RET all-the-icons
+   M-x treemacs-load-theme RET nerd-icons
    ```
 
 4. **Fallback to default**: Use text-based theme if icons don't work:

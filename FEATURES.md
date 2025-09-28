@@ -125,14 +125,13 @@ Automatic message logging with rotation for session history and debugging:
 Automatic system-wide font installation for icon packages:
 
 **Features** ([`core/core-fonts.el`](core/core-fonts.el)):
-- **Automatic font installation** for [all-the-icons](https://github.com/domtronn/all-the-icons.el) and [nerd-icons](https://github.com/rainstormstudio/nerd-icons.el) packages
+- **Automatic font installation** for [nerd-icons](https://github.com/rainstormstudio/nerd-icons.el) package
 - **System-wide availability** installs fonts to `~/.local/share/fonts/` (Linux) or `~/Library/Fonts/` (macOS)
 - **Cross-application support** fonts available to terminals, browsers, and other applications
 - **Fast verification** uses file-based checks instead of slow font system queries
 - **Automatic detection** only installs fonts when packages are present and fonts missing
 
 **Supported Font Packages:**
-- **all-the-icons fonts** - comprehensive icon collection for UI elements
 - **nerd-icons fonts (NFM.ttf)** - Nerd Font symbols for enhanced terminal and GUI display
 - **Platform detection** automatically uses correct font directory for your system
 
@@ -354,7 +353,7 @@ Comprehensive project management and file tree navigation:
 
 **[Treemacs](https://github.com/Alexander-Miller/treemacs) Integration** ([`features/treemacs-config.el`](features/treemacs-config.el)):
 - **File tree sidebar** with project structure visualization and git integration
-- **Smart theming** - automatically uses `all-the-icons` in GUI mode, `Default` theme in terminal
+- **Smart theming** - uses `Default` theme by default, customizable via `local.el`
 - **Project management** with automatic root detection and directory navigation
 - **Git integration** shows file status and changes directly in the tree
 - **Intelligent display** with collapsible directories and sorting options
@@ -374,7 +373,7 @@ Comprehensive project management and file tree navigation:
 
 **Display Optimization:**
 - **Terminal compatibility** - uses text-based Default theme for maximum compatibility
-- **GUI enhancement** - leverages all-the-icons for rich visual experience
+- **GUI enhancement** - leverages nerd-icons for rich visual experience
 - **Performance tuning** - optimized refresh rates and minimal resource usage
 - **Responsive design** - adapts to window size changes and split configurations
 

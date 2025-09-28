@@ -32,8 +32,6 @@
     cape
     flymake-ruff
     treemacs
-    all-the-icons
-    treemacs-all-the-icons
     treemacs-icons-dired
     treemacs-nerd-icons)
   "Development and programming packages.")

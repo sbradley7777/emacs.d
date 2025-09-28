@@ -40,37 +40,13 @@
  (defun
   fonts-file-exists-p (filename)
   "Check if font file exists in system font directory.
-FILENAME should be the font file name (e.g., 'all-the-icons.ttf')."
+FILENAME should be the font file name (e.g., 'NFM.ttf')."
   (file-exists-p (expand-file-name filename fonts-system-font-directory)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Font Installation Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- (defun
-  fonts-install-all-the-icons ()
-  "Install all-the-icons fonts if not already installed.
-Uses fast file-based check instead of font system queries."
-  (when
-   (package-installed-p 'all-the-icons)
-   (condition-case err
-       (progn
-        (require 'all-the-icons)
-        (unless
-         (fonts-file-exists-p "all-the-icons.ttf")
-         (core-message-package "Installing all-the-icons fonts...")
-         (all-the-icons-install-fonts t)
-         (core-message-success "all-the-icons fonts installed successfully")))
-     (error
-      (core-message-warning
-       "all-the-icons package not ready for font installation: %s" (error-message-string err))))))
-
- (defun
-  fonts-check-all-the-icons () "Check if all-the-icons fonts are properly installed."
-  (if
-   (fonts-file-exists-p "all-the-icons.ttf")
-   (core-message-success "all-the-icons fonts are available")
-   (core-message-warning "all-the-icons fonts not found - may need installation")))
 
  (defun
   fonts-install-nerd-icons ()
@@ -102,8 +78,8 @@ Uses fast file-based check instead of font system queries."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; Install fonts automatically after packages are available
- (fonts-install-all-the-icons) (fonts-install-nerd-icons)
+ (fonts-install-nerd-icons)
 
- (core-message-config "Font management system loaded - supports all-the-icons and nerd-icons"))
+ (core-message-config "Font management system loaded - supports nerd-icons"))
 
 (provide 'core-fonts)

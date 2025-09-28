@@ -191,7 +191,6 @@ The modular design makes it easy to add support for additional languages.
 - **Cross-application availability**: Fonts work in Emacs, terminals, browsers, and other applications
 
 **Supported Font Packages:**
-- **all-the-icons**: Comprehensive icon collection for UI elements
 - **nerd-icons (NFM.ttf)**: Nerd Font symbols for enhanced display
 
 ### Q: Why do I see boxes or missing icons?
@@ -209,7 +208,7 @@ The modular design makes it easy to add support for additional languages.
 3. **Terminal limitations**: Some terminals don't support advanced font features
 
 **Solutions:**
-- **Force font installation**: `M-x all-the-icons-install-fonts` or `M-x nerd-icons-install-fonts`
+- **Force font installation**: `M-x nerd-icons-install-fonts`
 - **Refresh font cache**: `fc-cache -fv` (Linux)
 - **Terminal setup**: Install and configure a Nerd Font in your terminal settings
 - **Restart applications**: Restart Emacs and terminal after font installation
@@ -236,20 +235,18 @@ The modular design makes it easy to add support for additional languages.
 **File-based check:**
 ```bash
 # Linux
-ls ~/.local/share/fonts/ | grep -E '(all-the-icons|NFM)'
+ls ~/.local/share/fonts/ | grep NFM
 
 # macOS
-ls ~/Library/Fonts/ | grep -E '(all-the-icons|NFM)'
+ls ~/Library/Fonts/ | grep NFM
 ```
 
 **Emacs verification:**
 ```elisp
-M-x fonts-check-all-the-icons
 M-x fonts-check-nerd-icons
 ```
 
 **Expected files:**
-- `all-the-icons.ttf` - all-the-icons package fonts
 - `NFM.ttf` - Nerd Font symbols
 
 ## Project Navigation with Treemacs
@@ -267,7 +264,7 @@ M-x fonts-check-nerd-icons
 - **Project context**: Automatically shows project structure with git integration
 
 **Key Features:**
-- **Smart theming**: Uses `all-the-icons` in GUI mode, `Default` theme in terminal
+- **Smart theming**: Uses `Default` theme by default, customizable via `local.el`
 - **Git integration**: Shows file status (modified, staged, untracked) with visual indicators
 - **Project following**: Automatically tracks current file location in tree
 - **File watching**: Real-time updates when files change on disk
@@ -277,8 +274,8 @@ M-x fonts-check-nerd-icons
 **A:** This is intentional design for optimal compatibility:
 
 **GUI Mode:**
-- Uses `all-the-icons` theme with rich graphical icons
-- Requires `all-the-icons` fonts to be installed
+- Uses `nerd-icons` theme with rich graphical icons
+- Requires `nerd-icons` fonts to be installed
 - Provides the best visual experience with color-coded file types
 
 **Terminal Mode:**
