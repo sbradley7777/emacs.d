@@ -24,15 +24,14 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Autosave files (example: #foo#) -> ~/.emacs.d/local/autosaves/
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defvar core-files-autosave-dir (expand-file-name "autosaves/" emacs-local-dir))
- (defvar core-files-auto-save-list-dir (expand-file-name "auto-save-list/" emacs-local-dir))
+ ;; Directory constants now defined in core-constants.el
  (setq auto-save-list-file-prefix (expand-file-name "saves-" core-files-auto-save-list-dir))
  (setq auto-save-file-name-transforms `((".*" ,core-files-autosave-dir t)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Backup files (example: foo~) -> ~/.emacs.d/local/backups/
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defvar core-files-backup-dir (expand-file-name "backups/" emacs-local-dir))
+ ;; Directory constants now defined in core-constants.el
  (setq backup-directory-alist (list (cons ".*" core-files-backup-dir)))
 
  ;; Enhanced backup preferences configuration

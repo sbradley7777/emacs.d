@@ -6,16 +6,11 @@
 ;;      - Preventing UI element flashing
 ;;      - Package system configuration
 
-;; Early init constants (can't require core-constants since load path not set up yet)
-(defconst early-gc-percentage-startup 0.6 "GC percentage during startup (60% of heap).")
-(defconst early-idle-update-delay-startup 1.0 "Idle update delay during startup.")
-(defconst
- emacs-local-dir
- (expand-file-name "local/" user-emacs-directory)
- "Path to ~/.emacs.d/local/ directory.")
-
-;; Set up minimal load path for loading message utilities early
+;; Set up minimal load path for loading constants and utilities early
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
+
+;; Load constants first (includes emacs-local-dir and startup constants)
+(require 'core-constants)
 
 ;; Load message utilities for consistent logging
 (require 'logging)
@@ -29,7 +24,7 @@
 ;; This will be restored to normal values in init.el after startup
 (setq
  gc-cons-threshold most-positive-fixnum ; Maximum possible value
- gc-cons-percentage early-gc-percentage-startup) ; Allow % of heap for GC
+ gc-cons-percentage core-gc-percentage-startup) ; Allow % of heap for GC
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -82,7 +77,7 @@
 ;; Completion and Input Optimizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Reduce input processing overhead during startup
-(setq which-func-update-delay early-idle-update-delay-startup) ; Longer delay for idle updates during startup
+(setq which-func-update-delay core-idle-update-delay-startup) ; Longer delay for idle updates during startup
 
 ;; Reduce startup noise and font cache overhead
 (setq
@@ -92,8 +87,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package System Initialization (early)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Add core directory to load-path to find package-system files
-(add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
 
 ;; Bootstrap the package system and install use-package
 (require 'package-system/manager)
@@ -148,9 +141,9 @@
        (list
         (expand-file-name "eln-cache" emacs-local-dir)
         (expand-file-name "tramp-autosave" emacs-local-dir)
-        (expand-file-name "autosaves" emacs-local-dir)
-        (expand-file-name "backups" emacs-local-dir)
-        (expand-file-name "auto-save-list" emacs-local-dir)
+        core-files-autosave-dir
+        core-files-backup-dir
+        core-files-auto-save-list-dir
         (expand-file-name "elpa" emacs-local-dir))))
   (dolist (dir dirs-to-create) (core-utils-ensure-directory dir)))
 
