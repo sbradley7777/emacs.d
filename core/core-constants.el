@@ -16,7 +16,7 @@
 
 ;; Load Path Auto-Detection Configuration
 (defconst
- ignore-on-load '("configs" "local" "log") "Directories to ignore when auto-detecting load paths.")
+ ignore-on-load '("configs" "local") "Directories to ignore when auto-detecting load paths.")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

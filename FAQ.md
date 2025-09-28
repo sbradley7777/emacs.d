@@ -344,10 +344,10 @@ M-x fonts-check-nerd-icons
 - **Saves on exit**: Automatically saves Messages buffer content when Emacs exits
 - **Log rotation**: Maintains up to 5 log files with automatic rotation
 - **Timestamped entries**: Adds session end timestamps for debugging
-- **Organized storage**: Stores logs in `~/.emacs.d/log/` directory
+- **Organized storage**: Stores logs in `<emacs-local-dir>/log/` directory
 
 **Log File Structure:**
-- **Current session**: `~/.emacs.d/log/messages.log`
+- **Current session**: `<emacs-local-dir>/log/messages.log`
 - **Previous sessions**: `messages.log.1`, `messages.log.2`, etc.
 - **Automatic cleanup**: Removes oldest logs when exceeding retention limit
 
@@ -373,13 +373,13 @@ M-x fonts-check-nerd-icons
 **Direct file access:**
 ```bash
 # View current session log
-less ~/.emacs.d/log/messages.log
+less <emacs-local-dir>/log/messages.log
 
 # View previous session
-less ~/.emacs.d/log/messages.log.1
+less <emacs-local-dir>/log/messages.log.1
 
 # List all logs
-ls -la ~/.emacs.d/log/
+ls -la <emacs-local-dir>/log/
 ```
 
 **From within Emacs:**
@@ -388,7 +388,7 @@ ls -la ~/.emacs.d/log/
 M-x view-echo-area-messages
 
 # Open log directory
-C-x C-f ~/.emacs.d/log/
+C-x C-f <emacs-local-dir>/log/
 
 # Force save current messages
 M-x core-save-messages-log
@@ -400,7 +400,7 @@ M-x core-save-messages-log
 
 **Configuration variables:**
 - **`core-log-max-files`**: Number of rotated logs to keep (default: 5)
-- **`core-log-directory`**: Directory for log storage (default: `~/.emacs.d/log`)
+- **`core-log-directory`**: Directory for log storage (default: `<emacs-local-dir>/log`)
 - **`core-messages-log-file`**: Base filename (default: `messages.log`)
 
 **Override in local.el:**

@@ -105,11 +105,11 @@ Automatic message logging with rotation for session history and debugging:
 - **Automatic log saving** on Emacs exit to preserve session messages
 - **Log rotation** with configurable file retention (default: 5 files)
 - **Timestamped entries** with session end markers for debugging
-- **Organized storage** in `~/.emacs.d/log/` directory with automatic creation
+- **Organized storage** in `<emacs-local-dir>/log/` directory with automatic creation
 - **Error handling** with graceful fallbacks for filesystem issues
 
 **Log Management:**
-- **Primary log**: `~/.emacs.d/log/messages.log` - current session messages
+- **Primary log**: `<emacs-local-dir>/log/messages.log` - current session messages
 - **Rotated logs**: `messages.log.1`, `messages.log.2`, etc. - previous sessions
 - **Automatic cleanup** removes oldest logs when exceeding retention limit
 - **Session markers** help identify different Emacs sessions in logs

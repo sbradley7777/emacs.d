@@ -112,7 +112,7 @@ The following directories are **not** added to load-path:
 
 - **`~/.emacs.d/configs/`** - Template configuration files, not active modules
 - **`~/.emacs.d/local/`** - Runtime data (package cache, recentf, auto-save files, etc.)
-- **`~/.emacs.d/log/`** - Runtime log files from the message logging system
+- **`<emacs-local-dir>/log/`** - Runtime log files from the message logging system
 
 These exclusions prevent runtime data and template files from interfering with module loading while ensuring all actual configuration modules are automatically discovered.
 

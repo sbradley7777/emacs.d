@@ -277,18 +277,18 @@ M-x emacs-version
 
 ### Log Files Not Created
 
-**Symptoms**: No message logs in `~/.emacs.d/log/` directory
+**Symptoms**: No message logs in `<emacs-local-dir>/log/` directory
 
 **Troubleshooting Steps**:
 1. **Check log directory**: Verify directory exists and is writable:
    ```bash
-   ls -la ~/.emacs.d/log/
-   mkdir -p ~/.emacs.d/log
+   ls -la <emacs-local-dir>/log/
+   mkdir -p <emacs-local-dir>/log
    ```
 
 2. **Check permissions**: Ensure Emacs can write to log directory:
    ```bash
-   chmod 755 ~/.emacs.d/log
+   chmod 755 <emacs-local-dir>/log
    ```
 
 3. **Test manual logging**: Force a log save:
@@ -318,7 +318,7 @@ M-x emacs-version
 
 3. **File permissions**: Ensure Emacs can rename/move log files:
    ```bash
-   chmod 644 ~/.emacs.d/log/messages.log*
+   chmod 644 <emacs-local-dir>/log/messages.log*
    ```
 
 ### Missing Log Content
