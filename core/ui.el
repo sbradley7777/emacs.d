@@ -139,6 +139,9 @@
  (blink-cursor-mode -1) ; Disable cursor blinking
  (setq mouse-yank-at-point t) ; Paste at cursor, not mouse position
 
+ ;; Enable xterm mouse mode for consistent mouse selection in terminal
+ (unless (display-graphic-p) (xterm-mouse-mode 1))
+
 
  ;; Make this module available for loading with (require 'ui)
  (provide 'ui))
