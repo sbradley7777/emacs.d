@@ -51,7 +51,7 @@
   'make-mode
   (add-hook
    'makefile-mode-hook
-   (lambda () "Enable visual feedback for proper Make syntax." (highlight-indentation-mode 1))))
+   (lambda () "Enable visual feedback for proper Make syntax." (highlight-indent-guides-mode 1))))
 
  ;; Additional configuration for different Makefile variants
  (add-hook
