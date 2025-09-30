@@ -45,17 +45,13 @@
 ;; It eliminates the need to manually maintain a list of directories when new modules are added.
 ;;
 ;; Process:
-;; 1. Load core constants first to access ignore-on-load list
+;; 1. Use core constants loaded by early-init.el to access ignore-on-load list
 ;; 2. Scan all directories in user-emacs-directory for .el files
 ;; 3. Include nested directories (e.g., lang/python, core/package-system)
 ;; 4. Exclude runtime directories defined in ignore-on-load constant:
 ;;    - "configs"  : Template configuration files, not active modules
 ;;    - "local"    : Runtime data (package cache, recentf, etc.)
-;;    - "log"      : Runtime log files from message logging system
 ;; 5. Add discovered directories to load-path for module loading
-
-;; Load core constants (core directory already in load-path from early-init.el)
-(require 'core-constants)
 
 ;; Directory auto-detection function
 (defun
@@ -324,7 +320,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (show-config-diagnostics)
 
 ;; Show version-aware configuration status
-(core-message-success "Emacs 30.2+ configuration loaded successfully")
+(core-message-success "Emacs %s configuration loaded successfully" emacs-version)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Memory Management Strategy
