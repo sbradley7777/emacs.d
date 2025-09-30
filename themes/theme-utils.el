@@ -10,7 +10,6 @@
 ;;; Dependencies:
 ;; - themes-config (for theme variables and core functions)
 
-(require 'logging)
 (require 'themes-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

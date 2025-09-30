@@ -2,8 +2,6 @@
 ;;; Commentary:
 ;;      Enhanced configuration for bash and shell script editing.
 
-(require 'core-constants)
-(require 'core-utils)
 
 (core-utils-with-load-timing
  "bash-config.el"

@@ -3,10 +3,7 @@
 ;;      Package repository setup, archive priorities, and security policies.
 ;;      Centralizes trust policies, signature verification, and repository management.
 
-(require 'core-constants)
 (require 'package-system/network)
-(require 'core-utils)
-(require 'logging)
 
 (core-utils-with-load-timing
  "repositories.el"

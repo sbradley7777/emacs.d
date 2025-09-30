@@ -4,7 +4,6 @@
 ;;      This file contains paths, settings, and other constants used
 ;;      across multiple Python-related configuration files.
 
-(require 'core-utils)
 
 (defvar pyvenv-current-project-name nil "Current project status for modeline.")
 (defvar pyvenv-current-version nil "Python version of the detected virtual environment.")

@@ -3,7 +3,6 @@
 ;;      Coordinates package system initialization and module loading.
 ;;      Central entry point for the modular package management system.
 
-(require 'core-constants)
 (require 'core-utils)
 
 (core-utils-with-load-timing

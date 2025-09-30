@@ -2,9 +2,6 @@
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
 
-(require 'core-constants)
-(require 'core-utils)
-
 
 (core-utils-with-load-timing
  "core-files.el"
@@ -24,14 +21,12 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Autosave files (example: #foo#) -> ~/.emacs.d/local/autosaves/
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Directory constants now defined in core-constants.el
  (setq auto-save-list-file-prefix (expand-file-name "saves-" core-files-auto-save-list-dir))
  (setq auto-save-file-name-transforms `((".*" ,core-files-autosave-dir t)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Backup files (example: foo~) -> ~/.emacs.d/local/backups/
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Directory constants now defined in core-constants.el
  (setq backup-directory-alist (list (cons ".*" core-files-backup-dir)))
 
  ;; Enhanced backup preferences configuration

@@ -3,10 +3,7 @@
 ;;      Interactive package upgrade, cleanup, and maintenance utilities.
 ;;      Bulk operations with comprehensive error handling and network awareness.
 
-(require 'core-constants)
 (require 'package-system/network)
-(require 'core-utils)
-(require 'logging)
 
 (core-utils-with-load-timing
  "maintenance.el"

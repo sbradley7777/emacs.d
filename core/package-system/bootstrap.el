@@ -3,10 +3,7 @@
 ;;      Network-aware use-package installation and fallback handling.
 ;;      Global use-package settings and error recovery for offline scenarios.
 
-(require 'core-constants)
 (require 'package-system/network)
-(require 'core-utils)
-(require 'logging)
 
 (core-utils-with-load-timing
  "bootstrap.el"

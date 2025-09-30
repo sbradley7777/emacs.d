@@ -4,8 +4,6 @@
 ;;      Provides column-based indentation visualization for better code structure understanding.
 
 (require 'features-constants)
-(require 'core-utils)
-(require 'logging)
 
 (core-utils-with-load-timing
  "indent-guides.el"

@@ -3,11 +3,8 @@
 ;;      Package state caching for offline functionality and faster startup.
 ;;      Provides intelligent cache management with freshness validation.
 
-(require 'core-constants)
-(require 'core-utils)
 (require 'package)
 (require 'package-system/metadata)
-(require 'logging)
 
 (core-utils-with-load-timing
  "cache.el"

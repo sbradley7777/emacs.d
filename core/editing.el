@@ -2,8 +2,6 @@
 ;;; Commentary:
 ;;      Tabs, spaces, and general editing preferences
 
-(require 'core-constants)
-(require 'core-utils)
 
 (core-utils-with-load-timing
  "editing.el"

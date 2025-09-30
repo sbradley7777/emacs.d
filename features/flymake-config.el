@@ -3,7 +3,6 @@
 ;;      Global Flymake configuration for diagnostic display and behavior
 
 (require 'features-constants)
-(require 'core-utils)
 
 (core-utils-with-load-timing
  "flymake-config.el"

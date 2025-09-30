@@ -2,9 +2,6 @@
 ;;; Commentary:
 ;;      Makefile mode support and configuration for Makefiles with proper tab handling
 
-(require 'core-constants)
-(require 'core-utils)
-(require 'logging)
 (require 'make-mode)
 (require 'highlight-indent-guides)
 

@@ -3,7 +3,6 @@
 ;;;      General utility functions for Python development support,
 ;;;      including both local and remote contexts.
 
-(require 'core-utils)
 (require 'python-constants)
 
 (core-utils-with-load-timing

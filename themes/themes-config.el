@@ -11,8 +11,6 @@
 ;; - core-utils (for core-utils-with-load-timing)
 ;; - doom-themes package
 
-(require 'core-utils)
-(require 'logging)
 
 (core-utils-with-load-timing
  "themes-config.el"

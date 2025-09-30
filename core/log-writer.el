@@ -4,9 +4,6 @@
 ;; This file provides functionality for writing the Messages buffer to files
 ;; with automatic log rotation support.
 
-(require 'core-constants)
-(require 'core-utils)
-(require 'logging)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Logging Constants

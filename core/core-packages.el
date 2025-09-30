@@ -2,9 +2,6 @@
 ;;; Commentary:
 ;;      Package installation and configuration using use-package.
 
-(require 'core-constants)
-(require 'core-utils)
-(require 'logging)
 (require 'package-system/metadata)
 (require 'package-system/repositories)
 

@@ -9,8 +9,6 @@
 ;;      The virtual environment stays globally active (following pyvenv's design)
 ;;      but the modeline reflects whether the current file is part of the project.
 
-(require 'core-utils)
-(require 'logging)
 (require 'python-constants)
 (require 'pyvenv-utils)
 

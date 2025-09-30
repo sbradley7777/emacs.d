@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
-(require 'core-utils)
 (require 'functions)
 
 (core-utils-with-load-timing

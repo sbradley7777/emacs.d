@@ -2,9 +2,7 @@
 ;;; Commentary:
 ;;      User-defined custom functions
 
-(require 'core-utils)
 (require 'cl-lib)
-(require 'logging)
 
 (core-utils-with-load-timing
  "functions.el"

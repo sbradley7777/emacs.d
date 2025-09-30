@@ -3,12 +3,9 @@
 ;;      Network connectivity testing and timeout-protected package operations.
 ;;      Provides resilient package management with graceful network failure handling.
 
-(require 'core-constants)
 (require 'package-system/cache)
 (require 'package-system/metadata)
-(require 'core-utils)
 (require 'url)
-(require 'logging)
 
 (core-utils-with-load-timing
  "network.el"

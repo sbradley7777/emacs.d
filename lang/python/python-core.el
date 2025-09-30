@@ -2,8 +2,6 @@
 ;;; Commentary:
 ;;      Basic Python editing settings, indentation, and shell configuration.
 
-(require 'core-constants)
-(require 'core-utils)
 (require 'python-constants)
 (require 'python-utils)
 (require 'python)

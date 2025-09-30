@@ -17,8 +17,6 @@
 
 ;;; Code:
 
-(require 'core-constants)
-(require 'core-utils)
 (require 'tramp-utils)
 
 ;; Load TRAMP

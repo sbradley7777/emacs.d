@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;      YAML mode support and configuration
 
-(require 'core-utils)
 
 (core-utils-with-load-timing
  "yaml-config.el"

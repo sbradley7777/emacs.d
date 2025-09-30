@@ -2,9 +2,6 @@
 ;;; Commentary:
 ;;      GUI mode settings, UI elements control, and window management setup.
 
-(require 'core-constants)
-(require 'core-utils)
-(require 'logging)
 
 (core-utils-with-load-timing
  "gui-mode.el"

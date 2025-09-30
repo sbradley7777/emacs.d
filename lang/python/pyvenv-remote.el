@@ -3,8 +3,6 @@
 ;;      TRAMP integration with proper remote virtual environment detection.
 ;;      Provides seamless Python virtual environment support for remote files.
 
-(require 'core-utils)
-(require 'logging)
 (require 'pyvenv-config)
 (require 'tramp-utils)
 

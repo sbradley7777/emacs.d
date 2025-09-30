@@ -3,9 +3,6 @@
 ;;      Treemacs configuration for file and project tree navigation.
 ;;      Provides a sidebar with project structure, git integration, and enhanced navigation.
 
-(require 'core-constants)
-(require 'core-utils)
-(require 'logging)
 
 (core-utils-with-load-timing
  "treemacs-config.el"
@@ -13,8 +10,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Treemacs Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Note: Treemacs packages are now installed via the core package system in core-packages.el
- ;;
  ;; Available Themes:
  ;; - "Default" : Built-in theme with simple text indicators (works everywhere)
  ;; - "nerd-icons" : Nerd Font symbols (requires Nerd Fonts installation)
