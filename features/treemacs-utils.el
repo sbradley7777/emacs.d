@@ -19,7 +19,10 @@
     ("gnumakefile" nerd-icons-sucicon "nf-seti-makefile" :face nerd-icons-dorange)
     ("license" nerd-icons-sucicon "nf-seti-license" :face nerd-icons-blue)
     ("licence" nerd-icons-sucicon "nf-seti-license" :face nerd-icons-blue)
-    ("copying" nerd-icons-sucicon "nf-seti-license" :face nerd-icons-blue))
+    ("copying" nerd-icons-sucicon "nf-seti-license" :face nerd-icons-blue)
+    ("pyproject.toml" nerd-icons-sucicon "nf-seti-python" :face nerd-icons-yellow)
+    (".pre-commit-config.yaml" nerd-icons-devicon "nf-dev-git_merge" :face nerd-icons-dred)
+    (".gitlab-ci.yml" nerd-icons-mdicon "nf-md-gitlab" :face nerd-icons-orange))
   "Custom file icon mappings for treemacs nerd-icons theme.
 Each entry is a list of (FILENAME ICON-FUNCTION ICON-NAME :face FACE).
 FILENAME must be lowercase (treemacs downcases filenames before lookup).
