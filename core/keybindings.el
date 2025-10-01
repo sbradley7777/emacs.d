@@ -19,6 +19,20 @@
  (global-set-key (kbd "<kp-delete>") 'delete-char)
  (setq delete-key-deletes-forward t)
 
+ ;; Copy command (macOS-style)
+ ;; NOTE: For macOS users with iTerm2, two settings are required for clipboard integration:
+ ;;
+ ;; 1. Configure Command-C to send Meta-c to Emacs:
+ ;;    iTerm2 → Settings → Keys → Key Bindings → Add:
+ ;;    - Keyboard Shortcut: ⌘C
+ ;;    - Action: "Send Text with "vim" Special Chars"
+ ;;    - Text: \ec
+ ;;
+ ;; 2. Enable OSC 52 clipboard access (allows Emacs to copy to macOS clipboard over SSH):
+ ;;    iTerm2 → Preferences → General → Selection
+ ;;    - Enable: "Applications in terminal may access clipboard"
+ (global-set-key (kbd "M-c") 'kill-ring-save) ; Copy selected region
+
  ;; Utility function keys
  (global-set-key (kbd "<f1>") 'toggle-flymake-diagnostics-window) ; Show Flymake diagnostics
  (global-set-key (kbd "<f2>") 'flymake-goto-prev-error) ; Go to previous flymake error

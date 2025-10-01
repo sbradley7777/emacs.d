@@ -46,5 +46,23 @@
   undo-strong-limit core-undo-strong-limit ; Strongly-held undo entries
   undo-outer-limit core-undo-outer-limit) ; Maximum undo data before old entries are discarded
 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Clipboard integration
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Enable clipboard integration for terminal mode using OSC 52 escape sequences.
+ ;; This allows copying from Emacs in terminal mode to the system clipboard over SSH.
+ (unless
+  (display-graphic-p)
+  (setq select-enable-clipboard t select-enable-primary t save-interprogram-paste-before-kill t)
+
+  ;; Configure OSC 52 clipboard support for terminal
+  (defun
+   osc-52-copy (text) "Copy TEXT to system clipboard using OSC 52 escape sequence."
+   (let ((encoded (base64-encode-string text t)))
+     (send-string-to-terminal (concat "\e]52;c;" encoded "\a"))))
+
+  ;; Hook into Emacs clipboard system
+  (setq interprogram-cut-function 'osc-52-copy))
+
  ;; Make this module available for loading with (require 'editing)
  (provide 'editing))
