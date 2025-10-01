@@ -238,6 +238,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 
 ;; Load navigation tools AFTER completion - may integrate with completion system
 (safe-load-config 'imenu-list-config "Symbol sidebar navigation")
+(safe-load-config 'treemacs-utils "Treemacs utility functions")
 (safe-load-config 'treemacs-config "Project tree navigation")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

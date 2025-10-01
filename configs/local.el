@@ -128,30 +128,17 @@
 ;; ============================================
 ;; 5. TREEMACS ICON THEME OVERRIDE (OPTIONAL)
 ;; ============================================
-;; By default, treemacs uses the "Default" theme (simple text indicators)
-;; for both GUI and terminal modes.
-;;
 ;; Set your preferred treemacs theme here:
-;; Options: "nerd-icons", "Default", or nil (use defaults)
-;;(setq treemacs-theme-name "Default")
-(setq treemacs-theme-name "nerd-icons")
+;; Options: "nerd-icons" (with custom file icons), "Default", or nil (use defaults)
+;;
+;; The treemacs-load-user-theme function handles:
+;; - Loading the specified theme
+;; - Applying custom file icon mappings (for nerd-icons theme)
+;; - Error handling and validation
+;;
+;; To add more custom file icons, edit: features/treemacs-config.el (treemacs-custom-file-icon-mappings)
 
-;; Apply the theme override
-(when
- treemacs-theme-name
- (with-eval-after-load
-  'treemacs
-  (cond
-   ;; Nerd Icons theme
-   ((and (string= treemacs-theme-name "nerd-icons") (package-installed-p 'treemacs-nerd-icons))
-    (require 'treemacs-nerd-icons)
-    (treemacs-load-theme "nerd-icons")
-    (core-message-success "Treemacs nerd-icons theme loaded (overriding default theme)"))
-
-   ;; Default theme
-   ((string= treemacs-theme-name "Default")
-    (treemacs-load-theme "Default")
-    (core-message-success "Treemacs Default theme loaded (overriding automatic selection)")))))
+(with-eval-after-load 'treemacs (treemacs-load-user-theme "nerd-icons"))
 
 ;; ============================================
 ;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
