@@ -100,14 +100,19 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
             ;; Apply post-load fixes for terminal compatibility
             (when
              (and (not (display-graphic-p)) (string-match-p "^doom-" (symbol-name theme)))
-             (core-message-theme "Applied terminal compatibility fixes for %s" theme)))
+             (core-message-theme "Applied terminal compatibility fixes for %s" theme))
+            ;; Customize region (selection) to be distinct from hl-line
+            ;; Use a blue-tinted background for selections
+            (set-face-attribute 'region nil :background "#264F78" :foreground nil :extend t))
          (error
           (core-message-error "Failed to load theme '%s': %s" theme (error-message-string err))
           ;; Fallback to doom-zenburn
           (core-message-theme "Loading fallback theme: doom-zenburn")
           (themes-config-apply-customizations 'doom-zenburn)
           (load-theme 'doom-zenburn t)
-          (core-message-success "Loaded fallback theme: doom-zenburn"))))))))
+          (core-message-success "Loaded fallback theme: doom-zenburn")
+          ;; Apply region customization for fallback theme too
+          (set-face-attribute 'region nil :background "#264F78" :foreground nil :extend t))))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load Theme on Startup

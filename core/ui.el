@@ -34,6 +34,7 @@
  (setq-default scroll-step core-scroll-step) ; Turn off jumpy scroll
  (setq ring-bell-function 'ignore) ; Better than visible-bell
  (global-hl-line-mode 1) ; Highlight current line
+
  ;; Additional editor preferences
  (setq-default
   transient-mark-mode t ; Visual feedback on
