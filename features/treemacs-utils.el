@@ -13,6 +13,8 @@
  ;; Custom File Icon Mappings
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+ ;; You can search for the icons and their names from this url:
+ ;;   - https://www.nerdfonts.com/cheat-sheet
  (defvar
   treemacs-nerd-icons-file-icon-mappings
   '(("makefile" nerd-icons-sucicon "nf-seti-makefile" :face nerd-icons-dorange)
@@ -20,7 +22,7 @@
     ("license" nerd-icons-sucicon "nf-seti-license" :face nerd-icons-blue)
     ("licence" nerd-icons-sucicon "nf-seti-license" :face nerd-icons-blue)
     ("copying" nerd-icons-sucicon "nf-seti-license" :face nerd-icons-blue)
-    ("pyproject.toml" nerd-icons-sucicon "nf-seti-python" :face nerd-icons-yellow)
+    ("pyproject.toml" nerd-icons-sucicon "nf-custom-toml" :face nerd-icons-yellow)
     (".pre-commit-config.yaml" nerd-icons-devicon "nf-dev-git_merge" :face nerd-icons-dred)
     (".gitlab-ci.yml" nerd-icons-mdicon "nf-md-gitlab" :face nerd-icons-orange))
   "Custom file icon mappings for treemacs nerd-icons theme.
