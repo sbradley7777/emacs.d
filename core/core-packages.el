@@ -30,7 +30,8 @@
     flymake-ruff
     treemacs
     treemacs-icons-dired
-    treemacs-nerd-icons)
+    treemacs-nerd-icons
+    breadcrumb)
   "Development and programming packages.")
 
  (defvar
