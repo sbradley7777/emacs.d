@@ -20,15 +20,10 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load Misc Preferences:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Display the time
- (display-time)
  ;; Don't show the GNU splash screen
  (setq inhibit-startup-message t)
- ;; Search and line/column display preferences - consolidated for efficiency
- (setq
-  case-fold-search t ; Make searches case insensitive
-  column-number-mode t) ; Add column numbers to mode line
- (line-number-mode 1) ; Show current line number in mode line (mode function, not variable)
+ ;; Search preferences
+ (setq case-fold-search t) ; Make searches case insensitive
  ;; Basic editor behavior
  (set-default 'truncate-lines t) ; Don't word wrap long lines
  (setq-default scroll-step core-scroll-step) ; Turn off jumpy scroll
@@ -69,35 +64,6 @@
 
  ;; Better buffer switching
  (setq switch-to-buffer-preserve-window-point t)
-
- ;; More informative mode line
- (setq size-indication-mode t) ; Show buffer size in mode line
-
- ;; Add custom Python virtual environment indicator to mode line
- (add-to-list
-  'mode-line-misc-info
-  '(:eval
-    (when
-     (and
-      (local-variable-p 'pyvenv-current-project-name)
-      pyvenv-current-project-name
-      (not (string= pyvenv-current-project-name "inactive")))
-     (propertize
-      (concat
-       "[venv: " pyvenv-current-project-name
-       (when pyvenv-current-version (concat " (py" pyvenv-current-version ")")) "] ")
-      'face
-      (when
-       (and
-        (boundp 'pyvenv-modeline-color) pyvenv-modeline-color)
-       `(:foreground ,pyvenv-modeline-color))))))
-
- ;; Add username and hostname to mode line (non-destructive approach)
- (add-to-list
-  'mode-line-misc-info
-  '(:eval
-    (concat
-     "[" (user-login-name) "@" (or (file-remote-p default-directory 'host) (system-name)) "] ")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Modern Emacs features

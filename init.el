@@ -194,6 +194,10 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load UI foundation BEFORE themes - establishes basic interface elements
 (safe-load-config 'ui "Basic UI setup")
+
+;; Load modeline configuration AFTER UI - customizes status line display
+(safe-load-config 'ui-modeline "Modeline configuration")
+
 (safe-load-config 'gui-mode "GUI mode configuration")
 
 ;; Load theme configuration BEFORE theme utilities - establishes theme system
