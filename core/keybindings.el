@@ -19,18 +19,7 @@
  (global-set-key (kbd "<kp-delete>") 'delete-char)
  (setq delete-key-deletes-forward t)
 
- ;; Copy command (macOS-style)
- ;; NOTE: For macOS users with iTerm2, two settings are required for clipboard integration:
- ;;
- ;; 1. Configure Command-C to send Meta-c to Emacs:
- ;;    iTerm2 → Settings → Keys → Key Bindings → Add:
- ;;    - Keyboard Shortcut: ⌘C
- ;;    - Action: "Send Text with "vim" Special Chars"
- ;;    - Text: \ec
- ;;
- ;; 2. Enable OSC 52 clipboard access (allows Emacs to copy to macOS clipboard over SSH):
- ;;    iTerm2 → Preferences → General → Selection
- ;;    - Enable: "Applications in terminal may access clipboard"
+ ;; Use Alt-c instead of Command-c on osx for copying.
  (global-set-key (kbd "M-c") 'kill-ring-save) ; Copy selected region
 
  ;; Utility function keys
