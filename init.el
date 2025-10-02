@@ -236,6 +236,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load diagnostics BEFORE language modes - provides error reporting for code files
 (safe-load-config 'flymake-config "Flymake configuration")
 
+;; Load flymake utilities AFTER flymake-config - provides formatting utilities for diagnostics
+(safe-load-config 'flymake-utils "Flymake utility functions")
+
 ;; Load visual enhancements - order independent within this group
 (safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability")
 (safe-load-config 'indent-guides "Visual indentation guides")

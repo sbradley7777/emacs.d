@@ -20,17 +20,5 @@
 
  (setq syntax-checking-window-width features-window-width-percentage)
 
- ;; A toggle to open and close the flymake diagnostic window.
- (defun
-  toggle-flymake-diagnostics-window () "Show or hide the Flymake diagnostics window." (interactive)
-  ;; Find any window that is displaying a Flymake diagnostics buffer
-  (let ((flymake-window
-         (cl-find-if
-          (lambda
-           (window) (string-prefix-p "*Flymake diagnostics" (buffer-name (window-buffer window))))
-          (window-list))))
-    ;; If such a window exists, close it. Otherwise, open one.
-    (if flymake-window (quit-window nil flymake-window) (flymake-show-buffer-diagnostics))))
-
  ;; Make this module available for loading with (require 'flymake-config)
  (provide 'flymake-config))
