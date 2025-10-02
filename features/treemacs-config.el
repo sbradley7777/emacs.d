@@ -61,6 +61,7 @@
   (treemacs-fringe-indicator-mode 'always)
   (treemacs-project-follow-mode t)
   (treemacs-indent-guide-mode t)
+  (treemacs-hide-gitignored-files-mode t)
 
   ;; Update modeline to show correct theme
   (add-hook
