@@ -19,8 +19,12 @@
  ;; Enable buffer size indication in modeline
  (size-indication-mode 1)
 
- ;; Display the time in modeline
+ ;; Display the time in modeline with custom format (YYYY-MM-dd HH:MM)
+ (setq display-time-format "  %Y-%m-%d %H:%M") ; Leading spaces for separation
  (display-time)
+
+ ;; Enable which-function-mode to show current function name
+ (which-function-mode 1)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python Virtual Environment Indicator
