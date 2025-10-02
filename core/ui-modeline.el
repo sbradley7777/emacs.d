@@ -26,6 +26,28 @@
  ;; Enable which-function-mode to show current function name
  (which-function-mode 1)
 
+ ;; Only enable which-function-mode in programming modes (prevents errors in non-code buffers like treemacs)
+ (setq
+  which-func-modes
+  '(emacs-lisp-mode
+    lisp-interaction-mode
+    python-mode
+    python-ts-mode
+    bash-mode
+    sh-mode
+    c-mode
+    c++-mode
+    java-mode
+    javascript-mode
+    typescript-mode
+    js-mode
+    js2-mode
+    go-mode
+    rust-mode
+    ruby-mode
+    perl-mode
+    makefile-mode))
+
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python Virtual Environment Indicator
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
