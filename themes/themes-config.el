@@ -103,7 +103,12 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
              (core-message-theme "Applied terminal compatibility fixes for %s" theme))
             ;; Customize region (selection) to be distinct from hl-line
             ;; Use a blue-tinted background for selections
-            (set-face-attribute 'region nil :background "#264F78" :foreground nil :extend t))
+            (set-face-attribute
+             'region
+             nil
+             :background "#264F78"
+             :foreground 'unspecified
+             :extend t))
          (error
           (core-message-error "Failed to load theme '%s': %s" theme (error-message-string err))
           ;; Fallback to doom-zenburn
@@ -112,7 +117,12 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
           (load-theme 'doom-zenburn t)
           (core-message-success "Loaded fallback theme: doom-zenburn")
           ;; Apply region customization for fallback theme too
-          (set-face-attribute 'region nil :background "#264F78" :foreground nil :extend t))))))))
+          (set-face-attribute
+           'region
+           nil
+           :background "#264F78"
+           :foreground 'unspecified
+           :extend t))))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load Theme on Startup
