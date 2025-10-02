@@ -72,6 +72,12 @@
 ;; Enable italic fonts for all doom themes
 (setq doom-themes-enable-italic t)
 
+;; Improve comment readability - use lighter gray for better visibility
+(defvar
+ doom-1337-comment-color
+ "#989898"
+ "Custom comment color for doom-1337 theme - light gray for better readability.")
+
 ;; Global whitespace customizations - applies to all themes
 ;; Disable line length highlighting for all themes by removing 'lines-tail from whitespace-style
 (setq whitespace-style '(face trailing tabs tab-mark))
@@ -82,6 +88,13 @@
  "The preferred theme (%s) will be applied after all configuration modules ared loaded"
  themes-config-preferred-theme)
 (core-message-info "=== local.el: Theme configuration finished ===")
+
+;; Apply custom comment color after theme loads
+(with-eval-after-load
+ 'doom-themes
+ (custom-set-faces
+  `(font-lock-comment-face ((t (:foreground ,doom-1337-comment-color :slant italic))))
+  `(font-lock-doc-face ((t (:foreground ,doom-1337-comment-color :slant italic))))))
 
 ;; ============================================
 ;; 2. PLATFORM-SPECIFIC CONFIGURATION
