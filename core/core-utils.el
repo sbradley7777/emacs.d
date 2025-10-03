@@ -32,8 +32,11 @@ Returns t if command is found, nil otherwise."
  (let ((command-path (executable-find command)))
    (if
     command-path
-    (progn (core-message-success "Command '%s' found at %s" command command-path) t)
-    (core-message-warning "Command '%s' not found in PATH" command)
+    (progn
+     (core-message-success
+      "Command '%s' found at %s on host: %s" command command-path (system-name))
+     t)
+    (core-message-warning "Command '%s' not found in PATH on host: %s" command (system-name))
     nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
