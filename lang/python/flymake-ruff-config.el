@@ -12,7 +12,10 @@
  ;; Flymake Ruff Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Only configure ruff if it's available in PATH
+ ;; NOTE: Ruff runs locally (not remotely) because flymake operates on buffer content in the local Emacs process.
+ ;; Unlike LSP servers (e.g., pylsp) which need remote execution to access project structure and dependencies,
+ ;; ruff analyzes code directly via stdin and doesn't require filesystem access to the remote host.
+ ;; Only configure ruff if it's available in local PATH
  (when
   (core-utils-check-command-in-path "ruff")
 
