@@ -34,9 +34,13 @@ Returns t if command is found, nil otherwise."
     command-path
     (progn
      (core-message-success
-      "Command '%s' found at %s on host: %s" command command-path (system-name))
+      "The LSP command \"%s\" was found in PATH at %s on host (local): %s"
+      command
+      command-path
+      (system-name))
      t)
-    (core-message-warning "Command '%s' not found in PATH on host: %s" command (system-name))
+    (core-message-warning
+     "The LSP command \"%s\" was not found in PATH on host (local): %s" command (system-name))
     nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -4,6 +4,7 @@
 ;;      specifically for Python development support.
 
 (require 'tramp)
+(require 'logging)
 
 (core-utils-with-load-timing
  "tramp-utils.el"
@@ -33,6 +34,30 @@ PYTHON-PATH: Optional additional Python path"
   (&optional file)
   "Check if FILE (or current buffer file) is accessed via TRAMP."
   (file-remote-p (or file default-directory)))
+
+ (defun
+  core-utils-check-command-in-path-remote-host (command)
+  "Check if COMMAND exists in PATH on remote host (for TRAMP buffers).
+Returns t if command is found, nil otherwise.
+Only works when called from a buffer visiting a remote file via TRAMP."
+  (if
+   (not (file-remote-p default-directory))
+   (progn (core-message-warning "Not a remote file - cannot check remote host PATH") nil)
+   (let* ((host (file-remote-p default-directory 'host))
+          (command-path (executable-find command t)))
+     (if
+      command-path
+      (progn
+       (core-message-success
+        "The LSP command \"%s\" was found in PATH at %s on host (remote): %s"
+        command
+        command-path
+        host)
+       t)
+      (core-message-warning
+       "The LSP command \"%s\" was not found in PATH on host (remote): %s" command host)
+      nil))))
+
  (core-message-debug "TRAMP utilities loaded"))
 
 (provide 'tramp-utils)
