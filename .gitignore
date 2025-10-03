@@ -50,6 +50,7 @@ Thumbs.db
 monkeytype.sqlite3
 .coverage/
 .vscode/
+.cursor/
 
 # Claude Code project configuration
 CLAUDE.md
