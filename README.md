@@ -21,7 +21,9 @@ This Emacs configuration provides a professional development environment with in
 
 **Key Features:**
 - **Fast startup** with modern performance optimizations
-- **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types
+- **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types with full terminal support
+- **LSP integration** via [Eglot](https://github.com/joaotavora/eglot) for Python, C, and C++ with automatic local/remote detection
+- **Breadcrumb navigation** showing file path and code structure in the header line
 - **Python development** with automatic virtual environment management
 - **Remote development** with seamless [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects
 - **Project navigation** with [Treemacs](https://github.com/Alexander-Miller/treemacs) file tree sidebar and project management
@@ -50,6 +52,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-fonts.el`](core/core-fonts.el) - Automatic font management for icon packages
   - [`core-utils.el`](core/core-utils.el) - Utility functions and load timing system
   - [`ui.el`](core/ui.el) - Basic UI configuration
+  - [`ui-modeline.el`](core/ui-modeline.el) - Modeline customization and status indicators
   - [`editing.el`](core/editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
   - [`tramp-config.el`](core/tramp-config.el) - TRAMP remote file access with Python support
@@ -58,12 +61,16 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`diagnostics.el`](core/diagnostics.el) - System information and configuration diagnostics
   - [`keybindings.el`](core/keybindings.el) - Global key bindings
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
-  - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework
+  - [`breadcrumbs-config.el`](features/breadcrumbs-config.el) - Breadcrumb navigation for file path and code structure
+  - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework with terminal support
+  - [`eglot-config.el`](features/eglot-config.el) - [Eglot](https://github.com/joaotavora/eglot) LSP client with automatic local/remote detection
   - [`flymake-config.el`](features/flymake-config.el) - Flymake diagnostic display configuration
+  - [`flymake-utils.el`](features/flymake-utils.el) - Flymake utility functions and backend formatting
   - [`imenu-list-config.el`](features/imenu-list-config.el) - Symbol navigation sidebar for code structure
   - [`rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el) - Enhanced delimiter visibility
   - [`indent-guides.el`](features/indent-guides.el) - Visual indentation guides
   - [`treemacs-config.el`](features/treemacs-config.el) - File tree navigation and project management
+  - [`treemacs-utils.el`](features/treemacs-utils.el) - Treemacs utility functions
   - [`features-constants.el`](features/features-constants.el) - Feature-specific constants
 - **[`lang/`](lang/)** - Language-specific configurations
   - [`lisp-config.el`](lang/lisp-config.el) - Lisp/Elisp development settings

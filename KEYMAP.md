@@ -80,7 +80,7 @@ Additional keyboard mappings for improved functionality:
 
 ## Code Completion (Corfu)
 
-Intelligent auto-completion powered by [Corfu](https://github.com/minad/corfu):
+Intelligent auto-completion powered by [Corfu](https://github.com/minad/corfu) with full terminal support:
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
@@ -91,6 +91,14 @@ Intelligent auto-completion powered by [Corfu](https://github.com/minad/corfu):
 | `S-TAB` | `corfu-previous` | Navigate to previous candidate | Popup active |
 | `S-TAB` | `python-dedent-line-function` | Decrease indentation | Normal editing |
 | `RET` | `corfu-insert` | Accept selected completion | Popup active |
+| `M-d` | `corfu-popupinfo-toggle` | Toggle documentation popup | Popup active (GUI only) |
+| `M-n` | `corfu-popupinfo-scroll-up` | Scroll documentation down | Popup active (GUI only) |
+| `M-p` | `corfu-popupinfo-scroll-down` | Scroll documentation up | Popup active (GUI only) |
+
+**Documentation Display:**
+- **GUI mode**: Documentation appears in child frame popups (via `corfu-popupinfo`)
+- **Terminal mode**: Documentation appears in echo area/minibuffer (via `corfu-echo`)
+- **Delay**: Documentation appears after 0.1 seconds
 
 ## Essential Emacs Operations
 

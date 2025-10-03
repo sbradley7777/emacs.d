@@ -156,6 +156,13 @@ Powered by [Corfu](https://github.com/minad/corfu) for comprehensive auto-comple
 **Features:**
 - **Automatic completion** appears after typing 1 character (200ms delay)
 - **Smart `TAB` behavior** - completes when possible, indents otherwise
+- **Terminal mode support** - full Corfu functionality in both GUI and terminal environments
+- **Intelligent documentation display**:
+  - **GUI mode**: Documentation popups via `corfu-popupinfo` with child frames
+  - **Terminal mode**: Documentation in echo area via `corfu-echo`
+  - **Responsive feedback**: 0.1s documentation delay
+  - **Documentation controls** (GUI): `M-d` (toggle), `M-n`/`M-p` (scroll)
+- **Completion type icons** via `kind-icon` for visual identification
 - **Multiple trigger options**:
   - `TAB` - Smart completion/indentation
   - `C-c TAB` - Manual completion trigger (reliable in all environments)
@@ -378,6 +385,14 @@ Comprehensive project management and file tree navigation:
 - **Responsive design** - adapts to window size changes and split configurations
 
 ### Navigation and Discovery
+
+- **[Breadcrumb Navigation](https://github.com/joaotavora/breadcrumb)** ([`features/breadcrumbs-config.el`](features/breadcrumbs-config.el)): Hierarchical navigation showing file path and code structure in the header line
+  - **Always visible** - enabled globally via `breadcrumb-mode`
+  - **Dual navigation** - shows both file system path and code structure (via imenu)
+  - **Terminal-optimized colors** - custom color scheme for enhanced readability
+  - **Visual hierarchy** - distinct colors for project base, path components, and current location
+  - **Code structure display** - shows current function/class context with bright highlighting
+
 - **[Which-Key](https://github.com/justbur/emacs-which-key)** ([`core/core-packages.el`](core/core-packages.el)): Interactive keybinding discovery system that displays available key combinations in popup windows
   - **0.3-second delay** for faster response than default settings
   - **40 character descriptions** with improved readability
@@ -397,8 +412,25 @@ Comprehensive project management and file tree navigation:
 - **Theme Support** ([`themes/themes-config.el`](themes/themes-config.el)): [Doom Themes](https://github.com/doomemacs/themes) with doom-zenburn default and terminal compatibility
 
 ### Enhanced Diagnostics
-- **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake-config.el`](features/flymake-config.el)): Real-time syntax checking and linting
+
+- **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake-config.el`](features/flymake-config.el), [`features/flymake-utils.el`](features/flymake-utils.el)): Real-time syntax checking and linting
+  - **Enhanced diagnostics buffer** with user-friendly backend names
+  - **Intelligent backend mapping** - Ruff, Eglot, and other checkers displayed clearly
+  - **Diagnostics window toggle** via `F1` for quick access
+  - **Navigation shortcuts** - `F2`/`F3` for previous/next error
+
+- **[Eglot LSP Client](https://github.com/joaotavora/eglot)** ([`features/eglot-config.el`](features/eglot-config.el)): Language Server Protocol integration for intelligent code features
+  - **Automatic LSP detection** - enables LSP when server executables are found
+  - **Local and remote support** - seamless TRAMP integration for SSH-based development
+  - **Supported languages**:
+    - **Python**: `pylsp` (python-lsp-server)
+    - **C/C++**: `clangd`
+  - **Smart connection handling** - 60-second timeout for remote connections
+  - **Informative logging** - shows LSP command availability checks for debugging
+  - **Automatic mode hooks** - LSP activates automatically for configured languages
+
 - **System Diagnostics** ([`core/diagnostics.el`](core/diagnostics.el)): OS detection, startup logging, and configuration diagnostics
+
 - **Performance Monitoring**: Load time tracking for configuration modules with detailed startup information
 
 ## Related Documentation
