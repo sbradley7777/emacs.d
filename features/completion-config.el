@@ -102,6 +102,63 @@
   (core-message-debug "Corfu auto delay: %s" corfu-auto-delay)
   (core-message-debug "Corfu auto prefix: %s" corfu-auto-prefix))
 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Corfu Terminal Support
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; Terminal support for Corfu
+ (use-package
+  corfu-terminal
+  :after corfu
+  :config
+  (unless (display-graphic-p) (corfu-terminal-mode +1))
+  (core-message-config "Corfu terminal support enabled"))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Corfu Documentation Popup
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; Show documentation while browsing completions
+ (with-eval-after-load
+  'corfu
+
+  ;; In GUI mode: use popupinfo (child frame popup)
+  (when
+   (display-graphic-p)
+   (require 'corfu-popupinfo)
+   (corfu-popupinfo-mode 1)
+   (setq corfu-popupinfo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
+
+   ;; Add keybindings to manually toggle documentation in completion menu
+   (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle) ; Alt+d to toggle
+   (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-down) ; Alt+n scroll down
+   (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-up) ; Alt+p scroll up
+
+   (core-message-config "Corfu documentation popup enabled (GUI mode)")
+   (core-message-debug "Popupinfo keybindings: M-d (toggle), M-n/M-p (scroll)"))
+
+  ;; In terminal mode: use echo (shows documentation in echo area/minibuffer)
+  (unless
+   (display-graphic-p)
+   (require 'corfu-echo)
+   (corfu-echo-mode 1)
+   (setq corfu-echo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
+
+   (core-message-config "Corfu documentation echo enabled (terminal mode)")
+   (core-message-debug "Documentation appears in echo area (minibuffer)")))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Corfu Completion Icons
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; Add type icons to completion candidates
+ (use-package
+  kind-icon
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
+  (core-message-config "Corfu completion icons enabled"))
+
  ;; Add cape backends for in-buffer completion
  (add-hook 'completion-at-point-functions #'cape-dabbrev)
  (add-hook 'completion-at-point-functions #'cape-file)

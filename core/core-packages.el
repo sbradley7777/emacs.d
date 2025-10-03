@@ -23,6 +23,7 @@
     pyvenv
     elisp-autofmt
     corfu
+    kind-icon
     rainbow-delimiters
     highlight-indent-guides
     imenu-list
