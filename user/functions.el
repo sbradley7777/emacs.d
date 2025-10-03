@@ -81,7 +81,8 @@ When reaching the end of buffer, move point to end."
     "^\\*Completions\\*$"
     "^\\*Backtrace\\*$"
     "^\\*.*compile.*\\*$"
-    "^\\*Async-native-compile-log\\*$")
+    "^\\*Async-native-compile-log\\*$"
+    "^\\*EGLOT.*\\*$")
   "List of regex patterns for buffers to filter out during cycling.")
 
  (defun
