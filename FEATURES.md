@@ -423,7 +423,9 @@ Comprehensive project management and file tree navigation:
   - **Automatic LSP detection** - enables LSP when server executables are found
   - **Local and remote support** - seamless TRAMP integration for SSH-based development
   - **Supported languages**:
-    - **Python**: `pylsp` (python-lsp-server)
+    - **Python**: `pylsp` ([python-lsp-server](https://github.com/python-lsp/python-lsp-server))
+      - Base installation: `pip install python-lsp-server`
+      - Recommended plugin: `pip install python-lsp-ruff` (integrates ruff linting into LSP)
     - **C/C++**: `clangd`
   - **Smart connection handling** - 60-second timeout for remote connections
   - **Informative logging** - shows LSP command availability checks for debugging

@@ -7,6 +7,12 @@ This guide helps resolve common issues you may encounter while using this Emacs 
 - [Emacs Version Requirements](#emacs-version-requirements)
 - [Auto-completion Issues](#auto-completion-issues)
 - [Virtual Environment Issues](#virtual-environment-issues)
+- [LSP and Tool Executable Issues](#lsp-and-tool-executable-issues)
+  - [Understanding PATH Search Behavior](#understanding-path-search-behavior)
+  - [pylsp (Python Language Server Protocol)](#pylsp-python-language-server-protocol)
+  - [ruff (Python Linter)](#ruff-python-linter)
+  - [clangd (C/C++ Language Server)](#clangd-cc-language-server)
+  - [General Executable Debugging](#general-executable-debugging)
 - [Font and Icon Issues](#font-and-icon-issues)
 - [Treemacs Navigation Issues](#treemacs-navigation-issues)
 - [Message Logging Issues](#message-logging-issues)
@@ -124,6 +130,196 @@ M-x emacs-version
 
 2. **Permission issues**: Check directory permissions
 3. **Path issues**: Ensure virtual environment path doesn't contain spaces or special characters
+
+## LSP and Tool Executable Issues
+
+### Understanding PATH Search Behavior
+
+**Overview**:
+The configuration automatically searches for required executables (`pylsp`, `ruff`, `clangd`) in your system PATH. Understanding how this works helps diagnose "command not found" issues.
+
+**How PATH Search Works**:
+
+1. **Local Files** (non-TRAMP):
+   - Uses Emacs' `executable-find` function
+   - Searches standard system PATH from your shell environment
+   - Checks `~/.local/bin` (common location for `pip install --user` packages)
+
+2. **Remote Files** (TRAMP/SSH):
+   - Uses TRAMP's remote PATH configuration (`tramp-remote-path`)
+   - Includes `~/.local/bin` on remote host (see `core/tramp-config.el:31-33`)
+   - Includes user's PATH from remote shell profile via `tramp-own-remote-path`
+   - Searches remote host's PATH independently from local system
+
+**Common Installation Locations**:
+
+| Tool | Typical Local Path | Typical Remote Path |
+|------|-------------------|---------------------|
+| `pylsp` | `~/.local/bin/pylsp` | `~/.local/bin/pylsp` |
+| `ruff` | `~/.local/bin/ruff` | N/A (runs locally only) |
+| `clangd` | `/usr/bin/clangd` | `/usr/bin/clangd` |
+
+### pylsp (Python Language Server Protocol)
+
+**About pylsp**:
+- **Purpose**: LSP server for Python providing code completion, diagnostics, and navigation
+- **Execution**: Runs on the same host as the Python file (local for local files, remote for TRAMP files)
+- **Base Installation**: `pip install python-lsp-server`
+- **Recommended Plugin**: `pip install python-lsp-ruff` - integrates ruff linting into pylsp for LSP-based diagnostics
+
+**Configuration**:
+- Defined in `features/eglot-config.el:26` as the LSP server for `python-mode`
+- Automatically detected via PATH search on local or remote host
+- Works alongside `flymake-ruff` (see [ruff section](#ruff-python-linter) below)
+
+**Troubleshooting "pylsp not found"**:
+
+1. **Verify installation**:
+   ```bash
+   # Local installation check
+   which pylsp
+
+   # Remote installation check (from SSH session)
+   ssh remote-host "which pylsp"
+   ```
+
+2. **Check PATH configuration**:
+   ```bash
+   # Verify ~/.local/bin is in PATH
+   echo $PATH | grep -o ~/.local/bin
+
+   # If missing, add to ~/.bash_profile or ~/.bashrc:
+   export PATH="$HOME/.local/bin:$PATH"
+   ```
+
+3. **Install pylsp** (if missing):
+   ```bash
+   # Local installation - base LSP server
+   pip install --user python-lsp-server
+
+   # Local installation - recommended plugin for ruff integration
+   pip install --user python-lsp-ruff
+
+   # Remote installation (requires SSH access)
+   ssh remote-host "pip install --user python-lsp-server python-lsp-ruff"
+   ```
+
+4. **Verify detection in Emacs**:
+   - Open a Python file
+   - Check `*Messages*` buffer for "The LSP command \"pylsp\" was found..." or warning message
+   - LSP status should appear in modeline when successful
+
+### ruff (Python Linter)
+
+**About ruff**:
+- **Purpose**: Fast Python linter for code quality checks
+- **Two integration methods**:
+  1. **Via Flymake**: `flymake-ruff` package (runs locally only, analyzes via stdin)
+  2. **Via LSP**: `python-lsp-ruff` plugin for `pylsp` (runs on same host as pylsp)
+- **Standalone execution**: When used via Flymake, runs **locally only** (even for remote files via TRAMP)
+- **Why local for Flymake?**: Ruff analyzes code via stdin and doesn't need filesystem access to remote host
+
+**Configuration**:
+- **Flymake integration**: Defined in `lang/python/flymake-ruff-config.el:20`
+  - Only activated if `ruff` is found in **local** PATH
+  - Note in `flymake-ruff-config.el:15-17` explains local-only execution
+- **LSP integration**: `python-lsp-ruff` plugin extends `pylsp` with ruff diagnostics
+  - Runs on same host as `pylsp` (local or remote)
+  - Installed separately: `pip install python-lsp-ruff`
+
+**Troubleshooting "ruff not found"**:
+
+1. **Verify local installation**:
+   ```bash
+   which ruff
+   ```
+
+2. **Install ruff** (if missing):
+   ```bash
+   # For Flymake integration (local only)
+   pip install --user ruff
+
+   # For LSP integration via pylsp (local and/or remote)
+   pip install --user python-lsp-ruff
+   ```
+
+3. **Check PATH** (must include `~/.local/bin`):
+   ```bash
+   echo $PATH | grep -o ~/.local/bin
+   ```
+
+4. **Verify detection in Emacs**:
+   - Open a Python file
+   - Ruff diagnostics should appear in buffer if enabled
+   - Check for "f-r---c" backend in Flymake status (Flymake integration)
+   - Check `*Messages*` buffer for LSP server startup (LSP integration via `python-lsp-ruff`)
+
+**Important**:
+- **Flymake ruff**: Runs on your **local** machine only (even for remote files via TRAMP)
+- **LSP ruff** (via `python-lsp-ruff` plugin): Runs on the same host as `pylsp` (local or remote)
+- Both can coexist - Flymake provides local analysis, LSP provides host-aware analysis
+
+### clangd (C/C++ Language Server)
+
+**About clangd**:
+- **Purpose**: LSP server for C and C++ development
+- **Execution**: Runs on the same host as the C/C++ file (local or remote)
+- **Installation**: Typically via system package manager
+
+**Configuration**:
+- Defined in `features/eglot-config.el:26` as the LSP server for `c-mode` and `c++-mode`
+- Automatically detected via PATH search on local or remote host
+
+**Troubleshooting "clangd not found"**:
+
+1. **Verify installation**:
+   ```bash
+   # Local check
+   which clangd
+
+   # Remote check
+   ssh remote-host "which clangd"
+   ```
+
+2. **Install clangd**:
+   ```bash
+   # Debian/Ubuntu
+   sudo apt-get install clangd
+
+   # RHEL/CentOS/Rocky
+   sudo yum install clang-tools-extra
+
+   # macOS
+   brew install llvm
+   ```
+
+3. **Verify detection in Emacs**:
+   - Open a C/C++ file
+   - Check `*Messages*` buffer for LSP detection messages
+   - LSP should activate automatically if clangd is found
+
+### General Executable Debugging
+
+**Check what Emacs sees in PATH**:
+```elisp
+M-: (getenv "PATH")
+```
+
+**For remote TRAMP files, check remote PATH**:
+```elisp
+M-: (file-remote-p default-directory)  ; Verify you're on remote file
+M-: (with-connection-local-variables (getenv "PATH"))
+```
+
+**Check TRAMP remote path configuration**:
+```elisp
+M-x describe-variable RET tramp-remote-path
+```
+
+**Expected TRAMP paths** (from `core/tramp-config.el:31-63`):
+- `~/.local/bin` (added explicitly)
+- `tramp-own-remote-path` (user's shell PATH from remote host)
+- TRAMP default paths (system directories like `/bin`, `/usr/bin`, etc.)
 
 ## Font and Icon Issues
 
@@ -275,18 +471,21 @@ M-x emacs-version
 
 ### Log Files Not Created
 
-**Symptoms**: No message logs in `<emacs-local-dir>/log/` directory
+**Symptoms**: No message logs in `~/.emacs.d/local/log/` directory
+
+**About Log Locations**:
+The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. This directory is defined by the `emacs-local-dir` constant (`~/.emacs.d/local/`) and is excluded from load-path to prevent interference with module loading.
 
 **Troubleshooting Steps**:
 1. **Check log directory**: Verify directory exists and is writable:
    ```bash
-   ls -la <emacs-local-dir>/log/
-   mkdir -p <emacs-local-dir>/log
+   ls -la ~/.emacs.d/local/log/
+   mkdir -p ~/.emacs.d/local/log
    ```
 
 2. **Check permissions**: Ensure Emacs can write to log directory:
    ```bash
-   chmod 755 <emacs-local-dir>/log
+   chmod 755 ~/.emacs.d/local/log
    ```
 
 3. **Test manual logging**: Force a log save:
@@ -298,6 +497,8 @@ M-x emacs-version
    ```elisp
    M-x describe-variable kill-emacs-hook
    ```
+
+5. **Verify log file location**: The actual path expands to `~/.emacs.d/local/log/messages.log`
 
 ### Log Rotation Not Working
 
@@ -316,7 +517,7 @@ M-x emacs-version
 
 3. **File permissions**: Ensure Emacs can rename/move log files:
    ```bash
-   chmod 644 <emacs-local-dir>/log/messages.log*
+   chmod 644 ~/.emacs.d/local/log/messages.log*
    ```
 
 ### Missing Log Content
