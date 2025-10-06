@@ -76,7 +76,7 @@
   (defun
    treemacs-smart-toggle
    ()
-   "Toggle Treemacs, switching to current project if needed."
+   "Toggle Treemacs, opening at current file's project root."
    (interactive)
    (cond
     ;; If treemacs window is selected, close it
@@ -85,9 +85,9 @@
     ;; If treemacs is visible but not selected, select it
     ((treemacs-get-local-window)
      (treemacs-select-window))
-    ;; Treemacs not visible, open it
+    ;; Treemacs not visible, open it at current project
     (t
-     (treemacs))))
+     (treemacs-add-and-display-current-project-exclusively))))
 
   ;; Global keybindings for treemacs
   (global-set-key (kbd "<f4>") 'treemacs-smart-toggle)
