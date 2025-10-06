@@ -61,6 +61,10 @@
        "Search Packages"
        "Search for packages"
        (lambda (&rest _) (search-packages)))
+      (,(nerd-icons-codicon "nf-cod-trash" :height 1.1 :v-adjust 0.0)
+       "Package Cleanup"
+       "Remove unused packages and reset metadata cache"
+       (lambda (&rest _) (core-packages-cleanup)))
       (,(nerd-icons-octicon "nf-oct-tools" :height 1.1 :v-adjust 0.0)
        "Settings"
        "Open settings"

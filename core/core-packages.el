@@ -309,6 +309,58 @@ showing current version -> new version for each package."
       (core-message-package "No package updates available - all packages are up to date.")))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Package Cleanup Functions
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  core-packages-cleanup ()
+  "Clean up unused packages and reset package metadata cache.
+Removes orphaned package dependencies using package-autoremove and resets metadata."
+  (interactive)
+  (let ((cleanup-count 0))
+
+    (core-message-package "Starting package cleanup...")
+
+    ;; Step 1: Remove unused dependencies using built-in package-autoremove
+    (core-message-loading "Removing unused package dependencies...")
+    (condition-case err
+        (progn
+         ;; Use core-packages-all as wanted packages if package-selected-packages is empty
+         (let ((package-selected-packages (or package-selected-packages core-packages-all))
+               (before-count (length package-alist)))
+
+           ;; Override confirmation prompts to auto-accept
+           (cl-letf (((symbol-function 'y-or-n-p) (lambda (&rest _) t))
+                     ((symbol-function 'yes-or-no-p) (lambda (&rest _) t)))
+             (package-autoremove))
+
+           ;; Calculate removed count
+           (setq cleanup-count (- before-count (length package-alist)))
+           (if
+            (> cleanup-count 0)
+            (core-message-success
+             "Removed %d unused package%s" cleanup-count (if (> cleanup-count 1) "s" ""))
+            (core-message-success "No unused packages found"))))
+      (error
+       (core-message-error "Package cleanup failed: %s" (error-message-string err))))
+
+    ;; Step 2: Reset package metadata cache
+    (core-message-loading "Resetting package metadata cache...")
+    (condition-case err
+        (progn
+         (require 'package-system/metadata)
+         (when (fboundp 'package-metadata-reset) (package-metadata-reset))
+         (core-message-success "Package metadata cache reset"))
+      (error
+       (core-message-warning "Metadata reset failed: %s" (error-message-string err))))
+
+    ;; Summary
+    (core-message-success
+     "Cleanup complete: removed %d package%s, metadata reset"
+     cleanup-count
+     (if (> cleanup-count 1) "s" ""))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Automatic Weekly Update Check with Persistent Storage
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
