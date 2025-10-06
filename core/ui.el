@@ -22,6 +22,12 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Don't show the GNU splash screen
  (setq inhibit-startup-message t)
+
+ ;; Initial buffer choice: show dashboard only when no files specified
+ (setq
+  initial-buffer-choice
+  (lambda
+   () (if (> (length command-line-args) 1) (current-buffer) (get-buffer-create "*dashboard*"))))
  ;; Search preferences
  (setq case-fold-search t) ; Make searches case insensitive
  ;; Basic editor behavior

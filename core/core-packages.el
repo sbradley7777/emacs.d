@@ -32,7 +32,8 @@
     treemacs
     treemacs-icons-dired
     treemacs-nerd-icons
-    breadcrumb)
+    breadcrumb
+    dashboard)
   "Development and programming packages.")
 
  (defvar
