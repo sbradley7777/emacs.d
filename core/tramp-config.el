@@ -40,10 +40,6 @@ These directories will be searched for executables on remote hosts.")
 (setq tramp-default-method "ssh")
 (setq tramp-default-remote-shell "/bin/bash")
 
-;; Silent operation by default - this prevents the connection buffer from appearing.
-;; Can be overridden in local.el for debugging.
-(setq tramp-verbose 0)
-
 ;; Cache and auto-save locations
 (setq tramp-persistency-file-name (expand-file-name "tramp" emacs-local-dir))
 (setq tramp-auto-save-directory (expand-file-name "tramp-autosave" emacs-local-dir))
