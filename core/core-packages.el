@@ -9,38 +9,45 @@
  "core-packages.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Essential Package Categories
+ ;; Package Categories
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Organized package lists for better maintainability
- (defvar
-  core-packages-essential
-  '(doom-themes yaml-mode toml-mode markdown-mode)
-  "Essential packages that must be installed.")
+ ;; Packages organized by function and load order for better maintainability.
+ ;; Categories: interface -> editing -> development -> languages
 
  (defvar
-  core-packages-development
-  '(which-key
-    pyvenv
-    elisp-autofmt
-    corfu
-    kind-icon
+  core-packages-interface
+  '(doom-themes
+    which-key
     rainbow-delimiters
     highlight-indent-guides
-    imenu-list
-    cape
-    flymake-ruff
-    treemacs
-    treemacs-nerd-icons
-    breadcrumb
-    dashboard
+    kind-icon
     nerd-icons-dired
-    dired-subtree)
-  "Development and programming packages.")
+    treemacs-nerd-icons
+    dashboard)
+  "UI/UX essentials for all users.
+Themes, visual enhancements, icons, and interface helpers.")
+
+ (defvar
+  core-packages-editing '(corfu cape imenu-list treemacs breadcrumb dired-subtree)
+  "Text manipulation and navigation tools for all users.
+Completion, navigation, and file browsing functionality.")
+
+ (defvar
+  core-packages-development '(flymake-ruff elisp-autofmt)
+  "Programming-specific development tools.
+Linting, formatting, and code analysis tools.")
+
+ (defvar
+  core-packages-languages '(pyvenv yaml-mode toml-mode markdown-mode)
+  "Language-specific modes and tools.
+File type handlers and language-specific utilities.")
 
  (defvar
   core-packages-all
-  (append core-packages-essential core-packages-development)
-  "Complete list of packages to install.")
+  (append
+   core-packages-interface core-packages-editing core-packages-development core-packages-languages)
+  "Complete list of all packages to install.
+Assembled from all category lists in load order.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Robust Package Installation
