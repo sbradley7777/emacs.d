@@ -13,8 +13,6 @@
  ;; Dashboard Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- (require 'dashboard-utils)
-
  (use-package
   dashboard
   :ensure t
@@ -58,11 +56,11 @@
       (,(nerd-icons-octicon "nf-oct-list_unordered" :height 1.1 :v-adjust 0.0)
        "Installed Packages"
        "List installed packages"
-       (lambda (&rest _) (dashboard-show-installed-packages)))
+       (lambda (&rest _) (show-installed-packages)))
       (,(nerd-icons-octicon "nf-oct-search" :height 1.1 :v-adjust 0.0)
        "Search Packages"
        "Search for packages"
-       (lambda (&rest _) (dashboard-search-packages)))
+       (lambda (&rest _) (search-packages)))
       (,(nerd-icons-octicon "nf-oct-tools" :height 1.1 :v-adjust 0.0)
        "Settings"
        "Open settings"
