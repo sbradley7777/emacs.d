@@ -21,7 +21,7 @@
    dashboard-banner-logo-title
    "Welcome to Emacs"
    dashboard-startup-banner
-   'logo
+   2
    dashboard-center-content
    t
    dashboard-vertically-center-content
