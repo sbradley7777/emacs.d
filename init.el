@@ -248,6 +248,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'breadcrumbs-config "Breadcrumb navigation")
 (safe-load-config 'treemacs-utils "Treemacs utility functions")
 (safe-load-config 'treemacs-config "Project tree navigation")
+(safe-load-config 'dired-config "Dired with nerd icons")
 (safe-load-config 'dashboard-config "Dashboard startup screen")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

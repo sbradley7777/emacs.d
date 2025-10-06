@@ -30,10 +30,11 @@
     cape
     flymake-ruff
     treemacs
-    treemacs-icons-dired
     treemacs-nerd-icons
     breadcrumb
-    dashboard)
+    dashboard
+    nerd-icons-dired
+    dired-subtree)
   "Development and programming packages.")
 
  (defvar

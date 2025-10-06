@@ -102,11 +102,9 @@
   ;; Dired Integration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  ;; Configure dired integration - only in GUI mode (icon fonts don't display properly in terminal)
-  (when
-   (and (display-graphic-p) (package-installed-p 'treemacs-icons-dired))
-   (require 'treemacs-icons-dired)
-   (add-hook 'dired-mode-hook 'treemacs-icons-dired-enable-once)))
+  ;; NOTE: Dired icons are now handled by nerd-icons-dired (see features/dired-config.el)
+  ;; treemacs-icons-dired is NOT enabled to avoid conflicts with nerd-icons-dired
+  ) ;; End of (when (package-installed-p 'treemacs))
 
  ;; Ensure F4 binding is always set
  (unless
