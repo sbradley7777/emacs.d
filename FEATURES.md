@@ -6,6 +6,7 @@ This document provides comprehensive details about all features available in thi
 
 - [Modern Emacs 30.2+ Features](#modern-emacs-302-features)
 - [Performance Optimizations](#performance-optimizations)
+- [Package Management](#package-management)
 - [System Management](#system-management)
   - [Message Logging System](#message-logging-system)
   - [Font Management](#font-management)
@@ -21,6 +22,8 @@ This document provides comprehensive details about all features available in thi
 - [User Interface Enhancements](#user-interface-enhancements)
   - [Theme System](#theme-system)
   - [Project Navigation](#project-navigation)
+  - [Directory Browsing (Dired)](#directory-browsing-dired)
+  - [Startup Dashboard](#startup-dashboard)
   - [Navigation and Discovery](#navigation-and-discovery)
   - [Visual Improvements](#visual-improvements)
   - [Enhanced Diagnostics](#enhanced-diagnostics)
@@ -94,6 +97,59 @@ This configuration is designed exclusively for Emacs 30.2+ and utilizes specific
 - **Repository refresh optimization**: Only downloads catalogs when needed, avoiding unnecessary network calls
 - **Fast startup**: Skips package refresh during startup when recent cache exists
 - **Safe cache reset**: Delete `~/.emacs.d/local/package-metadata.el` to force fresh repository downloads
+
+## Package Management
+
+Interactive package management commands for browsing, updating, and maintaining installed packages:
+
+**Features** ([`core/core-packages.el`](core/core-packages.el)):
+- **Package Browser**: View all installed packages with status and version information
+- **Update Checking**: Automatic weekly update checks with manual override option
+- **Package Search**: Search for packages by name or keyword across repositories
+- **Cleanup Utilities**: Remove unused package dependencies and reset metadata cache
+
+**Interactive Commands:**
+
+**`M-x show-installed-packages`** ([`core/core-packages.el:148-244`](core/core-packages.el)):
+- **Comprehensive package listing** showing all installed packages with status labels
+- **Update availability indicator** (`*` marker) for packages with available updates
+- **Clear status labels**: "Installed (by User)" vs "Dependency" for easy identification
+- **One-click updates**: `[Update All]` button when updates are available
+- **Detailed columns**: Package name, installed version, update status, and description
+- **Sorted display**: Alphabetically sorted for easy navigation
+
+**`M-x search-packages`** ([`core/core-packages.el:246-252`](core/core-packages.el)):
+- **Keyword-based search** across all available package repositories
+- **Interactive results**: Browse and install packages directly from search results
+- **Repository coverage**: Searches MELPA, GNU ELPA, and all configured repositories
+
+**`M-x show-package-upgrades`** ([`core/core-packages.el:278-309`](core/core-packages.el)):
+- **Manual update check** on demand (bypasses weekly automatic check)
+- **Detailed upgrade information**: Shows current version → new version for each package
+- **Repository diagnostics**: Confirms successful contact with all package repositories
+- **Network-aware**: Includes timeout protection and error handling
+- **Usage instructions**: Provides next steps for installing updates via `package-list-packages`
+
+**`M-x core-packages-cleanup`** ([`core/core-packages.el:316-361`](core/core-packages.el)):
+- **Automatic dependency removal**: Uses built-in `package-autoremove` to clean orphaned packages
+- **Metadata cache reset**: Clears package metadata for fresh repository state
+- **Safe operation**: Auto-accepts removal prompts for streamlined cleanup
+- **Status reporting**: Shows count of removed packages and cleanup results
+- **Error handling**: Graceful failure recovery with detailed error messages
+
+**Automatic Update Checking:**
+- **Weekly schedule**: Automatically checks for updates once per week during interactive sessions
+- **Persistent tracking**: Stores last check timestamp in `~/.emacs.d/local/package-metadata.el`
+- **Non-disruptive**: Notifies about available updates without installing them
+- **Network-aware**: Only runs when network connectivity is available
+- **Timeout protection**: 30-second timeout prevents hanging on slow connections
+- **User control**: Manual installation required for all updates (prevents surprise breakage)
+
+**Benefits:**
+- **Stay informed**: Know when package updates are available without manual checking
+- **Maintain stability**: Review and approve updates before installation
+- **Easy maintenance**: One-command cleanup for unused dependencies
+- **Clear visibility**: Understand package status and update availability at a glance
 
 ## System Management
 
@@ -383,6 +439,89 @@ Comprehensive project management and file tree navigation:
 - **GUI enhancement** - leverages nerd-icons for rich visual experience
 - **Performance tuning** - optimized refresh rates and minimal resource usage
 - **Responsive design** - adapts to window size changes and split configurations
+
+### Directory Browsing (Dired)
+
+Enhanced file and directory management with inline tree expansion and icon support:
+
+**[Dired](https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html) Enhancements** ([`features/dired-config.el`](features/dired-config.el)):
+- **Inline tree expansion** via [dired-subtree](https://github.com/Fuco1/dired-hacks) package
+- **File-type icons** via [nerd-icons-dired](https://github.com/rainstormstudio/nerd-icons-dired) package
+- **Smart defaults** for recursive operations and auto-refresh
+- **Human-readable sizes** in directory listings
+
+**Dired Subtree Features:**
+- **Inline directory expansion** - expand directories without opening new buffers
+- **Tree-like navigation** - visual hierarchy showing nested directory structure
+- **Quick toggle** - press `i` on any directory to expand/collapse inline
+- **Depth cycling** - use `TAB` to cycle through expansion depths
+- **Clean interface** - no buffer clutter, everything in one dired buffer
+
+**Icon Support:**
+- **Automatic icons** - file-type specific icons appear automatically in dired buffers
+- **Terminal and GUI** - works in both modes when terminal uses a Nerd Font
+- **Font requirement** - terminal emulator needs Nerd Font configuration for icon display
+- **Visual file types** - instantly identify files by type (code, config, images, etc.)
+
+**Enhanced Dired Settings:**
+- **Smart target suggestions** - suggests visible dired buffers for copy/move operations
+- **Recursive operations** - always copies directories recursively without asking
+- **Auto-refresh** - dired buffers update automatically when files change
+- **Buffer management** - kills old dired buffer when opening new one (cleaner workflow)
+
+**Keybindings:**
+- **`i`** - Toggle inline subtree expansion/collapse for directory under cursor
+- **`TAB`** - Cycle subtree expansion depth (collapsed → 1 level → 2 levels → ...)
+- **Standard dired keys** - all normal dired operations still available
+
+**Terminal Font Setup for Icons:**
+
+For icon display in terminal mode, configure your terminal to use a Nerd Font:
+
+```bash
+# macOS (iTerm2/Terminal.app)
+brew install font-fira-code-nerd-font
+# Then: iTerm2 → Preferences → Profiles → Text → Font → "FiraCode Nerd Font Mono"
+
+# Linux (download from https://www.nerdfonts.com/)
+# Extract to ~/.local/share/fonts/ and run:
+fc-cache -fv
+```
+
+**Without a Nerd Font in your terminal, icons will appear as empty boxes.**
+
+### Startup Dashboard
+
+Professional startup screen with quick access to recent files, package management, and system actions:
+
+**[Dashboard](https://github.com/emacs-dashboard/emacs-dashboard) Features** ([`features/dashboard-config.el`](features/dashboard-config.el)):
+- **Welcome screen** - displays on Emacs startup with branding and navigation
+- **Recent files** - quick access to last 5 recently opened files
+- **Bookmarks** - access to saved file bookmarks (last 5)
+- **Icon navigation** - clickable buttons with Nerd Font icons for common actions
+- **System information** - startup time and initialization details
+
+**Dashboard Navigation Buttons:**
+- **Home** - browse dashboard homepage (documentation)
+- **Restart** - restart Emacs session
+- **Update** - check for package updates (`show-package-upgrades`)
+- **Installed Packages** - view all installed packages (`show-installed-packages`)
+- **Search Packages** - search for new packages (`search-packages`)
+- **Package Cleanup** - remove unused packages and reset cache (`core-packages-cleanup`)
+- **Settings** - open `init.el` configuration file
+- **Quit** - exit Emacs with save prompts
+
+**Display Features:**
+- **Centered content** - professional centered layout
+- **Icon support** - uses Nerd Icons for visual navigation
+- **Smart startup** - appears on launch, doesn't interfere with file opening
+- **Keyboard accessible** - navigate buttons with `TAB` and `RET`
+
+**Benefits:**
+- **Quick navigation** - one-click access to common operations
+- **Package management** - integrated package maintenance without memorizing commands
+- **Recent files** - fast access to working files
+- **Professional appearance** - polished startup experience
 
 ### Navigation and Discovery
 

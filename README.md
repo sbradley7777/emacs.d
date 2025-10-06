@@ -63,6 +63,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`breadcrumbs-config.el`](features/breadcrumbs-config.el) - Breadcrumb navigation for file path and code structure
   - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework with terminal support
+  - [`dired-config.el`](features/dired-config.el) - Enhanced directory browsing with inline tree expansion and icons
   - [`eglot-config.el`](features/eglot-config.el) - [Eglot](https://github.com/joaotavora/eglot) LSP client with automatic local/remote detection
   - [`flymake-config.el`](features/flymake-config.el) - Flymake diagnostic display configuration
   - [`flymake-utils.el`](features/flymake-utils.el) - Flymake utility functions and backend formatting

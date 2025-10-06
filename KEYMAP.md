@@ -14,11 +14,14 @@ This document provides a comprehensive reference for all keybindings and executa
   - [Custom Navigation](#custom-navigation)
   - [Imenu-List Navigation](#imenu-list-navigation)
   - [Treemacs Project Navigation](#treemacs-project-navigation)
+  - [Dired Directory Browsing](#dired-directory-browsing)
   - [Language-Specific Keybindings](#language-specific-keybindings)
   - [Code Formatting](#code-formatting)
   - [Diagnostic and Error Checking](#diagnostic-and-error-checking)
 - [Functions](#functions)
   - [Virtual Environment Management](#virtual-environment-management)
+  - [Package Management](#package-management)
+  - [Theme Management](#theme-management)
 - [Related Documentation](#related-documentation)
 
 ## How to Use This Guide
@@ -232,6 +235,50 @@ When the Treemacs sidebar is active, these keys work within the sidebar:
 | `s` | Sort | Change sorting method | Treemacs sidebar |
 | `h` | Show/hide hidden files | Toggle hidden file visibility | Treemacs sidebar |
 
+### Dired Directory Browsing
+
+Enhanced directory navigation with inline tree expansion powered by [dired-subtree](https://github.com/Fuco1/dired-hacks):
+
+**Opening Dired:**
+- `C-x C-f` then navigate to directory (standard Emacs file browser)
+- `C-x d` - open dired for a specific directory
+
+**Dired Subtree Extensions:**
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `i` | `dired-subtree-toggle` | Toggle inline directory expansion/collapse | Dired buffer |
+| `TAB` | `dired-subtree-cycle` | Cycle subtree depth (collapsed → 1 level → 2 levels → ...) | Dired buffer |
+
+**Standard Dired Navigation:**
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `RET` | Open file/directory | Open file or enter directory | Dired buffer |
+| `^` | Go to parent directory | Navigate up one directory level | Dired buffer |
+| `n` | Next line | Move to next file/directory | Dired buffer |
+| `p` | Previous line | Move to previous file/directory | Dired buffer |
+| `g` | Refresh | Reload directory listing | Dired buffer |
+| `q` | Quit dired | Close dired buffer | Dired buffer |
+
+**File Operations:**
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `C` | Copy file | Copy file(s) to destination | Dired buffer |
+| `R` | Rename/move file | Rename or move file(s) | Dired buffer |
+| `D` | Delete file | Delete marked file(s) | Dired buffer |
+| `+` | Create directory | Create new directory | Dired buffer |
+| `m` | Mark file | Mark file for operations | Dired buffer |
+| `u` | Unmark file | Remove mark from file | Dired buffer |
+| `U` | Unmark all | Remove all marks | Dired buffer |
+
+**Display Features:**
+- **Icons**: File-type icons appear automatically (requires Nerd Font in terminal)
+- **Inline trees**: Expand directories without opening new buffers
+- **Human-readable sizes**: File sizes shown with KB/MB/GB units
+- **Auto-refresh**: Directory updates automatically when files change
+
 ## Language-Specific Keybindings
 
 ### Python Development
@@ -330,6 +377,30 @@ Python virtual environment commands for project isolation using [pyvenv](https:/
 | `pyvenv-activate` | Manually activate a virtual environment |
 | `pyvenv-deactivate` | Deactivate current virtual environment |
 | `pyvenv-workon` | Switch to a different virtual environment |
+
+### Package Management
+
+Interactive package management commands for browsing, updating, and maintaining installed packages:
+
+| Function | Description |
+|:---------|:------------|
+| `show-installed-packages` | View all installed packages with update indicators and status labels |
+| `search-packages` | Search for packages by name or keyword across repositories |
+| `show-package-upgrades` | Check for available package updates (manual override of weekly check) |
+| `core-packages-cleanup` | Remove unused package dependencies and reset metadata cache |
+
+**Features:**
+- **Package browser** - displays all packages with "Installed (by User)" or "Dependency" labels
+- **Update checking** - shows current version → new version for available updates
+- **One-click updates** - `[Update All]` button when updates are available
+- **Cleanup utilities** - removes orphaned dependencies and resets cache
+
+**Dashboard Integration:**
+All package management functions are accessible from the startup dashboard via icon buttons:
+- **Update** button - runs `show-package-upgrades`
+- **Installed Packages** button - runs `show-installed-packages`
+- **Search Packages** button - runs `search-packages`
+- **Package Cleanup** button - runs `core-packages-cleanup`
 
 ### Theme Management
 
