@@ -13,6 +13,14 @@
  ;; Dashboard Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+ (defun
+  dashboard-insert-separator () "Insert a centered horizontal line separator."
+  (let* ((line-width 80)
+         (separator (make-string line-width ?─))
+         (padding (/ (- (window-width) line-width) 2))
+         (spaces (make-string (max 0 padding) ?\s)))
+    (insert "\n\n" spaces separator "\n")))
+
  (use-package
   dashboard
   :ensure t
@@ -81,6 +89,7 @@
      dashboard-insert-navigator
      dashboard-insert-newline
      dashboard-insert-init-info
+     dashboard-insert-separator
      dashboard-insert-items
      dashboard-insert-footer))
   (dashboard-setup-startup-hook)
