@@ -51,9 +51,8 @@
    treemacs-project-follow-cleanup
    t)
 
-  ;; Use Default theme for all environments (user can override in local.el)
-  (treemacs-load-theme "Default")
-  (core-message-package "Default theme loaded (user can override in local.el)")
+  ;; Load nerd-icons theme (requires Nerd Fonts installation)
+  (treemacs-load-user-theme "nerd-icons")
 
   ;; Enable useful modes
   (treemacs-follow-mode t)

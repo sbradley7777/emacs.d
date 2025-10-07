@@ -70,22 +70,7 @@
 ;; (setq tramp-verbose 6)
 
 ;; ============================================
-;; 4. TREEMACS ICON THEME OVERRIDE (OPTIONAL)
-;; ============================================
-;; Set your preferred treemacs theme here:
-;; Options: "nerd-icons" (with custom file icons), "Default", or nil (use defaults)
-;;
-;; The treemacs-load-user-theme function handles:
-;; - Loading the specified theme
-;; - Applying custom file icon mappings (for nerd-icons theme)
-;; - Error handling and validation
-;;
-;; To add more custom file icons, edit: features/treemacs-config.el (treemacs-custom-file-icon-mappings)
-
-(with-eval-after-load 'treemacs (treemacs-load-user-theme "nerd-icons"))
-
-;; ============================================
-;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 4. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)
