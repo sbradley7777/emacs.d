@@ -31,7 +31,7 @@
   python-shell-prompt-detect-failure-warning
   nil
   python-shell-interpreter
-  (or (executable-find "python3") (executable-find "python") "python3")))
+  python-default-interpreter))
 
 ;; Make this module available for loading with (require 'core)
 (provide 'python-core)
