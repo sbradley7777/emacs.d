@@ -130,16 +130,7 @@
 ;; (setq tramp-verbose 6)
 
 ;; ============================================
-;; 4. PYTHON VIRTUAL ENVIRONMENT CONFIGURATION
-;; ============================================
-;; Python virtual environment modeline color (optional)
-;; Customize the color of the [venv: project-name] indicator in the modeline
-;; By default, no special color is applied (uses normal modeline text color)
-;; Options: "lightcoral", "red", "orange", "green", "blue", "purple", "#ff7f7f", etc.
-(setq pyvenv-modeline-color "lightcoral")
-
-;; ============================================
-;; 5. TREEMACS ICON THEME OVERRIDE (OPTIONAL)
+;; 4. TREEMACS ICON THEME OVERRIDE (OPTIONAL)
 ;; ============================================
 ;; Set your preferred treemacs theme here:
 ;; Options: "nerd-icons" (with custom file icons), "Default", or nil (use defaults)

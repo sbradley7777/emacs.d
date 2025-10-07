@@ -263,21 +263,12 @@ Comprehensive Python development setup with intelligent environment management:
 - `M-x pyvenv-deactivate` - Deactivate current virtual environment
 - `M-x pyvenv-workon` - Switch to a different virtual environment
 
-#### Enhanced Virtual Environment Display
+#### Virtual Environment Display
 
-**Project-Scoped Modeline Indicator** ([`core/ui.el`](core/ui.el)):
-- **Conditional display** - `[venv: project-name (pyX.X)]` indicator only appears for files within the detected project root directory
-- **Path-based filtering** - indicator is completely hidden when file path does not start with the project root path
-- **Optional color customization** via `pyvenv-modeline-color` variable in [`local.el`](configs/local.el)
-- **Clean modeline** - files outside the project show no virtual environment information
-
-**Example Configuration** ([`configs/local.el`](configs/local.el)):
-```elisp
-;; Set custom modeline color for Python virtual environment indicator
-(setq pyvenv-modeline-color "lightcoral")  ; Options: "red", "green", "blue", "#ff7f7f", etc.
-```
-
-**Behavior**: The `[venv: project-name]` indicator will only be displayed when editing files located within the active `python` virtual environment and truly project-scoped and path-dependent. Files or buffers that do not meet this requirement will show no virtual environment status in the modeline at all.
+**Default pyvenv Modeline Indicator**:
+- Uses pyvenv's built-in `[ venvname ]` modeline indicator
+- Automatically appears when a virtual environment is activated
+- Clean, simple display without custom formatting
 
 #### Development Tools
 - **Advanced Python Linting** via [flymake-ruff](https://github.com/erickgnavar/flymake-ruff) integration ([`lang/python/flymake-ruff-config.el`](lang/python/flymake-ruff-config.el))

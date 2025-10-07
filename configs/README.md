@@ -88,26 +88,6 @@ This directory contains template configuration files that demonstrate how to use
 - All files are optional - the configuration works without them
 - Settings in these files can override anything in the main configuration
 
-## Python Development Customizations
-
-### **Virtual Environment Modeline Color** ([`local.el`](./local.el))
-
-- **Customize the color** of the `[venv: project-name]` indicator in the modeline
-- **Visual distinction** for active `python` projects with color-coded status
-- **Optional setting** - by default uses normal modeline text color
-
-**Example Usage**:
-```elisp
-;; Python virtual environment modeline color (optional)
-;; Customize the color of the [venv: project-name] indicator in the modeline
-(setq pyvenv-modeline-color "lightcoral")
-```
-
-**Available Color Options**:
-- **Named colors**: `"red"`, `"green"`, `"blue"`, `"orange"`, `"purple"`, `"lightcoral"`
-- **Hex colors**: `"#ff7f7f"`, `"#90ee90"`, `"#87ceeb"`, etc.
-- **Default**: No special color (uses normal modeline text)
-
 ## Integration
 
 These files integrate seamlessly with the main Emacs configuration:
