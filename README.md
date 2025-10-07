@@ -23,10 +23,12 @@ This Emacs configuration provides a professional development environment with in
 - **Fast startup** with modern performance optimizations
 - **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types with full terminal support
 - **LSP integration** via [Eglot](https://github.com/joaotavora/eglot) for Python, C, and C++ with automatic local/remote detection
+- **Professional modeline** with [Doom-modeline](https://github.com/seagle0128/doom-modeline) showing Git status, LSP indicators, and Python environment
 - **Breadcrumb navigation** showing file path and code structure in the header line
 - **Python development** with automatic virtual environment management
 - **Remote development** with seamless [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects
 - **Project navigation** with [Treemacs](https://github.com/Alexander-Miller/treemacs) file tree sidebar and project management
+- **Custom dashboard** with quick access to recent files, package management, and system actions
 - **Automatic font management** for icon packages with system-wide font installation
 - **Message logging** with automatic log rotation and session history
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
@@ -52,7 +54,6 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-fonts.el`](core/core-fonts.el) - Automatic font management for icon packages
   - [`core-utils.el`](core/core-utils.el) - Utility functions and load timing system
   - [`ui.el`](core/ui.el) - Basic UI configuration
-  - [`ui-modeline.el`](core/ui-modeline.el) - Modeline customization and status indicators
   - [`editing.el`](core/editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
   - [`tramp-config.el`](core/tramp-config.el) - TRAMP remote file access with Python support
@@ -89,6 +90,9 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
 - **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
   - [`themes-utils.el`](themes/themes-utils.el) - Theme utilities and helper functions
+  - [`theme-doom-1337.el`](themes/theme-doom-1337.el) - Doom 1337 theme-specific customizations
+  - [`modeline-config.el`](themes/modeline-config.el) - [Doom-modeline](https://github.com/seagle0128/doom-modeline) configuration
+  - [`modeline-faces.el`](themes/modeline-faces.el) - Theme-specific modeline face customizations
 - **[`user/`](user/)** - Personal customizations
   - [`functions.el`](user/functions.el) - Custom helper functions
   - [`aliases.el`](user/aliases.el) - Custom command aliases

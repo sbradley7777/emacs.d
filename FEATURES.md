@@ -356,12 +356,45 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 
 ## User Interface Enhancements
 
+### Modeline System
+
+Modern status line powered by [Doom-modeline](https://github.com/seagle0128/doom-modeline) with rich visual indicators:
+
+**Features** ([`themes/modeline-config.el`](themes/modeline-config.el)):
+- **Doom-modeline integration**: Professional status line with icons and rich information display
+- **Icon support**: File type icons, mode indicators, and status symbols
+- **Git integration**: Branch name and repository status in modeline
+- **LSP status**: Visual indicators for language server connection and diagnostics
+- **Python environment**: Virtual environment name and version display
+- **Time display**: Current date and time in modeline
+- **Theme coordination**: Modeline colors match current theme
+- **Configurable**: Switch to default Emacs modeline via `modeline-config-use-doom-modeline` variable
+
+**Modeline Components:**
+- **Buffer information**: File name, modification status, and buffer state
+- **Project context**: Current project directory and file path
+- **Version control**: Git branch, status, and changes
+- **LSP indicators**: Connection status and diagnostic counts
+- **Python environment**: Active virtual environment and interpreter version
+- **System status**: Time, encoding, and line/column position
+
+**Customization** ([`themes/modeline-faces.el`](themes/modeline-faces.el)):
+- **Theme-specific colors**: Automatic color coordination with active theme
+- **Custom faces**: Dedicated customizations for doom-1337 and other themes
+- **Breadcrumb integration**: Coordinated colors for breadcrumb navigation
+
+**Why Doom-modeline?**
+- **Professional appearance**: Clean, modern status line design
+- **Information density**: Shows relevant information without clutter
+- **Visual feedback**: Immediate status updates for Git, LSP, and Python environments
+- **Active maintenance**: Regular updates and community support
+
 ### Theme System
 
 Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/themes) with dynamic discovery and interactive browsing:
 
 **Features** ([`themes/themes-config.el`](themes/themes-config.el)):
-- **Default Theme**: `doom-zenburn` - classic zenburn theme with excellent terminal compatibility
+- **Default Theme**: `doom-1337` - vibrant cyberpunk theme with excellent terminal compatibility
 - **Dynamic Discovery**: Automatically finds all 68+ available doom themes at runtime
 - **Interactive Browser**: Dedicated theme testing interface with live preview
 - **Terminal Compatibility**: Automatic adjustments for terminal vs GUI environments
@@ -380,15 +413,15 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
 - **Full Collection**: Access to all 68+ doom themes plus additional options
 
 **Available Themes** (Dynamically Discovered):
-- **68+ Doom Themes**: Complete collection including `doom-zenburn`, `doom-1337`, `doom-acario-dark`, `doom-ayu-dark`, etc.
-- **Popular Choices**: `doom-zenburn` (default), `doom-1337`, `doom-Iosvkem`, `doom-gruvbox`, `doom-material-dark`, `doom-monokai-machine`
-- **Terminal-Optimized**: `doom-zenburn` (default), `doom-1337`, `doom-gruvbox`, `doom-material-dark`, `doom-tomorrow-night`
+- **68+ Doom Themes**: Complete collection including `doom-1337`, `doom-zenburn`, `doom-acario-dark`, `doom-ayu-dark`, etc.
+- **Popular Choices**: `doom-1337` (default), `doom-zenburn`, `doom-Iosvkem`, `doom-gruvbox`, `doom-material-dark`, `doom-monokai-machine`
+- **Terminal-Optimized**: `doom-1337` (default), `doom-zenburn`, `doom-gruvbox`, `doom-material-dark`, `doom-tomorrow-night`
 - **Built-in Fallbacks**: `wombat`, `tango-dark`, `leuven` for system compatibility
 
 **Customization** ([`configs/local.el`](configs/local.el)):
 ```elisp
-;; Set your preferred theme in local.el to override the default doom-zenburn
-(setq user-preferred-theme 'doom-1337)  ; Example override from configs/local.el
+;; Set your preferred theme in local.el to override the default doom-1337
+(setq themes-config-preferred-theme 'doom-zenburn)  ; Example override to classic theme
 
 ;; Theme-specific customizations
 (setq user-theme-customizations
@@ -539,7 +572,7 @@ Professional startup screen with quick access to recent files, package managemen
 ### Visual Improvements
 - **[Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters)** ([`features/rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el)): Enhanced delimiter visibility with color coding
 - **[Indent Guides](https://github.com/DarthFennec/highlight-indent-guides)** ([`features/indent-guides.el`](features/indent-guides.el)): Visual indentation guides for better code structure
-- **Theme Support** ([`themes/themes-config.el`](themes/themes-config.el)): [Doom Themes](https://github.com/doomemacs/themes) with doom-zenburn default and terminal compatibility
+- **Theme Support** ([`themes/themes-config.el`](themes/themes-config.el)): [Doom Themes](https://github.com/doomemacs/themes) with doom-1337 default and terminal compatibility
 
 ### Enhanced Diagnostics
 

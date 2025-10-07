@@ -427,8 +427,8 @@ Interactive theme selection and customization using [Doom Themes](https://github
 
 **Available Themes:**
 - **68+ Doom Themes**: All doom-themes dynamically discovered and sorted alphabetically
-- **Popular choices**: `doom-zenburn` (default), `doom-1337`, `doom-Iosvkem`, `doom-gruvbox`, `doom-material-dark`, `doom-monokai-machine`
-- **Terminal-optimized**: `doom-zenburn` (default), `doom-1337`, `doom-gruvbox`, `doom-material-dark`, `doom-tomorrow-night`
+- **Popular choices**: `doom-1337` (default), `doom-zenburn`, `doom-Iosvkem`, `doom-gruvbox`, `doom-material-dark`, `doom-monokai-machine`
+- **Terminal-optimized**: `doom-1337` (default), `doom-zenburn`, `doom-gruvbox`, `doom-material-dark`, `doom-tomorrow-night`
 - **Other options**: `wombat`, `tango-dark`, `leuven`
 
 **Theme Persistence:**
