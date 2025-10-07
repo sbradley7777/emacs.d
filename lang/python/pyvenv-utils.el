@@ -4,7 +4,6 @@
 ;;      pyvenv-remote.el for Python virtual environment management.
 
 (require 'python-constants)
-(require 'modeline-utils)
 
 (core-utils-with-load-timing
  "pyvenv-utils.el"

@@ -200,10 +200,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load theme configuration BEFORE theme utilities - establishes theme system
 (safe-load-config 'themes-config "Theme configuration")
 
-;; Load modeline utilities BEFORE modeline configuration - provides modeline functions
-(safe-load-config 'modeline-utils "Modeline utility functions")
-
-;; Load modeline configuration AFTER utilities - customizes status line display
+;; Load modeline configuration - basic Emacs modeline setup
 (safe-load-config 'modeline-config "Modeline configuration")
 
 ;; Load theme utilities AFTER theme configuration - provides interactive theme switching

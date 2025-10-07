@@ -3,7 +3,6 @@
 ;;      TRAMP integration with proper remote virtual environment detection.
 ;;      Provides seamless Python virtual environment support for remote files.
 
-(require 'modeline-utils)
 (require 'pyvenv-config)
 (require 'tramp-utils)
 
@@ -86,19 +85,15 @@ First tries to find it remotely, falls back to local equivalent if needed."
          ;; Setup connection profile with remote path
          (pyvenv-remote-setup-connection host venv-path)
 
-         ;; Update project state for modeline
+         ;; Update project state
          (let* ((project-dir (file-name-directory (directory-file-name venv-path)))
                 (project-name (file-name-nondirectory (directory-file-name project-dir))))
            (setq pyvenv-project-root project-dir)
-           (setq pyvenv-project-name project-name)
-           (setq pyvenv-current-project-name project-name))
+           (setq pyvenv-project-name project-name))
 
          (core-message-success
           "Activated remote Python venv: %s"
-          (file-name-nondirectory (directory-file-name venv-path)))
-         (pyvenv-update-modeline))
-        ;; No venv found
-        (setq pyvenv-current-project-name "inactive") (pyvenv-update-modeline))))
+          (file-name-nondirectory (directory-file-name venv-path)))))))
 
    ;; Local file: use existing activation
    (when (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate))))

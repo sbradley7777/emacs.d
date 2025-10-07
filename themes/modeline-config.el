@@ -1,10 +1,8 @@
 ;;; modeline-config.el --- Modeline Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      Modeline customization and status indicators.
-;;      Consolidates all modeline-related configuration for global modeline display.
-;;      Note: Buffer-specific modelines (treemacs, imenu-list) are configured in their respective modules.
-
-(require 'modeline-utils)
+;;      Basic modeline configuration using Emacs defaults.
+;;      Enables standard modeline features: line/column numbers, time, which-function-mode.
+;;      Python venv uses pyvenv's default modeline indicator.
 
 (core-utils-with-load-timing
  "modeline-config.el"
@@ -22,19 +20,13 @@
  (size-indication-mode 1)
 
  ;; Display the time in modeline with custom format (YYYY-MM-dd HH:MM)
- (setq display-time-format "  %Y-%m-%d %H:%M") ; Leading spaces for separation
- (display-time)
+ (setq display-time-format "%Y-%m-%d %H:%M") (display-time)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Modeline Indicators
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Note: add-to-list adds to beginning, so add in reverse order of desired display
- ;; Desired order: Python venv → Function name → username@hostname → time
 
- ;; Add system information indicator (username@hostname) - added first, appears before time
- (modeline-add-system-info-indicator)
-
- ;; Configure and enable which-function-mode (adds function name before username@hostname)
+ ;; Configure and enable which-function-mode.
  ;; Only enable which-function-mode in programming modes (prevents errors in non-code buffers like treemacs)
  (setq
   which-func-modes
@@ -56,11 +48,6 @@
     ruby-mode
     perl-mode
     makefile-mode))
- (which-function-mode 1)
-
- ;; Add Python virtual environment indicator - added last, appears first (leftmost)
- (modeline-add-python-venv-indicator)
-
- (provide 'modeline-config))
+ (which-function-mode 1) (provide 'modeline-config))
 
 ;;; modeline-config.el ends here
