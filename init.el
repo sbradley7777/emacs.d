@@ -207,7 +207,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'modeline-faces "Modeline face customizations")
 
 ;; Load theme utilities AFTER theme configuration - provides interactive theme switching
-(safe-load-config 'theme-utils "Theme utilities")
+(safe-load-config 'themes-utils "Theme utilities")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 4: Core Editing and File Management

@@ -25,76 +25,16 @@
 ;; ============================================
 ;; 1. THEME CONFIGURATION
 ;; ============================================
-;; Theme Configuration (with example debug output)
-;; Set your preferred theme - will be loaded automatically after initialization
-(core-message-loading "=== local.el: Theme configuration starting ===")
-(core-message-theme "Display type: %s" (if (display-graphic-p) "GUI" "Terminal"))
-(core-message-theme
- "Before setting: user-preferred-theme = %s"
- (if (boundp 'themes-config-preferred-theme) themes-config-preferred-theme 'unbound))
-(setq themes-config-preferred-theme 'doom-1337) ; Active: doom-1337 (hacker-inspired dark theme)
-(core-message-theme "After setting: user-preferred-theme = %s" themes-config-preferred-theme)
-(core-message-theme
- "Current active theme: %s"
- (if
-  (boundp 'custom-enabled-themes)
-  (if custom-enabled-themes (car custom-enabled-themes) 'none)
-  'unbound))
-(core-message-theme
- "Theme system status: %s"
- (if
-  (boundp 'themes-config--user-theme-loaded)
-  (if themes-config--user-theme-loaded "ready for override" "pending reload")
-  "not initialized"))
-
-;; Available Doom Theme Options:
-;; See https://github.com/doomemacs/themes for full collection
-;; Recommended themes (uncomment one line to change the theme):
-;; (setq themes-config-preferred-theme 'doom-1337)           ; Hacker-inspired dark theme
+;; The default theme is doom-1337. To change it, uncomment one of these:
+;; (setq themes-config-preferred-theme 'doom-zenburn)        ; Retro warm colors
 ;; (setq themes-config-preferred-theme 'doom-Iosvkem)        ; Clean, modern dark theme
 ;; (setq themes-config-preferred-theme 'doom-gruvbox)        ; Retro groove colors
 ;; (setq themes-config-preferred-theme 'doom-material-dark)  ; Material design dark variant
 ;; (setq themes-config-preferred-theme 'doom-monokai-machine) ; Enhanced Monokai colors
 ;; (setq themes-config-preferred-theme 'doom-tomorrow-night) ; Clean, minimal design
 ;; (setq themes-config-preferred-theme 'doom-peacock)        ; Vibrant, colorful theme
-
-;; Built-in theme alternatives (uncomment one line to use):
-;; (setq themes-config-preferred-theme 'wombat)            ; Built-in dark theme
-;; (setq themes-config-preferred-theme 'tango-dark)        ; Built-in tango variant
-
-;; Global Theme Customizations
-;; Allow all themes without confirmation
-(setq custom-safe-themes t)
-
-;; Enable bold fonts for all doom themes
-(setq doom-themes-enable-bold t)
-
-;; Enable italic fonts for all doom themes
-(setq doom-themes-enable-italic t)
-
-;; Improve comment readability - use lighter gray for better visibility
-(defvar
- doom-1337-comment-color
- "#989898"
- "Custom comment color for doom-1337 theme - light gray for better readability.")
-
-;; Global whitespace customizations - applies to all themes
-;; Disable line length highlighting for all themes by removing 'lines-tail from whitespace-style
-(setq whitespace-style '(face trailing tabs tab-mark))
-;; Refresh whitespace-mode to apply the new style
-(when
- (bound-and-true-p global-whitespace-mode) (global-whitespace-mode -1) (global-whitespace-mode 1))
-(core-message-info
- "The preferred theme (%s) will be applied after all configuration modules ared loaded"
- themes-config-preferred-theme)
-(core-message-info "=== local.el: Theme configuration finished ===")
-
-;; Apply custom comment color after theme loads
-(with-eval-after-load
- 'doom-themes
- (custom-set-faces
-  `(font-lock-comment-face ((t (:foreground ,doom-1337-comment-color :slant italic))))
-  `(font-lock-doc-face ((t (:foreground ,doom-1337-comment-color :slant italic))))))
+;; (setq themes-config-preferred-theme 'wombat)              ; Built-in dark theme
+;; (setq themes-config-preferred-theme 'tango-dark)          ; Built-in tango variant
 
 ;; ============================================
 ;; 2. PLATFORM-SPECIFIC CONFIGURATION

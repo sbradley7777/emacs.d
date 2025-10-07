@@ -88,7 +88,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`flymake-ruff-config.el`](lang/python/flymake-ruff-config.el) - Advanced Python linting with Ruff integration
 - **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
-  - [`theme-utils.el`](themes/theme-utils.el) - Theme utilities and helper functions
+  - [`themes-utils.el`](themes/themes-utils.el) - Theme utilities and helper functions
 - **[`user/`](user/)** - Personal customizations
   - [`functions.el`](user/functions.el) - Custom helper functions
   - [`aliases.el`](user/aliases.el) - Custom command aliases

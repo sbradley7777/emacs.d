@@ -5,7 +5,7 @@
 ;; PROVIDES: load-configured-theme, basic theme variables
 ;;
 ;; Core theme and visual appearance configuration
-;; Advanced theme utilities are in theme-utils.el
+;; Advanced theme utilities are in themes-utils.el
 
 ;;; Dependencies:
 ;; - core-utils (for core-utils-with-load-timing)
@@ -19,11 +19,14 @@
  ;; Theme Configuration Variables
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+ ;; Allow all themes without confirmation prompts
+ (setq custom-safe-themes t)
+
  ;; User-configurable theme variables (can be set in local.el)
  (defvar
-  themes-config-preferred-theme 'doom-zenburn
+  themes-config-preferred-theme 'doom-1337
   "User's preferred theme. Can be overridden in local.el.
-Examples: 'doom-zenburn, 'doom-one, 'doom-gruvbox, 'wombat")
+Examples: 'doom-1337, 'doom-zenburn, 'doom-one, 'doom-gruvbox, 'wombat")
 
  (defvar
   themes-config-customizations nil
@@ -39,8 +42,9 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  (defvar
   themes-config-doom-default-customizations
   '((doom-themes-enable-bold . t)
-    (doom-themes-enable-italic . nil) ; Disable italic in terminal to avoid issues
-    (doom-themes-treemacs-theme . "doom-atom") (doom-themes-treemacs-enable-variable-pitch . nil))
+    (doom-themes-enable-italic . t)
+    (doom-themes-treemacs-theme . "doom-atom")
+    (doom-themes-treemacs-enable-variable-pitch . nil))
   "Default doom themes customizations.")
 
  (defun
@@ -49,9 +53,6 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
   "Apply doom-themes-specific customizations."
   (require 'doom-themes)
   (dolist (custom themes-config-doom-default-customizations) (set (car custom) (cdr custom)))
-
-  ;; Terminal-specific adjustments to prevent nil attribute warnings
-  (when (not (display-graphic-p)) (setq doom-themes-enable-italic nil))
 
   ;; Enable doom-themes enhancements (with error handling for terminal compatibility)
   (condition-case err
@@ -125,6 +126,22 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
            :background "#264F78"
            :foreground 'unspecified
            :extend t))))))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Theme-Specific Customizations
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; doom-1337 comment color customization for better readability
+ (defvar
+  doom-1337-comment-color
+  "#989898"
+  "Custom comment color for doom-1337 theme - light gray for better readability.")
+
+ (with-eval-after-load
+  'doom-themes
+  (custom-set-faces
+   `(font-lock-comment-face ((t (:foreground ,doom-1337-comment-color :slant italic))))
+   `(font-lock-doc-face ((t (:foreground ,doom-1337-comment-color :slant italic))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Load Theme on Startup

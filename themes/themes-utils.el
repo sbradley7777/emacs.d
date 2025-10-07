@@ -1,4 +1,4 @@
-;;; theme-utils.el --- Theme Utilities and Interactive Tools -*- lexical-binding: t -*-
+;;; themes-utils.el --- Theme Utilities and Interactive Tools -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; WHAT: Interactive theme switching and browsing utilities
 ;; WHY:  Provides advanced theme management features separate from core loading
@@ -138,7 +138,7 @@
       (setq buffer-read-only t)
       (goto-char (point-min))))))
 
-;; Make this module available for loading with (require 'theme-utils)
-(provide 'theme-utils)
+;; Make this module available for loading with (require 'themes-utils)
+(provide 'themes-utils)
 
-;;; theme-utils.el ends here
+;;; themes-utils.el ends here
