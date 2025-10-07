@@ -13,6 +13,33 @@
 (require 'themes-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Generic Theme Customization Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun
+ themes-utils-apply-doom-customizations
+ ()
+ "Apply doom-themes-specific customizations."
+ (require 'doom-themes)
+ (dolist (custom themes-config-doom-default-customizations) (set (car custom) (cdr custom)))
+
+ ;; Enable doom-themes enhancements (with error handling for terminal compatibility)
+ (condition-case err
+     (progn (doom-themes-visual-bell-config) (doom-themes-org-config))
+   (error
+    (core-message-warning
+     "Some doom-themes features disabled for terminal compatibility: %s"
+     (error-message-string err)))))
+
+(defun
+ themes-utils-apply-customizations (theme) "Apply customizations for the specified THEME."
+ ;; Apply doom-themes configuration for all themes
+ (themes-utils-apply-doom-customizations)
+ ;; Apply any user customizations from local.el
+ (when-let ((customs (cdr (assq theme themes-config-customizations))))
+   (dolist (custom customs) (set (car custom) (cdr custom)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Theme Discovery Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
