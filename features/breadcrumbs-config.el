@@ -17,12 +17,12 @@
   breadcrumb
   :ensure t
   :config (breadcrumb-mode 1)
-  ;; Customize breadcrumb colors for better terminal readability
-  (set-face-attribute 'breadcrumb-face nil :foreground "cyan")
-  (set-face-attribute 'breadcrumb-project-base-face nil :foreground "brightyellow" :weight 'bold)
-  (set-face-attribute 'breadcrumb-project-crumbs-face nil :foreground "yellow")
-  (set-face-attribute 'breadcrumb-project-leaf-face nil :foreground "brightcyan" :weight 'bold)
-  (set-face-attribute 'breadcrumb-imenu-crumbs-face nil :foreground "brightgreen")
-  (set-face-attribute 'breadcrumb-imenu-leaf-face nil :foreground "brightgreen" :weight 'bold)))
+  ;; Customize breadcrumb colors to match doom-1337 modeline theme
+  (set-face-attribute 'breadcrumb-face nil :foreground "#00ff9f") ; Cyan - matches general nav
+  (set-face-attribute 'breadcrumb-project-base-face nil :foreground "#00b8ff" :weight 'bold) ; Blue - matches project-dir
+  (set-face-attribute 'breadcrumb-project-crumbs-face nil :foreground "#7bc275") ; Green - matches buffer-path
+  (set-face-attribute 'breadcrumb-project-leaf-face nil :foreground "#00ff9f" :weight 'bold) ; Cyan - matches buffer-file
+  (set-face-attribute 'breadcrumb-imenu-crumbs-face nil :foreground "#7bc275") ; Green - code structure path
+  (set-face-attribute 'breadcrumb-imenu-leaf-face nil :foreground "#00ff9f" :weight 'bold))) ; Cyan - current symbol
 
 (provide 'breadcrumbs-config)

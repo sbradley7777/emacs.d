@@ -97,6 +97,8 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
             (mapc #'disable-theme custom-enabled-themes)
             (load-theme theme t)
             (core-message-success "Successfully loaded theme: %s" theme)
+            ;; Apply modeline face customizations if available
+            (when (fboundp 'modeline-faces-apply-for-theme) (modeline-faces-apply-for-theme theme))
             ;; Apply post-load fixes for terminal compatibility
             (when
              (and (not (display-graphic-p)) (string-match-p "^doom-" (symbol-name theme)))
