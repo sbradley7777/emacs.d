@@ -147,20 +147,9 @@
 ;; ============================================
 ;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
-;; Theme-specific customizations (optional - for exceptions to global settings)
-;; (setq themes-config-customizations
-;;       '((some-theme . ((custom-setting . custom-value)))))      ; Example theme-specific override
-
-;; Machine-specific paths
-;; (setq python-shell-interpreter "/usr/local/bin/python3")
-
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)
 ;; (global-set-key (kbd "C-c t") 'switch-theme)  ; Quick theme switching
-
-;; Private settings
-;; (setq user-full-name "Your Full Name"
-;;       user-mail-address "your.email@example.com")
 
 (core-message-info "=== local.el: The loading of local user configuration finished ===")
 (core-message-success "Local user configuration loaded successfully")
