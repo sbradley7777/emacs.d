@@ -15,44 +15,51 @@
  ;; Auto-detect Once Virtual Environment Support
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Auto-detect once and activate
+ ;; Main function to auto-detect and activate virtual environment once per project
+ ;; Uses pyvenv-project-root as a guard to ensure activation happens only once
  (defun
   pyvenv-auto-activate () "Auto-detect virtual environment once and activate it." (interactive)
   (unless
-   pyvenv-project-root
-   ;; First time - auto-detect project
-   (core-message-info "Auto-detecting Python virtual environment...")
+   pyvenv-project-root (core-message-info "Auto-detecting Python virtual environment...")
    (let ((detected-venv (pyvenv-find-venv)))
      (if
       detected-venv
       (progn
-       ;; Store detected project info
+       ;; Remember the project root to prevent re-detection
        (setq
         pyvenv-project-root
         (file-name-directory (directory-file-name detected-venv))
         pyvenv-project-name
         (file-name-nondirectory (directory-file-name pyvenv-project-root)))
 
-       ;; Activate the virtual environment
+       ;; pyvenv-activate sets python-shell-virtualenv-path (Python mode's primary interpreter source)
        (if
         (fboundp 'pyvenv-activate)
         (progn
          (pyvenv-activate detected-venv)
          (core-message-success "Activated Python venv for project: %s" pyvenv-project-name)
 
-         ;; Update Python shell interpreter
-         (let ((venv-python (expand-file-name "bin/python" detected-venv)))
-           (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python))))
+         ;; Log detected Python version for user feedback
+         (let ((python-version (pyvenv-get-python-version detected-venv)))
+           (if
+            python-version
+            (core-message-info "Using Python %s from virtual environment" python-version)
+            (core-message-warning "Could not detect Python version in virtual environment"))))
         (core-message-warning "Warning: pyvenv-activate function not available")))
       (core-message-warning "No Python virtual environment found")))))
 
- ;; Initialize pyvenv
+ ;; Initialize pyvenv package and enable pyvenv-mode
  (if
-  (fboundp 'use-package) (use-package pyvenv :config (pyvenv-mode 1))
-  ;; Fallback when use-package is not available
+  (fboundp 'use-package)
+  (use-package pyvenv :config (pyvenv-mode 1))
   (when (require 'pyvenv nil t) (pyvenv-mode 1)))
 
- ;; Auto-activate when opening Python files
+ ;; Hook into pyvenv activation/deactivation to update python-shell-interpreter for doom-modeline
+ ;; Note: python-shell-virtualenv-path remains the primary interpreter source for Python mode
+ (add-hook 'pyvenv-post-activate-hooks #'pyvenv-update-shell-interpreter)
+ (add-hook 'pyvenv-post-deactivate-hooks #'pyvenv-update-shell-interpreter)
+
+ ;; Trigger auto-detection when opening Python files
  (add-hook 'python-mode-hook #'pyvenv-auto-activate))
 
 (provide 'pyvenv-config)

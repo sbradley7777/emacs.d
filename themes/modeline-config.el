@@ -98,6 +98,9 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
    ;; Git/VCS Status Display
    (setq doom-modeline-vcs-max-length 15) ; Limit branch name length
 
+   ;; Python Environment Display (updated by pyvenv hooks)
+   (setq doom-modeline-env-version t doom-modeline-env-enable-python t)
+
    ;; Modeline Height and Appearance
    (setq
     doom-modeline-height 25 ; Height of the mode-line
