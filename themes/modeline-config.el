@@ -90,13 +90,6 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
     doom-modeline-buffer-state-icon t ; Show buffer state icon
     doom-modeline-buffer-modification-icon t) ; Show buffer modification icon
 
-   ;; Python Environment Display
-   ;; Python environment display enabled by default (doom-modeline-env-version and doom-modeline-env-enable-python both default
-   ;; to t) Uses python-shell-interpreter or falls back to "python" executable
-
-   ;; LSP/Eglot, Flymake, Time, Position - Using defaults
-   ;; Most features are enabled by default. Only setting non-default preferences below.
-
    ;; Time Display
    (setq display-time-format "%Y-%m-%d %H:%M") ; Format: YYYY-MM-DD HH:MM
    (setq doom-modeline-time t) ; Enable time display (not enabled by default)
