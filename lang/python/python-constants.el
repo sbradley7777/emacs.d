@@ -4,13 +4,6 @@
 ;;      This file contains paths, settings, and other constants used
 ;;      across multiple Python-related configuration files.
 
-
-(defvar pyvenv-current-project-name nil "Current project status for modeline.")
-(defvar pyvenv-current-version nil "Python version of the detected virtual environment.")
-
-(make-variable-buffer-local 'pyvenv-current-project-name)
-(make-variable-buffer-local 'pyvenv-current-version)
-
 (core-utils-with-load-timing
  "python-constants.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -33,13 +26,6 @@
  (defvar pyvenv-project-root nil "Auto-detected project root - set once and remembered.")
 
  (defvar pyvenv-project-name nil "Auto-detected project name for modeline display.")
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Shared Modeline Variables
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
- ;; Runtime variables for modeline display (buffer-local)
- (setq-default pyvenv-current-version nil)
 
  ;; Make this module available for loading with (require 'python-constants)
  (provide 'python-constants))

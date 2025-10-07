@@ -4,6 +4,7 @@
 ;;      pyvenv-remote.el for Python virtual environment management.
 
 (require 'python-constants)
+(require 'modeline-utils)
 
 (core-utils-with-load-timing
  "pyvenv-utils.el"
@@ -52,42 +53,6 @@
           (progn (core-message-success "Found Python venv at: %s" venv-path) venv-path)
           (core-message-warning "No venv directory found at: %s" venv-path)
           nil))))))
-
- ;; Function to update modeline based on current file location
- (defun
-  pyvenv-update-modeline () "Update modeline based on whether current file is in detected project."
-  (let ((is-in-project
-         (and
-          pyvenv-project-root
-          (string-prefix-p
-           (pyvenv-normalize-path pyvenv-project-root)
-           (pyvenv-normalize-path default-directory)))))
-    (setq-local pyvenv-current-project-name (if is-in-project pyvenv-project-name "inactive"))
-    (setq-local
-     pyvenv-current-version (if is-in-project (default-value 'pyvenv-current-version) nil))
-    (force-mode-line-update)))
-
- ;; Debug function to check modeline variables (shared utility)
- (defun
-  pyvenv-debug-modeline
-  ()
-  "Debug function to check modeline variables in current buffer."
-  (interactive)
-  (core-message-plain "=== DEBUG PYTHON MODELINE ===")
-  (core-message-plain "Buffer: %s | File: %s" (buffer-name) (or buffer-file-name "NO FILE"))
-  (core-message-plain "Directory: %s" default-directory)
-  (core-message-plain "Remote: %s" (if (file-remote-p default-directory) "YES" "NO"))
-  (core-message-plain
-   "Project name: %s (local: %s)"
-   pyvenv-current-project-name
-   (local-variable-p 'pyvenv-current-project-name))
-  (core-message-plain
-   "Python version: %s (local: %s)"
-   pyvenv-current-version
-   (local-variable-p 'pyvenv-current-version))
-  (core-message-plain
-   "Detected project root: %s | name: %s" pyvenv-project-root pyvenv-project-name)
-  (core-message-plain "=============================="))
 
  (provide 'pyvenv-utils))
 

@@ -10,6 +10,7 @@
 ;;      but the modeline reflects whether the current file is part of the project.
 
 (require 'python-constants)
+(require 'modeline-utils)
 (require 'pyvenv-utils)
 
 (core-utils-with-load-timing
