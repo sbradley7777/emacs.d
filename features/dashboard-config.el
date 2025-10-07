@@ -53,10 +53,6 @@
        "Home"
        "Browse homepage"
        (lambda (&rest _) (browse-url "https://github.com/emacs-dashboard/emacs-dashboard")))
-      (,(nerd-icons-faicon "nf-fa-refresh" :height 1.1 :v-adjust 0.0)
-       "Restart"
-       "Restart Emacs"
-       (lambda (&rest _) (restart-emacs)))
       (,(nerd-icons-codicon "nf-cod-package" :height 1.1 :v-adjust 0.0)
        "Update"
        "Check for package updates"
@@ -77,6 +73,10 @@
        "Settings"
        "Open settings"
        (lambda (&rest _) (find-file user-init-file)))
+      (,(nerd-icons-faicon "nf-fa-refresh" :height 1.1 :v-adjust 0.0)
+       "Restart"
+       "Restart Emacs"
+       (lambda (&rest _) (restart-emacs)))
       (,(nerd-icons-octicon "nf-oct-sign_out" :height 1.1 :v-adjust 0.0)
        "Quit"
        "Quit Emacs"
