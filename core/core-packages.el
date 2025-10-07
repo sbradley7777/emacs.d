@@ -17,6 +17,7 @@
  (defvar
   core-packages-interface
   '(doom-themes
+    doom-modeline
     which-key
     rainbow-delimiters
     highlight-indent-guides
