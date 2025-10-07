@@ -73,54 +73,50 @@ When reaching the end of buffer, move point to end."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Custom Buffer Cycling Functions:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defconst
-  user-buffer-filter-patterns
-  '("^\\*\\(debug \\)?tramp/ssh "
-    "^\\*scratch\\*$"
-    "^\\*Help\\*$"
-    "^\\*Completions\\*$"
-    "^\\*Backtrace\\*$"
-    "^\\*.*compile.*\\*$"
-    "^\\*Async-native-compile-log\\*$"
-    "^\\*EGLOT.*\\*$")
-  "List of regex patterns for buffers to filter out during cycling.")
-
  (defun
-  user-buffer-should-skip-p (buffer-name) "Return t if BUFFER-NAME matches any filter pattern."
-  (or
-   (string-prefix-p " " buffer-name) ; Skip hidden buffers (starting with space)
-   (cl-some (lambda (pattern) (string-match-p pattern buffer-name)) user-buffer-filter-patterns)))
+  user-buffer-should-skip-p (buffer)
+  "Return t if BUFFER should be skipped during cycling.
+
+Buffers INCLUDED in cycling:
+  - *Messages* buffer (for viewing Emacs messages)
+  - File-visiting buffers (any buffer editing a file)
+
+Buffers EXCLUDED from cycling:
+  - *scratch* and other special buffers (except *Messages*)
+  - Dired buffers (directory listings)
+  - Hidden buffers (names starting with space)
+  - Temporary/internal buffers (*Completions*, *Backtrace*, etc.)"
+  (let ((name (buffer-name buffer)))
+    (not
+     (or
+      ;; Allow *Messages* buffer
+      (string= name "*Messages*")
+      ;; Allow buffers visiting files (not dired, not special buffers)
+      (buffer-file-name buffer)))))
 
  (defun
   user-cycle-buffer (direction)
   "Cycle through buffers in DIRECTION (:forward or :backward).
-Skips buffers that match patterns in `user-buffer-filter-patterns'."
-  (let ((buffer-list (if (eq direction :forward) (buffer-list) (reverse (buffer-list))))
-        (current-buffer (current-buffer))
-        (found-current nil)
-        (target-buffer nil))
-    ;; First pass: look for next buffer after current
-    (cl-dolist
-     (buffer buffer-list)
-     (let ((buffer-name (buffer-name buffer)))
-       (cond
-        ;; Skip the current buffer until we find it
-        ((and (not found-current) (eq buffer current-buffer))
-         (setq found-current t))
-        ;; Once we've found current buffer, look for next valid buffer
-        ((and found-current (not (user-buffer-should-skip-p buffer-name)))
-         (setq target-buffer buffer)
-         (cl-return)))))
-    ;; If no target found after current, wrap to beginning/end
-    (unless
-     target-buffer
-     (cl-dolist
-      (buffer buffer-list)
-      (let ((buffer-name (buffer-name buffer)))
-        (when
-         (and (not (eq buffer current-buffer)) (not (user-buffer-should-skip-p buffer-name)))
-         (setq target-buffer buffer)
-         (cl-return)))))
+Skips buffers that should not be included in cycling."
+  (let* ( ;; Get buffers in stable order (sorted by name for consistency)
+         (all-buffers
+          (sort (buffer-list) (lambda (a b) (string< (buffer-name a) (buffer-name b)))))
+         ;; Filter valid buffers first, maintaining sorted order
+         (valid-buffers
+          (seq-filter (lambda (buf) (not (user-buffer-should-skip-p buf))) all-buffers))
+         (current-buffer (current-buffer))
+         (current-index (cl-position current-buffer valid-buffers))
+         (num-buffers (length valid-buffers))
+         (target-buffer nil))
+    (when
+     (and current-index (> num-buffers 1))
+     ;; Calculate next index with wrap-around
+     (let ((next-index
+            (if
+             (eq direction :forward)
+             (mod (1+ current-index) num-buffers)
+             (mod (1- current-index) num-buffers))))
+       (setq target-buffer (nth next-index valid-buffers))))
     ;; Switch to target buffer if found
     (when target-buffer (switch-to-buffer target-buffer))))
 
