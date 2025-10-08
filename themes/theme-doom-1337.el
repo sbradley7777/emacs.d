@@ -81,7 +81,7 @@ Doom-1337 color palette:
    '(doom-modeline-vcs-info ((t (:foreground "#8c8c8c")))) ; Gray for VCS info
 
    ;; LSP/Language server
-   '(doom-modeline-lsp-success ((t (:foreground "#7bc275")))) ; Green for LSP connected
+   '(doom-modeline-lsp-success ((t (:foreground "#00ff00")))) ; Bright green for LSP connected
    '(doom-modeline-lsp-warning ((t (:foreground "#ff9800")))) ; Orange for warnings
    '(doom-modeline-lsp-error ((t (:foreground "#ff6b9d")))) ; Light red for errors
    '(doom-modeline-lsp-running ((t (:foreground "#00b8ff")))) ; Blue for LSP running

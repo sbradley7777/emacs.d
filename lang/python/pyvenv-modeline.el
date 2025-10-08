@@ -73,7 +73,12 @@
    (when
     (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
     (let ((icon
-           (doom-modeline-icon 'mdicon "nf-md-language_python" "🐍" " " :face 'doom-modeline-info)))
+           (doom-modeline-icon
+            'mdicon
+            "nf-md-language_python"
+            "🐍"
+            " "
+            :face 'doom-modeline-lsp-success)))
       (propertize
        icon 'help-echo "Click to show Python venv info" 'mouse-face 'mode-line-highlight 'local-map
        (let ((map (make-sparse-keymap)))
