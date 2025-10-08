@@ -114,8 +114,8 @@ When adding new functionality, follow the modular structure:
 **Core Modules** ([`core/`](core/)): Essential functionality loaded first
 - `package-system/` - Modular package management system
 - `core-packages.el` - Package declarations and configurations
-- `ui.el` - User interface settings
-- `editing.el` - Text editing behavior
+- `core-ui.el` - User interface settings
+- `core-editing.el` - Text editing behavior
 - `core-files.el` - File handling and backup settings
 - `keybindings.el` - Global key bindings
 

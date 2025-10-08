@@ -53,13 +53,13 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-packages.el`](core/core-packages.el) - Package declarations and configurations
   - [`core-fonts.el`](core/core-fonts.el) - Automatic font management for icon packages
   - [`core-utils.el`](core/core-utils.el) - Utility functions and load timing system
-  - [`ui.el`](core/ui.el) - Basic UI configuration
-  - [`editing.el`](core/editing.el) - Editing preferences and behavior
+  - [`core-ui.el`](core/core-ui.el) - Basic UI configuration
+  - [`core-editing.el`](core/core-editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
   - [`tramp-config.el`](core/tramp-config.el) - TRAMP remote file access with Python support
   - [`tramp-utils.el`](core/tramp-utils.el) - TRAMP utility functions for remote development
-  - [`logging.el`](core/logging.el) - Message logging and log rotation system
-  - [`diagnostics.el`](core/diagnostics.el) - System information and configuration diagnostics
+  - [`core-logging.el`](core/core-logging.el) - Message logging and log rotation system
+  - [`core-diagnostics.el`](core/core-diagnostics.el) - System information and configuration diagnostics
   - [`keybindings.el`](core/keybindings.el) - Global key bindings
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`breadcrumbs-config.el`](features/breadcrumbs-config.el) - Breadcrumb navigation for file path and code structure
@@ -94,8 +94,8 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`modeline-config.el`](themes/modeline-config.el) - [Doom-modeline](https://github.com/seagle0128/doom-modeline) configuration
   - [`modeline-faces.el`](themes/modeline-faces.el) - Theme-specific modeline face customizations
 - **[`user/`](user/)** - Personal customizations
-  - [`functions.el`](user/functions.el) - Custom helper functions
-  - [`aliases.el`](user/aliases.el) - Custom command aliases
+  - [`user-functions.el`](user/user-functions.el) - Custom helper functions
+  - [`user-aliases.el`](user/user-aliases.el) - Custom command aliases
 - **[`scripts/`](scripts/)** - Installation and utility scripts
   - [`install.sh`](scripts/install.sh) - Automated installation script
   - [`test-config.sh`](scripts/test-config.sh) - Configuration testing script

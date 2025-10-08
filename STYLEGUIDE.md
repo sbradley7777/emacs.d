@@ -57,8 +57,8 @@ emacs.d/
 ├── [`core/`](core/)                        # Essential Emacs functionality (loaded first)
 │   ├── package-system/          # Modular package management system
 │   ├── core-packages.el         # Essential package installations and configurations
-│   ├── ui.el                    # User interface and visual settings
-│   ├── editing.el               # Text editing behavior and preferences
+│   ├── core-ui.el               # User interface and visual settings
+│   ├── core-editing.el          # Text editing behavior and preferences
 │   ├── core-files.el            # File handling, backup, and auto-save settings
 │   └── keybindings.el           # Global keybindings and shortcuts
 ├── [`features/`](features/)                    # Optional enhancements (can be disabled independently)
@@ -75,8 +75,8 @@ emacs.d/
 ├── [`themes/`](themes/)                      # Theme configurations
 │   └── themes-config.el         # Core theme and appearance configuration
 ├── [`user/`](user/)                        # Personal customizations
-│   ├── functions.el             # User-defined utility functions
-│   └── aliases.el               # Command aliases and shortcuts
+│   ├── user-functions.el        # User-defined utility functions
+│   └── user-aliases.el          # Command aliases and shortcuts
 ├── [`scripts/`](scripts/)                     # Installation and utility scripts
 │   ├── install.sh               # Automated configuration installation
 │   └── README.md                # Script documentation
@@ -279,7 +279,7 @@ The configuration provides standardized message functions for consistent, profes
 
 ```elisp
 ;; Always require logging at the top of your file
-(require 'logging)
+(require 'core-logging)
 
 ;; Unicode message functions (preferred for operational status)
 (core-message-loading "Loading %s..." module-name)    ; 🔄  Loading...
