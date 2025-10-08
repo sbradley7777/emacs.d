@@ -113,6 +113,9 @@ Doom-1337 color palette:
    ;; Time display
    '(doom-modeline-time ((t (:foreground "#ff6b9d")))) ; Light red for time
 
+   ;; Remote host indicator (TRAMP/SSH)
+   '(doom-modeline-host ((t (:foreground "#ff00ff" :weight bold)))) ; Purple for remote connection
+
    ;; Panel (like treemacs integration)
    '(doom-modeline-panel ((t (:background "#242424" :foreground "#00ff9f"))))) ; Dark bg, cyan fg
 
