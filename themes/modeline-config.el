@@ -6,7 +6,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
-(require 'logging)
+(require 'core-logging)
 
 (core-utils-with-load-timing
  "modeline-config.el"

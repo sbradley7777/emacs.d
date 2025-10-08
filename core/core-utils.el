@@ -3,7 +3,7 @@
 ;;; Commentary:
 ;; Utility functions and macros for configuration loading and management.
 
-(require 'logging)
+(require 'core-logging)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

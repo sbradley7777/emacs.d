@@ -1,11 +1,11 @@
-;;; diagnostics.el --- System and Configuration Diagnostics -*- lexical-binding: t -*-
+;;; core-diagnostics.el --- System and Configuration Diagnostics -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      System information detection and configuration diagnostics
 ;;      Provides detailed system context and startup logging for debugging
 
 
 (core-utils-with-load-timing
- "diagnostics.el"
+ "core-diagnostics.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Operating System Detection
@@ -126,5 +126,5 @@
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- (provide 'diagnostics))
-;;; diagnostics.el ends here
+ (provide 'core-diagnostics))
+;;; core-diagnostics.el ends here

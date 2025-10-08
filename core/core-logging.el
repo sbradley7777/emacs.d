@@ -1,4 +1,4 @@
-;;; logging.el --- Message Utility Functions -*- lexical-binding: t -*-
+;;; core-logging.el --- Message Utility Functions -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; Lightweight message utility functions with Unicode prefixes.
@@ -68,6 +68,6 @@
 Useful for system diagnostics, debug output, and structured information that doesn't need visual emphasis."
  (apply #'message format-string args))
 
-(provide 'logging)
+(provide 'core-logging)
 
-;;; logging.el ends here
+;;; core-logging.el ends here

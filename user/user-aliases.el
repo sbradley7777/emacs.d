@@ -1,11 +1,11 @@
-;;; aliases.el --- Function Aliases and Shortcuts -*- lexical-binding: t -*-
+;;; user-aliases.el --- Function Aliases and Shortcuts -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Function aliases to improve usability and provide shortcuts
 ;;      for commonly used Emacs functions.
 
 
 (core-utils-with-load-timing
- "aliases.el"
+ "user-aliases.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Interactive function aliases
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -15,4 +15,4 @@
  (defalias 'switch-theme 'theme-utils-switch-theme)
 
  ;; Make this module available for loading with (require 'aliases)
- (provide 'aliases))
+ (provide 'user-aliases))

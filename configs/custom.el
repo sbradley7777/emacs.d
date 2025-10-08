@@ -32,5 +32,5 @@
  )
 
 ;; Display a message to confirm loading
-(require 'logging)
+(require 'core-logging)
 (core-message-success "custom.el loaded - menu customizations are working!")

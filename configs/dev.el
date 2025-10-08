@@ -22,7 +22,7 @@
 ;; temporary testing and development work.
 ;;
 
-(require 'logging)
+(require 'core-logging)
 (core-message-debug "Loading development configuration...")
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; DEVELOPMENT CONFIGURATION

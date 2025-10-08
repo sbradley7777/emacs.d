@@ -20,7 +20,7 @@
 ;; • Customize keybindings
 ;; • Set machine-specific variables
 ;;
-(require 'logging)
+(require 'core-logging)
 (core-message-loading "=== local.el: Loading local user configuration ===")
 ;; ============================================
 ;; 1. THEME CONFIGURATION

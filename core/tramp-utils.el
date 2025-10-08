@@ -4,7 +4,7 @@
 ;;      specifically for Python development support.
 
 (require 'tramp)
-(require 'logging)
+(require 'core-logging)
 
 (core-utils-with-load-timing
  "tramp-utils.el"

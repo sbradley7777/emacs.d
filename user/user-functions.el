@@ -1,11 +1,11 @@
-;;; functions.el --- Custom Functions -*- lexical-binding: t -*-
+;;; user-functions.el --- Custom Functions -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      User-defined custom functions
 
 (require 'cl-lib)
 
 (core-utils-with-load-timing
- "functions.el"
+ "user-functions.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Reload init.el on the Fly:
@@ -134,4 +134,4 @@ Skips buffers that should not be included in cycling."
   (interactive)
   (user-cycle-buffer :backward)))
 
-(provide 'functions)
+(provide 'user-functions)

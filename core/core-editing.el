@@ -1,10 +1,10 @@
-;;; editing.el --- Editing Behavior Configuration -*- lexical-binding: t -*-
+;;; core-editing.el --- Editing Behavior Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Tabs, spaces, and general editing preferences
 
 
 (core-utils-with-load-timing
- "editing.el"
+ "core-editing.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Enhanced editing preferences
@@ -64,5 +64,5 @@
   ;; Hook into Emacs clipboard system
   (setq interprogram-cut-function 'osc-52-copy))
 
- ;; Make this module available for loading with (require 'editing)
- (provide 'editing))
+ ;; Make this module available for loading with (require 'core-editing)
+ (provide 'core-editing))

@@ -3,7 +3,7 @@
 ;;      Enhanced configuration for bash and shell script editing.
 
 (require 'core-utils)
-(require 'logging)
+(require 'core-logging)
 
 (core-utils-with-load-timing
  "bash-config.el"

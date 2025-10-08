@@ -175,7 +175,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Phase 1: Foundation Layer - System Infrastructure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load diagnostics FIRST - provides early error logging and system info for troubleshooting
-(safe-load-config 'diagnostics "System and configuration diagnostics")
+(safe-load-config 'core-diagnostics "System and configuration diagnostics")
 
 ;; Show system information immediately after diagnostics loads (before packages)
 (diagnostics-show-system-info)
@@ -193,7 +193,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Phase 3: User Interface Layer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load UI foundation BEFORE themes - establishes basic interface elements
-(safe-load-config 'ui "Basic UI setup")
+(safe-load-config 'core-ui "Basic UI setup")
 
 (safe-load-config 'gui-mode "GUI mode configuration")
 
@@ -213,7 +213,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Phase 4: Core Editing and File Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load editing preferences BEFORE file handling - establishes basic editing behavior
-(safe-load-config 'editing "Editing preferences")
+(safe-load-config 'core-editing "Editing preferences")
 
 ;; Load file handling BEFORE TRAMP - establishes local file management
 (safe-load-config 'core-files "File handling")
@@ -293,10 +293,10 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Phase 8: User Customizations (Final Layer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load user functions BEFORE aliases - aliases may reference custom functions
-(safe-load-config 'functions "Custom helper functions")
+(safe-load-config 'user-functions "Custom helper functions")
 
 ;; Load aliases LAST - may reference any previously loaded functionality
-(safe-load-config 'aliases "Function aliases and shortcuts")
+(safe-load-config 'user-aliases "Function aliases and shortcuts")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom settings via emacs menu system

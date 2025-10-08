@@ -13,7 +13,7 @@
 (require 'core-constants)
 
 ;; Load message utilities for consistent logging
-(require 'logging)
+(require 'core-logging)
 
 (core-message-loading "Loading early-init.el...")
 
