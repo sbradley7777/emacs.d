@@ -5,6 +5,11 @@
 ;;      environment is activated and pyvenv's default modeline indicator shows
 ;;      the venv name.
 
+;;; Dependencies:
+;; - python-constants (for configuration values)
+;; - pyvenv-utils (for utility functions)
+;; - pyvenv package (for virtual environment management)
+
 (require 'python-constants)
 (require 'pyvenv-utils)
 

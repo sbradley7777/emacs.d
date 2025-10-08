@@ -161,7 +161,6 @@
 
  ;; Add cape backends for in-buffer completion
  (add-hook 'completion-at-point-functions #'cape-dabbrev)
- (add-hook 'completion-at-point-functions #'cape-file)
+ (add-hook 'completion-at-point-functions #'cape-file))
 
- ;; Make this module available for loading with (require 'completion-config)
- (provide 'completion-config))
+(provide 'completion-config)

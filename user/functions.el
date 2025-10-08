@@ -132,9 +132,6 @@ Skips buffers that should not be included in cycling."
   ()
   "Switch to the previous buffer, skipping filtered buffers."
   (interactive)
-  (user-cycle-buffer :backward))
-
- ;; Make this module available for loading with (require 'functions)
- )
+  (user-cycle-buffer :backward)))
 
 (provide 'functions)

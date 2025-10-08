@@ -8,9 +8,14 @@
 ;; Advanced theme utilities are in themes-utils.el
 
 ;;; Dependencies:
+;; - core-constants (for standard constants)
 ;; - core-utils (for core-utils-with-load-timing)
+;; - logging (for message utilities)
 ;; - doom-themes package
 
+(require 'core-constants)
+(require 'core-utils)
+(require 'logging)
 
 (core-utils-with-load-timing
  "themes-config.el"

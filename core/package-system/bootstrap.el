@@ -15,10 +15,11 @@
  (unless
   (package-installed-p 'use-package)
   (core-message-package "Installing use-package...")
-  (package-install 'use-package))
+  (package-install 'use-package)
+  (core-message-success "use-package installed successfully"))
 
  ;; Configure use-package for optimal package management
- (require 'use-package)
+ (require 'use-package) (core-message-debug "use-package loaded and ready")
 
  ;; Global use-package configuration
  (setq
@@ -26,6 +27,12 @@
   use-package-verbose t ; Show loading messages for debugging
   use-package-compute-statistics t ; Enable statistics collection
   use-package-minimum-reported-time core-use-package-minimum-reported-time) ; Report slow-loading packages
+
+ (core-message-debug
+  "use-package settings: always-ensure=%s, verbose=%s, min-time=%.2fs"
+  use-package-always-ensure
+  use-package-verbose
+  use-package-minimum-reported-time)
 
  ;; Make this module available for loading with (require 'package-system/bootstrap)
  (provide 'package-system/bootstrap))
