@@ -13,6 +13,18 @@
  "pyvenv-modeline.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Helper Functions
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  pyvenv-modeline-file-in-project-p
+  ()
+  "Check if current buffer's file is under the pyvenv project root."
+  (and
+   (boundp 'pyvenv-project-root) pyvenv-project-root buffer-file-name
+   (string-prefix-p (expand-file-name pyvenv-project-root) (expand-file-name buffer-file-name))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Clickable Python Venv Indicator
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -46,7 +58,7 @@
  (defun
   pyvenv-modeline-indicator () "Return modeline indicator for Python venv with click handler."
   (when
-   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
+   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (pyvenv-modeline-file-in-project-p))
    (let* ((venv-name (file-name-nondirectory (directory-file-name pyvenv-virtual-env)))
           (indicator (format " 🐍 %s " venv-name)))
      (propertize
@@ -71,7 +83,7 @@
   (doom-modeline-def-segment
    pyvenv-indicator "Display Python virtual environment with clickable icon."
    (when
-    (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
+    (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (pyvenv-modeline-file-in-project-p))
     (let ((icon
            (doom-modeline-icon
             'mdicon
