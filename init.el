@@ -283,6 +283,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load pyvenv remote AFTER local pyvenv - extends virtual environment support to TRAMP sessions
 (safe-load-config 'pyvenv-remote "Python virtual environments TRAMP support")
 
+;; Load pyvenv modeline AFTER pyvenv config - provides clickable venv indicator
+(safe-load-config 'pyvenv-modeline "Python virtual environment modeline indicator")
+
 ;; Load Ruff integration LAST - requires Python core, flymake, and pyvenv to be established
 (safe-load-config 'flymake-ruff-config "Flymake Ruff integration")
 

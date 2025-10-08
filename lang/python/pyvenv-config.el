@@ -2,8 +2,8 @@
 ;;; Commentary:
 ;;      AUTO-DETECT ONCE APPROACH: Automatically detects the first Python virtual
 ;;      environment encountered and remembers it as THE project. The virtual
-;;      environment is activated and pyvenv's default modeline indicator shows
-;;      the venv name.
+;;      environment is activated. The built-in pyvenv modeline indicator is disabled
+;;      in favor of our custom doom-modeline segment (defined in pyvenv-modeline.el).
 
 ;;; Dependencies:
 ;; - python-constants (for configuration values)
@@ -56,8 +56,15 @@
  ;; Initialize pyvenv package and enable pyvenv-mode
  (if
   (fboundp 'use-package)
-  (use-package pyvenv :config (pyvenv-mode 1))
-  (when (require 'pyvenv nil t) (pyvenv-mode 1)))
+  (use-package
+   pyvenv
+   :config (pyvenv-mode 1)
+   ;; Disable the built-in pyvenv modeline indicator (we use our custom doom-modeline segment instead)
+   (setq pyvenv-mode-line-indicator nil))
+  (when
+   (require 'pyvenv nil t) (pyvenv-mode 1)
+   ;; Disable the built-in pyvenv modeline indicator
+   (setq pyvenv-mode-line-indicator nil)))
 
  ;; Hook into pyvenv activation/deactivation to update python-shell-interpreter for doom-modeline
  ;; Note: python-shell-virtualenv-path remains the primary interpreter source for Python mode

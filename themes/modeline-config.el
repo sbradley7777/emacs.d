@@ -111,6 +111,46 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
    ;; Enable doom-modeline
    (doom-modeline-mode 1))
 
+  ;; Add pyvenv-indicator to the main modeline format (after pyvenv-modeline segment is loaded)
+  ;; This waits for both doom-modeline and the pyvenv-indicator segment to be available
+  (with-eval-after-load
+   'pyvenv-modeline
+   ;; Left side: bar, buffer info, and basic indicators
+   ;; Right side: everything else including pyvenv-indicator
+   (doom-modeline-def-modeline
+    'main
+    '(bar
+      workspace-name
+      window-number
+      modals
+      matches
+      buffer-info
+      remote-host
+      buffer-position
+      parrot
+      selection-info)
+    '(pyvenv-indicator
+      misc-info
+      persp-name
+      battery
+      grip
+      irc
+      mu4e
+      gnus
+      github
+      debug
+      repl
+      lsp
+      minor-modes
+      input-method
+      indent-info
+      buffer-encoding
+      major-mode
+      process
+      vcs
+      check
+      time)))
+
   (core-message-success "doom-modeline configured and enabled"))
 
 
