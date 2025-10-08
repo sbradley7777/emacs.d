@@ -117,19 +117,10 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
    ;; Enable doom-modeline
    (doom-modeline-mode 1))
 
-  ;; Add pyvenv-indicator to the main modeline format (after pyvenv-modeline segment is loaded)
+  ;; Define custom modeline format (after pyvenv-modeline segment is loaded)
   ;; This waits for both doom-modeline and the pyvenv-indicator segment to be available
   (with-eval-after-load
    'pyvenv-modeline
-   ;; Define separator segment
-   (doom-modeline-def-segment
-    separator "Visual separator." (propertize " ◆ " 'face 'doom-modeline-buffer-path))
-
-   ;; Define remote file indicator segment
-   (doom-modeline-def-segment
-    remote-file-indicator
-    "Display an icon when editing a remote file."
-    (when (file-remote-p default-directory) (propertize " 🌐" 'face 'doom-modeline-host)))
 
    ;; Left side: bar, buffer info, and basic indicators
    ;; Right side: everything else including pyvenv-indicator
@@ -141,8 +132,7 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
       modals ; Modal editing state (evil, god-mode, etc.)
       matches ; Search match count (anzu, evil-search, etc.)
       buffer-info ; Buffer name with icon and modification indicator
-      remote-file-indicator ; 🌐 icon when editing remote files
-      remote-host ; TRAMP remote host indicator
+      remote-file-indicator ; Remote/local host indicator with click handler
       separator ; Visual separator (◆)
       buffer-position ; Line:Column and position percentage
       selection-info ; Selected region size/line count

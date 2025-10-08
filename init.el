@@ -203,6 +203,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load modeline configuration - basic Emacs modeline setup
 (safe-load-config 'modeline-config "Modeline configuration")
 
+;; Load custom modeline segments - user-defined doom-modeline segments
+(safe-load-config 'modeline-segments "Custom modeline segments")
+
 ;; Load modeline face customizations - theme-specific modeline colors
 (safe-load-config 'modeline-faces "Modeline face customizations")
 
