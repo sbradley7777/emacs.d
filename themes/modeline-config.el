@@ -101,6 +101,12 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
    ;; Python Environment Display (updated by pyvenv hooks)
    (setq doom-modeline-env-version t doom-modeline-env-enable-python t)
 
+   ;; Position Display
+   (setq
+    doom-modeline-column-zero-based nil ; Column numbers start at 1
+    doom-modeline-percent-position nil) ; Show percentage position in addition to line:column
+   (column-number-mode 1) ; Enable column number display globally
+
    ;; Modeline Height and Appearance
    (setq
     doom-modeline-height 25 ; Height of the mode-line
@@ -115,41 +121,38 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
   ;; This waits for both doom-modeline and the pyvenv-indicator segment to be available
   (with-eval-after-load
    'pyvenv-modeline
+   ;; Define separator segment
+   (doom-modeline-def-segment
+    separator "Visual separator." (propertize " ◆ " 'face 'doom-modeline-buffer-path))
+
    ;; Left side: bar, buffer info, and basic indicators
    ;; Right side: everything else including pyvenv-indicator
    (doom-modeline-def-modeline
     'main
-    '(bar
-      workspace-name
-      window-number
-      modals
-      matches
-      buffer-info
-      remote-host
-      buffer-position
-      parrot
-      selection-info)
-    '(pyvenv-indicator
-      misc-info
-      persp-name
-      battery
-      grip
-      irc
-      mu4e
-      gnus
-      github
-      debug
-      repl
-      lsp
-      minor-modes
-      input-method
-      indent-info
-      buffer-encoding
-      major-mode
-      process
-      vcs
-      check
-      time)))
+    '(bar ; Colored bar indicating buffer status (modified, read-only, etc.)
+      workspace-name ; Workspace/project name
+      window-number ; Window number when using window-numbering
+      modals ; Modal editing state (evil, god-mode, etc.)
+      matches ; Search match count (anzu, evil-search, etc.)
+      buffer-info ; Buffer name with icon and modification indicator
+      remote-host ; TRAMP remote host indicator
+      separator ; Visual separator (◆)
+      buffer-position ; Line:Column and position percentage
+      selection-info ; Selected region size/line count
+      indent-info ; Indentation type and width
+      buffer-encoding) ; File encoding (UTF-8, etc.)
+    '(pyvenv-indicator ; Python virtual environment name and version (custom segment)
+      misc-info ; Miscellaneous information
+      debug ; Debug mode indicator (edebug, dap, etc.)
+      repl ; REPL connection status
+      lsp ; LSP/Eglot server status and diagnostics
+      minor-modes ; Active minor modes (truncated list)
+      input-method ; Input method indicator (for non-English text)
+      major-mode ; Major mode name with icon
+      process ; Running processes in buffer
+      check ; Syntax checker status (flymake error/warning counts)
+      vcs ; Git branch and status (modified, ahead/behind, etc.)
+      time))) ; Current time display
 
   (core-message-success "doom-modeline configured and enabled"))
 
