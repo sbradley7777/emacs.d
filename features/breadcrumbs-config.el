@@ -17,12 +17,9 @@
   breadcrumb
   :ensure t
   :config (breadcrumb-mode 1)
-  ;; Customize breadcrumb colors to match doom-1337 modeline theme
-  (set-face-attribute 'breadcrumb-face nil :foreground "#00ff9f") ; Cyan - matches general nav
-  (set-face-attribute 'breadcrumb-project-base-face nil :foreground "#00b8ff" :weight 'bold) ; Blue - matches project-dir
-  (set-face-attribute 'breadcrumb-project-crumbs-face nil :foreground "#7bc275") ; Green - matches buffer-path
-  (set-face-attribute 'breadcrumb-project-leaf-face nil :foreground "#00ff9f" :weight 'bold) ; Cyan - matches buffer-file
-  (set-face-attribute 'breadcrumb-imenu-crumbs-face nil :foreground "#7bc275") ; Green - code structure path
-  (set-face-attribute 'breadcrumb-imenu-leaf-face nil :foreground "#00ff9f" :weight 'bold))) ; Cyan - current symbol
+  ;; Note: Theme-specific breadcrumb colors are applied by each theme's setup function
+  ;; (e.g., doom-1337-breadcrumb-faces-apply in theme-doom-1337.el)
+  ;; This ensures breadcrumb colors always match the active theme's modeline colors
+  ))
 
 (provide 'breadcrumbs-config)
