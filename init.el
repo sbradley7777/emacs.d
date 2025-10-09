@@ -301,8 +301,11 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load user functions BEFORE aliases - aliases may reference custom functions
 (safe-load-config 'user-functions "Custom helper functions")
 
-;; Load aliases LAST - may reference any previously loaded functionality
+;; Load aliases BEFORE command palette - aliases may be used in palette
 (safe-load-config 'user-aliases "Function aliases and shortcuts")
+
+;; Load command palette LAST - provides M-x tracking and command launcher
+(safe-load-config 'command-palette "Command palette with M-x history tracking")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom settings via emacs menu system

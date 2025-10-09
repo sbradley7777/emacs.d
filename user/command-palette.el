@@ -1,0 +1,484 @@
+;;; command-palette.el --- Clickable Side Window Command Launcher -*- lexical-binding: t -*-
+;;; Commentary:
+;;
+;; Provides a persistent side-window command palette with:
+;; - Clickable buttons for frequently used commands
+;; - Automatic tracking of M-x command history
+;; - Customizable favorites list
+;; - Persistent storage of history and favorites
+;;
+;; Usage: Press C-c p to toggle the command palette
+
+(require 'core-constants)
+(require 'core-utils)
+(require 'core-logging)
+
+(core-utils-with-load-timing
+ "command-palette.el"
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Constants
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defconst
+  command-palette-data-dir
+  (expand-file-name "command_palette/" emacs-local-dir)
+  "Directory for command palette persistent data.")
+
+ (defconst
+  command-palette-history-file
+  (expand-file-name "command-palette-history.el" command-palette-data-dir)
+  "File storing command palette history.")
+
+ (defconst
+  command-palette-favorites-file
+  (expand-file-name "command-palette-favorites.el" command-palette-data-dir)
+  "File storing command palette favorites.")
+
+ (defconst command-palette-buffer-name "*Command Palette*" "Name of the command palette buffer.")
+
+ (defconst command-palette-width 35 "Width of the command palette side window.")
+
+ (defconst command-palette-history-size 20 "Maximum number of commands to store in history.")
+
+ (defconst
+  command-palette-default-favorites
+  '(("Beginning Of Buffer" . beginning-of-buffer)
+    ("End Of Buffer" . end-of-buffer)
+    ("Reload Init File" . user-reload-init-file)
+    ("Copy Whole Buffer" . user-copy-whole-buffer))
+  "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
+
+ (defconst
+  command-palette-excluded-commands
+  '(command-palette-toggle
+    command-palette-add-favorite
+    command-palette-remove-favorite
+    command-palette-clear-history
+    keyboard-quit
+    keyboard-escape-quit
+    abort-recursive-edit
+    exit-minibuffer
+    minibuffer-complete
+    minibuffer-complete-and-exit
+    completion-at-point
+    minibuffer-completion-help
+    self-insert-command
+    delete-backward-char
+    y-or-n-p-insert-other
+    undefined)
+  "Commands to exclude from M-x history tracking.")
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Variables
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defvar command-palette-window nil "Window displaying the command palette.")
+
+ (defvar
+  command-palette-history
+  (make-ring command-palette-history-size)
+  "Ring buffer storing recently executed commands from palette.")
+
+ (defvar
+  command-palette-favorites
+  nil
+  "List of favorite commands displayed in the palette. Loaded from file or defaults.")
+
+ (defvar
+  command-palette-previous-window nil "Window that was active before opening the command palette.")
+
+ (defvar
+  command-palette-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "q") 'command-palette-toggle)
+    map)
+  "Keymap for command palette buffer.")
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Directory Management
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  command-palette--ensure-data-directory
+  ()
+  "Ensure the command palette data directory exists, creating it if necessary."
+  (core-utils-ensure-directory command-palette-data-dir))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Persistence Functions - History
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  command-palette--save-history
+  ()
+  "Save command history to persistent storage."
+  (command-palette--ensure-data-directory)
+  (condition-case err
+      (with-temp-file
+       command-palette-history-file
+       (insert
+        ";;; command-palette-history.el --- Command Palette History -*- lexical-binding: t -*-\n")
+       (insert ";;;\n")
+       (insert ";;; This file stores the command palette execution history.\n")
+       (insert ";;; Generated automatically - do not edit manually.\n")
+       (insert ";;;\n\n")
+       (insert "(setq command-palette-saved-history\n")
+       (insert "  '(")
+       (let ((first t))
+         (dotimes
+          (i (ring-length command-palette-history))
+          (let ((item (ring-ref command-palette-history i)))
+            (unless first (insert "\n    "))
+            (setq first nil)
+            (insert (format "%S" item)))))
+       (insert "))\n\n")
+       (insert ";;; command-palette-history.el ends here\n"))
+    (error
+     (core-message-error
+      "Failed to save command palette history: %s" (error-message-string err)))))
+
+ (defun
+  command-palette--load-history (&optional silent)
+  "Load command history from persistent storage.
+If SILENT is non-nil, suppress success messages. Returns t if successful, nil otherwise."
+  (when
+   (file-exists-p command-palette-history-file)
+   (condition-case err
+       (progn
+        (load command-palette-history-file)
+        (when
+         (boundp 'command-palette-saved-history)
+         (setq command-palette-history (make-ring command-palette-history-size))
+         (dolist
+          (item (reverse command-palette-saved-history))
+          (ring-insert command-palette-history item))
+         (unless
+          silent
+          (core-message-success
+           "Loaded %d command(s) from history" (length command-palette-saved-history)))
+         t))
+     (error
+      (core-message-warning
+       "Failed to load command palette history: %s" (error-message-string err))
+      nil))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Persistence Functions - Favorites
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  command-palette--save-favorites
+  ()
+  "Save favorites list to persistent storage."
+  (command-palette--ensure-data-directory)
+  (condition-case err
+      (with-temp-file
+       command-palette-favorites-file
+       (insert
+        ";;; command-palette-favorites.el --- Command Palette Favorites -*- lexical-binding: t -*-\n")
+       (insert ";;;\n")
+       (insert ";;; This file stores the command palette favorites list.\n")
+       (insert ";;; Generated automatically - do not edit manually.\n")
+       (insert ";;;\n\n")
+       (insert "(setq command-palette-saved-favorites\n")
+       (insert "  '(")
+       (let ((first t))
+         (dolist
+          (item command-palette-favorites)
+          (unless first (insert "\n    "))
+          (setq first nil)
+          (insert (format "%S" item))))
+       (insert "))\n\n")
+       (insert ";;; command-palette-favorites.el ends here\n"))
+    (error
+     (core-message-error
+      "Failed to save command palette favorites: %s" (error-message-string err)))))
+
+ (defun
+  command-palette--load-favorites (&optional silent)
+  "Load favorites from persistent storage.
+If SILENT is non-nil, suppress success messages. Returns t if successful, nil otherwise."
+  (if
+   (file-exists-p command-palette-favorites-file)
+   (condition-case err
+       (progn
+        (load command-palette-favorites-file)
+        (when
+         (boundp 'command-palette-saved-favorites)
+         (setq command-palette-favorites command-palette-saved-favorites)
+         (unless
+          silent
+          (core-message-success
+           "Loaded %d favorite command(s)" (length command-palette-favorites)))
+         t))
+     (error
+      (core-message-warning
+       "Failed to load command palette favorites: %s" (error-message-string err))
+      (setq command-palette-favorites command-palette-default-favorites)
+      nil))
+   (progn
+    (setq command-palette-favorites command-palette-default-favorites)
+    (unless silent (core-message-info "Using default command palette favorites"))
+    nil)))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Helper Functions
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  command-palette--format-command-name (cmd-symbol)
+  "Convert CMD-SYMBOL to human-readable format.
+Example: 'find-file' becomes 'Find File'."
+  (let ((name (symbol-name cmd-symbol)))
+    (capitalize (replace-regexp-in-string "-" " " name))))
+
+ (defun
+  command-palette--add-to-history (cmd-symbol)
+  "Add CMD-SYMBOL to command history if it's not excluded or in favorites.
+Removes any existing occurrences before adding to ensure no duplicates. Returns t if added, nil if excluded."
+  (when
+   (and
+    (symbolp cmd-symbol)
+    (commandp cmd-symbol)
+    (not (memq cmd-symbol command-palette-excluded-commands))
+    ;; Don't add to history if it's already in favorites
+    (not
+     (assoc
+      cmd-symbol (mapcar (lambda (item) (cons (cdr item) (car item))) command-palette-favorites))))
+   ;; Remove all existing occurrences of this command from the ring
+   (let ((new-ring (make-ring command-palette-history-size))
+         (cmd-name (command-palette--format-command-name cmd-symbol))
+         (len (ring-length command-palette-history)))
+     ;; Iterate from oldest to newest to preserve order when inserting
+     (dotimes
+      (i len)
+      (let* ((idx (- len 1 i)) ; Start from the end (oldest)
+             (item (ring-ref command-palette-history idx)))
+        (unless (eq (cdr item) cmd-symbol) (ring-insert new-ring item))))
+     ;; Replace old ring with new deduplicated ring
+     (setq command-palette-history new-ring)
+     ;; Insert the command at the front (most recent position)
+     (ring-insert command-palette-history (cons cmd-name cmd-symbol))
+     (command-palette--save-history)
+     (command-palette--refresh-buffer)
+     t)))
+
+ (defun
+  command-palette--execute-command (cmd-symbol cmd-name)
+  "Execute command CMD-SYMBOL and add CMD-NAME to history.
+Switches to the previous window before executing the command."
+  ;; Use add-to-history for deduplication
+  (command-palette--add-to-history cmd-symbol)
+  ;; Find the target window (previous window or another suitable window)
+  (let ((target-window
+         (or
+          (and
+           command-palette-previous-window
+           (window-live-p command-palette-previous-window)
+           command-palette-previous-window)
+          ;; Find first non-palette window
+          (cl-find-if
+           (lambda
+            (win) (not (string= (buffer-name (window-buffer win)) command-palette-buffer-name)))
+           (window-list)))))
+    (when target-window (select-window target-window))
+    (call-interactively cmd-symbol)
+    (command-palette--refresh-buffer)))
+
+ (defun
+  command-palette--make-button
+  (label action face)
+  "Create a clickable button with LABEL that executes ACTION. Use FACE for styling."
+  (let ((start (point)))
+    (insert "  " label)
+    (make-text-button
+     start
+     (point)
+     'action
+     action
+     'follow-link
+     t
+     'face
+     face
+     'help-echo
+     (format "Click to execute: %s" label))
+    (insert "\n")))
+
+ (defun
+  command-palette--refresh-buffer () "Refresh the command palette buffer contents."
+  (let ((buffer (get-buffer command-palette-buffer-name)))
+    (when
+     buffer
+     (with-current-buffer
+      buffer
+      (let ((inhibit-read-only t)
+            (line (line-number-at-pos)))
+        (erase-buffer)
+        (command-palette--render-content)
+        (goto-char (point-min))
+        (forward-line (1- line)))))))
+
+ (defun
+  command-palette--render-content () "Render the command palette buffer content."
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Header
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (insert (propertize "━━━ COMMAND PALETTE ━━━\n\n" 'face '(:weight bold :foreground "cyan")))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Favorites Section
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (insert (propertize "Favorite Commands:\n" 'face '(:weight bold :foreground "green")))
+  (dolist
+   (item command-palette-favorites)
+   (let ((name (car item))
+         (cmd (cdr item)))
+     (command-palette--make-button
+      (format "★ %s" name)
+      `(lambda (_) (command-palette--execute-command ',cmd ,name))
+      '(:foreground "lightgreen"))))
+
+  (insert "\n")
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Recent Commands Section
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (when
+   (> (ring-length command-palette-history) 0)
+   (insert (propertize "Recent Commands:\n" 'face '(:weight bold :foreground "yellow")))
+   (dotimes
+    (i (ring-length command-palette-history))
+    (let* ((item (ring-ref command-palette-history i))
+           (name (car item))
+           (cmd (cdr item)))
+      (command-palette--make-button
+       (format "↻ %s" name)
+       `(lambda (_) (command-palette--execute-command ',cmd ,name))
+       '(:foreground "orange"))))
+   (insert "\n"))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Actions Section
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (insert (propertize "Actions:\n" 'face '(:weight bold :foreground "magenta")))
+  (command-palette--make-button
+   "+ Add Command"
+   (lambda (_) (call-interactively 'command-palette-add-favorite))
+   '(:foreground "cyan"))
+  (command-palette--make-button
+   "− Remove Command"
+   (lambda (_) (call-interactively 'command-palette-remove-favorite))
+   '(:foreground "red"))
+  (command-palette--make-button
+   "⟳ Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
+  (command-palette--make-button
+   "✕ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
+
+  (insert "\n") (insert (propertize "Hit 'q' to quit" 'face '(:foreground "gray" :slant italic))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Interactive Commands
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  command-palette-add-favorite () "Add a command to the favorites list." (interactive)
+  (let* ((cmd-name (read-string "Command display name: "))
+         (cmd-symbol (intern (completing-read "Command: " obarray 'commandp t))))
+    (add-to-list 'command-palette-favorites (cons cmd-name cmd-symbol) t)
+    (command-palette--save-favorites)
+    (command-palette--refresh-buffer)
+    (core-message-success "Added '%s' to command palette" cmd-name)))
+
+ (defun
+  command-palette-remove-favorite () "Remove a command from the favorites list." (interactive)
+  (let* ((choices (mapcar 'car command-palette-favorites))
+         (choice (completing-read "Remove command: " choices nil t)))
+    (setq
+     command-palette-favorites
+     (cl-remove-if (lambda (item) (string= (car item) choice)) command-palette-favorites))
+    (command-palette--save-favorites)
+    (command-palette--refresh-buffer)
+    (core-message-success "Removed '%s' from command palette" choice)))
+
+ (defun
+  command-palette-clear-history
+  ()
+  "Clear the command history."
+  (interactive)
+  (setq command-palette-history (make-ring command-palette-history-size))
+  (command-palette--save-history)
+  (command-palette--refresh-buffer)
+  (core-message-success "Command palette history cleared"))
+
+ (defun
+  command-palette-toggle () "Toggle the command palette side window." (interactive)
+  (if
+   (and command-palette-window (window-live-p command-palette-window))
+   (progn
+    (delete-window command-palette-window)
+    (setq command-palette-window nil)
+    (core-message-info "Command palette closed"))
+   ;; Store current window before opening palette
+   (setq command-palette-previous-window (selected-window))
+   ;; Reload history and favorites from disk to ensure freshness (silently)
+   (command-palette--load-favorites t) (command-palette--load-history t)
+   (let ((buffer (get-buffer-create command-palette-buffer-name)))
+     (with-current-buffer
+      buffer
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (command-palette--render-content))
+      (setq buffer-read-only t)
+      (setq-local cursor-type nil)
+      (use-local-map command-palette-mode-map)
+      (hl-line-mode 1))
+     (setq
+      command-palette-window
+      (display-buffer-in-side-window
+       buffer `((side . right) (window-width . ,command-palette-width) (slot . 0))))
+     (select-window command-palette-window)
+     (core-message-success "Command palette opened"))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; M-x Command Tracking
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defvar command-palette--mx-flag nil "Flag set when M-x is invoked.")
+
+ (defun
+  command-palette--track-command () "Track commands executed via M-x using post-command-hook."
+  ;; Set flag when M-x is invoked
+  (when
+   (memq this-command '(execute-extended-command execute-extended-command-for-buffer))
+   (setq command-palette--mx-flag t))
+
+  ;; Track the next real command after M-x
+  (when
+   (and
+    command-palette--mx-flag this-command (commandp this-command)
+    (not
+     (memq this-command '(execute-extended-command execute-extended-command-for-buffer)))
+    (not (memq this-command command-palette-excluded-commands)))
+   (command-palette--add-to-history this-command) (setq command-palette--mx-flag nil)))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Initialization
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; Load saved data
+ (command-palette--load-favorites)
+ (command-palette--load-history)
+
+ ;; Enable M-x command tracking via post-command-hook
+ (add-hook 'post-command-hook 'command-palette--track-command)
+
+ ;; Save on exit
+ (add-hook 'kill-emacs-hook 'command-palette--save-history)
+ (add-hook 'kill-emacs-hook 'command-palette--save-favorites)
+
+ (core-message-success "Command palette loaded! F9 to toggle (M-x commands auto-tracked)"))
+
+(provide 'command-palette)
+
+;;; command-palette.el ends here

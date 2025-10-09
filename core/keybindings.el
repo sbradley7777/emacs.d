@@ -37,8 +37,7 @@
  ;; Buffer navigation
  (global-set-key (kbd "<f7>") 'user-next-buffer) ; Cycle to next buffer that is filter to not include all buffers
  (global-set-key (kbd "<f8>") 'next-buffer) ; Cycle to next buffer
- (global-set-key (kbd "<f9>") 'beginning-of-buffer) ; Goto top of buffer
- (global-set-key (kbd "<f10>") 'end-of-buffer) ; Goto end of buffer
+ (global-set-key (kbd "<f9>") 'command-palette-toggle) ; Toggle command palette
 
  ;; Page down/up move the point, not the screen. Can move point to beginning or end of buffer.
  ;; Reference: http://snarfed.org/emacs_page_up_page_down
