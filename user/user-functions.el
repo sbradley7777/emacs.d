@@ -97,7 +97,8 @@ Buffers EXCLUDED from cycling:
  (defun
   user-cycle-buffer (direction)
   "Cycle through buffers in DIRECTION (:forward or :backward).
-Skips buffers that should not be included in cycling."
+Skips buffers that should not be included in cycling.
+Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
   (let* ( ;; Get buffers in stable order (sorted by name for consistency)
          (all-buffers
           (sort (buffer-list) (lambda (a b) (string< (buffer-name a) (buffer-name b)))))
@@ -109,14 +110,22 @@ Skips buffers that should not be included in cycling."
          (num-buffers (length valid-buffers))
          (target-buffer nil))
     (when
-     (and current-index (> num-buffers 1))
-     ;; Calculate next index with wrap-around
-     (let ((next-index
-            (if
-             (eq direction :forward)
-             (mod (1+ current-index) num-buffers)
-             (mod (1- current-index) num-buffers))))
-       (setq target-buffer (nth next-index valid-buffers))))
+     (> num-buffers 0)
+     ;; If current buffer is excluded (current-index is nil), start from first or last
+     (if
+      (null current-index)
+      (setq
+       target-buffer
+       (if (eq direction :forward) (nth 0 valid-buffers) (nth (1- num-buffers) valid-buffers)))
+      ;; Otherwise cycle normally
+      (when
+       (> num-buffers 1)
+       (let ((next-index
+              (if
+               (eq direction :forward)
+               (mod (1+ current-index) num-buffers)
+               (mod (1- current-index) num-buffers))))
+         (setq target-buffer (nth next-index valid-buffers))))))
     ;; Switch to target buffer if found
     (when target-buffer (switch-to-buffer target-buffer))))
 
