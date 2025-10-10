@@ -18,12 +18,9 @@
 
 ;; Window Constants
 (defconst
- features-window-width-percentage
- 0.3
- "Window width as fraction of frame width for diagnostic buffers.")
-
-;; Imenu-list Constants
-(defconst features-imenu-list-size 0.25 "Imenu-list sidebar width as fraction of frame width.")
+ features-side-window-width 0.3
+ "Width for all side windows (right/left) as fraction of frame width.
+Used by flymake diagnostics, imenu-list, command palette, and other side windows.")
 
 ;; Indent Guides Constants
 (defconst
