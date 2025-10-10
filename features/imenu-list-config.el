@@ -39,8 +39,9 @@
 
  ;; Global key bindings for quick access
  ;; The 'imenu-list-focus-after-activation' setting handles focus correctly.
- (global-set-key (kbd "<f5>") 'imenu-list-smart-toggle)
- (global-set-key (kbd "C-c i l") 'imenu-list-smart-toggle)
+ ;; F5 uses the wrapper function to ensure mutual exclusion with other side windows
+ (global-set-key (kbd "<f5>") 'user-imenu-list-smart-toggle)
+ (global-set-key (kbd "C-c i l") 'user-imenu-list-smart-toggle)
  (global-set-key (kbd "C-c i s") 'imenu-list-show-current-symbol)
  (global-set-key (kbd "C-c i r") 'imenu-list-refresh)
 

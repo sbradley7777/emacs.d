@@ -482,6 +482,8 @@ Returns width as number of columns needed to display content."
     (delete-window command-palette-window)
     (setq command-palette-window nil)
     (core-message-info "Command palette closed"))
+   ;; Close other exclusive side windows before opening
+   (when (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
    ;; Store current window before opening palette
    (setq command-palette-previous-window (selected-window))
    ;; Reload history and favorites from disk to ensure freshness (silently)

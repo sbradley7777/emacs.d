@@ -132,6 +132,53 @@ Skips buffers that should not be included in cycling."
   ()
   "Switch to the previous buffer, skipping filtered buffers."
   (interactive)
-  (user-cycle-buffer :backward)))
+  (user-cycle-buffer :backward))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Side Window Mutual Exclusion:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  user-close-exclusive-side-windows ()
+  "Close all exclusive side windows (F1: Flymake, F5: Imenu-list, F9: Command Palette).
+This ensures only one of these windows is open at a time."
+  ;; Close Flymake diagnostics window (F1)
+  (let ((flymake-window
+         (cl-find-if
+          (lambda
+           (window) (string-prefix-p "*Flymake diagnostics" (buffer-name (window-buffer window))))
+          (window-list))))
+    (when flymake-window (quit-window nil flymake-window)))
+
+  ;; Close Imenu-list window (F5)
+  (let ((imenu-window
+         (cl-find-if
+          (lambda
+           (window) (string= "*Ilist*" (buffer-name (window-buffer window))))
+          (window-list))))
+    (when imenu-window (quit-window nil imenu-window)))
+
+  ;; Close Command Palette window (F9)
+  (when
+   (boundp 'command-palette-window)
+   (when
+    (and command-palette-window (window-live-p command-palette-window))
+    (delete-window command-palette-window)
+    (setq command-palette-window nil))))
+
+ (defun
+  user-imenu-list-smart-toggle ()
+  "Toggle Imenu-list with mutual exclusion from other side windows.
+This wrapper ensures that opening Imenu-list closes other exclusive side windows (F1, F9)."
+  (interactive)
+  ;; Find if imenu-list window is currently open
+  (let ((imenu-window
+         (cl-find-if
+          (lambda
+           (window) (string= "*Ilist*" (buffer-name (window-buffer window))))
+          (window-list))))
+    ;; If not open, close other exclusive windows first
+    (unless imenu-window (user-close-exclusive-side-windows))
+    ;; Call the original toggle function
+    (when (fboundp 'imenu-list-smart-toggle) (imenu-list-smart-toggle)))))
 
 (provide 'user-functions)

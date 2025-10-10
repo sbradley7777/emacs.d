@@ -20,8 +20,13 @@
           (lambda
            (window) (string-prefix-p "*Flymake diagnostics" (buffer-name (window-buffer window))))
           (window-list))))
-    ;; If such a window exists, close it. Otherwise, open one.
-    (if flymake-window (quit-window nil flymake-window) (flymake-show-buffer-diagnostics))))
+    ;; If such a window exists, close it. Otherwise, close other exclusive windows and open this one.
+    (if
+     flymake-window (quit-window nil flymake-window)
+     (progn
+      (when
+       (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
+      (flymake-show-buffer-diagnostics)))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Backend Name Formatting
