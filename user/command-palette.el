@@ -274,9 +274,14 @@ Removes any existing occurrences before adding to ensure no duplicates. Returns 
  (defun
   command-palette--execute-command (cmd-symbol cmd-name)
   "Execute command CMD-SYMBOL and add CMD-NAME to history.
-Switches to the previous window before executing the command."
+Switches to the previous window before executing the command, then closes the palette."
   ;; Use add-to-history for deduplication
   (command-palette--add-to-history cmd-symbol)
+  ;; Close the command palette window
+  (when
+   (and command-palette-window (window-live-p command-palette-window))
+   (delete-window command-palette-window)
+   (setq command-palette-window nil))
   ;; Find the target window (previous window or another suitable window)
   (let ((target-window
          (or
@@ -290,8 +295,7 @@ Switches to the previous window before executing the command."
             (win) (not (string= (buffer-name (window-buffer win)) command-palette-buffer-name)))
            (window-list)))))
     (when target-window (select-window target-window))
-    (call-interactively cmd-symbol)
-    (command-palette--refresh-buffer)))
+    (call-interactively cmd-symbol)))
 
  (defun
   command-palette--make-button
