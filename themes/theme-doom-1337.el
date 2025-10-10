@@ -37,7 +37,7 @@
  (defvar doom-1337-color-purple "#ff00ff" "Secondary accent - magenta.")
  (defvar doom-1337-color-blue "#5fb3f0" "Tertiary accent - brightened blue.")
  (defvar doom-1337-color-orange "#ffb347" "Warnings - brightened orange.")
- (defvar doom-1337-color-red "#ff6b9d" "Errors - light red.")
+ (defvar doom-1337-color-red "#f0a0a0" "Errors - light coral red for contrast.")
  (defvar doom-1337-color-yellow "#ffe66d" "Modified/attention - yellow.")
  (defvar doom-1337-color-green "#7bc275" "Success - green.")
  (defvar doom-1337-color-teal "#7dd0d0" "Info/time - soft cyan-teal.")
