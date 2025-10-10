@@ -30,6 +30,7 @@ This Emacs configuration provides a professional development environment with in
 - **Remote development** with seamless [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects
 - **Project navigation** with [Treemacs](https://github.com/Alexander-Miller/treemacs) file tree sidebar and project management
 - **Custom dashboard** with quick access to recent files, package management, and system actions
+- **Command palette** with M-x history tracking, customizable favorites, and one-click command execution
 - **Automatic font management** for icon packages with system-wide font installation
 - **Message logging** with automatic log rotation and session history
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes

@@ -15,6 +15,7 @@ This document provides a comprehensive reference for all keybindings and executa
   - [Imenu-List Navigation](#imenu-list-navigation)
   - [Treemacs Project Navigation](#treemacs-project-navigation)
   - [Dired Directory Browsing](#dired-directory-browsing)
+  - [Command Palette](#command-palette)
   - [Language-Specific Keybindings](#language-specific-keybindings)
   - [Code Formatting](#code-formatting)
   - [Diagnostic and Error Checking](#diagnostic-and-error-checking)
@@ -65,9 +66,9 @@ These are configuration-specific shortcuts designed for quick access to common o
 | `F4` | `treemacs-smart-toggle` | Smart toggle Treemacs file tree sidebar | - |
 | `F5` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
 | `F6` | `delete-trailing-whitespace` | Clean up line endings | - |
-| `F7` | `previous-buffer` | Switch to previous buffer | - |
+| `F7` | `user-previous-buffer` | Switch to previous buffer (file buffers and *Messages* only) | - |
 | `F8` | `next-buffer` | Switch to next buffer | - |
-| `F9` | `beginning-of-buffer` | Jump to file start | - |
+| `F9` | `command-palette-toggle` | Toggle command palette side window | - |
 | `F10` | `end-of-buffer` | Jump to file end | - |
 | `F11` | Smart scroll down | Scroll with boundary handling | - |
 | `F12` | Smart scroll up | Scroll with boundary handling | - |
@@ -278,6 +279,63 @@ Enhanced directory navigation with inline tree expansion powered by [dired-subtr
 - **Inline trees**: Expand directories without opening new buffers
 - **Human-readable sizes**: File sizes shown with KB/MB/GB units
 - **Auto-refresh**: Directory updates automatically when files change
+
+### Command Palette
+
+Interactive command launcher with history tracking and customizable favorites powered by [command-palette.el](user/command-palette.el):
+
+**Opening the Command Palette:**
+- `F9` - Toggle command palette side window
+
+**Command Palette Keybindings:**
+
+When the command palette is active, these keys work within the palette window:
+
+| Key Binding | Function | Description | Context |
+|:------------|:---------|:------------|:--------|
+| `F9` | `command-palette-toggle` | Toggle command palette window | - |
+| `q` | Close palette | Close command palette window | Command palette |
+| `a` | Promote to favorite | Promote recent command to favorites by index | Command palette |
+| `r` | Remove favorite | Remove favorite command by index | Command palette |
+| Mouse click | Execute command | Execute any command button | Command palette |
+
+**Command Palette Features:**
+- **Automatic M-x tracking** - all M-x commands captured in recent history
+- **Clickable buttons** - mouse or keyboard navigation
+- **Numbered commands** - easy visual scanning (1-9, 10-20, etc.)
+- **Auto-close** - closes automatically after executing command
+- **Persistent storage** - favorites and history saved between sessions
+- **Mutual exclusion** - opening palette closes F1 (Flymake) and F5 (Imenu-list) windows
+
+**Interactive Commands:**
+
+These commands are available via button clicks in the palette:
+
+| Action | Description |
+|:-------|:------------|
+| **Execute Favorite** | Click any numbered favorite command to run it |
+| **Execute Recent** | Click any numbered recent command to run it |
+| **Promote Recent to Favorite** | Click button or press 'a', then enter index number |
+| **Remove Favorite** | Click button or press 'r', then enter index number |
+| **Clear History** | Click button to reset recent commands list |
+| **Close Palette** | Click button or press 'q' to close window |
+
+**Default Favorite Commands:**
+1. Show Installed Packages
+2. Search Packages
+3. Show Package Upgrades
+4. List Themes
+5. Pyvenv Activate
+6. Pyvenv Deactivate
+7. Pyvenv Workon
+8. Run Python
+9. Shell
+
+**Tips:**
+- Use the palette to discover commands you use frequently
+- Promote useful commands from recent history to favorites
+- The palette automatically sizes to fit content
+- Recent history excludes commands already in favorites
 
 ## Language-Specific Keybindings
 

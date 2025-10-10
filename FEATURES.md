@@ -24,6 +24,7 @@ This document provides comprehensive details about all features available in thi
   - [Project Navigation](#project-navigation)
   - [Directory Browsing (Dired)](#directory-browsing-dired)
   - [Startup Dashboard](#startup-dashboard)
+  - [Command Palette](#command-palette)
   - [Navigation and Discovery](#navigation-and-discovery)
   - [Visual Improvements](#visual-improvements)
   - [Enhanced Diagnostics](#enhanced-diagnostics)
@@ -546,6 +547,64 @@ Professional startup screen with quick access to recent files, package managemen
 - **Package management** - integrated package maintenance without memorizing commands
 - **Recent files** - fast access to working files
 - **Professional appearance** - polished startup experience
+
+### Command Palette
+
+Interactive command launcher with history tracking and customizable favorites:
+
+**[Command Palette](user/command-palette.el) Features:**
+- **Clickable side window** - dedicated right-side panel with command buttons
+- **Automatic M-x tracking** - captures and displays recently executed commands
+- **Customizable favorites** - persistent list of frequently used commands
+- **Auto-sizing window** - automatically adjusts width to fit content
+- **Auto-close on execution** - closes after running a command for clean workflow
+- **Index-based operations** - promote recent commands to favorites or remove favorites by number
+- **Persistent storage** - saves history and favorites between sessions
+- **Mutual exclusion** - automatically manages side windows (F1, F5, F9)
+
+**Default Favorite Commands:**
+- **Show Installed Packages** - view all installed packages with update indicators
+- **Search Packages** - search for new packages across repositories
+- **Show Package Upgrades** - check for available package updates
+- **List Themes** - browse and test themes interactively
+- **Pyvenv Activate** - activate Python virtual environment
+- **Pyvenv Deactivate** - deactivate Python virtual environment
+- **Pyvenv Workon** - switch to different virtual environment
+- **Run Python** - start Python REPL
+- **Shell** - launch shell buffer
+
+**Command Palette Navigation:**
+- **F9** - toggle command palette window
+- **Mouse click** - execute any command button
+- **q** - close palette (from within palette window)
+- **a** - promote recent command to favorites by index
+- **r** - remove favorite by index
+
+**History Tracking:**
+- **Automatic capture** - all M-x commands automatically tracked
+- **Intelligent filtering** - excludes internal/minibuffer commands
+- **No duplicates** - recent commands appear only once
+- **20 command limit** - maintains last 20 executed commands
+- **Favorites exclusion** - commands in favorites don't clutter recent history
+
+**Customization and Management:**
+- **Add favorites** - promote any recent command to favorites list
+- **Remove favorites** - remove commands from favorites by index number
+- **Clear history** - reset recent commands list
+- **Persistent data** - stored in `~/.emacs.d/local/command_palette/`
+
+**Display Features:**
+- **Color-coded sections** - favorites (green), recent (yellow), actions (magenta)
+- **Numbered buttons** - easy visual scanning and selection
+- **Highlight on hover** - visual feedback for clickable elements
+- **Current position tracking** - cursor highlights active line
+
+**Benefits:**
+- **Faster workflow** - one-click access to frequently used commands
+- **Command discovery** - see what you've used recently
+- **No memorization** - reduce need to remember command names
+- **Clean interface** - closes automatically to avoid screen clutter
+- **Personalization** - build your own favorite commands list
 
 ### Navigation and Discovery
 
