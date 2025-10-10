@@ -41,17 +41,15 @@
 
  (defconst
   command-palette-default-favorites
-  '(("Beginning Of Buffer" . beginning-of-buffer)
-    ("End Of Buffer" . end-of-buffer)
-    ("Reload Init File" . user-reload-init-file)
-    ("Copy Whole Buffer" . user-copy-whole-buffer)
-    ("Show Installed Packages" . show-installed-packages)
+  '(("Show Installed Packages" . show-installed-packages)
     ("Search Packages" . search-packages)
     ("Show Package Upgrades" . show-package-upgrades)
     ("List Themes" . list-themes)
     ("Pyvenv Activate" . pyvenv-activate)
     ("Pyvenv Deactivate" . pyvenv-deactivate)
-    ("Pyvenv Workon" . pyvenv-workon))
+    ("Pyvenv Workon" . pyvenv-workon)
+    ("Run Python" . run-python)
+    ("Shell" . shell))
   "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
 
  (defconst
