@@ -37,8 +37,6 @@
 
  (defconst command-palette-buffer-name "*Command Palette*" "Name of the command palette buffer.")
 
- (defconst command-palette-width 35 "Width of the command palette side window.")
-
  (defconst command-palette-history-size 20 "Maximum number of commands to store in history.")
 
  (defconst
@@ -46,7 +44,14 @@
   '(("Beginning Of Buffer" . beginning-of-buffer)
     ("End Of Buffer" . end-of-buffer)
     ("Reload Init File" . user-reload-init-file)
-    ("Copy Whole Buffer" . user-copy-whole-buffer))
+    ("Copy Whole Buffer" . user-copy-whole-buffer)
+    ("Show Installed Packages" . show-installed-packages)
+    ("Search Packages" . search-packages)
+    ("Show Package Upgrades" . show-package-upgrades)
+    ("List Themes" . list-themes)
+    ("Pyvenv Activate" . pyvenv-activate)
+    ("Pyvenv Deactivate" . pyvenv-deactivate)
+    ("Pyvenv Workon" . pyvenv-workon))
   "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
 
  (defconst
@@ -92,6 +97,8 @@
   command-palette-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "q") 'command-palette-toggle)
+    (define-key map (kbd "a") 'command-palette-add-favorite)
+    (define-key map (kbd "r") 'command-palette-remove-favorite)
     map)
   "Keymap for command palette buffer.")
 
@@ -306,6 +313,21 @@ Switches to the previous window before executing the command."
     (insert "\n")))
 
  (defun
+  command-palette--calculate-window-width ()
+  "Calculate window width based on longest line in current buffer.
+Returns width as number of columns needed to display content."
+  (save-excursion
+   (goto-char (point-min))
+   (let ((max-width 0))
+     (while
+      (not (eobp))
+      (let ((line-width (- (line-end-position) (line-beginning-position))))
+        (setq max-width (max max-width line-width)))
+      (forward-line 1))
+     ;; Add 2 for a small margin
+     (+ max-width 2))))
+
+ (defun
   command-palette--refresh-buffer () "Refresh the command palette buffer contents."
   (let ((buffer (get-buffer command-palette-buffer-name)))
     (when
@@ -324,20 +346,22 @@ Switches to the previous window before executing the command."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Header
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (insert (propertize "━━━ COMMAND PALETTE ━━━\n\n" 'face '(:weight bold :foreground "cyan")))
+  (insert (propertize " ━━━ COMMAND PALETTE ━━━\n\n" 'face '(:weight bold :foreground "cyan")))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Favorites Section
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (insert (propertize "Favorite Commands:\n" 'face '(:weight bold :foreground "green")))
-  (dolist
-   (item command-palette-favorites)
-   (let ((name (car item))
-         (cmd (cdr item)))
-     (command-palette--make-button
-      (format "★ %s" name)
-      `(lambda (_) (command-palette--execute-command ',cmd ,name))
-      '(:foreground "lightgreen"))))
+  (insert (propertize " ⭐ Favorite Commands:\n" 'face '(:weight bold :foreground "green")))
+  (let ((index 1))
+    (dolist
+     (item command-palette-favorites)
+     (let ((name (car item))
+           (cmd (cdr item)))
+       (command-palette--make-button
+        (format "%d. %s" index name)
+        `(lambda (_) (command-palette--execute-command ',cmd ,name))
+        '(:foreground "lightgreen"))
+       (setq index (1+ index)))))
 
   (insert "\n")
 
@@ -346,14 +370,15 @@ Switches to the previous window before executing the command."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (when
    (> (ring-length command-palette-history) 0)
-   (insert (propertize "Recent Commands:\n" 'face '(:weight bold :foreground "yellow")))
+   (insert (propertize " ↻ Recent Commands:\n" 'face '(:weight bold :foreground "yellow")))
    (dotimes
     (i (ring-length command-palette-history))
     (let* ((item (ring-ref command-palette-history i))
            (name (car item))
-           (cmd (cdr item)))
+           (cmd (cdr item))
+           (index (1+ i)))
       (command-palette--make-button
-       (format "↻ %s" name)
+       (format "%d. %s" index name)
        `(lambda (_) (command-palette--execute-command ',cmd ,name))
        '(:foreground "orange"))))
    (insert "\n"))
@@ -361,13 +386,13 @@ Switches to the previous window before executing the command."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Actions Section
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (insert (propertize "Actions:\n" 'face '(:weight bold :foreground "magenta")))
+  (insert (propertize " ⚙️  Actions:\n" 'face '(:weight bold :foreground "magenta")))
   (command-palette--make-button
-   "+ Add Command"
+   "+ Promote Recent to Favorite"
    (lambda (_) (call-interactively 'command-palette-add-favorite))
    '(:foreground "cyan"))
   (command-palette--make-button
-   "− Remove Command"
+   "− Remove Favorite by Index"
    (lambda (_) (call-interactively 'command-palette-remove-favorite))
    '(:foreground "red"))
   (command-palette--make-button
@@ -375,31 +400,69 @@ Switches to the previous window before executing the command."
   (command-palette--make-button
    "✕ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
 
-  (insert "\n") (insert (propertize "Hit 'q' to quit" 'face '(:foreground "gray" :slant italic))))
+  (insert "\n") (insert (propertize " Keys:\n" 'face '(:foreground "gray" :slant italic)))
+  (insert
+   (propertize "  • 'a' - promote recent to favorite\n" 'face '(:foreground "gray" :slant italic)))
+  (insert
+   (propertize "  • 'r' - remove favorite by index\n" 'face '(:foreground "gray" :slant italic)))
+  (insert (propertize "  • 'q' - quit" 'face '(:foreground "gray" :slant italic))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Interactive Commands
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  (defun
-  command-palette-add-favorite () "Add a command to the favorites list." (interactive)
-  (let* ((cmd-name (read-string "Command display name: "))
-         (cmd-symbol (intern (completing-read "Command: " obarray 'commandp t))))
-    (add-to-list 'command-palette-favorites (cons cmd-name cmd-symbol) t)
-    (command-palette--save-favorites)
-    (command-palette--refresh-buffer)
-    (core-message-success "Added '%s' to command palette" cmd-name)))
+  command-palette-add-favorite
+  ()
+  "Promote a recent command to favorites by index number."
+  (interactive)
+  (if
+   (= (ring-length command-palette-history) 0)
+   (core-message-warning "No recent commands to promote. Execute commands via M-x first.")
+   (let* ((max-index (ring-length command-palette-history))
+          (index-str
+           (read-string (format "Promote recent command to favorites (1 - %d): " max-index)))
+          (index (string-to-number index-str)))
+     (if
+      (and (> index 0) (<= index max-index))
+      (let* ((item (ring-ref command-palette-history (1- index)))
+             (cmd-name (car item))
+             (cmd-symbol (cdr item)))
+        ;; Add to favorites
+        (add-to-list 'command-palette-favorites item t)
+        (command-palette--save-favorites)
+        ;; Remove from history by rebuilding the ring without this item
+        (let ((new-ring (make-ring command-palette-history-size)))
+          (dotimes
+           (i (ring-length command-palette-history))
+           (let ((hist-item (ring-ref command-palette-history i)))
+             (unless
+              (eq (cdr hist-item) cmd-symbol) (ring-insert-at-beginning new-ring hist-item))))
+          (setq command-palette-history new-ring))
+        (command-palette--save-history)
+        (command-palette--refresh-buffer)
+        (core-message-success "Promoted #%d '%s' to favorites" index cmd-name))
+      (core-message-error "Invalid index: %s (must be between 1 and %d)" index-str max-index)))))
 
  (defun
-  command-palette-remove-favorite () "Remove a command from the favorites list." (interactive)
-  (let* ((choices (mapcar 'car command-palette-favorites))
-         (choice (completing-read "Remove command: " choices nil t)))
-    (setq
-     command-palette-favorites
-     (cl-remove-if (lambda (item) (string= (car item) choice)) command-palette-favorites))
-    (command-palette--save-favorites)
-    (command-palette--refresh-buffer)
-    (core-message-success "Removed '%s' from command palette" choice)))
+  command-palette-remove-favorite
+  ()
+  "Remove a command from the favorites list by index number."
+  (interactive)
+  (if
+   (= (length command-palette-favorites) 0) (core-message-warning "No favorites to remove")
+   (let* ((max-index (length command-palette-favorites))
+          (index-str (read-string (format "Remove favorite by index (1 - %d): " max-index)))
+          (index (string-to-number index-str)))
+     (if
+      (and (> index 0) (<= index max-index))
+      (let* ((item-to-remove (nth (1- index) command-palette-favorites))
+             (cmd-name (car item-to-remove)))
+        (setq command-palette-favorites (cl-remove item-to-remove command-palette-favorites))
+        (command-palette--save-favorites)
+        (command-palette--refresh-buffer)
+        (core-message-success "Removed favorite #%d: '%s'" index cmd-name))
+      (core-message-error "Invalid index: %s (must be between 1 and %d)" index-str max-index)))))
 
  (defun
   command-palette-clear-history
@@ -423,12 +486,15 @@ Switches to the previous window before executing the command."
    (setq command-palette-previous-window (selected-window))
    ;; Reload history and favorites from disk to ensure freshness (silently)
    (command-palette--load-favorites t) (command-palette--load-history t)
-   (let ((buffer (get-buffer-create command-palette-buffer-name)))
+   (let* ((buffer (get-buffer-create command-palette-buffer-name))
+          (window-width nil))
      (with-current-buffer
       buffer
       (let ((inhibit-read-only t))
         (erase-buffer)
-        (command-palette--render-content))
+        (command-palette--render-content)
+        ;; Calculate width based on content
+        (setq window-width (command-palette--calculate-window-width)))
       (setq buffer-read-only t)
       (setq-local cursor-type nil)
       (use-local-map command-palette-mode-map)
@@ -436,8 +502,11 @@ Switches to the previous window before executing the command."
      (setq
       command-palette-window
       (display-buffer-in-side-window
-       buffer `((side . right) (window-width . ,command-palette-width) (slot . 0))))
+       buffer `((side . right) (window-width . ,window-width) (slot . 0))))
      (select-window command-palette-window)
+     ;; Move cursor to first favorite item (skip header and section title)
+     (goto-char (point-min))
+     (forward-line 3)
      (core-message-success "Command palette opened"))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
