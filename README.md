@@ -7,6 +7,7 @@ Personal Emacs configuration files and customizations.
 - [Overview](#overview)
 - [Configuration Structure](#configuration-structure)
 - [Requirements](#requirements)
+  - [Shell Configuration for Terminal Colors](#shell-configuration-for-terminal-colors)
 - [Installation](#installation)
   - [Option 1: Development Installation (Symlinks)](#option-1-development-installation-symlinks)
   - [Option 2: Standard Installation (Copy)](#option-2-standard-installation-copy)
@@ -161,6 +162,27 @@ pre-commit install  # Run in repository root after cloning
 ```
 
 **Important**: Ensure your `~/.bash_profile` includes `$HOME/.local/bin` in your PATH, if you plan on using user-local packages.
+
+### Shell Configuration for Terminal Colors
+
+**For consistent theme colors in terminal mode (both local and remote SSH sessions):**
+
+This configuration uses 24-bit true color (RGB) values for theme customization. To ensure colors display consistently across all environments, you need to enable true color support in your terminal:
+
+```bash
+# Add to ~/.bashrc or ~/.zshrc
+export COLORTERM=truecolor
+```
+
+**Why this is needed:**
+- Without `COLORTERM=truecolor`, Emacs approximates RGB colors to the nearest 256-color palette entry
+- This can cause colors to appear different between local and remote SSH sessions
+- The doom-1337 theme uses specific RGB values (`#rrggbb`) that require true color support
+
+**After adding this setting:**
+1. Reload your shell configuration: `source ~/.bashrc` (or `source ~/.zshrc`)
+2. Verify it's set: `echo $COLORTERM` should output `truecolor`
+3. For SSH sessions, ensure this is set on the **remote host's** shell configuration
 
 ## Installation
 

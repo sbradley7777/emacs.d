@@ -14,6 +14,7 @@ This guide helps resolve common issues you may encounter while using this Emacs 
   - [clangd (C/C++ Language Server)](#clangd-cc-language-server)
   - [General Executable Debugging](#general-executable-debugging)
 - [Font and Icon Issues](#font-and-icon-issues)
+- [Terminal Color Rendering Issues](#terminal-color-rendering-issues)
 - [Treemacs Navigation Issues](#treemacs-navigation-issues)
 - [Message Logging Issues](#message-logging-issues)
 - [Installation Problems](#installation-problems)
@@ -389,6 +390,55 @@ M-x describe-variable RET tramp-remote-path
    ```elisp
    M-x describe-variable treemacs-theme
    ```
+
+## Terminal Color Rendering Issues
+
+### Colors Appear Different Between Local and SSH Sessions
+
+**Symptoms**: Theme colors (especially the modeline) look different when using Emacs locally vs over SSH in terminal mode
+
+**Cause**: Missing `COLORTERM=truecolor` environment variable prevents Emacs from using 24-bit true color support. Without this, RGB color values like `#d77dd7` are approximated to the nearest 256-color palette entry, causing inconsistent appearance.
+
+**Solution**:
+
+1. **Add to your shell configuration** (on both local and remote hosts):
+   ```bash
+   # Add to ~/.bashrc or ~/.zshrc
+   export COLORTERM=truecolor
+   ```
+
+2. **Reload your shell configuration**:
+   ```bash
+   source ~/.bashrc
+   # or
+   source ~/.zshrc
+   ```
+
+3. **Verify the setting**:
+   ```bash
+   echo $COLORTERM
+   # Should output: truecolor
+   ```
+
+4. **For SSH sessions**: Ensure this is set on the **remote host's** shell configuration, not just locally
+
+**Verification**:
+
+Check what Emacs detects:
+```elisp
+M-x getenv RET COLORTERM
+# Should return: truecolor
+```
+
+**Expected Results**:
+- Colors should now match between local and SSH sessions
+- Theme colors will use exact RGB values as configured
+- The doom-1337 theme's modeline colors will appear consistent
+
+**Additional Notes**:
+- This configuration uses 24-bit true color (RGB) values for all theme customization
+- See `themes/theme-doom-1337.el:37-41` for color value comments
+- For more details, see [Shell Configuration for Terminal Colors](README.md#shell-configuration-for-terminal-colors) in README.md
 
 ## Treemacs Navigation Issues
 
