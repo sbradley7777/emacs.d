@@ -21,6 +21,46 @@
   "Whether to use doom-modeline instead of the default Emacs modeline.
 Set this to nil in local.el to use the default Emacs modeline instead.")
 
+ ;; Doom-modeline segment configuration
+ ;; Users can customize these in local.el to reorder or remove segments
+ (defvar
+  modeline-config-segments-left
+  '(bar ; Colored bar indicating buffer status (modified, read-only, etc.)
+    workspace-name ; Workspace/project name
+    window-number ; Window number when using window-numbering
+    modals ; Modal editing state (evil, god-mode, etc.)
+    matches ; Search match count (anzu, evil-search, etc.)
+    buffer-info ; Buffer name with icon and modification indicator
+    remote-file-indicator ; Remote/local host indicator with click handler
+    separator ; Visual separator (◆)
+    buffer-position ; Line:Column and position percentage
+    selection-info ; Selected region size/line count
+    indent-info ; Indentation type and width
+    buffer-encoding) ; File encoding (UTF-8, etc.)
+  "Left side segments for doom-modeline.
+Each symbol represents a modeline segment. Users can customize this in local.el
+to reorder segments or remove unwanted ones. See doom-modeline documentation
+for available segment names.")
+
+ (defvar
+  modeline-config-segments-right
+  '(pyvenv-indicator ; Python virtual environment name and version (custom segment)
+    misc-info ; Miscellaneous information
+    debug ; Debug mode indicator (edebug, dap, etc.)
+    repl ; REPL connection status
+    lsp ; LSP/Eglot server status and diagnostics
+    minor-modes ; Active minor modes (truncated list)
+    input-method ; Input method indicator (for non-English text)
+    major-mode ; Major mode name with icon
+    process ; Running processes in buffer
+    check ; Syntax checker status (flymake error/warning counts)
+    vcs ; Git branch and status (modified, ahead/behind, etc.)
+    time) ; Current time display
+  "Right side segments for doom-modeline.
+Each symbol represents a modeline segment. Users can customize this in local.el
+to reorder segments or remove unwanted ones. See doom-modeline documentation
+for available segment names.")
+
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Default Modeline Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -123,34 +163,8 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
   (with-eval-after-load
    'pyvenv-modeline
 
-   ;; Left side: bar, buffer info, and basic indicators
-   ;; Right side: everything else including pyvenv-indicator
-   (doom-modeline-def-modeline
-    'main
-    '(bar ; Colored bar indicating buffer status (modified, read-only, etc.)
-      workspace-name ; Workspace/project name
-      window-number ; Window number when using window-numbering
-      modals ; Modal editing state (evil, god-mode, etc.)
-      matches ; Search match count (anzu, evil-search, etc.)
-      buffer-info ; Buffer name with icon and modification indicator
-      remote-file-indicator ; Remote/local host indicator with click handler
-      separator ; Visual separator (◆)
-      buffer-position ; Line:Column and position percentage
-      selection-info ; Selected region size/line count
-      indent-info ; Indentation type and width
-      buffer-encoding) ; File encoding (UTF-8, etc.)
-    '(pyvenv-indicator ; Python virtual environment name and version (custom segment)
-      misc-info ; Miscellaneous information
-      debug ; Debug mode indicator (edebug, dap, etc.)
-      repl ; REPL connection status
-      lsp ; LSP/Eglot server status and diagnostics
-      minor-modes ; Active minor modes (truncated list)
-      input-method ; Input method indicator (for non-English text)
-      major-mode ; Major mode name with icon
-      process ; Running processes in buffer
-      check ; Syntax checker status (flymake error/warning counts)
-      vcs ; Git branch and status (modified, ahead/behind, etc.)
-      time))) ; Current time display
+   ;; Use customizable segment variables (can be modified in local.el)
+   (doom-modeline-def-modeline 'main modeline-config-segments-left modeline-config-segments-right))
 
   (core-message-success "doom-modeline configured and enabled"))
 
