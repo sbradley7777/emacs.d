@@ -70,6 +70,18 @@
   ()
   "Apply doom-1337 theme-specific colors to doom-modeline faces using shared color constants."
 
+  ;; VCS State Color Mapping
+  ;; Maps version control states to specific modeline faces for visual feedback
+  (setq
+   doom-modeline-vcs-state-faces-alist
+   '((edited . doom-modeline-debug) ; Yellow for uncommitted changes
+     (added . doom-modeline-info) ; Blue for added/staged files
+     (removed . doom-modeline-urgent) ; Red for deleted files
+     (conflict . doom-modeline-urgent) ; Red for merge conflicts
+     (needs-merge . doom-modeline-warning) ; Orange for needs merge
+     (needs-update . doom-modeline-warning) ; Orange for behind remote
+     (unregistered . doom-modeline-vcs-default))) ; Purple for untracked files
+
   (custom-set-faces
    ;; Base modeline backgrounds
    `(mode-line ((t (:background ,doom-1337-modeline-bg :foreground ,doom-1337-modeline-fg))))
@@ -94,9 +106,9 @@
    `(doom-modeline-evil-motion-state ((t (:foreground ,doom-1337-color-yellow :weight bold))))
    `(doom-modeline-evil-emacs-state ((t (:foreground ,doom-1337-color-green :weight bold))))
 
-   ;; Git/VCS status
-   `(doom-modeline-vcs-branch ((t (:foreground ,doom-1337-color-purple))))
-   `(doom-modeline-vcs-info ((t (:foreground ,doom-1337-color-dim-gray))))
+   ;; Git/VCS status faces
+   `(doom-modeline-vcs-branch ((t (:foreground ,doom-1337-color-purple)))) ; Branch name
+   `(doom-modeline-vcs-default ((t (:foreground ,doom-1337-color-purple)))) ; Clean repository
 
    ;; LSP/Language server
    `(doom-modeline-lsp-success ((t (:foreground ,doom-1337-color-green))))
