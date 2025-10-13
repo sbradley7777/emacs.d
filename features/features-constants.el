@@ -37,6 +37,17 @@ Used by flymake diagnostics, imenu-list, command palette, and other side windows
  "Timeout in seconds for Eglot LSP server connections.
 Longer timeout accommodates slow remote connections and large codebases where LSP initialization may take time.")
 
+(defconst
+ features-eglot-lsp-server-map '((python-mode . "pylsp") (c-mode . "clangd") (c++-mode . "clangd"))
+ "Map of major modes to their LSP server executables.
+Each entry is a cons cell (MODE . EXECUTABLE) where MODE is the major mode symbol
+and EXECUTABLE is the LSP server command name. Users can extend this in local.el
+to add support for additional languages.
+
+Example usage in local.el:
+  (add-to-list 'features-eglot-lsp-server-map '(rust-mode . \"rust-analyzer\"))
+  (add-to-list 'features-eglot-lsp-server-map '(go-mode . \"gopls\"))")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
