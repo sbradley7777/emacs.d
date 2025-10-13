@@ -6,6 +6,7 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'tramp-utils)
+(require 'features-constants)
 
 (core-utils-with-load-timing
  "eglot-config.el"
@@ -15,7 +16,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  ;; Increase connection timeout for remote LSP servers
- (setq eglot-connect-timeout 60)
+ (setq eglot-connect-timeout features-eglot-connection-timeout)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; LSP Server Mapping

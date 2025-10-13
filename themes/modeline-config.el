@@ -7,6 +7,7 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
+(require 'themes-constants)
 
 (core-utils-with-load-timing
  "modeline-config.el"
@@ -40,7 +41,7 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
   (size-indication-mode 1)
 
   ;; Display the time in modeline with custom format (YYYY-MM-dd HH:MM)
-  (setq display-time-format "%Y-%m-%d %H:%M")
+  (setq display-time-format core-time-format)
   (display-time-mode 1)
 
   ;; Configure and enable which-function-mode.
@@ -91,12 +92,12 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
     doom-modeline-buffer-modification-icon t) ; Show buffer modification icon
 
    ;; Time Display
-   (setq display-time-format "%Y-%m-%d %H:%M") ; Format: YYYY-MM-DD HH:MM
+   (setq display-time-format core-time-format) ; Format: YYYY-MM-DD HH:MM
    (setq doom-modeline-time t) ; Enable time display (not enabled by default)
    (display-time-mode 1) ; Activate time display
 
    ;; Git/VCS Status Display
-   (setq doom-modeline-vcs-max-length 15) ; Limit branch name length
+   (setq doom-modeline-vcs-max-length themes-modeline-vcs-max-length) ; Limit branch name length
 
    ;; Python Environment Display (updated by pyvenv hooks)
    (setq doom-modeline-env-version t doom-modeline-env-enable-python t)
@@ -109,8 +110,8 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
 
    ;; Modeline Height and Appearance
    (setq
-    doom-modeline-height 25 ; Height of the mode-line
-    doom-modeline-bar-width 3 ; Width of the mode-line bar
+    doom-modeline-height themes-modeline-height ; Height of the mode-line
+    doom-modeline-bar-width themes-modeline-bar-width ; Width of the mode-line bar
     doom-modeline-hud nil ; Disable HUD-style modeline
     doom-modeline-window-width-limit nil) ; No width limit for displaying info
 

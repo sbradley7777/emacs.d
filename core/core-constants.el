@@ -80,6 +80,12 @@
 ;; UI and Display Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Time Display
+(defconst
+ core-time-format
+ "%Y-%m-%d %H:%M"
+ "Standard time display format for modeline and diagnostics (YYYY-MM-DD HH:MM).")
+
 ;; Scrolling and Navigation
 (defconst core-scroll-step 1 "Scroll step for smooth scrolling.")
 (defconst core-scroll-conservatively 10000 "Conservative scrolling threshold.")
@@ -126,9 +132,44 @@
 (defconst core-which-key-idle-delay 0.3 "Which-key display delay.")
 (defconst core-which-key-max-description-length 40 "Maximum which-key description length.")
 (defconst core-which-key-column-padding 1 "Which-key column padding.")
+(defconst core-which-key-separator " → " "Separator displayed between key and description.")
 
 ;; Elisp Autofmt Configuration
 (defconst core-elisp-autofmt-parallel-jobs 1 "Number of parallel jobs for elisp-autofmt.")
+
+;; Package List Display
+(defconst
+ core-package-list-column-widths '(40 20 18 22)
+ "Column widths for package list display table.
+List of integers representing character widths for: package-name, installed-version, update-available, status.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TRAMP (Remote Access) Constants
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst
+ core-tramp-default-shell "/bin/bash"
+ "Default remote shell for TRAMP connections.
+Bash is widely available and provides consistent behavior across remote systems.")
+
+(defconst
+ core-tramp-user-paths '("~/.local/bin")
+ "Additional remote paths for TRAMP executable search.
+These directories are added to the remote PATH when connecting via TRAMP.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Directory Path Patterns
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst
+ core-elisp-autofmt-cache-dir (expand-file-name "elisp-autofmt-cache" emacs-local-dir)
+ "Directory for elisp-autofmt cache files.
+Caching improves formatting performance by avoiding redundant analysis.")
+
+(defconst
+ core-byte-compile-dir-pattern "elc/%s"
+ "Format pattern for version-specific byte-compiled files directory.
+The %s placeholder is replaced with emacs-version to isolate compiled files by Emacs version.")
 
 ;;; Provide this module
 (provide 'core-constants)

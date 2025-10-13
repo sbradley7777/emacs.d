@@ -43,7 +43,8 @@
 ;; Store byte-compiled files (.elc) in a version-specific directory to
 ;; prevent stale file issues when switching Emacs versions.
 (setq
- byte-compile-output-dir (expand-file-name (format "elc/%s" emacs-version) user-emacs-directory))
+ byte-compile-output-dir
+ (expand-file-name (format core-byte-compile-dir-pattern emacs-version) user-emacs-directory))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GUI Element Suppression - Prevents UI Flashing

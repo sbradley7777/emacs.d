@@ -26,11 +26,7 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Additional remote paths to include for executable search
-(defconst
- tramp-user-remote-path '("~/.local/bin")
- "List of additional directories to add to tramp-remote-path.
-These directories will be searched for executables on remote hosts.")
+;; Note: Additional remote paths are defined in core-constants.el as core-tramp-user-paths
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -38,7 +34,7 @@ These directories will be searched for executables on remote hosts.")
 
 ;; Default connection method and shell
 (setq tramp-default-method "ssh")
-(setq tramp-default-remote-shell "/bin/bash")
+(setq tramp-default-remote-shell core-tramp-default-shell)
 
 ;; Cache and auto-save locations
 (setq tramp-persistency-file-name (expand-file-name "tramp" emacs-local-dir))
@@ -49,7 +45,7 @@ These directories will be searched for executables on remote hosts.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Add each additional path to tramp-remote-path
-(dolist (path tramp-user-remote-path) (add-to-list 'tramp-remote-path path))
+(dolist (path core-tramp-user-paths) (add-to-list 'tramp-remote-path path))
 
 ;; Include user's PATH from shell profile
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)

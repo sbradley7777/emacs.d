@@ -16,6 +16,7 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
+(require 'themes-constants)
 
 (core-utils-with-load-timing
  "themes-config.el"
@@ -42,9 +43,9 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  ;; Doom themes configuration - applied before theme loading
  (defvar
   themes-config-doom-default-customizations
-  '((doom-themes-enable-bold . t)
+  `((doom-themes-enable-bold . t)
     (doom-themes-enable-italic . t)
-    (doom-themes-treemacs-theme . "doom-atom")
+    (doom-themes-treemacs-theme . ,themes-doom-treemacs-theme)
     (doom-themes-treemacs-enable-variable-pitch . nil))
   "Default doom themes customizations.")
 
@@ -102,7 +103,7 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
             (set-face-attribute
              'region
              nil
-             :background "#264F78"
+             :background themes-region-background
              :foreground 'unspecified
              :extend t))
          (error

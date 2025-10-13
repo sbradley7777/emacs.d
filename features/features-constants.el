@@ -31,6 +31,12 @@ Used by flymake diagnostics, imenu-list, command palette, and other side windows
  "Top-level visibility percentage for indent guides.")
 (defconst features-indent-guides-delay 0.1 "Delay before showing indent guides.")
 
+;; LSP/Eglot Constants
+(defconst
+ features-eglot-connection-timeout 60
+ "Timeout in seconds for Eglot LSP server connections.
+Longer timeout accommodates slow remote connections and large codebases where LSP initialization may take time.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

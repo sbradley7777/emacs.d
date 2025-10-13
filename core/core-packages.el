@@ -131,7 +131,7 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
    which-key-idle-delay core-which-key-idle-delay ; Faster response
    which-key-max-description-length core-which-key-max-description-length ; Longer descriptions
    which-key-add-column-padding core-which-key-column-padding ; Better spacing
-   which-key-separator " → "))
+   which-key-separator core-which-key-separator))
 
  (use-package
   elisp-autofmt
@@ -139,7 +139,7 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
   ;; Configure elisp-autofmt for consistent formatting
   (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
   (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs) ; Single-threaded for consistency
-  (setq elisp-autofmt-cache-directory (expand-file-name "elisp-autofmt-cache" emacs-local-dir))) ; Use local directory
+  (setq elisp-autofmt-cache-directory core-elisp-autofmt-cache-dir)) ; Use local directory
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Interactive Package Management Functions
