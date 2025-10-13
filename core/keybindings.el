@@ -29,6 +29,9 @@
  (global-set-key (kbd "<f4>") 'treemacs-smart-toggle) ; Smart toggle Treemacs file tree
  (global-set-key (kbd "<f6>") 'delete-trailing-whitespace) ; Delete trailing whitespace
 
+ ;; Navigation keybindings
+ (global-set-key (kbd "C-c i a") 'imenu-anywhere) ; Cross-buffer symbol search
+
  ;; Keyboard commands for controlling the buffer.
  ;;
  ;; Scroll buffer down/up

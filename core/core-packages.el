@@ -29,7 +29,7 @@
 Themes, visual enhancements, icons, and interface helpers.")
 
  (defvar
-  core-packages-editing '(corfu cape imenu-list treemacs breadcrumb dired-subtree)
+  core-packages-editing '(corfu cape imenu-list imenu-anywhere treemacs breadcrumb dired-subtree)
   "Text manipulation and navigation tools for all users.
 Completion, navigation, and file browsing functionality.")
 
@@ -122,6 +122,7 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  (use-package toml-mode :mode ("\\.toml\\'" . toml-mode)) ; TOML file support
  (use-package markdown-mode :mode ("\\.md\\'" . markdown-mode)) ; Markdown file support
  (use-package flymake-ruff :defer t) ; Deferred loading for ruff integration
+ (use-package imenu-anywhere :defer t) ; Cross-buffer symbol search (keybinding in keybindings.el)
 
 
  (use-package
