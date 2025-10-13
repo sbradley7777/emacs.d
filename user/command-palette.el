@@ -348,7 +348,7 @@ Returns width as number of columns needed to display content."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Header
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (insert (propertize " ━━━ COMMAND PALETTE ━━━\n\n" 'face '(:weight bold :foreground "cyan")))
+  (insert (propertize "    ━━━ COMMAND PALETTE ━━━\n\n" 'face '(:weight bold :foreground "cyan")))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Favorites Section
@@ -360,7 +360,7 @@ Returns width as number of columns needed to display content."
      (let ((name (car item))
            (cmd (cdr item)))
        (command-palette--make-button
-        (format "%d. %s" index name)
+        (format "  %d. %s" index name)
         `(lambda (_) (command-palette--execute-command ',cmd ,name))
         '(:foreground "lightgreen"))
        (setq index (1+ index)))))
@@ -372,7 +372,7 @@ Returns width as number of columns needed to display content."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (when
    (> (ring-length command-palette-history) 0)
-   (insert (propertize " ↻ Recent Commands:\n" 'face '(:weight bold :foreground "yellow")))
+   (insert (propertize " ↻  Recent Commands:\n" 'face '(:weight bold :foreground "yellow")))
    (dotimes
     (i (ring-length command-palette-history))
     (let* ((item (ring-ref command-palette-history i))
@@ -380,7 +380,7 @@ Returns width as number of columns needed to display content."
            (cmd (cdr item))
            (index (1+ i)))
       (command-palette--make-button
-       (format "%d. %s" index name)
+       (format "  %d. %s" index name)
        `(lambda (_) (command-palette--execute-command ',cmd ,name))
        '(:foreground "orange"))))
    (insert "\n"))
@@ -390,24 +390,25 @@ Returns width as number of columns needed to display content."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (insert (propertize " ⚙️  Actions:\n" 'face '(:weight bold :foreground "magenta")))
   (command-palette--make-button
-   "+ Promote Recent to Favorite"
+   "  + Promote Recent to Favorite"
    (lambda (_) (call-interactively 'command-palette-add-favorite))
    '(:foreground "cyan"))
   (command-palette--make-button
-   "− Remove Favorite by Index"
+   "  − Remove Favorite by Index"
    (lambda (_) (call-interactively 'command-palette-remove-favorite))
    '(:foreground "red"))
   (command-palette--make-button
-   "⟳ Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
+   "  ⟳ Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
   (command-palette--make-button
-   "✕ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
+   "  ✕ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
 
   (insert "\n") (insert (propertize " Keys:\n" 'face '(:foreground "gray" :slant italic)))
   (insert
-   (propertize "  • 'a' - promote recent to favorite\n" 'face '(:foreground "gray" :slant italic)))
+   (propertize
+    "    • 'a' - promote recent to favorite\n" 'face '(:foreground "gray" :slant italic)))
   (insert
-   (propertize "  • 'r' - remove favorite by index\n" 'face '(:foreground "gray" :slant italic)))
-  (insert (propertize "  • 'q' - quit" 'face '(:foreground "gray" :slant italic))))
+   (propertize "    • 'r' - remove favorite by index\n" 'face '(:foreground "gray" :slant italic)))
+  (insert (propertize "    • 'q' - quit" 'face '(:foreground "gray" :slant italic))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Interactive Commands
