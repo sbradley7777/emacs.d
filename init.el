@@ -277,6 +277,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load Python constants AFTER core - provides configuration values for other Python modules
 (safe-load-config 'python-constants "Python configuration constants")
 
+;; Load Python tree-sitter AFTER constants - enables tree-sitter mode for Python files
+(safe-load-config 'python-treesitter "Python tree-sitter mode")
+
 ;; Load pyvenv utilities BEFORE pyvenv config - provides helper functions for virtual environments
 (safe-load-config 'pyvenv-utils "Python virtual environment utilities")
 

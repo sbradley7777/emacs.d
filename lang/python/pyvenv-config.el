@@ -71,8 +71,9 @@
  (add-hook 'pyvenv-post-activate-hooks #'pyvenv-update-shell-interpreter)
  (add-hook 'pyvenv-post-deactivate-hooks #'pyvenv-update-shell-interpreter)
 
- ;; Trigger auto-detection when opening Python files
- (add-hook 'python-mode-hook #'pyvenv-auto-activate))
+ ;; Trigger auto-detection when opening Python files (both python-mode and python-ts-mode)
+ (add-hook 'python-mode-hook #'pyvenv-auto-activate)
+ (add-hook 'python-ts-mode-hook #'pyvenv-auto-activate))
 
 (provide 'pyvenv-config)
 

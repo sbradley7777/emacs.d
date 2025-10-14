@@ -34,9 +34,9 @@ Themes, visual enhancements, icons, and interface helpers.")
 Completion, navigation, and file browsing functionality.")
 
  (defvar
-  core-packages-development '(flymake-ruff elisp-autofmt)
+  core-packages-development '(flymake-ruff elisp-autofmt treesit-auto)
   "Programming-specific development tools.
-Linting, formatting, and code analysis tools.")
+Linting, formatting, code analysis, and tree-sitter support.")
 
  (defvar
   core-packages-languages '(pyvenv yaml-mode toml-mode markdown-mode)
@@ -141,6 +141,11 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
   (setq elisp-autofmt-style 'native) ; Use native Emacs indentation style
   (setq elisp-autofmt-parallel-jobs core-elisp-autofmt-parallel-jobs) ; Single-threaded for consistency
   (setq elisp-autofmt-cache-directory core-elisp-autofmt-cache-dir)) ; Use local directory
+
+ (use-package
+  treesit-auto
+  :custom (treesit-auto-install 'prompt) ; Prompt before installing grammars
+  :config (global-treesit-auto-mode)) ; Enable automatic tree-sitter mode selection
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Interactive Package Management Functions

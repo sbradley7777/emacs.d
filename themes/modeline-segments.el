@@ -10,6 +10,32 @@
  "modeline-segments.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Helper Functions
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  modeline-treesitter-show-info
+  ()
+  "Display tree-sitter status information in minibuffer."
+  (interactive)
+  (if
+   (treesit-available-p)
+   (let* ((mode-name (symbol-name major-mode))
+          (is-ts-mode (string-match-p "-ts-mode$" mode-name))
+          (lang (when is-ts-mode (replace-regexp-in-string "-ts-mode$" "" mode-name)))
+          (lang-cap (when lang (capitalize lang)))
+          (grammar-available (when lang (treesit-language-available-p (intern lang)))))
+     (if
+      is-ts-mode
+      (message
+       "Tree-sitter: %s (%s), grammar %s"
+       lang-cap
+       mode-name
+       (if grammar-available "installed" "NOT INSTALLED"))
+      (message "Tree-sitter: inactive (%s)" mode-name)))
+   (message "Tree-sitter: not available in this Emacs build")))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Generic Segments
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -19,6 +45,32 @@
   ;; Define separator segment
   (doom-modeline-def-segment
    separator "Visual separator." (propertize " ◆ " 'face 'doom-modeline-buffer-path))
+
+  ;; Define tree-sitter indicator segment
+  (doom-modeline-def-segment
+   treesitter-indicator "Display tree-sitter mode indicator when active. Click to show status."
+   (when
+    (and (bound-and-true-p major-mode) (string-match-p "-ts-mode$" (symbol-name major-mode)))
+    (let* ((mode-name (symbol-name major-mode))
+           (lang (replace-regexp-in-string "-ts-mode$" "" mode-name))
+           (lang-cap (capitalize lang))
+           (icon
+            (if
+             (fboundp 'nerd-icons-mdicon)
+             (nerd-icons-mdicon "nf-md-tree" :face 'doom-modeline-info)
+             "TS")))
+      (propertize
+       (format " %s " icon)
+       'face
+       'doom-modeline-info
+       'mouse-face
+       'mode-line-highlight
+       'help-echo
+       (format "Tree-sitter: %s (click for info)" lang-cap)
+       'local-map
+       (let ((map (make-sparse-keymap)))
+         (define-key map [mode-line mouse-1] 'modeline-treesitter-show-info)
+         map)))))
 
   ;; Define remote/local host indicator segment
   (doom-modeline-def-segment

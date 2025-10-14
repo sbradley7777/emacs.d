@@ -44,7 +44,8 @@ for available segment names.")
 
  (defvar
   modeline-config-segments-right
-  '(pyvenv-indicator ; Python virtual environment name and version (custom segment)
+  '(treesitter-indicator ; Tree-sitter mode indicator (TS badge when active)
+    pyvenv-indicator ; Python virtual environment name and version (custom segment)
     misc-info ; Miscellaneous information
     debug ; Debug mode indicator (edebug, dap, etc.)
     repl ; REPL connection status
@@ -158,13 +159,16 @@ for available segment names.")
    ;; Enable doom-modeline
    (doom-modeline-mode 1))
 
-  ;; Define custom modeline format (after pyvenv-modeline segment is loaded)
-  ;; This waits for both doom-modeline and the pyvenv-indicator segment to be available
+  ;; Define custom modeline format (after custom segments load)
+  ;; This waits for both modeline-segments and pyvenv-modeline to be available
   (with-eval-after-load
-   'pyvenv-modeline
+   'modeline-segments
+   (with-eval-after-load
+    'pyvenv-modeline
 
-   ;; Use customizable segment variables (can be modified in local.el)
-   (doom-modeline-def-modeline 'main modeline-config-segments-left modeline-config-segments-right))
+    ;; Use customizable segment variables (can be modified in local.el)
+    (doom-modeline-def-modeline
+     'main modeline-config-segments-left modeline-config-segments-right)))
 
   (core-message-success "doom-modeline configured and enabled"))
 
