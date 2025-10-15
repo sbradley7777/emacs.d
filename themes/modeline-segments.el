@@ -62,7 +62,7 @@
            (is-ts-mode (string-match-p "-ts-mode$" mode-name))
            (lang (when is-ts-mode (replace-regexp-in-string "-ts-mode$" "" mode-name)))
            (lang-cap (if is-ts-mode (capitalize lang) "inactive"))
-           (icon-face (if is-ts-mode 'doom-modeline-info 'doom-modeline-inactive))
+           (icon-face (if is-ts-mode 'doom-modeline-info 'doom-modeline-buffer-minor-mode))
            (icon
             (if
              (fboundp 'nerd-icons-mdicon)
