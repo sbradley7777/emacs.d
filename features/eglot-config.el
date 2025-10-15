@@ -6,7 +6,7 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'tramp-utils)
-(require 'features-constants)
+(require 'eglot-constants)
 
 (core-utils-with-load-timing
  "eglot-config.el"
@@ -15,8 +15,15 @@
  ;; Eglot Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Increase connection timeout for remote LSP servers
+ ;; Connection timeout for remote LSP servers
  (setq eglot-connect-timeout features-eglot-connection-timeout)
+
+ ;; Performance optimizations
+ (setq eglot-autoshutdown features-eglot-autoshutdown)
+ (setq eglot-send-changes-idle-time features-eglot-send-changes-idle-time)
+
+ ;; Progress reporting - send to Messages buffer instead of mode line
+ (setq eglot-report-progress features-eglot-report-progress)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Hook Setup

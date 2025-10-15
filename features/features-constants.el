@@ -31,40 +31,6 @@ Used by flymake diagnostics, imenu-list, command palette, and other side windows
  "Top-level visibility percentage for indent guides.")
 (defconst features-indent-guides-delay 0.1 "Delay before showing indent guides.")
 
-;; LSP/Eglot Constants
-(defconst
- features-eglot-connection-timeout 60
- "Timeout in seconds for Eglot LSP server connections.
-Longer timeout accommodates slow remote connections and large codebases where LSP initialization may take time.")
-
-(defconst
- features-eglot-lsp-server-map
- '((python-mode . "pylsp")
-   (python-ts-mode . "pylsp")
-   (c-mode . "clangd")
-   (c++-mode . "clangd")
-   (c-ts-mode . "clangd")
-   (c++-ts-mode . "clangd")
-   (bash-ts-mode . "bash-language-server")
-   (json-mode . "vscode-json-language-server")
-   (json-ts-mode . "vscode-json-language-server")
-   (yaml-mode . "yaml-language-server")
-   (yaml-ts-mode . "yaml-language-server")
-   (toml-mode . "taplo")
-   (toml-ts-mode . "taplo")
-   (markdown-mode . "marksman")
-   (markdown-ts-mode . "marksman"))
- "Map of major modes to their LSP server executables.
-Each entry is a cons cell (MODE . EXECUTABLE) where MODE is the major mode symbol
-and EXECUTABLE is the LSP server command name.
-
-This map includes both regular and tree-sitter modes for consistency.
-Eglot will only activate LSP if the server executable is found in PATH.
-
-Users can extend this in local.el to add support for additional languages:
-  (add-to-list 'features-eglot-lsp-server-map '(rust-mode . \"rust-analyzer\"))
-  (add-to-list 'features-eglot-lsp-server-map '(go-mode . \"gopls\"))")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
