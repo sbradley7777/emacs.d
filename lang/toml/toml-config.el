@@ -28,7 +28,7 @@
 
  (require 'toml-mode)
 
- ;; File associations (treesit-auto will override when toml grammar available)
+ ;; File associations (treesit-auto overrides when grammar available)
  (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-mode))
  (add-to-list 'auto-mode-alist '("pyproject\\.toml\\'" . toml-mode))
  (add-to-list 'auto-mode-alist '("Cargo\\.toml\\'" . toml-mode))

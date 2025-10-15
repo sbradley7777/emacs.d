@@ -49,7 +49,7 @@
  ;; Use K&R style as base with modifications
  (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "k&r")))
 
- ;; File associations (treesit-auto will override when c/cpp grammars available)
+ ;; File associations (treesit-auto overrides when grammar available)
  (add-to-list 'auto-mode-alist '("\\.c\\'" . c-mode))
  (add-to-list 'auto-mode-alist '("\\.h\\'" . c-mode))
  (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))

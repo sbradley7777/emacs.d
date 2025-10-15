@@ -32,7 +32,7 @@
 
  (require 'markdown-mode)
 
- ;; File associations (treesit-auto will override when markdown grammar available)
+ ;; File associations (treesit-auto overrides when grammar available)
  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
  (add-to-list 'auto-mode-alist '("README\\.md\\'" . markdown-mode))

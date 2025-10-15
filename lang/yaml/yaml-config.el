@@ -28,7 +28,7 @@
 
  (require 'yaml-mode)
 
- ;; File associations (treesit-auto will override when yaml grammar available)
+ ;; File associations (treesit-auto overrides when grammar available)
  (add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-mode))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

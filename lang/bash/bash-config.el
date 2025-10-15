@@ -44,7 +44,7 @@
  ;; File Associations
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Associate file extensions with sh-mode (treesit-auto will override when bash grammar available)
+ ;; File associations (treesit-auto overrides when grammar available)
  (add-to-list 'auto-mode-alist '("\\.sh\\'" . sh-mode))
  (add-to-list 'auto-mode-alist '("\\.bash\\'" . sh-mode))
  (add-to-list 'auto-mode-alist '("\\.zsh\\'" . sh-mode))

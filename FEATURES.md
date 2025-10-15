@@ -255,6 +255,14 @@ Install using `M-x treesit-install-language-grammar`:
 - **toml** - TOML configuration (toml-ts-mode)
 - **markdown** - Markdown documentation (markdown-ts-mode)
 
+**Grammar Installation:**
+- **Source**: Grammars downloaded from [tree-sitter-grammars organization](https://github.com/tree-sitter-grammars)
+- **Storage**: Installed to `~/.emacs.d/tree-sitter/` directory
+- **Installation methods**:
+  - **Automatic**: Open a file of the language type, prompted to install grammar
+  - **Manual**: `M-x treesit-install-language-grammar` for individual languages
+- **Verification**: Tree-sitter indicator in modeline shows active status (colored icon when grammar active, grayed when inactive)
+
 **Dual Mode Configuration:**
 All language configurations use a shared setup pattern ensuring identical behavior:
 
