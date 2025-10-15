@@ -20,9 +20,10 @@
   (interactive)
   (if
    (treesit-available-p)
-   (let* ((mode-name (symbol-name major-mode))
-          (is-ts-mode (string-match-p "-ts-mode$" mode-name))
-          (lang (when is-ts-mode (replace-regexp-in-string "-ts-mode$" "" mode-name)))
+   (let* ((mode-symbol (symbol-name major-mode))
+          (mode-display-name (format-mode-line mode-name))
+          (is-ts-mode (string-match-p "-ts-mode$" mode-symbol))
+          (lang (when is-ts-mode (replace-regexp-in-string "-ts-mode$" "" mode-symbol)))
           (lang-cap (when lang (capitalize lang)))
           (grammar-available (when lang (treesit-language-available-p (intern lang))))
           (grammar-file
@@ -30,11 +31,14 @@
      (if
       is-ts-mode
       (message
-       "Tree-sitter: %s (major mode: %s) Grammar installed: %s"
-       lang-cap
-       mode-name
+       "Tree-sitter> Mode Name: %s | Mode Symbol: %s | Grammar: %s"
+       mode-display-name
+       mode-symbol
        (if grammar-available grammar-file "NOT INSTALLED"))
-      (message "Tree-sitter: inactive (%s)" mode-name)))
+      (message
+       "Tree-sitter> Mode Name: %s | Mode Symbol: %s | Status: inactive"
+       mode-display-name
+       mode-symbol)))
    (message "Tree-sitter: not available in this Emacs build")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
