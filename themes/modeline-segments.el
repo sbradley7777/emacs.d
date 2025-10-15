@@ -22,23 +22,23 @@
    (treesit-available-p)
    (let* ((mode-symbol (symbol-name major-mode))
           (mode-display-name (format-mode-line mode-name))
+          (parent-mode (get major-mode 'derived-mode-parent))
+          (parent-mode-name (if parent-mode (symbol-name parent-mode) "none"))
           (is-ts-mode (string-match-p "-ts-mode$" mode-symbol))
           (lang (when is-ts-mode (replace-regexp-in-string "-ts-mode$" "" mode-symbol)))
-          (lang-cap (when lang (capitalize lang)))
           (grammar-available (when lang (treesit-language-available-p (intern lang))))
           (grammar-file
-           (when lang (format "libtree-sitter-%s%s" lang (car dynamic-library-suffixes)))))
-     (if
-      is-ts-mode
-      (message
-       "Tree-sitter> Mode Name: %s | Mode Symbol: %s | Grammar: %s"
-       mode-display-name
-       mode-symbol
-       (if grammar-available grammar-file "NOT INSTALLED"))
-      (message
-       "Tree-sitter> Mode Name: %s | Mode Symbol: %s | Status: inactive"
-       mode-display-name
-       mode-symbol)))
+           (if
+            (and lang grammar-available)
+            (format "libtree-sitter-%s%s" lang (car dynamic-library-suffixes))
+            "none")))
+     (message
+      "Tree-Sitter> Mode Name: %s | Mode Symbol: %s | Parent Mode: %s | Tree-sitter: %s | Grammar Installed: %s"
+      mode-display-name
+      mode-symbol
+      parent-mode-name
+      (if is-ts-mode "yes" "no")
+      grammar-file))
    (message "Tree-sitter: not available in this Emacs build")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -54,21 +54,24 @@
 
   ;; Define tree-sitter indicator segment
   (doom-modeline-def-segment
-   treesitter-indicator "Display tree-sitter mode indicator when active. Click to show status."
+   treesitter-indicator
+   "Display tree-sitter mode indicator. Active modes show in color, inactive in gray. Click to show status."
    (when
-    (and (bound-and-true-p major-mode) (string-match-p "-ts-mode$" (symbol-name major-mode)))
+    (and (treesit-available-p) (bound-and-true-p major-mode))
     (let* ((mode-name (symbol-name major-mode))
-           (lang (replace-regexp-in-string "-ts-mode$" "" mode-name))
-           (lang-cap (capitalize lang))
+           (is-ts-mode (string-match-p "-ts-mode$" mode-name))
+           (lang (when is-ts-mode (replace-regexp-in-string "-ts-mode$" "" mode-name)))
+           (lang-cap (if is-ts-mode (capitalize lang) "inactive"))
+           (icon-face (if is-ts-mode 'doom-modeline-info 'doom-modeline-inactive))
            (icon
             (if
              (fboundp 'nerd-icons-mdicon)
-             (nerd-icons-mdicon "nf-md-tree" :face 'doom-modeline-info)
-             "TS")))
+             (nerd-icons-mdicon "nf-md-tree" :face icon-face)
+             (if is-ts-mode "TS" "ts"))))
       (propertize
        (format " %s " icon)
        'face
-       'doom-modeline-info
+       icon-face
        'mouse-face
        'mode-line-highlight
        'help-echo
