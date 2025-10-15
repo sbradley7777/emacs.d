@@ -262,6 +262,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load general language modes - order independent, no cross-dependencies
 (safe-load-config 'bash-config "Bash/shell script support")
+(safe-load-config 'c-config "C/C++ language support")
 (safe-load-config 'lisp-config "Emacs Lisp development")
 (safe-load-config 'yaml-config "YAML file support")
 (safe-load-config 'toml-config "TOML file support")

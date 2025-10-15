@@ -1,33 +1,41 @@
 ;;; markdown-config.el --- Markdown Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      Markdown mode support and configuration for .md files
+;;      Markdown mode support and configuration for .md files.
+;;      Supports both markdown-mode and markdown-ts-mode with shared configuration.
 
+(require 'core-utils)
+(require 'core-logging)
+(require 'core-constants)
 
 (core-utils-with-load-timing
  "markdown-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Load Markdown mode support
+ ;; Shared Configuration Function
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defun
+  markdown-setup-common
+  ()
+  "Common setup for both markdown-mode and markdown-ts-mode."
+  (setq indent-tabs-mode nil)
+  (setq tab-width core-tab-width)
+  (setq markdown-indent-on-enter 'indent-and-new-item)
+  (setq markdown-enable-math t)
+  (setq markdown-fontify-code-blocks-natively t)
+  (visual-line-mode 1)
+  (setq fill-column core-fill-column))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Markdown Mode Configuration
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
  (require 'markdown-mode)
 
- ;; File associations for Markdown files
+ ;; File associations (treesit-auto will override when markdown grammar available)
  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
  (add-to-list 'auto-mode-alist '("README\\.md\\'" . markdown-mode))
-
- ;; Markdown-specific configuration
- (add-hook
-  'markdown-mode-hook
-  (lambda
-   () "Configure Markdown mode settings."
-   (setq indent-tabs-mode nil) ; Use spaces for indentation
-   (setq tab-width core-tab-width) ; Use standard tab width
-   (setq markdown-indent-on-enter 'indent-and-new-item) ; Smart indentation on enter
-   (setq markdown-enable-math t) ; Enable math syntax highlighting
-   (setq markdown-fontify-code-blocks-natively t) ; Syntax highlight code blocks
-   (visual-line-mode 1) ; Enable visual line mode for better text wrapping
-   (setq fill-column core-fill-column))) ; Use standard fill column
 
  ;; Terminal-friendly settings (no external preview dependencies)
  (with-eval-after-load
@@ -48,5 +56,18 @@
   (define-key markdown-mode-map (kbd "C-c C-c i") 'markdown-insert-italic)
   (define-key markdown-mode-map (kbd "C-c C-c c") 'markdown-insert-code))
 
- ;; Make this module available for loading with (require 'markdown-config)
- (provide 'markdown-config))
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Mode Hooks - Apply to both markdown-mode and markdown-ts-mode
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; Apply common setup to markdown-mode
+ (add-hook 'markdown-mode-hook 'markdown-setup-common)
+
+ ;; Apply common setup to markdown-ts-mode (when tree-sitter grammar available)
+ (add-hook 'markdown-ts-mode-hook 'markdown-setup-common)
+
+ (core-message-success "Markdown configuration loaded (markdown-mode and markdown-ts-mode)"))
+
+(provide 'markdown-config)
+
+;;; markdown-config.el ends here

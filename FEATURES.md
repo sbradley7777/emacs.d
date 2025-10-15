@@ -234,6 +234,59 @@ Powered by [Corfu](https://github.com/minad/corfu) for comprehensive auto-comple
 
 ## Language Support
 
+### Tree-Sitter Integration
+
+Automatic tree-sitter mode switching powered by [treesit-auto](https://github.com/renzmann/treesit-auto):
+
+**Features** ([`core/core-packages.el:146-148`](core/core-packages.el)):
+- **Automatic mode switching** - uses tree-sitter modes when grammars are installed
+- **Fallback support** - gracefully falls back to regular modes if grammar is missing
+- **Prompt installation** - offers to install grammars when first needed
+- **Dual mode support** - all language configs work identically in both regular and tree-sitter modes
+
+**Required Tree-Sitter Grammars:**
+Install using `M-x treesit-install-language-grammar`:
+- **python** - Python development (python-ts-mode)
+- **c** - C language support (c-ts-mode)
+- **cpp** - C++ language support (c++-ts-mode)
+- **bash** - Bash/shell scripts (bash-ts-mode)
+- **json** - JSON configuration (json-ts-mode)
+- **yaml** - YAML configuration (yaml-ts-mode)
+- **toml** - TOML configuration (toml-ts-mode)
+- **markdown** - Markdown documentation (markdown-ts-mode)
+
+**Dual Mode Configuration:**
+All language configurations use a shared setup pattern ensuring identical behavior:
+
+```elisp
+;; Example from python-config.el
+(defun python-setup-common ()
+  "Common setup for both python-mode and python-ts-mode."
+  (setq indent-tabs-mode nil)
+  (setq python-indent core-tab-width)
+  (electric-indent-mode 1))
+
+(add-hook 'python-mode-hook 'python-setup-common)
+(add-hook 'python-ts-mode-hook 'python-setup-common)
+```
+
+**LSP Server Support:**
+Tree-sitter modes work seamlessly with Eglot LSP:
+- **Python**: `pylsp` works with both python-mode and python-ts-mode
+- **C/C++**: `clangd` works with both c-mode/c++-mode and c-ts-mode/c++-ts-mode
+- **Bash**: `bash-language-server` works with both sh-mode and bash-ts-mode
+- **JSON**: `vscode-json-language-server` works with both json-mode and json-ts-mode
+- **YAML**: `yaml-language-server` works with both yaml-mode and yaml-ts-mode
+- **TOML**: `taplo` works with both toml-mode and toml-ts-mode
+- **Markdown**: `marksman` works with both markdown-mode and markdown-ts-mode
+
+**Benefits:**
+- **Superior syntax highlighting** - tree-sitter provides more accurate, context-aware highlighting
+- **Better indentation** - smarter code structure understanding for auto-indentation
+- **Improved navigation** - enhanced code folding and structural navigation
+- **Zero configuration** - works automatically when grammars are installed
+- **Consistent experience** - same settings regardless of which mode is active
+
 ### Python Development Environment
 
 Comprehensive Python development setup with intelligent environment management:

@@ -39,20 +39,36 @@
   - 'f-r---c' (flymake-ruff) -> 'Ruff'
   - 'p-f' (python-flymake) -> 'Python'
   - 'e-f-b' (eglot-flymake-backend) -> 'Eglot'
-  - Others -> original name as fallback"
-  (cond
-   ;; Match flymake-ruff backend identifier
-   ((string-match "f-r" backend-name)
-    "Ruff")
-   ;; Match python-flymake backend identifier
-   ((string-match "p-f" backend-name)
-    "Python")
-   ;; Match eglot-flymake-backend identifier
-   ((string-match "e-f-b" backend-name)
-    "Eglot")
-   ;; Fallback to original name for unknown backends
-   (t
-    backend-name)))
+  - Others -> original name as fallback
+
+  Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
+  ;; Convert to string if backend-name is a list
+  (let ((backend-str
+         (cond
+          ((stringp backend-name)
+           backend-name)
+          ((listp backend-name)
+           (format "%s" (car backend-name)))
+          ((symbolp backend-name)
+           (symbol-name backend-name))
+          (t
+           (format "%s" backend-name)))))
+    (cond
+     ;; Match flymake-ruff backend identifier
+     ((string-match "f-r" backend-str)
+      "Ruff")
+     ;; Match python-flymake backend identifier
+     ((string-match "p-f" backend-str)
+      "Python")
+     ;; Match eglot-flymake-backend identifier
+     ((string-match "e-f-b" backend-str)
+      "Eglot")
+     ;; Match generic flymake backend
+     ((string-match "flymake" backend-str)
+      "Flymake")
+     ;; Fallback to original name for unknown backends
+     (t
+      backend-str))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Diagnostics Buffer Formatting

@@ -19,17 +19,18 @@
  (when
   (core-utils-check-command-in-path "ruff")
 
-  ;; Configure flymake-ruff to replace built-in python checker
-  (add-hook
-   'python-mode-hook
-   (lambda
-    ()
-    ;; Remove the default python checker (with backend name: p-f) to avoid duplicates
-    (remove-hook 'flymake-diagnostic-functions 'python-flymake t)
-    ;; Add the ruff checker
-    (flymake-ruff-load)))
-  ;; Enable flymake-mode to activate diagnostics. The only enabled backend is flymake-ruff:"f-r---c"
-  (add-hook 'python-mode-hook 'flymake-mode))
+  (defun
+   flymake-ruff-setup () "Common Flymake Ruff setup for both python-mode and python-ts-mode."
+   ;; Remove the default python checker (with backend name: p-f) to avoid duplicates
+   (remove-hook 'flymake-diagnostic-functions 'python-flymake t)
+   ;; Add the ruff checker
+   (flymake-ruff-load)
+   ;; Enable flymake-mode to activate diagnostics
+   (flymake-mode 1))
+
+  ;; Configure flymake-ruff for both python-mode and python-ts-mode
+  (add-hook 'python-mode-hook 'flymake-ruff-setup)
+  (add-hook 'python-ts-mode-hook 'flymake-ruff-setup))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Ruff Error Code Extraction
