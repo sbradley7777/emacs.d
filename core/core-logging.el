@@ -75,15 +75,32 @@ Useful for system diagnostics, debug output, and structured information that doe
 (defun
  core-logging-duplicate-warnings-to-messages (orig-fun type message &optional level buffer-name)
  "Advice to duplicate warning messages to *Messages* buffer.
-Calls the original display-warning function and also logs to *Messages*."
+Calls the original display-warning function and also logs to *Messages*.
+Filters out :debug level warnings to reduce noise."
  (prog1
   (apply orig-fun type message level buffer-name nil)
-  ;; Also log to *Messages* buffer with formatted prefix
-  (message
-   "[%s] %s: %s"
-   (upcase (symbol-name type))
-   (if level (upcase (symbol-name level)) "WARNING")
-   message)))
+  ;; Also log to *Messages* buffer with formatted prefix (skip debug messages)
+  (unless
+   (eq level :debug)
+   (let ((type-str
+          (cond
+           ((symbolp type)
+            (symbol-name type))
+           ((listp type)
+            (format "%s" (car type)))
+           (t
+            (format "%s" type))))
+         (level-str
+          (cond
+           ((symbolp level)
+            (symbol-name level))
+           ((listp level)
+            (format "%s" (car level)))
+           (level
+            (format "%s" level))
+           (t
+            "WARNING"))))
+     (message "[%s] %s: %s" (upcase type-str) (upcase level-str) message)))))
 
 ;; Add advice to display-warning to duplicate warnings to *Messages* buffer
 (advice-add 'display-warning :around #'core-logging-duplicate-warnings-to-messages)
