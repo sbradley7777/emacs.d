@@ -1,6 +1,7 @@
-;;; python-core.el --- Core Python Language Configuration -*- lexical-binding: t -*-
+;;; python-config.el --- Python Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Basic Python editing settings, indentation, and shell configuration.
+;;      Supports both python-mode and python-ts-mode with shared configuration.
 
 ;;; Dependencies:
 ;; - python-constants (for configuration values)
@@ -13,23 +14,25 @@
 (require 'python)
 
 (core-utils-with-load-timing
- "python-core.el"
+ "python-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Python-specific indentation settings
+ ;; Shared Configuration Function
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (add-hook
-  'python-mode-hook
-  (lambda
-   () "Configure Python mode with project-specific indentation settings."
-   (setq python-indent-guess-indent-offset t) ; Attempts to guess indentation offset based on existing file indentation
-   (setq indent-tabs-mode nil) ; Use spaces
-   (setq python-indent core-tab-width) ; Use standard tab width for indentation
-   (electric-indent-mode 1))) ; Enable electric indentation for automatic formatting
+
+ (defun
+  python-setup-common
+  ()
+  "Common setup for both python-mode and python-ts-mode."
+  (setq python-indent-guess-indent-offset t)
+  (setq indent-tabs-mode nil)
+  (setq python-indent core-tab-width)
+  (electric-indent-mode 1))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Python shell integration improvements
+ ;; Python Shell Integration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
  ;; Python shell improvements: disable native completion (prevents hangs) and prompt detection warnings (cleaner REPL)
  (setq
   python-shell-completion-native-enable
@@ -37,7 +40,18 @@
   python-shell-prompt-detect-failure-warning
   nil
   python-shell-interpreter
-  python-default-interpreter))
+  python-default-interpreter)
 
-;; Make this module available for loading with (require 'core)
-(provide 'python-core)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Mode Hooks - Apply to both python-mode and python-ts-mode
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ ;; Apply common setup to python-mode
+ (add-hook 'python-mode-hook 'python-setup-common)
+
+ ;; Apply common setup to python-ts-mode (when tree-sitter grammar available)
+ (add-hook 'python-ts-mode-hook 'python-setup-common))
+
+(provide 'python-config)
+
+;;; python-config.el ends here
