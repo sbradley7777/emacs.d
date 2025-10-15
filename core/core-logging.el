@@ -68,6 +68,26 @@
 Useful for system diagnostics, debug output, and structured information that doesn't need visual emphasis."
  (apply #'message format-string args))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Warning Buffer Integration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun
+ core-logging-duplicate-warnings-to-messages (orig-fun type message &optional level buffer-name)
+ "Advice to duplicate warning messages to *Messages* buffer.
+Calls the original display-warning function and also logs to *Messages*."
+ (prog1
+  (apply orig-fun type message level buffer-name nil)
+  ;; Also log to *Messages* buffer with formatted prefix
+  (message
+   "[%s] %s: %s"
+   (upcase (symbol-name type))
+   (if level (upcase (symbol-name level)) "WARNING")
+   message)))
+
+;; Add advice to display-warning to duplicate warnings to *Messages* buffer
+(advice-add 'display-warning :around #'core-logging-duplicate-warnings-to-messages)
+
 (provide 'core-logging)
 
 ;;; core-logging.el ends here
