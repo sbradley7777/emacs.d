@@ -1,7 +1,8 @@
 ;;; json-config.el --- JSON Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      JSON mode support and configuration.
-;;      Supports both json-mode and json-ts-mode with shared configuration.
+;;      Supports both js-json-mode (built-in) and json-ts-mode with shared configuration.
+;;      tree-sit-auto handles automatic grammar installation and mode switching.
 
 (require 'core-utils)
 (require 'core-logging)
@@ -16,7 +17,7 @@
  (defun
   json-setup-common
   ()
-  "Common setup for both json-mode and json-ts-mode."
+  "Common setup for both js-json-mode and json-ts-mode."
   (setq indent-tabs-mode nil)
   (setq js-indent-level 2)
   (electric-indent-mode 1))
@@ -25,21 +26,23 @@
  ;; JSON Mode Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; File associations (treesit-auto will override when json grammar available)
- (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))
- (add-to-list 'auto-mode-alist '("\\.jsonc\\'" . json-mode))
+ ;; NOTE: Do not set auto-mode-alist here for .json files
+ ;; treesit-auto expects js-json-mode (built-in) to activate first, then it will:
+ ;; 1. Prompt to install json grammar if missing
+ ;; 2. Switch to json-ts-mode if grammar is installed
+ ;; Adding json-mode to auto-mode-alist prevents treesit-auto from detecting and prompting
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Mode Hooks - Apply to both json-mode and json-ts-mode
+ ;; Mode Hooks
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Apply common setup to json-mode
- (add-hook 'json-mode-hook 'json-setup-common)
+ ;; Apply common setup to js-json-mode (built-in fallback when grammar not installed)
+ (add-hook 'js-json-mode-hook 'json-setup-common)
 
  ;; Apply common setup to json-ts-mode (when tree-sitter grammar available)
  (add-hook 'json-ts-mode-hook 'json-setup-common)
 
- (core-message-success "JSON configuration loaded (json-mode and json-ts-mode)"))
+ (core-message-success "JSON configuration loaded (js-json-mode and json-ts-mode)"))
 
 (provide 'json-config)
 

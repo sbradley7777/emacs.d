@@ -45,8 +45,8 @@ Set to t for mode line, 'messages for *Messages* buffer, or nil to disable.")
    (c-ts-mode . "clangd")
    (c++-ts-mode . "clangd")
    (bash-ts-mode . "bash-language-server")
-   (json-mode . "vscode-json-language-server")
-   (json-ts-mode . "vscode-json-language-server")
+   (js-json-mode . "vscode-json-language-server") ; Built-in JSON mode
+   (json-ts-mode . "vscode-json-language-server") ; Tree-sitter JSON mode
    (yaml-mode . "yaml-language-server")
    (yaml-ts-mode . "yaml-language-server")
    (toml-mode . "taplo")

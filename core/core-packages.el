@@ -124,6 +124,10 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  (use-package flymake-ruff :defer t) ; Deferred loading for ruff integration
  (use-package imenu-anywhere :defer t) ; Cross-buffer symbol search (keybinding in keybindings.el)
 
+ ;; NOTE: json-mode is intentionally NOT installed
+ ;; - It conflicts with treesit-auto by adding itself to auto-mode-alist
+ ;; - treesit-auto handles JSON: js-json-mode → prompt → json-ts-mode
+ ;; - js-json-mode (built-in) is sufficient as fallback without tree-sitter grammar
 
  (use-package
   which-key
