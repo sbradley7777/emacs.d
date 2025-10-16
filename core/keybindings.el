@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
-(require 'user-functions)
+(require 'user-utils)
 
 (core-utils-with-load-timing
  "keybindings.el"

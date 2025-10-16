@@ -1,17 +1,23 @@
-;;; user-functions.el --- Custom Functions -*- lexical-binding: t -*-
+;;; user-utils.el --- User Utility Functions -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      User-defined custom functions
+;;      User-defined utility functions for custom functionality.
 
+(require 'core-constants)
+(require 'core-utils)
+(require 'core-logging)
 (require 'cl-lib)
 
 (core-utils-with-load-timing
- "user-functions.el"
+ "user-utils.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Reload init.el on the Fly:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  user-reload-init-file () (interactive)
+  user-reload-init-file ()
+  "Reload init.el configuration file.
+Saves init.el buffer if it's currently open before reloading."
+  (interactive)
   (let ((init-file (expand-file-name "init.el" user-emacs-directory)))
     (if
      (bufferp (get-file-buffer init-file))
@@ -190,4 +196,4 @@ This wrapper ensures that opening Imenu-list closes other exclusive side windows
     ;; Call the original toggle function
     (when (fboundp 'imenu-list-smart-toggle) (imenu-list-smart-toggle)))))
 
-(provide 'user-functions)
+(provide 'user-utils)

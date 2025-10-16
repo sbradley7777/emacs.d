@@ -300,8 +300,8 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 8: User Customizations (Final Layer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load user functions BEFORE aliases - aliases may reference custom functions
-(safe-load-config 'user-functions "Custom helper functions")
+;; Load user utilities BEFORE aliases - aliases may reference custom utility functions
+(safe-load-config 'user-utils "User utility functions")
 
 ;; Load aliases BEFORE command palette - aliases may be used in palette
 (safe-load-config 'user-aliases "Function aliases and shortcuts")
