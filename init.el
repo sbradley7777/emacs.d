@@ -239,6 +239,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load completion framework FIRST in features - provides foundation for other enhanced features
 (safe-load-config 'completion-config "Auto-completion framework")
 
+;; Load tree-sitter configuration BEFORE language modes - ensures grammars install to correct location
+(safe-load-config 'tree-sitter-config "Tree-sitter grammar management")
+
 ;; Load diagnostics BEFORE language modes - provides error reporting for code files
 (safe-load-config 'flymake-config "Flymake configuration")
 
