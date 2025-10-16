@@ -70,7 +70,14 @@
 ;; (setq tramp-verbose 6)
 
 ;; ============================================
-;; 4. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 4. LSP/EGLOT CONFIGURATION
+;; ============================================
+;; Disable eglot event logging to improve performance and reduce memory usage
+;; Setting to 0 completely disables the *EGLOT events* buffer
+(setq eglot-events-buffer-size 0)
+
+;; ============================================
+;; 5. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)
