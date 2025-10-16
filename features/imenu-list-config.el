@@ -37,19 +37,9 @@
          (excluded-mode (memq major-mode imenu-list-excluded-modes))
          (hidden-buf (string-prefix-p " " (buffer-name)))
          (special-buf (string-prefix-p "*" (buffer-name))))
-     ;; Debug output
-     (message
-      "DEBUG imenu-list: buf=%s mode=%s open=%s excl=%s hid=%s spec=%s"
-      (buffer-name)
-      major-mode
-      ilist-open
-      excluded-mode
-      hidden-buf
-      special-buf)
      ;; Update if conditions are met
      (when
       (and ilist-open (not excluded-mode) (not hidden-buf) (not special-buf))
-      (message "DEBUG imenu-list: UPDATING for %s" (buffer-name))
       (imenu-list-update t)))) ;; Force update with t parameter
 
   ;; Update on buffer/window changes
