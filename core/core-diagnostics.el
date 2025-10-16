@@ -57,7 +57,6 @@
  ;; Enhanced Configuration Diagnostics
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
  (defun
   diagnostics-show-system-info () "Show system information in Messages buffer."
   (let ((timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
@@ -74,6 +73,16 @@
           (format
            "%.3fs" (float-time (time-subtract after-init-time before-init-time)))
           "unknown"))
+        ;; Tree-sitter diagnostic information
+        (treesit-available (fboundp 'treesit-available-p))
+        (treesit-status
+         (if
+          (and (fboundp 'treesit-available-p) (treesit-available-p)) "Available" "Not available"))
+        (treesit-grammar-count
+         (if
+          (fboundp 'treesit-utils-count-installed-grammars)
+          (treesit-utils-count-installed-grammars)
+          0))
         ;; Calculate maximum label width for alignment
         (max-width
          (apply
@@ -89,7 +98,9 @@
              "Startup time"
              "Load path entries"
              "Installed packages"
-             "Configuration")))))
+             "Configuration"
+             "Tree-sitter"
+             "Installed grammars")))))
     (core-message-plain "\n=== Emacs Startup Log - %s ===" timestamp)
     (core-message-plain
      "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "OS") os-info)
@@ -104,7 +115,6 @@
     (message
      "%s: Modern Emacs 30.2+"
      (format (concat "%-" (number-to-string max-width) "s") "Configuration"))
-    (core-message-plain "")
     (message
      "%s: %s %s"
      (format (concat "%-" (number-to-string max-width) "s") "System")
@@ -119,9 +129,29 @@
      (format (concat "%-" (number-to-string max-width) "s") "Load path entries")
      load-path-count)
     (message
-     "%s: %d\n"
+     "%s: %d"
      (format (concat "%-" (number-to-string max-width) "s") "Installed packages")
-     package-count)))
+     package-count)
+    (message
+     "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "Tree-sitter") treesit-status)
+    (message
+     "%s: %d"
+     (format (concat "%-" (number-to-string max-width) "s") "Installed grammars")
+     treesit-grammar-count)
+    ;; Display individual grammar details if any are installed
+    (when
+     (> treesit-grammar-count 0)
+     (when
+      (fboundp 'treesit-utils-get-installed-grammars)
+      (let ((grammars (treesit-utils-get-installed-grammars)))
+        (dolist
+         (grammar grammars)
+         (let ((name (plist-get grammar :name))
+               (file (plist-get grammar :file)))
+           (message "  - %s (%s)" name file))))))
+    ;; Add separator line at the end
+    (core-message-plain "===============================================\n")
+    (core-message-plain "")))
 
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

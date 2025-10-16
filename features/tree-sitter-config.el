@@ -6,6 +6,7 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
+(require 'tree-sitter-constants)
 
 (core-utils-with-load-timing
  "tree-sitter-config.el"
@@ -14,12 +15,7 @@
  ;; Tree-sitter Grammar Directory Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Define custom tree-sitter grammar directory
- (defvar
-  core-treesit-grammar-dir (expand-file-name "tree-sitter" emacs-local-dir)
-  "Custom directory for tree-sitter grammar installations.
-Uses emacs-local-dir constant (~/.emacs.d/local/tree-sitter).")
-
+ ;; Display the tree-sitter grammar directory from constants
  (core-message-config "Tree-sitter grammar directory: %s" core-treesit-grammar-dir)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -52,7 +52,7 @@
      (dolist (pkg failed-packages) (core-message-error "  %s" pkg))
      (core-message-info
       "    Consider running (package-refresh-contents) and retrying failed packages"))
-    (core-message-plain "===================================\n")
+    (core-message-plain "====================================\n")
 
     ;; Return list of failed packages for further handling
     failed-packages))

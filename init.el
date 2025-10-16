@@ -174,7 +174,13 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 1: Foundation Layer - System Infrastructure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load diagnostics FIRST - provides early error logging and system info for troubleshooting
+;; Load tree-sitter constants FIRST - provides directory paths for tree-sitter modules
+(safe-load-config 'tree-sitter-constants "Tree-sitter configuration constants")
+
+;; Load tree-sitter utilities AFTER constants - diagnostics will use these for grammar counting
+(safe-load-config 'tree-sitter-utils "Tree-sitter utility functions")
+
+;; Load diagnostics AFTER tree-sitter utilities - provides early error logging and system info for troubleshooting
 (safe-load-config 'core-diagnostics "System and configuration diagnostics")
 
 ;; Show system information immediately after diagnostics loads (before packages)
