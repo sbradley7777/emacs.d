@@ -77,7 +77,19 @@
 (setq eglot-events-buffer-size 0)
 
 ;; ============================================
-;; 5. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 5. FLYMAKE DIAGNOSTIC DISPLAY
+;; ============================================
+;; Show diagnostics inline at the end of problematic lines (Emacs 30+ only)
+;; When enabled, error/warning messages appear directly in the code like:
+;;   def foo(x):
+;;       return x + "string"  # ❌ Operator not supported between int and str
+;;
+;; This can make the code look cluttered, so it's disabled by default.
+;; To enable, uncomment the line below:
+;; (setq flymake-show-diagnostics-at-end-of-line t)
+
+;; ============================================
+;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)
