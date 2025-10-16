@@ -5,12 +5,10 @@
 
 ;;; Dependencies:
 ;; - python-constants (for configuration values)
-;; - python-utils (for utility functions)
 ;; - python (built-in Python mode)
 ;; - core-constants (for core-tab-width)
 
 (require 'python-constants)
-(require 'python-utils)
 (require 'python)
 
 (core-utils-with-load-timing
