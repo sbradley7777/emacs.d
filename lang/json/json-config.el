@@ -6,6 +6,7 @@
 
 (require 'core-utils)
 (require 'core-logging)
+(require 'lang-utils)
 
 (core-utils-with-load-timing
  "json-config.el"
@@ -18,9 +19,7 @@
   json-setup-common
   ()
   "Common setup for both js-json-mode and json-ts-mode."
-  (setq indent-tabs-mode nil)
-  (setq js-indent-level 2)
-  (electric-indent-mode 1))
+  (lang-setup-minimal 'js-indent-level 2))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; JSON Mode Configuration
@@ -36,10 +35,8 @@
  ;; Mode Hooks
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Apply common setup to js-json-mode (built-in fallback when grammar not installed)
- (add-hook 'js-json-mode-hook 'json-setup-common)
-
- ;; Apply common setup to json-ts-mode (when tree-sitter grammar available)
+ (lang-register-dual-mode-hooks js-json json-setup-common)
+ ;; Note: json-ts-mode hook is registered separately since the base mode name differs
  (add-hook 'json-ts-mode-hook 'json-setup-common)
 
  (core-message-success "JSON configuration loaded (js-json-mode and json-ts-mode)"))

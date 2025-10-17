@@ -6,6 +6,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)
+(require 'lang-utils)
 
 (core-utils-with-load-timing
  "bash-config.el"
@@ -18,14 +19,7 @@
   bash-setup-common
   ()
   "Common setup for both sh-mode and bash-ts-mode."
-  (setq indent-tabs-mode nil)
-  (setq sh-basic-offset core-tab-width)
-  (setq sh-indentation core-tab-width)
-  (electric-indent-mode 1)
-  (electric-pair-local-mode 1)
-  (show-paren-mode 1)
-  (hl-line-mode 1)
-  (display-line-numbers-mode 1))
+  (lang-setup-full 'sh-basic-offset core-tab-width '((sh-indentation . core-tab-width))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Shell Script Mode Configuration
@@ -71,13 +65,7 @@ Only applies to sh-mode as bash-ts-mode uses tree-sitter highlighting."
  ;; Mode Hooks - Apply to both sh-mode and bash-ts-mode
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Apply common setup to sh-mode
- (add-hook 'sh-mode-hook 'bash-setup-common)
- (add-hook 'sh-mode-hook 'enhance-bash-syntax-highlighting)
-
- ;; Apply common setup to bash-ts-mode (when tree-sitter grammar available)
- (add-hook 'bash-ts-mode-hook 'bash-setup-common)
- (add-hook 'bash-ts-mode-hook 'enhance-bash-syntax-highlighting)
+ (lang-register-dual-mode-hooks sh bash-setup-common '(enhance-bash-syntax-highlighting))
 
  (core-message-success
   "Bash configuration loaded with 4-space indentation (sh-mode and bash-ts-mode)"))

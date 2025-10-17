@@ -6,6 +6,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)
+(require 'lang-utils)
 
 (core-utils-with-load-timing
  "markdown-config.el"
@@ -18,8 +19,7 @@
   markdown-setup-common
   ()
   "Common setup for both markdown-mode and markdown-ts-mode."
-  (setq indent-tabs-mode nil)
-  (setq tab-width core-tab-width)
+  (lang-setup-minimal 'tab-width core-tab-width)
   (setq markdown-indent-on-enter 'indent-and-new-item)
   (setq markdown-enable-math t)
   (setq markdown-fontify-code-blocks-natively t)
@@ -60,11 +60,7 @@
  ;; Mode Hooks - Apply to both markdown-mode and markdown-ts-mode
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Apply common setup to markdown-mode
- (add-hook 'markdown-mode-hook 'markdown-setup-common)
-
- ;; Apply common setup to markdown-ts-mode (when tree-sitter grammar available)
- (add-hook 'markdown-ts-mode-hook 'markdown-setup-common)
+ (lang-register-dual-mode-hooks markdown markdown-setup-common)
 
  (core-message-success "Markdown configuration loaded (markdown-mode and markdown-ts-mode)"))
 

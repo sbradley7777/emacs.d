@@ -7,9 +7,11 @@
 ;; - python-constants (for configuration values)
 ;; - python (built-in Python mode)
 ;; - core-constants (for core-tab-width)
+;; - lang-utils (for shared language setup)
 
 (require 'python-constants)
 (require 'python)
+(require 'lang-utils)
 
 (core-utils-with-load-timing
  "python-config.el"
@@ -23,9 +25,7 @@
   ()
   "Common setup for both python-mode and python-ts-mode."
   (setq python-indent-guess-indent-offset t)
-  (setq indent-tabs-mode nil)
-  (setq python-indent core-tab-width)
-  (electric-indent-mode 1))
+  (lang-setup-minimal 'python-indent core-tab-width))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Python Shell Integration
@@ -44,11 +44,7 @@
  ;; Mode Hooks - Apply to both python-mode and python-ts-mode
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Apply common setup to python-mode
- (add-hook 'python-mode-hook 'python-setup-common)
-
- ;; Apply common setup to python-ts-mode (when tree-sitter grammar available)
- (add-hook 'python-ts-mode-hook 'python-setup-common))
+ (lang-register-dual-mode-hooks python python-setup-common))
 
 (provide 'python-config)
 

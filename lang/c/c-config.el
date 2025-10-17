@@ -6,6 +6,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)
+(require 'lang-utils)
 (require 'cc-mode)
 
 (core-utils-with-load-timing
@@ -19,28 +20,16 @@
   c-setup-common
   ()
   "Common setup for both c-mode and c-ts-mode."
-  (setq indent-tabs-mode nil)
-  (setq c-basic-offset core-tab-width)
-  (c-set-offset 'substatement-open 0)
-  (electric-indent-mode 1)
-  (electric-pair-local-mode 1)
-  (show-paren-mode 1)
-  (hl-line-mode 1)
-  (display-line-numbers-mode 1))
+  (lang-setup-full 'c-basic-offset core-tab-width)
+  (c-set-offset 'substatement-open 0))
 
  (defun
   c++-setup-common
   ()
   "Common setup for both c++-mode and c++-ts-mode."
-  (setq indent-tabs-mode nil)
-  (setq c-basic-offset core-tab-width)
+  (lang-setup-full 'c-basic-offset core-tab-width)
   (c-set-offset 'substatement-open 0)
-  (c-set-offset 'innamespace 0)
-  (electric-indent-mode 1)
-  (electric-pair-local-mode 1)
-  (show-paren-mode 1)
-  (hl-line-mode 1)
-  (display-line-numbers-mode 1))
+  (c-set-offset 'innamespace 0))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; C/C++ Mode Configuration
@@ -63,17 +52,8 @@
  ;; Mode Hooks - Apply to both regular and tree-sitter modes
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;; Apply common setup to c-mode
- (add-hook 'c-mode-hook 'c-setup-common)
-
- ;; Apply common setup to c-ts-mode (when tree-sitter grammar available)
- (add-hook 'c-ts-mode-hook 'c-setup-common)
-
- ;; Apply common setup to c++-mode
- (add-hook 'c++-mode-hook 'c++-setup-common)
-
- ;; Apply common setup to c++-ts-mode (when tree-sitter grammar available)
- (add-hook 'c++-ts-mode-hook 'c++-setup-common)
+ (lang-register-dual-mode-hooks c c-setup-common)
+ (lang-register-dual-mode-hooks c++ c++-setup-common)
 
  (core-message-success "C/C++ configuration loaded (c-mode, c++-mode, c-ts-mode, c++-ts-mode)"))
 
