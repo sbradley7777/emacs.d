@@ -27,12 +27,13 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
   (when
    (and python-executable (file-executable-p python-executable))
    (with-temp-buffer
-    ;; Set default-directory to the executable's directory so process-file
-    ;; can execute on the correct host (local or remote)
-    (let ((default-directory (file-name-directory python-executable))
-          (python-basename (file-name-nondirectory python-executable)))
-      (core-message-debug "Python version check: %s" python-executable)
-      (process-file python-basename nil t nil "--version")
+    (core-message-debug "Python version check: %s" python-executable)
+    ;; For process-file to work with TRAMP paths, we need to:
+    ;; 1. Set default-directory to match the remote connection
+    ;; 2. Use the local filename part (without TRAMP prefix) as the program
+    (let* ((default-directory (file-name-directory python-executable))
+           (program (file-local-name python-executable)))
+      (process-file program nil t nil "--version")
       (let ((output (string-trim (buffer-string))))
         (goto-char (point-min))
         (if
@@ -80,11 +81,16 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
   (if
    (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
    (let ((venv-python (expand-file-name "bin/python" pyvenv-virtual-env)))
-     ;; Skip setting python-shell-interpreter for remote files (TRAMP paths)
-     ;; since they can't be executed locally. The remote environment is handled
-     ;; via connection-local variables in TRAMP.
-     (unless
+     (if
       (file-remote-p venv-python)
+      ;; For remote files, use the local path part (without TRAMP prefix)
+      ;; doom-modeline will execute this in the context of default-directory,
+      ;; which is a TRAMP path, so the execution will happen on the remote host
+      (let ((local-python-path (file-local-name venv-python)))
+        (core-message-debug
+         "Setting python-shell-interpreter to '%s' for remote venv" local-python-path)
+        (setq-local python-shell-interpreter local-python-path))
+      ;; For local files, set to the actual executable path
       (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python))))
    (setq python-shell-interpreter python-default-interpreter)))
 

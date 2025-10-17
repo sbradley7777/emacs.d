@@ -87,9 +87,19 @@ First tries to find it remotely, falls back to local equivalent if needed."
            (setq-local pyvenv-project-name project-name)
            ;; Set pyvenv-virtual-env buffer-locally to the remote venv path
            ;; This is used by the modeline and other tools
-           (setq-local pyvenv-virtual-env venv-path))
+           (setq-local pyvenv-virtual-env venv-path)
 
-         (core-message-success "Activated Python venv for project: %s" project-name)))))
+           (core-message-success "Activated Python venv for project: %s" project-name)
+
+           ;; Log detected Python version for user feedback
+           (let ((python-version (pyvenv-get-python-version venv-path)))
+             (if
+              python-version
+              (core-message-info "Using Python %s from virtual environment" python-version)
+              (core-message-warning "Could not detect Python version in virtual environment")))
+
+           ;; Update python-shell-interpreter for doom-modeline display
+           (pyvenv-update-shell-interpreter))))))
 
    ;; Local file: use existing activation
    (when (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate))))
@@ -102,10 +112,12 @@ First tries to find it remotely, falls back to local equivalent if needed."
          (intern (format "pyvenv-remote-%s" (secure-hash 'md5 (format "%s-%s" host venv-path))))))
     (tramp-create-python-connection-profile profile-name host venv-path)))
 
- ;; Replace existing hooks
+ ;; Replace existing hooks for both python-mode and python-ts-mode
  (remove-hook 'python-mode-hook #'pyvenv-auto-activate)
+ (remove-hook 'python-ts-mode-hook #'pyvenv-auto-activate)
  ;; Add pyvenv-remote-activate back for virtual environment detection and modeline
  (add-hook 'python-mode-hook #'pyvenv-remote-activate)
+ (add-hook 'python-ts-mode-hook #'pyvenv-remote-activate)
 
  (core-message-debug "TRAMP-aware pyvenv support loaded"))
 
