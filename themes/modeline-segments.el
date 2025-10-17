@@ -5,6 +5,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'tree-sitter-utils)
 
 (core-utils-with-load-timing
  "modeline-segments.el"
@@ -20,12 +21,11 @@
   (interactive)
   (if
    (treesit-available-p)
-   (let* ((mode-symbol (symbol-name major-mode))
-          (mode-display-name (format-mode-line mode-name))
+   (let* ((mode-display-name (format-mode-line mode-name))
           (parent-mode (get major-mode 'derived-mode-parent))
           (parent-mode-name (if parent-mode (symbol-name parent-mode) "none"))
-          (is-ts-mode (string-match-p "-ts-mode$" mode-symbol))
-          (lang (when is-ts-mode (replace-regexp-in-string "-ts-mode$" "" mode-symbol)))
+          (is-ts-mode (treesit-utils-is-ts-mode-p major-mode))
+          (lang (treesit-utils-extract-lang-from-mode major-mode))
           (grammar-available (when lang (treesit-language-available-p (intern lang))))
           (grammar-file
            (if
@@ -35,7 +35,7 @@
      (message
       "Tree-Sitter> Mode Name: %s | Mode Symbol: %s | Parent Mode: %s | Tree-sitter: %s | Grammar Installed: %s"
       mode-display-name
-      mode-symbol
+      (symbol-name major-mode)
       parent-mode-name
       (if is-ts-mode "yes" "no")
       grammar-file))
@@ -58,9 +58,8 @@
    "Display tree-sitter mode indicator. Active modes show in color, inactive in gray. Click to show status."
    (when
     (and (treesit-available-p) (bound-and-true-p major-mode))
-    (let* ((mode-name (symbol-name major-mode))
-           (is-ts-mode (string-match-p "-ts-mode$" mode-name))
-           (lang (when is-ts-mode (replace-regexp-in-string "-ts-mode$" "" mode-name)))
+    (let* ((is-ts-mode (treesit-utils-is-ts-mode-p major-mode))
+           (lang (treesit-utils-extract-lang-from-mode major-mode))
            (lang-cap (if is-ts-mode (capitalize lang) "inactive"))
            (icon-face (if is-ts-mode 'doom-modeline-info 'doom-modeline-buffer-minor-mode))
            (icon

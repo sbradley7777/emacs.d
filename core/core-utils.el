@@ -26,21 +26,31 @@ MODULE-NAME should be a string identifying the module being loaded."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun
+ core-utils-format-command-found-message (command path host location)
+ "Format success message when COMMAND is found.
+COMMAND is the command name, PATH is the full path, HOST is the hostname,
+LOCATION is either 'local' or 'remote'."
+ (core-message-success
+  "The LSP command \"%s\" was found in PATH at %s on host (%s): %s" command path location host))
+
+(defun
+ core-utils-format-command-not-found-message (command host location)
+ "Format warning message when COMMAND is not found.
+COMMAND is the command name, HOST is the hostname,
+LOCATION is either 'local' or 'remote'."
+ (core-message-warning
+  "The LSP command \"%s\" was not found in PATH on host (%s): %s" command location host))
+
+(defun
  core-utils-check-command-in-path (command)
  "Check if COMMAND exists in PATH and log message if not found.
 Returns t if command is found, nil otherwise."
- (let ((command-path (executable-find command)))
+ (let ((command-path (executable-find command))
+       (host (system-name)))
    (if
     command-path
-    (progn
-     (core-message-success
-      "The LSP command \"%s\" was found in PATH at %s on host (local): %s"
-      command
-      command-path
-      (system-name))
-     t)
-    (core-message-warning
-     "The LSP command \"%s\" was not found in PATH on host (local): %s" command (system-name))
+    (progn (core-utils-format-command-found-message command command-path host "local") t)
+    (core-utils-format-command-not-found-message command host "local")
     nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -74,6 +84,34 @@ Returns t if directory exists/was created, nil if creation failed."
        (core-message-error
         "Failed to create directory %s: %s" expanded-path (error-message-string err))
        nil)))))
+
+(defun
+ core-utils-scan-directory-for-pattern (dir pattern transform-fn)
+ "Scan DIR for files matching PATTERN and apply TRANSFORM-FN to each match.
+DIR should be a directory path (string).
+PATTERN should be a regular expression (string) to match against filenames.
+TRANSFORM-FN is a function that takes the filename and match groups, returning a result.
+
+Returns a list of results from applying TRANSFORM-FN to each matching file.
+
+Example:
+  (core-utils-scan-directory-for-pattern
+   \"/path/to/grammars\"
+   \"libtree-sitter-\\\\([^.]+\\\\)\\\\.\\\\(so\\\\|dylib\\\\)$\"
+   (lambda (file lang ext)
+     (list :name lang :file file)))"
+ (when
+  (and dir (file-directory-p dir))
+  (let ((results '()))
+    (dolist
+     (file (directory-files dir nil pattern))
+     (when
+      (string-match pattern file)
+      (let* ((num-groups (1- (/ (length (match-data)) 2)))
+             (match-groups (cl-loop for i from 1 to num-groups collect (match-string i file)))
+             (result (apply transform-fn file match-groups)))
+        (when result (push result results)))))
+    (nreverse results))))
 
 ;;; Provide this module
 (provide 'core-utils)

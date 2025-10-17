@@ -40,6 +40,7 @@ PYTHON-PATH: Optional additional Python path"
   "Check if COMMAND exists in PATH on remote host (for TRAMP buffers).
 Returns t if command is found, nil otherwise.
 Only works when called from a buffer visiting a remote file via TRAMP."
+  (require 'core-utils)
   (if
    (not (file-remote-p default-directory))
    (progn (core-message-warning "Not a remote file - cannot check remote host PATH") nil)
@@ -47,15 +48,8 @@ Only works when called from a buffer visiting a remote file via TRAMP."
           (command-path (executable-find command t)))
      (if
       command-path
-      (progn
-       (core-message-success
-        "The LSP command \"%s\" was found in PATH at %s on host (remote): %s"
-        command
-        command-path
-        host)
-       t)
-      (core-message-warning
-       "The LSP command \"%s\" was not found in PATH on host (remote): %s" command host)
+      (progn (core-utils-format-command-found-message command command-path host "remote") t)
+      (core-utils-format-command-not-found-message command host "remote")
       nil))))
 
  (core-message-debug "TRAMP utilities loaded"))
