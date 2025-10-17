@@ -24,9 +24,13 @@
     (if
      flymake-window (quit-window nil flymake-window)
      (progn
-      (when
-       (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
-      (flymake-show-buffer-diagnostics)))))
+      (when (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
+      ;; Ensure flymake is loaded before calling flymake-show-buffer-diagnostics
+      (require 'flymake nil t)
+      (if
+       (fboundp 'flymake-show-buffer-diagnostics)
+       (flymake-show-buffer-diagnostics)
+       (message "Flymake is not available"))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Backend Name Formatting
