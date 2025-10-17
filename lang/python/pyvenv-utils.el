@@ -19,18 +19,36 @@
   "Normalize path for comparison. Handles both local and TRAMP paths."
   (if (file-remote-p path) (file-local-name path) (expand-file-name path)))
 
+ ;; Get Python version by executing python --version (TRAMP-compatible)
+ (defun
+  pyvenv-get-version-from-executable (python-executable)
+  "Get Python version from PYTHON-EXECUTABLE.
+Uses process-file for TRAMP compatibility - works for both local and remote files."
+  (when
+   (and python-executable (file-executable-p python-executable))
+   (with-temp-buffer
+    ;; Set default-directory to the executable's directory so process-file
+    ;; can execute on the correct host (local or remote)
+    (let ((default-directory (file-name-directory python-executable))
+          (python-basename (file-name-nondirectory python-executable)))
+      (core-message-debug "Python version check: %s" python-executable)
+      (process-file python-basename nil t nil "--version")
+      (let ((output (string-trim (buffer-string))))
+        (goto-char (point-min))
+        (if
+         (re-search-forward "Python \\([0-9]+\\.[0-9]+\\(?:\\.[0-9]+\\)?\\)" nil t)
+         (let ((version (match-string 1)))
+           (core-message-debug "Python version: %s" version)
+           version)
+         (core-message-debug "Failed to parse version from: %s" output) nil))))))
+
  ;; Extract Python version from virtual environment for logging
  (defun
   pyvenv-get-python-version (venv-path) "Get Python version from virtual environment."
   (when
    venv-path
    (let ((python-executable (expand-file-name "bin/python" venv-path)))
-     (when
-      (file-executable-p python-executable)
-      (with-temp-buffer
-       (call-process python-executable nil t nil "--version")
-       (goto-char (point-min))
-       (when (re-search-forward "Python \\([0-9]+\\.[0-9]+\\)" nil t) (match-string 1)))))))
+     (pyvenv-get-version-from-executable python-executable))))
 
  ;; Search for virtual environment by walking up directory tree looking for project markers
  ;; Returns the venv path if found, nil otherwise
@@ -62,7 +80,12 @@
   (if
    (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
    (let ((venv-python (expand-file-name "bin/python" pyvenv-virtual-env)))
-     (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python)))
+     ;; Skip setting python-shell-interpreter for remote files (TRAMP paths)
+     ;; since they can't be executed locally. The remote environment is handled
+     ;; via connection-local variables in TRAMP.
+     (unless
+      (file-remote-p venv-python)
+      (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python))))
    (setq python-shell-interpreter python-default-interpreter)))
 
  (provide 'pyvenv-utils))

@@ -5,8 +5,10 @@
 
 ;;; Dependencies:
 ;; - python-constants (for configuration values)
+;; - pyvenv-utils (for shared utility functions)
 
 (require 'python-constants)
+(require 'pyvenv-utils)
 (require 'core-logging)
 
 (core-utils-with-load-timing
@@ -35,19 +37,10 @@
   (interactive)
   (if
    (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
-   (let ((project-name (if (boundp 'pyvenv-project-name) pyvenv-project-name "Unknown"))
-         (venv-path pyvenv-virtual-env)
-         (python-version
-          (with-temp-buffer
-           (when
-            (file-executable-p (expand-file-name "bin/python" pyvenv-virtual-env))
-            (call-process
-             (expand-file-name "bin/python" pyvenv-virtual-env) nil t nil "--version")
-            (goto-char (point-min))
-            (when
-             (re-search-forward
-              "Python \\([0-9]+\\.[0-9]+\\.[0-9]+\\)" nil t)
-             (match-string 1))))))
+   (let* ((project-name (if (boundp 'pyvenv-project-name) pyvenv-project-name "Unknown"))
+          (venv-path pyvenv-virtual-env)
+          (python-bin (expand-file-name "bin/python" pyvenv-virtual-env))
+          (python-version (pyvenv-get-version-from-executable python-bin)))
      (core-message-info
       "Python Project: %s | Venv: %s | Version: %s"
       project-name

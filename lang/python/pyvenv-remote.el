@@ -76,25 +76,20 @@ First tries to find it remotely, falls back to local equivalent if needed."
        (if
         venv-path
         (progn
-         ;; For remote venv, we need to activate the local equivalent for pyvenv
-         (let ((local-venv-path
-                (if (file-remote-p venv-path) (file-local-name venv-path) venv-path)))
-           (when
-            (and (fboundp 'pyvenv-activate) (file-exists-p local-venv-path))
-            (pyvenv-activate local-venv-path)))
-
          ;; Setup connection profile with remote path
          (pyvenv-remote-setup-connection host venv-path)
 
-         ;; Update project state
+         ;; Update project state (use buffer-local variables for remote files)
          (let* ((project-dir (file-name-directory (directory-file-name venv-path)))
                 (project-name (file-name-nondirectory (directory-file-name project-dir))))
-           (setq pyvenv-project-root project-dir)
-           (setq pyvenv-project-name project-name))
+           ;; Set buffer-local variables so they don't interfere with local Python files
+           (setq-local pyvenv-project-root project-dir)
+           (setq-local pyvenv-project-name project-name)
+           ;; Set pyvenv-virtual-env buffer-locally to the remote venv path
+           ;; This is used by the modeline and other tools
+           (setq-local pyvenv-virtual-env venv-path))
 
-         (core-message-success
-          "Activated remote Python venv: %s"
-          (file-name-nondirectory (directory-file-name venv-path)))))))
+         (core-message-success "Activated Python venv for project: %s" project-name)))))
 
    ;; Local file: use existing activation
    (when (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate))))
