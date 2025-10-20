@@ -38,11 +38,11 @@
    ;;   - insert (green):  #7bc275 - same as doom-1337-color-green (success states)
    ;;   - delete (red):    #f0a0a0 - same as doom-1337-color-red (error states)
    ;;   - change (yellow): #ffe66d - same as doom-1337-color-yellow (modified/attention states)
-   ;; Background set to nil ensures symbols display with colored text only, not colored blocks
+   ;; Background set to unspecified ensures symbols display with colored text only, not colored blocks
    (custom-set-faces
-    '(diff-hl-insert ((t (:foreground "#7bc275" :background nil)))) ; Green (matches theme success)
-    '(diff-hl-delete ((t (:foreground "#f0a0a0" :background nil)))) ; Coral red (matches theme errors)
-    '(diff-hl-change ((t (:foreground "#ffe66d" :background nil))))))
+    '(diff-hl-insert ((t (:foreground "#7bc275" :background unspecified)))) ; Green (matches theme success)
+    '(diff-hl-delete ((t (:foreground "#f0a0a0" :background unspecified)))) ; Coral red (matches theme errors)
+    '(diff-hl-change ((t (:foreground "#ffe66d" :background unspecified))))))
 
   ;; Update diff indicators after save
   (add-hook 'after-save-hook 'diff-hl-update)
