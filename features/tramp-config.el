@@ -17,16 +17,12 @@
 
 ;;; Code:
 
+(require 'core-constants)
+(require 'tramp-constants)
 (require 'tramp-utils)
 
 ;; Load TRAMP
 (require 'tramp)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Note: Additional remote paths are defined in core-constants.el as core-tramp-user-paths
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -34,7 +30,7 @@
 
 ;; Default connection method and shell
 (setq tramp-default-method "ssh")
-(setq tramp-default-remote-shell core-tramp-default-shell)
+(setq tramp-default-remote-shell tramp-default-shell)
 
 ;; Cache and auto-save locations
 (setq tramp-persistency-file-name (expand-file-name "tramp" emacs-local-dir))
@@ -45,7 +41,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Add each additional path to tramp-remote-path
-(dolist (path core-tramp-user-paths) (add-to-list 'tramp-remote-path path))
+(dolist (path tramp-user-paths) (add-to-list 'tramp-remote-path path))
 
 ;; Include user's PATH from shell profile
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)

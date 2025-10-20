@@ -224,14 +224,8 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load editing preferences BEFORE file handling - establishes basic editing behavior
 (safe-load-config 'core-editing "Editing preferences")
 
-;; Load file handling BEFORE TRAMP - establishes local file management
+;; Load file handling - establishes local file management
 (safe-load-config 'core-files "File handling")
-
-;; Load TRAMP utilities BEFORE TRAMP config - provides helper functions for remote access
-(safe-load-config 'tramp-utils "TRAMP utility functions")
-
-;; Load TRAMP config AFTER utilities - establishes remote file access using helper functions
-(safe-load-config 'tramp-config "TRAMP remote file access")
 
 ;; Load keybindings LAST in core phase - allows binding to all previously loaded functionality
 (safe-load-config 'keybindings "Global keybindings")
@@ -244,6 +238,15 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load completion framework FIRST in features - provides foundation for other enhanced features
 (safe-load-config 'completion-config "Auto-completion framework")
+
+;; Load TRAMP constants BEFORE TRAMP utilities - provides configuration values
+(safe-load-config 'tramp-constants "TRAMP configuration constants")
+
+;; Load TRAMP utilities BEFORE TRAMP config - provides helper functions for remote access
+(safe-load-config 'tramp-utils "TRAMP utility functions")
+
+;; Load TRAMP config AFTER utilities - establishes remote file access using helper functions
+(safe-load-config 'tramp-config "TRAMP remote file access")
 
 ;; Load tree-sitter configuration BEFORE language modes - ensures grammars install to correct location
 (safe-load-config 'tree-sitter-config "Tree-sitter grammar management")
