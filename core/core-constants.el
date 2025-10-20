@@ -128,12 +128,6 @@
 (defconst
  core-use-package-minimum-reported-time 0.1 "Report packages taking longer than this to load.")
 
-;; Which-key Configuration
-(defconst core-which-key-idle-delay 0.3 "Which-key display delay.")
-(defconst core-which-key-max-description-length 40 "Maximum which-key description length.")
-(defconst core-which-key-column-padding 1 "Which-key column padding.")
-(defconst core-which-key-separator " → " "Separator displayed between key and description.")
-
 ;; Elisp Autofmt Configuration
 (defconst core-elisp-autofmt-parallel-jobs 1 "Number of parallel jobs for elisp-autofmt.")
 

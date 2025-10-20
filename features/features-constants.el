@@ -31,6 +31,12 @@ Used by flymake diagnostics, imenu-list, command palette, and other side windows
  "Top-level visibility percentage for indent guides.")
 (defconst features-indent-guides-delay 0.1 "Delay before showing indent guides.")
 
+;; Which-key Constants
+(defconst features-which-key-idle-delay 0.3 "Which-key display delay.")
+(defconst features-which-key-max-description-length 40 "Maximum which-key description length.")
+(defconst features-which-key-column-padding 1 "Which-key column padding.")
+(defconst features-which-key-separator " → " "Separator displayed between key and description.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

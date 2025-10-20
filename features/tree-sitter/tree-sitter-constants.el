@@ -10,7 +10,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defconst
- core-treesit-grammar-dir (expand-file-name "tree-sitter/" emacs-local-dir)
+ features-treesit-grammar-dir (expand-file-name "tree-sitter/" emacs-local-dir)
  "Directory for tree-sitter grammar installations.
 Uses emacs-local-dir constant (~/.emacs.d/local/tree-sitter/).")
 

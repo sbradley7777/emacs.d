@@ -26,7 +26,7 @@ Returns a list of plists with :name and :file keys."
      ;; Scan the primary grammar directory
      (when-let ((results
                  (core-utils-scan-directory-for-pattern
-                  core-treesit-grammar-dir pattern transform-fn)))
+                  features-treesit-grammar-dir pattern transform-fn)))
        (setq grammars (append grammars results)))
      ;; Also check treesit-extra-load-path if it's set
      (when
@@ -34,7 +34,7 @@ Returns a list of plists with :name and :file keys."
       (dolist
        (dir treesit-extra-load-path)
        (when
-        (and dir (file-directory-p dir) (not (string= dir core-treesit-grammar-dir)))
+        (and dir (file-directory-p dir) (not (string= dir features-treesit-grammar-dir)))
         (when-let ((results (core-utils-scan-directory-for-pattern dir pattern transform-fn)))
           (setq grammars (append grammars results))))))
      grammars)))

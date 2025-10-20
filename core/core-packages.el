@@ -5,6 +5,7 @@
 (require 'package-system/metadata)
 (require 'package-system/repositories)
 (require 'core-packages-utils)
+(require 'features-constants)
 
 (core-utils-with-load-timing
  "core-packages.el"
@@ -76,10 +77,10 @@ Assembled from all category lists in load order.")
   which-key
   :config (which-key-mode 1)
   (setq
-   which-key-idle-delay core-which-key-idle-delay ; Faster response
-   which-key-max-description-length core-which-key-max-description-length ; Longer descriptions
-   which-key-add-column-padding core-which-key-column-padding ; Better spacing
-   which-key-separator core-which-key-separator))
+   which-key-idle-delay features-which-key-idle-delay ; Faster response
+   which-key-max-description-length features-which-key-max-description-length ; Longer descriptions
+   which-key-add-column-padding features-which-key-column-padding ; Better spacing
+   which-key-separator features-which-key-separator))
 
  (use-package
   elisp-autofmt
