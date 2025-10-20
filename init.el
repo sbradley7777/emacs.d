@@ -201,7 +201,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load UI foundation BEFORE themes - establishes basic interface elements
 (safe-load-config 'core-ui "Basic UI setup")
 
-(safe-load-config 'gui-mode "GUI mode configuration")
+(safe-load-config 'core-gui-mode "GUI mode configuration")
 
 ;; Load theme configuration BEFORE theme utilities - establishes theme system
 (safe-load-config 'themes-config "Theme configuration")
@@ -228,7 +228,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 (safe-load-config 'core-files "File handling")
 
 ;; Load log writer system AFTER file handling - establishes message logging with rotation
-(safe-load-config 'log-writer "Message logging and log rotation")
+(safe-load-config 'core-log-writer "Message logging and log rotation")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)

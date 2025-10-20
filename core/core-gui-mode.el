@@ -1,10 +1,10 @@
-;;; gui-mode.el --- GUI Mode Configuration -*- lexical-binding: t -*-
+;;; core-gui-mode.el --- GUI Mode Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      GUI mode settings, UI elements control, and window management setup.
 
 
 (core-utils-with-load-timing
- "gui-mode.el"
+ "core-gui-mode.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Frame Parameter Configuration
@@ -46,5 +46,5 @@
   (core-message-info "macOS native fullscreen enabled"))
 
 
- ;; Make this module available for loading with (require 'gui-mode)
- (provide 'gui-mode))
+ ;; Make this module available for loading with (require 'core-gui-mode)
+ (provide 'core-gui-mode))

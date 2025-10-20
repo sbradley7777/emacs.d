@@ -1,4 +1,4 @@
-;;; log-writer.el --- Log File Writing and Rotation -*- lexical-binding: t -*-
+;;; core-log-writer.el --- Log File Writing and Rotation -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; This file provides functionality for writing the Messages buffer to files
@@ -87,6 +87,6 @@ BASE-FILENAME is the base name without directory."
 (add-hook 'kill-emacs-hook 'core-save-messages-log)
 (core-message-config "Message logging configured with %d file rotation" core-log-max-files)
 
-(provide 'log-writer)
+(provide 'core-log-writer)
 
-;;; log-writer.el ends here
+;;; core-log-writer.el ends here
