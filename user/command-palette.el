@@ -42,6 +42,7 @@
  (defconst
   command-palette-default-favorites
   '(("Menu Bar Open" . menu-bar-open)
+    ("Diagnostics Show All" . diagnostics-show-all)
     ("Show Installed Packages" . show-installed-packages)
     ("Search Packages" . search-packages)
     ("Show Package Upgrades" . show-package-upgrades)

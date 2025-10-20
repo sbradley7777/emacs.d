@@ -155,6 +155,165 @@
 
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; External Dependencies Diagnostics
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (defvar
+  diagnostics-external-dependencies-results
+  nil
+  "Store results from the last external dependencies check.")
+
+ (defun
+  diagnostics-check-executable (name &optional description optional)
+  "Check if executable NAME is available.
+DESCRIPTION is optional user-friendly name for the tool.
+OPTIONAL marks the tool as optional (warning instead of error)."
+  (let ((desc (or description name)))
+    (if
+     (executable-find name) (list :status 'ok :message (format "%s found" desc) :tool name)
+     (list
+      :status (if optional 'warning 'error)
+      :message (format "%s not found" desc)
+      :tool name))))
+
+ (defun
+  diagnostics-check-font (font-name) "Check if FONT-NAME is installed and available."
+  (if
+   (find-font (font-spec :name font-name))
+   (list :status 'ok :message (format "Font '%s' installed" font-name) :font font-name)
+   (list :status 'warning :message (format "Font '%s' not found" font-name) :font font-name)))
+
+ (defun
+  diagnostics-check-package (package-symbol) "Check if PACKAGE-SYMBOL is installed and loadable."
+  (cond
+   ((featurep package-symbol)
+    (list
+     :status 'ok
+     :message (format "Package '%s' loaded" package-symbol)
+     :package package-symbol))
+   ((locate-library (symbol-name package-symbol))
+    (list
+     :status 'ok
+     :message (format "Package '%s' available" package-symbol)
+     :package package-symbol))
+   (t
+    (list
+     :status 'error
+     :message (format "Package '%s' not found" package-symbol)
+     :package package-symbol))))
+
+ (defun
+  diagnostics-check-tramp-path ()
+  "Check if TRAMP remote PATH is properly configured.
+Only checks when working on a remote file."
+  (when
+   (file-remote-p default-directory)
+   (if
+    (and (boundp 'tramp-remote-path) (member 'tramp-own-remote-path tramp-remote-path))
+    (list :status 'ok :message "TRAMP remote PATH configured")
+    (list :status 'warning :message "TRAMP remote PATH may not use remote user's PATH"))))
+
+ (defun
+  diagnostics-check-lsp-servers () "Check LSP server availability for configured languages."
+  (let ((results nil))
+    (push (diagnostics-check-executable "pylsp" "Python LSP (pylsp)" t) results)
+    (push (diagnostics-check-executable "clangd" "C/C++ LSP (clangd)" t) results)
+    (push (diagnostics-check-executable "bash-language-server" "Bash LSP" t) results)
+    (push (diagnostics-check-executable "vscode-json-language-server" "JSON LSP" t) results)
+    (push (diagnostics-check-executable "yaml-language-server" "YAML LSP" t) results)
+    (push (diagnostics-check-executable "taplo" "TOML LSP (taplo)" t) results)
+    (push (diagnostics-check-executable "marksman" "Markdown LSP (marksman)" t) results)
+    results))
+
+ (defun
+  diagnostics-check-nerd-fonts () "Check if Nerd Fonts are installed."
+  (let ((font-dir (expand-file-name "~/.local/share/fonts/")))
+    (if
+     (and (file-directory-p font-dir) (directory-files font-dir nil "NFM\\.ttf$"))
+     (list :status 'ok :message "Nerd Fonts installed")
+     (list :status 'warning :message "Nerd Fonts not found in ~/.local/share/fonts/"))))
+
+ (defun
+  diagnostics-show-external-dependencies
+  ()
+  "Check and display status of external dependencies.
+Validates tools and resources not managed by Emacs package system:
+- Language interpreters (Python, etc.)
+- LSP servers
+- System fonts
+- TRAMP configuration (when working remotely)"
+  (interactive)
+
+  (core-message-plain "")
+  (core-message-plain "")
+  (core-message-plain "=== External Dependencies ===")
+  (core-message-plain "")
+
+  (let ((all-results nil)
+        (ok-count 0)
+        (warning-count 0)
+        (error-count 0))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; External Dependencies
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; Python
+    (push (diagnostics-check-executable "python3" "Python 3") all-results)
+
+    ;; LSP Servers
+    (dolist (result (diagnostics-check-lsp-servers)) (push result all-results))
+
+    ;; Fonts
+    (push (diagnostics-check-nerd-fonts) all-results)
+
+    ;; TRAMP Configuration (only when working remotely)
+    (let ((tramp-result (diagnostics-check-tramp-path)))
+      (when tramp-result (push tramp-result all-results)))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; Display Results
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    (dolist
+     (result (reverse all-results))
+     (pcase (plist-get result :status)
+       ('ok
+        (core-message-success "%s" (plist-get result :message))
+        (setq ok-count (1+ ok-count)))
+       ('warning
+        (core-message-warning "%s" (plist-get result :message))
+        (setq warning-count (1+ warning-count)))
+       ('error
+        (core-message-error "%s" (plist-get result :message))
+        (setq error-count (1+ error-count)))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; Summary
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    (core-message-plain "")
+    (core-message-plain "=== Summary ===")
+    (core-message-success "Passed: %d" ok-count)
+    (when (> warning-count 0) (core-message-warning "Warnings: %d" warning-count))
+    (when (> error-count 0) (core-message-error "Errors: %d" error-count))
+
+    (setq diagnostics-external-dependencies-results all-results)
+
+    (core-message-plain "")
+    (core-message-success "External dependencies check completed")
+    (core-message-plain "===============================================\n")
+
+    all-results))
+
+ (defun
+  diagnostics-show-all
+  ()
+  "Show complete diagnostics: system info and external dependencies."
+  (interactive)
+  (let ((suggest-key-bindings nil))
+    (diagnostics-show-system-info)
+    (diagnostics-show-external-dependencies)))
+
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
  (provide 'core-diagnostics))
 ;;; core-diagnostics.el ends here
