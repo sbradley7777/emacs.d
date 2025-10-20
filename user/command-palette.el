@@ -41,7 +41,8 @@
 
  (defconst
   command-palette-default-favorites
-  '(("Show Installed Packages" . show-installed-packages)
+  '(("Menu Bar Open" . menu-bar-open)
+    ("Show Installed Packages" . show-installed-packages)
     ("Search Packages" . search-packages)
     ("Show Package Upgrades" . show-package-upgrades)
     ("List Themes" . list-themes)
@@ -49,7 +50,10 @@
     ("Pyvenv Deactivate" . pyvenv-deactivate)
     ("Pyvenv Workon" . pyvenv-workon)
     ("Run Python" . run-python)
-    ("Shell" . shell))
+    ("Shell" . shell)
+    ("Treesit Show Symbols Sidebar" . treesit-show-symbols-sidebar)
+    ("Treesitter Grammar Status" . treesitter-grammar-status)
+    ("Treesit Install Language Grammar" . treesit-install-language-grammar))
   "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
 
  (defconst
