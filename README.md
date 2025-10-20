@@ -58,46 +58,68 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-ui.el`](core/core-ui.el) - Basic UI configuration
   - [`core-editing.el`](core/core-editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
-  - [`tramp-config.el`](core/tramp-config.el) - TRAMP remote file access with Python support
-  - [`tramp-utils.el`](core/tramp-utils.el) - TRAMP utility functions for remote development
   - [`core-logging.el`](core/core-logging.el) - Message logging and log rotation system
   - [`core-diagnostics.el`](core/core-diagnostics.el) - System information and configuration diagnostics
-  - [`keybindings.el`](core/keybindings.el) - Global key bindings
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`breadcrumbs-config.el`](features/breadcrumbs-config.el) - Breadcrumb navigation for file path and code structure
   - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework with terminal support
+  - [`dashboard-config.el`](features/dashboard-config.el) - Startup dashboard with quick access to files and actions
   - [`dired-config.el`](features/dired-config.el) - Enhanced directory browsing with inline tree expansion and icons
-  - [`eglot-config.el`](features/eglot-config.el) - [Eglot](https://github.com/joaotavora/eglot) LSP client with automatic local/remote detection
-  - [`flymake-config.el`](features/flymake-config.el) - Flymake diagnostic display configuration
-  - [`flymake-utils.el`](features/flymake-utils.el) - Flymake utility functions and backend formatting
+  - **[`eglot/`](features/eglot/)** - LSP client integration
+    - [`eglot-config.el`](features/eglot/eglot-config.el) - [Eglot](https://github.com/joaotavora/eglot) LSP client with automatic local/remote detection
+    - [`eglot-constants.el`](features/eglot/eglot-constants.el) - Eglot configuration constants
+  - **[`flymake/`](features/flymake/)** - Syntax checking and diagnostics
+    - [`flymake-config.el`](features/flymake/flymake-config.el) - Flymake diagnostic display configuration
+    - [`flymake-utils.el`](features/flymake/flymake-utils.el) - Flymake utility functions and backend formatting
+  - [`highlight-indent-guides-config.el`](features/highlight-indent-guides-config.el) - Visual indentation guides
   - [`imenu-list-config.el`](features/imenu-list-config.el) - Symbol navigation sidebar for code structure
   - [`rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el) - Enhanced delimiter visibility
-  - [`highlight-indent-guides-config.el`](features/highlight-indent-guides-config.el) - Visual indentation guides
-  - [`treemacs-config.el`](features/treemacs-config.el) - File tree navigation and project management
-  - [`treemacs-utils.el`](features/treemacs-utils.el) - Treemacs utility functions
+  - **[`tramp/`](features/tramp/)** - Remote file access configuration
+    - [`tramp-config.el`](features/tramp/tramp-config.el) - TRAMP remote file access with Python support
+    - [`tramp-constants.el`](features/tramp/tramp-constants.el) - TRAMP configuration constants
+    - [`tramp-utils.el`](features/tramp/tramp-utils.el) - TRAMP utility functions for remote development
+  - **[`tree-sitter/`](features/tree-sitter/)** - Tree-sitter integration
+    - [`tree-sitter-config.el`](features/tree-sitter/tree-sitter-config.el) - Automatic tree-sitter mode switching
+    - [`tree-sitter-constants.el`](features/tree-sitter/tree-sitter-constants.el) - Tree-sitter configuration constants
+    - [`tree-sitter-utils.el`](features/tree-sitter/tree-sitter-utils.el) - Tree-sitter utility functions
+  - **[`treemacs/`](features/treemacs/)** - File tree navigation
+    - [`treemacs-config.el`](features/treemacs/treemacs-config.el) - File tree navigation and project management
+    - [`treemacs-utils.el`](features/treemacs/treemacs-utils.el) - Treemacs utility functions
   - [`features-constants.el`](features/features-constants.el) - Feature-specific constants
 - **[`lang/`](lang/)** - Language-specific configurations
+  - [`lang-utils.el`](lang/lang-utils.el) - Language configuration utilities
+  - **[`bash/`](lang/bash/)** - Bash/shell script development
+    - [`bash-config.el`](lang/bash/bash-config.el) - Bash mode configuration
+  - **[`c/`](lang/c/)** - C/C++ development
+    - [`c-config.el`](lang/c/c-config.el) - C and C++ development settings
+  - **[`json/`](lang/json/)** - JSON configuration
+    - [`json-config.el`](lang/json/json-config.el) - JSON mode configuration
   - [`lisp-config.el`](lang/lisp-config.el) - Lisp/Elisp development settings
   - [`makefile-config.el`](lang/makefile-config.el) - Makefile development settings
   - [`markdown-config.el`](lang/markdown-config.el) - Markdown mode support and configuration
-  - [`toml-config.el`](lang/toml-config.el) - TOML mode support for configuration files
-  - [`yaml-config.el`](lang/yaml-config.el) - YAML file handling
   - **[`python/`](lang/python/)** - Python development environment
-    - [`python-core.el`](lang/python/python-core.el) - Core Python development settings
+    - [`python-config.el`](lang/python/python-config.el) - Core Python development settings
     - [`python-constants.el`](lang/python/python-constants.el) - Python configuration constants (LSP paths, etc.)
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
-    - [`pyvenv-utils.el`](lang/python/pyvenv-utils.el) - Python virtual environment utilities
+    - [`pyvenv-modeline.el`](lang/python/pyvenv-modeline.el) - Python environment modeline display
     - [`pyvenv-remote.el`](lang/python/pyvenv-remote.el) - TRAMP-aware virtual environment support
+    - [`pyvenv-utils.el`](lang/python/pyvenv-utils.el) - Python virtual environment utilities
     - [`flymake-ruff-config.el`](lang/python/flymake-ruff-config.el) - Advanced Python linting with Ruff integration
+  - [`toml-config.el`](lang/toml-config.el) - TOML mode support for configuration files
+  - [`yaml-config.el`](lang/yaml-config.el) - YAML file handling
 - **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
+  - [`themes-constants.el`](themes/themes-constants.el) - Theme configuration constants
   - [`themes-utils.el`](themes/themes-utils.el) - Theme utilities and helper functions
   - [`theme-doom-1337.el`](themes/theme-doom-1337.el) - Doom 1337 theme-specific customizations
   - [`modeline-config.el`](themes/modeline-config.el) - [Doom-modeline](https://github.com/seagle0128/doom-modeline) configuration
   - [`modeline-faces.el`](themes/modeline-faces.el) - Theme-specific modeline face customizations
+  - [`modeline-segments.el`](themes/modeline-segments.el) - Custom modeline segments and utilities
 - **[`user/`](user/)** - Personal customizations
-  - [`user-functions.el`](user/user-functions.el) - Custom helper functions
+  - [`command-palette.el`](user/command-palette.el) - Interactive command launcher with history tracking
   - [`user-aliases.el`](user/user-aliases.el) - Custom command aliases
+  - [`user-keybindings.el`](user/user-keybindings.el) - Global key bindings
+  - [`user-utils.el`](user/user-utils.el) - Custom helper functions
 - **[`scripts/`](scripts/)** - Installation and utility scripts
   - [`install.sh`](scripts/install.sh) - Automated installation script
   - [`test-config.sh`](scripts/test-config.sh) - Configuration testing script

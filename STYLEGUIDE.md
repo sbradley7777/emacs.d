@@ -60,23 +60,42 @@ emacs.d/
 │   ├── core-ui.el               # User interface and visual settings
 │   ├── core-editing.el          # Text editing behavior and preferences
 │   ├── core-files.el            # File handling, backup, and auto-save settings
-│   └── keybindings.el           # Global keybindings and shortcuts
+│   ├── core-logging.el          # Message logging and log rotation system
+│   └── core-diagnostics.el      # System information and configuration diagnostics
 ├── [`features/`](features/)                    # Optional enhancements (can be disabled independently)
 │   ├── completion-config.el     # Core auto-completion framework
-│   ├── flymake-config.el        # Flymake diagnostic display configuration
+│   ├── eglot/                   # LSP client integration
+│   │   ├── eglot-config.el      # Eglot LSP configuration
+│   │   └── eglot-constants.el   # Eglot configuration constants
+│   ├── flymake/                 # Syntax checking and diagnostics
+│   │   ├── flymake-config.el    # Flymake diagnostic display configuration
+│   │   └── flymake-utils.el     # Flymake utility functions
 │   ├── rainbow-delimiters-config.el    # Enhanced delimiter visibility
-│   └── highlight-indent-guides-config.el    # Visual indentation guides
+│   ├── highlight-indent-guides-config.el    # Visual indentation guides
+│   ├── tramp/                   # Remote file access
+│   │   ├── tramp-config.el      # TRAMP configuration
+│   │   ├── tramp-constants.el   # TRAMP configuration constants
+│   │   └── tramp-utils.el       # TRAMP utility functions
+│   ├── treemacs/                # File tree navigation
+│   │   ├── treemacs-config.el   # Treemacs configuration
+│   │   └── treemacs-utils.el    # Treemacs utility functions
+│   └── tree-sitter/             # Tree-sitter integration
+│       ├── tree-sitter-config.el    # Tree-sitter configuration
+│       ├── tree-sitter-constants.el # Tree-sitter configuration constants
+│       └── tree-sitter-utils.el     # Tree-sitter utility functions
 ├── [`lang/`](lang/)                        # Language-specific configurations
 │   ├── lisp-config.el                  # Lisp and Emacs Lisp development settings
 │   ├── yaml-config.el                  # YAML file editing configuration
 │   └── python/                  # Python development environment
-│       ├── python-core.el       # Basic Python mode settings and indentation
-│       ├── pyvenv-config.el              # Virtual environment management
+│       ├── python-config.el     # Basic Python mode settings and indentation
+│       └── pyvenv-config.el     # Virtual environment management
 ├── [`themes/`](themes/)                      # Theme configurations
 │   └── themes-config.el         # Core theme and appearance configuration
 ├── [`user/`](user/)                        # Personal customizations
-│   ├── user-functions.el        # User-defined utility functions
-│   └── user-aliases.el          # Command aliases and shortcuts
+│   ├── command-palette.el       # Interactive command launcher
+│   ├── user-aliases.el          # Command aliases and shortcuts
+│   ├── user-keybindings.el      # Global key bindings
+│   └── user-utils.el            # User-defined utility functions
 ├── [`scripts/`](scripts/)                     # Installation and utility scripts
 │   ├── install.sh               # Automated configuration installation
 │   └── README.md                # Script documentation

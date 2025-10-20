@@ -255,7 +255,7 @@ M-x fonts-check-nerd-icons
 
 ### Q: How do I use the Treemacs file tree?
 
-**A:** Treemacs provides a comprehensive file tree sidebar ([`features/treemacs-config.el`](features/treemacs-config.el)):
+**A:** Treemacs provides a comprehensive file tree sidebar ([`features/treemacs/treemacs-config.el`](features/treemacs/treemacs-config.el)):
 
 **Basic Usage:**
 - **Toggle sidebar**: Press `F4` to open/close/focus Treemacs
@@ -313,7 +313,7 @@ M-x fonts-check-nerd-icons
 
 **A:** Treemacs offers extensive customization options:
 
-**Common settings (in [`features/treemacs-config.el`](features/treemacs-config.el)):**
+**Common settings (in [`features/treemacs/treemacs-config.el`](features/treemacs/treemacs-config.el)):**
 - **Width**: `treemacs-width` (default: 30)
 - **Indentation**: `treemacs-indentation` (default: 2)
 - **Hidden files**: `treemacs-show-hidden-files` (default: t)
@@ -472,7 +472,7 @@ M-x core-save-messages-log
 2. **SSH configuration**: Uses standard SSH settings, no special TRAMP configuration required
 3. **Local customization**: Override remote Python paths in [`configs/local.el`](configs/local.el) if needed
 
-**Default Configuration** ([`core/tramp-config.el`](core/tramp-config.el)):
+**Default Configuration** ([`features/tramp/tramp-config.el`](features/tramp/tramp-config.el)):
 ```elisp
 ;; Connection settings
 (setq tramp-default-method "ssh")              ; Use SSH for remote connections
@@ -537,10 +537,10 @@ The configuration automatically detects and activates the appropriate virtual en
 ### Q: How do I add my own customizations?
 
 **A:** The configuration provides several customization points:
-- **User directory**: Add personal functions to [`user/functions.el`](user/functions.el)
-- **Aliases**: Add command aliases to [`user/aliases.el`](user/aliases.el)
+- **User directory**: Add personal functions to [`user/user-utils.el`](user/user-utils.el)
+- **Aliases**: Add command aliases to [`user/user-aliases.el`](user/user-aliases.el)
 - **Package additions**: Add packages to [`core/core-packages.el`](core/core-packages.el)
-- **Key bindings**: Extend [`core/keybindings.el`](core/keybindings.el)
+- **Key bindings**: Extend [`user/user-keybindings.el`](user/user-keybindings.el)
 
 ### Q: Can I override default settings?
 

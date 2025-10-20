@@ -318,7 +318,7 @@ Comprehensive Python development setup with intelligent environment management:
 - **Fallback detection** to local equivalent when remote virtual environment not found
 - **Unified modeline display** showing remote virtual environment status
 - **Pre-configured remote paths** automatically searches common Python installation locations ([`lang/python/python-constants.el`](lang/python/python-constants.el))
-- **Optimized environment variables** for Python development over TRAMP connections
+- **Optimized environment variables** for Python development over TRAMP connections ([`features/tramp/tramp-config.el`](features/tramp/tramp-config.el))
 
 **Manual Control:**
 - `M-x pyvenv-activate` - Manually activate a virtual environment
@@ -500,7 +500,7 @@ Advanced theme management powered by [Doom Themes](https://github.com/doomemacs/
 
 Comprehensive project management and file tree navigation:
 
-**[Treemacs](https://github.com/Alexander-Miller/treemacs) Integration** ([`features/treemacs-config.el`](features/treemacs-config.el)):
+**[Treemacs](https://github.com/Alexander-Miller/treemacs) Integration** ([`features/treemacs/treemacs-config.el`](features/treemacs/treemacs-config.el)):
 - **File tree sidebar** with project structure visualization and git integration
 - **Smart theming** - uses `Default` theme by default, customizable via `local.el`
 - **Project management** with automatic root detection and directory navigation
@@ -696,13 +696,13 @@ Interactive command launcher with history tracking and customizable favorites:
 
 ### Enhanced Diagnostics
 
-- **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake-config.el`](features/flymake-config.el), [`features/flymake-utils.el`](features/flymake-utils.el)): Real-time syntax checking and linting
+- **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake/flymake-config.el`](features/flymake/flymake-config.el), [`features/flymake/flymake-utils.el`](features/flymake/flymake-utils.el)): Real-time syntax checking and linting
   - **Enhanced diagnostics buffer** with user-friendly backend names
   - **Intelligent backend mapping** - Ruff, Eglot, and other checkers displayed clearly
   - **Diagnostics window toggle** via `F1` for quick access
   - **Navigation shortcuts** - `F2`/`F3` for previous/next error
 
-- **[Eglot LSP Client](https://github.com/joaotavora/eglot)** ([`features/eglot-config.el`](features/eglot-config.el)): Language Server Protocol integration for intelligent code features
+- **[Eglot LSP Client](https://github.com/joaotavora/eglot)** ([`features/eglot/eglot-config.el`](features/eglot/eglot-config.el)): Language Server Protocol integration for intelligent code features
   - **Automatic LSP detection** - enables LSP when server executables are found
   - **Local and remote support** - seamless TRAMP integration for SSH-based development
   - **Supported languages**:

@@ -117,7 +117,8 @@ When adding new functionality, follow the modular structure:
 - `core-ui.el` - User interface settings
 - `core-editing.el` - Text editing behavior
 - `core-files.el` - File handling and backup settings
-- `keybindings.el` - Global key bindings
+- `core-logging.el` - Message logging and log rotation system
+- `core-diagnostics.el` - System information and configuration diagnostics
 
 **Feature Modules** ([`features/`](features/)): Optional enhancements
 - Can be disabled independently
