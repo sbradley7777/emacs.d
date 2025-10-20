@@ -691,7 +691,7 @@ Interactive command launcher with history tracking and customizable favorites:
 
 ### Visual Improvements
 - **[Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters)** ([`features/rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el)): Enhanced delimiter visibility with color coding
-- **[Indent Guides](https://github.com/DarthFennec/highlight-indent-guides)** ([`features/indent-guides.el`](features/indent-guides.el)): Visual indentation guides for better code structure
+- **[Indent Guides](https://github.com/DarthFennec/highlight-indent-guides)** ([`features/highlight-indent-guides-config.el`](features/highlight-indent-guides-config.el)): Visual indentation guides for better code structure
 - **Theme Support** ([`themes/themes-config.el`](themes/themes-config.el)): [Doom Themes](https://github.com/doomemacs/themes) with doom-1337 default and terminal compatibility
 
 ### Enhanced Diagnostics

@@ -1,4 +1,4 @@
-;;; indent-guides.el --- Visual Indentation Guides Configuration -*- lexical-binding: t -*-
+;;; highlight-indent-guides-config.el --- Visual Indentation Guides Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Visual indentation guides using highlight-indent-guides.
 ;;      Provides column-based indentation visualization for better code structure understanding.
@@ -6,7 +6,7 @@
 (require 'features-constants)
 
 (core-utils-with-load-timing
- "indent-guides.el"
+ "highlight-indent-guides-config.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Highlight Indent Guides Configuration
@@ -55,4 +55,4 @@
   (core-message-config
    "Highlight indent guides configured with column method and responsive highlighting")))
 
-(provide 'indent-guides)
+(provide 'highlight-indent-guides-config)

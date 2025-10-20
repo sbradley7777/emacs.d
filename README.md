@@ -72,7 +72,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`flymake-utils.el`](features/flymake-utils.el) - Flymake utility functions and backend formatting
   - [`imenu-list-config.el`](features/imenu-list-config.el) - Symbol navigation sidebar for code structure
   - [`rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el) - Enhanced delimiter visibility
-  - [`indent-guides.el`](features/indent-guides.el) - Visual indentation guides
+  - [`highlight-indent-guides-config.el`](features/highlight-indent-guides-config.el) - Visual indentation guides
   - [`treemacs-config.el`](features/treemacs-config.el) - File tree navigation and project management
   - [`treemacs-utils.el`](features/treemacs-utils.el) - Treemacs utility functions
   - [`features-constants.el`](features/features-constants.el) - Feature-specific constants

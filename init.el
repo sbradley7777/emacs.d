@@ -256,7 +256,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 
 ;; Load visual enhancements - order independent within this group
 (safe-load-config 'rainbow-delimiters-config "Rainbow delimiters for better code readability")
-(safe-load-config 'indent-guides "Visual indentation guides")
+(safe-load-config 'highlight-indent-guides-config "Visual indentation guides")
 
 ;; Load navigation tools AFTER completion - may integrate with completion system
 (safe-load-config 'imenu-list-config "Symbol sidebar navigation")

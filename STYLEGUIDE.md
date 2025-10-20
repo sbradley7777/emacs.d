@@ -65,7 +65,7 @@ emacs.d/
 │   ├── completion-config.el     # Core auto-completion framework
 │   ├── flymake-config.el        # Flymake diagnostic display configuration
 │   ├── rainbow-delimiters-config.el    # Enhanced delimiter visibility
-│   └── indent-guides.el         # Visual indentation guides
+│   └── highlight-indent-guides-config.el    # Visual indentation guides
 ├── [`lang/`](lang/)                        # Language-specific configurations
 │   ├── lisp-config.el                  # Lisp and Emacs Lisp development settings
 │   ├── yaml-config.el                  # YAML file editing configuration
