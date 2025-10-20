@@ -39,6 +39,12 @@
  (global-set-key (kbd "C-c i s") 'imenu-list-show-current-symbol) ; Show current symbol in imenu-list
  (global-set-key (kbd "C-c i r") 'imenu-list-refresh) ; Refresh imenu-list
 
+ ;; Git diff navigation (diff-hl)
+ (global-set-key (kbd "C-c g n") 'diff-hl-next-hunk) ; Jump to next change
+ (global-set-key (kbd "C-c g p") 'diff-hl-previous-hunk) ; Jump to previous change
+ (global-set-key (kbd "C-c g d") 'diff-hl-diff-goto-hunk) ; Show diff for current change
+ (global-set-key (kbd "C-c g r") 'diff-hl-revert-hunk) ; Revert current change
+
  ;; Keyboard commands for controlling the buffer.
  ;;
  ;; Scroll buffer down/up
