@@ -27,6 +27,9 @@
  (global-set-key (kbd "<f2>") 'flymake-goto-prev-error) ; Go to previous flymake error
  (global-set-key (kbd "<f3>") 'flymake-goto-next-error) ; Go to next flymake error
  (global-set-key (kbd "<f4>") 'treemacs-smart-toggle) ; Smart toggle Treemacs file tree
+ (global-set-key (kbd "C-x t 1") 'treemacs-delete-other-windows) ; Treemacs delete other windows
+ (global-set-key (kbd "C-x t t") 'treemacs) ; Open treemacs
+ (global-set-key (kbd "C-x t C-t") 'treemacs-find-file) ; Find file in treemacs
  (global-set-key (kbd "<f5>") 'user-imenu-list-smart-toggle) ; Smart toggle imenu-list symbol navigation
  (global-set-key (kbd "<f6>") 'delete-trailing-whitespace) ; Delete trailing whitespace
 

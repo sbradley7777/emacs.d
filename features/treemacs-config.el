@@ -88,12 +88,6 @@
     (t
      (treemacs-add-and-display-current-project-exclusively))))
 
-  ;; Global keybindings for treemacs
-  (global-set-key (kbd "<f4>") 'treemacs-smart-toggle)
-  (global-set-key (kbd "C-x t 1") 'treemacs-delete-other-windows)
-  (global-set-key (kbd "C-x t t") 'treemacs)
-  (global-set-key (kbd "C-x t C-t") 'treemacs-find-file)
-
   (core-message-success "Treemacs loaded and configured successfully")
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -104,17 +98,11 @@
   ;; treemacs-icons-dired is NOT enabled to avoid conflicts with nerd-icons-dired
   ) ;; End of (when (package-installed-p 'treemacs))
 
- ;; Ensure F4 binding is always set
+ ;; Ensure fallback function is defined
  (unless
   (fboundp 'treemacs-smart-toggle)
   (defun
-   treemacs-smart-toggle
-   ()
-   "Fallback function when treemacs is not available."
-   (interactive)
-   (core-message-error "Treemacs not available - package not installed")))
-
- ;; Always bind F4 to treemacs-smart-toggle
- (global-set-key (kbd "<f4>") 'treemacs-smart-toggle)) ;; End of core-utils-with-load-timing
+   treemacs-smart-toggle () "Fallback function when treemacs is not available." (interactive)
+   (core-message-error "Treemacs not available - package not installed")))) ;; End of core-utils-with-load-timing
 
 (provide 'treemacs-config)
