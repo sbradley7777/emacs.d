@@ -1,11 +1,11 @@
-;;; keybindings.el --- Global Key Bindings Configuration -*- lexical-binding: t -*-
+;;; user-keybindings.el --- User Key Bindings Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      Keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
+;;      User-specific keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
 (require 'user-utils)
 
 (core-utils-with-load-timing
- "keybindings.el"
+ "user-keybindings.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Keyboard behavior and Custom HotKeys (aka: keyboard-modifiers or shortcuts):
@@ -27,10 +27,14 @@
  (global-set-key (kbd "<f2>") 'flymake-goto-prev-error) ; Go to previous flymake error
  (global-set-key (kbd "<f3>") 'flymake-goto-next-error) ; Go to next flymake error
  (global-set-key (kbd "<f4>") 'treemacs-smart-toggle) ; Smart toggle Treemacs file tree
+ (global-set-key (kbd "<f5>") 'user-imenu-list-smart-toggle) ; Smart toggle imenu-list symbol navigation
  (global-set-key (kbd "<f6>") 'delete-trailing-whitespace) ; Delete trailing whitespace
 
  ;; Navigation keybindings
  (global-set-key (kbd "C-c i a") 'imenu-anywhere) ; Cross-buffer symbol search
+ (global-set-key (kbd "C-c i l") 'user-imenu-list-smart-toggle) ; Toggle imenu-list sidebar
+ (global-set-key (kbd "C-c i s") 'imenu-list-show-current-symbol) ; Show current symbol in imenu-list
+ (global-set-key (kbd "C-c i r") 'imenu-list-refresh) ; Refresh imenu-list
 
  ;; Keyboard commands for controlling the buffer.
  ;;
@@ -48,5 +52,7 @@
  (global-set-key (kbd "<f11>") 'user-smart-page-up) ; Page up with smart boundary handling
  (global-set-key (kbd "<f12>") 'user-smart-page-down) ; Page down with smart boundary handling
 
- ;; Make this module available for loading with (require 'keybindings)
- (provide 'keybindings))
+ ;; Make this module available for loading with (require 'user-keybindings)
+ (provide 'user-keybindings))
+
+;;; user-keybindings.el ends here

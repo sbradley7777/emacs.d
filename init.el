@@ -227,9 +227,6 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Load file handling - establishes local file management
 (safe-load-config 'core-files "File handling")
 
-;; Load keybindings LAST in core phase - allows binding to all previously loaded functionality
-(safe-load-config 'keybindings "Global keybindings")
-
 ;; Load log writer system AFTER file handling - establishes message logging with rotation
 (safe-load-config 'log-writer "Message logging and log rotation")
 
@@ -317,6 +314,9 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 
 ;; Load aliases BEFORE command palette - aliases may be used in palette
 (safe-load-config 'user-aliases "Function aliases and shortcuts")
+
+;; Load user keybindings AFTER utilities - custom keybindings may reference user functions
+(safe-load-config 'user-keybindings "User keybindings")
 
 ;; Load command palette LAST - provides M-x tracking and command launcher
 (safe-load-config 'command-palette "Command palette with M-x history tracking")
