@@ -121,8 +121,12 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 
 (defun
  init--safe-load-config (config-name &optional description)
- "Safely load a configuration module with comprehensive error handling.
-CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable description."
+ "Safely load a configuration module with error handling, timing, and diagnostics.
+CONFIG-NAME is the module to load (via require).
+DESCRIPTION is an optional human-readable description for user messages.
+
+Tracks load time, records results in `config-load-results' for diagnostics,
+and displays success/error messages. Returns t on success, nil on failure."
  (let ((load-time (current-time))
        (desc (or description (symbol-name config-name))))
    (condition-case err
@@ -190,7 +194,7 @@ CONFIG-NAME is the module to load. DESCRIPTION is an optional human-readable des
 ;; Phase 2: Package and Resource Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load package system BEFORE any packages are used - establishes repositories and use-package
-(init--safe-load-config 'core-packages "Package declarations")
+(init--safe-load-config 'core-packages "Package system setup and declarations")
 
 ;; Load font management BEFORE UI - ensures fonts are available for interface setup
 (init--safe-load-config 'core-fonts "Font management")
