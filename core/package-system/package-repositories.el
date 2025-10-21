@@ -56,6 +56,6 @@
         (package-install 'gnu-elpa-keyring-update)
         (core-message-success "GNU ELPA keyring updated for secure package verification"))
      (error
-      (core-message-warning "Failed to install keyring update: %s" (error-message-string err))))))
+      (core-message-warning "Failed to install keyring update: %s" (error-message-string err)))))))
 
- (provide 'package-repositories))
+(provide 'package-repositories)

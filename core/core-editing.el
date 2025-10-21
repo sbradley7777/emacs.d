@@ -64,7 +64,6 @@
      (send-string-to-terminal (concat "\e]52;c;" encoded "\a"))))
 
   ;; Hook into Emacs clipboard system
-  (setq interprogram-cut-function 'osc-52-copy))
+  (setq interprogram-cut-function 'osc-52-copy)))
 
- ;; Make this module available for loading with (require 'core-editing)
- (provide 'core-editing))
+(provide 'core-editing)

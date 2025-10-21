@@ -254,8 +254,8 @@ Benefits:
       (not noninteractive)
       (core-message-package
        "Skipping package check (%.1f days since last check, checking weekly)"
-       days-since-last-check)))))
+       days-since-last-check))))))
 
- (provide 'package-maintenance))
+(provide 'package-maintenance)
 
 ;;; package-maintenance.el ends here

@@ -35,6 +35,6 @@
   "use-package settings: always-ensure=%s, verbose=%s, min-time=%.2fs"
   use-package-always-ensure
   use-package-verbose
-  use-package-minimum-reported-time)
+  use-package-minimum-reported-time))
 
- (provide 'package-bootstrap))
+(provide 'package-bootstrap)

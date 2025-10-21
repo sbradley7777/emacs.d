@@ -27,6 +27,6 @@
  (unless package--initialized (package-initialize))
 
  ;; Smart package state management with caching
- (smart-package-state-management)
+ (smart-package-state-management))
 
- (provide 'package-manager))
+(provide 'package-manager)

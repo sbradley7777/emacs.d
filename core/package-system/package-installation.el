@@ -69,8 +69,8 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
      (and failed-packages (> max-retries 0))
      (core-message-loading "Retrying failed packages after network refresh...")
      (package-refresh-contents)
-     (core-packages-install-with-retry failed-packages (1- max-retries)))))
+     (core-packages-install-with-retry failed-packages (1- max-retries))))))
 
- (provide 'package-installation))
+(provide 'package-installation)
 
 ;;; package-installation.el ends here

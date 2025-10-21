@@ -317,6 +317,7 @@ Validates tools and resources not managed by Emacs package system:
 
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ )
 
- (provide 'core-diagnostics))
+(provide 'core-diagnostics)
 ;;; core-diagnostics.el ends here

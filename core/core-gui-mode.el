@@ -49,4 +49,6 @@
 
 
  ;; Make this module available for loading with (require 'core-gui-mode)
- (provide 'core-gui-mode))
+ )
+
+(provide 'core-gui-mode)

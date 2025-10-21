@@ -94,8 +94,8 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
         (setq-local python-shell-interpreter local-python-path))
       ;; For local files, set to the actual executable path
       (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python))))
-   (setq python-shell-interpreter python-default-interpreter)))
+   (setq python-shell-interpreter python-default-interpreter))))
 
- (provide 'pyvenv-utils))
+(provide 'pyvenv-utils)
 
 ;;; pyvenv-utils.el ends here

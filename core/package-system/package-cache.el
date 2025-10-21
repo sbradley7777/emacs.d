@@ -78,6 +78,6 @@
   (package-metadata-info))
 
  (defun
-  package-cache-clear () "Clear the package cache file." (interactive) (package-metadata-reset))
+  package-cache-clear () "Clear the package cache file." (interactive) (package-metadata-reset)))
 
- (provide 'package-cache))
+(provide 'package-cache)

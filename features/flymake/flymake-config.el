@@ -19,7 +19,6 @@
     (side . right)
     (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
 
- (setq syntax-checking-window-width features-side-window-width)
+ (setq syntax-checking-window-width features-side-window-width))
 
- ;; Make this module available for loading with (require 'flymake-config)
- (provide 'flymake-config))
+(provide 'flymake-config)

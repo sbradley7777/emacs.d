@@ -132,6 +132,6 @@
     (safe-package-refresh-with-timeout)
     (save-package-state)
     (core-message-success "Package refresh and cache update completed"))
-   (core-message-error "Cannot refresh packages - network unavailable")))
+   (core-message-error "Cannot refresh packages - network unavailable"))))
 
- (provide 'package-network))
+(provide 'package-network)

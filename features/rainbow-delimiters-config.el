@@ -56,7 +56,6 @@
         :background ,features-color-delimiter-error-bg
         :weight bold)))))
 
-  (core-message-config "Rainbow delimiters configured with enhanced bold visibility"))
+  (core-message-config "Rainbow delimiters configured with enhanced bold visibility")))
 
- ;; Make this module available for loading with (require 'rainbow-delimiters-config)
- (provide 'rainbow-delimiters-config))
+(provide 'rainbow-delimiters-config)

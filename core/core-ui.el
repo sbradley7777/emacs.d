@@ -119,4 +119,6 @@
 
 
  ;; Make this module available for loading with (require 'core-ui)
- (provide 'core-ui))
+ )
+
+(provide 'core-ui)

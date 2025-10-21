@@ -119,8 +119,8 @@ Shows available version and indicates if updates are available."
     (when
      (and search-term (not (string-empty-p search-term)))
      ;; Use package-show-package-list with keywords parameter to avoid async refresh issues
-     (package-show-package-list t (list search-term)))))
+     (package-show-package-list t (list search-term))))))
 
- (provide 'package-ui))
+(provide 'package-ui)
 
 ;;; package-ui.el ends here
