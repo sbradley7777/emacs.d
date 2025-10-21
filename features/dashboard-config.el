@@ -3,11 +3,6 @@
 ;;      Dashboard configuration for a customizable startup screen.
 ;;      Displays recent files, bookmarks, and other useful information.
 
-;;; Dependencies:
-;; - core-constants (for configuration values)
-;; - core-utils (for core-utils-with-load-timing)
-;; - dashboard package (for startup screen)
-
 (require 'core-constants)
 (require 'core-utils)
 
