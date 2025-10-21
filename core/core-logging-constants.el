@@ -5,17 +5,20 @@
 ;; Constants are prefixed with 'core-' to avoid naming conflicts.
 
 (require 'core-constants)
+(require 'core-utils)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Logging Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(core-utils-with-load-timing
+ "core-logging-constants.el"
 
-(defconst core-log-max-files 5 "Maximum number of rotated log files to keep.")
-(defconst
- core-log-directory (expand-file-name "log" emacs-local-dir) "Directory for storing log files.")
-(defconst core-messages-log-file "messages.log" "Base name for messages log file.")
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Logging Constants
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;; Provide this module
+ (defconst core-log-max-files 5 "Maximum number of rotated log files to keep.")
+ (defconst
+  core-log-directory (expand-file-name "log" emacs-local-dir) "Directory for storing log files.")
+ (defconst core-messages-log-file "messages.log" "Base name for messages log file."))
+
 (provide 'core-logging-constants)
 
 ;;; core-logging-constants.el ends here
