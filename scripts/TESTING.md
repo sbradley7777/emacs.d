@@ -338,7 +338,7 @@ Understanding what the test script **cannot** validate is crucial for comprehens
 ~/github/emacs.d/scripts/test-config.sh | grep "seconds"
 
 # Test individual modules
-emacs --batch --load ~/github/emacs.d/core/package-system/manager.el --eval "(message \"Package manager test\")"
+emacs --batch --load ~/github/emacs.d/core/package-system/package-manager.el --eval "(message \"Package manager test\")"
 ```
 
 **Solutions**:

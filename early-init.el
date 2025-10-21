@@ -8,6 +8,7 @@
 
 ;; Set up minimal load path for loading constants and utilities early
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "core/package-system" user-emacs-directory))
 
 ;; Load constants first (includes emacs-local-dir and startup constants)
 (require 'core-constants)
@@ -90,7 +91,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Bootstrap the package system and install use-package
-(require 'package-system/manager)
+(require 'package-manager)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Native Compilation Configuration

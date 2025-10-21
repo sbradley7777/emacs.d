@@ -192,8 +192,7 @@ Shows available version and indicates if updates are available."
 Returns a list of available upgrades or nil if failed/no upgrades.
 TIMEOUT-SECONDS specifies how long to wait before timing out."
   (when
-   (and
-    (require 'package-system/network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
+   (and (require 'package-network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
    (condition-case err
        (progn
         (with-timeout
@@ -279,7 +278,7 @@ Removes orphaned package dependencies using package-autoremove and resets metada
     (core-message-loading "Resetting package metadata cache...")
     (condition-case err
         (progn
-         (require 'package-system/metadata)
+         (require 'package-metadata)
          (when (fboundp 'package-metadata-reset) (package-metadata-reset))
          (core-message-success "Package metadata cache reset"))
       (error
@@ -330,9 +329,7 @@ Benefits:
       ;; Only during interactive sessions, not batch mode
       (not noninteractive)
       ;; Only if network is available
-      (require 'package-system/network nil t)
-      (fboundp 'network-responsive-p)
-      (network-responsive-p))
+      (require 'package-network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
      ;; Perform weekly check
      (progn
       (core-message-package "Checking for package updates (weekly check)...")

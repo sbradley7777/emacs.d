@@ -237,7 +237,7 @@ git diff --cached
 
 ### Managing Dependencies
 
-**Version Pinning** ([`core/package-system/repositories.el`](core/package-system/repositories.el)):
+**Version Pinning** ([`core/package-system/package-repositories.el`](core/package-system/package-repositories.el)):
 - **[MELPA Stable](https://stable.melpa.org/)**: Priority 20 (preferred for stability)
 - **[GNU ELPA](https://elpa.gnu.org/)**: Priority 15 (official packages)
 - **[MELPA](https://melpa.org/)**: Priority 10 (latest packages)

@@ -4,8 +4,8 @@
 
 (require 'core-constants)
 (require 'core-utils)
-(require 'package-system/metadata)
-(require 'package-system/repositories)
+(require 'package-metadata)
+(require 'package-repositories)
 (require 'core-packages-utils)
 (require 'features-constants)
 

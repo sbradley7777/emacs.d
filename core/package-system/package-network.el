@@ -1,16 +1,16 @@
-;;; network.el --- Network-Aware Package Management -*- lexical-binding: t -*-
+;;; package-network.el --- Network-Aware Package Management -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Network connectivity testing and timeout-protected package operations.
 ;;      Provides resilient package management with graceful network failure handling.
 
 (require 'core-utils)
 (require 'core-logging)
-(require 'package-system/cache)
-(require 'package-system/metadata)
+(require 'package-cache)
+(require 'package-metadata)
 (require 'url)
 
 (core-utils-with-load-timing
- "network.el"
+ "package-network.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Network Connectivity Testing
@@ -134,5 +134,4 @@
     (core-message-success "Package refresh and cache update completed"))
    (core-message-error "Cannot refresh packages - network unavailable")))
 
- ;; Make this module available for loading with (require 'package-system/network)
- (provide 'package-system/network))
+ (provide 'package-network))

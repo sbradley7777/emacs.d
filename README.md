@@ -45,12 +45,12 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
 - **[`early-init.el`](early-init.el)** - Early initialization for performance optimizations and directory setup
 - **[`core/`](core/)** - Essential Emacs functionality (loaded first in dependency order)
   - **[`package-system/`](core/package-system/)** - Modular package management system
-    - [`manager.el`](core/package-system/manager.el) - Package system orchestration and module loading
-    - [`bootstrap.el`](core/package-system/bootstrap.el) - Use-package installation and configuration
-    - [`cache.el`](core/package-system/cache.el) - Package state caching system (stores cache in `~/.emacs.d/local/package-metadata.el`)
-    - [`network.el`](core/package-system/network.el) - Network-aware package operations
-    - [`repositories.el`](core/package-system/repositories.el) - Repository configuration and security
-    - [`maintenance.el`](core/package-system/maintenance.el) - Package upgrade and cleanup utilities
+    - [`package-manager.el`](core/package-system/package-manager.el) - Package system orchestration and module loading
+    - [`package-bootstrap.el`](core/package-system/package-bootstrap.el) - Use-package installation and configuration
+    - [`package-cache.el`](core/package-system/package-cache.el) - Package state caching system (stores cache in `~/.emacs.d/local/package-metadata.el`)
+    - [`package-network.el`](core/package-system/package-network.el) - Network-aware package operations
+    - [`package-repositories.el`](core/package-system/package-repositories.el) - Repository configuration and security
+    - [`package-maintenance.el`](core/package-system/package-maintenance.el) - Package upgrade and cleanup utilities
   - [`core-constants.el`](core/core-constants.el) - Modern Emacs 30.2+ constants and configuration values
   - [`core-packages.el`](core/core-packages.el) - Package declarations and configurations
   - [`core-fonts.el`](core/core-fonts.el) - Automatic font management for icon packages

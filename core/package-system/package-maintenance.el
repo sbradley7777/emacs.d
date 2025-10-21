@@ -1,14 +1,14 @@
-;;; maintenance.el --- Package Upgrade and Maintenance -*- lexical-binding: t -*-
+;;; package-maintenance.el --- Package Upgrade and Maintenance -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Interactive package upgrade, cleanup, and maintenance utilities.
 ;;      Bulk operations with comprehensive error handling and network awareness.
 
 (require 'core-utils)
 (require 'core-logging)
-(require 'package-system/network)
+(require 'package-network)
 
 (core-utils-with-load-timing
- "maintenance.el"
+ "package-maintenance.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package Management Utilities
@@ -76,5 +76,4 @@
   (package-autoremove)
   (core-message-package "Cleaned up unused packages"))
 
- ;; Make this module available for loading with (require 'package-system/maintenance)
- (provide 'package-system/maintenance))
+ (provide 'package-maintenance))

@@ -1,4 +1,4 @@
-;;; cache.el --- Package State Caching System -*- lexical-binding: t -*-
+;;; package-cache.el --- Package State Caching System -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Package state caching for offline functionality and faster startup.
 ;;      Provides intelligent cache management with freshness validation.
@@ -6,10 +6,10 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'package)
-(require 'package-system/metadata)
+(require 'package-metadata)
 
 (core-utils-with-load-timing
- "cache.el"
+ "package-cache.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package State Caching Configuration
@@ -80,5 +80,4 @@
  (defun
   package-cache-clear () "Clear the package cache file." (interactive) (package-metadata-reset))
 
- ;; Make this module available for loading with (require 'package-system/cache)
- (provide 'package-system/cache))
+ (provide 'package-cache))

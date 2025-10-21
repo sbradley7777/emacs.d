@@ -1,4 +1,4 @@
-;;; bootstrap.el --- Use-Package Bootstrap and Configuration -*- lexical-binding: t -*-
+;;; package-bootstrap.el --- Use-Package Bootstrap and Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Network-aware use-package installation and fallback handling.
 ;;      Global use-package settings and error recovery for offline scenarios.
@@ -6,10 +6,10 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
-(require 'package-system/network)
+(require 'package-network)
 
 (core-utils-with-load-timing
- "bootstrap.el"
+ "package-bootstrap.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Use-Package Bootstrap and Configuration
@@ -37,5 +37,4 @@
   use-package-verbose
   use-package-minimum-reported-time)
 
- ;; Make this module available for loading with (require 'package-system/bootstrap)
- (provide 'package-system/bootstrap))
+ (provide 'package-bootstrap))

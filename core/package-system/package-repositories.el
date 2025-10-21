@@ -1,4 +1,4 @@
-;;; repositories.el --- Repository Configuration and Security -*- lexical-binding: t -*-
+;;; package-repositories.el --- Repository Configuration and Security -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Package repository setup, archive priorities, and security policies.
 ;;      Centralizes trust policies, signature verification, and repository management.
@@ -6,10 +6,10 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
-(require 'package-system/network)
+(require 'package-network)
 
 (core-utils-with-load-timing
- "repositories.el"
+ "package-repositories.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package Repository Configuration
@@ -58,5 +58,4 @@
      (error
       (core-message-warning "Failed to install keyring update: %s" (error-message-string err))))))
 
- ;; Make this module available for loading with (require 'package-system/repositories)
- (provide 'package-system/repositories))
+ (provide 'package-repositories))

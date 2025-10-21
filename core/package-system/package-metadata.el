@@ -1,4 +1,4 @@
-;;; metadata.el --- Package metadata persistence management -*- lexical-binding: t -*-
+;;; package-metadata.el --- Package metadata persistence management -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Centralized management of package system persistent metadata.
 ;;      Handles reading/writing of package refresh timestamps and cache information
@@ -9,7 +9,7 @@
 (require 'core-logging)
 
 (core-utils-with-load-timing
- "metadata.el"
+ "package-metadata.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Constants and Variables
@@ -205,6 +205,6 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
       (core-message-plain "    Package count: %s" (or cache-count "Unknown"))))
    (core-message-package "No package metadata found"))))
 
-(provide 'package-system/metadata)
+(provide 'package-metadata)
 
-;;; metadata.el ends here
+;;; package-metadata.el ends here

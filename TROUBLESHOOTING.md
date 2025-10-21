@@ -688,7 +688,7 @@ The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. Th
 **Solutions**:
 1. **Update all packages**: `M-x package-list-packages`, then `U` followed by `x`
 2. **Clear package cache**: Delete `~/.emacs.d/elpa/` and restart Emacs
-3. **Check package pinning**: Review package-archive-priorities in [`core/package-system/repositories.el`](core/package-system/repositories.el)
+3. **Check package pinning**: Review package-archive-priorities in [`core/package-system/package-repositories.el`](core/package-system/package-repositories.el)
 
 ### Package Metadata Cache Issues
 
