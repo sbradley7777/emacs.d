@@ -3,6 +3,7 @@
 ;;      Utility functions for TRAMP configuration and management,
 ;;      specifically for Python development support.
 
+(require 'core-utils)
 (require 'tramp)
 (require 'core-logging)
 

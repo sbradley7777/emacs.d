@@ -3,6 +3,7 @@
 ;;      Treemacs configuration for file and project tree navigation.
 ;;      Provides a sidebar with project structure, git integration, and enhanced navigation.
 
+(require 'core-utils)
 (require 'treemacs-utils)
 
 (core-utils-with-load-timing

@@ -7,9 +7,7 @@
 ;; Advanced theme utilities for interactive theme management
 ;; Core theme loading is handled by themes-config.el
 
-;;; Dependencies:
-;; - themes-config (for theme variables and core functions)
-
+(require 'core-utils)
 (require 'themes-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

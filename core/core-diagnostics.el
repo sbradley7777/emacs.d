@@ -3,6 +3,7 @@
 ;;      System information detection and configuration diagnostics
 ;;      Provides detailed system context and startup logging for debugging
 
+(require 'core-utils)
 
 (core-utils-with-load-timing
  "core-diagnostics.el"

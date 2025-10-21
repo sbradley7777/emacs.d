@@ -4,6 +4,8 @@
 ;;      This file contains paths, settings, and other constants used
 ;;      across multiple Python-related configuration files.
 
+(require 'core-utils)
+
 (core-utils-with-load-timing
  "python-constants.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -33,7 +35,6 @@
  ;; Auto-detected project tracking (shared between local and remote)
  (defvar pyvenv-project-root nil "Auto-detected project root - set once and remembered.")
 
- (defvar pyvenv-project-name nil "Auto-detected project name for modeline display.")
+ (defvar pyvenv-project-name nil "Auto-detected project name for modeline display."))
 
- ;; Make this module available for loading with (require 'python-constants)
- (provide 'python-constants))
+(provide 'python-constants)

@@ -4,6 +4,7 @@
 ;;      Handles reading/writing of package refresh timestamps and cache information
 ;;      to a unified human-readable metadata file.
 
+(require 'core-utils)
 
 (core-utils-with-load-timing
  "metadata.el"

@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      Configuration for imenu-list package providing sidebar symbol navigation
 
+(require 'core-utils)
 (require 'features-constants)
 
 (core-utils-with-load-timing

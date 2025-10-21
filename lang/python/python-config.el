@@ -3,12 +3,8 @@
 ;;      Basic Python editing settings, indentation, and shell configuration.
 ;;      Supports both python-mode and python-ts-mode with shared configuration.
 
-;;; Dependencies:
-;; - python-constants (for configuration values)
-;; - python (built-in Python mode)
-;; - core-constants (for core-tab-width)
-;; - lang-utils (for shared language setup)
-
+(require 'core-constants)
+(require 'core-utils)
 (require 'python-constants)
 (require 'python)
 (require 'lang-utils)

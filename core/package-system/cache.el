@@ -3,6 +3,7 @@
 ;;      Package state caching for offline functionality and faster startup.
 ;;      Provides intelligent cache management with freshness validation.
 
+(require 'core-utils)
 (require 'package)
 (require 'package-system/metadata)
 

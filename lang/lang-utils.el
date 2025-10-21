@@ -4,7 +4,7 @@
 ;;      Provides common setup functions and hook registration for both
 ;;      regular and tree-sitter language modes.
 
-(require 'core-constants)
+(require 'core-utils)
 (require 'core-logging)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

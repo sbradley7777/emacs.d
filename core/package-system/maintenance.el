@@ -3,6 +3,7 @@
 ;;      Interactive package upgrade, cleanup, and maintenance utilities.
 ;;      Bulk operations with comprehensive error handling and network awareness.
 
+(require 'core-utils)
 (require 'package-system/network)
 
 (core-utils-with-load-timing

@@ -3,6 +3,7 @@
 ;;      Network connectivity testing and timeout-protected package operations.
 ;;      Provides resilient package management with graceful network failure handling.
 
+(require 'core-utils)
 (require 'package-system/cache)
 (require 'package-system/metadata)
 (require 'url)

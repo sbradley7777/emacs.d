@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Display preferences and UI behavior
 
+(require 'core-constants)
+(require 'core-utils)
 
 (core-utils-with-load-timing
  "core-ui.el"

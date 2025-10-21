@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
 
+(require 'core-constants)
+(require 'core-utils)
 
 (core-utils-with-load-timing
  "core-files.el"

@@ -5,11 +5,7 @@
 ;;      environment is activated. The built-in pyvenv modeline indicator is disabled
 ;;      in favor of our custom doom-modeline segment (defined in pyvenv-modeline.el).
 
-;;; Dependencies:
-;; - python-constants (for configuration values)
-;; - pyvenv-utils (for utility functions)
-;; - pyvenv package (for virtual environment management)
-
+(require 'core-utils)
 (require 'python-constants)
 (require 'pyvenv-utils)
 

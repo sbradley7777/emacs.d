@@ -3,6 +3,7 @@
 ;;      Visual indentation guides using highlight-indent-guides.
 ;;      Provides column-based indentation visualization for better code structure understanding.
 
+(require 'core-utils)
 (require 'features-constants)
 
 (core-utils-with-load-timing

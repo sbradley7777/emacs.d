@@ -3,6 +3,7 @@
 ;;      Enhanced rainbow delimiters configuration with bold, high-visibility colors.
 ;;      Provides color-coded parentheses, brackets, and braces for better code navigation.
 
+(require 'core-utils)
 (require 'features-constants)
 
 (core-utils-with-load-timing

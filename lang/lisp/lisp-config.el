@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      Emacs Lisp specific settings and formatting
 
+(require 'core-utils)
 
 (core-utils-with-load-timing
  "lisp-config.el"
@@ -27,7 +28,6 @@
   elisp-autofmt
   :hook (emacs-lisp-mode . elisp-autofmt-mode)
   :bind (:map emacs-lisp-mode-map ("C-c C-f" . elisp-autofmt-buffer))
-  :config (core-message-config "elisp-autofmt configured for automatic formatting on save"))
+  :config (core-message-config "elisp-autofmt configured for automatic formatting on save")))
 
- ;; Make this module available for loading with (require 'lisp-config)
- (provide 'lisp-config))
+(provide 'lisp-config)

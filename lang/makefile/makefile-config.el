@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Makefile mode support and configuration for Makefiles with proper tab handling
 
+(require 'core-constants)
+(require 'core-utils)
 (require 'make-mode)
 (require 'highlight-indent-guides)
 
@@ -110,7 +112,6 @@
  ;; Automatically validate Makefile syntax when opening
  (add-hook
   'makefile-mode-hook
-  (lambda () "Validate Makefile syntax on open." (run-with-timer 1 nil 'makefile-validate-tabs)))
+  (lambda () "Validate Makefile syntax on open." (run-with-timer 1 nil 'makefile-validate-tabs))))
 
- ;; Make this module available for loading with (require 'makefile-config)
- (provide 'makefile-config))
+(provide 'makefile-config)

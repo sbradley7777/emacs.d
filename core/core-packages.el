@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      Package installation and configuration using use-package.
 
+(require 'core-utils)
 (require 'package-system/metadata)
 (require 'package-system/repositories)
 (require 'core-packages-utils)

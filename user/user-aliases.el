@@ -3,6 +3,7 @@
 ;;      Function aliases to improve usability and provide shortcuts
 ;;      for commonly used Emacs functions.
 
+(require 'core-utils)
 
 (core-utils-with-load-timing
  "user-aliases.el"
@@ -12,7 +13,6 @@
  ;; Use shorter y/n prompts instead of yes/no
  (defalias 'yes-or-no-p 'y-or-n-p)
  (defalias 'list-themes 'theme-utils-list-themes)
- (defalias 'switch-theme 'theme-utils-switch-theme)
+ (defalias 'switch-theme 'theme-utils-switch-theme))
 
- ;; Make this module available for loading with (require 'aliases)
- (provide 'user-aliases))
+(provide 'user-aliases)

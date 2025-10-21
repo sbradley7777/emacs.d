@@ -3,10 +3,7 @@
 ;;      Provides a custom clickable Python virtual environment indicator for doom-modeline.
 ;;      Shows a Python icon when a venv is active and displays project info when clicked.
 
-;;; Dependencies:
-;; - python-constants (for configuration values)
-;; - pyvenv-utils (for shared utility functions)
-
+(require 'core-utils)
 (require 'python-constants)
 (require 'pyvenv-utils)
 (require 'core-logging)

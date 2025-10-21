@@ -10,9 +10,7 @@
 ;; - Breadcrumb customizations
 ;; - Other theme-specific tweaks
 
-;;; Dependencies:
-;; - doom-themes package
-
+(require 'core-utils)
 (require 'doom-themes)
 
 (core-utils-with-load-timing

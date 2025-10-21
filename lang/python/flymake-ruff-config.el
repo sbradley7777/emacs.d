@@ -3,6 +3,7 @@
 ;;      Configuration for flymake-ruff with custom diagnostics buffer formatting
 ;;      that adds error code extraction in a separate column.
 
+(require 'core-utils)
 (require 'flymake-utils)
 
 (core-utils-with-load-timing

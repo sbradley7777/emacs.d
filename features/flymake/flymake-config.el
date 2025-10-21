@@ -2,10 +2,7 @@
 ;;; Commentary:
 ;;      Global Flymake configuration for diagnostic display and behavior
 
-;;; Dependencies:
-;; - features-constants (for window width configuration)
-;; - flymake (built-in diagnostic framework)
-
+(require 'core-utils)
 (require 'features-constants)
 
 (core-utils-with-load-timing

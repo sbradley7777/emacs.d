@@ -4,10 +4,6 @@
 ;;      Shows added, modified, and deleted lines with colored bars.
 ;;      Works passively alongside terminal git workflow.
 
-;;; Dependencies:
-;; - diff-hl (package)
-;; - core-utils (for load timing)
-
 (require 'core-utils)
 
 (core-utils-with-load-timing

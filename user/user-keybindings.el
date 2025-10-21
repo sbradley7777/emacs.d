@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;      User-specific keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
 
+(require 'core-utils)
 (require 'user-utils)
 
 (core-utils-with-load-timing
@@ -61,8 +62,8 @@
  ;; Page down/up the buffer with smart boundaries
  (global-set-key (kbd "<f11>") 'user-smart-page-up) ; Page up with smart boundary handling
  (global-set-key (kbd "<f12>") 'user-smart-page-down) ; Page down with smart boundary handling
+ )
 
- ;; Make this module available for loading with (require 'user-keybindings)
- (provide 'user-keybindings))
+(provide 'user-keybindings)
 
 ;;; user-keybindings.el ends here

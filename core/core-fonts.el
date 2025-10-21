@@ -15,6 +15,8 @@
 ;;      - Emacs uses fonts directly for icon display in buffers and UI elements
 ;;      - Terminal integration requires manual font configuration in terminal settings
 
+(require 'core-constants)
+(require 'core-utils)
 
 (core-utils-with-load-timing
  "core-fonts.el"

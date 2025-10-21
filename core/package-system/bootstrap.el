@@ -3,6 +3,8 @@
 ;;      Network-aware use-package installation and fallback handling.
 ;;      Global use-package settings and error recovery for offline scenarios.
 
+(require 'core-constants)
+(require 'core-utils)
 (require 'package-system/network)
 
 (core-utils-with-load-timing
