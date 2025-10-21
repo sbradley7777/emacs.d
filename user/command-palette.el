@@ -12,6 +12,8 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
+(require 'package-ui)
+(require 'package-maintenance)
 
 (core-utils-with-load-timing
  "command-palette.el"

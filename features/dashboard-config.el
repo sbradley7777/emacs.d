@@ -5,6 +5,8 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'package-ui)
+(require 'package-maintenance)
 
 (core-utils-with-load-timing
  "dashboard-config.el"

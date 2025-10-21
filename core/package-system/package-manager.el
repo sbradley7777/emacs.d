@@ -16,7 +16,9 @@
  (require 'package-network) ; Network-aware package operations
  (require 'package-repositories) ; Repository configuration and security
  (require 'package-bootstrap) ; Use-package installation and configuration
+ (require 'package-installation) ; Robust package installation utilities
  (require 'package-maintenance) ; Package upgrade and cleanup utilities
+ (require 'package-ui) ; Interactive package management interfaces
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package System Initialization

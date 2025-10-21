@@ -6,7 +6,8 @@
 (require 'core-utils)
 (require 'package-metadata)
 (require 'package-repositories)
-(require 'core-packages-utils)
+(require 'package-installation)
+(require 'package-maintenance)
 (require 'features-constants)
 
 (core-utils-with-load-timing
