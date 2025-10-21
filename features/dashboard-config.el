@@ -99,6 +99,6 @@
      dashboard-insert-footer))
   (dashboard-setup-startup-hook)
   ;; Force dashboard refresh when opening files at startup
-  (add-hook 'emacs-startup-hook 'dashboard-insert-startupify-lists)))
+  (add-hook 'emacs-startup-hook #'dashboard-insert-startupify-lists)))
 
 (provide 'dashboard-config)

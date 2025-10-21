@@ -78,7 +78,7 @@ BASE-FILENAME is the base name without directory."
 ;; Hook Setup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-hook 'kill-emacs-hook 'core-save-messages-log)
+(add-hook 'kill-emacs-hook #'core-save-messages-log)
 (core-message-config "Message logging configured with %d file rotation" core-log-max-files)
 
 (provide 'core-log-writer)

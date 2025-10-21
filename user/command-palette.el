@@ -550,11 +550,11 @@ Returns width as number of columns needed to display content."
  (command-palette--load-history)
 
  ;; Enable M-x command tracking via post-command-hook
- (add-hook 'post-command-hook 'command-palette--track-command)
+ (add-hook 'post-command-hook #'command-palette--track-command)
 
  ;; Save on exit
- (add-hook 'kill-emacs-hook 'command-palette--save-history)
- (add-hook 'kill-emacs-hook 'command-palette--save-favorites)
+ (add-hook 'kill-emacs-hook #'command-palette--save-history)
+ (add-hook 'kill-emacs-hook #'command-palette--save-favorites)
 
  (core-message-success "Command palette loaded! F9 to toggle (M-x commands auto-tracked)"))
 

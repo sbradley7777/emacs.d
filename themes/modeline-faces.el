@@ -43,7 +43,7 @@ THEME should be a symbol like 'doom-1337 or 'doom-zenburn."
    (modeline-faces-apply-for-theme themes-config-preferred-theme)))
 
  ;; Add to theme load hooks
- (add-hook 'after-load-theme-hook 'modeline-faces-on-theme-change))
+ (add-hook 'after-load-theme-hook #'modeline-faces-on-theme-change))
 
 (provide 'modeline-faces)
 

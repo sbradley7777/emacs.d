@@ -41,13 +41,13 @@
     '(diff-hl-change ((t (:foreground "#ffe66d" :background unspecified))))))
 
   ;; Update diff indicators after save
-  (add-hook 'after-save-hook 'diff-hl-update)
+  (add-hook 'after-save-hook #'diff-hl-update)
 
   ;; Enable in dired buffers to show file status
-  (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
+  (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
 
   ;; Refresh diff-hl when magit refreshes (if magit is ever added)
-  (with-eval-after-load 'magit (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))))
+  (with-eval-after-load 'magit (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))))
 
 (provide 'diff-hl-config)
 

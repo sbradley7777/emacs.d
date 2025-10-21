@@ -30,8 +30,8 @@
    (flymake-mode 1))
 
   ;; Configure flymake-ruff for both python-mode and python-ts-mode
-  (add-hook 'python-mode-hook 'flymake-ruff-setup)
-  (add-hook 'python-ts-mode-hook 'flymake-ruff-setup))
+  (add-hook 'python-mode-hook #'flymake-ruff-setup)
+  (add-hook 'python-ts-mode-hook #'flymake-ruff-setup))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Ruff Error Code Extraction

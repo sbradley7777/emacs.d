@@ -20,7 +20,7 @@
  ;; Add hook to convert tabs to spaces when saving Emacs Lisp files
  (add-hook
   'emacs-lisp-mode-hook
-  (lambda () (add-hook 'before-save-hook 'lisp-config-untabify-buffer nil t)))
+  (lambda () (add-hook 'before-save-hook #'lisp-config-untabify-buffer nil t)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Automatic formatting with elisp-autofmt

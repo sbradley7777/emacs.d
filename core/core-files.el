@@ -79,7 +79,7 @@
     (core-files-log-backup-operation buffer-file-name))))
 
  ;; Hook into auto-save operations
- (add-hook 'auto-save-hook 'core-files-log-auto-save-operation)
+ (add-hook 'auto-save-hook #'core-files-log-auto-save-operation)
 
  ;; Make this module available for loading with (require 'files)
  )

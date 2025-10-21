@@ -37,7 +37,7 @@
 
  (lang-register-dual-mode-hooks js-json json-setup-common)
  ;; Note: json-ts-mode hook is registered separately since the base mode name differs
- (add-hook 'json-ts-mode-hook 'json-setup-common)
+ (add-hook 'json-ts-mode-hook #'json-setup-common)
 
  (core-message-success "JSON configuration loaded (js-json-mode and json-ts-mode)"))
 

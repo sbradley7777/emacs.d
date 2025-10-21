@@ -92,7 +92,7 @@ Shows available version and indicates if updates are available."
 
      ;; Collect packages with updates
      (dolist
-      (pkg (mapcar 'car package-alist))
+      (pkg (mapcar #'car package-alist))
       (let* ((installed-desc (cadr (assq pkg package-alist)))
              (installed-version (package-desc-version installed-desc))
              (available-desc (cadr (assq pkg package-archive-contents)))
@@ -147,7 +147,7 @@ Shows available version and indicates if updates are available."
 
      ;; Insert package list
      (dolist
-      (pkg (sort (mapcar 'car package-alist) 'string<))
+      (pkg (sort (mapcar #'car package-alist) #'string<))
       (let* ((desc (cadr (assq pkg package-alist)))
              (installed-version (package-desc-version desc))
              (available-desc (cadr (assq pkg package-archive-contents)))
@@ -213,7 +213,7 @@ Refreshes package contents and displays a list of packages with available update
 showing current version -> new version for each package."
   (interactive)
   (core-message-package "Checking for package updates (manual check)...")
-  (core-message-debug "Configured repositories: %s" (mapcar 'car package-archives))
+  (core-message-debug "Configured repositories: %s" (mapcar #'car package-archives))
   (let ((upgrades (core-packages-safe-refresh-and-check core-package-refresh-timeout)))
     (if
      upgrades
@@ -336,7 +336,7 @@ Benefits:
      ;; Perform weekly check
      (progn
       (core-message-package "Checking for package updates (weekly check)...")
-      (core-message-debug "Configured repositories: %s" (mapcar 'car package-archives))
+      (core-message-debug "Configured repositories: %s" (mapcar #'car package-archives))
       ;; Refresh package contents with timeout protection
       (condition-case err
           (progn
