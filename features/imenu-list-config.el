@@ -3,6 +3,7 @@
 ;;      Configuration for imenu-list package providing sidebar symbol navigation
 
 (require 'core-utils)
+(require 'core-logging)
 (require 'features-constants)
 
 (core-utils-with-load-timing

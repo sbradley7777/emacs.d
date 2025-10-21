@@ -5,6 +5,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'core-logging)
 (require 'package-system/network)
 
 (core-utils-with-load-timing

@@ -3,6 +3,7 @@
 ;;      Emacs Lisp specific settings and formatting
 
 (require 'core-utils)
+(require 'core-logging)
 
 (core-utils-with-load-timing
  "lisp-config.el"

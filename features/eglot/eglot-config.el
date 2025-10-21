@@ -5,8 +5,10 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'core-logging)
 (require 'tramp-utils)
 (require 'eglot-constants)
+(require 'features-constants)
 
 (core-utils-with-load-timing
  "eglot-config.el"

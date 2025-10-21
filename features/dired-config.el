@@ -18,6 +18,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'core-logging)
 
 (core-utils-with-load-timing
  "dired-config.el"

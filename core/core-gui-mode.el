@@ -3,6 +3,7 @@
 ;;      GUI mode settings, UI elements control, and window management setup.
 
 (require 'core-utils)
+(require 'core-logging)
 
 (core-utils-with-load-timing
  "core-gui-mode.el"

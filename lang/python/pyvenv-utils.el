@@ -4,6 +4,7 @@
 ;;      pyvenv-remote.el for Python virtual environment management.
 
 (require 'core-utils)
+(require 'core-logging)
 (require 'python-constants)
 
 (core-utils-with-load-timing

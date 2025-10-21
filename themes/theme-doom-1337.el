@@ -11,6 +11,7 @@
 ;; - Other theme-specific tweaks
 
 (require 'core-utils)
+(require 'core-logging)
 (require 'doom-themes)
 
 (core-utils-with-load-timing

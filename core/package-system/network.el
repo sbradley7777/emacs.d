@@ -4,6 +4,7 @@
 ;;      Provides resilient package management with graceful network failure handling.
 
 (require 'core-utils)
+(require 'core-logging)
 (require 'package-system/cache)
 (require 'package-system/metadata)
 (require 'url)

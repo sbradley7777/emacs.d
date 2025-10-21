@@ -6,6 +6,7 @@
 ;;      in favor of our custom doom-modeline segment (defined in pyvenv-modeline.el).
 
 (require 'core-utils)
+(require 'core-logging)
 (require 'python-constants)
 (require 'pyvenv-utils)
 

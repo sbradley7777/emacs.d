@@ -4,7 +4,9 @@
 ;;      Provides seamless Python virtual environment support for remote files.
 
 (require 'core-utils)
+(require 'core-logging)
 (require 'pyvenv-config)
+(require 'pyvenv-utils)
 (require 'tramp-utils)
 
 (core-utils-with-load-timing

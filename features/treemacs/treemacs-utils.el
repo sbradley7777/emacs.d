@@ -5,6 +5,7 @@
 
 (require 'core-constants)
 (require 'core-utils)
+(require 'core-logging)
 
 (core-utils-with-load-timing
  "treemacs-utils.el"

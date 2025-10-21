@@ -4,6 +4,7 @@
 ;;      Provides intelligent cache management with freshness validation.
 
 (require 'core-utils)
+(require 'core-logging)
 (require 'package)
 (require 'package-system/metadata)
 
