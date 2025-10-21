@@ -18,33 +18,37 @@
 ;;; Code:
 
 (require 'core-constants)
+(require 'core-utils)
 (require 'tramp-constants)
 (require 'tramp-utils)
 
 ;; Load TRAMP
 (require 'tramp)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(core-utils-with-load-timing
+ "tramp-config.el"
 
-;; Default connection method and shell
-(setq tramp-default-method "ssh")
-(setq tramp-default-remote-shell tramp-default-shell)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Configuration
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Cache and auto-save locations
-(setq tramp-persistency-file-name (expand-file-name "tramp" emacs-local-dir))
-(setq tramp-auto-save-directory (expand-file-name "tramp-autosave" emacs-local-dir))
+ ;; Default connection method and shell
+ (setq tramp-default-method "ssh")
+ (setq tramp-default-remote-shell tramp-default-shell)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Remote Path Configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Cache and auto-save locations
+ (setq tramp-persistency-file-name (expand-file-name "tramp" emacs-local-dir))
+ (setq tramp-auto-save-directory (expand-file-name "tramp-autosave" emacs-local-dir))
 
-;; Add each additional path to tramp-remote-path
-(dolist (path tramp-user-paths) (add-to-list 'tramp-remote-path path))
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Remote Path Configuration
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Include user's PATH from shell profile
-(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+ ;; Add each additional path to tramp-remote-path
+ (dolist (path tramp-user-paths) (add-to-list 'tramp-remote-path path))
+
+ ;; Include user's PATH from shell profile
+ (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (provide 'tramp-config)
 
