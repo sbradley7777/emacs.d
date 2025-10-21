@@ -110,13 +110,13 @@
 ;; in compilation buffers. This is an acceptable limitation for Snap environments.
 
 (defun
- running-in-snap-p
+ early-init--running-in-snap-p
  ()
  "Return non-nil if Emacs is running from a Snap package."
  (string-match-p "/snap/" invocation-directory))
 
 (if
- (running-in-snap-p)
+ (early-init--running-in-snap-p)
  (progn
   ;; Disable native compilation for Snap due to library compatibility issues
   (setq native-comp-deferred-compilation nil)

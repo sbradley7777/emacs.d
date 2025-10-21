@@ -37,13 +37,13 @@ THEME should be a symbol like 'doom-1337 or 'doom-zenburn."
 
  ;; Also hook into theme loading to reapply faces when theme changes
  (defun
-  modeline-faces-on-theme-change (&rest _) "Apply modeline faces when theme changes."
+  modeline-faces--on-theme-change (&rest _) "Apply modeline faces when theme changes."
   (when
    (and (boundp 'themes-config-preferred-theme) (featurep 'doom-modeline))
    (modeline-faces-apply-for-theme themes-config-preferred-theme)))
 
  ;; Add to theme load hooks
- (add-hook 'after-load-theme-hook #'modeline-faces-on-theme-change))
+ (add-hook 'after-load-theme-hook #'modeline-faces--on-theme-change))
 
 (provide 'modeline-faces)
 
