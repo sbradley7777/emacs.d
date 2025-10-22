@@ -11,7 +11,6 @@
 
 (core-utils-with-load-timing
  "pyvenv-remote.el"
-
  (defun
   pyvenv-remote-find-venv (remote-dir)
   "Find virtual environment for remote directory.

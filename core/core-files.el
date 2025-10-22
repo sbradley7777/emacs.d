@@ -8,7 +8,6 @@
 
 (core-utils-with-load-timing
  "core-files.el"
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Don't litter OS with autosaves (~) and backup (#) files. Based on:
  ;; http://snarfed.org/gnu_emacs_backup_files and

@@ -16,7 +16,6 @@
 
 (core-utils-with-load-timing
  "theme-doom-1337.el"
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Color Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -195,6 +194,7 @@
   (core-message-theme "Applied doom-1337 customizations")))
 
 ;; Make this module available for loading with (require 'theme-doom-1337)
+
 (provide 'theme-doom-1337)
 
 ;;; theme-doom-1337.el ends here

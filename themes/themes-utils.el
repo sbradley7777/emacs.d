@@ -13,7 +13,6 @@
 
 (core-utils-with-load-timing
  "themes-utils.el"
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Generic Theme Customization Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -168,6 +167,7 @@
        (goto-char (point-min)))))))
 
 ;; Make this module available for loading with (require 'themes-utils)
+
 (provide 'themes-utils)
 
 ;;; themes-utils.el ends here

@@ -9,7 +9,6 @@
 
 (core-utils-with-load-timing
  "core-diagnostics.el"
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Operating System Detection
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -318,4 +317,5 @@ Validates tools and resources not managed by Emacs package system:
  )
 
 (provide 'core-diagnostics)
+
 ;;; core-diagnostics.el ends here

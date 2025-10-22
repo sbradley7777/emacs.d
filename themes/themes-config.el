@@ -14,7 +14,6 @@
 
 (core-utils-with-load-timing
  "themes-config.el"
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Theme Configuration Variables
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -111,6 +110,7 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  (add-hook 'emacs-startup-hook #'themes-config-load-configured-theme))
 
 ;; Make this module available for loading with (require 'themes-config)
+
 (provide 'themes-config)
 
 ;;; themes-config.el ends here

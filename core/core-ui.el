@@ -7,7 +7,6 @@
 
 (core-utils-with-load-timing
  "core-ui.el"
-
  ;; Modern line number display (Emacs 30.2+)
  (global-display-line-numbers-mode 1)
  (setq

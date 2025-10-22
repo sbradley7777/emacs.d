@@ -113,6 +113,7 @@ Example:
     (nreverse results))))
 
 ;;; Provide this module
+
 (provide 'core-utils)
 
 ;;; core-utils.el ends here

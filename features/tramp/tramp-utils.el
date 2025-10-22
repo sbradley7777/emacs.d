@@ -9,7 +9,6 @@
 
 (core-utils-with-load-timing
  "tramp-utils.el"
-
  (defun
   tramp-create-python-connection-profile (profile-name host venv-path &optional python-path)
   "Create connection-local profile for Python virtual environment.
@@ -56,4 +55,5 @@ Only works when called from a buffer visiting a remote file via TRAMP."
  (core-message-debug "TRAMP utilities loaded"))
 
 (provide 'tramp-utils)
+
 ;;; tramp-utils.el ends here
