@@ -34,9 +34,7 @@
   "File storing command palette favorites.")
 
  (defconst command-palette-buffer-name "*Command Palette*" "Name of the command palette buffer.")
-
  (defconst command-palette-history-size 20 "Maximum number of commands to store in history.")
-
  (defconst
   command-palette-default-favorites
   '(("Menu Bar Open" . menu-bar-open)
@@ -79,7 +77,6 @@
  ;; Variables
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defvar command-palette-window nil "Window displaying the command palette.")
-
  (defvar
   command-palette-history
   (make-ring command-palette-history-size)

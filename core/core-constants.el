@@ -59,7 +59,6 @@
  (defconst
   core-gc-startup-threshold most-positive-fixnum "GC threshold during startup (maximum possible).")
  (defconst core-gc-normal-threshold (* 8 1000 1000) "Normal GC threshold for Emacs 30.2+ (8MB).")
-
  (defconst
   core-gc-long-session-threshold
   (* 200 1000 1000)

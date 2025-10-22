@@ -31,6 +31,5 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Auto-detected project tracking (shared between local and remote)
  (defvar pyvenv-project-root nil "Auto-detected project root - set once and remembered.")
-
  (defvar pyvenv-project-name nil "Auto-detected project name for modeline display."))
 (provide 'python-constants)
