@@ -36,7 +36,10 @@
   (when (fboundp 'dimmer-configure-which-key) (dimmer-configure-which-key))
 
   ;; Exclude certain buffers from being dimmed
-  (setq dimmer-exclusion-regexp-list '("^ \\*Minibuf-[0-9]+\\*$" "^ \\*Echo.*\\*$"))
+  ;; Flymake diagnostics buffer should remain bright so errors are easily visible
+  (setq
+   dimmer-exclusion-regexp-list
+   '("^ \\*Minibuf-[0-9]+\\*$" "^ \\*Echo.*\\*$" "^\\*Flymake diagnostics.*\\*$"))
 
   (core-message-success "Dimmer configured for dark theme - inactive windows will be dimmed")
   (core-message-info "Dimming: foreground only, HSL color space, 80%% intensity"))
