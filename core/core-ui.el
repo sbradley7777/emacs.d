@@ -8,7 +8,6 @@
 (core-utils-with-load-timing
  "core-ui.el"
 
-
  ;; Modern line number display (Emacs 30.2+)
  (global-display-line-numbers-mode 1)
  (setq
@@ -103,7 +102,6 @@
     (let ((recentf-auto-cleanup 'never))
       (recentf-save-list)))))
 
-
  (normal-erase-is-backspace-mode 0)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -116,7 +114,6 @@
 
  ;; Enable xterm mouse mode for consistent mouse selection in terminal
  (unless (display-graphic-p) (xterm-mouse-mode 1))
-
 
  ;; Make this module available for loading with (require 'core-ui)
  )

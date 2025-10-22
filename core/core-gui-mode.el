@@ -47,7 +47,6 @@
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (core-message-info "macOS native fullscreen enabled"))
 
-
  ;; Make this module available for loading with (require 'core-gui-mode)
  )
 

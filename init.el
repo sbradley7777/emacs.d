@@ -91,7 +91,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  (> gc-cons-threshold core-gc-check-threshold)
  (core-message-warning "GC threshold not optimized by early-init.el - startup may be slower"))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Native Compilation Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -106,7 +105,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  (add-to-list 'native-comp-deferred-compilation-deny-list "/snap/emacs/.*"))
 
 (add-hook 'native-comp-init-hook #'init--configure-native-comp-for-snap)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Error handling and robustness
@@ -136,7 +134,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
    (core-message-debug
     "Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
    (core-message-plain "====================================\n")))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configuration loading infrastructure
@@ -330,7 +327,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
    (core-message-debug "Loading dev.el...")
    (load dev-config 'noerror)
    (core-message-success "dev.el loaded successfully")))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization complete - show diagnostics

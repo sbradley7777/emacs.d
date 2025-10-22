@@ -47,7 +47,6 @@ FILENAME should be the font file name (e.g., 'NFM.ttf')."
  ;; Font Installation Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
  (defun
   fonts-install-nerd-icons ()
   "Install nerd-icons fonts if not already installed.
