@@ -194,6 +194,10 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  :after core-packages
  :description "Visual indentation guides")
 (load-module
+ dimmer-config
+ :after core-packages
+ :description "Dim inactive windows for visual focus")
+(load-module
  imenu-list-config
  :after (core-packages completion-config)
  :description "Symbol sidebar navigation")

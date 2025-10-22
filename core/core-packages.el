@@ -26,7 +26,8 @@
     kind-icon
     nerd-icons-dired
     treemacs-nerd-icons
-    dashboard)
+    dashboard
+    dimmer)
   "UI/UX essentials for all users.
 Themes, visual enhancements, icons, and interface helpers.")
 

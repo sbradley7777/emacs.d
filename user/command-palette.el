@@ -41,6 +41,7 @@
     ("Search Packages" . search-packages)
     ("Show Package Upgrades" . show-package-upgrades)
     ("List Themes" . list-themes)
+    ("Toggle Dimmer" . toggle-dimmer)
     ("Pyvenv Activate" . pyvenv-activate)
     ("Pyvenv Deactivate" . pyvenv-deactivate)
     ("Pyvenv Workon" . pyvenv-workon)
