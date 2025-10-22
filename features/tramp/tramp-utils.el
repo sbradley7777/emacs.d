@@ -26,13 +26,11 @@ PYTHON-PATH: Optional additional Python path"
        (tramp-remote-process-environment . ,env-vars)))
 
     (connection-local-set-profiles `(:application tramp :machine ,host) profile-name)))
-
  (defun
   tramp-is-remote-file
   (&optional file)
   "Check if FILE (or current buffer file) is accessed via TRAMP."
   (file-remote-p (or file default-directory)))
-
  (defun
   core-utils-check-command-in-path-remote-host (command)
   "Check if COMMAND exists in PATH on remote host (for TRAMP buffers).

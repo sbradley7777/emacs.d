@@ -50,7 +50,6 @@ Returns the count of .so/.dylib grammar files found in the tree-sitter grammar d
 MODE-SYMBOL should be a symbol like 'python-ts-mode or 'python-mode.
 Returns t if the mode is a tree-sitter mode (ends with -ts-mode), nil otherwise."
   (when mode-symbol (string-match-p "-ts-mode$" (symbol-name mode-symbol))))
-
  (defun
   treesit-utils-extract-lang-from-mode (mode-symbol)
   "Extract language name from tree-sitter MODE-SYMBOL.

@@ -12,7 +12,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Ensure package system is initialized
  (unless package--initialized (package-initialize))
-
  (use-package
   rainbow-delimiters
   :ensure t

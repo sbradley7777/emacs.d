@@ -18,7 +18,6 @@
   "Common setup for both c-mode and c-ts-mode."
   (lang-setup-full 'c-basic-offset core-tab-width)
   (c-set-offset 'substatement-open 0))
-
  (defun
   c++-setup-common
   ()

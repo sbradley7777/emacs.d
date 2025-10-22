@@ -21,7 +21,6 @@ Shows available version and indicates if updates are available."
 
     ;; Ensure package archive contents are loaded
     (unless package-archive-contents (package-refresh-contents))
-
     (with-current-buffer
      buf (setq buffer-read-only nil) (erase-buffer)
 
@@ -108,7 +107,6 @@ Shows available version and indicates if updates are available."
 
      (goto-char (point-min)) (setq buffer-read-only t) (help-mode))
     (switch-to-buffer buf)))
-
  (defun
   search-packages () "Search for packages by name or keyword." (interactive)
   (let ((search-term (read-string "Search packages: ")))

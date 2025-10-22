@@ -28,7 +28,6 @@
      (core-message-warning
       "Some doom-themes features disabled for terminal compatibility: %s"
       (error-message-string err)))))
-
  (defun
   themes-utils--apply-customizations (theme) "Apply customizations for the specified THEME."
   ;; Apply doom-themes configuration for all themes
@@ -46,7 +45,6 @@
    (seq-filter
     (lambda (theme) (string-match-p "^doom-" (symbol-name theme))) (custom-available-themes))
    (lambda (a b) (string< (symbol-name a) (symbol-name b)))))
-
  (defun
   themes-utils--get-other-themes
   ()
@@ -121,7 +119,6 @@
 
     ;; Add some padding
     (setq max-width (+ max-width 4))
-
     (with-output-to-temp-buffer
      buffer-name (dolist (line (reverse lines)) (princ line) (princ "\n")))
 
@@ -157,7 +154,6 @@
        (local-set-key (kbd "RET") select-theme-fn)
        (local-set-key (kbd "q") 'quit-window)
        (local-set-key (kbd "C-g") 'quit-window)
-
        (setq buffer-read-only t)
        (goto-char (point-min)))))))
 

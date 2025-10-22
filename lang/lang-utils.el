@@ -15,7 +15,6 @@
   "Apply basic editing settings common to all language modes.
 These settings are applied before language-specific configuration."
   (electric-indent-mode 1) (setq indent-tabs-mode nil))
-
  (defun
   lang-setup-ui-enhancements
   ()
@@ -24,7 +23,6 @@ These settings are applied before language-specific configuration."
   (show-paren-mode 1)
   (hl-line-mode 1)
   (display-line-numbers-mode 1))
-
  (defun
   lang-apply-indent-settings
   (indent-var indent-value &optional extra-vars)
@@ -67,7 +65,6 @@ Sets INDENT-VAR to INDENT-VALUE and applies EXTRA-INDENT-VARS if provided.
 Use for simple file formats (JSON, YAML, etc.)."
   (lang-setup-basic-editing)
   (lang-apply-indent-settings indent-var indent-value extra-indent-vars))
-
  (defun
   lang-setup-full
   (indent-var indent-value &optional extra-indent-vars)

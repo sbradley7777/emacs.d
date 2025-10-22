@@ -22,17 +22,14 @@
   command-palette-data-dir
   (expand-file-name "command_palette/" emacs-local-dir)
   "Directory for command palette persistent data.")
-
  (defconst
   command-palette-history-file
   (expand-file-name "command-palette-history.el" command-palette-data-dir)
   "File storing command palette history.")
-
  (defconst
   command-palette-favorites-file
   (expand-file-name "command-palette-favorites.el" command-palette-data-dir)
   "File storing command palette favorites.")
-
  (defconst command-palette-buffer-name "*Command Palette*" "Name of the command palette buffer.")
  (defconst command-palette-history-size 20 "Maximum number of commands to store in history.")
  (defconst
@@ -81,15 +78,12 @@
   command-palette-history
   (make-ring command-palette-history-size)
   "Ring buffer storing recently executed commands from palette.")
-
  (defvar
   command-palette-favorites
   nil
   "List of favorite commands displayed in the palette. Loaded from file or defaults.")
-
  (defvar
   command-palette-previous-window nil "Window that was active before opening the command palette.")
-
  (defvar
   command-palette-mode-map
   (let ((map (make-sparse-keymap)))
@@ -98,7 +92,6 @@
     (define-key map (kbd "r") 'command-palette-remove-favorite)
     map)
   "Keymap for command palette buffer.")
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Directory Management
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -232,7 +225,6 @@ If SILENT is non-nil, suppress success messages. Returns t if successful, nil ot
 Example: 'find-file' becomes 'Find File'."
   (let ((name (symbol-name cmd-symbol)))
     (capitalize (replace-regexp-in-string "-" " " name))))
-
  (defun
   command-palette--add-to-history (cmd-symbol)
   "Add CMD-SYMBOL to command history if it's not excluded or in favorites.
@@ -289,7 +281,6 @@ Switches to the previous window before executing the command, then closes the pa
            (window-list)))))
     (when target-window (select-window target-window))
     (call-interactively cmd-symbol)))
-
  (defun
   command-palette--make-button
   (label action face)
@@ -308,7 +299,6 @@ Switches to the previous window before executing the command, then closes the pa
      'help-echo
      (format "Click to execute: %s" label))
     (insert "\n")))
-
  (defun
   command-palette--calculate-window-width ()
   "Calculate window width based on longest line in current buffer.
@@ -323,7 +313,6 @@ Returns width as number of columns needed to display content."
       (forward-line 1))
      ;; Add 2 for a small margin
      (+ max-width 2))))
-
  (defun
   command-palette--refresh-buffer () "Refresh the command palette buffer contents."
   (let ((buffer (get-buffer command-palette-buffer-name)))
@@ -337,7 +326,6 @@ Returns width as number of columns needed to display content."
         (command-palette--render-content)
         (goto-char (point-min))
         (forward-line (1- line)))))))
-
  (defun
   command-palette--render-content () "Render the command palette buffer content."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -359,7 +347,6 @@ Returns width as number of columns needed to display content."
         `(lambda (_) (command-palette--execute-command ',cmd ,name))
         '(:foreground "lightgreen"))
        (setq index (1+ index)))))
-
   (insert "\n")
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -440,7 +427,6 @@ Returns width as number of columns needed to display content."
         (command-palette--refresh-buffer)
         (core-message-success "Promoted #%d '%s' to favorites" index cmd-name))
       (core-message-error "Invalid index: %s (must be between 1 and %d)" index-str max-index)))))
-
  (defun
   command-palette-remove-favorite
   ()
@@ -460,7 +446,6 @@ Returns width as number of columns needed to display content."
         (command-palette--refresh-buffer)
         (core-message-success "Removed favorite #%d: '%s'" index cmd-name))
       (core-message-error "Invalid index: %s (must be between 1 and %d)" index-str max-index)))))
-
  (defun
   command-palette-clear-history
   ()
@@ -470,7 +455,6 @@ Returns width as number of columns needed to display content."
   (command-palette--save-history)
   (command-palette--refresh-buffer)
   (core-message-success "Command palette history cleared"))
-
  (defun
   command-palette-toggle () "Toggle the command palette side window." (interactive)
   (if
@@ -512,14 +496,12 @@ Returns width as number of columns needed to display content."
  ;; M-x Command Tracking
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defvar command-palette--mx-flag nil "Flag set when M-x is invoked.")
-
  (defun
   command-palette--track-command () "Track commands executed via M-x using post-command-hook."
   ;; Set flag when M-x is invoked
   (when
    (memq this-command '(execute-extended-command execute-extended-command-for-buffer))
    (setq command-palette--mx-flag t))
-
   ;; Track the next real command after M-x
   (when
    (and

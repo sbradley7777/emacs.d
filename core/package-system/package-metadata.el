@@ -15,7 +15,6 @@
   package-metadata-file
   (expand-file-name "package-metadata.el" emacs-local-dir)
   "File to store all package system persistent metadata.")
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Utility Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -33,7 +32,6 @@ TIMESTAMP can be a string (already human-readable), list (Emacs time format), or
    ;; Nil or other - use current time
    (t
     (format-time-string "%Y-%m-%d %H:%M:%S"))))
-
  (defun
   package-metadata-load-variables ()
   "Load metadata variables from file if it exists.
@@ -107,7 +105,6 @@ Returns a plist with :timestamp (as float) and :count, or defaults if not found.
          (when
           (boundp 'package-cache-count) (if (numberp package-cache-count) package-cache-count 0))))
     (list :timestamp (or timestamp 0) :count (or count 0))))
-
  (defun
   package-metadata-write-cache-info (timestamp count)
   "Write cache timestamp and count to persistent storage.
@@ -169,7 +166,6 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
          (insert ";;; package-metadata.el ends here\n"))
       (error
        (core-message-error "Failed to save package metadata: %s" (error-message-string err))))))
-
  (defun
   package-metadata-reset () "Delete the metadata file to reset all package system state."
   (when
@@ -180,7 +176,6 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
         (core-message-success "Package metadata reset successfully"))
      (error
       (core-message-error "Failed to delete metadata file: %s" (error-message-string err))))))
-
  (defun
   package-metadata-info () "Display current package metadata information."
   (if

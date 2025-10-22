@@ -66,7 +66,6 @@
        failed-packages
        (core-message-error "Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
      (core-message-success "All packages are up to date"))))
-
  (defun
   core-packages--safe-refresh-and-check (timeout-seconds)
   "Safely refresh package contents and return available upgrades.
@@ -128,7 +127,6 @@ showing current version -> new version for each package."
 Removes orphaned package dependencies using package-autoremove and resets metadata."
   (interactive)
   (let ((cleanup-count 0))
-
     (core-message-package "Starting package cleanup...")
 
     ;; Step 1: Remove unused dependencies using built-in package-autoremove

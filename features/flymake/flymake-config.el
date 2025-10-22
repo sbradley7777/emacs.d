@@ -15,6 +15,5 @@
     (display-buffer-in-side-window)
     (side . right)
     (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
-
  (setq syntax-checking-window-width features-side-window-width))
 (provide 'flymake-config)

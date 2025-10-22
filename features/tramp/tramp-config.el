@@ -1,5 +1,4 @@
 ;;; tramp-config.el --- Enhanced TRAMP remote file access configuration -*- lexical-binding: t; -*-
-
 ;; Author: Emacs Configuration
 ;; Keywords: tramp, remote, files
 ;; Package-Requires: ((emacs "24.1"))
@@ -16,7 +15,6 @@
 ;; - Proper cache management
 
 ;;; Code:
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'tramp-constants)

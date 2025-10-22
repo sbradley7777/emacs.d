@@ -21,12 +21,10 @@
   doom-1337-comment-color
   "#989898"
   "Custom comment color for doom-1337 theme - light gray for better readability.")
-
  ;; Modeline color palette (shared with breadcrumbs and other UI elements)
  (defvar doom-1337-modeline-bg "#4a4a4a" "Modeline background - medium gray.")
  (defvar doom-1337-modeline-inactive-bg "#3a3a3a" "Inactive modeline background - darker gray.")
  (defvar doom-1337-modeline-fg "#d0d0d0" "Default modeline foreground - light gray.")
-
  ;; Accent colors for modeline segments (optimized for gray background)
  ;;
  ;; IMPORTANT: For consistent color rendering across local and remote (SSH) sessions,
@@ -44,7 +42,6 @@
  (defvar doom-1337-color-teal "#7dd0d0" "Info/time - soft cyan-teal.")
  (defvar doom-1337-color-light-gray "#d0d0d0" "Light text - brightened gray.")
  (defvar doom-1337-color-dim-gray "#a0a0a0" "Dim text - medium gray.")
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Face Customizations
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

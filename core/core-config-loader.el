@@ -22,7 +22,6 @@
       arg)
      (t
       (use-package-error ":description expects a string"))))))
-
  (defun
   core-config-loader-handler/:description
   (name _keyword description rest state)

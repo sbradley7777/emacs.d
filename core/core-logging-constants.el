@@ -1,5 +1,4 @@
 ;;; core-logging-constants.el --- Logging Configuration Constants -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; This file contains constants for logging and log file management.
 ;; Constants are prefixed with 'core-' to avoid naming conflicts.

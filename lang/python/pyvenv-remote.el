@@ -29,7 +29,6 @@ First tries to find it remotely, falls back to local equivalent if needed."
          (pyvenv-find-venv)))))
    ;; Local directory - use existing function
    (pyvenv-find-venv)))
-
  (defun
   pyvenv-remote-search-venv
   (remote-dir)
@@ -62,7 +61,6 @@ First tries to find it remotely, falls back to local equivalent if needed."
      project-root
      (let ((venv-path (expand-file-name pyvenv-venv-directory-name project-root)))
        (when (file-directory-p venv-path) venv-path)))))
-
  (defun
   pyvenv-remote-activate () "TRAMP-aware virtual environment activation."
   (if
@@ -88,7 +86,6 @@ First tries to find it remotely, falls back to local equivalent if needed."
            ;; Set pyvenv-virtual-env buffer-locally to the remote venv path
            ;; This is used by the modeline and other tools
            (setq-local pyvenv-virtual-env venv-path)
-
            (core-message-success "Activated Python venv for project: %s" project-name)
 
            ;; Log detected Python version for user feedback
@@ -103,7 +100,6 @@ First tries to find it remotely, falls back to local equivalent if needed."
 
    ;; Local file: use existing activation
    (when (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate))))
-
  (defun
   pyvenv-remote-setup-connection
   (host venv-path)

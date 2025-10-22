@@ -178,7 +178,6 @@ OPTIONAL marks the tool as optional (warning instead of error)."
    (find-font (font-spec :name font-name))
    (list :status 'ok :message (format "Font '%s' installed" font-name) :font font-name)
    (list :status 'warning :message (format "Font '%s' not found" font-name) :font font-name)))
-
  (defun
   diagnostics-check-package (package-symbol) "Check if PACKAGE-SYMBOL is installed and loadable."
   (cond
@@ -208,7 +207,6 @@ Only checks when working on a remote file."
     (and (boundp 'tramp-remote-path) (member 'tramp-own-remote-path tramp-remote-path))
     (list :status 'ok :message "TRAMP remote PATH configured")
     (list :status 'warning :message "TRAMP remote PATH may not use remote user's PATH"))))
-
  (defun
   diagnostics-check-lsp-servers () "Check LSP server availability for configured languages."
   (let ((results nil))
@@ -228,7 +226,6 @@ Only checks when working on a remote file."
      (and (file-directory-p font-dir) (directory-files font-dir nil "NFM\\.ttf$"))
      (list :status 'ok :message "Nerd Fonts installed")
      (list :status 'warning :message "Nerd Fonts not found in ~/.local/share/fonts/"))))
-
  (defun
   diagnostics-show-external-dependencies
   ()
@@ -239,7 +236,6 @@ Validates tools and resources not managed by Emacs package system:
 - System fonts
 - TRAMP configuration (when working remotely)"
   (interactive)
-
   (core-message-plain "")
   (core-message-plain "")
   (core-message-plain "=== External Dependencies ===")
@@ -290,13 +286,10 @@ Validates tools and resources not managed by Emacs package system:
     (core-message-success "Passed: %d" ok-count)
     (when (> warning-count 0) (core-message-warning "Warnings: %d" warning-count))
     (when (> error-count 0) (core-message-error "Errors: %d" error-count))
-
     (setq diagnostics-external-dependencies-results all-results)
-
     (core-message-plain "")
     (core-message-success "External dependencies check completed")
     (core-message-plain "===============================================\n")
-
     all-results))
 
  (defun

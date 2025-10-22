@@ -94,7 +94,6 @@
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)
 ;; (global-set-key (kbd "C-c t") 'switch-theme)  ; Quick theme switching
-
 (core-message-info "=== local.el: The loading of local user configuration finished ===")
 (core-message-success "Local user configuration loaded successfully")
 (provide 'local)

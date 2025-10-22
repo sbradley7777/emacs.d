@@ -1,5 +1,4 @@
 ;;; core-utils.el --- Configuration Utilities -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; Utility functions and macros for configuration loading and management.
 (require 'core-logging)

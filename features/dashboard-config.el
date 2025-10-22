@@ -18,7 +18,6 @@
          (padding (/ (- (window-width) line-width) 2))
          (spaces (make-string (max 0 padding) ?\s)))
     (insert "\n\n" spaces separator "\n")))
-
  (use-package
   dashboard
   :ensure t

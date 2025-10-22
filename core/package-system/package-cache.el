@@ -14,7 +14,6 @@
  (defvar
   package-cache-max-age (* 7 24 60 60) ; 7 days in seconds
   "Maximum age of package cache before considering it stale.")
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Cache Management Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,7 +26,6 @@
             (float-time
              (time-subtract (current-time) (seconds-to-time (plist-get cache-info :timestamp))))))
        (< cache-age package-cache-max-age)))))
-
  (defun
   save-package-state () "Cache current working package configuration to disk."
   (when
@@ -41,7 +39,6 @@
          (core-message-info "Package state cached (%d packages)" package-count))
      (error
       (core-message-warning "Failed to save package cache: %s" (error-message-string err))))))
-
  (defun
   load-cached-package-state () "Load cached package state using built-in package system."
   (let ((cache-info (package-metadata-read-cache-info)))
@@ -73,7 +70,6 @@
   "Display information about the package cache."
   (interactive)
   (package-metadata-info))
-
  (defun
   package-cache-clear () "Clear the package cache file." (interactive) (package-metadata-reset)))
 (provide 'package-cache)

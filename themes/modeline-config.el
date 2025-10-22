@@ -16,7 +16,6 @@
   modeline-config-use-doom-modeline t
   "Whether to use doom-modeline instead of the default Emacs modeline.
 Set this to nil in local.el to use the default Emacs modeline instead.")
-
  ;; Doom-modeline segment configuration
  ;; Users can customize these in local.el to reorder or remove segments
  (defvar
@@ -114,7 +113,6 @@ for available segment names.")
   ()
   "Configure and enable doom-modeline."
   (core-message-config "Setting up doom-modeline")
-
   (use-package
    doom-modeline
    :config

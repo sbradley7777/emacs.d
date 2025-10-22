@@ -1,5 +1,4 @@
 ;;; features-constants.el --- Feature Configuration Constants -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; This file contains constants used across various feature modules.
 ;; Constants are prefixed with 'features-' to avoid naming conflicts.
@@ -15,13 +14,11 @@
  (defconst features-corfu-min-width 20 "Minimum corfu popup width.")
  (defconst features-corfu-max-width 100 "Maximum corfu popup width.")
  (defconst features-corfu-count 10 "Maximum number of completion candidates shown.")
-
  ;; Window Constants
  (defconst
   features-side-window-width 0.3
   "Width for all side windows (right/left) as fraction of frame width.
 Used by flymake diagnostics, imenu-list, command palette, and other side windows.")
-
  ;; Indent Guides Constants
  (defconst
   features-indent-guides-auto-char-face-perc 40 "Base visibility percentage for indent guides.")
@@ -30,13 +27,11 @@ Used by flymake diagnostics, imenu-list, command palette, and other side windows
   80
   "Top-level visibility percentage for indent guides.")
  (defconst features-indent-guides-delay 0.1 "Delay before showing indent guides.")
-
  ;; Which-key Constants
  (defconst features-which-key-idle-delay 0.3 "Which-key display delay.")
  (defconst features-which-key-max-description-length 40 "Maximum which-key description length.")
  (defconst features-which-key-column-padding 1 "Which-key column padding.")
  (defconst features-which-key-separator " → " "Separator displayed between key and description.")
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Color Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -53,7 +48,6 @@ Used by flymake diagnostics, imenu-list, command palette, and other side windows
  (defconst features-color-delimiter-unmatched "#f44336" "Error red for unmatched delimiters.")
  (defconst features-color-delimiter-error-bg "#f44336" "Background color for delimiter errors.")
  (defconst features-color-delimiter-error-fg "#ffffff" "Foreground color for delimiter errors.")
-
  ;; Indent Guide Colors
  (defconst features-color-indent-guide-odd "#2a2a2a" "Odd level indent guide background.")
  (defconst features-color-indent-guide-even "#3a3a3a" "Even level indent guide background.")

@@ -1,5 +1,4 @@
 ;;; core-log-writer.el --- Log File Writing and Rotation -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; This file provides functionality for writing the Messages buffer to files
 ;; with automatic log rotation support.

@@ -136,7 +136,6 @@
    (require 'corfu-echo)
    (corfu-echo-mode 1)
    (setq corfu-echo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
-
    (core-message-config "Corfu documentation echo enabled (terminal mode)")
    (core-message-debug "Documentation appears in echo area (minibuffer)")))
 

@@ -14,7 +14,6 @@
 ;;      - Your terminal can use these fonts if configured (e.g., set iTerm2 font to "Hack Nerd Font")
 ;;      - Emacs uses fonts directly for icon display in buffers and UI elements
 ;;      - Terminal integration requires manual font configuration in terminal settings
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

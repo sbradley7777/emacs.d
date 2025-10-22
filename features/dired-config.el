@@ -15,7 +15,6 @@
 ;;        Extract to ~/.local/share/fonts/ and run: fc-cache -fv
 ;;
 ;;      Without a Nerd Font, you'll see empty boxes instead of icons.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

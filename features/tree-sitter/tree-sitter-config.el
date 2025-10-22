@@ -37,7 +37,6 @@ Returns nil if no mapping is found."
       (let ((ts-mode (treesit-auto-recipe-ts-mode recipe))
             (remap (treesit-auto-recipe-remap recipe)))
         (when (and ts-mode remap) (list remap ts-mode)))))))
-
  (defun
   core-treesit-reload-buffers-for-language (lang)
   "Reload all buffers that could use the newly installed LANG grammar.

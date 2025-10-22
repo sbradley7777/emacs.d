@@ -46,7 +46,6 @@ When reaching the beginning of buffer, move point to beginning."
       (scroll-down)
     (beginning-of-buffer
      (goto-char (point-min)))))
-
  (defun
   user-smart-page-down ()
   "Page down with smart boundary handling.
@@ -65,7 +64,6 @@ When reaching the end of buffer, move point to end."
   (if
    (minibufferp) (minibuffer-complete)
    (if corfu-mode (or (completion-at-point) (indent-for-tab-command)) (indent-for-tab-command))))
-
  (defun
   user-completion-or-indent
   ()
@@ -96,7 +94,6 @@ Buffers EXCLUDED from cycling:
       (string= name "*Messages*")
       ;; Allow buffers visiting files (not dired, not special buffers)
       (buffer-file-name buffer)))))
-
  (defun
   user-cycle-buffer (direction)
   "Cycle through buffers in DIRECTION (:forward or :backward).
@@ -131,14 +128,12 @@ Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
          (setq target-buffer (nth next-index valid-buffers))))))
     ;; Switch to target buffer if found
     (when target-buffer (switch-to-buffer target-buffer))))
-
  (defun
   user-next-buffer
   ()
   "Switch to the next buffer, skipping filtered buffers."
   (interactive)
   (user-cycle-buffer :forward))
-
  (defun
   user-previous-buffer
   ()
@@ -176,7 +171,6 @@ This ensures only one of these windows is open at a time."
     (and command-palette-window (window-live-p command-palette-window))
     (delete-window command-palette-window)
     (setq command-palette-window nil))))
-
  (defun
   user-imenu-list-smart-toggle ()
   "Toggle Imenu-list with mutual exclusion from other side windows.

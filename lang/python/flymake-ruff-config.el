@@ -15,7 +15,6 @@
  ;; Only configure ruff if it's available in local PATH
  (when
   (core-utils-check-command-in-path "ruff")
-
   (defun
    flymake-ruff-setup () "Common Flymake Ruff setup for both python-mode and python-ts-mode."
    ;; Remove the default python checker (with backend name: p-f) to avoid duplicates

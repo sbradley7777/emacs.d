@@ -39,7 +39,6 @@
       venv-path
       (or python-version "Unknown")))
    (core-message-warning "No Python virtual environment active")))
-
  (defun
   pyvenv-modeline-indicator () "Return modeline indicator for Python venv with click handler."
   (when

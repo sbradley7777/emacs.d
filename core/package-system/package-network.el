@@ -116,7 +116,6 @@
    (network-responsive-p)
    (core-message-success "Network connectivity to package repositories confirmed")
    (core-message-error "Network connectivity to package repositories failed")))
-
  (defun
   package-force-refresh
   ()
