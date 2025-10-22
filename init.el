@@ -14,10 +14,6 @@
 (core-message-loading "Loading init.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package system configuration (Snap-compatible approach)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance optimizations for faster startup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Restore normal performance values after startup is complete
@@ -120,33 +116,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 (defvar config-load-results '() "List of configuration loading results for diagnostics.")
 
 (defun
- init--safe-load-config (config-name &optional description)
- "Safely load a configuration module with error handling, timing, and diagnostics.
-CONFIG-NAME is the module to load (via require).
-DESCRIPTION is an optional human-readable description for user messages.
-
-Tracks load time, records results in `config-load-results' for diagnostics,
-and displays success/error messages. Returns t on success, nil on failure."
- (let ((load-time (current-time))
-       (desc (or description (symbol-name config-name))))
-   (condition-case err
-       (progn
-        (require config-name)
-        (let ((elapsed (float-time (time-subtract (current-time) load-time))))
-          (add-to-list 'config-load-results (list config-name 'success elapsed desc))
-          (core-message-success "Loaded %s (%.3f seconds)" desc elapsed)
-          t))
-     (error
-      (let ((elapsed (float-time (time-subtract (current-time) load-time))))
-        (add-to-list
-         'config-load-results (list config-name 'failed elapsed desc (error-message-string err)))
-        (core-message-error "Failed to load %s: %s" desc (error-message-string err))
-        (core-message-info
-         "Consider checking: file exists, syntax is valid, dependencies available")
-        nil)))))
-
-
-(defun
  init--show-config-diagnostics () "Display configuration loading diagnostics."
  (let ((total-time (float-time (time-subtract (current-time) init-start-time)))
        (successful 0)
@@ -170,164 +139,166 @@ and displays success/error messages. Returns t on success, nil on failure."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load configuration modules in order with error handling
+;; Load configuration loading infrastructure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; CRITICAL LOADING ORDER: Dependencies must be satisfied before dependent modules load.
-;; Changing this order may cause configuration failures or missing functionality.
+(require 'core-config-loader)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load configuration modules with declarative dependencies via :after keyword
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 1: Foundation Layer - System Infrastructure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load tree-sitter constants FIRST - provides directory paths for tree-sitter modules
-(init--safe-load-config 'tree-sitter-constants "Tree-sitter configuration constants")
+(load-module tree-sitter-constants :description "Tree-sitter configuration constants")
 
-;; Load tree-sitter utilities AFTER constants - diagnostics will use these for grammar counting
-(init--safe-load-config 'tree-sitter-utils "Tree-sitter utility functions")
+(load-module
+ tree-sitter-utils
+ :after tree-sitter-constants
+ :description "Tree-sitter utility functions")
 
-;; Load diagnostics AFTER tree-sitter utilities - provides early error logging and system info for troubleshooting
-(init--safe-load-config 'core-diagnostics "System and configuration diagnostics")
-
-;; Show system information immediately after diagnostics loads (before packages)
-(diagnostics-show-system-info)
+(load-module
+ core-diagnostics
+ :after tree-sitter-utils
+ :description "System and configuration diagnostics"
+ :config (diagnostics-show-system-info))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 2: Package and Resource Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load package system BEFORE any packages are used - establishes repositories and use-package
-(init--safe-load-config 'core-packages "Package system setup and declarations")
+(load-module core-packages :description "Package system setup and declarations")
 
-;; Load font management BEFORE UI - ensures fonts are available for interface setup
-(init--safe-load-config 'core-fonts "Font management")
+(load-module core-fonts :description "Font management")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 3: User Interface Layer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load UI foundation BEFORE themes - establishes basic interface elements
-(init--safe-load-config 'core-ui "Basic UI setup")
+(load-module core-ui :after core-packages :description "Basic UI setup")
 
-(init--safe-load-config 'core-gui-mode "GUI mode configuration")
+(load-module core-gui-mode :after core-ui :description "GUI mode configuration")
 
-;; Load theme configuration BEFORE theme utilities - establishes theme system
-(init--safe-load-config 'themes-config "Theme configuration")
+(load-module themes-config :after core-packages :description "Theme configuration")
 
-;; Load modeline configuration - basic Emacs modeline setup
-(init--safe-load-config 'modeline-config "Modeline configuration")
+(load-module modeline-config :after core-packages :description "Modeline configuration")
 
-;; Load custom modeline segments - user-defined doom-modeline segments
-(init--safe-load-config 'modeline-segments "Custom modeline segments")
+(load-module modeline-segments :after modeline-config :description "Custom modeline segments")
 
-;; Load modeline face customizations - theme-specific modeline colors
-(init--safe-load-config 'modeline-faces "Modeline face customizations")
+(load-module modeline-faces :after modeline-config :description "Modeline face customizations")
 
-;; Load theme utilities AFTER theme configuration - provides interactive theme switching
-(init--safe-load-config 'themes-utils "Theme utilities")
+(load-module themes-utils :after themes-config :description "Theme utilities")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 4: Core Editing and File Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load editing preferences BEFORE file handling - establishes basic editing behavior
-(init--safe-load-config 'core-editing "Editing preferences")
+(load-module core-editing :description "Editing preferences")
 
-;; Load file handling - establishes local file management
-(init--safe-load-config 'core-files "File handling")
+(load-module core-files :description "File handling")
 
-;; Load log writer system AFTER file handling - establishes message logging with rotation
-(init--safe-load-config 'core-log-writer "Message logging and log rotation")
+(load-module core-log-writer :after core-files :description "Message logging and log rotation")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load completion framework FIRST in features - provides foundation for other enhanced features
-(init--safe-load-config 'completion-config "Auto-completion framework")
+(load-module completion-config :after core-packages :description "Auto-completion framework")
 
-;; Load TRAMP constants BEFORE TRAMP utilities - provides configuration values
-(init--safe-load-config 'tramp-constants "TRAMP configuration constants")
+(load-module tramp-constants :description "TRAMP configuration constants")
 
-;; Load TRAMP utilities BEFORE TRAMP config - provides helper functions for remote access
-(init--safe-load-config 'tramp-utils "TRAMP utility functions")
+(load-module tramp-utils :after tramp-constants :description "TRAMP utility functions")
 
-;; Load TRAMP config AFTER utilities - establishes remote file access using helper functions
-(init--safe-load-config 'tramp-config "TRAMP remote file access")
+(load-module tramp-config :after tramp-utils :description "TRAMP remote file access")
 
-;; Load tree-sitter configuration BEFORE language modes - ensures grammars install to correct location
-(init--safe-load-config 'tree-sitter-config "Tree-sitter grammar management")
+(load-module
+ tree-sitter-config
+ :after (tree-sitter-utils core-packages)
+ :description "Tree-sitter grammar management")
 
-;; Load diagnostics BEFORE language modes - provides error reporting for code files
-(init--safe-load-config 'flymake-config "Flymake configuration")
+(load-module flymake-config :after core-packages :description "Flymake configuration")
 
-;; Load flymake utilities AFTER flymake-config - provides formatting utilities for diagnostics
-(init--safe-load-config 'flymake-utils "Flymake utility functions")
+(load-module flymake-utils :after flymake-config :description "Flymake utility functions")
 
-;; Load git diff highlighting - provides visual feedback for version control changes
-(init--safe-load-config 'diff-hl-config "Git diff highlighting")
+(load-module diff-hl-config :after core-packages :description "Git diff highlighting")
 
-;; Load visual enhancements - order independent within this group
-(init--safe-load-config 'rainbow-delimiters-config
-                        "Rainbow delimiters for better code readability")
-(init--safe-load-config 'highlight-indent-guides-config "Visual indentation guides")
+(load-module
+ rainbow-delimiters-config
+ :after core-packages
+ :description "Rainbow delimiters for better code readability")
+(load-module
+ highlight-indent-guides-config
+ :after core-packages
+ :description "Visual indentation guides")
 
-;; Load navigation tools AFTER completion - may integrate with completion system
-(init--safe-load-config 'imenu-list-config "Symbol sidebar navigation")
-(init--safe-load-config 'breadcrumbs-config "Breadcrumb navigation")
-(init--safe-load-config 'treemacs-utils "Treemacs utility functions")
-(init--safe-load-config 'treemacs-config "Project tree navigation")
-(init--safe-load-config 'dired-config "Dired with nerd icons")
-(init--safe-load-config 'dashboard-config "Dashboard startup screen")
+(load-module
+ imenu-list-config
+ :after (core-packages completion-config)
+ :description "Symbol sidebar navigation")
+(load-module breadcrumbs-config :after core-packages :description "Breadcrumb navigation")
+(load-module treemacs-utils :description "Treemacs utility functions")
+(load-module
+ treemacs-config
+ :after (core-packages treemacs-utils)
+ :description "Project tree navigation")
+(load-module dired-config :after core-packages :description "Dired with nerd icons")
+(load-module dashboard-config :after core-packages :description "Dashboard startup screen")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 6: Language-Specific Configurations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load general language modes - order independent, no cross-dependencies
-(init--safe-load-config 'bash-config "Bash/shell script support")
-(init--safe-load-config 'c-config "C/C++ language support")
-(init--safe-load-config 'lisp-config "Emacs Lisp development")
-(init--safe-load-config 'yaml-config "YAML file support")
-(init--safe-load-config 'toml-config "TOML file support")
-(init--safe-load-config 'json-config "JSON file support")
-(init--safe-load-config 'markdown-config "Markdown file support")
-(init--safe-load-config 'makefile-config "Makefile support")
+(load-module bash-config :description "Bash/shell script support")
+(load-module c-config :description "C/C++ language support")
+(load-module lisp-config :description "Emacs Lisp development")
+(load-module yaml-config :after core-packages :description "YAML file support")
+(load-module toml-config :after core-packages :description "TOML file support")
+(load-module json-config :description "JSON file support")
+(load-module markdown-config :after core-packages :description "Markdown file support")
+(load-module makefile-config :description "Makefile support")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 7: Python Development Stack (Complex Dependencies)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load Python config FIRST - establishes basic Python editing capabilities
-(init--safe-load-config 'python-config "Python configuration")
+(load-module python-config :description "Python configuration")
 
-;; Load Python constants AFTER core - provides configuration values for other Python modules
-(init--safe-load-config 'python-constants "Python configuration constants")
+(load-module python-constants :description "Python configuration constants")
 
-;; Load pyvenv utilities BEFORE pyvenv config - provides helper functions for virtual environments
-(init--safe-load-config 'pyvenv-utils "Python virtual environment utilities")
+(load-module
+ pyvenv-utils
+ :after python-constants
+ :description "Python virtual environment utilities")
 
-;; Load pyvenv config AFTER utilities - establishes virtual environment management using helpers
-(init--safe-load-config 'pyvenv-config "Python virtual environments")
+(load-module
+ pyvenv-config
+ :after (pyvenv-utils core-packages)
+ :description "Python virtual environments")
 
-;; Load pyvenv remote AFTER local pyvenv - extends virtual environment support to TRAMP sessions
-(init--safe-load-config 'pyvenv-remote "Python virtual environments TRAMP support")
+(load-module
+ pyvenv-remote
+ :after pyvenv-config
+ :description "Python virtual environments TRAMP support")
 
-;; Load pyvenv modeline AFTER pyvenv config - provides clickable venv indicator
-(init--safe-load-config 'pyvenv-modeline "Python virtual environment modeline indicator")
+(load-module
+ pyvenv-modeline
+ :after pyvenv-config
+ :description "Python virtual environment modeline indicator")
 
-;; Load Ruff integration LAST - requires Python core, flymake, and pyvenv to be established
-(init--safe-load-config 'flymake-ruff-config "Flymake Ruff integration")
+(load-module
+ flymake-ruff-config
+ :after (core-packages python-config flymake-config pyvenv-config)
+ :description "Flymake Ruff integration")
 
-;; Load Eglot configuration - provides LSP support if pylsp is available
-(init--safe-load-config 'eglot-config "Eglot LSP integration")
+(load-module eglot-config :after python-config :description "Eglot LSP integration")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 8: User Customizations (Final Layer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load user utilities BEFORE aliases - aliases may reference custom utility functions
-(init--safe-load-config 'user-utils "User utility functions")
+(load-module user-utils :description "User utility functions")
 
-;; Load aliases BEFORE command palette - aliases may be used in palette
-(init--safe-load-config 'user-aliases "Function aliases and shortcuts")
+(load-module user-aliases :after user-utils :description "Function aliases and shortcuts")
 
-;; Load user keybindings AFTER utilities - custom keybindings may reference user functions
-(init--safe-load-config 'user-keybindings "User keybindings")
+(load-module user-keybindings :after user-utils :description "User keybindings")
 
-;; Load command palette LAST - provides M-x tracking and command launcher
-(init--safe-load-config 'command-palette "Command palette with M-x history tracking")
+(load-module
+ command-palette
+ :after user-aliases
+ :description "Command palette with M-x history tracking")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom settings via emacs menu system
