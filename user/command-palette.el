@@ -48,7 +48,8 @@
     ("Shell" . shell)
     ("Treesit Show Symbols Sidebar" . treesit-show-symbols-sidebar)
     ("Treesitter Grammar Status" . treesitter-grammar-status)
-    ("Treesit Install Language Grammar" . treesit-install-language-grammar))
+    ("Treesit Install Language Grammar" . treesit-install-language-grammar)
+    ,("Elisp Autofmt Buffer" . elisp-autofmt-buffer))
   "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
 
  (defconst
