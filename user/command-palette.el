@@ -528,6 +528,6 @@ Returns width as number of columns needed to display content."
  (add-hook 'kill-emacs-hook #'command-palette--save-history)
  (add-hook 'kill-emacs-hook #'command-palette--save-favorites)
 
- (core-message-success "Command palette loaded! F9 to toggle (M-x commands auto-tracked)"))
+ (core-message-success "Command palette loaded!"))
 (provide 'command-palette)
 ;;; command-palette.el ends here
