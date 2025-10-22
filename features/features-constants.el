@@ -3,15 +3,12 @@
 ;;; Commentary:
 ;; This file contains constants used across various feature modules.
 ;; Constants are prefixed with 'features-' to avoid naming conflicts.
-
 (require 'core-utils)
-
 (core-utils-with-load-timing
  "features-constants.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; UI and Interaction Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Completion (Corfu) Constants
  (defconst features-corfu-auto-delay 0.2 "Corfu completion delay in seconds.")
  (defconst features-corfu-auto-prefix 1 "Start completing after this many characters.")
@@ -43,7 +40,6 @@ Used by flymake diagnostics, imenu-list, command palette, and other side windows
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Color Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Rainbow Delimiters Color Palette
  (defconst features-color-delimiter-1 "#ff6b6b" "Bright red for delimiter depth 1.")
  (defconst features-color-delimiter-2 "#ffa500" "Bright orange for delimiter depth 2.")
@@ -67,7 +63,5 @@ Used by flymake diagnostics, imenu-list, command palette, and other side windows
   features-color-indent-guide-top-even "#505050" "Top-level even indent guide background.")
  (defconst
   features-color-indent-guide-top-char "#707070" "Top-level indent guide character color."))
-
 (provide 'features-constants)
-
 ;;; features-constants.el ends here

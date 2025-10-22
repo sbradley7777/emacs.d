@@ -2,9 +2,7 @@
 ;;; Commentary:
 ;;      Function aliases to improve usability and provide shortcuts
 ;;      for commonly used Emacs functions.
-
 (require 'core-utils)
-
 (core-utils-with-load-timing
  "user-aliases.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -14,5 +12,4 @@
  (defalias 'yes-or-no-p #'y-or-n-p)
  (defalias 'list-themes #'theme-utils-list-themes)
  (defalias 'switch-theme #'theme-utils-switch-theme))
-
 (provide 'user-aliases)

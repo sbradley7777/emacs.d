@@ -2,12 +2,10 @@
 ;;; Commentary:
 ;;      Package repository setup, archive priorities, and security policies.
 ;;      Centralizes trust policies, signature verification, and repository management.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
 (require 'package-network)
-
 (core-utils-with-load-timing
  "package-repositories.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,5 +54,4 @@
         (core-message-success "GNU ELPA keyring updated for secure package verification"))
      (error
       (core-message-warning "Failed to install keyring update: %s" (error-message-string err)))))))
-
 (provide 'package-repositories)

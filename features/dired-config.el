@@ -19,13 +19,11 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "dired-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Built-in Dired Settings
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Better dired defaults
  (setq dired-dwim-target t) ; Suggest other visible dired buffer as copy/move target
  (setq dired-recursive-copies 'always) ; Always copy directories recursively
@@ -39,7 +37,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Nerd Icons Dired
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Configure nerd-icons-dired for icon support in dired buffers
  ;; Provides file-type icons using Nerd Fonts (works in both GUI and terminal with proper font)
  (use-package
@@ -50,7 +47,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Dired Subtree
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Configure dired-subtree for inline directory expansion
  ;; Press 'i' on a directory to expand/collapse it inline (like a tree view)
  (use-package
@@ -61,5 +57,4 @@
    dired-mode-map ("i" . dired-subtree-toggle)
    ("TAB" . dired-subtree-cycle)) ; TAB to cycle expand/collapse depth
   :config (core-message-config "Dired subtree configured - use 'i' to toggle subtrees")))
-
 (provide 'dired-config)

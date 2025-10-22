@@ -2,25 +2,21 @@
 ;;; Commentary:
 ;;      Configures tree-sitter grammar installation and loading paths.
 ;;      Ensures grammars are installed to ~/.emacs.d/local/tree-sitter instead of the default location.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
 (require 'tree-sitter-constants)
-
 (core-utils-with-load-timing
  "tree-sitter-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Tree-sitter Grammar Directory Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Display the tree-sitter grammar directory from constants
  (core-message-config "Tree-sitter grammar directory: %s" features-treesit-grammar-dir)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Configure Search Path
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Configure tree-sitter to search in custom directory first
  (setq treesit-extra-load-path (list features-treesit-grammar-dir))
  (core-message-config "treesit-extra-load-path: %s" treesit-extra-load-path)
@@ -28,7 +24,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Buffer Reload After Grammar Installation
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   core-treesit-get-mode-mapping (lang)
   "Get the (REGULAR-MODE TS-MODE) pair for LANG by querying treesit-auto.
@@ -93,7 +88,6 @@ Dynamically discovers mode mappings from treesit-auto configuration."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Redirect Grammar Installations
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Redirect all grammar installations to custom directory and reload buffers after installation
  (advice-add
   'treesit-install-language-grammar
@@ -114,7 +108,5 @@ After successful installation, automatically reloads buffers to use the new gram
 
  (core-message-success "Tree-sitter grammar management configured")
  (core-message-info "Grammars will install to: %s" features-treesit-grammar-dir))
-
 (provide 'tree-sitter-config)
-
 ;;; tree-sitter-config.el ends here

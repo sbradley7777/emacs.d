@@ -97,5 +97,4 @@
 
 (core-message-info "=== local.el: The loading of local user configuration finished ===")
 (core-message-success "Local user configuration loaded successfully")
-
 (provide 'local)

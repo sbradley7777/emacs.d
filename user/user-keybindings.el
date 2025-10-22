@@ -1,16 +1,13 @@
 ;;; user-keybindings.el --- User Key Bindings Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      User-specific keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
-
 (require 'core-utils)
 (require 'user-utils)
-
 (core-utils-with-load-timing
  "user-keybindings.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Keyboard behavior and Custom HotKeys (aka: keyboard-modifiers or shortcuts):
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; List of hotkeys: http://www.math.uh.edu/~bgb/emacs_keys.html | Use CTRL-h k to describe keys (describe-key)
 
  ;; Set up the keyboard so the delete key on both regular keyboard and keypad delete the character under the cursor
@@ -62,7 +59,5 @@
  (global-set-key (kbd "<f11>") 'user-smart-page-up) ; Page up with smart boundary handling
  (global-set-key (kbd "<f12>") 'user-smart-page-down) ; Page down with smart boundary handling
  )
-
 (provide 'user-keybindings)
-
 ;;; user-keybindings.el ends here

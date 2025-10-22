@@ -2,18 +2,15 @@
 ;;; Commentary:
 ;;      Dashboard configuration for a customizable startup screen.
 ;;      Displays recent files, bookmarks, and other useful information.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'package-ui)
 (require 'package-maintenance)
-
 (core-utils-with-load-timing
  "dashboard-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Dashboard Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   dashboard--insert-separator () "Insert a centered horizontal line separator."
   (let* ((line-width 80)
@@ -96,5 +93,4 @@
   (dashboard-setup-startup-hook)
   ;; Force dashboard refresh when opening files at startup
   (add-hook 'emacs-startup-hook #'dashboard-insert-startupify-lists)))
-
 (provide 'dashboard-config)

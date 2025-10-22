@@ -2,17 +2,14 @@
 ;;; Commentary:
 ;;      Shared utility functions used by both pyvenv-config.el and
 ;;      pyvenv-remote.el for Python virtual environment management.
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'python-constants)
-
 (core-utils-with-load-timing
  "pyvenv-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Shared Utility Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Path normalization for both local and remote (TRAMP) files
  (defun
   pyvenv-normalize-path
@@ -94,7 +91,5 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
       ;; For local files, set to the actual executable path
       (when (file-executable-p venv-python) (setq python-shell-interpreter venv-python))))
    (setq python-shell-interpreter python-default-interpreter))))
-
 (provide 'pyvenv-utils)
-
 ;;; pyvenv-utils.el ends here

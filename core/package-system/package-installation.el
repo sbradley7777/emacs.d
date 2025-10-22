@@ -2,11 +2,9 @@
 ;;; Commentary:
 ;;      Low-level package installation primitives with comprehensive error handling.
 ;;      Provides safe installation with retry logic and detailed reporting.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "package-installation.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -69,7 +67,5 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
      (core-message-loading "Retrying failed packages after network refresh...")
      (package-refresh-contents)
      (core-packages-install-with-retry failed-packages (1- max-retries))))))
-
 (provide 'package-installation)
-
 ;;; package-installation.el ends here

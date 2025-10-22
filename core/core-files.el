@@ -1,11 +1,9 @@
 ;;; core-files.el --- File Handling Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "core-files.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16,10 +14,8 @@
  ;; Autosave files: ~/.emacs.d/local/autosaves/ | Backup files: ~/.emacs.d/local/backups/
  ;; Directories are automatically created if they don't exist.
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Stamp time on all files saved.
  (require 'time-stamp)
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Autosave files (example: #foo#) -> ~/.emacs.d/local/autosaves/
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -82,5 +78,4 @@
 
  ;; Make this module available for loading with (require 'files)
  )
-
 (provide 'core-files)

@@ -2,12 +2,10 @@
 ;;; Commentary:
 ;;      Package state caching for offline functionality and faster startup.
 ;;      Provides intelligent cache management with freshness validation.
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'package)
 (require 'package-metadata)
-
 (core-utils-with-load-timing
  "package-cache.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -78,5 +76,4 @@
 
  (defun
   package-cache-clear () "Clear the package cache file." (interactive) (package-metadata-reset)))
-
 (provide 'package-cache)

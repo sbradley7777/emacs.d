@@ -2,17 +2,14 @@
 ;;; Commentary:
 ;;      Utility functions for treemacs configuration.
 ;;      Handles theme loading and custom file icon management.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "treemacs-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Custom File Icon Mappings
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; You can search for the icons and their names from this url:
  ;;   - https://www.nerdfonts.com/cheat-sheet
  (defvar
@@ -35,7 +32,6 @@ To browse available icons: M-x nerd-icons-insert")
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Theme Loading Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   treemacs-apply-nerd-icons-file-icons ()
   "Apply custom file icon mappings to nerd-icons extension list.
@@ -73,5 +69,4 @@ When using nerd-icons theme, custom file icons are automatically applied."
    ;; Invalid or nil theme
    (t
     (core-message-warning "Invalid treemacs theme: %s. Using default." theme-name)))))
-
 (provide 'treemacs-utils)

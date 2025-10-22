@@ -2,17 +2,14 @@
 ;;; Commentary:
 ;;      User-facing interfaces for package browsing, searching, and management.
 ;;      Provides interactive commands for discovering and managing packages.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "package-ui.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Interactive Package Management Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   show-installed-packages ()
   "Show installed packages with clear status labels and update information.
@@ -119,7 +116,5 @@ Shows available version and indicates if updates are available."
      (and search-term (not (string-empty-p search-term)))
      ;; Use package-show-package-list with keywords parameter to avoid async refresh issues
      (package-show-package-list t (list search-term))))))
-
 (provide 'package-ui)
-
 ;;; package-ui.el ends here

@@ -1,10 +1,8 @@
 ;;; lisp-config.el --- Emacs Lisp Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Emacs Lisp specific settings and formatting
-
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "lisp-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -30,5 +28,4 @@
   :hook (emacs-lisp-mode . elisp-autofmt-mode)
   :bind (:map emacs-lisp-mode-map ("C-c C-f" . elisp-autofmt-buffer))
   :config (core-message-config "elisp-autofmt configured for automatic formatting on save")))
-
 (provide 'lisp-config)

@@ -7,7 +7,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Message Utility Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defun
  core-message-success
  (format-string &rest args)
@@ -71,7 +70,6 @@ Useful for system diagnostics, debug output, and structured information that doe
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Warning Buffer Integration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defun
  core-logging-duplicate-warnings-to-messages (orig-fun type message &optional level buffer-name)
  "Advice to duplicate warning messages to *Messages* buffer.
@@ -104,7 +102,5 @@ Filters out :debug level warnings to reduce noise."
 
 ;; Add advice to display-warning to duplicate warnings to *Messages* buffer
 (advice-add 'display-warning :around #'core-logging-duplicate-warnings-to-messages)
-
 (provide 'core-logging)
-
 ;;; core-logging.el ends here

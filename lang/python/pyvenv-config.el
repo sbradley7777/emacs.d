@@ -4,18 +4,15 @@
 ;;      environment encountered and remembers it as THE project. The virtual
 ;;      environment is activated. The built-in pyvenv modeline indicator is disabled
 ;;      in favor of our custom doom-modeline segment (defined in pyvenv-modeline.el).
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'python-constants)
 (require 'pyvenv-utils)
-
 (core-utils-with-load-timing
  "pyvenv-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Auto-detect Once Virtual Environment Support
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Main function to auto-detect and activate virtual environment once per project
  ;; Uses pyvenv-project-root as a guard to ensure activation happens only once
  (defun
@@ -70,7 +67,5 @@
  ;; Trigger auto-detection when opening Python files (both python-mode and python-ts-mode)
  (add-hook 'python-mode-hook #'pyvenv-auto-activate)
  (add-hook 'python-ts-mode-hook #'pyvenv-auto-activate))
-
 (provide 'pyvenv-config)
-
 ;;; pyvenv-config.el ends here

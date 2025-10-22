@@ -2,17 +2,14 @@
 ;;; Commentary:
 ;;      Enhanced rainbow delimiters configuration with bold, high-visibility colors.
 ;;      Provides color-coded parentheses, brackets, and braces for better code navigation.
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'features-constants)
-
 (core-utils-with-load-timing
  "rainbow-delimiters-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Rainbow Delimiters Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Ensure package system is initialized
  (unless package--initialized (package-initialize))
 
@@ -56,5 +53,4 @@
         :weight bold)))))
 
   (core-message-config "Rainbow delimiters configured with enhanced bold visibility")))
-
 (provide 'rainbow-delimiters-config)

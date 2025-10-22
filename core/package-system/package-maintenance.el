@@ -2,13 +2,11 @@
 ;;; Commentary:
 ;;      Interactive package upgrade, cleanup, and maintenance utilities.
 ;;      Bulk operations with comprehensive error handling and network awareness.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
 (require 'package-network)
 (require 'package-metadata)
-
 (core-utils-with-load-timing
  "package-maintenance.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -124,7 +122,6 @@ showing current version -> new version for each package."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package Cleanup Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   core-packages-cleanup ()
   "Clean up unused packages and reset package metadata cache.
@@ -176,7 +173,6 @@ Removes orphaned package dependencies using package-autoremove and resets metada
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Automatic Weekly Update Check with Persistent Storage
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   core-packages-check-weekly-updates ()
   "Check for package updates once per week during interactive sessions.
@@ -254,7 +250,5 @@ Benefits:
       (core-message-package
        "Skipping package check (%.1f days since last check, checking weekly)"
        days-since-last-check))))))
-
 (provide 'package-maintenance)
-
 ;;; package-maintenance.el ends here

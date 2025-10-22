@@ -2,12 +2,10 @@
 ;;; Commentary:
 ;;      Treemacs configuration for file and project tree navigation.
 ;;      Provides a sidebar with project structure, git integration, and enhanced navigation.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
 (require 'treemacs-utils)
-
 (core-utils-with-load-timing
  "treemacs-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -95,7 +93,6 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Dired Integration
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
   ;; NOTE: Dired icons are now handled by nerd-icons-dired (see features/dired-config.el)
   ;; treemacs-icons-dired is NOT enabled to avoid conflicts with nerd-icons-dired
   ) ;; End of (when (package-installed-p 'treemacs))
@@ -106,5 +103,4 @@
   (defun
    treemacs-smart-toggle () "Fallback function when treemacs is not available." (interactive)
    (core-message-error "Treemacs not available - package not installed")))) ;; End of core-utils-with-load-timing
-
 (provide 'treemacs-config)

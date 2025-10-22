@@ -2,19 +2,16 @@
 ;;; Commentary:
 ;;      C and C++ mode support and configuration.
 ;;      Supports both c-mode/c++-mode and c-ts-mode/c++-ts-mode with shared configuration.
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)
 (require 'lang-utils)
 (require 'cc-mode)
-
 (core-utils-with-load-timing
  "c-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Shared Configuration Function
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   c-setup-common
   ()
@@ -33,7 +30,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; C/C++ Mode Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Use K&R style as base with modifications
  (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "k&r")))
 
@@ -50,12 +46,9 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Mode Hooks - Apply to both regular and tree-sitter modes
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (lang-register-dual-mode-hooks c c-setup-common)
  (lang-register-dual-mode-hooks c++ c++-setup-common)
 
  (core-message-success "C/C++ configuration loaded (c-mode, c++-mode, c-ts-mode, c++-ts-mode)"))
-
 (provide 'c-config)
-
 ;;; c-config.el ends here

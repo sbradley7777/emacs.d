@@ -1,16 +1,13 @@
 ;;; flymake-utils.el --- Flymake Utility Functions -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Utility functions for Flymake diagnostics formatting and display
-
 (require 'core-constants)
 (require 'core-utils)
-
 (core-utils-with-load-timing
  "flymake-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Diagnostics Window Management
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   toggle-flymake-diagnostics-window () "Show or hide the Flymake diagnostics window." (interactive)
   ;; Find any window that is displaying a Flymake diagnostics buffer
@@ -34,7 +31,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Backend Name Formatting
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   flymake-friendly-backend-name (backend-name)
   "Convert cryptic backend names to user-friendly versions.
@@ -76,7 +72,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Diagnostics Buffer Formatting
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   flymake-setup-custom-format (error-code-extractor)
   "Set up custom diagnostics buffer format with Code column.
@@ -137,5 +132,4 @@
 
  ;; Make this module available for loading with (require 'flymake-utils)
  )
-
 (provide 'flymake-utils)

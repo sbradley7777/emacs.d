@@ -2,13 +2,11 @@
 ;;; Commentary:
 ;;      Network connectivity testing and timeout-protected package operations.
 ;;      Provides resilient package management with graceful network failure handling.
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'package-cache)
 (require 'package-metadata)
 (require 'url)
-
 (core-utils-with-load-timing
  "package-network.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -132,5 +130,4 @@
     (save-package-state)
     (core-message-success "Package refresh and cache update completed"))
    (core-message-error "Cannot refresh packages - network unavailable"))))
-
 (provide 'package-network)

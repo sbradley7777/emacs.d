@@ -2,16 +2,13 @@
 ;;; Commentary:
 ;;      Configuration for flymake-ruff with custom diagnostics buffer formatting
 ;;      that adds error code extraction in a separate column.
-
 (require 'core-utils)
 (require 'flymake-utils)
-
 (core-utils-with-load-timing
  "flymake-ruff-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Flymake Ruff Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; NOTE: Ruff runs locally (not remotely) because flymake operates on buffer content in the local Emacs process.
  ;; Unlike LSP servers (e.g., pylsp) which need remote execution to access project structure and dependencies,
  ;; ruff analyzes code directly via stdin and doesn't require filesystem access to the remote host.
@@ -35,7 +32,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Ruff Error Code Extraction
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   flymake-ruff-extract-error-code (message)
   "Extract error code from ruff diagnostic message.
@@ -58,10 +54,8 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Custom Diagnostics Buffer Formatting
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Set up custom diagnostics formatting using the generic flymake utilities
  (add-hook
   'flymake-diagnostics-buffer-mode-hook
   (lambda () (flymake-setup-custom-format 'flymake-ruff-extract-error-code))))
-
 (provide 'flymake-ruff-config)

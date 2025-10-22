@@ -2,17 +2,14 @@
 ;;; Commentary:
 ;;      Visual indentation guides using highlight-indent-guides.
 ;;      Provides column-based indentation visualization for better code structure understanding.
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'features-constants)
-
 (core-utils-with-load-timing
  "highlight-indent-guides-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Highlight Indent Guides Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (use-package
   highlight-indent-guides
   :hook (prog-mode . highlight-indent-guides-mode)
@@ -55,5 +52,4 @@
 
   (core-message-config
    "Highlight indent guides configured with column method and responsive highlighting")))
-
 (provide 'highlight-indent-guides-config)

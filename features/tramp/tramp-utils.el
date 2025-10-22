@@ -2,11 +2,9 @@
 ;;; Commentary:
 ;;      Utility functions for TRAMP configuration and management,
 ;;      specifically for Python development support.
-
 (require 'core-utils)
 (require 'tramp)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "tramp-utils.el"
  (defun
@@ -53,7 +51,5 @@ Only works when called from a buffer visiting a remote file via TRAMP."
       nil))))
 
  (core-message-debug "TRAMP utilities loaded"))
-
 (provide 'tramp-utils)
-
 ;;; tramp-utils.el ends here

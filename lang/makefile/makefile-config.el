@@ -1,19 +1,16 @@
 ;;; makefile-config.el --- Makefile Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Makefile mode support and configuration for Makefiles with proper tab handling
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
 (require 'make-mode)
 (require 'highlight-indent-guides)
-
 (core-utils-with-load-timing
  "makefile-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Makefile mode configuration (built-in mode)
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; File associations for Makefile variants
  (add-to-list 'auto-mode-alist '("\\(?:Makefile\\|makefile\\)\\'" . makefile-mode))
  (add-to-list 'auto-mode-alist '("\\.mk\\'" . makefile-mode))
@@ -113,5 +110,4 @@
  (add-hook
   'makefile-mode-hook
   (lambda () "Validate Makefile syntax on open." (run-with-timer 1 nil 'makefile-validate-tabs))))
-
 (provide 'makefile-config)

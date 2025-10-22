@@ -3,15 +3,12 @@
 ;;; Commentary:
 ;; This file contains constants for Eglot LSP configuration.
 ;; Constants are prefixed with 'features-eglot-' to avoid naming conflicts.
-
 (require 'core-utils)
-
 (core-utils-with-load-timing
  "eglot-constants.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Connection Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defconst
   features-eglot-connection-timeout 60
   "Timeout in seconds for Eglot LSP server connections.
@@ -20,7 +17,6 @@ Longer timeout accommodates slow remote connections and large codebases where LS
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Performance Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defconst
   features-eglot-autoshutdown t
   "Automatically shutdown LSP server when last buffer is killed.
@@ -39,7 +35,6 @@ Set to t for mode line, 'messages for *Messages* buffer, or nil to disable.")
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Server Programs Map
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defconst
   features-eglot-lsp-server-map
   '((python-mode . "pylsp")
@@ -71,7 +66,5 @@ This map is for modes we want to explicitly manage or customize.
 Users can extend this in local.el to add support for additional languages:
   (add-to-list 'features-eglot-lsp-server-map '(rust-mode . \"rust-analyzer\"))
   (add-to-list 'features-eglot-lsp-server-map '(go-mode . \"gopls\"))"))
-
 (provide 'eglot-constants)
-
 ;;; eglot-constants.el ends here

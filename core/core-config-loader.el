@@ -2,16 +2,13 @@
 ;;; Commentary:
 ;;      Custom use-package keyword for tracking module load times and descriptions.
 ;;      Provides the :description keyword that integrates with init.el diagnostics.
-
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "core-config-loader.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Custom use-package :description keyword
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   core-config-loader-normalize/:description
   (_name _keyword args)
@@ -53,7 +50,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Keyword Registration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Register the custom keyword (before :ensure, so it wraps everything)
  (setq
   use-package-keywords
@@ -73,7 +69,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Config Module Macro
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defmacro
   load-module (name &rest args)
   "Load a configuration module with automatic :ensure nil and :demand t.
@@ -83,7 +78,5 @@ ARGS are additional use-package keywords like :after, :description, :config, etc
 
  (core-message-config
   "Configuration loader with :description keyword and load-module macro ready"))
-
 (provide 'core-config-loader)
-
 ;;; core-config-loader.el ends here

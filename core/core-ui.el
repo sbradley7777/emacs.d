@@ -1,10 +1,8 @@
 ;;; core-ui.el --- User Interface Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Display preferences and UI behavior
-
 (require 'core-constants)
 (require 'core-utils)
-
 (core-utils-with-load-timing
  "core-ui.el"
  ;; Modern line number display (Emacs 30.2+)
@@ -116,5 +114,4 @@
 
  ;; Make this module available for loading with (require 'core-ui)
  )
-
 (provide 'core-ui)

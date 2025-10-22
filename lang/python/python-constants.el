@@ -3,9 +3,7 @@
 ;;      Centralized constants for Python development configuration.
 ;;      This file contains paths, settings, and other constants used
 ;;      across multiple Python-related configuration files.
-
 (require 'core-utils)
-
 (core-utils-with-load-timing
  "python-constants.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -31,10 +29,8 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Shared Project State Variables
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Auto-detected project tracking (shared between local and remote)
  (defvar pyvenv-project-root nil "Auto-detected project root - set once and remembered.")
 
  (defvar pyvenv-project-name nil "Auto-detected project name for modeline display."))
-
 (provide 'python-constants)

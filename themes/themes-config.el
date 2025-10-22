@@ -6,18 +6,15 @@
 ;;
 ;; Core theme and visual appearance configuration
 ;; Advanced theme utilities are in themes-utils.el
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
 (require 'themes-constants)
-
 (core-utils-with-load-timing
  "themes-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Theme Configuration Variables
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Allow all themes without confirmation prompts
  (setq custom-safe-themes t)
 
@@ -45,7 +42,6 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Theme-Specific Setup Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   themes-config-apply-theme-specific-customizations
   (theme)
@@ -61,7 +57,6 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Core Theme Loading
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   themes-config-load-configured-theme
   ()
@@ -110,7 +105,5 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  (add-hook 'emacs-startup-hook #'themes-config-load-configured-theme))
 
 ;; Make this module available for loading with (require 'themes-config)
-
 (provide 'themes-config)
-
 ;;; themes-config.el ends here

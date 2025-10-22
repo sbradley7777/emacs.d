@@ -3,15 +3,12 @@
 ;;      Visual indicators for git changes in the fringe.
 ;;      Shows added, modified, and deleted lines with colored bars.
 ;;      Works passively alongside terminal git workflow.
-
 (require 'core-utils)
-
 (core-utils-with-load-timing
  "diff-hl-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; diff-hl Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (use-package
   diff-hl
   :config
@@ -47,7 +44,5 @@
 
   ;; Refresh diff-hl when magit refreshes (if magit is ever added)
   (with-eval-after-load 'magit (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))))
-
 (provide 'diff-hl-config)
-
 ;;; diff-hl-config.el ends here

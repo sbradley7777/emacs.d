@@ -2,13 +2,11 @@
 ;;; Commentary:
 ;;      TRAMP integration with proper remote virtual environment detection.
 ;;      Provides seamless Python virtual environment support for remote files.
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'pyvenv-config)
 (require 'pyvenv-utils)
 (require 'tramp-utils)
-
 (core-utils-with-load-timing
  "pyvenv-remote.el"
  (defun
@@ -122,5 +120,4 @@ First tries to find it remotely, falls back to local equivalent if needed."
  (add-hook 'python-ts-mode-hook #'pyvenv-remote-activate)
 
  (core-message-debug "TRAMP-aware pyvenv support loaded"))
-
 (provide 'pyvenv-remote)

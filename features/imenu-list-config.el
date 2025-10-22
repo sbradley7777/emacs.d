@@ -1,17 +1,14 @@
 ;;; imenu-list-config.el --- Imenu List Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Configuration for imenu-list package providing sidebar symbol navigation
-
 (require 'core-utils)
 (require 'core-logging)
 (require 'features-constants)
-
 (core-utils-with-load-timing
  "imenu-list-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Imenu-List Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (use-package
   imenu-list
   :config
@@ -60,7 +57,5 @@
   (define-key imenu-list-major-mode-map (kbd "s") 'imenu-list-show-current-symbol)
 
   (core-message-success "Imenu-list configured for terminal-based symbol navigation")))
-
 (provide 'imenu-list-config)
-
 ;;; imenu-list-config.el ends here

@@ -1,7 +1,6 @@
 ;;; core-packages.el --- Package Declarations and Configurations -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Package installation and configuration using use-package.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'package-metadata)
@@ -9,7 +8,6 @@
 (require 'package-installation)
 (require 'package-maintenance)
 (require 'features-constants)
-
 (core-utils-with-load-timing
  "core-packages.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -105,5 +103,4 @@ Assembled from all category lists in load order.")
 
  ;; Make this module available for loading with (require 'core-packages)
  )
-
 (provide 'core-packages)

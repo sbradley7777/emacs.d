@@ -3,16 +3,13 @@
 ;;      Shared utilities for language mode configuration.
 ;;      Provides common setup functions and hook registration for both
 ;;      regular and tree-sitter language modes.
-
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "lang-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Common Mode Setup Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   lang-setup-basic-editing ()
   "Apply basic editing settings common to all language modes.
@@ -39,7 +36,6 @@ EXTRA-VARS should be an alist of (variable . value) pairs."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Mode Hook Registration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defmacro
   lang-register-dual-mode-hooks (lang-name setup-function &optional extra-hooks)
   "Register SETUP-FUNCTION for both regular and tree-sitter modes of LANG-NAME.
@@ -63,7 +59,6 @@ EXTRA-HOOKS is an optional list of additional hook functions to register."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Composite Setup Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   lang-setup-minimal
   (indent-var indent-value &optional extra-indent-vars)
@@ -82,7 +77,5 @@ Use for programming languages (Python, C, Bash, etc.)."
   (lang-setup-basic-editing)
   (lang-setup-ui-enhancements)
   (lang-apply-indent-settings indent-var indent-value extra-indent-vars)))
-
 (provide 'lang-utils)
-
 ;;; lang-utils.el ends here

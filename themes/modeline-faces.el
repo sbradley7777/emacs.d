@@ -2,18 +2,15 @@
 ;;; Commentary:
 ;;      Generic dispatcher for theme-specific modeline customizations.
 ;;      Theme-specific faces are defined in theme-*.el files.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
 (require 'themes-config)
-
 (core-utils-with-load-timing
  "modeline-faces.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Face Application Logic
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   modeline-faces-apply-for-theme (theme)
   "Apply modeline face customizations for THEME if available.
@@ -43,7 +40,5 @@ THEME should be a symbol like 'doom-1337 or 'doom-zenburn."
 
  ;; Add to theme load hooks
  (add-hook 'after-load-theme-hook #'modeline-faces--on-theme-change))
-
 (provide 'modeline-faces)
-
 ;;; modeline-faces.el ends here

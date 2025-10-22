@@ -2,17 +2,14 @@
 ;;; Commentary:
 ;;      Custom segment definitions for doom-modeline.
 ;;      These segments are used in modeline-config.el.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'tree-sitter-utils)
-
 (core-utils-with-load-timing
  "modeline-segments.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Helper Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   modeline-treesitter-show-info
   ()
@@ -43,7 +40,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Generic Segments
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (with-eval-after-load
   'doom-modeline
 
@@ -127,7 +123,5 @@
            [mode-line mouse-1]
            (lambda () (interactive) (message "Local Directory: %s" default-directory)))
           map)))))))
-
 (provide 'modeline-segments)
-
 ;;; modeline-segments.el ends here

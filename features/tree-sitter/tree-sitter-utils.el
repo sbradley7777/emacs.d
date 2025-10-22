@@ -2,17 +2,14 @@
 ;;; Commentary:
 ;;      Utility functions for working with tree-sitter grammars and functionality.
 ;;      Provides helpers for grammar management, counting, and availability checks.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'tree-sitter-constants)
-
 (core-utils-with-load-timing
  "tree-sitter-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Grammar Management
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   treesit-utils-get-installed-grammars ()
   "Get list of installed tree-sitter grammars with details.
@@ -47,7 +44,6 @@ Returns the count of .so/.dylib grammar files found in the tree-sitter grammar d
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Mode Name Parsing
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   treesit-utils-is-ts-mode-p (mode-symbol)
   "Check if MODE-SYMBOL is a tree-sitter mode.
@@ -64,7 +60,5 @@ or nil if MODE-SYMBOL is not a tree-sitter mode."
   (when
    (treesit-utils-is-ts-mode-p mode-symbol)
    (replace-regexp-in-string "-ts-mode$" "" (symbol-name mode-symbol)))))
-
 (provide 'tree-sitter-utils)
-
 ;;; tree-sitter-utils.el ends here

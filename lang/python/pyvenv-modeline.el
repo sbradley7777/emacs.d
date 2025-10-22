@@ -2,18 +2,15 @@
 ;;; Commentary:
 ;;      Provides a custom clickable Python virtual environment indicator for doom-modeline.
 ;;      Shows a Python icon when a venv is active and displays project info when clicked.
-
 (require 'core-utils)
 (require 'python-constants)
 (require 'pyvenv-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "pyvenv-modeline.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Helper Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   pyvenv-modeline-file-in-project-p
   ()
@@ -25,7 +22,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Clickable Python Venv Indicator
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   pyvenv-modeline-show-info
   ()
@@ -66,7 +62,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; doom-modeline Integration (if doom-modeline is available)
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (with-eval-after-load
   'doom-modeline
   (doom-modeline-def-segment
@@ -91,7 +86,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Fallback for Default Emacs Modeline
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; If not using doom-modeline, add to global-mode-string
  (unless
   (featurep 'doom-modeline)
@@ -102,7 +96,5 @@
     (setq-default
      global-mode-string (append global-mode-string (list '(:eval (pyvenv-modeline-indicator)))))))
   (add-hook 'pyvenv-post-deactivate-hooks (lambda () (setq-default global-mode-string nil)))))
-
 (provide 'pyvenv-modeline)
-
 ;;; pyvenv-modeline.el ends here

@@ -1,10 +1,8 @@
 ;;; core-gui-mode.el --- GUI Mode Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      GUI mode settings, UI elements control, and window management setup.
-
 (require 'core-utils)
 (require 'core-logging)
-
 (core-utils-with-load-timing
  "core-gui-mode.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -48,5 +46,4 @@
 
  ;; Make this module available for loading with (require 'core-gui-mode)
  )
-
 (provide 'core-gui-mode)

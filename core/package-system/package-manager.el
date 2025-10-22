@@ -2,9 +2,7 @@
 ;;; Commentary:
 ;;      Coordinates package system initialization and module loading.
 ;;      Central entry point for the modular package management system.
-
 (require 'core-utils)
-
 (core-utils-with-load-timing
  "package-manager.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -18,7 +16,6 @@
  (require 'package-installation) ; Robust package installation utilities
  (require 'package-maintenance) ; Package upgrade and cleanup utilities
  (require 'package-ui) ; Interactive package management interfaces
-
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Package System Initialization
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,5 +24,4 @@
 
  ;; Smart package state management with caching
  (smart-package-state-management))
-
 (provide 'package-manager)

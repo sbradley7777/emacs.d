@@ -2,20 +2,17 @@
 ;;; Commentary:
 ;;      Configuration for Eglot (Emacs Polyglot) LSP client.
 ;;      Enables language server protocol support with automatic local/remote detection.
-
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
 (require 'tramp-utils)
 (require 'eglot-constants)
 (require 'features-constants)
-
 (core-utils-with-load-timing
  "eglot-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  ;; Connection timeout for remote LSP servers
  (setq eglot-connect-timeout features-eglot-connection-timeout)
 
@@ -29,7 +26,6 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Hook Setup
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (defun
   eglot-setup-lsp-for-mode (mode lsp-executable)
   "Set up eglot hook for MODE if LSP-EXECUTABLE is available.
@@ -57,7 +53,6 @@ Checks local or remote host appropriately using tramp-is-remote-file."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Automatically Configure All Modes
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  (dolist
   (mode-config features-eglot-lsp-server-map)
   (let ((mode (car mode-config))
@@ -66,7 +61,5 @@ Checks local or remote host appropriately using tramp-is-remote-file."
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  )
-
 (provide 'eglot-config)
-
 ;;; eglot-config.el ends here
