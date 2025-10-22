@@ -5,17 +5,13 @@
 ;;      - Performance optimizations
 ;;      - Preventing UI element flashing
 ;;      - Package system configuration
-
 ;; Set up minimal load path for loading constants and utilities early
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "core/package-system" user-emacs-directory))
-
 ;; Load constants first (includes emacs-local-dir and startup constants)
 (require 'core-constants)
-
 ;; Load message utilities for consistent logging
 (require 'core-logging)
-
 (core-message-loading "Loading early-init.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -32,7 +28,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configure package directory to use emacs-local-dir
 (setq package-user-dir (expand-file-name "elpa" emacs-local-dir))
-
 ;; Disable package.el auto-initialization to prevent loading warnings
 ;; This must be done very early, before any package loading attempts
 (setq package-enable-at-startup nil package-quickstart nil)
@@ -47,9 +42,6 @@
  (expand-file-name (format core-byte-compile-dir-pattern emacs-version) user-emacs-directory))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; GUI Element Suppression - Prevents UI Flashing
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File Handling Optimizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Optimize file-name-handler-alist during startup (restore in init.el)
@@ -57,7 +49,6 @@
  default-file-name-handler-alist
  file-name-handler-alist
  "Backup of default file-name-handler-alist for restoration after init.")
-
 ;; Temporarily disable file name handlers for faster startup
 (setq file-name-handler-alist nil)
 
@@ -69,7 +60,6 @@
 (setq inhibit-startup-screen t) ; Skip startup screen
 (setq inhibit-startup-echo-area-message t) ; Skip echo area message
 (setq initial-scratch-message nil) ; Clean scratch buffer
-
 ;; Disable bidirectional text support for performance (can be re-enabled if needed)
 (setq-default bidi-display-reordering 'left-to-right bidi-paragraph-direction 'left-to-right)
 
@@ -78,7 +68,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Reduce input processing overhead during startup
 (setq which-func-update-delay core-idle-update-delay-startup) ; Longer delay for idle updates during startup
-
 ;; Reduce startup noise and font cache overhead
 (setq
  inhibit-compacting-font-caches t ; Don't compact font caches during startup
@@ -89,6 +78,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bootstrap the package system and install use-package
 (require 'package-manager)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Native Compilation Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -105,13 +95,11 @@
 ;; behavior in the Snap package itself, not user configuration. The compilation attempts can
 ;; be safely ignored as they don't affect functionality, but may generate background noise
 ;; in compilation buffers. This is an acceptable limitation for Snap environments.
-
 (defun
  early-init--running-in-snap-p
  ()
  "Return non-nil if Emacs is running from a Snap package."
  (string-match-p "/snap/" invocation-directory))
-
 (if
  (early-init--running-in-snap-p)
  (progn
@@ -133,7 +121,6 @@
 ;; Load core utilities for directory creation
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
 (require 'core-utils)
-
 (let ((dirs-to-create
        (list
         (expand-file-name "eln-cache" emacs-local-dir)
@@ -143,6 +130,5 @@
         core-files-auto-save-list-dir
         (expand-file-name "elpa" emacs-local-dir))))
   (dolist (dir dirs-to-create) (core-utils-ensure-directory dir)))
-
 (core-message-success "early-init.el loaded successfully - performance optimizations active.")
 (provide 'early-init)

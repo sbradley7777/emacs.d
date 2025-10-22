@@ -9,7 +9,6 @@
 ;; In interactive mode, early-init.el loads automatically before init.el
 ;; In batch mode, it doesn't load automatically, so we load it here if needed
 (unless (boundp 'emacs-local-dir) (load (expand-file-name "early-init.el" user-emacs-directory)))
-
 ;; Note: logging utilities are now loaded in early-init.el, so we can use them immediately
 (core-message-loading "Loading init.el...")
 
@@ -25,13 +24,10 @@
   (setq
    gc-cons-threshold core-gc-normal-threshold ; Normal operation threshold
    gc-cons-percentage core-gc-percentage-normal) ; Normal GC percentage
-
   ;; Restore file name handlers (disabled in early-init.el for faster startup)
   (setq file-name-handler-alist default-file-name-handler-alist)
-
   ;; Restore normal input processing
   (setq which-func-update-delay core-idle-update-delay-normal) ; Faster idle updates for responsiveness
-
   (core-message-success "Emacs startup complete. Performance settings restored.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -48,7 +44,6 @@
 ;;    - "configs"  : Template configuration files, not active modules
 ;;    - "local"    : Runtime data (package cache, recentf, etc.)
 ;; 5. Add discovered directories to load-path for module loading
-
 ;; Directory auto-detection function
 (defun
  init--auto-detect-config-directories ()
@@ -72,7 +67,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
           (and (file-directory-p subdir) (directory-files subdir t "\\.el$"))
           (push subdir all-dirs)))))))
    (nreverse all-dirs)))
-
 ;; Apply auto-detection: discover and add configuration directories to load-path
 (mapc (lambda (dir) (add-to-list 'load-path dir)) (init--auto-detect-config-directories))
 
@@ -85,7 +79,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  (core-message-warning
   "default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
  (setq default-file-name-handler-alist file-name-handler-alist))
-
 ;; Validate that early-init performance optimizations were applied
 (unless
  (> gc-cons-threshold core-gc-check-threshold)
@@ -103,16 +96,13 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  ()
  "Exclude the read-only Snap directory from native compilation."
  (add-to-list 'native-comp-deferred-compilation-deny-list "/snap/emacs/.*"))
-
 (add-hook 'native-comp-init-hook #'init--configure-native-comp-for-snap)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Error handling and robustness
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar init-start-time (current-time) "Time when Emacs initialization started.")
-
 (defvar config-load-results '() "List of configuration loading results for diagnostics.")
-
 (defun
  init--show-config-diagnostics () "Display configuration loading diagnostics."
  (let ((total-time (float-time (time-subtract (current-time) init-start-time)))
@@ -146,12 +136,10 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;; Phase 1: Foundation Layer - System Infrastructure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module tree-sitter-constants :description "Tree-sitter configuration constants")
-
 (load-module
  tree-sitter-utils
  :after tree-sitter-constants
  :description "Tree-sitter utility functions")
-
 (load-module
  core-diagnostics
  :after tree-sitter-utils
@@ -162,57 +150,40 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;; Phase 2: Package and Resource Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module core-packages :description "Package system setup and declarations")
-
 (load-module core-fonts :description "Font management")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 3: User Interface Layer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module core-ui :after core-packages :description "Basic UI setup")
-
 (load-module core-gui-mode :after core-ui :description "GUI mode configuration")
-
 (load-module themes-config :after core-packages :description "Theme configuration")
-
 (load-module modeline-config :after core-packages :description "Modeline configuration")
-
 (load-module modeline-segments :after modeline-config :description "Custom modeline segments")
-
 (load-module modeline-faces :after modeline-config :description "Modeline face customizations")
-
 (load-module themes-utils :after themes-config :description "Theme utilities")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 4: Core Editing and File Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module core-editing :description "Editing preferences")
-
 (load-module core-files :description "File handling")
-
 (load-module core-log-writer :after core-files :description "Message logging and log rotation")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module completion-config :after core-packages :description "Auto-completion framework")
-
 (load-module tramp-constants :description "TRAMP configuration constants")
-
 (load-module tramp-utils :after tramp-constants :description "TRAMP utility functions")
-
 (load-module tramp-config :after tramp-utils :description "TRAMP remote file access")
-
 (load-module
  tree-sitter-config
  :after (tree-sitter-utils core-packages)
  :description "Tree-sitter grammar management")
-
 (load-module flymake-config :after core-packages :description "Flymake configuration")
-
 (load-module flymake-utils :after flymake-config :description "Flymake utility functions")
-
 (load-module diff-hl-config :after core-packages :description "Git diff highlighting")
-
 (load-module
  rainbow-delimiters-config
  :after core-packages
@@ -221,7 +192,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  highlight-indent-guides-config
  :after core-packages
  :description "Visual indentation guides")
-
 (load-module
  imenu-list-config
  :after (core-packages completion-config)
@@ -251,45 +221,35 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;; Phase 7: Python Development Stack (Complex Dependencies)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module python-config :description "Python configuration")
-
 (load-module python-constants :description "Python configuration constants")
-
 (load-module
  pyvenv-utils
  :after python-constants
  :description "Python virtual environment utilities")
-
 (load-module
  pyvenv-config
  :after (pyvenv-utils core-packages)
  :description "Python virtual environments")
-
 (load-module
  pyvenv-remote
  :after pyvenv-config
  :description "Python virtual environments TRAMP support")
-
 (load-module
  pyvenv-modeline
  :after pyvenv-config
  :description "Python virtual environment modeline indicator")
-
 (load-module
  flymake-ruff-config
  :after (core-packages python-config flymake-config pyvenv-config)
  :description "Flymake Ruff integration")
-
 (load-module eglot-config :after python-config :description "Eglot LSP integration")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 8: User Customizations (Final Layer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module user-utils :description "User utility functions")
-
 (load-module user-aliases :after user-utils :description "Function aliases and shortcuts")
-
 (load-module user-keybindings :after user-utils :description "User keybindings")
-
 (load-module
  command-palette
  :after user-aliases
@@ -300,7 +260,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use standard Emacs convention for custom settings
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-
 ;; Load custom settings if the file exists
 (when (file-exists-p custom-file) (load custom-file 'noerror))
 
@@ -331,7 +290,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display detailed loading diagnostics
 (init--show-config-diagnostics)
-
 ;; Show version-aware configuration status
 (core-message-success "Emacs %s configuration loaded successfully" emacs-version)
 
@@ -343,7 +301,6 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;; - Emacs' built-in GC triggers are sufficient for light buffer usage
 ;; - Manual optimization available via M-x optimize-gc-for-long-session if needed
 ;; - This approach avoids over-optimization complexity for predictable, light workflows
-
 (defun
  init-optimize-gc-for-long-session ()
  "Optimize garbage collection for long-running sessions.
@@ -353,5 +310,4 @@ Can be called manually when needed for intensive work sessions."
   gc-cons-threshold core-gc-long-session-threshold ; Long session threshold
   gc-cons-percentage core-gc-percentage-normal) ; Normal GC percentage
  )
-
 (core-message-success "init.el loaded successfully.")
