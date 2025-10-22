@@ -29,6 +29,14 @@ Higher values reduce network traffic but increase latency for completions.")
   features-eglot-report-progress 'messages
   "Where to report LSP server progress notifications.
 Set to t for mode line, 'messages for *Messages* buffer, or nil to disable.")
+ (defconst
+  features-eglot-startup-delay 0.5
+  "Delay in seconds before activating eglot after opening a file.
+Prevents 'Invalid region' flymake warnings caused by race conditions when LSP
+server sends diagnostics before files are fully loaded. This happens when opening
+multiple files simultaneously - the LSP may reference line numbers that don't exist
+yet in the Emacs buffer. The idle timer ensures the buffer is fully parsed before
+eglot connects and receives diagnostics.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Eglot Server Programs Map
