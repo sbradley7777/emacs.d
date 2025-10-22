@@ -94,9 +94,12 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`c-config.el`](lang/c/c-config.el) - C and C++ development settings
   - **[`json/`](lang/json/)** - JSON configuration
     - [`json-config.el`](lang/json/json-config.el) - JSON mode configuration
-  - [`lisp-config.el`](lang/lisp-config.el) - Lisp/Elisp development settings
-  - [`makefile-config.el`](lang/makefile-config.el) - Makefile development settings
-  - [`markdown-config.el`](lang/markdown-config.el) - Markdown mode support and configuration
+  - **[`lisp/`](lang/lisp/)** - Lisp/Elisp development
+    - [`lisp-config.el`](lang/lisp/lisp-config.el) - Lisp/Elisp development settings
+  - **[`makefile/`](lang/makefile/)** - Makefile development
+    - [`makefile-config.el`](lang/makefile/makefile-config.el) - Makefile development settings
+  - **[`markdown/`](lang/markdown/)** - Markdown support
+    - [`markdown-config.el`](lang/markdown/markdown-config.el) - Markdown mode support and configuration
   - **[`python/`](lang/python/)** - Python development environment
     - [`python-config.el`](lang/python/python-config.el) - Core Python development settings
     - [`python-constants.el`](lang/python/python-constants.el) - Python configuration constants (LSP paths, etc.)
@@ -105,8 +108,10 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`pyvenv-remote.el`](lang/python/pyvenv-remote.el) - TRAMP-aware virtual environment support
     - [`pyvenv-utils.el`](lang/python/pyvenv-utils.el) - Python virtual environment utilities
     - [`flymake-ruff-config.el`](lang/python/flymake-ruff-config.el) - Advanced Python linting with Ruff integration
-  - [`toml-config.el`](lang/toml-config.el) - TOML mode support for configuration files
-  - [`yaml-config.el`](lang/yaml-config.el) - YAML file handling
+  - **[`toml/`](lang/toml/)** - TOML configuration
+    - [`toml-config.el`](lang/toml/toml-config.el) - TOML mode support for configuration files
+  - **[`yaml/`](lang/yaml/)** - YAML configuration
+    - [`yaml-config.el`](lang/yaml/yaml-config.el) - YAML file handling
 - **[`themes/`](themes/)** - Theme and appearance configuration
   - [`themes-config.el`](themes/themes-config.el) - [Doom Themes](https://github.com/doomemacs/themes) configuration with terminal compatibility
   - [`themes-constants.el`](themes/themes-constants.el) - Theme configuration constants

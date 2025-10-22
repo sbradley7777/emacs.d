@@ -352,7 +352,7 @@ Comprehensive Python development setup with intelligent environment management:
 
 Enhanced support for Lisp programming with comprehensive development tools:
 
-**Features** ([`lang/lisp-config.el`](lang/lisp-config.el)):
+**Features** ([`lang/lisp/lisp-config.el`](lang/lisp/lisp-config.el)):
 - **Intelligent completion** for functions, variables, and macros
 - **Enhanced evaluation** with inline result display for Emacs Lisp development
 - **Auto-formatting** via [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) integration
@@ -361,7 +361,7 @@ Enhanced support for Lisp programming with comprehensive development tools:
 
 Professional [Makefile](https://www.gnu.org/software/make/manual/make.html) editing support with intelligent features:
 
-**Features** ([`lang/makefile-config.el`](lang/makefile-config.el)):
+**Features** ([`lang/makefile/makefile-config.el`](lang/makefile/makefile-config.el)):
 - **Smart indentation** respecting Makefile tab requirements
 - **Target completion** and navigation
 - **Variable highlighting** and substitution awareness
@@ -371,7 +371,7 @@ Professional [Makefile](https://www.gnu.org/software/make/manual/make.html) edit
 
 Enhanced [Markdown](https://daringfireball.net/projects/markdown/) editing for documentation and content creation using [markdown-mode](https://github.com/jrblevin/markdown-mode):
 
-**Features** ([`lang/markdown-config.el`](lang/markdown-config.el)):
+**Features** ([`lang/markdown/markdown-config.el`](lang/markdown/markdown-config.el)):
 - **Syntax highlighting** with [GitHub Flavored Markdown](https://github.github.com/gfm/) support
 - **Live preview** capabilities (when markdown processors are available)
 - **Table editing** assistance
@@ -381,7 +381,7 @@ Enhanced [Markdown](https://daringfireball.net/projects/markdown/) editing for d
 
 Comprehensive [TOML](https://toml.io/) support for modern configuration management using [toml-mode](https://github.com/dryman/toml-mode.el):
 
-**Features** ([`lang/toml-config.el`](lang/toml-config.el)):
+**Features** ([`lang/toml/toml-config.el`](lang/toml/toml-config.el)):
 - **Syntax highlighting** for TOML configuration files
 - **Project integration** with `pyproject.toml` support
 - **Structure validation** with error highlighting
@@ -391,7 +391,7 @@ Comprehensive [TOML](https://toml.io/) support for modern configuration manageme
 
 Specialized handling for [YAML](https://yaml.org/) files with structure-aware features using [yaml-mode](https://github.com/yoshiki/yaml-mode):
 
-**Features** ([`lang/yaml-config.el`](lang/yaml-config.el)):
+**Features** ([`lang/yaml/yaml-config.el`](lang/yaml/yaml-config.el)):
 - **Structure-aware completion** for YAML hierarchies
 - **Indentation management** (2 spaces, [YAML standard](https://yaml.org/))
 - **Syntax highlighting** with nested structure visualization
