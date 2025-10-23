@@ -115,6 +115,26 @@
   (core-message-config "Vertico extensions enabled: directory navigation and mouse support"))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Visual Enhancements - Custom Faces (Doom-1337 Optimized)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Enhanced faces for better visual distinction and readability in minibuffer completion.
+ ;; These colors are optimized for doom-1337 theme, using the theme's existing accent colors
+ ;; for consistency and proper contrast against the dark background.
+ (with-eval-after-load
+  'vertico
+  (custom-set-faces
+   ;; Highlight current selection with a distinct background (subtle blue-gray)
+   '(vertico-current ((t (:background "#3a3f5a" :extend t :weight bold))))))
+ (with-eval-after-load
+  'orderless
+  (custom-set-faces
+   ;; Use doom-1337's accent colors for match highlighting - each search term gets distinct color
+   '(orderless-match-face-0 ((t (:foreground "#00ff9f" :weight bold))))
+   '(orderless-match-face-1 ((t (:foreground "#d77dd7" :weight bold))))
+   '(orderless-match-face-2 ((t (:foreground "#7bc275" :weight bold))))
+   '(orderless-match-face-3 ((t (:foreground "#5fb3f0" :weight bold))))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Marginalia - Rich Minibuffer Annotations
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Marginalia enriches minibuffer completion by adding contextual information
@@ -175,6 +195,11 @@
  (use-package
   consult
   :config (setq consult-preview-key 'any consult-narrow-key "<")
+  ;; Customize consult-line to pre-fill with symbol at point
+  (consult-customize
+   consult-line
+   :add-history (seq-some #'thing-at-point '(region symbol))
+   :initial (thing-at-point 'symbol))
 
   ;; Customize which sources appear in consult-buffer
   (with-eval-after-load
@@ -185,7 +210,7 @@
     '(consult--source-filtered-buffer
       consult--source-project-buffer consult--source-buffer consult--source-recent-file))
 
-   (core-message-config "Consult buffer sources configured")))
+   (core-message-config "Consult buffer sources and preview customization configured")))
 
  ;; Load custom consult sources (defines filtering patterns and customizes sources)
  (require 'consult-sources))
