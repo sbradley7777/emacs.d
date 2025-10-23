@@ -59,6 +59,17 @@
  ;; Page down/up the buffer with smart boundaries
  (global-set-key (kbd "<f11>") 'user-smart-page-up) ; Page up with smart boundary handling
  (global-set-key (kbd "<f12>") 'user-smart-page-down) ; Page down with smart boundary handling
- )
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Consult Enhanced Navigation Commands
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (with-eval-after-load
+  'consult
+  (global-set-key (kbd "C-x b") 'consult-buffer) ; Better buffer switching with preview
+  (global-set-key (kbd "C-s") 'consult-line) ; Better in-buffer search with preview
+  (global-set-key (kbd "M-y") 'consult-yank-pop) ; Better kill ring browsing
+  (global-set-key (kbd "M-g g") 'consult-goto-line) ; Better goto-line
+  (global-set-key (kbd "M-g M-g") 'consult-goto-line) ; Alternative binding
+  (core-message-config "Consult keybindings configured")))
 (provide 'user-keybindings)
 ;;; user-keybindings.el ends here

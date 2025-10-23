@@ -175,6 +175,10 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;; Phase 5: Enhanced Features (Optional Components)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module completion-config :after core-packages :description "Auto-completion framework")
+(load-module
+ minibuffer-config
+ :after core-packages
+ :description "Minibuffer completion with Vertico stack")
 (load-module tramp-constants :description "TRAMP configuration constants")
 (load-module tramp-utils :after tramp-constants :description "TRAMP utility functions")
 (load-module tramp-config :after tramp-utils :description "TRAMP remote file access")
