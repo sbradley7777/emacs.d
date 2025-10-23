@@ -137,13 +137,14 @@
  ;; The sources come from `consult-buffer-sources` which includes:
  ;;
  ;; Active Sources (visible categories in consult-buffer):
- ;; - Buffers (b): All open buffers (filtered by consult-buffer-filter)
+ ;; - Filtered Buffers (d): Open buffers with filtered patterns excluded (custom source)
+ ;; - Project Buffers (p): Project buffers with filtered patterns excluded (if in a project)
+ ;; - All Buffers (b): All open buffers (no filtering)
  ;; - Files (f): Recent files from recentf-list (limited to 10 most recent)
- ;; - Registers (r): File and buffer registers
- ;; - Project Buffers (p): Buffers belonging to current project (if in a project)
  ;;
  ;; The following sources are available in Consult but excluded:
  ;; - Bookmarks (not needed)
+ ;; - Registers (not needed)
  ;; - Project recent files (was showing non-project files)
  ;; - Hidden buffers (starting with space)
  ;; - Modified buffers (buffers with unsaved changes)
@@ -159,10 +160,10 @@
  ;; NARROWING FEATURE:
  ;; -------------------
  ;; Press "<" followed by a key to narrow to a specific source:
- ;; - <b - Show only buffers
+ ;; - <d - Show only filtered buffers (default, excludes utility/internal buffers)
+ ;; - <p - Show only project buffers (filtered, if in a project)
+ ;; - <b - Show all buffers (unfiltered, includes everything)
  ;; - <f - Show only recent files (10 most recent)
- ;; - <r - Show only registers
- ;; - <p - Show only project buffers (if in a project)
  ;; - Press "<" again to remove narrowing and show all sources
  ;;
  ;; INTEGRATION:
@@ -176,132 +177,17 @@
   :config (setq consult-preview-key 'any consult-narrow-key "<")
 
   ;; Customize which sources appear in consult-buffer
-  ;; By default, many sources are hidden (marked with :hidden t)
-  ;; We'll customize to show project sources and limit recent files
   (with-eval-after-load
    'consult
    ;; Customize buffer sources for a cleaner interface
    (setq
     consult-buffer-sources
-    '(consult--source-buffer
-      consult--source-recent-file consult--source-file-register consult--source-project-buffer))
+    '(consult--source-filtered-buffer
+      consult--source-project-buffer consult--source-buffer consult--source-recent-file))
 
-   ;; Assign unique narrowing key to project buffer source. By default it shares 'b' with regular buffers, causing conflicts
-   (plist-put consult--source-project-buffer :narrow ?p)
-   (plist-put consult--source-project-buffer :hidden nil)
+   (core-message-config "Consult buffer sources configured")))
 
-   ;; Limit recent files shown to 10
-   (plist-put
-    consult--source-recent-file
-    :items
-    (lambda
-     ()
-     (let ((ht (consult--buffer-file-hash))
-           (items (mapcar #'consult--fast-abbreviate-file-name recentf-list)))
-       (seq-take (seq-remove (lambda (x) (gethash x ht)) items) 10))))
-
-   (core-message-config "Consult buffer sources customized: projects visible, 10 recent files")))
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Custom Buffer Sources (Optional)
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; You can add custom sources to consult-buffer for specific use cases.
- ;; Examples of custom sources you might want to add:
- ;;
- ;; Example 1: Python buffers only (narrow with <y)
- ;; (with-eval-after-load 'consult
- ;;   (defvar consult--source-python-buffer
- ;;     (list :name "Python Buffer"
- ;;           :narrow ?y
- ;;           :category 'buffer
- ;;           :face 'consult-buffer
- ;;           :history 'buffer-name-history
- ;;           :state #'consult--buffer-state
- ;;           :items (lambda ()
- ;;                    (consult--buffer-query
- ;;                     :mode 'python-mode
- ;;                     :as #'buffer-name)))
- ;;     "Python buffer source for `consult-buffer'.")
- ;;   (add-to-list 'consult-buffer-sources 'consult--source-python-buffer 'append))
- ;;
- ;; Example 2: Org-mode buffers (narrow with <o)
- ;; (with-eval-after-load 'consult
- ;;   (defvar consult--source-org-buffer
- ;;     (list :name "Org Buffer"
- ;;           :narrow ?o
- ;;           :category 'buffer
- ;;           :face 'consult-buffer
- ;;           :history 'buffer-name-history
- ;;           :state #'consult--buffer-state
- ;;           :items (lambda ()
- ;;                    (consult--buffer-query
- ;;                     :mode 'org-mode
- ;;                     :as #'buffer-name)))
- ;;     "Org buffer source for `consult-buffer'.")
- ;;   (add-to-list 'consult-buffer-sources 'consult--source-org-buffer 'append))
- ;;
- ;; Example 3: Project-specific files (narrow with <j for project)
- ;; You can also create sources for specific project directories, file types, etc.
- ;;
- ;; To activate: Uncomment the examples above or create your own following the same pattern.
- ;; Source properties:
- ;; - :name - Display name in the minibuffer
- ;; - :narrow - Single character key for narrowing (must be unique)
- ;; - :category - Type of completion (buffer, file, etc.)
- ;; - :items - Function that returns list of candidates
- ;; - :state - Preview/action function
- ;; - :face - Face for displaying candidates
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Buffer Filtering Configuration
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Define buffer name patterns to hide from consult-buffer.
- ;; This keeps buffer lists clean by filtering out side panels, internal buffers,
- ;; and other UI elements that you don't typically want to switch to.
- ;;
- ;; Note: You can still access these buffers via M-x switch-to-buffer
- ;; or by typing their full name in consult-buffer.
- (defconst
-  minibuffer-config-ignored-buffer-patterns
-  '(
-    ;; Utility buffers
-    "\\*Command Palette\\*" "\\*Flymake diagnostics.*\\*" "\\*Messages\\*" "\\*Completions\\*"
-    ;; Common UI buffers
-    "\\*scratch\\*" "\\*dashboard\\*" "\\*Buffer List\\*"
-    ;; Language server protocol buffers
-    "\\*eglot.*\\*" "\\*EGLOT.*\\*"
-    ;; Internal buffers (starting with space)
-    "\\` "
-    ;; Magit buffers (uncomment if using Magit)
-    ;; "^magit"
-    ;; Help/info buffers (uncomment if desired)
-    ;; "\\*Help\\*"
-    ;; "\\*info\\*"
-    )
-  "List of regexp patterns for buffer names to hide from consult-buffer.
-Each pattern is matched against buffer names. Matching buffers are excluded
-from consult-buffer completion.
-
-Patterns included:
-- Command Palette: Side window for command history
-- Flymake diagnostics: Diagnostic output window
-- Messages: Emacs message log
-- Completions: Completion candidates popup
-- scratch: Default scratch buffer
-- dashboard: Startup screen
-- Buffer List: Buffer list window
-- eglot: Language server protocol buffers
-- Buffers starting with space: Internal Emacs buffers
-
-To add more patterns, simply add regexp strings to this list.")
-
- (with-eval-after-load
-  'consult
-  ;; Use the constant for buffer filtering
-  (setq consult-buffer-filter minibuffer-config-ignored-buffer-patterns)
-
-  (core-message-config
-   "Buffer filtering configured - hiding %d buffer patterns from consult-buffer"
-   (length minibuffer-config-ignored-buffer-patterns))))
+ ;; Load custom consult sources (defines filtering patterns and customizes sources)
+ (require 'consult-sources))
 (provide 'minibuffer-config)
 ;;; minibuffer-config.el ends here
