@@ -29,11 +29,23 @@
   ;; Options: :hsl or :rgb (HSL works better with dark themes)
   (setq dimmer-use-colourspace :hsl)
 
-  ;; Prevent dimming certain buffer types
+  ;; Prevent dimming the minibuffer itself
   (setq dimmer-prevent-dimming-predicates '(window-minibuffer-p))
 
   ;; Configure which-key integration if available
   (when (fboundp 'dimmer-configure-which-key) (dimmer-configure-which-key))
+
+  ;; Advice dimmer to prevent it from running when minibuffer is active
+  ;; This solves the vertico/consult issue where window-configuration-change-hook
+  ;; causes dimmer to re-dim buffers even when we don't want it to
+  (defun
+   dimmer--disable-when-minibuffer-active
+   (orig-fun &rest args)
+   "Advice for dimmer functions to prevent running when minibuffer is active."
+   (unless (active-minibuffer-window) (apply orig-fun args)))
+  (advice-add 'dimmer-process-all :around #'dimmer--disable-when-minibuffer-active)
+  (advice-add 'dimmer-command-handler :around #'dimmer--disable-when-minibuffer-active)
+  (advice-add 'dimmer-config-change-handler :around #'dimmer--disable-when-minibuffer-active)
 
   ;; Exclude certain buffers from being dimmed
   ;; Flymake diagnostics buffer should remain bright so errors are easily visible
