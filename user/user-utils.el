@@ -176,6 +176,50 @@ Otherwise, removes leading spaces from all lines in the current paragraph."
        (forward-line 1))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Format Git Commit Messages:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  user-git-commit-format ()
+  "Format entire git commit message buffer while preserving signature lines.
+Removes leading spaces from all lines, then applies fill-paragraph to regular paragraphs
+while protecting markdown list items (lines starting with '- ') from being merged together.
+Does not modify any lines starting with 'Signed-off-by:' or any lines after them."
+  (interactive)
+  (save-excursion
+   ;; Find the end of the formattable region (before any Signed-off-by: lines)
+   (goto-char (point-min))
+   (let ((format-end
+          (if
+           (re-search-forward "^Signed-off-by:" nil t)
+           (progn (beginning-of-line) (point))
+           (point-max))))
+     (save-restriction
+      (narrow-to-region (point-min) format-end)
+      ;; Step 1: Remove leading spaces from all lines
+      (goto-char (point-min))
+      (while (re-search-forward "^[ \t]+" nil t) (replace-match ""))
+      ;; Step 2: Protect list items by adding blank line before and after each
+      (goto-char (point-min))
+      (while
+       (re-search-forward "^- " nil t)
+       (beginning-of-line)
+       (unless (looking-back "\n\n" 2) (insert "\n"))
+       (end-of-line)
+       (unless (looking-at "\n\n") (insert "\n"))
+       (forward-line 1))
+      ;; Step 3: Fill all paragraphs
+      (goto-char (point-min))
+      (while (not (eobp)) (fill-paragraph) (forward-paragraph))
+      ;; Step 4: Remove blank lines between list items and before first list item
+      (goto-char (point-min))
+      (while (re-search-forward "\\(^- .*\\)\n\n\\(- \\)" nil t) (replace-match "\\1\n\\2"))
+      (goto-char (point-min))
+      (while (re-search-forward "\\(^[^-\n].*\\)\n\n\\(- \\)" nil t) (replace-match "\\1\n\\2"))
+      ;; Step 5: Clean up excessive blank lines
+      (goto-char (point-min))
+      (while (re-search-forward "\n\n\n+" nil t) (replace-match "\n\n"))))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Side Window Mutual Exclusion:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
