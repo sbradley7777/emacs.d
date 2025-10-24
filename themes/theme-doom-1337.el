@@ -43,6 +43,11 @@
  (defvar doom-1337-color-teal "#7dd0d0" "Info/time - soft cyan-teal.")
  (defvar doom-1337-color-light-gray "#d0d0d0" "Light text - brightened gray.")
  (defvar doom-1337-color-dim-gray "#a0a0a0" "Dim text - medium gray.")
+ ;; Search and highlight colors (shared between isearch/query-replace and orderless/consult)
+ (defvar
+  doom-1337-search-highlight-color
+  doom-1337-color-green
+  "Search match highlighting - used by isearch, query-replace, and orderless.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Face Customizations
@@ -52,7 +57,11 @@
   (custom-set-faces
    ;; Comment and documentation faces
    `(font-lock-comment-face ((t (:foreground ,doom-1337-comment-color :slant italic))))
-   `(font-lock-doc-face ((t (:foreground ,doom-1337-comment-color :slant italic))))))
+   `(font-lock-doc-face ((t (:foreground ,doom-1337-comment-color :slant italic))))
+   ;; Search and replace faces - match consult-line/orderless highlighting
+   `(isearch ((t (:foreground ,doom-1337-search-highlight-color :weight bold :underline t))))
+   `(lazy-highlight ((t (:foreground ,doom-1337-search-highlight-color :weight bold))))
+   `(isearch-fail ((t (:foreground ,doom-1337-color-red :weight bold))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Modeline Face Customizations
