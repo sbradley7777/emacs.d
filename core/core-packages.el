@@ -36,9 +36,9 @@ Themes, visual enhancements, icons, and interface helpers.")
   "Text manipulation and navigation tools for all users.
 Completion, navigation, and file browsing functionality.")
  (defvar
-  core-packages-development '(flymake-ruff elisp-autofmt treesit-auto diff-hl)
+  core-packages-development '(flymake-ruff elisp-autofmt treesit-auto diff-hl magit forge)
   "Programming-specific development tools.
-Linting, formatting, code analysis, tree-sitter support, and git diff visualization.")
+Linting, formatting, code analysis, tree-sitter support, git diff visualization, and git integration.")
  (defvar
   core-packages-languages '(pyvenv yaml-mode toml-mode markdown-mode)
   "Language-specific modes and tools.
