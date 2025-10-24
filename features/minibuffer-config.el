@@ -50,7 +50,7 @@
 ;; - Vertico stack: Minibuffer completion (commands, files, buffers via M-x or C-x)
 ;; Both systems complement each other for a complete completion experience.
 (require 'core-utils)
-(require 'theme-doom-1337)
+(require 'theme-doom-1337-constants)
 (core-utils-with-load-timing
  "minibuffer-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
