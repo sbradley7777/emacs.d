@@ -143,6 +143,39 @@ Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
   (user-cycle-buffer :backward))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Remove Leading Spaces:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  user-remove-leading-spaces ()
+  "Remove leading spaces from the current paragraph or region.
+If a region is active, removes leading spaces from all lines in the region.
+Otherwise, removes leading spaces from all lines in the current paragraph."
+  (interactive)
+  (if
+   (use-region-p)
+   ;; Process all lines in the region
+   (let ((start (region-beginning))
+         (end (region-end)))
+     (save-excursion
+      (goto-char start)
+      (while
+       (< (point) end)
+       (beginning-of-line)
+       (when (looking-at "^[ \t]+") (delete-region (match-beginning 0) (match-end 0)))
+       (forward-line 1)
+       (setq end (+ end (- (point) (line-beginning-position)))))))
+   ;; Process current paragraph
+   (save-excursion
+    (let ((start (save-excursion (backward-paragraph) (point)))
+          (end (save-excursion (forward-paragraph) (point))))
+      (goto-char start)
+      (while
+       (< (point) end)
+       (beginning-of-line)
+       (when (looking-at "^[ \t]+") (delete-region (match-beginning 0) (match-end 0)))
+       (forward-line 1))))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Side Window Mutual Exclusion:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
