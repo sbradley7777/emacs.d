@@ -32,6 +32,14 @@
   ;; Prevent dimming the minibuffer itself
   (setq dimmer-prevent-dimming-predicates '(window-minibuffer-p))
 
+  ;; Exclude buffers displayed in dedicated windows (e.g., transient menus)
+  (setq
+   dimmer-buffer-exclusion-predicates
+   '((lambda
+      (buf)
+      (let ((windows (get-buffer-window-list buf nil t)))
+        (cl-some #'window-dedicated-p windows)))))
+
   ;; Configure which-key integration if available
   (when (fboundp 'dimmer-configure-which-key) (dimmer-configure-which-key))
 
