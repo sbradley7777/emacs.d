@@ -35,13 +35,14 @@
  (defconst command-palette-history-size 20 "Maximum number of commands to store in history.")
  (defconst
   command-palette-default-favorites
-  '(("Menu Bar Open" . menu-bar-open)
+  '(("User Git Commit Format" . user-git-commit-format)
+    ("User Copy Whole Buffer" . user-copy-whole-buffer)
+    ("Menu Bar Open" . menu-bar-open)
     ("Diagnostics Show All" . diagnostics-show-all)
     ("Show Installed Packages" . show-installed-packages)
     ("Search Packages" . search-packages)
     ("Show Package Upgrades" . show-package-upgrades)
     ("List Themes" . list-themes)
-    ("Toggle Dimmer" . toggle-dimmer)
     ("Pyvenv Activate" . pyvenv-activate)
     ("Pyvenv Deactivate" . pyvenv-deactivate)
     ("Pyvenv Workon" . pyvenv-workon)
@@ -50,7 +51,12 @@
     ("Treesit Show Symbols Sidebar" . treesit-show-symbols-sidebar)
     ("Treesitter Grammar Status" . treesitter-grammar-status)
     ("Treesit Install Language Grammar" . treesit-install-language-grammar)
-    ,("Elisp Autofmt Buffer" . elisp-autofmt-buffer))
+    ("Elisp Autofmt Buffer" . elisp-autofmt-buffer)
+    ("Vertico Next" . vertico-next)
+    ("Project List Buffers" . project-list-buffers)
+    ("Magit Status" . magit-status)
+    ("Forge Pull" . forge-pull)
+    ("Forge List Issues" . forge-list-issues))
   "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
 
  (defconst
