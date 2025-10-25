@@ -147,44 +147,37 @@ Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
   user-git-commit-format ()
-  "Format entire git commit message buffer while preserving signature lines.
-Removes leading spaces from all lines, then applies fill-paragraph to regular paragraphs
-while protecting markdown list items (lines starting with '- ') from being merged together.
-Does not modify any lines starting with 'Signed-off-by:' or any lines after them."
+  "Remove 2 leading spaces from the subject line and body of a git commit message.
+
+This function is used to format Claude-generated git commit messages when editing
+a commit message. Claude often generates commit messages with 2-space indentation,
+and this function removes that leading indentation to produce properly formatted
+commit messages.
+
+Only formats the subject line and body (including section headers like 'Changes:').
+Stops processing and preserves original formatting when encountering known git
+trailers or git comments (lines starting with '#').
+
+Known trailers include: Signed-off-by, Co-authored-by, Reviewed-by, Acked-by,
+Tested-by, Reported-by, Suggested-by, Helped-by, Cc, Fixes, Closes, Resolves,
+See-also, Reference."
   (interactive)
   (save-excursion
-   ;; Find the end of the formattable region (before any Signed-off-by: lines)
+   ;; Find the end of the formattable region (subject + body only, before trailers or git comments)
    (goto-char (point-min))
-   (let ((format-end
-          (if
-           (re-search-forward "^Signed-off-by:" nil t)
-           (progn (beginning-of-line) (point))
-           (point-max))))
+   (let
+       ((format-end
+         (if
+          (re-search-forward
+           "^\\(Signed-off-by:\\|Co-authored-by:\\|Reviewed-by:\\|Acked-by:\\|Tested-by:\\|Reported-by:\\|Suggested-by:\\|Helped-by:\\|Cc:\\|Fixes:\\|Closes:\\|Resolves:\\|See-also:\\|Reference:\\|#\\)"
+           nil
+           t)
+          (progn (beginning-of-line) (point)) (point-max))))
      (save-restriction
       (narrow-to-region (point-min) format-end)
-      ;; Step 1: Remove leading spaces from all lines
+      ;; Remove 2 leading spaces from all lines in subject and body (including section headers)
       (goto-char (point-min))
-      (while (re-search-forward "^[ \t]+" nil t) (replace-match ""))
-      ;; Step 2: Protect list items by adding blank line before and after each
-      (goto-char (point-min))
-      (while
-       (re-search-forward "^- " nil t)
-       (beginning-of-line)
-       (unless (looking-back "\n\n" 2) (insert "\n"))
-       (end-of-line)
-       (unless (looking-at "\n\n") (insert "\n"))
-       (forward-line 1))
-      ;; Step 3: Fill all paragraphs
-      (goto-char (point-min))
-      (while (not (eobp)) (fill-paragraph) (forward-paragraph))
-      ;; Step 4: Remove blank lines between list items and before first list item
-      (goto-char (point-min))
-      (while (re-search-forward "\\(^- .*\\)\n\n\\(- \\)" nil t) (replace-match "\\1\n\\2"))
-      (goto-char (point-min))
-      (while (re-search-forward "\\(^[^-\n].*\\)\n\n\\(- \\)" nil t) (replace-match "\\1\n\\2"))
-      ;; Step 5: Clean up excessive blank lines
-      (goto-char (point-min))
-      (while (re-search-forward "\n\n\n+" nil t) (replace-match "\n\n"))))))
+      (while (re-search-forward "^  " nil t) (replace-match "") (beginning-of-line 2))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Side Window Mutual Exclusion:
