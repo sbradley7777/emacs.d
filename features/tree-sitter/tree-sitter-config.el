@@ -26,24 +26,11 @@
  ;; Buffer Reload After Grammar Installation
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  core-treesit-get-mode-mapping (lang)
-  "Get the (REGULAR-MODE TS-MODE) pair for LANG by querying treesit-auto.
-Returns nil if no mapping is found."
-  (when
-   (and (boundp 'treesit-auto-recipe-list) treesit-auto-recipe-list)
-   (let ((recipe
-          (seq-find (lambda (r) (eq (treesit-auto-recipe-lang r) lang)) treesit-auto-recipe-list)))
-     (when
-      recipe
-      (let ((ts-mode (treesit-auto-recipe-ts-mode recipe))
-            (remap (treesit-auto-recipe-remap recipe)))
-        (when (and ts-mode remap) (list remap ts-mode)))))))
- (defun
   core-treesit-reload-buffers-for-language (lang)
   "Reload all buffers that could use the newly installed LANG grammar.
 Switches buffers from regular mode to tree-sitter mode when grammar becomes available.
 Dynamically discovers mode mappings from treesit-auto configuration."
-  (when-let* ((mode-info (core-treesit-get-mode-mapping lang))
+  (when-let* ((mode-info (treesit-utils-get-mode-mapping lang))
               (regular-mode (nth 0 mode-info))
               (ts-mode (nth 1 mode-info)))
     (let ((reloaded-count 0)

@@ -43,8 +43,21 @@ Returns the count of .so/.dylib grammar files found in the tree-sitter grammar d
   (length (treesit-utils-get-installed-grammars)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Mode Name Parsing
+ ;; Mode Mapping and Parsing
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  treesit-utils-get-mode-mapping (lang)
+  "Get the (REGULAR-MODE TS-MODE) pair for LANG by querying treesit-auto.
+Returns nil if no mapping is found."
+  (when
+   (and (boundp 'treesit-auto-recipe-list) treesit-auto-recipe-list)
+   (let ((recipe
+          (seq-find (lambda (r) (eq (treesit-auto-recipe-lang r) lang)) treesit-auto-recipe-list)))
+     (when
+      recipe
+      (let ((ts-mode (treesit-auto-recipe-ts-mode recipe))
+            (remap (treesit-auto-recipe-remap recipe)))
+        (when (and ts-mode remap) (list remap ts-mode)))))))
  (defun
   treesit-utils-is-ts-mode-p (mode-symbol)
   "Check if MODE-SYMBOL is a tree-sitter mode.
