@@ -103,6 +103,12 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Forge Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  user-git-issues (&optional repo)
+  "List forge issues directly without showing the transient menu.
+Optional REPO argument specifies which repository to list issues for."
+  (interactive) (require 'forge-topics) (forge-topics-setup-buffer repo nil :type 'issue))
+
  (use-package
   forge
   :after magit

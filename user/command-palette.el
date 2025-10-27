@@ -56,7 +56,7 @@
     ("Project List Buffers" . project-list-buffers)
     ("Magit Status" . magit-status)
     ("Forge Pull" . forge-pull)
-    ("Forge List Issues" . forge-list-issues))
+    ("List Git Issues" . user-git-issues))
   "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
 
  (defconst
