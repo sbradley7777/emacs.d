@@ -237,6 +237,14 @@ Example: 'find-file' becomes 'Find File'."
   (let ((name (symbol-name cmd-symbol)))
     (capitalize (replace-regexp-in-string "-" " " name))))
  (defun
+  command-palette--get-keybinding
+  (cmd-symbol)
+  "Get the first keybinding for CMD-SYMBOL as a string, or nil if none exists."
+  (when
+   (commandp cmd-symbol)
+   (let ((keys (where-is-internal cmd-symbol nil t)))
+     (when keys (key-description keys)))))
+ (defun
   command-palette--add-to-history (cmd-symbol)
   "Add CMD-SYMBOL to command history if it's not excluded or in favorites.
 Removes any existing occurrences before adding to ensure no duplicates. Returns t if added, nil if excluded."
@@ -293,9 +301,9 @@ Switches to the previous window before executing the command, then closes the pa
     (when target-window (select-window target-window))
     (call-interactively cmd-symbol)))
  (defun
-  command-palette--make-button
-  (label action face)
-  "Create a clickable button with LABEL that executes ACTION. Use FACE for styling."
+  command-palette--make-button (label action face &optional keybinding)
+  "Create a clickable button with LABEL that executes ACTION. Use FACE for styling.
+If KEYBINDING is provided, display it in parentheses with a red color."
   (let ((start (point)))
     (insert "  " label)
     (make-text-button
@@ -309,6 +317,10 @@ Switches to the previous window before executing the command, then closes the pa
      face
      'help-echo
      (format "Click to execute: %s" label))
+    (when
+     keybinding
+     (insert " ")
+     (insert (propertize (format "(%s)" keybinding) 'face '(:foreground "#e74c3c"))))
     (insert "\n")))
  (defun
   command-palette--calculate-window-width ()
@@ -352,12 +364,14 @@ Returns width as number of columns needed to display content."
   (let ((index 1))
     (dolist
      (item command-palette-favorites)
-     (let ((name (car item))
-           (cmd (cdr item)))
+     (let* ((name (car item))
+            (cmd (cdr item))
+            (keybinding (command-palette--get-keybinding cmd)))
        (command-palette--make-button
         (format "  %d. %s" index name)
         `(lambda (_) (command-palette--execute-command ',cmd ,name))
-        '(:foreground "lightgreen"))
+        '(:foreground "lightgreen")
+        keybinding)
        (setq index (1+ index)))))
   (insert "\n")
 
@@ -372,11 +386,13 @@ Returns width as number of columns needed to display content."
     (let* ((item (ring-ref command-palette-history i))
            (name (car item))
            (cmd (cdr item))
-           (index (1+ i)))
+           (index (1+ i))
+           (keybinding (command-palette--get-keybinding cmd)))
       (command-palette--make-button
        (format "  %d. %s" index name)
        `(lambda (_) (command-palette--execute-command ',cmd ,name))
-       '(:foreground "orange"))))
+       '(:foreground "orange")
+       keybinding)))
    (insert "\n"))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
