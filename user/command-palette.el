@@ -400,21 +400,21 @@ Returns width as number of columns needed to display content."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (insert (propertize " ⚙️  Actions:\n" 'face '(:weight bold :foreground "magenta")))
   (command-palette--make-button
-   "  + Promote Recent to Favorite"
+   "  📌 Promote Recent to Favorite"
    (lambda (_) (call-interactively 'command-palette-add-favorite))
    '(:foreground "cyan"))
   (command-palette--make-button
-   "  − Remove Favorite by Index"
+   "  🗑️  Remove Favorite by Index"
    (lambda (_) (call-interactively 'command-palette-remove-favorite))
    '(:foreground "red"))
   (command-palette--make-button
-   "  ⟳ Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
+   "  🔄 Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
   (command-palette--make-button
    "  🔍 Validate Commands"
    (lambda (_) (command-palette-validate-commands))
    '(:foreground "lightblue"))
   (command-palette--make-button
-   "  ✕ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
+   "  ❌ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
 
   (insert "\n") (insert (propertize " Keys:\n" 'face '(:foreground "gray" :slant italic)))
   (insert
