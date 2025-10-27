@@ -27,7 +27,7 @@
 ;; Package System Early Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configure package directory to use emacs-local-dir
-(setq package-user-dir (expand-file-name "elpa" emacs-local-dir))
+(setq package-user-dir core-packages-dir)
 ;; Disable package.el auto-initialization to prevent loading warnings
 ;; This must be done very early, before any package loading attempts
 (setq package-enable-at-startup nil package-quickstart nil)
@@ -107,12 +107,12 @@
   (setq native-comp-deferred-compilation nil)
   (setq native-comp-jit-compilation nil)
   (setq native-comp-enable-subr-trampolines nil)
-  (setq native-comp-eln-load-path (list (expand-file-name "eln-cache" emacs-local-dir)))
+  (setq native-comp-eln-load-path (list core-eln-cache-dir))
   (core-message-warning "Native compilation disabled (running in Snap environment)"))
  (progn
   ;; Enable native compilation for non-Snap installations (macOS, Linux, etc.)
   (setq native-comp-deferred-compilation t)
-  (setq native-comp-eln-load-path (list (expand-file-name "eln-cache" emacs-local-dir)))
+  (setq native-comp-eln-load-path (list core-eln-cache-dir))
   (core-message-success "Native compilation enabled (standard installation)")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -123,12 +123,11 @@
 (require 'core-utils)
 (let ((dirs-to-create
        (list
-        (expand-file-name "eln-cache" emacs-local-dir)
-        (expand-file-name "tramp-autosave" emacs-local-dir)
+        core-eln-cache-dir
         core-files-autosave-dir
         core-files-backup-dir
         core-files-auto-save-list-dir
-        (expand-file-name "elpa" emacs-local-dir))))
+        core-packages-dir)))
   (dolist (dir dirs-to-create) (core-utils-ensure-directory dir)))
 (core-message-success "early-init.el loaded successfully - performance optimizations active.")
 (provide 'early-init)

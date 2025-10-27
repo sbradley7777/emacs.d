@@ -1,10 +1,35 @@
 ;;; features-constants.el --- Feature Configuration Constants -*- lexical-binding: t -*-
+
 ;;; Commentary:
 ;; This file contains constants used across various feature modules.
 ;; Constants are prefixed with 'features-' to avoid naming conflicts.
+(require 'core-constants)
 (require 'core-utils)
 (core-utils-with-load-timing
  "features-constants.el"
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; File Location Constants
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Tree-sitter
+ (defconst
+  features-treesit-grammars-dir
+  (expand-file-name "tree-sitter/" emacs-local-dir)
+  "Directory for tree-sitter grammar libraries.")
+ ;; TRAMP Remote File Access
+ (defconst
+  features-tramp-cache-file
+  (expand-file-name "tramp" emacs-local-dir)
+  "File for TRAMP connection cache and persistence data.")
+ (defconst
+  features-tramp-autosave-dir
+  (expand-file-name "tramp-autosave" emacs-local-dir)
+  "Directory for TRAMP remote file autosaves.")
+ ;; Treemacs
+ (defconst
+  features-treemacs-persist-file
+  (expand-file-name "treemacs-persist" emacs-local-dir)
+  "File for treemacs workspace and project state persistence.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; UI and Interaction Constants

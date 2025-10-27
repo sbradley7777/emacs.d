@@ -73,12 +73,12 @@
  ;; Modern Emacs features
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Save command history
- (setq savehist-file (expand-file-name "history" emacs-local-dir))
+ (setq savehist-file core-savehist-file)
  (savehist-mode 1)
  (setq savehist-additional-variables '(search-ring regexp-search-ring))
 
  ;; Track recently opened files
- (setq recentf-save-file (expand-file-name "recentf" emacs-local-dir))
+ (setq recentf-save-file core-recentf-file)
  (recentf-mode 1)
  ;; Ensure recentf loads existing list on startup
  (recentf-load-list)
@@ -86,7 +86,7 @@
   recentf-max-saved-items
   core-recentf-max-items
   recentf-exclude
-  `(,(expand-file-name "elpa/.*" emacs-local-dir) "/tmp/.*"))
+  `(,(concat core-packages-dir "/.*") "/tmp/.*"))
 
  ;; Auto-save recentf list every 30 seconds when idle
  (setq recentf-auto-cleanup 'never)

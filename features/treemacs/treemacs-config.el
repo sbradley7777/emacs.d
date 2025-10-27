@@ -44,7 +44,7 @@
    treemacs-never-persist
    nil
    treemacs-persist-file
-   (expand-file-name "treemacs-persist" emacs-local-dir)
+   features-treemacs-persist-file
    treemacs-is-never-other-window
    nil
    treemacs-goto-tag-strategy

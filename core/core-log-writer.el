@@ -4,7 +4,6 @@
 ;; with automatic log rotation support.
 (require 'core-constants)
 (require 'core-utils)
-(require 'core-logging-constants)
 (core-utils-with-load-timing
  "core-log-writer.el"
 
@@ -15,7 +14,7 @@
   core-ensure-log-directory
   ()
   "Ensure the log directory exists, creating it if necessary."
-  (core-utils-ensure-directory core-log-directory))
+  (core-utils-ensure-directory core-log-dir))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Log File Rotation
@@ -24,8 +23,8 @@
   core-rotate-log-files (base-filename)
   "Rotate log files, keeping up to `core-log-max-files' files.
 BASE-FILENAME is the base name without directory."
-  (let ((log-dir (expand-file-name core-log-directory))
-        (base-path (expand-file-name base-filename core-log-directory)))
+  (let ((log-dir (expand-file-name core-log-dir))
+        (base-path (expand-file-name base-filename core-log-dir)))
     (when
      (file-exists-p base-path)
      ;; Move existing numbered files up
@@ -55,7 +54,7 @@ BASE-FILENAME is the base name without directory."
   (condition-case err
       (progn
        (core-ensure-log-directory)
-       (let ((log-file (expand-file-name core-messages-log-file core-log-directory)))
+       (let ((log-file (expand-file-name core-messages-log-file core-log-dir)))
          ;; Rotate existing log files
          (core-rotate-log-files core-messages-log-file)
          ;; Save current Messages buffer contents

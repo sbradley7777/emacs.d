@@ -136,10 +136,10 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 1: Foundation Layer - System Infrastructure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module tree-sitter-constants :description "Tree-sitter configuration constants")
+(load-module features-constants :description "Feature module configuration constants")
 (load-module
  tree-sitter-utils
- :after tree-sitter-constants
+ :after features-constants
  :description "Tree-sitter utility functions")
 (load-module
  core-diagnostics
@@ -269,7 +269,7 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;; Custom settings via emacs menu system
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use standard Emacs convention for custom settings
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(setq custom-file core-custom-file)
 ;; Load custom settings if the file exists
 (when (file-exists-p custom-file) (load custom-file 'noerror))
 
@@ -277,23 +277,21 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 ;; Local user configuration (not version controlled)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load optional local configuration file for user-specific settings
-(let ((local-config (expand-file-name "local.el" user-emacs-directory)))
-  (when
-   (file-exists-p local-config)
-   (core-message-loading "Loading local.el...")
-   (load local-config 'noerror)
-   (core-message-success "local.el loaded successfully")))
+(when
+ (file-exists-p core-local-config-file)
+ (core-message-loading "Loading local.el...")
+ (load core-local-config-file 'noerror)
+ (core-message-success "local.el loaded successfully"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Development configuration (not version controlled)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load optional development configuration file for testing new configurations
-(let ((dev-config (expand-file-name "dev.el" user-emacs-directory)))
-  (when
-   (file-exists-p dev-config)
-   (core-message-debug "Loading dev.el...")
-   (load dev-config 'noerror)
-   (core-message-success "dev.el loaded successfully")))
+(when
+ (file-exists-p core-dev-config-file)
+ (core-message-debug "Loading dev.el...")
+ (load core-dev-config-file 'noerror)
+ (core-message-success "dev.el loaded successfully"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization complete - show diagnostics

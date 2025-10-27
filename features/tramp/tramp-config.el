@@ -17,6 +17,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
+(require 'features-constants)
 (require 'tramp-constants)
 (require 'tramp-utils)
 
@@ -33,8 +34,10 @@
  (setq tramp-default-remote-shell tramp-default-shell)
 
  ;; Cache and auto-save locations
- (setq tramp-persistency-file-name (expand-file-name "tramp" emacs-local-dir))
- (setq tramp-auto-save-directory (expand-file-name "tramp-autosave" emacs-local-dir))
+ (setq tramp-persistency-file-name features-tramp-cache-file)
+ (setq tramp-auto-save-directory features-tramp-autosave-dir)
+ ;; Ensure directory exists
+ (core-utils-ensure-directory features-tramp-autosave-dir)
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Remote Path Configuration

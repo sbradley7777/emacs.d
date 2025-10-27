@@ -18,14 +18,9 @@
   ignore-on-load '("configs" "local") "Directories to ignore when auto-detecting load paths.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Early Startup Constants
+ ;; File and Directory Location Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defconst core-gc-percentage-startup 0.6 "GC percentage during startup (60% of heap).")
- (defconst core-idle-update-delay-startup 1.0 "Idle update delay during startup.")
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; File Directory Constants
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; File Management (autosave, backup)
  (defconst
   core-files-autosave-dir
   (expand-file-name "autosaves/" emacs-local-dir)
@@ -38,6 +33,71 @@
   core-files-backup-dir
   (expand-file-name "backups/" emacs-local-dir)
   "Directory for backup files.")
+ ;; Package System
+ (defconst
+  core-packages-dir (expand-file-name "elpa" emacs-local-dir) "Directory for installed packages.")
+ (defconst
+  core-eln-cache-dir
+  (expand-file-name "eln-cache" emacs-local-dir)
+  "Directory for native compilation cache.")
+ (defconst
+  core-package-metadata-file
+  (expand-file-name "package-metadata.el" emacs-local-dir)
+  "File storing package system persistent metadata and cache.")
+ (defconst
+  core-elisp-autofmt-cache-dir (expand-file-name "elisp-autofmt-cache" emacs-local-dir)
+  "Directory for elisp-autofmt cache files.
+Caching improves formatting performance by avoiding redundant analysis.")
+ (defconst
+  core-byte-compile-dir-pattern "elc/%s"
+  "Format pattern for version-specific byte-compiled files directory.
+The %s placeholder is replaced with emacs-version to isolate compiled files by Emacs version.")
+ ;; Project and Version Control
+ (defconst
+  core-projects-file
+  (expand-file-name "projects.el" emacs-local-dir)
+  "File storing known projects list.")
+ (defconst
+  core-forge-db-file
+  (expand-file-name "forge-database.sqlite" emacs-local-dir)
+  "SQLite database for forge data.")
+ ;; Transient and Command History
+ (defconst
+  core-transient-history-file
+  (expand-file-name "transient/history.el" emacs-local-dir)
+  "File storing transient command history.")
+ ;; Editor History and State
+ (defconst
+  core-savehist-file
+  (expand-file-name "history" emacs-local-dir)
+  "File storing minibuffer and command history.")
+ (defconst
+  core-recentf-file
+  (expand-file-name "recentf" emacs-local-dir)
+  "File storing recently opened files list.")
+ ;; Logging
+ (defconst core-log-dir (expand-file-name "log" emacs-local-dir) "Directory for log files.")
+ (defconst core-log-max-files 5 "Maximum number of rotated log files to keep.")
+ (defconst core-messages-log-file "messages.log" "Base name for messages log file.")
+ ;; User Configuration Files
+ (defconst
+  core-custom-file
+  (expand-file-name "custom.el" user-emacs-directory)
+  "File for Emacs custom-set-variables and faces.")
+ (defconst
+  core-local-config-file
+  (expand-file-name "local.el" user-emacs-directory)
+  "File for user-specific local configuration.")
+ (defconst
+  core-dev-config-file
+  (expand-file-name "dev.el" user-emacs-directory)
+  "File for temporary development configuration.")
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Early Startup Constants
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defconst core-gc-percentage-startup 0.6 "GC percentage during startup (60% of heap).")
+ (defconst core-idle-update-delay-startup 1.0 "Idle update delay during startup.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Text and Editing Constants
@@ -112,18 +172,6 @@
  (defconst
   core-package-list-column-widths '(40 20 18 22)
   "Column widths for package list display table.
-List of integers representing character widths for: package-name, installed-version, update-available, status.")
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Directory Path Patterns
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defconst
-  core-elisp-autofmt-cache-dir (expand-file-name "elisp-autofmt-cache" emacs-local-dir)
-  "Directory for elisp-autofmt cache files.
-Caching improves formatting performance by avoiding redundant analysis.")
- (defconst
-  core-byte-compile-dir-pattern "elc/%s"
-  "Format pattern for version-specific byte-compiled files directory.
-The %s placeholder is replaced with emacs-version to isolate compiled files by Emacs version."))
+List of integers representing character widths for: package-name, installed-version, update-available, status."))
 (provide 'core-constants)
 ;;; core-constants.el ends here
