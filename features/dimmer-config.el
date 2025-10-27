@@ -29,7 +29,7 @@
   ;; Options: :hsl or :rgb (HSL works better with dark themes)
   (setq dimmer-use-colourspace :hsl)
 
-  ;; Prevent dimming the minibuffer itself
+  ;; Prevent dimming the minibuffer itself using built-in window-minibuffer-p predicate
   (setq dimmer-prevent-dimming-predicates '(window-minibuffer-p))
 
   ;; Exclude buffers displayed in dedicated windows (e.g., transient menus)
@@ -43,15 +43,16 @@
   ;; Configure which-key integration if available
   (when (fboundp 'dimmer-configure-which-key) (dimmer-configure-which-key))
 
-  ;; Advice dimmer to prevent it from running when minibuffer is active
+  ;; Advice dimmer to prevent excessive updates during minibuffer operations
   ;; This solves the vertico/consult issue where window-configuration-change-hook
-  ;; causes dimmer to re-dim buffers even when we don't want it to
+  ;; causes dimmer to re-dim buffers during searches (e.g., consult-line)
+  ;; We only block dimmer-command-handler and dimmer-config-change-handler
+  ;; but allow dimmer-process-all to run so the minibuffer stays bright
   (defun
    dimmer--disable-when-minibuffer-active
    (orig-fun &rest args)
-   "Advice for dimmer functions to prevent running when minibuffer is active."
+   "Advice for dimmer functions to prevent excessive updates when minibuffer is active."
    (unless (active-minibuffer-window) (apply orig-fun args)))
-  (advice-add 'dimmer-process-all :around #'dimmer--disable-when-minibuffer-active)
   (advice-add 'dimmer-command-handler :around #'dimmer--disable-when-minibuffer-active)
   (advice-add 'dimmer-config-change-handler :around #'dimmer--disable-when-minibuffer-active)
 
