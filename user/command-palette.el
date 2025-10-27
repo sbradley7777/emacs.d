@@ -99,6 +99,7 @@
     (define-key map (kbd "q") 'command-palette-toggle)
     (define-key map (kbd "a") 'command-palette-add-favorite)
     (define-key map (kbd "r") 'command-palette-remove-favorite)
+    (define-key map (kbd "v") 'command-palette-validate-commands)
     map)
   "Keymap for command palette buffer.")
 
@@ -393,6 +394,10 @@ Returns width as number of columns needed to display content."
   (command-palette--make-button
    "  ⟳ Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
   (command-palette--make-button
+   "  🔍 Validate Commands"
+   (lambda (_) (command-palette-validate-commands))
+   '(:foreground "lightblue"))
+  (command-palette--make-button
    "  ✕ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
 
   (insert "\n") (insert (propertize " Keys:\n" 'face '(:foreground "gray" :slant italic)))
@@ -401,6 +406,11 @@ Returns width as number of columns needed to display content."
     "    • 'a' - promote recent to favorite\n" 'face '(:foreground "gray" :slant italic)))
   (insert
    (propertize "    • 'r' - remove favorite by index\n" 'face '(:foreground "gray" :slant italic)))
+  (insert
+   (propertize
+    "    • 'v' - validate and remove nonexistent commands\n"
+    'face
+    '(:foreground "gray" :slant italic)))
   (insert (propertize "    • 'q' - quit" 'face '(:foreground "gray" :slant italic))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -466,6 +476,53 @@ Returns width as number of columns needed to display content."
   (command-palette--save-history)
   (command-palette--refresh-buffer)
   (core-message-success "Command palette history cleared"))
+ (defun
+  command-palette-validate-commands
+  ()
+  "Validate all commands in favorites and history, removing any that no longer exist."
+  (interactive)
+  (let ((removed-favorites 0)
+        (removed-history 0))
+    ;; Validate favorites
+    (let ((valid-favorites nil))
+      (dolist
+       (item command-palette-favorites)
+       (let ((cmd-symbol (cdr item))
+             (cmd-name (car item)))
+         (if
+          (and (fboundp cmd-symbol) (commandp cmd-symbol)) (push item valid-favorites)
+          (progn
+           (setq removed-favorites (1+ removed-favorites))
+           (core-message-warning "Removed invalid favorite: %s (%s)" cmd-name cmd-symbol)))))
+      (setq command-palette-favorites (nreverse valid-favorites)))
+    ;; Validate history
+    (let ((new-ring (make-ring command-palette-history-size))
+          (len (ring-length command-palette-history)))
+      (dotimes
+       (i len)
+       (let* ((idx (- len 1 i))
+              (item (ring-ref command-palette-history idx))
+              (cmd-symbol (cdr item))
+              (cmd-name (car item)))
+         (if
+          (and (fboundp cmd-symbol) (commandp cmd-symbol)) (ring-insert new-ring item)
+          (progn
+           (setq removed-history (1+ removed-history))
+           (core-message-warning "Removed invalid history item: %s (%s)" cmd-name cmd-symbol)))))
+      (setq command-palette-history new-ring))
+    ;; Save changes
+    (when (> removed-favorites 0) (command-palette--save-favorites))
+    (when (> removed-history 0) (command-palette--save-history))
+    ;; Refresh buffer
+    (command-palette--refresh-buffer)
+    ;; Report results
+    (if
+     (and (= removed-favorites 0) (= removed-history 0))
+     (core-message-success "All commands are valid")
+     (core-message-success
+      "Validation complete: removed %d favorite(s) and %d history item(s)"
+      removed-favorites
+      removed-history))))
  (defun
   command-palette-toggle () "Toggle the command palette side window." (interactive)
   (if
