@@ -4,6 +4,7 @@
 ;;      that adds error code extraction in a separate column.
 (require 'core-utils)
 (require 'flymake-utils)
+(require 'lang-utils)
 (core-utils-with-load-timing
  "flymake-ruff-config.el"
 
@@ -26,8 +27,7 @@
    (flymake-mode 1))
 
   ;; Configure flymake-ruff for both python-mode and python-ts-mode
-  (add-hook 'python-mode-hook #'flymake-ruff-setup)
-  (add-hook 'python-ts-mode-hook #'flymake-ruff-setup))
+  (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'flymake-ruff-setup))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Ruff Error Code Extraction

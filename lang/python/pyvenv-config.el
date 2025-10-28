@@ -8,6 +8,7 @@
 (require 'core-logging)
 (require 'python-constants)
 (require 'pyvenv-utils)
+(require 'lang-utils)
 (core-utils-with-load-timing
  "pyvenv-config.el"
 
@@ -66,7 +67,6 @@
  (add-hook 'pyvenv-post-deactivate-hooks #'pyvenv-update-shell-interpreter)
 
  ;; Trigger auto-detection when opening Python files (both python-mode and python-ts-mode)
- (add-hook 'python-mode-hook #'pyvenv-auto-activate)
- (add-hook 'python-ts-mode-hook #'pyvenv-auto-activate))
+ (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-auto-activate))
 (provide 'pyvenv-config)
 ;;; pyvenv-config.el ends here

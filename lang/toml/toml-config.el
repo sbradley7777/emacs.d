@@ -5,6 +5,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)
+(require 'lang-utils)
 (core-utils-with-load-timing
  "toml-config.el"
 
@@ -32,11 +33,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Mode Hooks - Apply to both toml-mode and toml-ts-mode
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Apply common setup to toml-mode
- (add-hook 'toml-mode-hook #'toml-setup-common)
-
- ;; Apply common setup to toml-ts-mode (when tree-sitter grammar available)
- (add-hook 'toml-ts-mode-hook #'toml-setup-common)
+ (lang-add-dual-mode-hooks 'toml-mode-hook 'toml-ts-mode-hook #'toml-setup-common)
 
  (core-message-success "TOML configuration loaded (toml-mode and toml-ts-mode)"))
 (provide 'toml-config)

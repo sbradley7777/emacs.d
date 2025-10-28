@@ -7,6 +7,7 @@
 (require 'pyvenv-config)
 (require 'pyvenv-utils)
 (require 'tramp-utils)
+(require 'lang-utils)
 (core-utils-with-load-timing
  "pyvenv-remote.el"
  (defun
@@ -112,8 +113,7 @@ First tries to find it remotely, falls back to local equivalent if needed."
  (remove-hook 'python-mode-hook #'pyvenv-auto-activate)
  (remove-hook 'python-ts-mode-hook #'pyvenv-auto-activate)
  ;; Add pyvenv-remote-activate back for virtual environment detection and modeline
- (add-hook 'python-mode-hook #'pyvenv-remote-activate)
- (add-hook 'python-ts-mode-hook #'pyvenv-remote-activate)
+ (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-remote-activate)
 
  (core-message-debug "TRAMP-aware pyvenv support loaded"))
 (provide 'pyvenv-remote)

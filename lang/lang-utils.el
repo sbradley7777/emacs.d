@@ -54,6 +54,16 @@ EXTRA-HOOKS is an optional list of additional hook functions to register."
          (hook-fn)
          `(progn (add-hook ',base-mode-hook ',hook-fn) (add-hook ',ts-mode-hook ',hook-fn)))
         extra-hooks)))))
+ (defun
+  lang-add-dual-mode-hooks (base-mode-hook ts-mode-hook hook-function)
+  "Add HOOK-FUNCTION to both BASE-MODE-HOOK and TS-MODE-HOOK.
+This is a simpler alternative to lang-register-dual-mode-hooks that accepts
+explicit hook names instead of inferring them from a language name.
+
+Example:
+  (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'my-setup-function)
+  (lang-add-dual-mode-hooks 'js-json-mode-hook 'json-ts-mode-hook #'json-setup-common)"
+  (add-hook base-mode-hook hook-function) (add-hook ts-mode-hook hook-function))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Composite Setup Functions
