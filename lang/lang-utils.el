@@ -33,6 +33,20 @@ EXTRA-VARS should be an alist of (variable . value) pairs."
   (when extra-vars (dolist (var-pair extra-vars) (set (car var-pair) (cdr var-pair)))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; File Extension Registration
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  lang-register-file-extensions (mode &rest patterns)
+  "Register file PATTERNS to activate MODE.
+MODE is the major mode to activate (e.g., 'c-mode, 'sh-mode).
+PATTERNS are regex patterns for matching filenames (e.g., \"\\\\.c\\\\'\" \"\\\\.h\\\\'\").
+
+Example:
+  (lang-register-file-extensions 'c-mode \"\\\\.c\\\\'\" \"\\\\.h\\\\'\")
+  (lang-register-file-extensions 'sh-mode \"\\\\.sh\\\\'\" \"\\\\.bash\\\\'\" \"\\\\.zsh\\\\'\")"
+  (dolist (pattern patterns) (add-to-list 'auto-mode-alist (cons pattern mode))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Mode Hook Registration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defmacro

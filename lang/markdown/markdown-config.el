@@ -29,9 +29,7 @@
  (require 'markdown-mode)
 
  ;; File associations (treesit-auto overrides when grammar available)
- (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
- (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
- (add-to-list 'auto-mode-alist '("README\\.md\\'" . markdown-mode))
+ (lang-register-file-extensions 'markdown-mode "\\.md\\'" "\\.markdown\\'" "README\\.md\\'")
 
  ;; Terminal-friendly settings (no external preview dependencies)
  (with-eval-after-load

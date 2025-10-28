@@ -4,6 +4,7 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
+(require 'lang-utils)
 (require 'make-mode)
 (require 'highlight-indent-guides)
 (core-utils-with-load-timing
@@ -13,9 +14,8 @@
  ;; Makefile mode configuration (built-in mode)
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; File associations for Makefile variants
- (add-to-list 'auto-mode-alist '("\\(?:Makefile\\|makefile\\)\\'" . makefile-mode))
- (add-to-list 'auto-mode-alist '("\\.mk\\'" . makefile-mode))
- (add-to-list 'auto-mode-alist '("GNUmakefile\\'" . makefile-gmake-mode))
+ (lang-register-file-extensions 'makefile-mode "\\(?:Makefile\\|makefile\\)\\'" "\\.mk\\'")
+ (lang-register-file-extensions 'makefile-gmake-mode "GNUmakefile\\'")
 
  ;; Helper function for common Makefile settings
  (defun

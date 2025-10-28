@@ -34,11 +34,8 @@
  ;; File Associations
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; File associations (treesit-auto overrides when grammar available)
- (add-to-list 'auto-mode-alist '("\\.sh\\'" . sh-mode))
- (add-to-list 'auto-mode-alist '("\\.bash\\'" . sh-mode))
- (add-to-list 'auto-mode-alist '("\\.zsh\\'" . sh-mode))
- (add-to-list 'auto-mode-alist '("\\.[^.]*rc\\'" . sh-mode))
- (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
+ (lang-register-file-extensions
+  'sh-mode "\\.sh\\'" "\\.bash\\'" "\\.zsh\\'" "\\.[^.]*rc\\'" "\\.env\\'")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Syntax Highlighting Enhancements

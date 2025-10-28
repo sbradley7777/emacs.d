@@ -34,14 +34,9 @@
  (setq c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "k&r")))
 
  ;; File associations (treesit-auto overrides when grammar available)
- (add-to-list 'auto-mode-alist '("\\.c\\'" . c-mode))
- (add-to-list 'auto-mode-alist '("\\.h\\'" . c-mode))
- (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
- (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
- (add-to-list 'auto-mode-alist '("\\.cc\\'" . c++-mode))
- (add-to-list 'auto-mode-alist '("\\.hh\\'" . c++-mode))
- (add-to-list 'auto-mode-alist '("\\.cxx\\'" . c++-mode))
- (add-to-list 'auto-mode-alist '("\\.hxx\\'" . c++-mode))
+ (lang-register-file-extensions 'c-mode "\\.c\\'" "\\.h\\'")
+ (lang-register-file-extensions
+  'c++-mode "\\.cpp\\'" "\\.hpp\\'" "\\.cc\\'" "\\.hh\\'" "\\.cxx\\'" "\\.hxx\\'")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Mode Hooks - Apply to both regular and tree-sitter modes

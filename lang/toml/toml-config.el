@@ -26,9 +26,7 @@
  (require 'toml-mode)
 
  ;; File associations (treesit-auto overrides when grammar available)
- (add-to-list 'auto-mode-alist '("\\.toml\\'" . toml-mode))
- (add-to-list 'auto-mode-alist '("pyproject\\.toml\\'" . toml-mode))
- (add-to-list 'auto-mode-alist '("Cargo\\.toml\\'" . toml-mode))
+ (lang-register-file-extensions 'toml-mode "\\.toml\\'" "pyproject\\.toml\\'" "Cargo\\.toml\\'")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Mode Hooks - Apply to both toml-mode and toml-ts-mode
