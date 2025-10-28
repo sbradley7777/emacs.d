@@ -107,7 +107,19 @@
   user-git-issues (&optional repo)
   "List forge issues directly without showing the transient menu.
 Optional REPO argument specifies which repository to list issues for."
-  (interactive) (require 'forge-topics) (forge-topics-setup-buffer repo nil :type 'issue))
+  (interactive) (require 'core-logging)
+  (condition-case err
+      (progn
+       (require 'forge-topics) (unless (magit-gitdir) (user-error "Not in a git repository"))
+       (let ((repo-name (file-name-nondirectory (directory-file-name (magit-toplevel)))))
+         (unless
+          (forge-get-repository nil)
+          (user-error "Forge is not configured for repository '%s'" repo-name))
+         (forge-topics-setup-buffer repo nil :type 'issue)))
+    (user-error
+     (core-message-warning "%s" (error-message-string err)))
+    (error
+     (core-message-error "Failed to list issues: %s" (error-message-string err)))))
 
  (use-package
   forge
