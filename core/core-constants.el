@@ -21,31 +21,27 @@
  ;; File and Directory Location Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; File Management (autosave, backup)
- (defconst
-  core-files-autosave-dir
-  (expand-file-name "autosaves/" emacs-local-dir)
-  "Directory for autosave files.")
- (defconst
+ (core-utils-defconst-path
+  core-files-autosave-dir "autosaves/" emacs-local-dir "Directory for autosave files.")
+ (core-utils-defconst-path
   core-files-auto-save-list-dir
-  (expand-file-name "auto-save-list/" emacs-local-dir)
+  "auto-save-list/"
+  emacs-local-dir
   "Directory for auto-save list files.")
- (defconst
-  core-files-backup-dir
-  (expand-file-name "backups/" emacs-local-dir)
-  "Directory for backup files.")
+ (core-utils-defconst-path
+  core-files-backup-dir "backups/" emacs-local-dir "Directory for backup files.")
  ;; Package System
- (defconst
-  core-packages-dir (expand-file-name "elpa" emacs-local-dir) "Directory for installed packages.")
- (defconst
-  core-eln-cache-dir
-  (expand-file-name "eln-cache" emacs-local-dir)
-  "Directory for native compilation cache.")
- (defconst
+ (core-utils-defconst-path
+  core-packages-dir "elpa" emacs-local-dir "Directory for installed packages.")
+ (core-utils-defconst-path
+  core-eln-cache-dir "eln-cache" emacs-local-dir "Directory for native compilation cache.")
+ (core-utils-defconst-path
   core-package-metadata-file
-  (expand-file-name "package-metadata.el" emacs-local-dir)
+  "package-metadata.el"
+  emacs-local-dir
   "File storing package system persistent metadata and cache.")
- (defconst
-  core-elisp-autofmt-cache-dir (expand-file-name "elisp-autofmt-cache" emacs-local-dir)
+ (core-utils-defconst-path
+  core-elisp-autofmt-cache-dir "elisp-autofmt-cache" emacs-local-dir
   "Directory for elisp-autofmt cache files.
 Caching improves formatting performance by avoiding redundant analysis.")
  (defconst
@@ -53,44 +49,40 @@ Caching improves formatting performance by avoiding redundant analysis.")
   "Format pattern for version-specific byte-compiled files directory.
 The %s placeholder is replaced with emacs-version to isolate compiled files by Emacs version.")
  ;; Project and Version Control
- (defconst
-  core-projects-file
-  (expand-file-name "projects.el" emacs-local-dir)
-  "File storing known projects list.")
- (defconst
-  core-forge-db-file
-  (expand-file-name "forge-database.sqlite" emacs-local-dir)
-  "SQLite database for forge data.")
+ (core-utils-defconst-path
+  core-projects-file "projects.el" emacs-local-dir "File storing known projects list.")
+ (core-utils-defconst-path
+  core-forge-db-file "forge-database.sqlite" emacs-local-dir "SQLite database for forge data.")
  ;; Transient and Command History
- (defconst
+ (core-utils-defconst-path
   core-transient-history-file
-  (expand-file-name "transient/history.el" emacs-local-dir)
+  "transient/history.el"
+  emacs-local-dir
   "File storing transient command history.")
  ;; Editor History and State
- (defconst
-  core-savehist-file
-  (expand-file-name "history" emacs-local-dir)
-  "File storing minibuffer and command history.")
- (defconst
-  core-recentf-file
-  (expand-file-name "recentf" emacs-local-dir)
-  "File storing recently opened files list.")
+ (core-utils-defconst-path
+  core-savehist-file "history" emacs-local-dir "File storing minibuffer and command history.")
+ (core-utils-defconst-path
+  core-recentf-file "recentf" emacs-local-dir "File storing recently opened files list.")
  ;; Logging
- (defconst core-log-dir (expand-file-name "log" emacs-local-dir) "Directory for log files.")
+ (core-utils-defconst-path core-log-dir "log" emacs-local-dir "Directory for log files.")
  (defconst core-log-max-files 5 "Maximum number of rotated log files to keep.")
  (defconst core-messages-log-file "messages.log" "Base name for messages log file.")
  ;; User Configuration Files
- (defconst
+ (core-utils-defconst-path
   core-custom-file
-  (expand-file-name "custom.el" user-emacs-directory)
+  "custom.el"
+  user-emacs-directory
   "File for Emacs custom-set-variables and faces.")
- (defconst
+ (core-utils-defconst-path
   core-local-config-file
-  (expand-file-name "local.el" user-emacs-directory)
+  "local.el"
+  user-emacs-directory
   "File for user-specific local configuration.")
- (defconst
+ (core-utils-defconst-path
   core-dev-config-file
-  (expand-file-name "dev.el" user-emacs-directory)
+  "dev.el"
+  user-emacs-directory
   "File for temporary development configuration.")
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

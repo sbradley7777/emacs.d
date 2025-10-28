@@ -49,6 +49,23 @@ Returns t if command is found, nil otherwise."
     nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Path Constant Definition Utilities
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmacro
+ core-utils-defconst-path (name subpath base-dir docstring)
+ "Define a path constant NAME by combining SUBPATH with BASE-DIR.
+NAME is the symbol name for the constant.
+SUBPATH is the subdirectory or file path relative to BASE-DIR.
+BASE-DIR is the base directory (e.g., emacs-local-dir, user-emacs-directory).
+DOCSTRING is the documentation string for the constant.
+
+Example:
+  (core-utils-defconst-path
+   my-config-dir \"config/\" emacs-local-dir
+   \"Directory for configuration files.\")"
+ (declare (indent 1)) `(defconst ,name (expand-file-name ,subpath ,base-dir) ,docstring))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Counter Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmacro
