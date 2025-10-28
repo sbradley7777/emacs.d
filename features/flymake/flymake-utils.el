@@ -12,11 +12,7 @@
  (defun
   toggle-flymake-diagnostics-window () "Show or hide the Flymake diagnostics window." (interactive)
   ;; Find any window that is displaying a Flymake diagnostics buffer
-  (let ((flymake-window
-         (cl-find-if
-          (lambda
-           (window) (string-prefix-p "*Flymake diagnostics" (buffer-name (window-buffer window))))
-          (window-list))))
+  (let ((flymake-window (core-utils-find-window-by-buffer-name "*Flymake diagnostics")))
     ;; If such a window exists, close it. Otherwise, close other exclusive windows and open this one.
     (if
      flymake-window (quit-window nil flymake-window)

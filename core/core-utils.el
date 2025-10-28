@@ -75,6 +75,43 @@ Example:
  `(setq ,counter-var (1+ ,counter-var)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Window Management Utilities
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-utils-find-window-by-buffer-name (buffer-name-pattern &optional exact-match)
+ "Find window displaying buffer matching BUFFER-NAME-PATTERN.
+If EXACT-MATCH is non-nil, match buffer name exactly using string=.
+Otherwise, use string-prefix-p for prefix matching (default).
+Returns the window if found, nil otherwise.
+
+Example:
+  (core-utils-find-window-by-buffer-name \"*Flymake diagnostics\")
+  (core-utils-find-window-by-buffer-name \"*Ilist*\" t)"
+ (require 'cl-lib)
+ (cl-find-if
+  (lambda
+   (window)
+   (let ((buffer-name (buffer-name (window-buffer window))))
+     (if
+      exact-match
+      (string= buffer-name-pattern buffer-name)
+      (string-prefix-p buffer-name-pattern buffer-name))))
+  (window-list)))
+
+(defun
+ core-utils-close-window-by-buffer-name (buffer-name-pattern &optional exact-match)
+ "Close window displaying buffer matching BUFFER-NAME-PATTERN.
+If EXACT-MATCH is non-nil, match buffer name exactly using string=.
+Otherwise, use string-prefix-p for prefix matching (default).
+Returns t if window was found and closed, nil otherwise.
+
+Example:
+  (core-utils-close-window-by-buffer-name \"*Flymake diagnostics\")
+  (core-utils-close-window-by-buffer-name \"*Ilist*\" t)"
+ (let ((window (core-utils-find-window-by-buffer-name buffer-name-pattern exact-match)))
+   (when window (quit-window nil window) t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Directory Management Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
