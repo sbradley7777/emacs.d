@@ -19,55 +19,68 @@
 ;;          git config user.email "your.email@example.com"
 ;;
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      FORGE AUTHENTICATION - GITHUB
+;;      FORGE CONFIGURATION - SETUP
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      Reuse existing gh CLI token:
-;;        If you have gh CLI authenticated, reuse its token:
-;;          echo "machine api.github.com login USERNAME^forge password $(gh auth token)" > ~/.authinfo
-;;          chmod 600 ~/.authinfo
+;;      All forge hosts (GitHub, GitLab, Gitea, etc.) are configured via ~/.gitconfig.
+;;      This provides centralized configuration without dependency on CLI tools like gh or glab.
 ;;
-;;      Create GitHub token manually (if not using gh CLI):
-;;        Create token at https://github.com/settings/tokens
-;;          Required scopes: repo, user, read:org
+;;      STEP 1: Add forge host configuration to ~/.gitconfig
+;;      ------------------------------------------------------
+;;      For GitHub (public):
+;;        [emacs-forge "github.com"]
+;;            apihost = api.github.com
+;;            webhost = github.com
+;;            type = github
+;;            user = YOUR_USERNAME
 ;;
-;;        Add to ~/.authinfo:
-;;          echo "machine api.github.com login USERNAME^forge password GITHUB_TOKEN" > ~/.authinfo
-;;          chmod 600 ~/.authinfo
+;;      For GitHub Enterprise:
+;;        [emacs-forge "github.enterprise.com"]
+;;            apihost = github.enterprise.com/api/v3
+;;            webhost = github.enterprise.com
+;;            type = github
+;;            user = YOUR_USERNAME
 ;;
-;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      FORGE AUTHENTICATION - GITLAB
-;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      GitLab hosts authenticated via glab CLI are automatically added to forge-alist.
-;;      You must complete two additional setup steps per repository:
+;;      For GitLab (public or self-hosted):
+;;        [emacs-forge "gitlab.example.com"]
+;;            apihost = gitlab.example.com/api/v4
+;;            webhost = gitlab.example.com
+;;            type = gitlab
+;;            user = YOUR_USERNAME
 ;;
-;;      1. Create and store GitLab token in ~/.authinfo:
-;;         For gitlab.com:
-;;           echo "machine gitlab.com/api/v4 login USERNAME^forge password GITLAB_TOKEN" >> ~/.authinfo
+;;      For other forges (Gitea, Gogs, Bitbucket):
+;;        Use the same pattern with appropriate apihost paths and type values.
+;;        Supported types: github, gitlab, gitea, gogs, bitbucket
 ;;
-;;         For self-hosted GitLab (example):
-;;           echo "machine gitlab.example.com/api/v4 login USERNAME^forge password GITLAB_TOKEN" >> ~/.authinfo
+;;      STEP 2: Create authentication tokens
+;;      -------------------------------------
+;;      GitHub:
+;;        URL: https://github.com/settings/tokens (or your enterprise URL)
+;;        Required scopes: repo, user, read:org
 ;;
-;;         Token creation:
-;;           - GitLab.com: https://gitlab.com/-/profile/personal_access_tokens
-;;           - Self-hosted: https://gitlab.example.com/-/profile/personal_access_tokens
-;;           - Required scopes: api, read_api, read_user
+;;      GitLab:
+;;        URL: https://gitlab.example.com/-/profile/personal_access_tokens
+;;        Required scopes: api, read_api, read_user
 ;;
-;;      2. Configure username per repository:
-;;         The git config format is: gitlab.<APIHOST>.user
+;;      STEP 3: Add tokens to ~/.authinfo
+;;      ----------------------------------
+;;      Format: machine APIHOST login USERNAME^forge password TOKEN
 ;;
-;;         For gitlab.com repositories:
-;;           cd /path/to/repo
-;;           git config --local gitlab.gitlab.com/api/v4.user USERNAME
+;;      For GitHub:
+;;        echo "machine api.github.com login YOUR_USERNAME^forge password YOUR_GITHUB_TOKEN" >> ~/.authinfo
+;;        chmod 600 ~/.authinfo
 ;;
-;;         For self-hosted GitLab (example with gitlab.example.com):
-;;           cd /path/to/repo
-;;           git config --local gitlab.gitlab.example.com/api/v4.user USERNAME
+;;      For GitLab:
+;;        echo "machine gitlab.example.com/api/v4 login YOUR_USERNAME^forge password YOUR_GITLAB_TOKEN" >> ~/.authinfo
+;;        chmod 600 ~/.authinfo
 ;;
-;;         IMPORTANT: The config variable name includes "/api/v4" which differs from
-;;         the Forge documentation but is what Forge actually requires in practice.
+;;      IMPORTANT:
+;;        - The ^forge suffix is required by the forge package
+;;        - APIHOST is the apihost value from your [emacs-forge] section in ~/.gitconfig
+;;        - After adding hosts to ~/.gitconfig, restart Emacs or run:
+;;          M-x git-utils-populate-forge-alist-from-gitconfig
 ;;
-;;      Note: Replace USERNAME with your GitLab username and GITLAB_TOKEN with your token.
-;;      The ^forge suffix in authinfo is required by the forge package.
+;;      Note: forge-alist and usernames are automatically configured on Emacs startup
+;;      from the [emacs-forge] sections in ~/.gitconfig.
 (require 'core-utils)
 (require 'git-utils)
 (core-utils-with-load-timing
@@ -90,7 +103,7 @@
   forge
   :after magit
   :config
-  (git-utils-setup-forge-gitlab-hosts)
+  (git-utils-populate-forge-alist-from-gitconfig)
   (core-message-config "Forge configured for GitHub/GitLab integration")))
 (provide 'git-config)
 ;;; git-config.el ends here

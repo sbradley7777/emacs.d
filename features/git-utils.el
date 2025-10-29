@@ -27,6 +27,7 @@
              (if (> max-len 0) (min (floor (* (frame-width) 0.8)) (max 60 (+ max-len 5))) 60))))))
     (display-buffer
      buffer `(display-buffer-in-side-window (side . right) (window-width . ,win-width)))))
+
  (defun
   git-utils-format-magit-buffer
   ()
@@ -46,129 +47,8 @@
          (fill-region-as-paragraph label-end line-end)))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Forge Utility Functions
+ ;; User Commands
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; These functions automatically detect GitLab hosts authenticated via the glab CLI
- ;; and add them to forge-alist so that Forge can work with custom GitLab instances.
- ;;
- ;; IMPORTANT: Username Configuration
- ;; After forge-alist is configured, you must also set your username per repository:
- ;;
- ;; For custom GitLab instances, use this format:
- ;;   git config --local gitlab.<APIHOST>.user <USERNAME>
- ;;
- ;; Example for gitlab.example.com:
- ;;   git config --local gitlab.gitlab.example.com/api/v4.user USERNAME
- ;;
- ;; Note: The format includes "/api/v4" in the config variable name, which differs
- ;; from the Forge documentation but is what Forge actually looks for in practice.
- ;;
- ;; See git-config.el commentary for authentication token setup instructions.
-
- (defun
-  git-utils-parse-glab-hosts ()
-  "Parse output of 'glab auth status' and return list of authenticated GitLab hosts.
-Returns a list of plists with :host and :username keys.
-
-Example output format:
-  ((:host \"gitlab.com\" :username \"user1\")
-   (:host \"gitlab.example.com\" :username \"user2\"))
-
-The function parses glab CLI output which has this structure:
-  hostname
-    ✓ Logged in to hostname as username (...)
-
-Returns nil if glab is not installed or not authenticated."
-  (condition-case err
-      (if
-       (not (core-utils-check-command-in-path "glab"))
-       (progn (core-message-debug "glab CLI not found, skipping GitLab host detection") nil)
-       (let ((output (shell-command-to-string "glab auth status 2>&1"))
-             (hosts nil)
-             (current-host nil))
-         (with-temp-buffer
-          (insert output) (goto-char (point-min))
-          (while
-           (not (eobp))
-           (cond
-            ;; Match standalone hostname line
-            ((looking-at "^\\([a-zA-Z0-9.-]+\\)$")
-             (let ((host (match-string 1)))
-               (when
-                (and
-                 (not (string-prefix-p "uptime:" host))
-                 (not (member host '("USAGE" "FLAGS" "EXAMPLES"))))
-                (setq current-host host))))
-            ;; Match "Logged in to ... as USERNAME" line
-            ((and current-host (looking-at "^  ✓ Logged in to .+ as \\([^ ]+\\) "))
-             (let ((username (match-string 1)))
-               (push (list :host current-host :username username) hosts)
-               (setq current-host nil))))
-           (forward-line 1)))
-         (reverse hosts)))
-    (error
-     (core-message-warning "Failed to parse glab hosts: %s" (error-message-string err))
-     nil)))
-
- (defun
-  git-utils-create-forge-gitlab-entry (host)
-  "Create a forge-alist entry for GitLab HOST.
-Returns a list in the format (GITHOST APIHOST WEBHOST CLASS).
-
-The forge-alist format is:
-  (GITHOST APIHOST WEBHOST CLASS)
-
-Where:
-  GITHOST - Host used for Git operations (e.g., \"gitlab.example.com\")
-  APIHOST - API endpoint including path (e.g., \"gitlab.example.com/api/v4\")
-  WEBHOST - Host for web browser access (e.g., \"gitlab.example.com\")
-  CLASS   - Forge class symbol (forge-gitlab-repository)
-
-Example:
-  (git-utils-create-forge-gitlab-entry \"gitlab.example.com\")
-  => (\"gitlab.example.com\" \"gitlab.example.com/api/v4\" \"gitlab.example.com\" forge-gitlab-repository)"
-  (list host (concat host "/api/v4") host 'forge-gitlab-repository))
-
- (defun
-  git-utils-setup-forge-gitlab-hosts ()
-  "Setup forge-alist with authenticated GitLab hosts from glab CLI.
-
-This function:
-1. Executes 'glab auth status' to find authenticated GitLab instances
-2. Parses the output to extract host information
-3. Adds missing hosts to forge-alist so Forge can access them
-
-The function only configures forge-alist. You must separately configure
-usernames per repository using git config. See the section comments above
-for username configuration instructions.
-
-This function is called automatically when Forge loads (see git-config.el).
-You can also call it interactively to refresh the list of GitLab hosts."
-  (interactive)
-  (condition-case err
-      (progn
-       (require 'forge nil t)
-       (let ((host-info-list (git-utils-parse-glab-hosts))
-             (added-count 0))
-         (if
-          (null host-info-list) (core-message-info "No authenticated GitLab hosts found via glab")
-          (dolist
-           (host-info host-info-list)
-           (let ((host (plist-get host-info :host)))
-             ;; Only add if not already present to avoid duplicates
-             (unless
-              (assoc host forge-alist)
-              (push (git-utils-create-forge-gitlab-entry host) forge-alist)
-              (setq added-count (1+ added-count))
-              (core-message-config "Added GitLab host to forge-alist: %s" host))))
-          (if
-           (> added-count 0)
-           (core-message-success
-            "Added %d GitLab host%s to forge-alist" added-count (if (= added-count 1) "" "s"))
-           (core-message-info "All GitLab hosts already configured in forge-alist")))))
-    (error
-     (core-message-error "Failed to setup forge GitLab hosts: %s" (error-message-string err)))))
-
  (defun
   user-git-issues (&optional repo)
   "List forge issues directly without showing the transient menu.
@@ -183,6 +63,159 @@ Optional REPO argument specifies which repository to list issues for."
      (core-message-warning "%s" (error-message-string err)))
     (error
      (core-message-error "Failed to list issues: %s" (error-message-string err)))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Forge Configuration from Git Config
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; These functions read [emacs-forge "HOST"] sections from ~/.gitconfig to populate forge-alist.
+ ;;
+ ;; Example ~/.gitconfig entries:
+ ;;
+ ;;   [emacs-forge "gitlab.example.com"]
+ ;;       apihost = gitlab.example.com/api/v4
+ ;;       webhost = gitlab.example.com
+ ;;       type = gitlab
+ ;;       user = YOUR_USERNAME
+ ;;
+ ;;   [emacs-forge "github.enterprise.com"]
+ ;;       apihost = github.enterprise.com/api/v3
+ ;;       webhost = github.enterprise.com
+ ;;       type = github
+ ;;       user = YOUR_USERNAME
+ ;;
+ ;; This configuration is read automatically when Forge loads (see git-config.el).
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Git Config Utility Functions
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  git-utils-git-config-get-regexp (pattern)
+  "Get git config values matching PATTERN using git config --global --get-regexp.
+Returns list of strings, one per matching config line.
+Returns nil if git is not installed or no matches found."
+  (if
+   (not (core-utils-check-command-in-path "git"))
+   (progn (core-message-warning "git command not found") nil)
+   (let ((output
+          (shell-command-to-string
+           (format "git config --global --get-regexp '%s' 2>/dev/null" pattern))))
+     (when (> (length output) 0) (split-string output "\n" t)))))
+
+ (defun
+  git-utils-git-config-get (key)
+  "Get git config value for KEY using git config --global --get.
+Returns the value as a string, or nil if not found or git not installed."
+  (if
+   (not (core-utils-check-command-in-path "git"))
+   (progn (core-message-warning "git command not found") nil)
+   (let ((output
+          (shell-command-to-string (format "git config --global --get '%s' 2>/dev/null" key))))
+     (when (> (length output) 0) (string-trim output)))))
+
+ (defun
+  git-utils-parse-forge-hosts-from-gitconfig ()
+  "Parse host names from [emacs-forge] sections in ~/.gitconfig.
+Returns list of host strings (e.g., (\"gitlab.example.com\" \"github.com\"))."
+  (let ((lines (git-utils-git-config-get-regexp "^emacs-forge\\..*\\.apihost$"))
+        (hosts nil))
+    (when
+     lines
+     (dolist
+      (line lines)
+      (when
+       (string-match "^emacs-forge\\.\\(.+\\)\\.apihost " line)
+       (push (match-string 1 line) hosts))))
+    (reverse hosts)))
+
+ (defun
+  git-utils-parse-forge-config-for-host (host)
+  "Parse forge configuration for HOST from ~/.gitconfig.
+Returns plist with :githost, :apihost, :webhost, :type, :user keys."
+  (let ((apihost (git-utils-git-config-get (format "emacs-forge.%s.apihost" host)))
+        (webhost (git-utils-git-config-get (format "emacs-forge.%s.webhost" host)))
+        (type (git-utils-git-config-get (format "emacs-forge.%s.type" host)))
+        (user (git-utils-git-config-get (format "emacs-forge.%s.user" host))))
+    (list :githost host :apihost apihost :webhost webhost :type type :user user)))
+
+ (defun
+  git-utils-forge-type-to-class (type)
+  "Convert forge TYPE string to repository class symbol.
+TYPE should be one of: gitlab, github, gitea, gogs, bitbucket.
+Returns the corresponding forge-*-repository symbol, or nil if unknown."
+  (pcase type
+    ("gitlab" 'forge-gitlab-repository)
+    ("github" 'forge-github-repository)
+    ("gitea" 'forge-gitea-repository)
+    ("gogs" 'forge-gogs-repository)
+    ("bitbucket" 'forge-bitbucket-repository)
+    (_ nil)))
+
+ (defun
+  git-utils-populate-forge-alist-from-gitconfig ()
+  "Populate forge-alist from [emacs-forge] sections in ~/.gitconfig.
+
+This function reads custom forge host configurations from ~/.gitconfig
+and adds them to forge-alist so that Forge can work with custom instances.
+
+Also configures usernames per host using git config variables that ghub reads.
+
+Only adds hosts that are not already present in forge-alist to avoid duplicates.
+Skips entries with missing required fields (apihost, webhost, or type)."
+  (interactive)
+  (condition-case err
+      (progn
+       (require 'forge nil t)
+       (let ((hosts (git-utils-parse-forge-hosts-from-gitconfig))
+             (added-count 0)
+             (user-count 0))
+         (if
+          (null hosts) (core-message-info "No [emacs-forge] sections found in ~/.gitconfig")
+          (dolist
+           (host hosts)
+           (let* ((config (git-utils-parse-forge-config-for-host host))
+                  (githost (plist-get config :githost))
+                  (apihost (plist-get config :apihost))
+                  (webhost (plist-get config :webhost))
+                  (type (plist-get config :type))
+                  (user (plist-get config :user)))
+             (cond
+              ((not (and githost apihost webhost type))
+               (core-message-warning
+                "Skipping incomplete [emacs-forge \"%s\"] entry in ~/.gitconfig"
+                (or githost "unknown")))
+              (t
+               (unless
+                (assoc githost forge-alist)
+                (let ((repo-class (git-utils-forge-type-to-class type)))
+                  (if
+                   repo-class
+                   (progn
+                    (push (list githost apihost webhost repo-class) forge-alist)
+                    (setq added-count (1+ added-count))
+                    (core-message-config "Added forge host from ~/.gitconfig: %s" githost))
+                   (core-message-warning "Unknown forge type '%s' for %s" type githost))))
+               (when
+                user
+                (let ((git-var (format "%s.%s.user" type apihost)))
+                  (unless
+                   (magit-get git-var)
+                   (magit-set user git-var)
+                   (setq user-count (1+ user-count))
+                   (core-message-config "Set %s = %s" git-var user))))))))
+          (when
+           (> added-count 0)
+           (core-message-success
+            "Added %d forge host%s from ~/.gitconfig" added-count (if (= added-count 1) "" "s")))
+          (when
+           (> user-count 0)
+           (core-message-success
+            "Configured %d username%s" user-count (if (= user-count 1) "" "s")))
+          (when
+           (and (= added-count 0) (= user-count 0))
+           (core-message-info "All forge hosts from ~/.gitconfig already configured")))))
+    (error
+     (core-message-error
+      "Failed to read forge config from ~/.gitconfig: %s" (error-message-string err)))))
+
  (core-message-config "Git utility functions loaded"))
 (provide 'git-utils)
 ;;; git-utils.el ends here
