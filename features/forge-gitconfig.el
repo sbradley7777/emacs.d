@@ -50,11 +50,10 @@ Returns list of host strings (e.g., (\"gitlab.example.com\" \"github.com\"))."
   forge-gitconfig-parse-config-for-host (host)
   "Parse forge configuration for HOST from ~/.gitconfig.
 Returns plist with :githost, :apihost, :webhost, :type, :user keys."
-  (let ((apihost (git-utils-git-config-get (format "emacs-forge.%s.apihost" host)))
-        (webhost (git-utils-git-config-get (format "emacs-forge.%s.webhost" host)))
-        (type (git-utils-git-config-get (format "emacs-forge.%s.type" host)))
-        (user (git-utils-git-config-get (format "emacs-forge.%s.user" host))))
-    (list :githost host :apihost apihost :webhost webhost :type type :user user)))
+  (let ((config
+         (git-utils-git-config-get-multiple
+          (format "emacs-forge.%s.%%s" host) '("apihost" "webhost" "type" "user"))))
+    (plist-put config :githost host)))
 
  (defun
   forge-gitconfig-forge-type-to-class (type)
