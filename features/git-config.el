@@ -111,11 +111,8 @@ Optional REPO argument specifies which repository to list issues for."
   (condition-case err
       (progn
        (require 'forge-topics) (unless (magit-gitdir) (user-error "Not in a git repository"))
-       (let ((repo-name (file-name-nondirectory (directory-file-name (magit-toplevel)))))
-         (unless
-          (forge-get-repository nil)
-          (user-error "Forge is not configured for repository '%s'" repo-name))
-         (forge-topics-setup-buffer repo nil :type 'issue)))
+       (let ((repository (or repo (forge-get-repository :tracked))))
+         (forge-topics-setup-buffer repository nil :type 'issue)))
     (user-error
      (core-message-warning "%s" (error-message-string err)))
     (error
