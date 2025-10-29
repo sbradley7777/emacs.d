@@ -76,31 +76,36 @@ Example output format:
 
 The function parses glab CLI output which has this structure:
   hostname
-    ✓ Logged in to hostname as username (...)"
+    ✓ Logged in to hostname as username (...)
+
+Returns nil if glab is not installed or not authenticated."
   (condition-case err
-      (let ((output (shell-command-to-string "glab auth status 2>&1"))
-            (hosts nil)
-            (current-host nil))
-        (with-temp-buffer
-         (insert output) (goto-char (point-min))
-         (while
-          (not (eobp))
-          (cond
-           ;; Match standalone hostname line
-           ((looking-at "^\\([a-zA-Z0-9.-]+\\)$")
-            (let ((host (match-string 1)))
-              (when
-               (and
-                (not (string-prefix-p "uptime:" host))
-                (not (member host '("USAGE" "FLAGS" "EXAMPLES"))))
-               (setq current-host host))))
-           ;; Match "Logged in to ... as USERNAME" line
-           ((and current-host (looking-at "^  ✓ Logged in to .+ as \\([^ ]+\\) "))
-            (let ((username (match-string 1)))
-              (push (list :host current-host :username username) hosts)
-              (setq current-host nil))))
-          (forward-line 1)))
-        (reverse hosts))
+      (if
+       (not (core-utils-check-command-in-path "glab"))
+       (progn (core-message-debug "glab CLI not found, skipping GitLab host detection") nil)
+       (let ((output (shell-command-to-string "glab auth status 2>&1"))
+             (hosts nil)
+             (current-host nil))
+         (with-temp-buffer
+          (insert output) (goto-char (point-min))
+          (while
+           (not (eobp))
+           (cond
+            ;; Match standalone hostname line
+            ((looking-at "^\\([a-zA-Z0-9.-]+\\)$")
+             (let ((host (match-string 1)))
+               (when
+                (and
+                 (not (string-prefix-p "uptime:" host))
+                 (not (member host '("USAGE" "FLAGS" "EXAMPLES"))))
+                (setq current-host host))))
+            ;; Match "Logged in to ... as USERNAME" line
+            ((and current-host (looking-at "^  ✓ Logged in to .+ as \\([^ ]+\\) "))
+             (let ((username (match-string 1)))
+               (push (list :host current-host :username username) hosts)
+               (setq current-host nil))))
+           (forward-line 1)))
+         (reverse hosts)))
     (error
      (core-message-warning "Failed to parse glab hosts: %s" (error-message-string err))
      nil)))
