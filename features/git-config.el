@@ -77,12 +77,13 @@
 ;;        - The ^forge suffix is required by the forge package
 ;;        - APIHOST is the apihost value from your [emacs-forge] section in ~/.gitconfig
 ;;        - After adding hosts to ~/.gitconfig, restart Emacs or run:
-;;          M-x git-utils-populate-forge-alist-from-gitconfig
+;;          M-x forge-gitconfig-populate-forge-alist-from-gitconfig
 ;;
 ;;      Note: forge-alist and usernames are automatically configured on Emacs startup
 ;;      from the [emacs-forge] sections in ~/.gitconfig.
 (require 'core-utils)
 (require 'git-utils)
+(require 'forge-gitconfig)
 (core-utils-with-load-timing
  "git-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -103,7 +104,7 @@
   forge
   :after magit
   :config
-  (git-utils-populate-forge-alist-from-gitconfig)
+  (forge-gitconfig-populate-forge-alist-from-gitconfig)
   (core-message-config "Forge configured for GitHub/GitLab integration")))
 (provide 'git-config)
 ;;; git-config.el ends here
