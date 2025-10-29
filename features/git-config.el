@@ -37,18 +37,37 @@
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      FORGE AUTHENTICATION - GITLAB
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      Create GitLab token:
-;;        Create token at https://gitlab.com/-/profile/personal_access_tokens
-;;          Required scopes: api, read_api, read_user
+;;      GitLab hosts authenticated via glab CLI are automatically added to forge-alist.
+;;      You must complete two additional setup steps per repository:
 ;;
-;;        Add to ~/.authinfo:
-;;          echo "machine gitlab.com login USERNAME^forge password GITLAB_TOKEN" >> ~/.authinfo
+;;      1. Create and store GitLab token in ~/.authinfo:
+;;         For gitlab.com:
+;;           echo "machine gitlab.com/api/v4 login USERNAME^forge password GITLAB_TOKEN" >> ~/.authinfo
 ;;
-;;      For self-hosted GitLab:
-;;          echo "machine gitlab.example.com login USERNAME^forge password GITLAB_TOKEN" >> ~/.authinfo
+;;         For self-hosted GitLab (example):
+;;           echo "machine gitlab.example.com/api/v4 login USERNAME^forge password GITLAB_TOKEN" >> ~/.authinfo
 ;;
-;;      Note: Replace USERNAME with your GitHub/GitLab username.
-;;      The ^forge suffix is required by the forge package.
+;;         Token creation:
+;;           - GitLab.com: https://gitlab.com/-/profile/personal_access_tokens
+;;           - Self-hosted: https://gitlab.example.com/-/profile/personal_access_tokens
+;;           - Required scopes: api, read_api, read_user
+;;
+;;      2. Configure username per repository:
+;;         The git config format is: gitlab.<APIHOST>.user
+;;
+;;         For gitlab.com repositories:
+;;           cd /path/to/repo
+;;           git config --local gitlab.gitlab.com/api/v4.user USERNAME
+;;
+;;         For self-hosted GitLab (example with gitlab.example.com):
+;;           cd /path/to/repo
+;;           git config --local gitlab.gitlab.example.com/api/v4.user USERNAME
+;;
+;;         IMPORTANT: The config variable name includes "/api/v4" which differs from
+;;         the Forge documentation but is what Forge actually requires in practice.
+;;
+;;      Note: Replace USERNAME with your GitLab username and GITLAB_TOKEN with your token.
+;;      The ^forge suffix in authinfo is required by the forge package.
 (require 'core-utils)
 (require 'git-utils)
 (core-utils-with-load-timing
@@ -70,6 +89,8 @@
  (use-package
   forge
   :after magit
-  :config (core-message-config "Forge configured for GitHub/GitLab integration")))
+  :config
+  (git-utils-setup-forge-gitlab-hosts)
+  (core-message-config "Forge configured for GitHub/GitLab integration")))
 (provide 'git-config)
 ;;; git-config.el ends here
