@@ -36,8 +36,8 @@
   'markdown-mode
   ;; Disable live preview by default (terminal-friendly)
   (setq markdown-live-preview-engine nil)
-  ;; Use simple markup hiding for better terminal readability
-  (setq markdown-hide-markup nil) ; Keep markup visible for terminal editing
+  ;; Keep markup visible for editing (use markdown-toggle-markup-hiding to toggle)
+  (setq markdown-hide-markup nil)
   ;; Configure list indentation
   (setq markdown-list-indent-width core-tab-width))
 
