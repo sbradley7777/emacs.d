@@ -370,7 +370,7 @@ Returns width as number of columns needed to display content."
             (cmd (cdr item))
             (keybinding (command-palette--get-keybinding cmd)))
        (command-palette--make-button
-        (format "  %d. %s" index name)
+        (format "  %2d. %s" index name)
         `(lambda (_) (command-palette--execute-command ',cmd ,name))
         '(:foreground "lightgreen")
         keybinding)
@@ -391,7 +391,7 @@ Returns width as number of columns needed to display content."
            (index (1+ i))
            (keybinding (command-palette--get-keybinding cmd)))
       (command-palette--make-button
-       (format "  %d. %s" index name)
+       (format "  %2d. %s" index name)
        `(lambda (_) (command-palette--execute-command ',cmd ,name))
        '(:foreground "orange")
        keybinding)))
