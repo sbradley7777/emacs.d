@@ -195,6 +195,10 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  :after (git-utils forge-gitconfig)
  :description "Forge configuration utilities and diagnostics")
 (load-module
+ forge-authinfo
+ :after (forge-utils forge-gitconfig)
+ :description "Interactive authinfo generator for forge hosts")
+(load-module
  rainbow-delimiters-config
  :after core-packages
  :description "Rainbow delimiters for better code readability")
