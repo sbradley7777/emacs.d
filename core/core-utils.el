@@ -26,7 +26,7 @@ MODULE-NAME should be a string identifying the module being loaded."
 COMMAND is the command name, PATH is the full path, HOST is the hostname,
 LOCATION is either 'local' or 'remote'."
  (core-message-success
-  "The LSP command \"%s\" was found in PATH at %s on host (%s): %s" command path location host))
+  "The command \"%s\" was found in PATH at %s on host (%s): %s" command path location host))
 
 (defun
  core-utils-format-command-not-found-message (command host location)
@@ -34,7 +34,7 @@ LOCATION is either 'local' or 'remote'."
 COMMAND is the command name, HOST is the hostname,
 LOCATION is either 'local' or 'remote'."
  (core-message-warning
-  "The LSP command \"%s\" was not found in PATH on host (%s): %s" command location host))
+  "The command \"%s\" was not found in PATH on host (%s): %s" command location host))
 
 (defun
  core-utils-check-command-in-path (command)
