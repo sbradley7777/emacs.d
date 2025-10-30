@@ -39,6 +39,7 @@
     ("User Copy Whole Buffer" . user-copy-whole-buffer)
     ("Menu Bar Open" . menu-bar-open)
     ("Diagnostics Show All" . diagnostics-show-all)
+    ("Diagnostics Show Forge Hosts" . diagnostics-show-forge-hosts)
     ("Show Installed Packages" . show-installed-packages)
     ("Search Packages" . search-packages)
     ("Show Package Upgrades" . show-package-upgrades)

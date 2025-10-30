@@ -191,6 +191,10 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 (load-module diff-hl-config :after core-packages :description "Git diff highlighting")
 (load-module git-config :after core-packages :description "Magit and forge git integration")
 (load-module
+ forge-utils
+ :after (git-utils forge-gitconfig)
+ :description "Forge configuration utilities and diagnostics")
+(load-module
  rainbow-delimiters-config
  :after core-packages
  :description "Rainbow delimiters for better code readability")
