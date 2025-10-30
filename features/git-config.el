@@ -79,8 +79,27 @@
 ;;        - After adding hosts to ~/.gitconfig, restart Emacs or run:
 ;;          M-x forge-gitconfig-populate-forge-alist-from-gitconfig
 ;;
-;;      Note: forge-alist and usernames are automatically configured on Emacs startup
-;;      from the [emacs-forge] sections in ~/.gitconfig.
+;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;      AUTOMATIC USERNAME CONFIGURATION
+;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;      When you open a file in a git repository, the forge username is automatically configured
+;;      in the repository-local .git/config file. This happens automatically via find-file-hook.
+;;
+;;      How it works:
+;;        1. When you open any file in a git repository
+;;        2. The repository's forge host is detected from remote.origin.url
+;;        3. The username is looked up from the matching [emacs-forge] section in ~/.gitconfig
+;;        4. The username is set in the local .git/config (not global)
+;;        5. Only the username for the repository's specific host is configured
+;;
+;;      Example:
+;;        - Repository: git@gitlab.company.com:user/project.git
+;;        - Adds to .git/config: [gitlab "gitlab.company.com/api/v4"] user = YOUR_USERNAME
+;;        - Does NOT add unrelated hosts (like GitHub) to this repository's config
+;;
+;;      This ensures clean, per-repository configuration without polluting git configs.
+;;
+;;      Note: forge-alist is automatically populated on Emacs startup from ~/.gitconfig.
 (require 'core-utils)
 (require 'git-utils)
 (require 'forge-gitconfig)

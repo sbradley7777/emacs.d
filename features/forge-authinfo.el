@@ -3,6 +3,12 @@
 ;;; Commentary:
 ;; Interactive helper to generate ~/.authinfo entries for forge hosts
 ;; configured in ~/.gitconfig but missing authentication credentials.
+;;
+;; IMPORTANT: Automatically appends ^forge suffix to usernames
+;; The ^forge suffix is required by the ghub/forge package to identify
+;; tokens used for Forge operations vs. other API access.
+;;
+;; Format: machine APIHOST login USERNAME^forge password TOKEN
 (require 'core-logging)
 (require 'core-utils)
 (require 'forge-gitconfig)
@@ -27,8 +33,9 @@ Returns empty list if file doesn't exist."
  (defun
   forge-authinfo--format-entry (machine login token)
   "Format a single authinfo line from MACHINE, LOGIN, and TOKEN.
-Returns formatted string suitable for ~/.authinfo."
-  (format "machine %s login %s password %s" machine login token))
+Returns formatted string suitable for ~/.authinfo.
+Automatically appends ^forge suffix to login for Forge authentication."
+  (format "machine %s login %s^forge password %s" machine login token))
 
  (defun
   forge-authinfo--ensure-file-permissions (file)

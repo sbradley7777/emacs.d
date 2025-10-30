@@ -3,6 +3,16 @@
 ;;; Commentary:
 ;;      Functions to read and populate forge-alist from ~/.gitconfig.
 ;;      Supports GitHub, GitLab, Gitea, Gogs, and Bitbucket forge hosts.
+;;
+;;      AUTOMATIC FEATURES:
+;;        1. Populates forge-alist from [emacs-forge] sections in ~/.gitconfig on startup
+;;        2. Auto-configures usernames in repository-local .git/config when opening files
+;;        3. Ensures each repository only gets username config for its specific forge host
+;;
+;;      WORKFLOW:
+;;        - On Emacs startup: Reads ~/.gitconfig and populates forge-alist
+;;        - When opening a file in a git repo: Detects forge host and sets username in local .git/config
+;;        - Before forge-pull: Ensures username is configured (backup safety check)
 (require 'core-utils)
 (require 'core-logging)
 (require 'git-utils)
@@ -115,10 +125,11 @@ Logs a warning if TYPE is unknown or invalid."
 This function reads custom forge host configurations from ~/.gitconfig
 and adds them to forge-alist so that Forge can work with custom instances.
 
-Also configures usernames per host using git config variables that ghub reads.
-
 Only adds hosts that are not already present in forge-alist to avoid duplicates.
-Skips entries with missing required fields (apihost, webhost, or type)."
+Skips entries with missing required fields (apihost, webhost, or type).
+
+Note: Usernames are configured per-repository when files are opened,
+not globally, to keep .git/config files clean."
   (interactive)
   (condition-case err
       (progn
@@ -132,13 +143,8 @@ Skips entries with missing required fields (apihost, webhost, or type)."
         (core-message-error
          "forge-alist variable not defined. Ensure forge is properly loaded")
         (cl-return-from forge-gitconfig-populate-forge-alist-from-gitconfig nil))
-       (unless
-        (fboundp 'magit-get)
-        (core-message-warning
-         "magit-get function not available. Username configuration will be skipped"))
        (let ((hosts (forge-gitconfig-parse-hosts-from-gitconfig))
-             (added-count 0)
-             (user-count 0))
+             (added-count 0))
          (if
           (null hosts) (core-message-info "No [emacs-forge] sections found in ~/.gitconfig")
           (dolist
@@ -147,8 +153,7 @@ Skips entries with missing required fields (apihost, webhost, or type)."
                   (githost (plist-get config :githost))
                   (apihost (plist-get config :apihost))
                   (webhost (plist-get config :webhost))
-                  (type (plist-get config :type))
-                  (user (plist-get config :user)))
+                  (type (plist-get config :type)))
              (cond
               ((not config)
                (core-message-warning "Failed to parse config for host '%s', skipping" host))
@@ -171,35 +176,121 @@ Skips entries with missing required fields (apihost, webhost, or type)."
                       (core-message-error
                        "Failed to add forge host '%s': %s"
                        githost
-                       (error-message-string inner-err)))))))
-               (when
-                (and user (fboundp 'magit-get) (fboundp 'magit-set) type apihost)
-                (condition-case inner-err
-                    (let ((git-var (format "%s.%s.user" type apihost)))
-                      (unless
-                       (magit-get git-var)
-                       (magit-set user git-var)
-                       (setq user-count (1+ user-count))
-                       (core-message-config "Set %s = %s" git-var user)))
-                  (error
-                   (core-message-warning
-                    "Failed to set username for %s: %s"
-                    host
-                    (error-message-string inner-err)))))))))
+                       (error-message-string inner-err)))))))))))
           (when
            (> added-count 0)
            (core-message-success
             "Added %d forge host%s from ~/.gitconfig" added-count (if (= added-count 1) "" "s")))
           (when
-           (> user-count 0)
-           (core-message-success
-            "Configured %d username%s" user-count (if (= user-count 1) "" "s")))
-          (when
-           (and (= added-count 0) (= user-count 0) hosts)
+           (and (= added-count 0) hosts)
            (core-message-info "All forge hosts from ~/.gitconfig already configured")))))
     (error
      (core-message-error
       "Failed to read forge config from ~/.gitconfig: %s" (error-message-string err)))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Repository-Specific Username Configuration
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; These functions automatically configure forge usernames in repository-local .git/config files.
+ ;;
+ ;; How it works:
+ ;;   1. When a file is opened, find-file-hook triggers forge-gitconfig-setup-repo-on-file-open
+ ;;   2. Magit is loaded on-demand if not already available
+ ;;   3. The repository's forge host is detected from remote.origin.url
+ ;;   4. The username is looked up from the [emacs-forge] section in ~/.gitconfig
+ ;;   5. The username is set in the LOCAL .git/config (not global ~/.gitconfig)
+ ;;   6. Only the username for THIS repository's specific host is configured
+ ;;
+ ;; Example:
+ ;;   Repository: git@gitlab.example.com:user/project.git
+ ;;   Adds to .git/config: [gitlab "gitlab.example.com/api/v4"] user = YOUR_USERNAME
+ ;;   Does NOT add GitHub or other unrelated hosts
+ ;;
+ ;; Benefits:
+ ;;   - Clean per-repository configuration
+ ;;   - No pollution of git configs with unrelated hosts
+ ;;   - Works automatically without manual intervention
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  forge-gitconfig-get-repo-forge-host ()
+  "Get the forge host for the current git repository.
+Returns the host portion from the remote.origin.url, or nil if not in a git repo.
+For example: 'github.com' or 'gitlab.example.com'."
+  (when
+   (and (fboundp 'magit-get) (magit-get "remote.origin.url"))
+   (let ((url (magit-get "remote.origin.url")))
+     (cond
+      ;; SSH format: git@github.com:user/repo.git
+      ((string-match "^git@\\([^:]+\\):" url)
+       (match-string 1 url))
+      ;; HTTPS format: https://github.com/user/repo.git
+      ((string-match "^https?://\\([^/]+\\)" url)
+       (match-string 1 url))
+      ;; Git protocol: git://github.com/user/repo.git
+      ((string-match "^git://\\([^/]+\\)" url)
+       (match-string 1 url))
+      (t
+       nil)))))
+
+ (defun
+  forge-gitconfig-set-repo-username ()
+  "Set username in local .git/config for the current repository's forge host.
+Only sets username if:
+1. We're in a git repository
+2. The repository's host matches one of our [emacs-forge] configurations
+3. The username is not already set in local config
+This ensures each repository only gets username config for its own host."
+  (interactive)
+  (when
+   (and (fboundp 'magit-get) (fboundp 'magit-set))
+   (let ((repo-host (forge-gitconfig-get-repo-forge-host)))
+     (when
+      repo-host
+      (let* ((config (forge-gitconfig-parse-config-for-host repo-host))
+             (apihost (plist-get config :apihost))
+             (type (plist-get config :type))
+             (user (plist-get config :user)))
+        (when
+         (and user type apihost)
+         (let ((git-var (format "%s.%s.user" type apihost)))
+           (unless
+            (magit-get git-var)
+            (condition-case err
+                (progn
+                 (magit-set user git-var) (core-message-config "Set local %s = %s" git-var user))
+              (error
+               (core-message-warning
+                "Failed to set local username: %s" (error-message-string err))))))))))))
+
+ (defun
+  forge-gitconfig-setup-repo-on-file-open ()
+  "Hook function to set repository username when opening files in git repos.
+Called automatically via find-file-hook.
+Loads Magit if needed, then sets username for the repository's forge host."
+  (when
+   (buffer-file-name)
+   ;; Load magit if not already loaded
+   (unless (fboundp 'magit-get) (require 'magit nil t))
+   ;; Set username if we're in a git repository
+   (when
+    (and (fboundp 'magit-get) (fboundp 'magit-set) (fboundp 'magit-gitdir) (magit-gitdir))
+    (forge-gitconfig-set-repo-username))))
+
+ ;; Auto-configure username when opening files in git repositories
+ ;; Hook is added immediately, but function checks if Magit is loaded before running
+ (add-hook 'find-file-hook #'forge-gitconfig-setup-repo-on-file-open)
+
+ ;; Also ensure username is set before Forge operations
+ (defun
+  forge-gitconfig-before-forge-pull ()
+  "Ensure repository username is configured before forge-pull.
+This is called as advice before forge-pull to ensure username is set."
+  (when
+   (and (fboundp 'magit-get) (fboundp 'magit-set) (magit-gitdir))
+   (forge-gitconfig-set-repo-username)))
+
+ ;; Add advice to run before forge-pull
+ (with-eval-after-load 'forge (advice-add 'forge-pull :before #'forge-gitconfig-before-forge-pull))
 
  (core-message-config "Forge gitconfig utilities loaded"))
 (provide 'forge-gitconfig)

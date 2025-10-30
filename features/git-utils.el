@@ -66,9 +66,23 @@ Optional REPO argument specifies which repository to list issues for."
           (error "No forge repository found. Ensure this repository is tracked by forge"))
          (forge-topics-setup-buffer repository nil :type 'issue)))
     (user-error
-     (core-message-warning "%s" (error-message-string err)))
+     (let ((err-msg (error-message-string err)))
+       (if
+        (string-match-p "Cannot use.*yet" err-msg)
+        (progn
+         ;; Extract just the first line of the error (before any newline or "Use `M-x...")
+         (let ((clean-msg (car (split-string err-msg "\n"))))
+           (core-message-warning
+            "%s Run M-x forge-pull (or N r) to fetch repository data from the forge" clean-msg)))
+        (core-message-warning "%s" err-msg))))
     (error
-     (core-message-error "Failed to list issues: %s" (error-message-string err)))))
+     (let ((err-msg (error-message-string err)))
+       (if
+        (string-match-p "Cannot use.*yet" err-msg)
+        (let ((clean-msg (car (split-string err-msg "\n"))))
+          (core-message-warning
+           "%s Run M-x forge-pull (or N r) to fetch repository data from the forge" clean-msg))
+        (core-message-error "Failed to list issues: %s" err-msg))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Git Config Utility Functions
