@@ -61,12 +61,66 @@ Fills region if forge-post-fill-region is set, and applies indentation if INDENT
   (when indent (indent-rigidly (point-min) (point-max) indent)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; URL Detection and Link Creation
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  forge--make-urls-clickable (string)
+  "Add click handlers to URLs in STRING.
+Makes both plain URLs and markdown link URLs clickable with mouse-1.
+For markdown links [text](url), finds the link text and extracts the URL from the invisible portion."
+  (with-temp-buffer
+   (insert string) (goto-char (point-min))
+   ;; First pass: Find all visible or invisible URLs and make them clickable
+   (while
+    (re-search-forward "https?://[^ \t\n\r\"<>)]*" nil t)
+    (let* ((url-start (match-beginning 0))
+           (url-end (match-end 0))
+           (url (match-string 0))
+           (map (make-sparse-keymap)))
+      ;; Create a keymap that opens the URL when clicked or when RET is pressed
+      (define-key map [mouse-1] `(lambda () (interactive) (browse-url ,url)))
+      (define-key map (kbd "RET") `(lambda () (interactive) (browse-url ,url)))
+      ;; Add interactive properties to make the link clickable
+      (put-text-property url-start url-end 'keymap map)
+      (put-text-property url-start url-end 'follow-link t)
+      (put-text-property url-start url-end 'mouse-face 'highlight)
+      (put-text-property url-start url-end 'help-echo url)))
+   ;; Second pass: Find markdown link text that precedes invisible URLs
+   ;; In markdown links [text](url), the url part is invisible but still in buffer
+   ;; We need to find link text and associate it with the following URL
+   (goto-char (point-min))
+   (while
+    (re-search-forward "\\[\\([^]]+\\)\\]" nil t)
+    (let ((link-text-start (match-beginning 1))
+          (link-text-end (match-end 1))
+          (after-bracket (match-end 0)))
+      ;; Check if there's a URL right after the ] (might be invisible)
+      (save-excursion
+       (goto-char after-bracket)
+       ;; Look for (url) pattern, the parens might be invisible
+       (when
+        (and
+         (eq (char-after) ?\()
+         (re-search-forward "(\\(https?://[^)]+\\))" (+ after-bracket 500) t))
+        (let* ((url (match-string 1))
+               (map (make-sparse-keymap)))
+          ;; Make the link text clickable
+          (define-key map [mouse-1] `(lambda () (interactive) (browse-url ,url)))
+          (define-key map (kbd "RET") `(lambda () (interactive) (browse-url ,url)))
+          (put-text-property link-text-start link-text-end 'keymap map)
+          (put-text-property link-text-start link-text-end 'follow-link t)
+          (put-text-property link-text-start link-text-end 'mouse-face 'highlight)
+          (put-text-property link-text-start link-text-end 'help-echo url))))))
+   (buffer-string)))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Face Property Conversion
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
   forge--convert-face-properties (string)
   "Convert face properties to font-lock-face in STRING.
-Normalizes quoted face symbols in both face and mouse-face properties to avoid rendering errors."
+Normalizes quoted face symbols in both face and mouse-face properties to avoid rendering errors.
+Preserves interactive properties (keymap, help-echo, follow-link) for clickable links."
   (let ((beg 0)
         (end (length string)))
     (while
@@ -83,6 +137,7 @@ Normalizes quoted face symbols in both face and mouse-face properties to avoid r
         mouse-face-val
         (put-text-property
          beg pos 'mouse-face (forge--normalize-face-value mouse-face-val) string))
+       ;; Only remove the 'face property, preserve keymap/help-echo/follow-link for clickable links
        (remove-list-of-text-properties beg pos '(face) string)
        (setq beg pos)))
     string))
@@ -95,11 +150,13 @@ Normalizes quoted face symbols in both face and mouse-face properties to avoid r
   "Fontify markdown TEXT with markup hiding enabled.
 This is an improved version of forge--fontify-markdown that hides markdown
 markup characters and URLs for cleaner display in forge topic buffers.
+Makes links clickable with mouse-1 and RET.
 Optional INDENT specifies indentation level."
   (with-temp-buffer
-   (forge--setup-markdown-buffer text)
-   (forge--apply-post-processing indent)
-   (forge--convert-face-properties (buffer-string))))
+   (forge--setup-markdown-buffer text) (forge--apply-post-processing indent)
+   (let ((fontified-string (forge--convert-face-properties (buffer-string))))
+     ;; Make URLs clickable after converting face properties
+     (forge--make-urls-clickable fontified-string))))
 
  (core-message-config "Forge markdown rendering functions loaded"))
 (provide 'forge-markdown)
