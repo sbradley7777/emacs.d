@@ -194,6 +194,11 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  forge-utils
  :after (git-utils forge-gitconfig)
  :description "Forge configuration utilities and diagnostics")
+(load-module forge-markdown :after forge-utils :description "Forge markdown rendering functions")
+(load-module
+ forge-config
+ :after forge-markdown
+ :description "Forge markdown rendering and customizations")
 (load-module
  forge-authinfo
  :after (forge-utils forge-gitconfig)

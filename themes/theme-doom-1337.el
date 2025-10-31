@@ -149,6 +149,22 @@
    (core-message-theme "Applied doom-1337 breadcrumb faces")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Markdown Face Customizations
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  doom-1337-markdown-faces-apply
+  ()
+  "Apply doom-1337 theme-specific colors to markdown link faces using shared color constants."
+  (custom-set-faces
+   ;; Markdown link text (applies to [text](url) style links)
+   `(markdown-link-face ((t (:foreground ,doom-1337-color-blue :underline t))))
+   ;; Plain URLs (applies to standalone URLs like https://example.com)
+   `(markdown-plain-url-face ((t (:foreground ,doom-1337-color-blue :underline t))))
+   ;; URL portion in markdown links (the URL part in [text](url))
+   `(markdown-url-face ((t (:foreground ,doom-1337-color-teal)))))
+  (core-message-theme "Applied doom-1337 markdown link faces"))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Main Setup Function
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
@@ -158,6 +174,7 @@
   (doom-1337-apply-face-customizations)
   (doom-1337-modeline-faces-apply)
   (doom-1337-breadcrumb-faces-apply)
+  (doom-1337-markdown-faces-apply)
   (core-message-theme "Applied doom-1337 customizations")))
 
 ;; Make this module available for loading with (require 'theme-doom-1337)
