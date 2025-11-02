@@ -124,7 +124,9 @@
   :after magit
   :config
   (forge-gitconfig-populate-forge-alist-from-gitconfig)
-  (add-hook 'forge-topic-mode-hook (lambda () (add-to-invisibility-spec 'markdown-markup)))
+  (add-hook
+   'forge-topic-mode-hook
+   (lambda () (add-to-invisibility-spec 'markdown-markup) (visual-line-mode 1)))
   (defun
    git-config--forge-fontify-with-hidden-markup
    (orig-fun text &optional indent)
