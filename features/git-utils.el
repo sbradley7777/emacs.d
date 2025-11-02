@@ -5,28 +5,17 @@
 ;;      Provides helper functions for Magit and Forge.
 (require 'core-utils)
 (require 'core-logging)
+(require 'features-constants)
 (core-utils-with-load-timing
  "git-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Magit Utility Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  git-utils-magit-display-buffer-side
-  (buffer)
-  "Display BUFFER in side window sized to fit longest line."
-  (let ((win-width
-         (with-current-buffer
-          buffer
-          (save-excursion
-           (goto-char (point-min))
-           (let ((max-len 0))
-             (while
-              (re-search-forward
-               "^\\(?:modified\\|new file\\|deleted\\|renamed\\)\\s-+\\(.+\\)$" nil t)
-              (setq max-len (max max-len (+ 12 (length (match-string 1))))))
-             (if (> max-len 0) (min (floor (* (frame-width) 0.8)) (max 60 (+ max-len 5))) 60))))))
-    (display-buffer
-     buffer `(display-buffer-in-side-window (side . right) (window-width . ,win-width)))))
+  git-utils-magit-display-buffer-side (buffer) "Display BUFFER in side window at configured width."
+  (display-buffer
+   buffer
+   `(display-buffer-in-side-window (side . right) (window-width . ,features-side-window-width))))
 
  (defun
   git-utils-format-magit-buffer
