@@ -419,6 +419,76 @@ For detailed style guidelines, see [`STYLEGUIDE.md`](STYLEGUIDE.md).
 
 ## User Interface Enhancements
 
+### Minibuffer Completion System
+
+Modern minibuffer completion stack powered by Vertico, Orderless, Marginalia, and Consult:
+
+**Features** ([`features/minibuffer-config.el`](features/minibuffer-config.el)):
+- **Vertico**: Vertical completion UI with smooth cycling through candidates
+- **Orderless**: Flexible space-separated fuzzy matching for non-contiguous search
+- **Marginalia**: Rich annotations showing file sizes, modification times, keybindings
+- **Consult**: Enhanced commands with live preview (consult-buffer, consult-line, etc.)
+
+**How They Work Together:**
+1. **Consult** provides powerful commands (e.g., `consult-buffer`)
+2. **Vertico** displays candidates in a vertical list
+3. **Orderless** enables fuzzy matching (e.g., "py ma" matches "python-mode.el")
+4. **Marginalia** adds contextual information to each candidate
+
+**Key Differences from Corfu:**
+- **Vertico stack**: Minibuffer completion for commands, files, buffers (M-x, C-x b)
+- **Corfu**: In-buffer completion for code and text while typing
+
+**Benefits:**
+- Fast fuzzy searching across all completion contexts
+- Visual preview of selections
+- Rich metadata without clutter
+- Seamless integration with built-in Emacs commands
+
+### Visual Focus Enhancement
+
+Buffer dimming for improved visual focus powered by [dimmer](https://github.com/gonewest818/dimmer.el):
+
+**Features** ([`features/dimmer-config.el`](features/dimmer-config.el)):
+- **Automatic dimming**: Dims inactive buffers to highlight the active window
+- **Dark theme optimized**: Configured for doom-1337 with foreground-only dimming
+- **Smart exclusions**: Prevents dimming minibuffer and dedicated windows
+- **Which-key integration**: Seamless integration with which-key popups
+- **Minibuffer-aware**: Stays bright during minibuffer operations
+
+**Configuration:**
+- **Dimming intensity**: 80% dimming for maximum visibility
+- **Color space**: HSL for better dark theme compatibility
+- **Adjustment mode**: Foreground-only to avoid whitish-gray backgrounds
+
+**Benefits:**
+- Clear visual indication of active window
+- Reduces eye strain during long sessions
+- Works in both terminal and GUI modes
+- Prevents accidental edits in wrong buffer
+
+### Git Diff Indicators
+
+Visual git change highlighting powered by [diff-hl](https://github.com/dgutov/diff-hl):
+
+**Features** ([`features/diff-hl-config.el`](features/diff-hl-config.el)):
+- **Fringe/margin indicators**: Shows added, modified, and deleted lines with colored bars
+- **Live updates**: On-the-fly highlighting as you edit (flydiff mode)
+- **Terminal and GUI support**: Uses fringe in GUI, margin in terminal
+- **Dired integration**: Shows file status in dired buffers
+- **Magit integration**: Refreshes indicators when Magit refreshes
+
+**Visual Indicators:**
+- **Green (+)**: Added lines (matches doom-1337 success color)
+- **Red (-)**: Deleted lines (matches doom-1337 error color)
+- **Yellow (~)**: Modified lines (matches doom-1337 modified color)
+
+**Benefits:**
+- Passive visual feedback alongside terminal git workflow
+- No need to check `git diff` constantly
+- Immediate visibility of uncommitted changes
+- Consistent color scheme with theme
+
 ### Modeline System
 
 Modern status line powered by [Doom-modeline](https://github.com/seagle0128/doom-modeline) with rich visual indicators:
@@ -738,31 +808,40 @@ A complete Git interface within Emacs ([`features/git-config.el`](features/git-c
 
 ### Forge - GitHub/GitLab Integration
 
-Work with Git forges directly from Magit ([`features/forge-config.el`](features/forge-config.el), [`features/forge-gitconfig.el`](features/forge-gitconfig.el)):
+Work with Git forges directly from Magit with comprehensive automation:
 
-**Core Features:**
+**Core Features** ([`features/forge-config.el`](features/forge-config.el)):
 - **Issue management** - Browse, create, edit, and close issues
 - **Pull request handling** - View, create, and manage pull requests
 - **Code review** - Comment on code and participate in reviews
 - **Repository data sync** - Fetch issues, PRs, and notifications
 - **Multiple forge support** - GitHub, GitLab, Gitea, Gogs, Bitbucket
 
-**Configuration Features** ([`features/forge-gitconfig.el`](features/forge-gitconfig.el)):
+**Automatic Configuration** ([`features/forge-gitconfig.el`](features/forge-gitconfig.el)):
 - **Centralized configuration** - All forge hosts configured via `~/.gitconfig`
 - **Automatic host detection** - Reads `[emacs-forge]` sections on startup
 - **Repository-local usernames** - Automatically sets usernames in `.git/config` when opening files
 - **CLI tool independence** - No dependency on `gh` or `glab` tools
+- **Smart file hooks** - Configures forge settings when you open repository files
 
-**Authentication** ([`features/forge-authinfo.el`](features/forge-authinfo.el)):
-- **Interactive credential generator** - Automatic `~/.authinfo` entry creation
+**Interactive Credential Management** ([`features/forge-authinfo.el`](features/forge-authinfo.el)):
+- **Automatic `~/.authinfo` generation** - Interactive credential entry creation
+- **Missing credential detection** - Identifies hosts without authentication
 - **Token management** - Secure storage of personal access tokens
 - **Multiple forge support** - Manage credentials for multiple GitHub/GitLab instances
+- **Correct format guarantee** - Automatic `^forge` suffix and proper syntax
+- **Duplicate prevention** - Prevents adding existing credentials
 
-**Markdown Rendering** ([`features/forge-markdown.el`](features/forge-markdown.el)):
+**Enhanced Markdown Rendering** ([`features/forge-markdown.el`](features/forge-markdown.el)):
 - **Syntax highlighting** - Code blocks with language-specific highlighting
 - **Clickable links** - Interactive URLs in GUI mode
 - **Formatted text** - Headers, lists, emphasis, and more
 - **Word wrapping** - Readable text formatting in issue/PR views
+- **Theme integration** - Coordinates with doom-1337 and other themes
+
+**Utility Functions** ([`features/forge-utils.el`](features/forge-utils.el)):
+- **Custom commands** - Additional forge-related helper functions
+- **Integration helpers** - Functions for working with forge data
 
 **User Commands** ([`features/git-utils.el`](features/git-utils.el)):
 - **Issue browser** - `user-git-issues` lists repository issues in side window

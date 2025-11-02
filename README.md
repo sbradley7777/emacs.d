@@ -22,15 +22,21 @@ This Emacs configuration provides a professional development environment with in
 
 **Key Features:**
 - **Fast startup** with modern performance optimizations
-- **Intelligent completion** powered by [Corfu](https://github.com/minad/corfu) across all file types with full terminal support
+- **Dual completion systems**:
+  - [Corfu](https://github.com/minad/corfu) for in-buffer code completion with full terminal support
+  - [Vertico](https://github.com/minad/vertico) + [Consult](https://github.com/minad/consult) for enhanced minibuffer completion with fuzzy matching
 - **LSP integration** via [Eglot](https://github.com/joaotavora/eglot) for Python, C, and C++ with automatic local/remote detection
-- **Professional modeline** with [Doom-modeline](https://github.com/seagle0128/doom-modeline) showing Git status, LSP indicators, and Python environment
+- **Visual enhancements**:
+  - [Doom-modeline](https://github.com/seagle0128/doom-modeline) showing Git status, LSP indicators, and Python environment
+  - [Dimmer](https://github.com/gonewest818/dimmer.el) for visual focus by dimming inactive buffers
+  - [diff-hl](https://github.com/dgutov/diff-hl) showing git changes in the fringe/margin
 - **Breadcrumb navigation** showing file path and code structure in the header line
 - **Python development** with automatic virtual environment management
 - **Remote development** with seamless [TRAMP](https://www.gnu.org/software/emacs/manual/html_node/tramp/) integration for SSH-based Python projects
 - **Project navigation** with [Treemacs](https://github.com/Alexander-Miller/treemacs) file tree sidebar and project management
 - **Custom dashboard** with quick access to recent files, package management, and system actions
 - **Command palette** with M-x history tracking, customizable favorites, and one-click command execution
+- **Git integration** with [Magit](https://magit.vc/) and [Forge](https://github.com/magit/forge) for GitHub/GitLab workflows
 - **Automatic font management** for icon packages with system-wide font installation
 - **Message logging** with automatic log rotation and session history
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
@@ -62,8 +68,12 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-diagnostics.el`](core/core-diagnostics.el) - System information and configuration diagnostics
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`breadcrumbs-config.el`](features/breadcrumbs-config.el) - Breadcrumb navigation for file path and code structure
-  - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) auto-completion framework with terminal support
+  - [`completion-config.el`](features/completion-config.el) - [Corfu](https://github.com/minad/corfu) in-buffer auto-completion framework with terminal support
+  - [`minibuffer-config.el`](features/minibuffer-config.el) - Modern minibuffer completion with Vertico, Orderless, Marginalia, and Consult
+  - [`consult-sources.el`](features/consult-sources.el) - Custom Consult buffer sources with filtering
   - [`dashboard-config.el`](features/dashboard-config.el) - Startup dashboard with quick access to files and actions
+  - [`dimmer-config.el`](features/dimmer-config.el) - Visual focus enhancement by dimming inactive buffers
+  - [`diff-hl-config.el`](features/diff-hl-config.el) - Git diff highlighting in fringe/margin
   - [`dired-config.el`](features/dired-config.el) - Enhanced directory browsing with inline tree expansion and icons
   - **[`eglot/`](features/eglot/)** - LSP client integration
     - [`eglot-config.el`](features/eglot/eglot-config.el) - [Eglot](https://github.com/joaotavora/eglot) LSP client with automatic local/remote detection
@@ -71,6 +81,14 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - **[`flymake/`](features/flymake/)** - Syntax checking and diagnostics
     - [`flymake-config.el`](features/flymake/flymake-config.el) - Flymake diagnostic display configuration
     - [`flymake-utils.el`](features/flymake/flymake-utils.el) - Flymake utility functions and backend formatting
+  - **Git Integration** - Magit and Forge for GitHub/GitLab workflows
+    - [`git-config.el`](features/git-config.el) - Magit configuration for Git operations
+    - [`git-utils.el`](features/git-utils.el) - Git utility functions and issue browser
+    - [`forge-config.el`](features/forge-config.el) - Forge configuration for GitHub/GitLab integration
+    - [`forge-gitconfig.el`](features/forge-gitconfig.el) - Automatic forge host configuration from ~/.gitconfig
+    - [`forge-authinfo.el`](features/forge-authinfo.el) - Interactive credential management for ~/.authinfo
+    - [`forge-markdown.el`](features/forge-markdown.el) - Markdown rendering for issues and pull requests
+    - [`forge-utils.el`](features/forge-utils.el) - Forge utility functions
   - [`highlight-indent-guides-config.el`](features/highlight-indent-guides-config.el) - Visual indentation guides
   - [`imenu-list-config.el`](features/imenu-list-config.el) - Symbol navigation sidebar for code structure
   - [`rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el) - Enhanced delimiter visibility
