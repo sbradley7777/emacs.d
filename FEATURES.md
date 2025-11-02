@@ -28,6 +28,7 @@ This document provides comprehensive details about all features available in thi
   - [Navigation and Discovery](#navigation-and-discovery)
   - [Visual Improvements](#visual-improvements)
   - [Enhanced Diagnostics](#enhanced-diagnostics)
+- [Git Integration](#git-integration)
 - [Related Documentation](#related-documentation)
 
 ## Modern Emacs 30.2+ Features
@@ -718,11 +719,84 @@ Interactive command launcher with history tracking and customizable favorites:
 
 - **Performance Monitoring**: Load time tracking for configuration modules with detailed startup information
 
+## Git Integration
+
+Comprehensive Git integration using Magit and Forge for repository management and forge (GitHub, GitLab, etc.) interaction.
+
+### Magit - Git Porcelain
+
+A complete Git interface within Emacs ([`features/git-config.el`](features/git-config.el)):
+
+**Features:**
+- **Visual Git interface** - Interactive staging, committing, branching, and merging
+- **Commit history** - Browse and search commit logs with detailed diffs
+- **Branch management** - Create, switch, merge, and rebase branches
+- **Staging control** - Stage/unstage individual hunks or files
+- **Advanced operations** - Cherry-pick, revert, rebase, stash, and more
+- **Side window display** - Magit buffers open in configurable side window
+- **Word-wrapped formatting** - Clean display of long branch names and commit messages
+
+### Forge - GitHub/GitLab Integration
+
+Work with Git forges directly from Magit ([`features/forge-config.el`](features/forge-config.el), [`features/forge-gitconfig.el`](features/forge-gitconfig.el)):
+
+**Core Features:**
+- **Issue management** - Browse, create, edit, and close issues
+- **Pull request handling** - View, create, and manage pull requests
+- **Code review** - Comment on code and participate in reviews
+- **Repository data sync** - Fetch issues, PRs, and notifications
+- **Multiple forge support** - GitHub, GitLab, Gitea, Gogs, Bitbucket
+
+**Configuration Features** ([`features/forge-gitconfig.el`](features/forge-gitconfig.el)):
+- **Centralized configuration** - All forge hosts configured via `~/.gitconfig`
+- **Automatic host detection** - Reads `[emacs-forge]` sections on startup
+- **Repository-local usernames** - Automatically sets usernames in `.git/config` when opening files
+- **CLI tool independence** - No dependency on `gh` or `glab` tools
+
+**Authentication** ([`features/forge-authinfo.el`](features/forge-authinfo.el)):
+- **Interactive credential generator** - Automatic `~/.authinfo` entry creation
+- **Token management** - Secure storage of personal access tokens
+- **Multiple forge support** - Manage credentials for multiple GitHub/GitLab instances
+
+**Markdown Rendering** ([`features/forge-markdown.el`](features/forge-markdown.el)):
+- **Syntax highlighting** - Code blocks with language-specific highlighting
+- **Clickable links** - Interactive URLs in GUI mode
+- **Formatted text** - Headers, lists, emphasis, and more
+- **Word wrapping** - Readable text formatting in issue/PR views
+
+**User Commands** ([`features/git-utils.el`](features/git-utils.el)):
+- **Issue browser** - `user-git-issues` lists repository issues in side window
+- **Toggleable width** - Press `F10` to toggle between 30% and 50% window width
+- **Quick access** - Direct issue viewing without transient menus
+
+**Automatic Features:**
+- **Forge host population** - Automatically adds configured hosts to `forge-alist` on startup
+- **Username configuration** - Sets forge username in local `.git/config` when opening repository files
+- **Host-specific config** - Only configures username for the repository's actual forge host
+
+### Setup and Configuration
+
+For complete setup instructions including:
+- Configuring forge hosts in `~/.gitconfig`
+- Creating personal access tokens for GitHub/GitLab
+- Setting up `~/.authinfo` authentication
+- Automatic vs manual configuration
+- Troubleshooting common issues
+
+See the comprehensive guide: [`GIT.md`](GIT.md)
+
+**Quick Setup Summary:**
+1. Add `[emacs-forge "HOST"]` section to `~/.gitconfig` with apihost, webhost, type, and user
+2. Create personal access token on your forge (GitHub/GitLab)
+3. Add credentials to `~/.authinfo` (or use `M-x forge-authinfo-generate-entries`)
+4. Restart Emacs or run `M-x forge-gitconfig-populate-forge-alist-from-gitconfig`
+
 ## Related Documentation
 
 **For Using These Features:**
 - [`KEYMAP.md`](KEYMAP.md) - Complete keybinding reference for all features
 - [`FAQ.md`](FAQ.md) - Common questions about feature usage
+- [`GIT.md`](GIT.md) - Git integration setup and usage (Magit and Forge)
 
 **For Setup and Issues:**
 - [`README.md`](README.md) - Installation and requirements

@@ -4,102 +4,37 @@
 ;;      Configuration for magit and forge integration.
 ;;      Provides git interface and GitHub/GitLab integration within Emacs.
 ;;
-;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      GIT USER CONFIGURATION
-;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      Configure git user settings globally or per-repository:
-;;
-;;        Global configuration (applies to all repositories):
-;;          git config --global user.name "Your Name"
-;;          git config --global user.email "your.email@example.com"
-;;
-;;        Local configuration (repository-specific, overrides global):
-;;          cd /path/to/repository
-;;          git config user.name "Your Name"
-;;          git config user.email "your.email@example.com"
+;;      For complete setup instructions, troubleshooting, and usage guide, see: GIT.md
 ;;
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      FORGE CONFIGURATION - SETUP
+;;      QUICK SETUP REFERENCE
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      All forge hosts (GitHub, GitLab, Gitea, etc.) are configured via ~/.gitconfig.
-;;      This provides centralized configuration without dependency on CLI tools like gh or glab.
-;;
-;;      STEP 1: Add forge host configuration to ~/.gitconfig
-;;      ------------------------------------------------------
-;;      For GitHub (public):
+;;      STEP 1: Add forge host to ~/.gitconfig
 ;;        [emacs-forge "github.com"]
 ;;            apihost = api.github.com
 ;;            webhost = github.com
 ;;            type = github
 ;;            user = YOUR_USERNAME
 ;;
-;;      For GitHub Enterprise:
-;;        [emacs-forge "github.enterprise.com"]
-;;            apihost = github.enterprise.com/api/v3
-;;            webhost = github.enterprise.com
-;;            type = github
-;;            user = YOUR_USERNAME
+;;      STEP 2: Create personal access token
+;;        GitHub: https://github.com/settings/tokens (scopes: repo, user, read:org)
+;;        GitLab: https://gitlab.com/-/profile/personal_access_tokens (scopes: api, read_api, read_user)
 ;;
-;;      For GitLab (public or self-hosted):
-;;        [emacs-forge "gitlab.example.com"]
-;;            apihost = gitlab.example.com/api/v4
-;;            webhost = gitlab.example.com
-;;            type = gitlab
-;;            user = YOUR_USERNAME
-;;
-;;      For other forges (Gitea, Gogs, Bitbucket):
-;;        Use the same pattern with appropriate apihost paths and type values.
-;;        Supported types: github, gitlab, gitea, gogs, bitbucket
-;;
-;;      STEP 2: Create authentication tokens
-;;      -------------------------------------
-;;      GitHub:
-;;        URL: https://github.com/settings/tokens (or your enterprise URL)
-;;        Required scopes: repo, user, read:org
-;;
-;;      GitLab:
-;;        URL: https://gitlab.example.com/-/profile/personal_access_tokens
-;;        Required scopes: api, read_api, read_user
-;;
-;;      STEP 3: Add tokens to ~/.authinfo
-;;      ----------------------------------
-;;      Format: machine APIHOST login USERNAME^forge password TOKEN
-;;
-;;      For GitHub:
-;;        echo "machine api.github.com login YOUR_USERNAME^forge password YOUR_GITHUB_TOKEN" >> ~/.authinfo
+;;      STEP 3: Add credentials to ~/.authinfo
+;;        echo "machine api.github.com login YOUR_USERNAME^forge password YOUR_TOKEN" >> ~/.authinfo
 ;;        chmod 600 ~/.authinfo
 ;;
-;;      For GitLab:
-;;        echo "machine gitlab.example.com/api/v4 login YOUR_USERNAME^forge password YOUR_GITLAB_TOKEN" >> ~/.authinfo
-;;        chmod 600 ~/.authinfo
-;;
-;;      IMPORTANT:
-;;        - The ^forge suffix is required by the forge package
-;;        - APIHOST is the apihost value from your [emacs-forge] section in ~/.gitconfig
-;;        - After adding hosts to ~/.gitconfig, restart Emacs or run:
-;;          M-x forge-gitconfig-populate-forge-alist-from-gitconfig
+;;      STEP 4: Restart Emacs or run
+;;        M-x forge-gitconfig-populate-forge-alist-from-gitconfig
 ;;
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      AUTOMATIC USERNAME CONFIGURATION
+;;      AUTOMATIC FEATURES
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      When you open a file in a git repository, the forge username is automatically configured
-;;      in the repository-local .git/config file. This happens automatically via find-file-hook.
+;;      - Forge hosts from ~/.gitconfig are automatically loaded on startup
+;;      - Repository-local usernames are auto-configured when opening files in git repositories
+;;      - Username is set in local .git/config (not global) for clean per-repository configuration
 ;;
-;;      How it works:
-;;        1. When you open any file in a git repository
-;;        2. The repository's forge host is detected from remote.origin.url
-;;        3. The username is looked up from the matching [emacs-forge] section in ~/.gitconfig
-;;        4. The username is set in the local .git/config (not global)
-;;        5. Only the username for the repository's specific host is configured
-;;
-;;      Example:
-;;        - Repository: git@gitlab.company.com:user/project.git
-;;        - Adds to .git/config: [gitlab "gitlab.company.com/api/v4"] user = YOUR_USERNAME
-;;        - Does NOT add unrelated hosts (like GitHub) to this repository's config
-;;
-;;      This ensures clean, per-repository configuration without polluting git configs.
-;;
-;;      Note: forge-alist is automatically populated on Emacs startup from ~/.gitconfig.
+;;      For detailed configuration examples, troubleshooting, and advanced usage, see: GIT.md
 (require 'core-utils)
 (require 'git-utils)
 (require 'forge-gitconfig)

@@ -314,6 +314,7 @@ For detailed information about these limitations, rationale, and workarounds, se
 - [`FEATURES.md`](FEATURES.md) - Complete feature documentation and capabilities
 
 **Additional Resources:**
+- [`GIT.md`](GIT.md) - Git integration setup and usage guide (Magit and Forge)
 - [`KEYMAP.md`](KEYMAP.md) - Comprehensive keybinding reference
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - Development and contribution guidelines
 - [`STYLEGUIDE.md`](STYLEGUIDE.md) - Code formatting standards

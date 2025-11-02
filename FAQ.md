@@ -171,6 +171,42 @@ The modular design makes it easy to add support for additional languages.
 
 **Example override:** The [`configs/local.el`](configs/local.el) includes examples for overriding to alternative themes like `doom-zenburn`.
 
+### Q: How do I set up Git integration (Magit and Forge)?
+
+**A:** The configuration provides comprehensive Git integration through Magit (Git interface) and Forge (GitHub/GitLab integration). Setup requires three main steps:
+
+**Quick Setup:**
+1. **Configure forge hosts** in `~/.gitconfig`:
+   ```ini
+   [emacs-forge "github.com"]
+       apihost = api.github.com
+       webhost = github.com
+       type = github
+       user = YOUR_USERNAME
+   ```
+
+2. **Create personal access token**:
+   - GitHub: https://github.com/settings/tokens (scopes: `repo`, `user`, `read:org`)
+   - GitLab: https://gitlab.com/-/profile/personal_access_tokens (scopes: `api`, `read_api`, `read_user`)
+
+3. **Add credentials** to `~/.authinfo`:
+   ```bash
+   echo "machine api.github.com login YOUR_USERNAME^forge password YOUR_TOKEN" >> ~/.authinfo
+   chmod 600 ~/.authinfo
+   ```
+
+**Important Notes:**
+- The `^forge` suffix on the username is required
+- Restart Emacs or run `M-x forge-gitconfig-populate-forge-alist-from-gitconfig`
+- Test with `M-x magit-status` then `M-x forge-pull`
+
+**Automatic Features:**
+- Repository-local usernames are automatically configured when you open files
+- Forge hosts from `~/.gitconfig` are automatically loaded on startup
+- Use `M-x forge-authinfo-generate-entries` for interactive credential setup
+
+For complete setup instructions, troubleshooting, and usage guide, see [`GIT.md`](GIT.md).
+
 ### Q: Can I disable specific features?
 
 **A:** Yes! The modular structure allows easy feature control:
