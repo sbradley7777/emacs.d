@@ -26,7 +26,7 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
   (when
    (and python-executable (file-executable-p python-executable))
    (with-temp-buffer
-    (core-message-debug "Python version check: %s" python-executable)
+    (core-message-debug "Python version check: %s" (abbreviate-file-name python-executable))
     ;; For process-file to work with TRAMP paths, we need to:
     ;; 1. Set default-directory to match the remote connection
     ;; 2. Use the local filename part (without TRAMP prefix) as the program
@@ -57,7 +57,8 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
   (&optional start-dir)
   "Find virtual environment by searching current directory and parents."
   (let ((current-dir (or start-dir default-directory)))
-    (core-message-loading "Searching for Python venv starting from: %s" current-dir)
+    (core-message-loading
+     "Searching for Python venv starting from: %s" (abbreviate-file-name current-dir))
     (let ((project-root
            (cl-some
             (lambda (marker) (locate-dominating-file current-dir marker)) pyvenv-project-markers)))
@@ -66,8 +67,12 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
        (let ((venv-path (expand-file-name pyvenv-venv-directory-name project-root)))
          (if
           (file-directory-p venv-path)
-          (progn (core-message-success "Found Python venv at: %s" venv-path) venv-path)
-          (core-message-warning "No venv directory found at: %s" venv-path)
+          (progn
+           (core-message-success
+            "Found Python venv at: %s" (abbreviate-file-name venv-path))
+           venv-path)
+          (core-message-warning
+           "No venv directory found at: %s" (abbreviate-file-name venv-path))
           nil))))))
 
  ;; Hook function to update python-shell-interpreter for doom-modeline compatibility

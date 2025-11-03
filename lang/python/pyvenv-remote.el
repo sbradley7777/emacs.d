@@ -14,7 +14,7 @@
   pyvenv-remote-find-venv (remote-dir)
   "Find virtual environment for remote directory.
 First tries to find it remotely, falls back to local equivalent if needed."
-  (core-message-debug "Searching for venv in: %s" remote-dir)
+  (core-message-debug "Searching for venv in: %s" (abbreviate-file-name remote-dir))
   (if
    (file-remote-p remote-dir)
    ;; Try remote search first

@@ -13,14 +13,16 @@
  ;; Tree-sitter Grammar Directory Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Display the tree-sitter grammar directory from constants
- (core-message-config "Tree-sitter grammar directory: %s" features-treesit-grammars-dir)
+ (core-message-config
+  "Tree-sitter grammar directory: %s" (abbreviate-file-name features-treesit-grammars-dir))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Configure Search Path
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Configure tree-sitter to search in custom directory first
  (setq treesit-extra-load-path (list features-treesit-grammars-dir))
- (core-message-config "treesit-extra-load-path: %s" treesit-extra-load-path)
+ (core-message-config
+  "treesit-extra-load-path: %s" (mapcar #'abbreviate-file-name treesit-extra-load-path))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Buffer Reload After Grammar Installation
@@ -85,7 +87,7 @@ Dynamically discovers mode mappings from treesit-auto configuration."
 Uses features-treesit-grammars-dir unless OUT-DIR is explicitly provided.
 After successful installation, automatically reloads buffers to use the new grammar."
    (let ((install-dir (or out-dir features-treesit-grammars-dir)))
-     (core-message-info "Installing %s grammar to: %s" lang install-dir)
+     (core-message-info "Installing %s grammar to: %s" lang (abbreviate-file-name install-dir))
      (funcall orig-fun lang install-dir)
      ;; After successful installation, reload buffers that can use this grammar
      (when
@@ -94,6 +96,7 @@ After successful installation, automatically reloads buffers to use the new gram
       (core-treesit-reload-buffers-for-language lang)))))
 
  (core-message-success "Tree-sitter grammar management configured")
- (core-message-info "Grammars will install to: %s" features-treesit-grammars-dir))
+ (core-message-info
+  "Grammars will install to: %s" (abbreviate-file-name features-treesit-grammars-dir)))
 (provide 'tree-sitter-config)
 ;;; tree-sitter-config.el ends here

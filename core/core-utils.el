@@ -26,7 +26,11 @@ MODULE-NAME should be a string identifying the module being loaded."
 COMMAND is the command name, PATH is the full path, HOST is the hostname,
 LOCATION is either 'local' or 'remote'."
  (core-message-success
-  "The command \"%s\" was found in PATH at %s on host (%s): %s" command path location host))
+  "The command \"%s\" was found in PATH at %s on host (%s): %s"
+  command
+  (abbreviate-file-name path)
+  location
+  host))
 
 (defun
  core-utils-format-command-not-found-message (command host location)
@@ -125,11 +129,13 @@ Returns t if directory exists/was created, nil if creation failed."
     (condition-case err
         (progn
          (make-directory expanded-path t)
-         (core-message-package "Created directory: %s" expanded-path)
+         (core-message-package "Created directory: %s" (abbreviate-file-name expanded-path))
          t)
       (error
        (core-message-error
-        "Failed to create directory %s: %s" expanded-path (error-message-string err))
+        "Failed to create directory %s: %s"
+        (abbreviate-file-name expanded-path)
+        (error-message-string err))
        nil)))))
 
 (defun
