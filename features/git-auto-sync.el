@@ -1,14 +1,16 @@
 ;;; git-auto-sync.el --- Automatic Git and Forge Synchronization -*- lexical-binding: t -*-
 
 ;;; Commentary:
-;; WHAT: Automatic synchronization of Git and Forge data when opening repository files
-;; WHY:  Keeps Git refs and Forge metadata up-to-date without manual intervention
+;; WHAT: Automatic and manual synchronization of Git and Forge data
+;; WHY:  Keeps Git refs and Forge metadata up-to-date
 ;; PROVIDES: Auto-fetch for Magit, auto-pull for Forge, once per repository per session
+;;           Manual sync command for on-demand updates
 ;;
 ;; Features:
 ;; - Automatically fetches Git data (branches, tags, commits) via Magit
 ;; - Automatically pulls Forge data (issues, PRs, comments) via Forge API
-;; - Runs once per repository per Emacs session
+;; - Auto-sync runs once per repository per Emacs session
+;; - Manual sync command (git-sync-repository) for on-demand updates
 ;; - Modular design allows independent use of Magit or Forge sync
 (require 'core-utils)
 (require 'core-logging)
@@ -47,7 +49,8 @@ Loads Magit if not already loaded and fetches all remotes."
   (require 'magit nil t)
   (when
    (fboundp 'magit-fetch-all)
-   (core-message-info "Fetching Git data for: %s" repo-root)
+   (core-message-info
+    "Fetching Git data for: %s" (git-utils-format-repository-display repo-root))
    (magit-fetch-all nil)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,7 +66,10 @@ even though the underlying function is named forge-pull. The operation is semant
 a fetch (retrieves remote data without modifying local state), not a pull (fetch + merge)."
   (require 'forge nil t)
   (when
-   (fboundp 'forge-pull) (core-message-info "Fetching Forge data for: %s" repo-root) (forge-pull)))
+   (fboundp 'forge-pull)
+   (core-message-info
+    "Fetching Forge data for: %s" (git-utils-format-repository-display repo-root))
+   (forge-pull)))
 
  ;; Forge Completion Detection
  ;; Forge doesn't provide a post-pull hook, so we use :around advice on forge--pull
@@ -85,9 +91,9 @@ fetching and storing data, but only for repositories we initiated sync for."
      (funcall
       orig-fun repo
       (lambda
-       ()
-       (when original-callback (funcall original-callback))
-       (core-message-success "Forge data fetched for: %s" repo-root))
+       () (when original-callback (funcall original-callback))
+       (core-message-success
+        "Forge data fetched for: %s" (git-utils-format-repository-display repo-root)))
       since)
      ;; Pass through unchanged for non-auto-synced calls
      (funcall orig-fun repo callback since))))
@@ -95,22 +101,33 @@ fetching and storing data, but only for repositories we initiated sync for."
   'forge (advice-add 'forge--pull :around #'git-auto-sync--around-forge-pull-advice))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Combined Auto-Sync
+ ;; Core Sync Function (Manual and Auto both use this)
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  git-sync-repository ()
+  "Manually sync both Magit and Forge data for the current repository.
+This function can be called multiple times and will sync each time.
+When called, it marks the repository as synced for this session."
+  (interactive)
+  (when-let ((repo-root (git-utils-find-repository-root)))
+    (git-auto-sync--mark-repository-synced repo-root)
+    (core-message-info
+     "Initiated sync for repository: %s" (git-utils-format-repository-display repo-root))
+    (git-auto-sync-magit-fetch repo-root)
+    (git-auto-sync-forge-pull repo-root)))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Auto-Sync (Automatic on File Open)
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
   git-auto-sync-repository-once ()
-  "Sync both Magit and Forge data once per repository when first file is opened.
+  "Auto-sync both Magit and Forge data once per repository when first file is opened.
 Fetches Git refs via Magit and pulls Forge metadata via Forge API.
 Runs only once per repository per Emacs session."
   (when-let ((repo-root (git-utils-find-repository-root)))
-    (unless
-     (git-auto-sync--is-repository-synced-p repo-root)
-     (git-auto-sync--mark-repository-synced repo-root)
-     (core-message-info "Initiated sync for repository: %s" repo-root)
-     (git-auto-sync-magit-fetch repo-root)
-     (git-auto-sync-forge-pull repo-root))))
+    (unless (git-auto-sync--is-repository-synced-p repo-root) (git-sync-repository))))
  (add-hook 'find-file-hook #'git-auto-sync-repository-once)
  (core-message-config
-  "Git and Forge auto-sync configured to run once per repository on first file open"))
+  "Git and Forge auto-sync configured (auto on file open, manual via git-sync-repository)"))
 (provide 'git-auto-sync)
 ;;; git-auto-sync.el ends here

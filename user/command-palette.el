@@ -56,7 +56,7 @@
     ("Vertico Next" . vertico-next)
     ("Project List Buffers" . project-list-buffers)
     ("Magit Status" . magit-status)
-    ("Forge Pull" . forge-pull)
+    ("Git Sync Repository" . git-sync-repository)
     ("List Git Issues" . user-git-issues)
     ("Generate Forge Authinfo Entries" . forge-authinfo-generate-entries))
   "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
