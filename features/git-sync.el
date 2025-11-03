@@ -1,4 +1,4 @@
-;;; git-auto-sync.el --- Automatic Git and Forge Synchronization -*- lexical-binding: t -*-
+;;; git-sync.el --- Automatic Git and Forge Synchronization -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; WHAT: Automatic and manual synchronization of Git and Forge data
@@ -16,7 +16,7 @@
 (require 'core-logging)
 (require 'git-utils)
 (core-utils-with-load-timing
- "git-auto-sync.el"
+ "git-sync.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Shared State and Utilities
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -129,5 +129,5 @@ Runs only once per repository per Emacs session."
  (add-hook 'find-file-hook #'git-auto-sync-repository-once)
  (core-message-config
   "Git and Forge auto-sync configured (auto on file open, manual via git-sync-repository)"))
-(provide 'git-auto-sync)
-;;; git-auto-sync.el ends here
+(provide 'git-sync)
+;;; git-sync.el ends here
