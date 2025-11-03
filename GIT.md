@@ -335,6 +335,48 @@ M-x forge-gitconfig-set-repo-username
 
 ## Usage
 
+### Automatic Synchronization
+
+The configuration automatically synchronizes Git and Forge data when you open files in a repository.
+
+#### How Automatic Sync Works
+
+**When you open any file in a git repository:**
+1. The configuration detects if this repository has been synced this session
+2. If not synced yet, it automatically:
+   - Fetches Git refs (branches, tags, commits) via `magit-fetch-all`
+   - Pulls Forge data (issues, PRs, comments) via Forge API
+3. Marks the repository as synced for this session
+4. Subsequent file opens in the same repository skip the sync
+
+**Messages you'll see:**
+```
+ℹ️  Initiated sync for repository: ~/project-name
+ℹ️  Fetching Git data for: ~/project-name
+ℹ️  Fetching Forge data for: ~/project-name
+✅  Forge data fetched for: ~/project-name
+```
+
+**Note**: Magit fetch runs in the background and shows progress in the modeline ("Fetching..." → "Fetching...done").
+
+#### Manual Synchronization
+
+**Trigger sync on demand:**
+```elisp
+M-x git-sync-repository
+```
+
+Use this when:
+- You want to refresh Git and Forge data during your session
+- You've made changes in another client (web UI, git command line)
+- You want to check for new issues or PRs without opening a new file
+
+**Benefits:**
+- **Always up-to-date** - Start working with latest Git refs and Forge data
+- **No manual fetching** - Automatic background updates
+- **Network efficient** - Only syncs once per repository per session
+- **Non-blocking** - Continue working while sync happens in background
+
 ### Basic Magit Workflows
 
 #### View Repository Status

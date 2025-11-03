@@ -61,10 +61,13 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-packages.el`](core/core-packages.el) - Package declarations and configurations
   - [`core-fonts.el`](core/core-fonts.el) - Automatic font management for icon packages
   - [`core-utils.el`](core/core-utils.el) - Utility functions and load timing system
+  - [`core-config-loader.el`](core/core-config-loader.el) - Configuration module loading with custom use-package keywords
   - [`core-ui.el`](core/core-ui.el) - Basic UI configuration
+  - [`core-gui-mode.el`](core/core-gui-mode.el) - GUI mode settings and window management
   - [`core-editing.el`](core/core-editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
   - [`core-logging.el`](core/core-logging.el) - Message logging and log rotation system
+  - [`core-log-writer.el`](core/core-log-writer.el) - Log file writing and rotation functionality
   - [`core-diagnostics.el`](core/core-diagnostics.el) - System information and configuration diagnostics
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`breadcrumbs-config.el`](features/breadcrumbs-config.el) - Breadcrumb navigation for file path and code structure
@@ -84,6 +87,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - **Git Integration** - Magit and Forge for GitHub/GitLab workflows
     - [`git-config.el`](features/git-config.el) - Magit configuration for Git operations
     - [`git-utils.el`](features/git-utils.el) - Git utility functions and issue browser
+    - [`git-sync.el`](features/git-sync.el) - Automatic Git and Forge synchronization on file open
     - [`forge-config.el`](features/forge-config.el) - Forge configuration for GitHub/GitLab integration
     - [`forge-gitconfig.el`](features/forge-gitconfig.el) - Automatic forge host configuration from ~/.gitconfig
     - [`forge-authinfo.el`](features/forge-authinfo.el) - Interactive credential management for ~/.authinfo
@@ -135,6 +139,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`themes-constants.el`](themes/themes-constants.el) - Theme configuration constants
   - [`themes-utils.el`](themes/themes-utils.el) - Theme utilities and helper functions
   - [`theme-doom-1337.el`](themes/theme-doom-1337.el) - Doom 1337 theme-specific customizations
+  - [`theme-doom-1337-constants.el`](themes/theme-doom-1337-constants.el) - Doom 1337 theme color constants
   - [`modeline-config.el`](themes/modeline-config.el) - [Doom-modeline](https://github.com/seagle0128/doom-modeline) configuration
   - [`modeline-faces.el`](themes/modeline-faces.el) - Theme-specific modeline face customizations
   - [`modeline-segments.el`](themes/modeline-segments.el) - Custom modeline segments and utilities

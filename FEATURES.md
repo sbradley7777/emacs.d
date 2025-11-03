@@ -793,6 +793,32 @@ Interactive command launcher with history tracking and customizable favorites:
 
 Comprehensive Git integration using Magit and Forge for repository management and forge (GitHub, GitLab, etc.) interaction.
 
+### Automatic Synchronization
+
+Automatic Git and Forge data synchronization ([`features/git-sync.el`](features/git-sync.el)):
+
+**Features:**
+- **Auto-sync on file open** - Automatically fetches Git and Forge data when opening files in a repository
+- **Once per session** - Syncs each repository once per Emacs session to avoid redundant network calls
+- **Magit integration** - Fetches Git refs (branches, tags, commits) via `magit-fetch-all`
+- **Forge integration** - Pulls Forge metadata (issues, PRs, comments) via Forge API
+- **Manual sync command** - `M-x git-sync-repository` for on-demand updates
+- **Non-intrusive** - Background fetching with progress indicators in modeline
+- **Smart completion messages** - Success notifications when Forge data fetch completes
+
+**How It Works:**
+- When you open any file in a git repository, the configuration automatically:
+  1. Detects if this repository has been synced this session
+  2. If not, initiates `magit-fetch-all` to update Git refs
+  3. Initiates `forge-pull` to fetch issues, PRs, and comments from the forge API
+  4. Marks the repository as synced to prevent redundant fetches
+
+**Benefits:**
+- **Always up-to-date** - Git branches and forge data automatically refreshed when you start working
+- **Reduced friction** - No need to manually run `magit-fetch` or `forge-pull`
+- **Network efficient** - Only fetches once per repository per session
+- **Background operation** - Non-blocking, allows you to continue working immediately
+
 ### Magit - Git Porcelain
 
 A complete Git interface within Emacs ([`features/git-config.el`](features/git-config.el)):
