@@ -73,11 +73,9 @@ Optional REPO argument specifies which repository to list issues for."
       (eq user-git-issues--current-width 'compact)
       (progn
        (user-git-issues--resize-forge-window existing-window 0.5)
-       (setq user-git-issues--current-width 'expanded)
-       (core-message-info "Forge issues window resized to 50%%"))
+       (setq user-git-issues--current-width 'expanded))
       (user-git-issues--resize-forge-window existing-window 0.3)
-      (setq user-git-issues--current-width 'compact)
-      (core-message-info "Forge issues window resized to 30%%"))
+      (setq user-git-issues--current-width 'compact))
      (condition-case err
          (progn
           (unless
