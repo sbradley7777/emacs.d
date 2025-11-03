@@ -6,6 +6,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'features-constants)
+(require 'vc-git)
 (core-utils-with-load-timing
  "git-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -13,22 +14,18 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
   git-utils-find-repository-root (&optional directory)
-  "Find git repository root using built-in project.el.
+  "Find git repository root using built-in vc-git.
 Returns the repository root path, or nil if not in a git repository."
-  (let ((default-directory (or directory default-directory)))
-    (when-let ((proj (project-current nil)))
-      (expand-file-name (project-root proj)))))
+  (when-let ((root (vc-git-root (or directory default-directory))))
+    (expand-file-name root)))
  (defun
   git-utils-format-repository-display (repo-root)
   "Format REPO-ROOT for display as 'name (abbreviated-path)'.
-Uses built-in project-name to get the repository name.
+Extracts repository name from directory path.
 Example: 'glocktopography (~/gitlab/glocktopography/)'."
   (when
    repo-root
-   (let* ((default-directory repo-root)
-          (proj (project-current nil))
-          (name
-           (if proj (project-name proj) (file-name-nondirectory (directory-file-name repo-root)))))
+   (let ((name (file-name-nondirectory (directory-file-name repo-root))))
      (format "%s (%s)" name (abbreviate-file-name repo-root)))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

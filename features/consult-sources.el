@@ -139,23 +139,23 @@ To add more patterns, simply add regexp strings to this list.")
   ;; Add shared custom annotation function
   (plist-put consult--source-project-buffer :annotate #'consult-sources--buffer-annotation)
 
-  ;; Filter project buffers to exclude patterns from minibuffer-config-ignored-buffer-patterns
-  ;; and ensure only buffers in the current project are shown
+  ;; Filter git repository buffers to exclude patterns from minibuffer-config-ignored-buffer-patterns
+  ;; and ensure only buffers in the current git repository are shown
   (plist-put
    consult--source-project-buffer
    :items
    (lambda
     ()
-    (when-let ((project (project-current)))
-      (let* ((project-root (expand-file-name (project-root project)))
+    (when-let ((git-root (vc-git-root default-directory)))
+      (let* ((repo-root (expand-file-name git-root))
              (all-buffers (consult--buffer-query :sort 'visibility :as #'buffer-name))
-             ;; Filter to only buffers whose files are in the current project
-             (project-buffers
+             ;; Filter to only buffers whose files are in the current git repository
+             (git-buffers
               (seq-filter
                (lambda
                 (buf)
                 (when-let ((file (buffer-file-name (get-buffer buf))))
-                  (string-prefix-p project-root (expand-file-name file))))
+                  (string-prefix-p repo-root (expand-file-name file))))
                all-buffers)))
         ;; Then remove buffers matching ignored patterns
         (seq-remove
@@ -164,7 +164,7 @@ To add more patterns, simply add regexp strings to this list.")
           (seq-some
            (lambda (pattern) (string-match-p pattern buf))
            minibuffer-config-ignored-buffer-patterns))
-         project-buffers)))))
+         git-buffers)))))
 
   (core-message-config "Project buffer source customized with filtering")
 
