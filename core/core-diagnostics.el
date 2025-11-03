@@ -147,7 +147,7 @@
          (grammar grammars)
          (let ((name (plist-get grammar :name))
                (file (plist-get grammar :file)))
-           (message "  - %s (%s)" name file))))))
+           (message "  - %s (%s)" name (abbreviate-file-name file)))))))
     ;; Add separator line at the end
     (core-message-plain "===============================================\n")
     (core-message-plain "")))

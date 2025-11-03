@@ -120,9 +120,10 @@
         'local-map
         (let ((map (make-sparse-keymap)))
           (define-key
-           map
-           [mode-line mouse-1]
-           (lambda () (interactive) (message "Local Directory: %s" default-directory)))
+           map [mode-line mouse-1]
+           (lambda
+            () (interactive)
+            (message "Local Directory: %s" (abbreviate-file-name default-directory))))
           map)))))))
 (provide 'modeline-segments)
 ;;; modeline-segments.el ends here

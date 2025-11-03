@@ -44,7 +44,8 @@ Returns t on success, nil on failure."
   (condition-case err
       (progn (set-file-modes file #o600) t)
     (error
-     (core-message-error "Failed to set permissions on %s: %s" file (error-message-string err))
+     (core-message-error
+      "Failed to set permissions on %s: %s" (abbreviate-file-name file) (error-message-string err))
      nil)))
 
  (defun

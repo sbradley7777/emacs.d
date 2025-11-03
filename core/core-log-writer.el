@@ -66,7 +66,7 @@ BASE-FILENAME is the base name without directory."
              (insert contents)
              (goto-char (point-max))
              (insert (format "\n;; Session ended: %s\n" (current-time-string))))))
-         (core-message-success "Messages log saved to %s" log-file)))
+         (core-message-success "Messages log saved to %s" (abbreviate-file-name log-file))))
     (error
      (core-message-error "Failed to save messages log: %s" (error-message-string err)))))
 

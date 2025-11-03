@@ -37,7 +37,7 @@
      (core-message-info
       "Python Project: %s | Venv: %s | Version: %s"
       project-name
-      venv-path
+      (abbreviate-file-name venv-path)
       (or python-version "Unknown")))
    (core-message-warning "No Python virtual environment active")))
  (defun
