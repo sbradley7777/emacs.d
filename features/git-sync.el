@@ -123,9 +123,15 @@ When called, it marks the repository as synced for this session."
   git-auto-sync-repository-once ()
   "Auto-sync both Magit and Forge data once per repository when first file is opened.
 Fetches Git refs via Magit and pulls Forge metadata via Forge API.
-Runs only once per repository per Emacs session."
+Runs only once per repository per Emacs session.
+Skips remote files accessed via TRAMP."
   (when-let ((repo-root (git-utils-find-repository-root)))
-    (unless (git-auto-sync--is-repository-synced-p repo-root) (git-sync-repository))))
+    (if
+     (file-remote-p repo-root)
+     (core-message-debug
+      "Skipping git auto-sync for remote repository (TRAMP): %s"
+      (git-utils-format-repository-display repo-root))
+     (unless (git-auto-sync--is-repository-synced-p repo-root) (git-sync-repository)))))
  (add-hook 'find-file-hook #'git-auto-sync-repository-once)
  (core-message-config
   "Git and Forge auto-sync configured (auto on file open, manual via git-sync-repository)"))
