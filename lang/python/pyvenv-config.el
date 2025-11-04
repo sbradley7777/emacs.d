@@ -7,6 +7,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'python-constants)
+(require 'python-utils)
 (require 'pyvenv-utils)
 (require 'lang-utils)
 (core-utils-with-load-timing
@@ -26,11 +27,12 @@
       detected-venv
       (progn
        ;; Remember the project root to prevent re-detection
-       (setq
-        pyvenv-project-root
-        (file-name-directory (directory-file-name detected-venv))
-        pyvenv-project-name
-        (file-name-nondirectory (directory-file-name pyvenv-project-root)))
+       (let ((project-dir (file-name-directory (directory-file-name detected-venv))))
+         (setq
+          pyvenv-project-root
+          project-dir
+          pyvenv-project-name
+          (python-utils-extract-project-name project-dir)))
 
        ;; pyvenv-activate sets python-shell-virtualenv-path (Python mode's primary interpreter source)
        (if

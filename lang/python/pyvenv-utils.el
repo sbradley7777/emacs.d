@@ -5,6 +5,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'python-constants)
+(require 'python-utils)
 (core-utils-with-load-timing
  "pyvenv-utils.el"
 
@@ -50,7 +51,7 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
    (let ((python-executable (expand-file-name "bin/python" venv-path)))
      (pyvenv-get-version-from-executable python-executable))))
 
- ;; Search for virtual environment by walking up directory tree looking for project markers
+ ;; Search for virtual environment using centralized project detection
  ;; Returns the venv path if found, nil otherwise
  (defun
   pyvenv-find-venv
@@ -59,21 +60,19 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
   (let ((current-dir (or start-dir default-directory)))
     (core-message-loading
      "Searching for Python venv starting from: %s" (abbreviate-file-name current-dir))
-    (let ((project-root
-           (cl-some
-            (lambda (marker) (locate-dominating-file current-dir marker)) pyvenv-project-markers)))
-      (when
-       project-root
-       (let ((venv-path (expand-file-name pyvenv-venv-directory-name project-root)))
-         (if
-          (file-directory-p venv-path)
-          (progn
-           (core-message-success
-            "Found Python venv at: %s" (abbreviate-file-name venv-path))
-           venv-path)
+    (let ((venv-path (python-utils-find-venv-path current-dir)))
+      (if
+       venv-path
+       (progn
+        (core-message-success "Found Python venv at: %s" (abbreviate-file-name venv-path))
+        venv-path)
+       (let ((project-root (python-utils-find-project-root current-dir)))
+         (when
+          project-root
           (core-message-warning
-           "No venv directory found at: %s" (abbreviate-file-name venv-path))
-          nil))))))
+           "No venv directory found at: %s"
+           (abbreviate-file-name (expand-file-name pyvenv-venv-directory-name project-root)))))
+       nil))))
 
  ;; Hook function to update python-shell-interpreter for doom-modeline compatibility
  ;; pyvenv sets python-shell-virtualenv-path (Python mode's primary), but doom-modeline reads

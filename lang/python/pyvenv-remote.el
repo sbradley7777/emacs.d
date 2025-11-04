@@ -6,6 +6,7 @@
 (require 'core-logging)
 (require 'pyvenv-config)
 (require 'pyvenv-utils)
+(require 'python-utils)
 (require 'tramp-utils)
 (require 'lang-utils)
 (core-utils-with-load-timing
@@ -31,37 +32,10 @@ First tries to find it remotely, falls back to local equivalent if needed."
    ;; Local directory - use existing function
    (pyvenv-find-venv)))
  (defun
-  pyvenv-remote-search-venv
-  (remote-dir)
-  "Search for virtual environment in remote directory and parent directories."
-  ;; Search up the directory tree for project markers
-  (let ((current-dir remote-dir)
-        (project-root nil))
-
-    (while
-     (and current-dir (not project-root) (not (string= current-dir "/")))
-
-     ;; Look for project markers in current directory
-     (setq
-      project-root
-      (cl-some
-       (lambda
-        (marker)
-        (let ((marker-path (expand-file-name marker current-dir)))
-          (when (file-exists-p marker-path) current-dir)))
-       pyvenv-project-markers))
-
-     ;; Move to parent directory if no marker found
-     (unless
-      project-root
-      (let ((parent (file-name-directory (directory-file-name current-dir))))
-        (setq current-dir (if (string= parent current-dir) nil parent)))))
-
-    ;; If we found a project root, look for venv
-    (when
-     project-root
-     (let ((venv-path (expand-file-name pyvenv-venv-directory-name project-root)))
-       (when (file-directory-p venv-path) venv-path)))))
+  pyvenv-remote-search-venv (remote-dir)
+  "Search for virtual environment in remote directory using centralized detection.
+Uses python-utils-find-venv-path which is TRAMP-compatible via locate-dominating-file."
+  (python-utils-find-venv-path remote-dir))
  (defun
   pyvenv-remote-activate () "TRAMP-aware virtual environment activation."
   (if
@@ -80,7 +54,7 @@ First tries to find it remotely, falls back to local equivalent if needed."
 
          ;; Update project state (use buffer-local variables for remote files)
          (let* ((project-dir (file-name-directory (directory-file-name venv-path)))
-                (project-name (file-name-nondirectory (directory-file-name project-dir))))
+                (project-name (python-utils-extract-project-name project-dir)))
            ;; Set buffer-local variables so they don't interfere with local Python files
            (setq-local pyvenv-project-root project-dir)
            (setq-local pyvenv-project-name project-name)
