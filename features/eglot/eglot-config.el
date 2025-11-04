@@ -49,11 +49,9 @@ Checks local or remote host appropriately using tramp-is-remote-file."
               is-remote
               (core-utils-check-command-in-path-remote-host lsp-executable)
               (core-utils-check-command-in-path lsp-executable))))
-        ;; Delay eglot activation to prevent race condition where LSP sends diagnostics
-        ;; before buffer is fully loaded, causing "Invalid region" flymake warnings.
-        ;; The idle timer waits for both the delay period AND for Emacs to be idle.
-        (when
-         should-enable (run-with-idle-timer features-eglot-startup-delay nil #'eglot-ensure)))))))
+        ;; Start eglot directly - no timer needed.
+        ;; Eglot handles async connection internally, so it won't block even during git-sync.
+        (when should-enable (eglot-ensure)))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Automatically Configure All Modes
