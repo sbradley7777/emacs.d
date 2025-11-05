@@ -16,11 +16,20 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Forge Markdown Rendering Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Helper function to wrap forge--fontify-markdown with markdown-hide-markup enabled
+ (defun
+  forge-config--fontify-with-hidden-markup
+  (orig-fun text &optional indent)
+  "Wrap forge--fontify-markdown to enable markdown-hide-markup."
+  (let ((markdown-hide-markup t))
+    (funcall orig-fun text indent)))
+
  ;; Override forge--fontify-markdown with improved version that hides markup
  ;; This makes issue/PR content cleaner by hiding [](url) syntax and showing only link text
  (with-eval-after-load
   'forge-topic
-  (advice-add 'forge--fontify-markdown :override #'forge--fontify-markdown-with-hiding)
+  (advice-add 'forge--fontify-markdown :around #'forge-config--fontify-with-hidden-markup)
+  (advice-add 'forge--fontify-markdown :override #'forge-markdown--fontify-with-hiding)
   (core-message-config "Forge markdown rendering configured with markup hiding")))
 (provide 'forge-config)
 ;;; forge-config.el ends here

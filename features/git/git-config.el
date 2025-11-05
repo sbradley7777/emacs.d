@@ -70,18 +70,10 @@
  (use-package
   forge
   :after magit
-  :config
-  (forge-gitconfig-populate-forge-alist-from-gitconfig)
+  :config (forge-gitconfig-populate-forge-alist-from-gitconfig)
   (add-hook
    'forge-topic-mode-hook
    (lambda () (add-to-invisibility-spec 'markdown-markup) (visual-line-mode 1)))
-  (defun
-   git-config--forge-fontify-with-hidden-markup
-   (orig-fun text &optional indent)
-   "Wrap forge--fontify-markdown to enable markdown-hide-markup."
-   (let ((markdown-hide-markup t))
-     (funcall orig-fun text indent)))
-  (advice-add 'forge--fontify-markdown :around #'git-config--forge-fontify-with-hidden-markup)
   (core-message-config "Forge configured for GitHub/GitLab integration")))
 (provide 'git-config)
 ;;; git-config.el ends here

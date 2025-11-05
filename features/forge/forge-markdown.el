@@ -3,7 +3,7 @@
 ;;; Commentary:
 ;; WHAT: Markdown rendering functions for Forge issues and pull requests
 ;; WHY:  Provides improved markdown display with hidden markup and styled links
-;; PROVIDES: forge--fontify-markdown-with-hiding and helper functions
+;; PROVIDES: forge-markdown--fontify-with-hiding and helper functions
 ;;
 ;; Functions for rendering markdown content in Forge topic buffers with:
 ;; - Markdown markup hiding ([](url) syntax hidden)
@@ -18,7 +18,7 @@
  ;; Face Normalization
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge--normalize-face-value (face-val)
+  forge-markdown--normalize-face-value (face-val)
   "Normalize quoted face symbols to avoid 'Invalid face reference: quote' error.
 FACE-VAL can be a single face symbol, a quoted face symbol, or a list of faces."
   (cond
@@ -36,7 +36,7 @@ FACE-VAL can be a single face symbol, a quoted face symbol, or a list of faces."
  ;; Buffer Setup and Fontification
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge--setup-markdown-buffer
+  forge-markdown--setup-buffer
   (text)
   "Set up a temporary buffer with TEXT for markdown fontification.
 Enables gfm-mode, markdown hiding features, and applies fontification."
@@ -52,7 +52,7 @@ Enables gfm-mode, markdown hiding features, and applies fontification."
   (markdown-reload-extensions))
 
  (defun
-  forge--apply-post-processing (indent)
+  forge-markdown--apply-post-processing (indent)
   "Apply post-fontification processing with optional INDENT.
 Fills region if forge-post-fill-region is set, and applies indentation if INDENT is specified."
   (when
@@ -65,7 +65,7 @@ Fills region if forge-post-fill-region is set, and applies indentation if INDENT
  ;; URL Detection and Link Creation
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge--make-urls-clickable (string)
+  forge-markdown--make-urls-clickable (string)
   "Add click handlers to URLs in STRING.
 Makes both plain URLs and markdown link URLs clickable with mouse-1.
 For markdown links [text](url), finds the link text and extracts the URL from the invisible portion."
@@ -119,7 +119,7 @@ For markdown links [text](url), finds the link text and extracts the URL from th
  ;; Face Property Conversion
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge--convert-face-properties (string)
+  forge-markdown--convert-face-properties (string)
   "Convert face properties to font-lock-face in STRING.
 Normalizes quoted face symbols in both face and mouse-face properties to avoid rendering errors.
 Preserves interactive properties (keymap, help-echo, follow-link) for clickable links."
@@ -133,12 +133,13 @@ Preserves interactive properties (keymap, help-echo, follow-link) for clickable 
        ;; Normalize and copy face property to font-lock-face
        (when
         face-val
-        (put-text-property beg pos 'font-lock-face (forge--normalize-face-value face-val) string))
+        (put-text-property
+         beg pos 'font-lock-face (forge-markdown--normalize-face-value face-val) string))
        ;; Normalize mouse-face property (if present)
        (when
         mouse-face-val
         (put-text-property
-         beg pos 'mouse-face (forge--normalize-face-value mouse-face-val) string))
+         beg pos 'mouse-face (forge-markdown--normalize-face-value mouse-face-val) string))
        ;; Only remove the 'face property, preserve keymap/help-echo/follow-link for clickable links
        (remove-list-of-text-properties beg pos '(face) string)
        (setq beg pos)))
@@ -148,17 +149,17 @@ Preserves interactive properties (keymap, help-echo, follow-link) for clickable 
  ;; Main Markdown Fontification Function
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge--fontify-markdown-with-hiding (text &optional indent)
+  forge-markdown--fontify-with-hiding (text &optional indent)
   "Fontify markdown TEXT with markup hiding enabled.
 This is an improved version of forge--fontify-markdown that hides markdown
 markup characters and URLs for cleaner display in forge topic buffers.
 Makes links clickable with mouse-1 and RET.
 Optional INDENT specifies indentation level."
   (with-temp-buffer
-   (forge--setup-markdown-buffer text) (forge--apply-post-processing indent)
-   (let ((fontified-string (forge--convert-face-properties (buffer-string))))
+   (forge-markdown--setup-buffer text) (forge-markdown--apply-post-processing indent)
+   (let ((fontified-string (forge-markdown--convert-face-properties (buffer-string))))
      ;; Make URLs clickable after converting face properties
-     (forge--make-urls-clickable fontified-string))))
+     (forge-markdown--make-urls-clickable fontified-string))))
 
  (core-message-config "Forge markdown rendering functions loaded"))
 (provide 'forge-markdown)

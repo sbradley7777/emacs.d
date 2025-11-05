@@ -21,7 +21,7 @@
  ;; URL Extraction Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge--extract-markdown-links (text)
+  forge-issue-links--extract-markdown-links (text)
   "Extract all markdown links from TEXT.
 Returns a deduplicated list of (TEXT . URL) cons cells found in markdown [text](url) format."
   (let ((links '())
@@ -44,7 +44,7 @@ Returns a deduplicated list of (TEXT . URL) cons cells found in markdown [text](
       (nreverse result))))
 
  (defun
-  forge--format-links-section (links)
+  forge-issue-links--format-links-section (links)
   "Format LINKS as a markdown section with raw URLs for terminal clickability.
 LINKS is a list of (TEXT . URL) cons cells.
 Returns formatted and fontified string with section header and bullet list of URLs with titles.
@@ -74,7 +74,7 @@ Returns nil if LINKS is empty."
  ;; Forge Integration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge--insert-post-content-with-links (orig-fun post)
+  forge-issue-links--insert-post-content-with-links (orig-fun post)
   "Advice for `forge-insert-post-content' to append raw URLs.
 ORIG-FUN is the original function, POST is the forge post object.
 Extracts markdown links from post body and appends them as clickable raw URLs."
@@ -82,8 +82,8 @@ Extracts markdown links from post body and appends them as clickable raw URLs."
   (funcall orig-fun post)
   ;; Extract and append links if any are found
   (when-let* ((body (oref post body))
-              (links (forge--extract-markdown-links body))
-              (links-section (forge--format-links-section links)))
+              (links (forge-issue-links--extract-markdown-links body))
+              (links-section (forge-issue-links--format-links-section links)))
     (save-excursion
      ;; Move back to before the trailing newlines added by original function
      (backward-char 2) (insert links-section))))
@@ -95,7 +95,7 @@ Extracts markdown links from post body and appends them as clickable raw URLs."
   'forge-topic
   (advice-add
    'forge-insert-post-content
-   :around #'forge--insert-post-content-with-links)
+   :around #'forge-issue-links--insert-post-content-with-links)
   (core-message-config "Forge link extraction enabled")))
 (provide 'forge-issue-links)
 ;;; forge-issue-links.el ends here

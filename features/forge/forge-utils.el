@@ -70,7 +70,7 @@ Returns one of:
  ;; Forge Host Diagnostics
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  diagnostics-show-forge-hosts
+  forge-utils-diagnostics-show-hosts
   ()
   "Display all configured forge hosts and their authentication status.
 Shows forge hosts from ~/.gitconfig along with their configuration details
