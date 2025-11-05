@@ -52,7 +52,7 @@
  (global-set-key (kbd "<f7>") 'user-next-buffer) ; Cycle to next buffer that is filter to not include all buffers
  (global-set-key (kbd "<f8>") 'next-buffer) ; Cycle to next buffer
  (global-set-key (kbd "<f9>") 'command-palette-toggle) ; Toggle command palette
- (global-set-key (kbd "<f10>") 'user-git-issues) ; List forge issues directly without menu
+ (global-set-key (kbd "<f10>") 'forge-issues-list) ; List forge issues directly without menu
 
  ;; Page down/up move the point, not the screen. Can move point to beginning or end of buffer.
  ;; Reference: http://snarfed.org/emacs_page_up_page_down

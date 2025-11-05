@@ -57,7 +57,7 @@
     ("Project List Buffers" . project-list-buffers)
     ("Magit Status" . magit-status)
     ("Git Sync Repository" . git-sync-repository)
-    ("List Git Issues" . user-git-issues)
+    ("List Git Issues" . forge-issues-list)
     ("Generate Forge Authinfo Entries" . forge-authinfo-generate-entries))
   "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
 

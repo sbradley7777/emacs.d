@@ -207,6 +207,7 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  forge-authinfo
  :after (forge-utils forge-gitconfig)
  :description "Interactive authinfo generator for forge hosts")
+(load-module forge-issues :after git-config :description "Forge issue management commands")
 (load-module
  git-sync
  :after (git-utils git-config forge-config)
