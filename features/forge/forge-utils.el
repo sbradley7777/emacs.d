@@ -2,7 +2,8 @@
 
 ;;; Commentary:
 ;; Utilities for working with forge hosts (GitHub, GitLab, etc.) including
-;; diagnostics for viewing configured hosts and their authentication status.
+;; diagnostics for viewing configured hosts and their authentication status,
+;; and TRAMP support for remote repository operations.
 (require 'core-logging)
 (require 'core-utils)
 (require 'forge-constants)
@@ -123,5 +124,32 @@ and whether they have credentials configured in ~/.authinfo."
      (core-message-plain
       "  Total hosts:    %d (Authenticated hosts total:  %d)" total-hosts authenticated-count)
      (core-message-plain "")))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TRAMP Support
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ghub--git-get uses call-process which only works on local system.
+;; magit-get uses process-file which respects default-directory (works with TRAMP).
+;; For remote repositories, delegate to magit-get; for local, use original implementation.
+(defun
+ forge-utils--ghub-use-magit-get (orig-fun var)
+ "Advice for ghub--git-get to delegate to magit-get for remote repositories.
+ORIG-FUN is the original ghub--git-get function.
+VAR is the git config variable to read.
+
+When default-directory is remote (TRAMP), use magit-get which handles TRAMP
+via process-file. For local directories, use original ghub implementation."
+ (if
+  (file-remote-p default-directory)
+  ;; Remote: use magit-get (handles TRAMP)
+  (progn (require 'magit-git nil t) (when (fboundp 'magit-get) (magit-get var)))
+  ;; Local: use original ghub implementation
+  (funcall orig-fun var)))
+
+;; Apply advice when ghub loads
+(with-eval-after-load
+ 'ghub
+ (advice-add 'ghub--git-get :around #'forge-utils--ghub-use-magit-get)
+ (core-message-config "Forge TRAMP support configured"))
 (provide 'forge-utils)
 ;;; forge-utils.el ends here

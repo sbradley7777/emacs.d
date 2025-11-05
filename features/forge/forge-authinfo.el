@@ -9,6 +9,9 @@
 ;; tokens used for Forge operations vs. other API access.
 ;;
 ;; Format: machine APIHOST login USERNAME^forge password TOKEN
+;;
+;; NOTE: Disabled when editing remote files via TRAMP to prevent
+;; attempting to modify local ~/.authinfo from remote context.
 (require 'core-logging)
 (require 'core-utils)
 (require 'forge-constants)
@@ -68,69 +71,75 @@ Returns t if valid, nil otherwise."
 Reads [emacs-forge] sections from ~/.gitconfig and checks which hosts
 are missing credentials in ~/.authinfo. For each missing host, prompts
 the user for authentication token and generates the authinfo entry.
-Only prompts for hosts that are properly configured in ~/.gitconfig."
+Only prompts for hosts that are properly configured in ~/.gitconfig.
+
+Does not run when editing remote files via TRAMP."
   (interactive)
-  (let* ((hosts (git-forge-config-parse-hosts))
-         (existing-machines (forge-authinfo--parse-existing-entries))
-         (authinfo-file (expand-file-name forge-authinfo-path))
-         (new-entries '())
-         (processed-count 0)
-         (skipped-count 0))
-    (if
-     (null hosts) (core-message-warning "No [emacs-forge] sections found in ~/.gitconfig")
-     (progn
-      (core-message-info
-       "Checking %d forge host%s..." (length hosts) (if (= (length hosts) 1) "" "s"))
-      (dolist
-       (host hosts)
-       (let* ((config (git-forge-config-parse-host-config host))
-              (api-host (plist-get config :apihost))
-              (user (plist-get config :user))
-              (forge-type (plist-get config :type)))
-         (cond
-          ((not config)
-           (core-message-warning "Failed to parse config for host '%s', skipping" host)
-           (setq skipped-count (1+ skipped-count)))
-          ((not api-host)
-           (core-message-warning "Host '%s' missing apihost in ~/.gitconfig, skipping" host)
-           (setq skipped-count (1+ skipped-count)))
-          ((member api-host existing-machines)
-           (core-message-info "Host '%s' already has credentials in ~/.authinfo" api-host)
-           (setq skipped-count (1+ skipped-count)))
-          (t
-           (let* ((username (if user user (read-string (format "Username for %s: " api-host))))
-                  (token (read-passwd (format "Token for %s: " api-host))))
-             (if
-              (forge-authinfo--validate-inputs username token)
-              (progn
-               (push (forge-authinfo--format-entry api-host username token) new-entries)
-               (setq processed-count (1+ processed-count))
-               (core-message-success "Prepared entry for %s" api-host))
-              (core-message-warning "Skipping %s (empty username or token)" api-host)
-              (setq skipped-count (1+ skipped-count))))))))
-      (if
-       (null new-entries) (core-message-info "No new entries to add to ~/.authinfo")
-       (condition-case err
-           (progn
-            (let ((file-existed (file-exists-p authinfo-file)))
-              (with-temp-buffer
-               (when file-existed (insert-file-contents authinfo-file))
-               (goto-char (point-max))
-               (unless (or (bobp) (eq (char-before) ?\n)) (insert "\n"))
-               (dolist (entry (reverse new-entries)) (insert entry "\n"))
-               (write-region (point-min) (point-max) authinfo-file nil 'quiet))
-              (when
-               (forge-authinfo--ensure-file-permissions authinfo-file)
-               (core-message-success
-                "Added %d entr%s to ~/.authinfo"
-                processed-count
-                (if (= processed-count 1) "y" "ies"))
+  (if
+   (or (and buffer-file-name (file-remote-p buffer-file-name)) (file-remote-p default-directory))
+   (core-message-warning "forge-authinfo-generate-entries disabled for remote files")
+   (let* ((hosts (git-forge-config-parse-hosts))
+          (existing-machines (forge-authinfo--parse-existing-entries))
+          (authinfo-file (expand-file-name forge-authinfo-path))
+          (new-entries '())
+          (processed-count 0)
+          (skipped-count 0))
+     (if
+      (null hosts) (core-message-warning "No [emacs-forge] sections found in ~/.gitconfig")
+      (progn
+       (core-message-info
+        "Checking %d forge host%s..." (length hosts) (if (= (length hosts) 1) "" "s"))
+       (dolist
+        (host hosts)
+        (let* ((config (git-forge-config-parse-host-config host))
+               (api-host (plist-get config :apihost))
+               (user (plist-get config :user))
+               (forge-type (plist-get config :type)))
+          (cond
+           ((not config)
+            (core-message-warning "Failed to parse config for host '%s', skipping" host)
+            (setq skipped-count (1+ skipped-count)))
+           ((not api-host)
+            (core-message-warning "Host '%s' missing apihost in ~/.gitconfig, skipping" host)
+            (setq skipped-count (1+ skipped-count)))
+           ((member api-host existing-machines)
+            (core-message-info "Host '%s' already has credentials in ~/.authinfo" api-host)
+            (setq skipped-count (1+ skipped-count)))
+           (t
+            (let* ((username (if user user (read-string (format "Username for %s: " api-host))))
+                   (token (read-passwd (format "Token for %s: " api-host))))
+              (if
+               (forge-authinfo--validate-inputs username token)
+               (progn
+                (push (forge-authinfo--format-entry api-host username token) new-entries)
+                (setq processed-count (1+ processed-count))
+                (core-message-success "Prepared entry for %s" api-host))
+               (core-message-warning "Skipping %s (empty username or token)" api-host)
+               (setq skipped-count (1+ skipped-count))))))))
+       (if
+        (null new-entries) (core-message-info "No new entries to add to ~/.authinfo")
+        (condition-case err
+            (progn
+             (let ((file-existed (file-exists-p authinfo-file)))
+               (with-temp-buffer
+                (when file-existed (insert-file-contents authinfo-file))
+                (goto-char (point-max))
+                (unless (or (bobp) (eq (char-before) ?\n)) (insert "\n"))
+                (dolist (entry (reverse new-entries)) (insert entry "\n"))
+                (write-region (point-min) (point-max) authinfo-file nil 'quiet))
                (when
-                (> skipped-count 0)
-                (core-message-info
-                 "Skipped %d host%s" skipped-count (if (= skipped-count 1) "" "s"))))))
-         (error
-          (core-message-error "Failed to write ~/.authinfo: %s" (error-message-string err)))))))))
+                (forge-authinfo--ensure-file-permissions authinfo-file)
+                (core-message-success
+                 "Added %d entr%s to ~/.authinfo"
+                 processed-count
+                 (if (= processed-count 1) "y" "ies"))
+                (when
+                 (> skipped-count 0)
+                 (core-message-info
+                  "Skipped %d host%s" skipped-count (if (= skipped-count 1) "" "s"))))))
+          (error
+           (core-message-error
+            "Failed to write ~/.authinfo: %s" (error-message-string err))))))))))
 
  (core-message-config "Forge authinfo generator loaded"))
 (provide 'forge-authinfo)
