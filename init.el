@@ -196,6 +196,10 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  :description "Forge configuration utilities and diagnostics")
 (load-module forge-markdown :after forge-utils :description "Forge markdown rendering functions")
 (load-module
+ forge-issue-links
+ :after forge-markdown
+ :description "Append raw URLs to forge issues for terminal clickability")
+(load-module
  forge-config
  :after forge-markdown
  :description "Forge markdown rendering and customizations")
