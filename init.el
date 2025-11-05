@@ -189,10 +189,12 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 (load-module flymake-config :after core-packages :description "Flymake configuration")
 (load-module flymake-utils :after flymake-config :description "Flymake utility functions")
 (load-module diff-hl-config :after core-packages :description "Git diff highlighting")
-(load-module git-config :after core-packages :description "Magit and forge git integration")
+(load-module git-constants :description "Git configuration constants")
+(load-module git-config :after git-constants :description "Magit and forge git integration")
+(load-module forge-constants :description "Forge configuration constants")
 (load-module
  forge-utils
- :after (git-utils forge-gitconfig)
+ :after (git-utils forge-gitconfig forge-constants)
  :description "Forge configuration utilities and diagnostics")
 (load-module forge-markdown :after forge-utils :description "Forge markdown rendering functions")
 (load-module

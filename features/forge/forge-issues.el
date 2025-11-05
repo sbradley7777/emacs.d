@@ -5,6 +5,7 @@
 ;;      Provides commands for listing, viewing, and managing issues.
 (require 'core-utils)
 (require 'core-logging)
+(require 'forge-constants)
 (core-utils-with-load-timing
  "forge-issues.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,9 +45,10 @@ Optional REPO argument specifies which repository to list issues for."
      (if
       (eq forge-issues-list--current-width 'compact)
       (progn
-       (forge-issues-list--resize-forge-window existing-window 0.5)
+       (forge-issues-list--resize-forge-window
+        existing-window forge-issues-expanded-width)
        (setq forge-issues-list--current-width 'expanded))
-      (forge-issues-list--resize-forge-window existing-window 0.3)
+      (forge-issues-list--resize-forge-window existing-window forge-issues-compact-width)
       (setq forge-issues-list--current-width 'compact))
      (condition-case err
          (progn

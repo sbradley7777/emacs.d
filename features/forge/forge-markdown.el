@@ -11,6 +11,7 @@
 ;; - Face property normalization to prevent rendering errors
 (require 'core-utils)
 (require 'core-logging)
+(require 'forge-constants)
 (core-utils-with-load-timing
  "forge-markdown.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -101,7 +102,8 @@ For markdown links [text](url), finds the link text and extracts the URL from th
        (when
         (and
          (eq (char-after) ?\()
-         (re-search-forward "(\\(https?://[^)]+\\))" (+ after-bracket 500) t))
+         (re-search-forward
+          "(\\(https?://[^)]+\\))" (+ after-bracket forge-markdown-url-search-limit) t))
         (let* ((url (match-string 1))
                (map (make-sparse-keymap)))
           ;; Make the link text clickable

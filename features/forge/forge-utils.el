@@ -5,6 +5,7 @@
 ;; diagnostics for viewing configured hosts and their authentication status.
 (require 'core-logging)
 (require 'core-utils)
+(require 'forge-constants)
 (require 'forge-gitconfig)
 (require 'git-utils)
 (core-utils-with-load-timing
@@ -12,14 +13,13 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Authinfo Parsing
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defconst forge-utils-authinfo-path "~/.authinfo" "Path to the authinfo file.")
 
  (defun
   forge-utils-parse-authinfo ()
   "Parse ~/.authinfo and return list of entries.
 Each entry is a plist with :machine, :login, and :password keys.
 Returns nil if file doesn't exist."
-  (let ((authinfo-file (expand-file-name forge-utils-authinfo-path)))
+  (let ((authinfo-file (expand-file-name forge-authinfo-path)))
     (when
      (file-exists-p authinfo-file)
      (with-temp-buffer
@@ -57,7 +57,7 @@ Returns one of:
   :authenticated - credentials found in ~/.authinfo
   :no-credentials - ~/.authinfo exists but no entry for this host
   :no-authinfo - ~/.authinfo file doesn't exist"
-  (let ((authinfo-file (expand-file-name forge-utils-authinfo-path)))
+  (let ((authinfo-file (expand-file-name forge-authinfo-path)))
     (if
      (not (file-exists-p authinfo-file))
      :no-authinfo

@@ -11,6 +11,7 @@
 ;; Format: machine APIHOST login USERNAME^forge password TOKEN
 (require 'core-logging)
 (require 'core-utils)
+(require 'forge-constants)
 (require 'forge-gitconfig)
 (require 'forge-utils)
 (core-utils-with-load-timing
@@ -35,7 +36,7 @@ Returns empty list if file doesn't exist."
   "Format a single authinfo line from MACHINE, LOGIN, and TOKEN.
 Returns formatted string suitable for ~/.authinfo.
 Automatically appends ^forge suffix to login for Forge authentication."
-  (format "machine %s login %s^forge password %s" machine login token))
+  (format "machine %s login %s%s password %s" machine login forge-authinfo-username-suffix token))
 
  (defun
   forge-authinfo--ensure-file-permissions (file)
@@ -71,7 +72,7 @@ Only prompts for hosts that are properly configured in ~/.gitconfig."
   (interactive)
   (let* ((hosts (forge-gitconfig-parse-hosts-from-gitconfig))
          (existing-machines (forge-authinfo--parse-existing-entries))
-         (authinfo-file (expand-file-name forge-utils-authinfo-path))
+         (authinfo-file (expand-file-name forge-authinfo-path))
          (new-entries '())
          (processed-count 0)
          (skipped-count 0))

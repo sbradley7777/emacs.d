@@ -5,6 +5,7 @@
 ;;      Provides customized display and formatting behavior for Magit buffers.
 (require 'core-utils)
 (require 'features-constants)
+(require 'git-constants)
 (core-utils-with-load-timing
  "magit-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -30,7 +31,7 @@
       (let* ((label-end (point))
              (line-end (line-end-position))
              (fill-prefix (make-string (current-column) ?\s))
-             (fill-column (- win-width 2)))
+             (fill-column (- win-width magit-format-fill-margin)))
         (when
          (> (- line-end (line-beginning-position)) fill-column)
          (fill-region-as-paragraph label-end line-end)))))))

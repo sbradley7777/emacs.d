@@ -36,6 +36,7 @@
 ;;
 ;;      For detailed configuration examples, troubleshooting, and advanced usage, see: GIT.md
 (require 'core-utils)
+(require 'git-constants)
 (require 'magit-utils)
 (require 'forge-gitconfig)
 (core-utils-with-load-timing
@@ -51,7 +52,7 @@
    magit-display-buffer-function
    #'magit-utils-display-buffer-side
    magit-log-section-commit-count
-   30
+   magit-log-commit-count
    magit-section-initial-visibility-alist
    '((stashes . show)
      (untracked . show)
