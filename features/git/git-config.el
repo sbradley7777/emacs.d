@@ -36,7 +36,7 @@
 ;;
 ;;      For detailed configuration examples, troubleshooting, and advanced usage, see: GIT.md
 (require 'core-utils)
-(require 'git-utils)
+(require 'magit-utils)
 (require 'forge-gitconfig)
 (core-utils-with-load-timing
  "git-config.el"
@@ -49,7 +49,7 @@
   :config
   (setq
    magit-display-buffer-function
-   #'git-utils-magit-display-buffer-side
+   #'magit-utils-display-buffer-side
    magit-log-section-commit-count
    30
    magit-section-initial-visibility-alist
@@ -60,7 +60,7 @@
      (unstaged . show)
      (staged . show)
      (issues . show)))
-  (advice-add 'magit-status-refresh-buffer :after #'git-utils-format-magit-buffer)
+  (advice-add 'magit-status-refresh-buffer :after #'magit-utils-format-buffer)
   (core-message-config "Magit configured for git integration"))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

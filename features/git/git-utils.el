@@ -2,10 +2,9 @@
 
 ;;; Commentary:
 ;;      Utility functions for git integration.
-;;      Provides helper functions for Magit and Forge.
+;;      Provides helper functions for git repository detection and configuration.
 (require 'core-utils)
 (require 'core-logging)
-(require 'features-constants)
 (require 'vc-git)
 (core-utils-with-load-timing
  "git-utils.el"
@@ -27,33 +26,6 @@ Example: 'glocktopography (~/gitlab/glocktopography/)'."
    repo-root
    (let ((name (file-name-nondirectory (directory-file-name repo-root))))
      (format "%s (%s)" name (abbreviate-file-name repo-root)))))
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Magit Utility Functions
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defun
-  git-utils-magit-display-buffer-side (buffer) "Display BUFFER in side window at configured width."
-  (display-buffer
-   buffer
-   `(display-buffer-in-side-window (side . right) (window-width . ,features-side-window-width))))
-
- (defun
-  git-utils-format-magit-buffer
-  ()
-  "Format Magit buffer with word-wrapped lines and proper padding."
-  (let ((inhibit-read-only t)
-        (win-width (window-width)))
-    (save-excursion
-     (goto-char (point-min))
-     (while
-      (re-search-forward "^\\(Head:\\|Merge:\\|Push:\\|Pull:\\)\\s-+" nil t)
-      (let* ((label-end (point))
-             (line-end (line-end-position))
-             (fill-prefix (make-string (current-column) ?\s))
-             (fill-column (- win-width 2)))
-        (when
-         (> (- line-end (line-beginning-position)) fill-column)
-         (fill-region-as-paragraph label-end line-end)))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; User Commands
