@@ -43,14 +43,19 @@ LOCATION is either 'local' or 'remote'."
 (defun
  core-utils-check-command-in-path (command)
  "Check if COMMAND exists in PATH and log message if not found.
-Returns t if command is found, nil otherwise."
- (let ((command-path (executable-find command))
-       (host (system-name)))
+Returns t if command is found, nil otherwise.
+
+Properly detects local vs remote (TRAMP) paths based on default-directory."
+ (let* ((is-remote (file-remote-p default-directory))
+        (host
+         (if
+          is-remote (or (file-remote-p default-directory 'host) "unknown-remote") (system-name)))
+        (location (if is-remote "remote" "local"))
+        (command-path (executable-find command)))
    (if
     command-path
-    (progn (core-utils-format-command-found-message command command-path host "local") t)
-    (core-utils-format-command-not-found-message command host "local")
-    nil)))
+    (progn (core-utils-format-command-found-message command command-path host location) t)
+    (progn (core-utils-format-command-not-found-message command host location) nil))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Path Constant Definition Utilities
