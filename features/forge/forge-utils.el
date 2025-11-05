@@ -6,7 +6,7 @@
 (require 'core-logging)
 (require 'core-utils)
 (require 'forge-constants)
-(require 'forge-gitconfig)
+(require 'git-forge-config)
 (require 'git-utils)
 (core-utils-with-load-timing
  "forge-utils.el"
@@ -79,7 +79,7 @@ and whether they have credentials configured in ~/.authinfo."
   (core-message-plain "")
   (core-message-plain "=== Forge Host Diagnostics ===")
   (core-message-plain "")
-  (let* ((hosts (forge-gitconfig-parse-hosts-from-gitconfig))
+  (let* ((hosts (git-forge-config-parse-hosts))
          (total-hosts (length hosts))
          (github-count 0)
          (gitlab-count 0)
@@ -89,7 +89,7 @@ and whether they have credentials configured in ~/.authinfo."
      (core-message-warning "No forge hosts configured in ~/.gitconfig")
      (dolist
       (host-id hosts)
-      (let* ((config (forge-gitconfig-parse-config-for-host host-id))
+      (let* ((config (git-forge-config-parse-host-config host-id))
              (forge-type (plist-get config :type))
              (git-host (plist-get config :githost))
              (web-host (plist-get config :webhost))

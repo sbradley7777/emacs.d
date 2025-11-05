@@ -25,7 +25,7 @@
 ;;        chmod 600 ~/.authinfo
 ;;
 ;;      STEP 4: Restart Emacs or run
-;;        M-x forge-gitconfig-populate-forge-alist-from-gitconfig
+;;        M-x git-forge-config-populate-forge-alist
 ;;
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      AUTOMATIC FEATURES
@@ -38,7 +38,7 @@
 (require 'core-utils)
 (require 'git-constants)
 (require 'magit-utils)
-(require 'forge-gitconfig)
+(require 'git-forge-config)
 (core-utils-with-load-timing
  "git-config.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -70,7 +70,7 @@
  (use-package
   forge
   :after magit
-  :config (forge-gitconfig-populate-forge-alist-from-gitconfig)
+  :config (git-forge-config-populate-forge-alist)
   (add-hook
    'forge-topic-mode-hook
    (lambda () (add-to-invisibility-spec 'markdown-markup) (visual-line-mode 1)))

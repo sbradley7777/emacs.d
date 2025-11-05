@@ -194,7 +194,7 @@ Returns a list of absolute directory paths suitable for adding to load-path."
 (load-module forge-constants :description "Forge configuration constants")
 (load-module
  forge-utils
- :after (git-utils forge-gitconfig forge-constants)
+ :after (git-utils git-forge-config forge-constants)
  :description "Forge configuration utilities and diagnostics")
 (load-module forge-markdown :after forge-utils :description "Forge markdown rendering functions")
 (load-module
@@ -207,7 +207,7 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  :description "Forge markdown rendering and customizations")
 (load-module
  forge-authinfo
- :after (forge-utils forge-gitconfig)
+ :after (forge-utils git-forge-config)
  :description "Interactive authinfo generator for forge hosts")
 (load-module forge-issues :after git-config :description "Forge issue management commands")
 (load-module

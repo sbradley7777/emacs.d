@@ -12,7 +12,7 @@
 (require 'core-logging)
 (require 'core-utils)
 (require 'forge-constants)
-(require 'forge-gitconfig)
+(require 'git-forge-config)
 (require 'forge-utils)
 (core-utils-with-load-timing
  "forge-authinfo.el"
@@ -70,7 +70,7 @@ are missing credentials in ~/.authinfo. For each missing host, prompts
 the user for authentication token and generates the authinfo entry.
 Only prompts for hosts that are properly configured in ~/.gitconfig."
   (interactive)
-  (let* ((hosts (forge-gitconfig-parse-hosts-from-gitconfig))
+  (let* ((hosts (git-forge-config-parse-hosts))
          (existing-machines (forge-authinfo--parse-existing-entries))
          (authinfo-file (expand-file-name forge-authinfo-path))
          (new-entries '())
@@ -83,7 +83,7 @@ Only prompts for hosts that are properly configured in ~/.gitconfig."
        "Checking %d forge host%s..." (length hosts) (if (= (length hosts) 1) "" "s"))
       (dolist
        (host hosts)
-       (let* ((config (forge-gitconfig-parse-config-for-host host))
+       (let* ((config (git-forge-config-parse-host-config host))
               (api-host (plist-get config :apihost))
               (user (plist-get config :user))
               (forge-type (plist-get config :type)))
