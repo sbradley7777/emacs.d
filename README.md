@@ -85,14 +85,21 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`flymake-config.el`](features/flymake/flymake-config.el) - Flymake diagnostic display configuration
     - [`flymake-utils.el`](features/flymake/flymake-utils.el) - Flymake utility functions and backend formatting
   - **Git Integration** - Magit and Forge for GitHub/GitLab workflows
-    - [`git-config.el`](features/git-config.el) - Magit configuration for Git operations
-    - [`git-utils.el`](features/git-utils.el) - Git utility functions and issue browser
-    - [`git-sync.el`](features/git-sync.el) - Automatic Git and Forge synchronization on file open
-    - [`forge-config.el`](features/forge-config.el) - Forge configuration for GitHub/GitLab integration
-    - [`forge-gitconfig.el`](features/forge-gitconfig.el) - Automatic forge host configuration from ~/.gitconfig
-    - [`forge-authinfo.el`](features/forge-authinfo.el) - Interactive credential management for ~/.authinfo
-    - [`forge-markdown.el`](features/forge-markdown.el) - Markdown rendering for issues and pull requests
-    - [`forge-utils.el`](features/forge-utils.el) - Forge utility functions
+    - **[`git/`](features/git/)** - Git and Magit configuration
+      - [`git-config.el`](features/git/git-config.el) - Magit configuration for Git operations
+      - [`git-constants.el`](features/git/git-constants.el) - Git configuration constants
+      - [`git-utils.el`](features/git/git-utils.el) - Git utility functions and issue browser
+      - [`git-sync.el`](features/git/git-sync.el) - Automatic Git and Forge synchronization on file open
+      - [`git-forge-config.el`](features/git/git-forge-config.el) - Automatic forge host configuration from ~/.gitconfig
+      - [`magit-utils.el`](features/git/magit-utils.el) - Magit-specific utility functions
+    - **[`forge/`](features/forge/)** - Forge integration for GitHub/GitLab
+      - [`forge-config.el`](features/forge/forge-config.el) - Forge configuration for GitHub/GitLab integration
+      - [`forge-constants.el`](features/forge/forge-constants.el) - Forge configuration constants
+      - [`forge-authinfo.el`](features/forge/forge-authinfo.el) - Interactive credential management for ~/.authinfo
+      - [`forge-markdown.el`](features/forge/forge-markdown.el) - Markdown rendering for issues and pull requests
+      - [`forge-issue-links.el`](features/forge/forge-issue-links.el) - Issue link extraction and display
+      - [`forge-issues.el`](features/forge/forge-issues.el) - Dedicated issue management commands
+      - [`forge-utils.el`](features/forge/forge-utils.el) - Forge utility functions
   - [`highlight-indent-guides-config.el`](features/highlight-indent-guides-config.el) - Visual indentation guides
   - [`imenu-list-config.el`](features/imenu-list-config.el) - Symbol navigation sidebar for code structure
   - [`rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el) - Enhanced delimiter visibility

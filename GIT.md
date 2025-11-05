@@ -200,7 +200,7 @@ Each forge requires a personal access token for API authentication.
 
 ### Step 3: Configure Authentication (`~/.authinfo`)
 
-Forge reads authentication credentials from `~/.authinfo`.
+Forge reads authentication credentials from `~/.authinfo` ([`features/forge/forge-authinfo.el`](features/forge/forge-authinfo.el)).
 
 #### Format
 
@@ -297,7 +297,7 @@ You should see messages indicating forge hosts were added.
 
 ### Repository-Local Username Configuration
 
-When you open any file in a git repository, the configuration automatically:
+When you open any file in a git repository, the configuration automatically ([`features/git/git-forge-config.el`](features/git/git-forge-config.el)):
 
 1. **Detects the repository's forge host** from `remote.origin.url`
 2. **Looks up the username** from the matching `[emacs-forge]` section in `~/.gitconfig`
@@ -337,7 +337,7 @@ M-x forge-gitconfig-set-repo-username
 
 ### Automatic Synchronization
 
-The configuration automatically synchronizes Git and Forge data when you open files in a repository.
+The configuration automatically synchronizes Git and Forge data when you open files in a repository ([`features/git/git-sync.el`](features/git/git-sync.el)).
 
 #### How Automatic Sync Works
 
@@ -432,7 +432,7 @@ M-x user-git-issues
 
 Or press the configured keybinding (e.g., `F10`).
 
-**Features**:
+**Features** ([`features/git/git-utils.el`](features/git/git-utils.el)):
 - Opens issues list in side window (30% width by default)
 - Press again to toggle width (30% → 50% → 30%)
 - Navigate with `n`/`p`, press `RET` to open issue
@@ -455,7 +455,7 @@ In the Magit status buffer:
 
 #### Markdown Rendering
 
-Issues and PRs display with:
+Issues and PRs display with ([`features/forge/forge-markdown.el`](features/forge/forge-markdown.el)):
 - **Syntax highlighting** for code blocks
 - **Clickable links** (GUI mode only)
 - **Formatted headers, lists, and emphasis**
@@ -510,7 +510,7 @@ Each requires a corresponding entry in `~/.authinfo`.
 
 #### Magit Window Width
 
-The default side window width is controlled by `features-side-window-width` in [`features/features-constants.el`](features/features-constants.el).
+The default side window width is controlled by `git-config-side-window-width` in [`features/git/git-constants.el`](features/git/git-constants.el).
 
 To customize, add to your `local.el`:
 
@@ -520,7 +520,7 @@ To customize, add to your `local.el`:
 
 #### Issues Window Toggle Widths
 
-The `user-git-issues` command toggles between 30% and 50% width by default. To customize, modify the function in [`features/git-utils.el`](features/git-utils.el).
+The `user-git-issues` command toggles between 30% and 50% width by default. To customize, modify the function in [`features/git/git-utils.el`](features/git/git-utils.el).
 
 ### Automatic Configuration Functions
 
@@ -528,10 +528,10 @@ These functions are called automatically but can be invoked manually if needed:
 
 ```elisp
 ;; Populate forge-alist from ~/.gitconfig
-M-x forge-gitconfig-populate-forge-alist-from-gitconfig
+M-x git-forge-config-populate-forge-alist-from-gitconfig
 
 ;; Set username in current repository's .git/config
-M-x forge-gitconfig-set-repo-username
+M-x git-forge-config-set-repo-username
 
 ;; Generate ~/.authinfo entries interactively
 M-x forge-authinfo-generate-entries
@@ -568,7 +568,7 @@ cat ~/.authinfo  # Review entries (be careful with tokens visible)
 **Solutions**:
 1. Verify `[emacs-forge]` section exists in `~/.gitconfig`
 2. Check section name matches repository's git host exactly
-3. Run: `M-x forge-gitconfig-populate-forge-alist-from-gitconfig`
+3. Run: `M-x git-forge-config-populate-forge-alist-from-gitconfig`
 4. Restart Emacs if configuration was just added
 
 **Check forge-alist**:
@@ -582,7 +582,7 @@ M-: forge-alist  ; View currently configured forge hosts
 
 **Solutions**:
 1. Check `~/.gitconfig` has `user = YOUR_USERNAME` in `[emacs-forge]` section
-2. Manually trigger: `M-x forge-gitconfig-set-repo-username`
+2. Manually trigger: `M-x git-forge-config-set-repo-username`
 3. Verify repository has `remote.origin.url` configured:
    ```bash
    git config remote.origin.url
@@ -659,7 +659,7 @@ For issues not covered here:
 - Check [`FAQ.md`](FAQ.md) for frequently asked questions
 - Review the [Forge manual](https://magit.vc/manual/forge.html)
 - Review the [Magit manual](https://magit.vc/manual/magit.html)
-- Check forge host configuration in [`features/git-config.el`](features/git-config.el) (inline documentation)
+- Check forge host configuration in [`features/git/git-config.el`](features/git/git-config.el) and [`features/git/git-forge-config.el`](features/git/git-forge-config.el) (inline documentation)
 
 ### Enable Debug Messages
 

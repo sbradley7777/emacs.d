@@ -795,7 +795,7 @@ Comprehensive Git integration using Magit and Forge for repository management an
 
 ### Automatic Synchronization
 
-Automatic Git and Forge data synchronization ([`features/git-sync.el`](features/git-sync.el)):
+Automatic Git and Forge data synchronization ([`features/git/git-sync.el`](features/git/git-sync.el)):
 
 **Features:**
 - **Auto-sync on file open** - Automatically fetches Git and Forge data when opening files in a repository
@@ -821,7 +821,7 @@ Automatic Git and Forge data synchronization ([`features/git-sync.el`](features/
 
 ### Magit - Git Porcelain
 
-A complete Git interface within Emacs ([`features/git-config.el`](features/git-config.el)):
+A complete Git interface within Emacs ([`features/git/git-config.el`](features/git/git-config.el)):
 
 **Features:**
 - **Visual Git interface** - Interactive staging, committing, branching, and merging
@@ -836,21 +836,21 @@ A complete Git interface within Emacs ([`features/git-config.el`](features/git-c
 
 Work with Git forges directly from Magit with comprehensive automation:
 
-**Core Features** ([`features/forge-config.el`](features/forge-config.el)):
+**Core Features** ([`features/forge/forge-config.el`](features/forge/forge-config.el)):
 - **Issue management** - Browse, create, edit, and close issues
 - **Pull request handling** - View, create, and manage pull requests
 - **Code review** - Comment on code and participate in reviews
 - **Repository data sync** - Fetch issues, PRs, and notifications
 - **Multiple forge support** - GitHub, GitLab, Gitea, Gogs, Bitbucket
 
-**Automatic Configuration** ([`features/forge-gitconfig.el`](features/forge-gitconfig.el)):
+**Automatic Configuration** ([`features/git/git-forge-config.el`](features/git/git-forge-config.el)):
 - **Centralized configuration** - All forge hosts configured via `~/.gitconfig`
 - **Automatic host detection** - Reads `[emacs-forge]` sections on startup
 - **Repository-local usernames** - Automatically sets usernames in `.git/config` when opening files
 - **CLI tool independence** - No dependency on `gh` or `glab` tools
 - **Smart file hooks** - Configures forge settings when you open repository files
 
-**Interactive Credential Management** ([`features/forge-authinfo.el`](features/forge-authinfo.el)):
+**Interactive Credential Management** ([`features/forge/forge-authinfo.el`](features/forge/forge-authinfo.el)):
 - **Automatic `~/.authinfo` generation** - Interactive credential entry creation
 - **Missing credential detection** - Identifies hosts without authentication
 - **Token management** - Secure storage of personal access tokens
@@ -858,18 +858,28 @@ Work with Git forges directly from Magit with comprehensive automation:
 - **Correct format guarantee** - Automatic `^forge` suffix and proper syntax
 - **Duplicate prevention** - Prevents adding existing credentials
 
-**Enhanced Markdown Rendering** ([`features/forge-markdown.el`](features/forge-markdown.el)):
+**Enhanced Markdown Rendering** ([`features/forge/forge-markdown.el`](features/forge/forge-markdown.el)):
 - **Syntax highlighting** - Code blocks with language-specific highlighting
 - **Clickable links** - Interactive URLs in GUI mode
 - **Formatted text** - Headers, lists, emphasis, and more
 - **Word wrapping** - Readable text formatting in issue/PR views
 - **Theme integration** - Coordinates with doom-1337 and other themes
 
-**Utility Functions** ([`features/forge-utils.el`](features/forge-utils.el)):
+**Issue Management** ([`features/forge/forge-issues.el`](features/forge/forge-issues.el)):
+- **Dedicated issue commands** - Specialized functions for working with forge issues
+- **Issue browsing** - Navigate and view repository issues efficiently
+- **Custom issue views** - Enhanced issue display with formatted content
+
+**Issue Link Handling** ([`features/forge/forge-issue-links.el`](features/forge/forge-issue-links.el)):
+- **URL extraction** - Extracts raw URLs from forge issue content for terminal compatibility
+- **Link display** - Shows clickable links in GUI mode, plain URLs in terminal mode
+- **Smart formatting** - Adapts link presentation to the current environment
+
+**Utility Functions** ([`features/forge/forge-utils.el`](features/forge/forge-utils.el)):
 - **Custom commands** - Additional forge-related helper functions
 - **Integration helpers** - Functions for working with forge data
 
-**User Commands** ([`features/git-utils.el`](features/git-utils.el)):
+**User Commands** ([`features/git/git-utils.el`](features/git/git-utils.el)):
 - **Issue browser** - `user-git-issues` lists repository issues in side window
 - **Toggleable width** - Press `F10` to toggle between 30% and 50% window width
 - **Quick access** - Direct issue viewing without transient menus
