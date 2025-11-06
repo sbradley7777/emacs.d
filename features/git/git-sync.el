@@ -38,10 +38,6 @@ Returns the timestamp if synced, nil otherwise."
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Magit Auto-Sync
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Note: Magit fetch runs asynchronously, but we don't show a completion message because:
- ;; - Magit already displays "Fetching..." and "Fetching...done" in the mode line
- ;; - Detecting completion reliably is complex (magit-process-finish-hook fires for ALL processes)
- ;; - Users can check magit-status to see the results when needed
  (defun
   git-auto-sync-magit-fetch (repo-root)
   "Fetch Git data for REPO-ROOT using Magit.
@@ -50,8 +46,47 @@ Loads Magit if not already loaded and fetches all remotes."
   (when
    (fboundp 'magit-fetch-all)
    (core-message-info
-    "Fetching Git data for: %s" (git-utils-format-repository-display repo-root))
+    "Fetching magit git data for project: %s" (git-utils-format-repository-display repo-root))
    (magit-fetch-all nil)))
+
+ ;; Magit Completion Detection
+ ;; Magit doesn't provide a post-fetch hook, so we use :before advice on magit-process-sentinel
+ ;; to detect when git fetch processes complete. We check the process command to identify fetch
+ ;; operations and show completion messages only for repositories we initiated sync for.
+ (defun
+  git-auto-sync--before-magit-sentinel-advice (process event)
+  "Advice to detect Magit fetch completion and show status message.
+PROCESS is the git process that finished.
+EVENT is the event string describing how the process finished.
+
+This advice detects fetch completion by examining the process command,
+but only shows messages for repositories we initiated sync for."
+  (when
+   (memq (process-status process) '(exit signal))
+   (let* ((command (process-command process))
+          (default-dir (process-get process 'default-dir))
+          (exit-code (process-exit-status process)))
+     ;; Only show message if this is a fetch command for a synced repository
+     (when
+      (and command (member "fetch" command) default-dir)
+      ;; Find the repository root from the process's default-dir
+      (let* ((process-dir (file-name-as-directory (expand-file-name default-dir)))
+             (repo-root
+              (let ((default-directory process-dir))
+                (git-utils-find-repository-root))))
+        (when
+         (and repo-root (git-auto-sync--is-repository-synced-p repo-root))
+         (if
+          (zerop exit-code)
+          (core-message-success
+           "Fetched magit git data for project: %s"
+           (git-utils-format-repository-display repo-root))
+          (core-message-error
+           "Failed to fetch magit git data for project: %s"
+           (git-utils-format-repository-display repo-root)))))))))
+ (with-eval-after-load
+  'magit
+  (advice-add 'magit-process-sentinel :before #'git-auto-sync--before-magit-sentinel-advice))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Forge Auto-Sync
@@ -68,7 +103,7 @@ a fetch (retrieves remote data without modifying local state), not a pull (fetch
   (when
    (fboundp 'forge-pull)
    (core-message-info
-    "Fetching Forge data for: %s" (git-utils-format-repository-display repo-root))
+    "Fetching forge git data for project: %s" (git-utils-format-repository-display repo-root))
    (forge-pull)))
 
  ;; Forge Completion Detection
@@ -87,14 +122,29 @@ fetching and storing data, but only for repositories we initiated sync for."
         (original-callback callback))
     (if
      (and repo-root (git-auto-sync--is-repository-synced-p repo-root))
-     ;; Inject our wrapped callback that shows completion message
-     (funcall
-      orig-fun repo
-      (lambda
-       () (when original-callback (funcall original-callback))
-       (core-message-success
-        "Forge data fetched for: %s" (git-utils-format-repository-display repo-root)))
-      since)
+     ;; Inject our wrapped callback that shows completion message and handles errors
+     (condition-case err
+         (funcall
+          orig-fun repo
+          (lambda
+           ()
+           (condition-case callback-err
+               (progn
+                (when original-callback (funcall original-callback))
+                (core-message-success
+                 "Fetched forge git data for project: %s"
+                 (git-utils-format-repository-display repo-root)))
+             (error
+              (core-message-error
+               "Failed to fetch forge git data for project: %s (error: %s)"
+               (git-utils-format-repository-display repo-root)
+               (error-message-string callback-err)))))
+          since)
+       (error
+        (core-message-error
+         "Failed to fetch forge git data for project: %s (error: %s)"
+         (git-utils-format-repository-display repo-root)
+         (error-message-string err))))
      ;; Pass through unchanged for non-auto-synced calls
      (funcall orig-fun repo callback since))))
  (with-eval-after-load
