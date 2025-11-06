@@ -13,15 +13,35 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defvar forge-issues-list--current-width 'compact "Current width state of forge issues window.")
  (defun
+  forge-issues-list--kill-orphaned-buffers ()
+  "Kill forge buffers that lack proper initialization.
+Orphaned buffers have forge-topics-mode but nil forge--buffer-topics-spec,
+which causes errors during redisplay when the mode-line is evaluated."
+  (dolist
+   (buf (buffer-list))
+   (with-current-buffer
+    buf
+    (when
+     (and
+      (derived-mode-p 'forge-topics-mode)
+      (or (not (boundp 'forge--buffer-topics-spec)) (not forge--buffer-topics-spec)))
+     (kill-buffer buf)))))
+ (defun
   forge-issues-list--find-forge-window ()
-  "Find the forge topic window if it exists.
+  "Find the forge topic window if it exists and is properly initialized.
 Returns the window displaying a forge topic buffer, or nil if not found."
   (let ((forge-window nil))
     (walk-windows
      (lambda
       (win)
       (with-current-buffer
-       (window-buffer win) (when (derived-mode-p 'forge-topics-mode) (setq forge-window win))))
+       (window-buffer win)
+       (when
+        (and
+         (derived-mode-p 'forge-topics-mode)
+         (boundp 'forge--buffer-topics-spec)
+         forge--buffer-topics-spec)
+        (setq forge-window win))))
      nil t)
     forge-window))
  (defun
@@ -38,7 +58,7 @@ Returns the window displaying a forge topic buffer, or nil if not found."
   "List forge issues with toggle between 30% and 50% width.
 When buffer is closed, opens at 30%. When buffer is open, toggles between 30% and 50%.
 Optional REPO argument specifies which repository to list issues for."
-  (interactive)
+  (interactive) (forge-issues-list--kill-orphaned-buffers)
   (let ((existing-window (forge-issues-list--find-forge-window)))
     (if
      existing-window
@@ -80,6 +100,40 @@ Optional REPO argument specifies which repository to list issues for."
              (core-message-warning
               "%s Run M-x forge-pull (or N r) to fetch repository data from the forge" clean-msg))
            (core-message-error "Failed to list issues: %s" err-msg))))))))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Defensive Mode-Line Handling
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (with-eval-after-load
+  'forge-topics
+  (defun
+   forge-issues--safe-buffer-desc
+   (orig-func &rest args)
+   "Safely call forge-topics-buffer-desc, returning fallback if buffer is orphaned."
+   (if
+    (and (boundp 'forge--buffer-topics-spec) forge--buffer-topics-spec) (apply orig-func args)
+    (let ((orphaned-buf (current-buffer)))
+      (run-with-idle-timer
+       0.1 nil
+       (lambda
+        ()
+        (when
+         (buffer-live-p orphaned-buf)
+         (with-current-buffer
+          orphaned-buf
+          (when
+           (and
+            (derived-mode-p 'forge-topics-mode)
+            (or (not (boundp 'forge--buffer-topics-spec)) (not forge--buffer-topics-spec)))
+           (kill-buffer orphaned-buf))))))
+      "Issues")))
+  (advice-add 'forge-topics-buffer-desc :around #'forge-issues--safe-buffer-desc))
+
+ (with-eval-after-load 'forge-topics (forge-issues-list--kill-orphaned-buffers))
+
+ (add-hook
+  'after-init-hook
+  (lambda () (run-with-idle-timer 1.0 nil (lambda () (forge-issues-list--kill-orphaned-buffers)))))
 
  (core-message-config "Forge issue commands loaded"))
 (provide 'forge-issues)
