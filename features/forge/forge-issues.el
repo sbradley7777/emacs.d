@@ -13,6 +13,21 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defvar forge-issues-list--current-width 'compact "Current width state of forge issues window.")
  (defun
+  forge-issues-list--handle-error (err error-type)
+  "Handle errors from forge-issues-list with appropriate messaging.
+ERR is the error object, ERROR-TYPE is the type of error caught (user-error or error).
+Provides helpful guidance for 'Cannot use repository yet' errors."
+  (let ((err-msg (error-message-string err)))
+    (if
+     (string-match-p "Cannot use.*yet" err-msg)
+     (let ((clean-msg (car (split-string err-msg "\n"))))
+       (core-message-warning
+        "%s Run M-x forge-pull (or N r) to fetch repository data from the forge" clean-msg))
+     (if
+      (eq error-type 'user-error)
+      (core-message-warning "%s" err-msg)
+      (core-message-error "Failed to list issues: %s" err-msg)))))
+ (defun
   forge-issues-list--kill-orphaned-buffers ()
   "Kill forge buffers that lack proper initialization.
 Orphaned buffers have forge-topics-mode but nil forge--buffer-topics-spec,
@@ -83,23 +98,9 @@ Optional REPO argument specifies which repository to list issues for."
             (forge-topics-setup-buffer repository nil :type 'issue)
             (setq forge-issues-list--current-width 'compact)))
        (user-error
-        (let ((err-msg (error-message-string err)))
-          (if
-           (string-match-p "Cannot use.*yet" err-msg)
-           (progn
-            (let ((clean-msg (car (split-string err-msg "\n"))))
-              (core-message-warning
-               "%s Run M-x forge-pull (or N r) to fetch repository data from the forge"
-               clean-msg)))
-           (core-message-warning "%s" err-msg))))
+        (forge-issues-list--handle-error err 'user-error))
        (error
-        (let ((err-msg (error-message-string err)))
-          (if
-           (string-match-p "Cannot use.*yet" err-msg)
-           (let ((clean-msg (car (split-string err-msg "\n"))))
-             (core-message-warning
-              "%s Run M-x forge-pull (or N r) to fetch repository data from the forge" clean-msg))
-           (core-message-error "Failed to list issues: %s" err-msg))))))))
+        (forge-issues-list--handle-error err 'error))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Defensive Mode-Line Handling
