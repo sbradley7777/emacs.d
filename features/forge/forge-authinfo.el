@@ -23,18 +23,6 @@
  ;; Helper Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge-authinfo--parse-existing-entries ()
-  "Parse existing ~/.authinfo and return list of machine hosts.
-Returns empty list if file doesn't exist."
-  (let ((entries (forge-utils-parse-authinfo))
-        (machines '()))
-    (dolist
-     (entry entries)
-     (let ((machine (plist-get entry :machine)))
-       (when machine (push machine machines))))
-    machines))
-
- (defun
   forge-authinfo--format-entry (machine login token)
   "Format a single authinfo line from MACHINE, LOGIN, and TOKEN.
 Returns formatted string suitable for ~/.authinfo.
@@ -79,7 +67,14 @@ Does not run when editing remote files via TRAMP."
    (or (and buffer-file-name (file-remote-p buffer-file-name)) (file-remote-p default-directory))
    (core-message-warning "forge-authinfo-generate-entries disabled for remote files")
    (let* ((hosts (git-forge-config-parse-hosts))
-          (existing-machines (forge-authinfo--parse-existing-entries))
+          (existing-machines
+           (let ((entries (forge-utils-parse-authinfo))
+                 (machines '()))
+             (dolist
+              (entry entries)
+              (let ((machine (plist-get entry :machine)))
+                (when machine (push machine machines))))
+             machines))
           (authinfo-file (expand-file-name forge-authinfo-path))
           (new-entries '())
           (processed-count 0)
