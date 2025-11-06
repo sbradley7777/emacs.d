@@ -59,16 +59,26 @@ Loads Magit if not already loaded and fetches all remotes."
 PROCESS is the git process that finished.
 EVENT is the event string describing how the process finished.
 
-This advice detects fetch completion by examining the process command,
-but only shows messages for repositories we initiated sync for."
+This advice detects fetch completion by examining the process buffer,
+which contains the actual git command, not the shell wrapper."
   (when
    (memq (process-status process) '(exit signal))
-   (let* ((command (process-command process))
+   (let* ((proc-buf (process-buffer process))
           (default-dir (process-get process 'default-dir))
-          (exit-code (process-exit-status process)))
+          (exit-code (process-exit-status process))
+          (is-fetch-cmd nil))
+     ;; Check if the process buffer contains "git ... fetch"
+     (when
+      (and proc-buf (buffer-live-p proc-buf))
+      (with-current-buffer
+       proc-buf
+       (save-excursion
+        (goto-char (point-min))
+        ;; Look for "git ... fetch" in the process buffer (Magit format: "run <dir> git ... fetch")
+        (when (re-search-forward "git.* fetch" nil t) (setq is-fetch-cmd t)))))
      ;; Only show message if this is a fetch command for a synced repository
      (when
-      (and command (member "fetch" command) default-dir)
+      (and is-fetch-cmd default-dir)
       ;; Find the repository root from the process's default-dir
       (let* ((process-dir (file-name-as-directory (expand-file-name default-dir)))
              (repo-root
