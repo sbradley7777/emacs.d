@@ -6,6 +6,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'forge-constants)
+(require 'git-utils)
 (core-utils-with-load-timing
  "forge-issues.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -90,7 +91,7 @@ Optional REPO argument specifies which repository to list issues for."
           (unless
            (require 'forge-topics nil t)
            (error "Forge package not available. Install it with: M-x package-install RET forge"))
-          (unless (magit-gitdir) (user-error "Not in a git repository"))
+          (unless (git-utils-find-repository-root) (user-error "Not in a git repository"))
           (let ((repository (or repo (forge-get-repository :tracked))))
             (unless
              repository

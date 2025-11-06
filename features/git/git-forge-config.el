@@ -217,8 +217,8 @@ not globally, to keep .git/config files clean."
 Returns the host portion from the remote.origin.url, or nil if not in a git repo.
 For example: 'github.com' or 'gitlab.example.com'."
   (when
-   (and (fboundp 'magit-get) (magit-get "remote.origin.url"))
-   (let ((url (magit-get "remote.origin.url")))
+   (and (git-utils-find-repository-root) (fboundp 'magit-get))
+   (when-let ((url (magit-get "remote.origin.url")))
      (cond
       ;; SSH format: git@github.com:user/repo.git
       ((string-match "^git@\\([^:]+\\):" url)
@@ -269,12 +269,13 @@ Called automatically via find-file-hook.
 Loads Magit if needed, then sets username for the repository's forge host."
   (when
    (buffer-file-name)
-   ;; Load magit if not already loaded
-   (unless (fboundp 'magit-get) (require 'magit nil t))
-   ;; Set username if we're in a git repository
+   ;; Check if we're in a git repository first
    (when
-    (and (fboundp 'magit-get) (fboundp 'magit-set) (fboundp 'magit-gitdir) (magit-gitdir))
-    (git-forge-config-set-repo-username))))
+    (git-utils-find-repository-root)
+    ;; Load magit if not already loaded
+    (unless (fboundp 'magit-get) (require 'magit nil t))
+    ;; Set username if magit functions are available
+    (when (and (fboundp 'magit-get) (fboundp 'magit-set)) (git-forge-config-set-repo-username)))))
 
  ;; Auto-configure username when opening files in git repositories
  ;; Hook is added immediately, but function checks if Magit is loaded before running
@@ -286,7 +287,7 @@ Loads Magit if needed, then sets username for the repository's forge host."
   "Ensure repository username is configured before forge-pull.
 This is called as advice before forge-pull to ensure username is set."
   (when
-   (and (fboundp 'magit-get) (fboundp 'magit-set) (magit-gitdir))
+   (and (git-utils-find-repository-root) (fboundp 'magit-get) (fboundp 'magit-set))
    (git-forge-config-set-repo-username)))
 
  ;; Add advice to run before forge-pull
