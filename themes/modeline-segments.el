@@ -4,6 +4,7 @@
 ;;      These segments are used in modeline-config.el.
 (require 'core-constants)
 (require 'core-utils)
+(require 'core-logging)
 (require 'tree-sitter-utils)
 (core-utils-with-load-timing
  "modeline-segments.el"
@@ -36,7 +37,7 @@
       parent-mode-name
       (if is-ts-mode "yes" "no")
       grammar-file))
-   (message "Tree-sitter: not available in this Emacs build")))
+   (core-message-warning "Tree-sitter: not available in this Emacs build")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Generic Segments
@@ -123,7 +124,7 @@
            map [mode-line mouse-1]
            (lambda
             () (interactive)
-            (message "Local Directory: %s" (abbreviate-file-name default-directory))))
+            (core-message-info "Local Directory: %s" (abbreviate-file-name default-directory))))
           map)))))))
 (provide 'modeline-segments)
 ;;; modeline-segments.el ends here

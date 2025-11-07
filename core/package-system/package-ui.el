@@ -65,7 +65,7 @@ Shows available version and indicates if updates are available."
          ;; Reload package state (suppress activation warnings)
          (let ((inhibit-message t))
            (package-initialize))
-         (message "Updated %d packages" (length packages-with-updates))
+         (core-message-success "Updated %d packages" (length packages-with-updates))
          (sit-for 1)
          (show-installed-packages))))
       (insert "\n\n"))

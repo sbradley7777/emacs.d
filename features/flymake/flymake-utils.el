@@ -3,6 +3,7 @@
 ;;      Utility functions for Flymake diagnostics formatting and display
 (require 'core-constants)
 (require 'core-utils)
+(require 'core-logging)
 (core-utils-with-load-timing
  "flymake-utils.el"
 
@@ -30,7 +31,7 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
       (if
        (fboundp 'flymake-show-buffer-diagnostics)
        (flymake-show-buffer-diagnostics)
-       (message "Flymake is not available"))))))
+       (core-message-warning "Flymake is not available"))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Backend Name Formatting
