@@ -20,17 +20,20 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Constants
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defconst
+ (core-utils-defconst-path
   command-palette-data-dir
-  (expand-file-name "command_palette/" emacs-local-dir)
+  "command_palette/"
+  emacs-local-dir
   "Directory for command palette persistent data.")
- (defconst
+ (core-utils-defconst-path
   command-palette-history-file
-  (expand-file-name "command-palette-history.el" command-palette-data-dir)
+  "command-palette-history.el"
+  command-palette-data-dir
   "File storing command palette history.")
- (defconst
+ (core-utils-defconst-path
   command-palette-favorites-file
-  (expand-file-name "command-palette-favorites.el" command-palette-data-dir)
+  "command-palette-favorites.el"
+  command-palette-data-dir
   "File storing command palette favorites.")
  (defconst command-palette-buffer-name "*Command Palette*" "Name of the command palette buffer.")
  (defconst command-palette-history-size 20 "Maximum number of commands to store in history.")
