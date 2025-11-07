@@ -11,6 +11,7 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
+(require 'core-user-interaction-utils)
 (require 'package-ui)
 (require 'package-maintenance)
 (core-utils-with-load-timing
@@ -444,11 +445,11 @@ persisted to disk immediately. Useful for pinning frequently-used commands."
    (= (ring-length command-palette-history) 0)
    (core-message-warning "No recent commands to promote. Execute commands via M-x first.")
    (let* ((max-index (ring-length command-palette-history))
-          (index-str
-           (read-string (format "Promote recent command to favorites (1 - %d): " max-index)))
-          (index (string-to-number index-str)))
+          (index
+           (core-user-read-number
+            (format "Promote recent command to favorites (1 - %d): " max-index) 1 max-index)))
      (if
-      (and (> index 0) (<= index max-index))
+      index
       (let* ((item (ring-ref command-palette-history (1- index)))
              (cmd-name (car item))
              (cmd-symbol (cdr item)))
@@ -466,7 +467,7 @@ persisted to disk immediately. Useful for pinning frequently-used commands."
         (command-palette--save-history)
         (command-palette--refresh-buffer)
         (core-message-success "Promoted #%d '%s' to favorites" index cmd-name))
-      (core-message-error "Invalid index: %s (must be between 1 and %d)" index-str max-index)))))
+      (core-message-warning "Invalid index or cancelled")))))
  (defun
   command-palette-remove-favorite ()
   "Remove a command from the favorites list by index number.
@@ -478,17 +479,18 @@ Does not affect the command's availability in M-x."
   (if
    (= (length command-palette-favorites) 0) (core-message-warning "No favorites to remove")
    (let* ((max-index (length command-palette-favorites))
-          (index-str (read-string (format "Remove favorite by index (1 - %d): " max-index)))
-          (index (string-to-number index-str)))
+          (index
+           (core-user-read-number
+            (format "Remove favorite by index (1 - %d): " max-index) 1 max-index)))
      (if
-      (and (> index 0) (<= index max-index))
+      index
       (let* ((item-to-remove (nth (1- index) command-palette-favorites))
              (cmd-name (car item-to-remove)))
         (setq command-palette-favorites (cl-remove item-to-remove command-palette-favorites))
         (command-palette--save-favorites)
         (command-palette--refresh-buffer)
         (core-message-success "Removed favorite #%d: '%s'" index cmd-name))
-      (core-message-error "Invalid index: %s (must be between 1 and %d)" index-str max-index)))))
+      (core-message-warning "Invalid index or cancelled")))))
  (defun
   command-palette-clear-history
   ()

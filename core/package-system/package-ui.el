@@ -5,6 +5,7 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
+(require 'core-user-interaction-utils)
 (core-utils-with-load-timing
  "package-ui.el"
 
@@ -116,7 +117,7 @@ Prompts for a search term and displays matching packages from all configured
 package repositories. Shows package descriptions and installation status.
 Useful for discovering new packages or finding alternatives."
   (interactive)
-  (let ((search-term (read-string "Search packages: ")))
+  (let ((search-term (core-user-read-string "Search packages: ")))
     (when
      (and search-term (not (string-empty-p search-term)))
      ;; Use package-show-package-list with keywords parameter to avoid async refresh issues

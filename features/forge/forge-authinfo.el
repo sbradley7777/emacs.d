@@ -13,6 +13,7 @@
 ;; NOTE: Disabled when editing remote files via TRAMP to prevent
 ;; attempting to modify local ~/.authinfo from remote context.
 (require 'core-logging)
+(require 'core-user-interaction-utils)
 (require 'core-utils)
 (require 'forge-constants)
 (require 'git-forge-config)
@@ -101,8 +102,9 @@ Does not run when editing remote files via TRAMP."
             (core-message-info "Host '%s' already has credentials in ~/.authinfo" api-host)
             (setq skipped-count (1+ skipped-count)))
            (t
-            (let* ((username (if user user (read-string (format "Username for %s: " api-host))))
-                   (token (read-passwd (format "Token for %s: " api-host))))
+            (let* ((username
+                    (if user user (core-user-read-string (format "Username for %s: " api-host))))
+                   (token (core-user-read-password (format "Token for %s: " api-host))))
               (if
                (forge-authinfo--validate-inputs username token)
                (progn
