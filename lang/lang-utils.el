@@ -78,6 +78,14 @@ Example:
   (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'my-setup-function)
   (lang-add-dual-mode-hooks 'js-json-mode-hook 'json-ts-mode-hook #'json-setup-common)"
   (add-hook base-mode-hook hook-function) (add-hook ts-mode-hook hook-function))
+ (defun
+  lang-remove-dual-mode-hooks (base-mode-hook ts-mode-hook hook-function)
+  "Remove HOOK-FUNCTION from both BASE-MODE-HOOK and TS-MODE-HOOK.
+Counterpart to lang-add-dual-mode-hooks for removing hooks from dual modes.
+
+Example:
+  (lang-remove-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-auto-activate)"
+  (remove-hook base-mode-hook hook-function) (remove-hook ts-mode-hook hook-function))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Composite Setup Functions

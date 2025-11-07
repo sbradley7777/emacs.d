@@ -84,8 +84,7 @@ Uses python-utils-find-venv-path which is TRAMP-compatible via locate-dominating
     (tramp-create-python-connection-profile profile-name host venv-path)))
 
  ;; Replace existing hooks for both python-mode and python-ts-mode
- (remove-hook 'python-mode-hook #'pyvenv-auto-activate)
- (remove-hook 'python-ts-mode-hook #'pyvenv-auto-activate)
+ (lang-remove-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-auto-activate)
  ;; Add pyvenv-remote-activate back for virtual environment detection and modeline
  (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-remote-activate)
 
