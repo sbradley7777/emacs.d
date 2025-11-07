@@ -53,7 +53,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
   diagnostics-show-system-info () "Show system information in Messages buffer."
-  (let ((timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
+  (let ((lines nil)
         (os-info (diagnostics-get-os-version-info))
         (package-count (if (boundp 'package-activated-list) (length package-activated-list) 0))
         (load-path-count (length load-path))
@@ -95,44 +95,65 @@
              "Configuration"
              "Tree-sitter"
              "Installed grammars")))))
-    (core-message-plain "\n=== Emacs Startup Log - %s ===" timestamp)
-    (core-message-plain
-     "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "OS") os-info)
-    (message
-     "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "User@Host") user-info)
-    (message
-     "%s: %d" (format (concat "%-" (number-to-string max-width) "s") "Process ID") emacs-pid)
-    (message
-     "%s: %s"
-     (format (concat "%-" (number-to-string max-width) "s") "Emacs version")
-     emacs-version)
-    (message
-     "%s: Modern Emacs 30.2+"
-     (format (concat "%-" (number-to-string max-width) "s") "Configuration"))
-    (message
-     "%s: %s %s"
-     (format (concat "%-" (number-to-string max-width) "s") "System")
-     system-type
-     system-configuration)
-    (message
-     "%s: %s"
-     (format (concat "%-" (number-to-string max-width) "s") "Display mode")
-     (if (display-graphic-p) "GUI" "Terminal"))
-    (message
-     "%s: %d"
-     (format (concat "%-" (number-to-string max-width) "s") "Load path entries")
-     load-path-count)
-    (message
-     "%s: %d"
-     (format (concat "%-" (number-to-string max-width) "s") "Installed packages")
-     package-count)
-    (message
-     "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "Tree-sitter") treesit-status)
-    (message
-     "%s: %d"
-     (format (concat "%-" (number-to-string max-width) "s") "Installed grammars")
-     treesit-grammar-count)
-    ;; Display individual grammar details if any are installed
+    (push
+     (format "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "OS") os-info) lines)
+    (push
+     (format
+      "%s: %s" (format (concat "%-" (number-to-string max-width) "s") "User@Host") user-info)
+     lines)
+    (push
+     (format
+      "%s: %d" (format (concat "%-" (number-to-string max-width) "s") "Process ID") emacs-pid)
+     lines)
+    (push
+     (format
+      "%s: %s"
+      (format (concat "%-" (number-to-string max-width) "s") "Emacs version")
+      emacs-version)
+     lines)
+    (push
+     (format
+      "%s: Modern Emacs 30.2+"
+      (format (concat "%-" (number-to-string max-width) "s") "Configuration"))
+     lines)
+    (push
+     (format
+      "%s: %s %s"
+      (format (concat "%-" (number-to-string max-width) "s") "System")
+      system-type
+      system-configuration)
+     lines)
+    (push
+     (format
+      "%s: %s"
+      (format (concat "%-" (number-to-string max-width) "s") "Display mode")
+      (if (display-graphic-p) "GUI" "Terminal"))
+     lines)
+    (push
+     (format
+      "%s: %d"
+      (format (concat "%-" (number-to-string max-width) "s") "Load path entries")
+      load-path-count)
+     lines)
+    (push
+     (format
+      "%s: %d"
+      (format (concat "%-" (number-to-string max-width) "s") "Installed packages")
+      package-count)
+     lines)
+    (push
+     (format
+      "%s: %s"
+      (format (concat "%-" (number-to-string max-width) "s") "Tree-sitter")
+      treesit-status)
+     lines)
+    (push
+     (format
+      "%s: %d"
+      (format (concat "%-" (number-to-string max-width) "s") "Installed grammars")
+      treesit-grammar-count)
+     lines)
+    ;; Add individual grammar details if any are installed
     (when
      (> treesit-grammar-count 0)
      (when
@@ -142,10 +163,8 @@
          (grammar grammars)
          (let ((name (plist-get grammar :name))
                (file (plist-get grammar :file)))
-           (message "  - %s (%s)" name (abbreviate-file-name file)))))))
-    ;; Add separator line at the end
-    (core-message-plain "===============================================\n")
-    (core-message-plain "")))
+           (push (format "  - %s (%s)" name (abbreviate-file-name file)) lines))))))
+    (core-message-diagnostic "Emacs Startup Log" (nreverse lines))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; External Dependencies Diagnostics
@@ -223,8 +242,7 @@ Only checks when working on a remote file."
      (list :status 'ok :message "Nerd Fonts installed")
      (list :status 'warning :message "Nerd Fonts not found in ~/.local/share/fonts/"))))
  (defun
-  diagnostics-show-external-dependencies
-  ()
+  diagnostics-show-external-dependencies ()
   "Check and display status of external dependencies.
 Validates tools and resources not managed by Emacs package system:
 - Language interpreters (Python, etc.)
@@ -232,12 +250,8 @@ Validates tools and resources not managed by Emacs package system:
 - System fonts
 - TRAMP configuration (when working remotely)"
   (interactive)
-  (core-message-plain "")
-  (core-message-plain "")
-  (core-message-plain "=== External Dependencies ===")
-  (core-message-plain "")
-
   (let ((all-results nil)
+        (all-lines nil)
         (ok-count 0)
         (warning-count 0)
         (error-count 0))
@@ -259,33 +273,36 @@ Validates tools and resources not managed by Emacs package system:
       (when tramp-result (push tramp-result all-results)))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Display Results
+    ;; Build Lines
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (dolist
      (result (reverse all-results))
      (pcase (plist-get result :status)
        ('ok
-        (core-message-success "%s" (plist-get result :message))
+        (push (format "✅  %s" (plist-get result :message)) all-lines)
         (setq ok-count (1+ ok-count)))
        ('warning
-        (core-message-warning "%s" (plist-get result :message))
+        (push (format "⚠️  %s" (plist-get result :message)) all-lines)
         (setq warning-count (1+ warning-count)))
        ('error
-        (core-message-error "%s" (plist-get result :message))
+        (push (format "❌  %s" (plist-get result :message)) all-lines)
         (setq error-count (1+ error-count)))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Summary
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (core-message-plain "")
-    (core-message-plain "=== Summary ===")
-    (core-message-success "Passed: %d" ok-count)
-    (when (> warning-count 0) (core-message-warning "Warnings: %d" warning-count))
-    (when (> error-count 0) (core-message-error "Errors: %d" error-count))
+    (push " " all-lines)
+    (push "=== Summary ===" all-lines)
+    (let ((format-str "%-22s"))
+      (push (format (concat "✅  " format-str " %d") "Passed" ok-count) all-lines)
+      (when
+       (> warning-count 0)
+       (push (format (concat "⚠️  " format-str " %d") "Warnings" warning-count) all-lines))
+      (when
+       (> error-count 0)
+       (push (format (concat "❌  " format-str " %d") "Errors" error-count) all-lines)))
     (setq diagnostics-external-dependencies-results all-results)
-    (core-message-plain "")
-    (core-message-success "External dependencies check completed")
-    (core-message-plain "===============================================\n")
+    (core-message-diagnostic "External Dependencies" (nreverse all-lines))
     all-results))
 
  (defun

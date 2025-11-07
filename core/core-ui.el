@@ -39,6 +39,9 @@
   transient-mark-mode t ; Visual feedback on
   kill-whole-line t ; ctrl-k kills whole line if at col 0
   show-trailing-whitespace t) ; Highlight trailing whitespaces
+ ;; Disable trailing whitespace highlighting in Messages buffer
+ (with-current-buffer "*Messages*" (setq-local show-trailing-whitespace nil))
+ (add-hook 'messages-buffer-mode-hook (lambda () (setq-local show-trailing-whitespace nil)))
  ;; Enhanced title bar showing buffer name and file path with hostname
  (setq
   frame-title-format '("%b - " (:eval (or (file-remote-p default-directory 'host) system-name))))

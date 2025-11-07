@@ -41,16 +41,16 @@
           (core-message-error "Failed to install %s: %s" package (error-message-string err)))))))
 
     ;; Installation summary
-    (core-message-plain "\n=== Package Installation Summary ====")
-    (core-message-info "    Installed: %d packages" installed-count)
-    (core-message-info "    Already present: %d packages" skipped-count)
-    (when
-     failed-packages
-     (core-message-error "    Failed: %d packages" (length failed-packages))
-     (dolist (pkg failed-packages) (core-message-error "  %s" pkg))
-     (core-message-info
-      "    Consider running (package-refresh-contents) and retrying failed packages"))
-    (core-message-plain "====================================\n")
+    (let ((lines nil)
+          (format-str "%-22s"))
+      (push (format (concat "ℹ️  " format-str " %d") "Installed" installed-count) lines)
+      (push (format (concat "ℹ️  " format-str " %d") "Already present" skipped-count) lines)
+      (when
+       failed-packages
+       (push (format (concat "❌  " format-str " %d") "Failed" (length failed-packages)) lines)
+       (dolist (pkg failed-packages) (push (format "  - %s" pkg) lines))
+       (push "ℹ️  Consider running (package-refresh-contents) and retrying" lines))
+      (core-message-diagnostic "Package Installation Summary" (nreverse lines)))
 
     ;; Return list of failed packages for further handling
     failed-packages))

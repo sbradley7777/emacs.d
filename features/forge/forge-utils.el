@@ -75,51 +75,74 @@ Returns one of:
   "Display all configured forge hosts and their authentication status.
 Shows forge hosts from ~/.gitconfig along with their configuration details
 and whether they have credentials configured in ~/.authinfo."
-  (interactive) (core-message-plain "\n=== Forge Host Diagnostics ===") (core-message-plain "")
+  (interactive)
   (let* ((hosts (git-forge-config-parse-hosts))
          (total-hosts (length hosts))
+         (lines nil)
          (github-count 0)
          (gitlab-count 0)
-         (authenticated-count 0))
+         (authenticated-count 0)
+         (missing-creds-count 0)
+         (no-authinfo-count 0))
     (if
      (zerop total-hosts)
-     (core-message-warning "No forge hosts configured in ~/.gitconfig")
+     (core-message-diagnostic
+      "Forge Host Diagnostics" (list "⚠️  No forge hosts configured in ~/.gitconfig"))
      (dolist
       (host-id hosts)
       (let* ((config (git-forge-config-parse-host-config host-id))
              (forge-type (plist-get config :type))
-             (git-host (plist-get config :githost))
-             (web-host (plist-get config :webhost))
              (api-host (plist-get config :apihost))
              (user (plist-get config :user))
              (auth-status (forge-utils-check-authinfo-for-host api-host)))
-        (core-message-plain "Host: %s" host-id)
-        (core-message-plain "  Type: %s" (or forge-type "unknown"))
-        (when git-host (core-message-plain "  Git Host: %s" git-host))
-        (when web-host (core-message-plain "  Web Host: %s" web-host))
-        (when api-host (core-message-plain "  API Host: %s" api-host))
-        (when user (core-message-plain "  User: %s" user))
+        (push (format "%s (%s)" host-id (capitalize (or forge-type "unknown"))) lines)
+        (when
+         (and user api-host (not (string= host-id api-host)))
+         (push (format "  User: %s | API: %s" user api-host) lines))
+        (when
+         (and user (or (not api-host) (string= host-id api-host)))
+         (push (format "  User: %s" user) lines))
         (cond
          ((eq auth-status :authenticated)
-          (core-message-success "Authentication: ✓ Configured in ~/.authinfo")
+          (push "  ✅  Authenticated" lines)
           (setq authenticated-count (1+ authenticated-count)))
          ((eq auth-status :no-credentials)
-          (core-message-warning "Authentication: ✗ No credentials in ~/.authinfo"))
+          (push "  ⚠️  No credentials in ~/.authinfo" lines)
+          (setq missing-creds-count (1+ missing-creds-count)))
          ((eq auth-status :no-authinfo)
-          (core-message-warning "Authentication: ⚠️  ~/.authinfo file not found")))
-        (core-message-plain "")
+          (push "  ❌  ~/.authinfo file not found" lines)
+          (setq no-authinfo-count (1+ no-authinfo-count))))
         (cond
          ((string= forge-type "github")
           (setq github-count (1+ github-count)))
          ((string= forge-type "gitlab")
-          (setq gitlab-count (1+ gitlab-count))))))
-     (core-message-plain "\n  === Total Number of Hosts ===")
-     (when (> github-count 0) (core-message-plain "  GitHub hosts:   %d" github-count))
-     (when (> gitlab-count 0) (core-message-plain "  GitLab hosts:   %d" gitlab-count))
-     (core-message-plain "  ─────────────────────────────")
-     (core-message-plain
-      "  Total hosts:    %d (Authenticated hosts total:  %d)\n" total-hosts authenticated-count)
-     (core-message-plain "")))))
+          (setq gitlab-count (1+ gitlab-count)))))))
+    (push " " lines)
+    (push "=== Summary ===" lines)
+    (let ((format-str "%-22s"))
+      (when
+       (> authenticated-count 0)
+       (push (format (concat "✅  " format-str " %d") "Authenticated" authenticated-count) lines))
+      (when
+       (> missing-creds-count 0)
+       (push
+        (format (concat "⚠️  " format-str " %d") "Missing credentials" missing-creds-count) lines))
+      (when
+       (> no-authinfo-count 0)
+       (push
+        (format (concat "❌  " format-str " %d") "Without ~/.authinfo" no-authinfo-count) lines))
+      (let ((type-summary
+             (string-join
+              (delq
+               nil
+               (list
+                (when (> github-count 0) (format "%d GitHub" github-count))
+                (when (> gitlab-count 0) (format "%d GitLab" gitlab-count))))
+              ", ")))
+        (push
+         (format (concat "ℹ️  " format-str " %d (%s)") "Total hosts" total-hosts type-summary)
+         lines)))
+    (core-message-diagnostic "Forge Host Diagnostics" (nreverse lines)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TRAMP Support

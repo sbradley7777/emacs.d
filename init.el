@@ -106,8 +106,8 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  init--show-config-diagnostics () "Display configuration loading diagnostics."
  (let ((total-time (float-time (time-subtract (current-time) init-start-time)))
        (successful 0)
-       (failed 0))
-   (core-message-plain "\n=== Configuration Loading Summary ====")
+       (failed 0)
+       (lines nil))
    (dolist
     (result (reverse config-load-results))
     (let ((name (nth 0 result))
@@ -117,12 +117,15 @@ Returns a list of absolute directory paths suitable for adding to load-path."
       (if
        (eq status 'success)
        (progn
-        (core-utils-increment-counter successful) (core-message-success "%s (%.3fs)" desc time))
+        (core-utils-increment-counter successful) (push (format "✅  %s (%.3fs)" desc time) lines))
        (core-utils-increment-counter failed)
-       (core-message-error "%s (%.3fs) - %s" desc time (nth 4 result)))))
-   (core-message-debug
-    "Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
-   (core-message-plain "====================================\n")))
+       (push (format "❌  %s (%.3fs) - %s" desc time (nth 4 result)) lines))))
+   (push " " lines)
+   (push "=== Summary ===" lines)
+   (push
+    (format "🛠️  Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
+    lines)
+   (core-message-diagnostic "Configuration Loading Summary" (nreverse lines))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configuration loading infrastructure
