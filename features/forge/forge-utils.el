@@ -71,15 +71,11 @@ Returns one of:
  ;; Forge Host Diagnostics
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  forge-utils-diagnostics-show-hosts
-  ()
+  forge-utils-diagnostics-show-hosts ()
   "Display all configured forge hosts and their authentication status.
 Shows forge hosts from ~/.gitconfig along with their configuration details
 and whether they have credentials configured in ~/.authinfo."
-  (interactive)
-  (core-message-plain "")
-  (core-message-plain "=== Forge Host Diagnostics ===")
-  (core-message-plain "")
+  (interactive) (core-message-plain "\n=== Forge Host Diagnostics ===") (core-message-plain "")
   (let* ((hosts (git-forge-config-parse-hosts))
          (total-hosts (length hosts))
          (github-count 0)
@@ -120,9 +116,9 @@ and whether they have credentials configured in ~/.authinfo."
      (core-message-plain "\n  === Total Number of Hosts ===")
      (when (> github-count 0) (core-message-plain "  GitHub hosts:   %d" github-count))
      (when (> gitlab-count 0) (core-message-plain "  GitLab hosts:   %d" gitlab-count))
-     (core-message-plain "  ─────────────────────────────\n")
+     (core-message-plain "  ─────────────────────────────")
      (core-message-plain
-      "  Total hosts:    %d (Authenticated hosts total:  %d)" total-hosts authenticated-count)
+      "  Total hosts:    %d (Authenticated hosts total:  %d)\n" total-hosts authenticated-count)
      (core-message-plain "")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
