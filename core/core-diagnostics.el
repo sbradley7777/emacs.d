@@ -5,6 +5,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'tree-sitter-utils)
+(require 'core-process-utils)
 (core-utils-with-load-timing
  "core-diagnostics.el"
 
@@ -31,24 +32,18 @@
        (when
         (re-search-forward "^DISTRIB_DESCRIPTION=\"?\\([^\"]*\\)\"?" nil t) (match-string 1))))
      ;; Try uname as fallback
-     (condition-case nil
-         (string-trim (shell-command-to-string "uname -sr"))
-       (error
-        "Linux (version unknown)"))))
+     (or (core-process-run-sync "uname" nil "-sr") "Linux (version unknown)")))
    ;; macOS
    ((eq system-type 'darwin)
-    (condition-case nil
-        (let ((version (string-trim (shell-command-to-string "sw_vers -productVersion")))
-              (build (string-trim (shell-command-to-string "sw_vers -buildVersion"))))
-          (format "macOS %s (Build %s)" version build))
-      (error
+    (let ((version (core-process-run-sync "sw_vers" nil "-productVersion"))
+          (build (core-process-run-sync "sw_vers" nil "-buildVersion")))
+      (if
+       (and version build)
+       (format "macOS %s (Build %s)" version build)
        "macOS (version unknown)")))
    ;; Windows
    ((eq system-type 'windows-nt)
-    (condition-case nil
-        (string-trim (shell-command-to-string "ver"))
-      (error
-       "Windows (version unknown)")))
+    (or (core-process-run-sync "ver" nil) "Windows (version unknown)"))
    ;; Other systems
    (t
     (format "%s (version unknown)" system-type))))

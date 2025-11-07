@@ -6,6 +6,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'vc-git)
+(require 'core-process-utils)
 (core-utils-with-load-timing
  "git-utils.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -72,23 +73,8 @@ Returns list of strings, one per matching config line.
 Returns nil if git is not installed, PATTERN is invalid, or no matches found."
   (when
    (and (git-utils--ensure-git-available) (git-utils--validate-config-key pattern))
-   (condition-case err
-       (with-temp-buffer
-        (let ((exit-code
-               (call-process "git" nil t nil "config" "--global" "--get-regexp" pattern)))
-          (cond
-           ((= exit-code 0)
-            (let ((output (buffer-string)))
-              (when (> (length output) 0) (split-string output "\n" t))))
-           ((= exit-code 1)
-            (core-message-debug "No git config entries matching pattern: %s" pattern)
-            nil)
-           (t
-            (core-message-warning "git config --get-regexp failed with exit code %d" exit-code)
-            nil))))
-     (error
-      (core-message-error "Failed to read git config: %s" (error-message-string err))
-      nil))))
+   (when-let ((output (core-process-run-sync "git" t "config" "--global" "--get-regexp" pattern)))
+     (when (> (length output) 0) (split-string output "\n" t)))))
 
  (defun
   git-utils-git-config-get (key)
@@ -96,23 +82,7 @@ Returns nil if git is not installed, PATTERN is invalid, or no matches found."
 Returns the value as a string, or nil if not found, KEY is invalid, or git not installed."
   (when
    (and (git-utils--ensure-git-available) (git-utils--validate-config-key key))
-   (condition-case err
-       (with-temp-buffer
-        (let ((exit-code (call-process "git" nil t nil "config" "--global" "--get" key)))
-          (cond
-           ((= exit-code 0)
-            (let ((output (buffer-string)))
-              (when (> (length output) 0) (string-trim output))))
-           ((= exit-code 1)
-            (core-message-debug "Git config key not found: %s" key)
-            nil)
-           (t
-            (core-message-warning
-             "git config --get failed for key '%s' with exit code %d" key exit-code)
-            nil))))
-     (error
-      (core-message-error "Failed to read git config key '%s': %s" key (error-message-string err))
-      nil))))
+   (core-process-run-sync "git" t "config" "--global" "--get" key)))
 
  (defun
   git-utils-git-config-get-multiple (base-key suffixes)
