@@ -109,7 +109,13 @@ Shows available version and indicates if updates are available."
      (goto-char (point-min)) (setq buffer-read-only t) (help-mode))
     (switch-to-buffer buf)))
  (defun
-  search-packages () "Search for packages by name or keyword." (interactive)
+  search-packages ()
+  "Search for packages by name or keyword in available repositories.
+
+Prompts for a search term and displays matching packages from all configured
+package repositories. Shows package descriptions and installation status.
+Useful for discovering new packages or finding alternatives."
+  (interactive)
   (let ((search-term (read-string "Search packages: ")))
     (when
      (and search-term (not (string-empty-p search-term)))

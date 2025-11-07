@@ -73,5 +73,11 @@
   (interactive)
   (package-metadata-info))
  (defun
-  package-cache-clear () "Clear the package cache file." (interactive) (package-metadata-reset)))
+  package-cache-clear ()
+  "Clear the package metadata cache file.
+
+Removes cached package information to force a fresh refresh from repositories
+on the next package operation. Useful when package metadata seems out of date
+or corrupted."
+  (interactive) (package-metadata-reset)))
 (provide 'package-cache)

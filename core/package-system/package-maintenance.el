@@ -14,11 +14,13 @@
  ;; Package Upgrade Utilities
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  package-upgrade-all
-  ()
-  "Upgrade all installed packages to their latest versions."
-  (interactive)
-  (core-message-debug "Checking for package upgrades...")
+  package-upgrade-all ()
+  "Upgrade all installed packages to their latest available versions.
+
+Checks for updates across all configured repositories and upgrades packages
+that have newer versions available. Requires network connectivity.
+Shows summary of upgraded packages or reports if no upgrades are available."
+  (interactive) (core-message-debug "Checking for package upgrades...")
   (unless
    (network-responsive-p)
    (core-message-error "Network unavailable - cannot check for package upgrades"))

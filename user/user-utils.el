@@ -61,14 +61,28 @@ When reaching the end of buffer, move point to end."
  ;; Smart TAB Completion Functions:
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  user-smart-tab () "Smart TAB: complete if possible, otherwise indent." (interactive)
+  user-smart-tab ()
+  "Context-aware TAB key behavior for completion and indentation.
+
+In minibuffer: Performs minibuffer completion.
+With corfu-mode active: Triggers completion-at-point, falling back to indentation.
+Otherwise: Performs standard indentation only.
+
+This provides a unified TAB key experience across different editing contexts."
+  (interactive)
   (if
    (minibufferp) (minibuffer-complete)
    (if corfu-mode (or (completion-at-point) (indent-for-tab-command)) (indent-for-tab-command))))
  (defun
   user-completion-or-indent
   ()
-  "Trigger completion or indent, depending on context."
+  "Trigger completion when Corfu is inactive, otherwise indent.
+
+This function checks if Corfu completion is currently visible:
+- If Corfu is enabled but not showing completions: triggers completion-at-point
+- Otherwise: performs standard indentation
+
+Useful for binding to keys where you want completion priority over indentation."
   (interactive)
   (if (and corfu-mode (not corfu--visible)) (completion-at-point) (indent-for-tab-command)))
 
@@ -130,17 +144,21 @@ Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
     ;; Switch to target buffer if found
     (when target-buffer (switch-to-buffer target-buffer))))
  (defun
-  user-next-buffer
-  ()
-  "Switch to the next buffer, skipping filtered buffers."
-  (interactive)
-  (user-cycle-buffer :forward))
+  user-next-buffer ()
+  "Cycle forward to the next buffer in the buffer list.
+
+Skips internal buffers, dired buffers, and other filtered buffers.
+Only cycles through file-visiting buffers and the *Messages* buffer.
+If called from an excluded buffer, jumps to the first valid buffer."
+  (interactive) (user-cycle-buffer :forward))
  (defun
-  user-previous-buffer
-  ()
-  "Switch to the previous buffer, skipping filtered buffers."
-  (interactive)
-  (user-cycle-buffer :backward))
+  user-previous-buffer ()
+  "Cycle backward to the previous buffer in the buffer list.
+
+Skips internal buffers, dired buffers, and other filtered buffers.
+Only cycles through file-visiting buffers and the *Messages* buffer.
+If called from an excluded buffer, jumps to the last valid buffer."
+  (interactive) (user-cycle-buffer :backward))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Format Git Commit Messages:

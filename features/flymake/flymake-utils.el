@@ -10,7 +10,14 @@
  ;; Diagnostics Window Management
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  toggle-flymake-diagnostics-window () "Show or hide the Flymake diagnostics window." (interactive)
+  toggle-flymake-diagnostics-window ()
+  "Toggle the Flymake diagnostics window for the current buffer.
+
+Opens the Flymake diagnostics window in a side window if not currently visible.
+If already open, closes it. When opening, automatically closes other exclusive
+side windows (Command Palette, Imenu-list) to maintain a clean workspace.
+Displays syntax errors, warnings, and notes from all active Flymake backends."
+  (interactive)
   ;; Find any window that is displaying a Flymake diagnostics buffer
   (let ((flymake-window (core-utils-find-window-by-buffer-name "*Flymake diagnostics")))
     ;; If such a window exists, close it. Otherwise, close other exclusive windows and open this one.

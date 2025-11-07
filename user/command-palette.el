@@ -433,9 +433,12 @@ Returns width as number of columns needed to display content."
  ;; Interactive Commands
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  command-palette-add-favorite
-  ()
-  "Promote a recent command to favorites by index number."
+  command-palette-add-favorite ()
+  "Promote a recent command from history to the favorites list.
+
+Prompts for an index number from the recent commands list, then moves that
+command to the favorites section and removes it from history. The command is
+persisted to disk immediately. Useful for pinning frequently-used commands."
   (interactive)
   (if
    (= (ring-length command-palette-history) 0)
@@ -465,9 +468,12 @@ Returns width as number of columns needed to display content."
         (core-message-success "Promoted #%d '%s' to favorites" index cmd-name))
       (core-message-error "Invalid index: %s (must be between 1 and %d)" index-str max-index)))))
  (defun
-  command-palette-remove-favorite
-  ()
-  "Remove a command from the favorites list by index number."
+  command-palette-remove-favorite ()
+  "Remove a command from the favorites list by index number.
+
+Prompts for an index number from the favorites list, then permanently removes
+that command from favorites. The change is persisted to disk immediately.
+Does not affect the command's availability in M-x."
   (interactive)
   (if
    (= (length command-palette-favorites) 0) (core-message-warning "No favorites to remove")
@@ -486,7 +492,11 @@ Returns width as number of columns needed to display content."
  (defun
   command-palette-clear-history
   ()
-  "Clear the command history."
+  "Clear all recent commands from the command palette history.
+
+Removes all entries from the recent commands section while preserving favorites.
+The cleared history is persisted to disk immediately. Use this to reset your
+recent commands list while keeping your favorites intact."
   (interactive)
   (setq command-palette-history (make-ring command-palette-history-size))
   (command-palette--save-history)
@@ -540,7 +550,14 @@ Returns width as number of columns needed to display content."
       removed-favorites
       removed-history))))
  (defun
-  command-palette-toggle () "Toggle the command palette side window." (interactive)
+  command-palette-toggle ()
+  "Toggle the command palette side window display.
+
+Opens the command palette in a side window showing favorite and recent commands.
+If already open, closes it. When opening, automatically closes other exclusive
+side windows (Flymake diagnostics, Imenu-list) and reloads the latest command
+data from disk to ensure freshness."
+  (interactive)
   (if
    (and command-palette-window (window-live-p command-palette-window))
    (progn

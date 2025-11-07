@@ -19,7 +19,14 @@
  ;; Main function to auto-detect and activate virtual environment once per project
  ;; Uses pyvenv-project-root as a guard to ensure activation happens only once
  (defun
-  pyvenv-auto-activate () "Auto-detect virtual environment once and activate it." (interactive)
+  pyvenv-auto-activate ()
+  "Auto-detect and activate Python virtual environment for current project.
+
+Searches for a virtual environment in the project root and activates it.
+Only runs once per project - subsequent calls are ignored to avoid redundant
+activation. Searches for common venv directory names (.venv, venv, env).
+Updates Python interpreter path and modeline after successful activation."
+  (interactive)
   (unless
    pyvenv-project-root (core-message-info "Auto-detecting Python virtual environment...")
    (let ((detected-venv (pyvenv-find-venv)))

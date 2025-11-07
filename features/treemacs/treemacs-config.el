@@ -74,9 +74,15 @@
 
   ;; Simplified treemacs toggle function
   (defun
-   treemacs-smart-toggle
-   ()
-   "Toggle Treemacs, opening at current file's project root."
+   treemacs-smart-toggle ()
+   "Smart toggle for Treemacs file tree sidebar.
+
+Behavior depends on current Treemacs state:
+- If Treemacs window is selected: closes it
+- If Treemacs is visible but not selected: selects it
+- If Treemacs is not visible: opens it at the current file's project root
+
+Opens exclusively at the current project for focused navigation."
    (interactive)
    (cond
     ;; If treemacs window is selected, close it
