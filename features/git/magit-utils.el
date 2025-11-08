@@ -1,5 +1,4 @@
 ;;; magit-utils.el --- Magit-specific utility functions -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Magit-specific helper functions for buffer display and formatting.
 ;;      Provides customized display and formatting behavior for Magit buffers.

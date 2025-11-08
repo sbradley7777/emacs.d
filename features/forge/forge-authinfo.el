@@ -1,5 +1,4 @@
 ;;; forge-authinfo.el --- Interactive authinfo generator for forge hosts -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; Interactive helper to generate ~/.authinfo entries for forge hosts
 ;; configured in ~/.gitconfig but missing authentication credentials.

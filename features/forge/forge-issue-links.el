@@ -1,5 +1,4 @@
 ;;; forge-issue-links.el --- Append raw URLs to Forge issue display for terminal clickability -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; WHAT: Automatically append raw URLs to Forge issue/PR displays
 ;; WHY:  Terminal emulators can click raw URLs but not markdown-rendered links over SSH

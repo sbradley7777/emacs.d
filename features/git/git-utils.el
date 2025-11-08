@@ -1,5 +1,4 @@
 ;;; git-utils.el --- Git Utility Functions -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Utility functions for git integration.
 ;;      Provides helper functions for git repository detection and configuration.

@@ -1,5 +1,4 @@
 ;;; forge-utils.el --- Forge configuration utilities and diagnostics -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; Utilities for working with forge hosts (GitHub, GitLab, etc.) including
 ;; diagnostics for viewing configured hosts and their authentication status,

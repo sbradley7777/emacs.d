@@ -1,5 +1,4 @@
 ;;; forge-markdown.el --- Forge Markdown Rendering Functions -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; WHAT: Markdown rendering functions for Forge issues and pull requests
 ;; WHY:  Provides improved markdown display with hidden markup and styled links

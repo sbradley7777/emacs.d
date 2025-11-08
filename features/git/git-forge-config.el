@@ -1,5 +1,4 @@
 ;;; git-forge-config.el --- Forge Configuration from Git Config -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Functions to read and populate forge-alist from ~/.gitconfig.
 ;;      Supports GitHub, GitLab, Gitea, Gogs, and Bitbucket forge hosts.

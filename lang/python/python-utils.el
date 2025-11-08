@@ -1,5 +1,4 @@
 ;;; python-utils.el --- Python Project Detection Utilities -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Centralized utility functions for Python project detection.
 ;;      Uses Emacs built-in functions for finding project roots, extracting

@@ -1,5 +1,4 @@
 ;;; minibuffer-config.el --- Minibuffer Completion Enhancement -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Modern minibuffer completion stack using Vertico, Orderless, Marginalia, and Consult.
 ;;      Provides enhanced command/file/buffer navigation with fuzzy matching and rich annotations.

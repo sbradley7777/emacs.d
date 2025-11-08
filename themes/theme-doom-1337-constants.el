@@ -1,5 +1,4 @@
 ;;; theme-doom-1337-constants.el --- Doom 1337 Theme Color Constants -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; WHAT: Color constants for doom-1337 theme
 ;; WHY:  Centralizes color definitions for reuse across theme customizations

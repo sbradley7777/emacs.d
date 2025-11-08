@@ -1,5 +1,4 @@
 ;;; core-process-utils.el --- Process Execution Utilities -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Standardized wrappers for running external commands with
 ;;      consistent error handling and logging.

@@ -1,5 +1,4 @@
 ;;; git-sync.el --- Automatic Git and Forge Synchronization -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; WHAT: Automatic and manual synchronization of Git and Forge data
 ;; WHY:  Keeps Git refs and Forge metadata up-to-date

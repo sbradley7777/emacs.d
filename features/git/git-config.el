@@ -1,5 +1,4 @@
 ;;; git-config.el --- Git Integration Configuration -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Configuration for magit and forge integration.
 ;;      Provides git interface and GitHub/GitLab integration within Emacs.

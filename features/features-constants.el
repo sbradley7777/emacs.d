@@ -1,5 +1,4 @@
 ;;; features-constants.el --- Feature Configuration Constants -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;; This file contains constants used across various feature modules.
 ;; Constants are prefixed with 'features-' to avoid naming conflicts.

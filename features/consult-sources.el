@@ -1,5 +1,4 @@
 ;;; consult-sources.el --- Custom Consult Buffer Sources -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Custom buffer sources for consult-buffer with filtering capabilities.
 ;;      Provides filtered buffer views that exclude utility and internal buffers.

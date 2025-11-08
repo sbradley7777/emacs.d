@@ -1,5 +1,4 @@
 ;;; forge-issues.el --- Forge issue management commands -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Interactive user commands for working with Forge issues.
 ;;      Provides commands for listing, viewing, and managing issues.

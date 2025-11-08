@@ -1,5 +1,4 @@
 ;;; core-user-interaction-utils.el --- User Input Collection Utilities -*- lexical-binding: t -*-
-
 ;;; Commentary:
 ;;      Standardized wrappers for collecting user input with consistent
 ;;      error handling, validation, and logging.
