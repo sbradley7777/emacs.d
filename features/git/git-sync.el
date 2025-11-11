@@ -14,6 +14,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'git-utils)
+(require 'forge-constants)
 (core-utils-with-load-timing
  "git-sync.el"
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -115,49 +116,90 @@ a fetch (retrieves remote data without modifying local state), not a pull (fetch
     "Fetching forge git data for project: %s" (git-utils-format-repository-display repo-root))
    (forge-pull)))
 
- ;; Forge Completion Detection
- ;; Forge doesn't provide a post-pull hook, so we use :around advice on forge--pull
- ;; to inject a callback that shows a completion message. This works because forge--pull
- ;; accepts an optional callback parameter that gets called when the async operation completes.
+ ;; Forge Completion and Error Detection
+ ;; Forge doesn't provide post-pull hooks, and errors can timeout silently without
+ ;; calling callbacks. We use :around advice on forge--glab-get to inject timeout
+ ;; detection for the initial API call.
+ (defun
+  git-sync--around-forge-glab-get-advice (orig-fun obj resource &optional params &rest args)
+  "Advice to wrap forge--glab-get and inject timeout detection.
+ORIG-FUN is the original forge--glab-get function.
+OBJ, RESOURCE, PARAMS, and ARGS are the original arguments."
+  (let* ((repo-root (git-utils-find-repository-root))
+         (is-sync-op (and repo-root (git-auto-sync--is-repository-synced-p repo-root)))
+         (plist args)
+         (original-callback (plist-get plist :callback))
+         (original-errorback (plist-get plist :errorback)))
+    (if
+     (and is-sync-op (string= resource "/projects/:project"))
+     ;; Wrap the initial API call with timeout detection
+     (let*
+         ((completed nil)
+          (timeout-timer
+           (run-with-timer
+            forge-api-timeout-seconds nil
+            (lambda
+             ()
+             (unless
+              completed
+              (core-message-error
+               "Failed to fetch forge git data for project: %s. The fetch of git data timed out after %d seconds"
+               (git-utils-format-repository-display repo-root)
+               forge-api-timeout-seconds)))))
+          (wrapped-callback
+           (when
+            original-callback
+            (lambda
+             (&rest callback-args) (setq completed t) (cancel-timer timeout-timer)
+             (condition-case callback-err
+                 (apply original-callback callback-args)
+               (error
+                (core-message-error
+                 "Failed to fetch forge git data for project: %s (callback error: %s)"
+                 (git-utils-format-repository-display repo-root)
+                 (error-message-string callback-err)))))))
+          (wrapped-errorback
+           (lambda
+            (err &rest errorback-args) (setq completed t) (cancel-timer timeout-timer)
+            (core-message-error
+             "Failed to fetch forge git data for project: %s"
+             (git-utils-format-repository-display repo-root))
+            ;; Call original errorback if it exists and is a function
+            (when (functionp original-errorback) (apply original-errorback err errorback-args)))))
+       ;; Replace callback and errorback in plist
+       (when original-callback (plist-put plist :callback wrapped-callback))
+       (plist-put plist :errorback wrapped-errorback)
+       (apply orig-fun obj resource params plist))
+     ;; Pass through unchanged for non-auto-synced calls or non-initial resources
+     (apply orig-fun obj resource params args))))
+
+ ;; Forge Success Detection
+ ;; We also need to detect successful completions. We use :around advice on forge--pull
+ ;; to inject a success callback.
  (defun
   git-auto-sync--around-forge-pull-advice (orig-fun repo &optional callback since)
-  "Advice to wrap forge--pull and inject completion detection.
+  "Advice to wrap forge--pull and inject success detection.
 ORIG-FUN is the original forge--pull function.
-REPO, CALLBACK, and SINCE are the original forge--pull arguments.
-
-This advice wraps the callback to show a success message when Forge completes
-fetching and storing data, but only for repositories we initiated sync for."
+REPO, CALLBACK, and SINCE are the original forge--pull arguments."
   (let ((repo-root (git-utils-find-repository-root))
         (original-callback callback))
     (if
      (and repo-root (git-auto-sync--is-repository-synced-p repo-root))
-     ;; Inject our wrapped callback that shows completion message and handles errors
-     (condition-case err
-         (funcall
-          orig-fun repo
-          (lambda
-           ()
-           (condition-case callback-err
-               (progn
-                (when original-callback (funcall original-callback))
-                (core-message-success
-                 "Fetched forge git data for project: %s"
-                 (git-utils-format-repository-display repo-root)))
-             (error
-              (core-message-error
-               "Failed to fetch forge git data for project: %s (error: %s)"
-               (git-utils-format-repository-display repo-root)
-               (error-message-string callback-err)))))
-          since)
-       (error
-        (core-message-error
-         "Failed to fetch forge git data for project: %s (error: %s)"
-         (git-utils-format-repository-display repo-root)
-         (error-message-string err))))
+     ;; Inject wrapped callback for success message
+     (funcall
+      orig-fun repo
+      (lambda
+       () (when original-callback (funcall original-callback))
+       (core-message-success
+        "Fetched forge git data for project: %s" (git-utils-format-repository-display repo-root)))
+      since)
      ;; Pass through unchanged for non-auto-synced calls
      (funcall orig-fun repo callback since))))
+
  (with-eval-after-load
-  'forge (advice-add 'forge--pull :around #'git-auto-sync--around-forge-pull-advice))
+  'forge
+  (advice-add 'forge--pull :around #'git-auto-sync--around-forge-pull-advice)
+  (advice-add 'forge--glab-get :around #'git-sync--around-forge-glab-get-advice))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Core Sync Function (Manual and Auto both use this)
