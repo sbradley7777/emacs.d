@@ -101,7 +101,7 @@
   command-palette-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "q") 'command-palette-toggle)
-    (define-key map (kbd "a") 'command-palette-add-favorite)
+    (define-key map (kbd "p") 'command-palette-add-favorite)
     (define-key map (kbd "r") 'command-palette-remove-favorite)
     (define-key map (kbd "v") 'command-palette-validate-commands)
     map)
@@ -143,7 +143,9 @@
             (setq first nil)
             (insert (format "%S" item)))))
        (insert "))\n\n")
-       (insert ";;; command-palette-history.el ends here\n"))
+       (insert ";;; command-palette-history.el ends here\n")
+       (core-message-success
+        "Saved command palette history to %s" (abbreviate-file-name command-palette-history-file)))
     (error
      (core-message-error
       "Failed to save command palette history: %s" (error-message-string err)))))
@@ -199,7 +201,10 @@ If SILENT is non-nil, suppress success messages. Returns t if successful, nil ot
           (setq first nil)
           (insert (format "%S" item))))
        (insert "))\n\n")
-       (insert ";;; command-palette-favorites.el ends here\n"))
+       (insert ";;; command-palette-favorites.el ends here\n")
+       (core-message-success
+        "Saved command palette favorites to %s"
+        (abbreviate-file-name command-palette-favorites-file)))
     (error
      (core-message-error
       "Failed to save command palette favorites: %s" (error-message-string err)))))
@@ -275,7 +280,6 @@ Removes any existing occurrences before adding to ensure no duplicates. Returns 
      (setq command-palette-history new-ring)
      ;; Insert the command at the front (most recent position)
      (ring-insert command-palette-history (cons cmd-name cmd-symbol))
-     (command-palette--save-history)
      (command-palette--refresh-buffer)
      t)))
 
@@ -423,7 +427,7 @@ Returns width as number of columns needed to display content."
   (insert "\n") (insert (propertize " Keys:\n" 'face '(:foreground "gray" :slant italic)))
   (insert
    (propertize
-    "    • 'a' - promote recent to favorite\n" 'face '(:foreground "gray" :slant italic)))
+    "    • 'p' - promote recent to favorite\n" 'face '(:foreground "gray" :slant italic)))
   (insert
    (propertize "    • 'r' - remove favorite by index\n" 'face '(:foreground "gray" :slant italic)))
   (insert
@@ -458,7 +462,6 @@ persisted to disk immediately. Useful for pinning frequently-used commands."
              (cmd-symbol (cdr item)))
         ;; Add to favorites
         (add-to-list 'command-palette-favorites item t)
-        (command-palette--save-favorites)
         ;; Remove from history by rebuilding the ring without this item
         (let ((new-ring (make-ring command-palette-history-size)))
           (dotimes
@@ -467,7 +470,6 @@ persisted to disk immediately. Useful for pinning frequently-used commands."
              (unless
               (eq (cdr hist-item) cmd-symbol) (ring-insert-at-beginning new-ring hist-item))))
           (setq command-palette-history new-ring))
-        (command-palette--save-history)
         (command-palette--refresh-buffer)
         (core-message-success "Promoted #%d '%s' to favorites" index cmd-name))
       (core-message-warning "Invalid index or cancelled")))))
@@ -490,7 +492,6 @@ Does not affect the command's availability in M-x."
       (let* ((item-to-remove (nth (1- index) command-palette-favorites))
              (cmd-name (car item-to-remove)))
         (setq command-palette-favorites (cl-remove item-to-remove command-palette-favorites))
-        (command-palette--save-favorites)
         (command-palette--refresh-buffer)
         (core-message-success "Removed favorite #%d: '%s'" index cmd-name))
       (core-message-warning "Invalid index or cancelled")))))
@@ -500,11 +501,9 @@ Does not affect the command's availability in M-x."
   "Clear all recent commands from the command palette history.
 
 Removes all entries from the recent commands section while preserving favorites.
-The cleared history is persisted to disk immediately. Use this to reset your
-recent commands list while keeping your favorites intact."
+Use this to reset your recent commands list while keeping your favorites intact."
   (interactive)
   (setq command-palette-history (make-ring command-palette-history-size))
-  (command-palette--save-history)
   (command-palette--refresh-buffer)
   (core-message-success "Command palette history cleared"))
  (defun
@@ -541,9 +540,6 @@ recent commands list while keeping your favorites intact."
            (setq removed-history (1+ removed-history))
            (core-message-warning "Removed invalid history item: %s (%s)" cmd-name cmd-symbol)))))
       (setq command-palette-history new-ring))
-    ;; Save changes
-    (when (> removed-favorites 0) (command-palette--save-favorites))
-    (when (> removed-history 0) (command-palette--save-history))
     ;; Refresh buffer
     (command-palette--refresh-buffer)
     ;; Report results
@@ -560,21 +556,15 @@ recent commands list while keeping your favorites intact."
 
 Opens the command palette in a side window showing favorite and recent commands.
 If already open, closes it. When opening, automatically closes other exclusive
-side windows (Flymake diagnostics, Imenu-list) and reloads the latest command
-data from disk to ensure freshness."
+side windows (Flymake diagnostics, Imenu-list)."
   (interactive)
   (if
    (and command-palette-window (window-live-p command-palette-window))
-   (progn
-    (delete-window command-palette-window)
-    (setq command-palette-window nil)
-    (core-message-info "Command palette closed"))
+   (progn (delete-window command-palette-window) (setq command-palette-window nil))
    ;; Close other exclusive side windows before opening
    (when (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
    ;; Store current window before opening palette
    (setq command-palette-previous-window (selected-window))
-   ;; Reload history and favorites from disk to ensure freshness (silently)
-   (command-palette--load-favorites t) (command-palette--load-history t)
    (let* ((buffer (get-buffer-create command-palette-buffer-name))
           (window-width nil))
      (with-current-buffer
@@ -595,8 +585,7 @@ data from disk to ensure freshness."
      (select-window command-palette-window)
      ;; Move cursor to first favorite item (skip header and section title)
      (goto-char (point-min))
-     (forward-line 3)
-     (core-message-success "Command palette opened"))))
+     (forward-line 3))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; M-x Command Tracking
