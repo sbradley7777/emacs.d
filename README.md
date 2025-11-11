@@ -68,6 +68,8 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
   - [`core-logging.el`](core/core-logging.el) - Message logging and log rotation system
   - [`core-log-writer.el`](core/core-log-writer.el) - Log file writing and rotation functionality
+  - [`core-user-interaction-utils.el`](core/core-user-interaction-utils.el) - Standardized user input collection utilities
+  - [`core-process-utils.el`](core/core-process-utils.el) - Centralized process execution utility
   - [`core-diagnostics.el`](core/core-diagnostics.el) - System information and configuration diagnostics
 - **[`features/`](features/)** - Optional enhancements (can be disabled independently)
   - [`breadcrumbs-config.el`](features/breadcrumbs-config.el) - Breadcrumb navigation for file path and code structure

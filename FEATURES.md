@@ -155,6 +155,30 @@ Interactive package management commands for browsing, updating, and maintaining 
 
 ## System Management
 
+### Core Utility Functions
+
+Standardized utilities for common operations ensuring consistent error handling and user experience:
+
+**User Input Collection** ([`core/core-user-interaction-utils.el`](core/core-user-interaction-utils.el)):
+- **String input**: `core-user-read-string` with automatic error handling
+- **Number input**: `core-user-read-number` with built-in validation and range checking
+- **Password input**: `core-user-read-password` with masked entry
+- **Consistent error handling**: All functions use standardized message utilities
+- **Returns nil on error**: Callers can check for nil and handle gracefully
+
+**Process Execution** ([`core/core-process-utils.el`](core/core-process-utils.el)):
+- **Centralized command execution**: `core-process-run-sync` for external commands
+- **Automatic output trimming**: Removes whitespace from command output
+- **Error logging**: Centralized error handling via `core-message-error`
+- **Quiet mode**: Optional suppression of non-zero exit code errors
+- **Exception handling**: Always logs exceptions for debugging
+
+**Benefits:**
+- **Consistent user experience**: All user input uses same error handling path
+- **Reduced boilerplate**: Eliminates repetitive `with-temp-buffer` and `call-process` code
+- **Better error messages**: Uses `core-message-*` utilities for standardized logging
+- **Easier maintenance**: Centralized code changes affect all callers
+
 ### Message Logging System
 
 Automatic message logging with rotation for session history and debugging:

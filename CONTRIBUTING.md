@@ -66,21 +66,26 @@ All contributions must follow the established coding standards documented in [`S
 
 ### Emacs Lisp Standards
 
+
 **File Structure** - Every `.el` file must include:
 ```elisp
 ;;; filename.el --- Brief Description -*- lexical-binding: t -*-
+
 ;;; Commentary:
 ;;      Detailed description of file purpose.
-
-(defvar config-load-start-time (current-time))
-(message "=  Loading filename.el...")
-
-;; Configuration code here
-
+(require 'core-utils)
+;; Add other dependencies as needed
+(core-utils-with-load-timing
+ "filename.el"
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Section Title
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Configuration code here
+ )
 (provide 'filename)
-(message "filename.el loaded (%.2fs)"
-         (float-time (time-subtract (current-time) config-load-start-time)))
 ```
+
+**Note**: Add `(require ...)` statements for any modules your file depends on. Only `early-init.el`, `init.el`, `core-logging.el`, and `core-utils.el` are exempt from using `core-utils-with-load-timing` due to technical constraints (circular dependencies or loading before core-utils exists).
 
 **Formatting Standards:**
 - **Indentation**: 2 spaces per level (automatic via [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt))
@@ -89,14 +94,20 @@ All contributions must follow the established coding standards documented in [`S
 - **Section separators**: Use consistent 127-character separators
 - **Naming**: Use [`kebab-case`](https://en.wikipedia.org/wiki/Letter_case#Kebab_case) for all identifiers
 
-**Message Symbols** - Use the established symbol system:
-- 🔄 Loading/In Progress
-- ✅ Success/Completion
-- ❌ Errors/Failures
-- ⚠️ Warnings
-- 📦 Package Operations
-- ℹ️ Information/Details
-- ⚙️ Configuration Complete
+**Standardized Utilities** - Use centralized utilities for consistency:
+- **User input**: `core-user-read-string`, `core-user-read-number`, `core-user-read-password` ([`core-user-interaction-utils.el`](core/core-user-interaction-utils.el))
+- **Process execution**: `core-process-run-sync` ([`core-process-utils.el`](core/core-process-utils.el))
+- **Message logging**: `core-message-*` functions ([`core-logging.el`](core/core-logging.el))
+
+**Message Functions** - Use the standardized message utilities:
+- `core-message-loading` - 🔄 Loading/In Progress
+- `core-message-success` - ✅ Success/Completion
+- `core-message-error` - ❌ Errors/Failures
+- `core-message-warning` - ⚠️ Warnings
+- `core-message-package` - 📦 Package Operations
+- `core-message-info` - ℹ️ Information/Details
+- `core-message-config` - ⚙️ Configuration Complete
+- `core-message-plain` - Plain messages (no Unicode prefix)
 
 ### Automated Formatting
 
@@ -118,6 +129,8 @@ When adding new functionality, follow the modular structure:
 - `core-editing.el` - Text editing behavior
 - `core-files.el` - File handling and backup settings
 - `core-logging.el` - Message logging and log rotation system
+- `core-user-interaction-utils.el` - Standardized user input collection utilities
+- `core-process-utils.el` - Centralized process execution utility
 - `core-diagnostics.el` - System information and configuration diagnostics
 
 **Feature Modules** ([`features/`](features/)): Optional enhancements

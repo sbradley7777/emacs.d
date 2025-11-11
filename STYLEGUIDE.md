@@ -25,11 +25,17 @@ This document outlines the formatting and code style conventions used in this Em
 - [Module Structure](#module-structure)
   - [Module Template](#module-template)
   - [Required Elements](#required-elements)
-- [Message Symbol Reference](#message-symbol-reference)
-  - [Symbol Categories and Usage](#symbol-categories-and-usage)
-  - [Message Formatting Standards](#message-formatting-standards)
-  - [Symbol Usage Guidelines](#symbol-usage-guidelines)
-  - [Benefits of the Symbol System](#benefits-of-the-symbol-system)
+- [Message Utilities Reference](#message-utilities-reference)
+  - [Message Utility Functions](#message-utility-functions)
+  - [Message Categories and Usage Guidelines](#message-categories-and-usage-guidelines)
+  - [Legacy Code Migration](#legacy-code-migration)
+  - [Symbol Categories and Technical Reference](#symbol-categories-and-technical-reference)
+  - [Context-Specific Usage Patterns](#context-specific-usage-patterns)
+  - [Implementation Benefits](#implementation-benefits)
+- [Standardized Utility Functions](#standardized-utility-functions)
+  - [User Input Collection](#user-input-collection)
+  - [Process Execution](#process-execution)
+  - [Legacy Code Migration](#legacy-code-migration-1)
 - [Quality Assurance](#quality-assurance)
   - [`pre-commit` Hooks](#pre-commit-hooks)
   - [Performance Considerations](#performance-considerations)
@@ -264,30 +270,30 @@ Each configuration module should follow this template:
 
 ```elisp
 ;;; module-name.el --- Module Description -*- lexical-binding: t -*-
+
 ;;; Commentary:
 ;;      Detailed description of module purpose.
-
-(defvar config-load-start-time (current-time))
-(message "Loading module-name.el...")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Section Title
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Configuration code here
-
-;; Make this module available for loading
+(require 'core-utils)
+;; Add other dependencies as needed
+(core-utils-with-load-timing
+ "module-name.el"
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Section Title
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Configuration code here
+ )
 (provide 'module-name)
-(message "module-name.el loaded (%.2fs)"
-         (float-time (time-subtract (current-time) config-load-start-time)))
 ```
+
+**Note**: Only `early-init.el`, `init.el`, `core-logging.el`, and `core-utils.el` are exempt from using `core-utils-with-load-timing` due to technical constraints (circular dependencies or loading before core-utils exists).
 
 ### Required Elements
 1. **File header** with lexical binding
-2. **Load timing** measurement
-3. **Section separators** for organization
-4. **Module provision** via `(provide 'module-name)`
-5. **Load completion** message with timing
+2. **Commentary section** describing module purpose
+3. **Dependencies** via `(require ...)` statements
+4. **Load timing wrapper** using `core-utils-with-load-timing`
+5. **Section separators** for organization (127 characters total including indentation)
+6. **Module provision** via `(provide 'module-name)`
 
 ## Message Utilities Reference
 
@@ -402,6 +408,93 @@ When updating existing code, replace direct message calls:
 - **Professional Output**: Consistent spacing and formatting
 - **Easy Updates**: Change message format in one place
 - **Error Prevention**: No more manual Unicode symbol management
+
+## Standardized Utility Functions
+
+**REQUIRED:** Use centralized utility functions for common operations to ensure consistent error handling and user experience.
+
+### User Input Collection
+
+Always use standardized input functions from [`core-user-interaction-utils.el`](core/core-user-interaction-utils.el):
+
+```elisp
+;; Require at the top of your file
+(require 'core-user-interaction-utils)
+
+;; String input with error handling
+(core-user-read-string "Prompt: ")
+(core-user-read-string "Prompt: " initial-value history default)
+
+;; Number input with automatic validation and range checking
+(core-user-read-number "Enter index (1-10): " 1 10)  ; min=1, max=10
+(core-user-read-number "Enter number: ")              ; no range constraints
+
+;; Password input (masked)
+(core-user-read-password "Password: ")
+```
+
+**Benefits:**
+- Consistent error handling across all user input
+- Built-in validation for numeric input
+- Standardized error messages via `core-message-*` utilities
+- Returns `nil` on error for graceful handling
+
+### Process Execution
+
+Always use the standardized utility from [`core-process-utils.el`](core/core-process-utils.el):
+
+```elisp
+;; Require at the top of your file
+(require 'core-process-utils)
+
+;; Run command with error logging (quiet=nil)
+(core-process-run-sync "git" nil "config" "--get" "user.name")
+
+;; Run command without error logging for non-zero exit (quiet=t)
+(core-process-run-sync "git" t "config" "--get" "nonexistent.key")
+
+;; Returns trimmed output string on success, nil on failure
+```
+
+**Benefits:**
+- Centralized error handling and logging
+- Automatic output trimming
+- Cleaner code without boilerplate `with-temp-buffer` and `call-process`
+- Quiet mode for optional commands
+
+### Legacy Code Migration
+
+When updating existing code:
+
+```elisp
+;; OLD - Manual process execution with boilerplate
+(condition-case err
+    (with-temp-buffer
+     (let ((exit-code (call-process "git" nil t nil "config" "--get" "user.name")))
+       (if (zerop exit-code)
+           (string-trim (buffer-string))
+         (core-message-error "Command failed")
+         nil)))
+  (error
+   (core-message-error "Error: %s" (error-message-string err))
+   nil))
+
+;; NEW - Use utility
+(core-process-run-sync "git" nil "config" "--get" "user.name")
+
+;; OLD - Manual number parsing and validation
+(let* ((index-str (read-string "Enter index (1-10): "))
+       (index (string-to-number index-str)))
+  (if (and (> index 0) (<= index 10))
+      (do-something index)
+    (core-message-error "Invalid index: %s" index-str)))
+
+;; NEW - Use utility with built-in validation
+(let ((index (core-user-read-number "Enter index (1-10): " 1 10)))
+  (if index
+      (do-something index)
+    (core-message-warning "Invalid index or cancelled")))
+```
 
 ## Quality Assurance
 
