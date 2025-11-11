@@ -105,16 +105,42 @@ which contains the actual git command, not the shell wrapper."
   git-auto-sync-forge-pull (repo-root)
   "Fetch Forge data for REPO-ROOT using Forge.
 Loads Forge if not already loaded and fetches issues/PRs from the forge API.
+If the repository is not yet in the Forge database, adds it automatically.
 
 Note: We use 'Fetching' in the message for consistency with git-auto-sync-magit-fetch,
 even though the underlying function is named forge-pull. The operation is semantically
 a fetch (retrieves remote data without modifying local state), not a pull (fetch + merge)."
   (require 'forge nil t)
   (when
-   (fboundp 'forge-pull)
-   (core-message-info
-    "Fetching forge git data for project: %s" (git-utils-format-repository-display repo-root))
-   (forge-pull)))
+   (and (fboundp 'forge-pull) (fboundp 'forge-get-repository) (fboundp 'magit-get))
+   (condition-case err
+       (progn
+        ;; First check if repository is already tracked in database
+        (let ((repo (forge-get-repository :tracked?)))
+          (unless
+           repo
+           ;; Repository not in database, need to add it with remote URL
+           (let ((remote-url (magit-get "remote.origin.url")))
+             (when
+              remote-url
+              (core-message-info
+               "Adding repository to forge database: %s"
+               (git-utils-format-repository-display repo-root))
+              (setq repo (forge-get-repository remote-url nil :insert!)))))
+          ;; Now pull forge data if we have a valid repository
+          (when
+           repo
+           (core-message-info
+            "Fetching forge git data for project: %s"
+            (git-utils-format-repository-display repo-root))
+           ;; Call forge--pull directly with nil callback to pull all topics
+           ;; This bypasses the transient menu that forge-pull shows
+           (when (fboundp 'forge--pull) (forge--pull repo nil)))))
+     (error
+      (core-message-error
+       "Error during forge sync for %s: %s"
+       (git-utils-format-repository-display repo-root)
+       (error-message-string err))))))
 
  ;; Forge Completion and Error Detection
  ;; Forge doesn't provide post-pull hooks, and errors can timeout silently without
