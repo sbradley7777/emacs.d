@@ -8,29 +8,74 @@
  "flymake-utils.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Diagnostics Window Configuration
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defconst
+  flymake-diagnostics-compact-width
+  0.3
+  "Window width fraction for compact flymake diagnostics view (30% of frame).")
+ (defconst
+  flymake-diagnostics-expanded-width
+  0.5
+  "Window width fraction for expanded flymake diagnostics view (50% of frame).")
+ (defvar
+  flymake-diagnostics--current-width 'compact "Current width state of flymake diagnostics window.")
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Diagnostics Window Management
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
+  flymake-diagnostics--find-window ()
+  "Find the Flymake diagnostics window if it exists.
+Returns the window displaying *Flymake diagnostics* buffer, or nil if not found."
+  (let ((diag-window nil))
+    (walk-windows
+     (lambda
+      (win)
+      (when
+       (string-match-p
+        "\\*Flymake diagnostics" (buffer-name (window-buffer win)))
+       (setq diag-window win)))
+     nil t)
+    diag-window))
+ (defun
+  flymake-diagnostics--resize-window
+  (window new-width)
+  "Resize WINDOW to NEW-WIDTH (fraction of frame width)."
+  (let* ((frame-width (frame-width))
+         (desired-width (floor (* frame-width new-width)))
+         (current-width (window-width window))
+         (delta (- desired-width current-width)))
+    (when (/= delta 0) (window-resize window delta t))))
+ (defun
   toggle-flymake-diagnostics-window ()
-  "Toggle the Flymake diagnostics window for the current buffer.
-
-Opens the Flymake diagnostics window in a side window if not currently visible.
-If already open, closes it. When opening, automatically closes other exclusive
-side windows (Command Palette, Imenu-list) to maintain a clean workspace.
+  "Toggle the Flymake diagnostics window with size cycling.
+When buffer is closed, opens at 30%. When buffer is open, toggles between 30% and 50%.
+Automatically focuses the diagnostics window when opened or resized.
 Displays syntax errors, warnings, and notes from all active Flymake backends."
   (interactive)
-  ;; Find any window that is displaying a Flymake diagnostics buffer
-  (let ((flymake-window (core-utils-find-window-by-buffer-name "*Flymake diagnostics")))
-    ;; If such a window exists, close it. Otherwise, close other exclusive windows and open this one.
+  (let ((existing-window (flymake-diagnostics--find-window)))
     (if
-     flymake-window (quit-window nil flymake-window)
+     existing-window
+     (progn
+      (if
+       (eq flymake-diagnostics--current-width 'compact)
+       (progn
+        (flymake-diagnostics--resize-window
+         existing-window flymake-diagnostics-expanded-width)
+        (setq flymake-diagnostics--current-width 'expanded))
+       (flymake-diagnostics--resize-window existing-window flymake-diagnostics-compact-width)
+       (setq flymake-diagnostics--current-width 'compact))
+      (select-window existing-window))
      (progn
       (when (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
-      ;; Ensure flymake is loaded before calling flymake-show-buffer-diagnostics
       (require 'flymake nil t)
       (if
        (fboundp 'flymake-show-buffer-diagnostics)
-       (flymake-show-buffer-diagnostics)
+       (progn
+        (flymake-show-buffer-diagnostics) (setq flymake-diagnostics--current-width 'compact)
+        (let ((diag-window (flymake-diagnostics--find-window)))
+          (when diag-window (select-window diag-window))))
        (core-message-warning "Flymake is not available"))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
