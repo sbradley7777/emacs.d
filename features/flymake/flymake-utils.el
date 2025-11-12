@@ -67,6 +67,9 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
      ;; Match eglot-flymake-backend identifier
      ((string-match "e-f-b" backend-str)
       "Eglot")
+     ;; Match flymake-aspell backend identifier
+     ((string-match "f-a" backend-str)
+      "Aspell")
      ;; Match generic flymake backend
      ((string-match "flymake" backend-str)
       "Flymake")

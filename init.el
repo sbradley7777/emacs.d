@@ -191,6 +191,7 @@ Returns a list of absolute directory paths suitable for adding to load-path."
  :description "Tree-sitter grammar management")
 (load-module flymake-config :after core-packages :description "Flymake configuration")
 (load-module flymake-utils :after flymake-config :description "Flymake utility functions")
+(load-module aspell-config :after flymake-utils :description "Spell checking with aspell")
 (load-module diff-hl-config :after core-packages :description "Git diff highlighting")
 (load-module git-constants :description "Git configuration constants")
 (load-module git-config :after git-constants :description "Magit and forge git integration")
