@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;;      Modern auto-completion framework using Corfu.
 ;;;      Provides universal auto-completion for all modes and languages.
+
+;;; Code:
 (require 'core-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -156,3 +158,4 @@
  (add-hook 'completion-at-point-functions #'cape-dabbrev)
  (add-hook 'completion-at-point-functions #'cape-file))
 (provide 'completion-config)
+;;; completion-config.el ends here

@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Dashboard configuration for a customizable startup screen.
 ;;      Displays recent files, bookmarks, and other useful information.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'package-ui)
@@ -94,3 +96,4 @@
   ;; Force dashboard refresh when opening files at startup
   (add-hook 'emacs-startup-hook #'dashboard-insert-startupify-lists)))
 (provide 'dashboard-config)
+;;; dashboard-config.el ends here

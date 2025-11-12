@@ -1,6 +1,8 @@
 ;;; core-editing.el --- Editing Behavior Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Tabs, spaces, and general editing preferences
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (core-utils-with-load-timing
@@ -64,3 +66,4 @@
   ;; Hook into Emacs clipboard system
   (setq interprogram-cut-function 'osc-52-copy)))
 (provide 'core-editing)
+;;; core-editing.el ends here

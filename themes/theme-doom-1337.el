@@ -9,6 +9,8 @@
 ;; - Modeline face customizations
 ;; - Breadcrumb customizations
 ;; - Other theme-specific tweaks
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'doom-themes)

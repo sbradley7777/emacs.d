@@ -40,6 +40,8 @@
 ;;   Spell checking integrates with Flymake and shows errors in the same way as
 ;;   coding errors. Misspelled words appear with the same highlighting as Flymake
 ;;   errors and can be viewed in the Flymake diagnostics buffer (F1).
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (core-utils-with-load-timing

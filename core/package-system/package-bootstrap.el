@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Network-aware use-package installation and fallback handling.
 ;;      Global use-package settings and error recovery for offline scenarios.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -35,3 +37,4 @@
   use-package-verbose
   use-package-minimum-reported-time))
 (provide 'package-bootstrap)
+;;; package-bootstrap.el ends here

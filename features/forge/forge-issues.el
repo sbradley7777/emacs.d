@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Interactive user commands for working with Forge issues.
 ;;      Provides commands for listing, viewing, and managing issues.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'features-constants)

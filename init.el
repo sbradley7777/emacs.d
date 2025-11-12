@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Main entry point for Emacs configuration.
 ;;      Loads configuration modules in the correct order.
+
+;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure early-init.el is loaded (for batch mode compatibility)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -46,9 +48,9 @@
 ;; Directory auto-detection function
 (defun
  init--auto-detect-config-directories ()
- "Automatically detect all directories containing .el files for load-path.
+ "Automatically detect all directories containing .el files for `load-path'.
 Recursively searches subdirectories and excludes directories in ignore-on-load.
-Returns a list of absolute directory paths suitable for adding to load-path."
+Returns a list of absolute directory paths suitable for adding to `load-path'."
  (let ((all-dirs '()))
    (dolist
     (dir (directory-files user-emacs-directory t "^[^.]"))
@@ -347,3 +349,5 @@ Can be called manually when needed for intensive work sessions."
   gc-cons-percentage core-gc-percentage-normal) ; Normal GC percentage
  )
 (core-message-success "init.el loaded successfully.")
+(provide 'init)
+;;; init.el ends here

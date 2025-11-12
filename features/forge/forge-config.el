@@ -7,6 +7,8 @@
 ;; Customizations include:
 ;; - Override forge--fontify-markdown to hide markdown markup
 ;; - Ensure links are properly styled (colors set in theme)
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'forge-markdown)

@@ -12,6 +12,8 @@
 ;;        - On Emacs startup: Reads ~/.gitconfig and populates forge-alist
 ;;        - When opening a file in a git repo: Detects forge host and sets username in local .git/config
 ;;        - Before forge-pull: Ensures username is configured (backup safety check)
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'git-utils)

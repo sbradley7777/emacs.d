@@ -1,6 +1,8 @@
 ;;; git-constants.el --- Git Configuration Constants -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Centralized constants for git configuration modules.
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "git-constants.el"

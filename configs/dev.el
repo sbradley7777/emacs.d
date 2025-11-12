@@ -21,6 +21,8 @@
 ;; Unlike local.el (for permanent local settings), dev.el is intended for
 ;; temporary testing and development work.
 ;;
+
+;;; Code:
 (require 'core-logging)
 (core-message-debug "Loading development configuration...")
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -31,3 +33,4 @@
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (core-message-success "Development configuration loaded successfully")
 (provide 'dev)
+;;; dev.el ends here

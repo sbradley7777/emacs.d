@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Custom use-package keyword for tracking module load times and descriptions.
 ;;      Provides the :description keyword that integrates with init.el diagnostics.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (core-utils-with-load-timing

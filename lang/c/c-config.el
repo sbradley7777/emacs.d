@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      C and C++ mode support and configuration.
 ;;      Supports both c-mode/c++-mode and c-ts-mode/c++-ts-mode with shared configuration.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)

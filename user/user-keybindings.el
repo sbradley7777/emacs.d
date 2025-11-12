@@ -1,6 +1,8 @@
 ;;; user-keybindings.el --- User Key Bindings Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      User-specific keyboard behavior and custom hotkeys (keyboard-modifiers or shortcuts)
+
+;;; Code:
 (require 'core-utils)
 (require 'user-utils)
 (core-utils-with-load-timing

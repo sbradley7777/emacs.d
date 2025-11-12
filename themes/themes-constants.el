@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;; This file contains constants used across various theme modules.
 ;; Constants are prefixed with 'themes-' to avoid naming conflicts.
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "themes-constants.el"

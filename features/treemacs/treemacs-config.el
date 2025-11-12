@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Treemacs configuration for file and project tree navigation.
 ;;      Provides a sidebar with project structure, git integration, and enhanced navigation.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -111,3 +113,4 @@ Opens exclusively at the current project for focused navigation."
    treemacs-smart-toggle () "Fallback function when treemacs is not available." (interactive)
    (core-message-error "Treemacs not available - package not installed")))) ;; End of core-utils-with-load-timing
 (provide 'treemacs-config)
+;;; treemacs-config.el ends here

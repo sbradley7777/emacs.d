@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Configuration for Eglot (Emacs Polyglot) LSP client.
 ;;      Enables language server protocol support with automatic local/remote detection.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

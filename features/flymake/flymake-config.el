@@ -1,6 +1,8 @@
 ;;; flymake-config.el --- Flymake Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Global Flymake configuration for diagnostic display and behavior
+
+;;; Code:
 (require 'core-utils)
 (require 'features-constants)
 (core-utils-with-load-timing
@@ -17,3 +19,4 @@
     (side . right)
     (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil))))))
 (provide 'flymake-config)
+;;; flymake-config.el ends here

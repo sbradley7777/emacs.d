@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Enhanced configuration for bash and shell script editing.
 ;;      Supports both sh-mode and bash-ts-mode with shared configuration.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)
@@ -60,3 +62,4 @@ Only applies to sh-mode as bash-ts-mode uses tree-sitter highlighting."
  (core-message-success
   "Bash configuration loaded with 4-space indentation (sh-mode and bash-ts-mode)"))
 (provide 'bash-config)
+;;; bash-config.el ends here

@@ -8,6 +8,8 @@
 ;; - Markdown markup hiding ([](url) syntax hidden)
 ;; - URL hiding/compression
 ;; - Face property normalization to prevent rendering errors
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'forge-constants)

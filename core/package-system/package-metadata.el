@@ -3,6 +3,8 @@
 ;;      Centralized management of package system persistent metadata.
 ;;      Handles reading/writing of package refresh timestamps and cache information
 ;;      to a unified human-readable metadata file.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

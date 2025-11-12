@@ -3,6 +3,8 @@
 ;;      Centralized utility functions for Python project detection.
 ;;      Uses Emacs built-in functions for finding project roots, extracting
 ;;      project names, and locating virtual environments. TRAMP-compatible.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'python-constants)

@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Package repository setup, archive priorities, and security policies.
 ;;      Centralizes trust policies, signature verification, and repository management.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -56,3 +58,4 @@
      (error
       (core-message-warning "Failed to install keyring update: %s" (error-message-string err)))))))
 (provide 'package-repositories)
+;;; package-repositories.el ends here

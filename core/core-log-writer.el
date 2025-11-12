@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;; This file provides functionality for writing the Messages buffer to files
 ;; with automatic log rotation support.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (core-utils-with-load-timing

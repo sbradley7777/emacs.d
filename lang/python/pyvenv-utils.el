@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Shared utility functions used by both pyvenv-config.el and
 ;;      pyvenv-remote.el for Python virtual environment management.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'python-constants)

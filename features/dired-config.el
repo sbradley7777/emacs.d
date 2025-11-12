@@ -15,6 +15,8 @@
 ;;        Extract to ~/.local/share/fonts/ and run: fc-cache -fv
 ;;
 ;;      Without a Nerd Font, you'll see empty boxes instead of icons.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -58,3 +60,4 @@
    ("TAB" . dired-subtree-cycle)) ; TAB to cycle expand/collapse depth
   :config (core-message-config "Dired subtree configured - use 'i' to toggle subtrees")))
 (provide 'dired-config)
+;;; dired-config.el ends here

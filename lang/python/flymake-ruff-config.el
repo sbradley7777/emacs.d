@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Configuration for flymake-ruff with custom diagnostics buffer formatting
 ;;      that adds error code extraction in a separate column.
+
+;;; Code:
 (require 'core-utils)
 (require 'flymake-utils)
 (require 'lang-utils)
@@ -59,3 +61,4 @@
   'flymake-diagnostics-buffer-mode-hook
   (lambda () (flymake-setup-custom-format 'flymake-ruff-extract-error-code))))
 (provide 'flymake-ruff-config)
+;;; flymake-ruff-config.el ends here

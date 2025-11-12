@@ -34,6 +34,8 @@
 ;;      - Username is set in local .git/config (not global) for clean per-repository configuration
 ;;
 ;;      For detailed configuration examples, troubleshooting, and advanced usage, see: GIT.md
+
+;;; Code:
 (require 'core-utils)
 (require 'git-constants)
 (require 'magit-utils)

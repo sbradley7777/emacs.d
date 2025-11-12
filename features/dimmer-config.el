@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Dims inactive buffers to highlight the active window.
 ;;      Provides enhanced visual focus for terminal and GUI Emacs.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (core-utils-with-load-timing

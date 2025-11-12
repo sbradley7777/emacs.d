@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Standardized wrappers for collecting user input with consistent
 ;;      error handling, validation, and logging.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (core-utils-with-load-timing

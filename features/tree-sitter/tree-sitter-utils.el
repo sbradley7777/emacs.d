@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Utility functions for working with tree-sitter grammars and functionality.
 ;;      Provides helpers for grammar management, counting, and availability checks.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'features-constants)

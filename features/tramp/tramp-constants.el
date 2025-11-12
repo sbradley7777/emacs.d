@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;; Constants for TRAMP (Transparent Remote Access, Multiple Protocol) configuration.
 ;; These settings control remote file access behavior.
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "tramp-constants.el"

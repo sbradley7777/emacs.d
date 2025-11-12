@@ -48,6 +48,8 @@
 ;; - Corfu: In-buffer completion (code, text while typing)
 ;; - Vertico stack: Minibuffer completion (commands, files, buffers via M-x or C-x)
 ;; Both systems complement each other for a complete completion experience.
+
+;;; Code:
 (require 'core-utils)
 (require 'theme-doom-1337-constants)
 (core-utils-with-load-timing

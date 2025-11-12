@@ -3,6 +3,8 @@
 ;; Utilities for working with forge hosts (GitHub, GitLab, etc.) including
 ;; diagnostics for viewing configured hosts and their authentication status,
 ;; and TRAMP support for remote repository operations.
+
+;;; Code:
 (require 'core-logging)
 (require 'core-utils)
 (require 'forge-constants)

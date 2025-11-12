@@ -20,6 +20,8 @@
 ;; • Customize keybindings
 ;; • Set machine-specific variables
 ;;
+
+;;; Code:
 (require 'core-logging)
 (core-message-loading "=== local.el: Loading local user configuration ===")
 ;; ============================================
@@ -97,3 +99,4 @@
 (core-message-info "=== local.el: The loading of local user configuration finished ===")
 (core-message-success "Local user configuration loaded successfully")
 (provide 'local)
+;;; local.el ends here

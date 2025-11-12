@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Magit-specific helper functions for buffer display and formatting.
 ;;      Provides customized display and formatting behavior for Magit buffers.
+
+;;; Code:
 (require 'core-utils)
 (require 'features-constants)
 (require 'git-constants)

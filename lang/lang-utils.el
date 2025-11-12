@@ -3,6 +3,8 @@
 ;;      Shared utilities for language mode configuration.
 ;;      Provides common setup functions and hook registration for both
 ;;      regular and tree-sitter language modes.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (core-utils-with-load-timing

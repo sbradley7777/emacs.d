@@ -1,6 +1,8 @@
 ;;; forge-constants.el --- Forge Configuration Constants -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Centralized constants for forge configuration modules.
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "forge-constants.el"

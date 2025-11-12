@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;; This file contains constants used across various feature modules.
 ;; Constants are prefixed with 'features-' to avoid naming conflicts.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (core-utils-with-load-timing

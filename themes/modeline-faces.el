@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Generic dispatcher for theme-specific modeline customizations.
 ;;      Theme-specific faces are defined in theme-*.el files.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;; This file contains fundamental constants used across core configuration modules.
 ;; Constants are prefixed with 'core-' to avoid naming conflicts.
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "core-constants.el"

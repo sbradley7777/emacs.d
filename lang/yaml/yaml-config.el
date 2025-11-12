@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      YAML mode support and configuration.
 ;;      Supports both yaml-mode and yaml-ts-mode with shared configuration.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'lang-utils)
@@ -33,3 +35,4 @@
 
  (core-message-success "YAML configuration loaded (yaml-mode and yaml-ts-mode)"))
 (provide 'yaml-config)
+;;; yaml-config.el ends here

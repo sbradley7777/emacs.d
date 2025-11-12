@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Markdown mode support and configuration for .md files.
 ;;      Supports both markdown-mode and markdown-ts-mode with shared configuration.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)

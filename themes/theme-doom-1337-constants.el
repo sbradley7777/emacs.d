@@ -9,6 +9,8 @@
 ;; - Modeline color palette
 ;; - Accent colors for UI elements
 ;; - Search and highlight colors
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "theme-doom-1337-constants.el"

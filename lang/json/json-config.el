@@ -3,6 +3,8 @@
 ;;      JSON mode support and configuration.
 ;;      Supports both js-json-mode (built-in) and json-ts-mode with shared configuration.
 ;;      tree-sit-auto handles automatic grammar installation and mode switching.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'lang-utils)

@@ -1,6 +1,8 @@
 ;;; flymake-utils.el --- Flymake Utility Functions -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Utility functions for Flymake diagnostics formatting and display
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -184,3 +186,4 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
  ;; Make this module available for loading with (require 'flymake-utils)
  )
 (provide 'flymake-utils)
+;;; flymake-utils.el ends here

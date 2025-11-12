@@ -1,6 +1,8 @@
 ;;; imenu-list-config.el --- Imenu List Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Configuration for imenu-list package providing sidebar symbol navigation
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'features-constants)

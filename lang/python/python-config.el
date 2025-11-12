@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Basic Python editing settings, indentation, and shell configuration.
 ;;      Supports both python-mode and python-ts-mode with shared configuration.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'python-constants)

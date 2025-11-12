@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      TOML mode support and configuration for .toml files including pyproject.toml.
 ;;      Supports both toml-mode and toml-ts-mode with shared configuration.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'core-constants)
@@ -35,3 +37,4 @@
 
  (core-message-success "TOML configuration loaded (toml-mode and toml-ts-mode)"))
 (provide 'toml-config)
+;;; toml-config.el ends here

@@ -3,6 +3,8 @@
 ;;      Visual indicators for git changes in the fringe.
 ;;      Shows added, modified, and deleted lines with colored bars.
 ;;      Works passively alongside terminal git workflow.
+
+;;; Code:
 (require 'core-utils)
 (require 'theme-doom-1337-constants)
 (core-utils-with-load-timing

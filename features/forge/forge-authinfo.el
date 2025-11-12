@@ -11,6 +11,8 @@
 ;;
 ;; NOTE: Disabled when editing remote files via TRAMP to prevent
 ;; attempting to modify local ~/.authinfo from remote context.
+
+;;; Code:
 (require 'core-logging)
 (require 'core-user-interaction-utils)
 (require 'core-utils)

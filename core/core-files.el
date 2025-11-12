@@ -1,6 +1,8 @@
 ;;; core-files.el --- File Handling Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      File archiving, backups, and autosave settings
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -93,3 +95,4 @@
  ;; Make this module available for loading with (require 'files)
  )
 (provide 'core-files)
+;;; core-files.el ends here

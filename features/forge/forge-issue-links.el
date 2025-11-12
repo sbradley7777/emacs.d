@@ -12,6 +12,8 @@
 ;; - Advises `forge-insert-post-content` to append extracted URLs after post body
 ;; - Extracts all markdown link URLs using regex pattern
 ;; - Deduplicates and formats as a clean list at the bottom of each post
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (core-utils-with-load-timing

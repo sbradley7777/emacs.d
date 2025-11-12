@@ -1,6 +1,8 @@
 ;;; user-utils.el --- User Utility Functions -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      User-defined utility functions for custom functionality.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -229,3 +231,4 @@ This wrapper ensures that opening Imenu-list closes other exclusive side windows
     ;; Call the original toggle function
     (when (fboundp 'imenu-list-smart-toggle) (imenu-list-smart-toggle)))))
 (provide 'user-utils)
+;;; user-utils.el ends here

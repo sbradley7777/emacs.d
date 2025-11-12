@@ -1,6 +1,8 @@
 ;;; makefile-config.el --- Makefile Language Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Makefile mode support and configuration for Makefiles with proper tab handling
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -112,3 +114,4 @@
   'makefile-mode-hook
   (lambda () "Validate Makefile syntax on open." (run-with-timer 1 nil 'makefile-validate-tabs))))
 (provide 'makefile-config)
+;;; makefile-config.el ends here

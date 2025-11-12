@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;; This file contains constants for Eglot LSP configuration.
 ;; Constants are prefixed with 'features-eglot-' to avoid naming conflicts.
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "eglot-constants.el"

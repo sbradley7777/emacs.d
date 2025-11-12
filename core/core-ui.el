@@ -1,6 +1,8 @@
 ;;; core-ui.el --- User Interface Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Display preferences and UI behavior
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (core-utils-with-load-timing
@@ -118,3 +120,4 @@
  ;; Make this module available for loading with (require 'core-ui)
  )
 (provide 'core-ui)
+;;; core-ui.el ends here

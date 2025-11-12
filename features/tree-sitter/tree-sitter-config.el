@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Configures tree-sitter grammar installation and loading paths.
 ;;      Ensures grammars are installed to ~/.emacs.d/local/tree-sitter instead of the default location.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

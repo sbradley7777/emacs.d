@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Package state caching for offline functionality and faster startup.
 ;;      Provides intelligent cache management with freshness validation.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'package)
@@ -81,3 +83,4 @@ on the next package operation. Useful when package metadata seems out of date
 or corrupted."
   (interactive) (package-metadata-reset)))
 (provide 'package-cache)
+;;; package-cache.el ends here

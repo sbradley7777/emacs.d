@@ -6,6 +6,8 @@
 ;;
 ;; Advanced theme utilities for interactive theme management
 ;; Core theme loading is handled by themes-config.el
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'themes-config)

@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      System information detection and configuration diagnostics
 ;;      Provides detailed system context and startup logging for debugging
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'tree-sitter-utils)

@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Low-level package installation primitives with comprehensive error handling.
 ;;      Provides safe installation with retry logic and detailed reporting.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Interactive package upgrade, cleanup, and maintenance utilities.
 ;;      Bulk operations with comprehensive error handling and network awareness.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

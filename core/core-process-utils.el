@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Standardized wrappers for running external commands with
 ;;      consistent error handling and logging.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (core-utils-with-load-timing

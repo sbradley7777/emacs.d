@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      User-facing interfaces for package browsing, searching, and management.
 ;;      Provides interactive commands for discovering and managing packages.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

@@ -3,6 +3,8 @@
 ;;      Centralized constants for Python development configuration.
 ;;      This file contains paths, settings, and other constants used
 ;;      across multiple Python-related configuration files.
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "python-constants.el"
@@ -33,3 +35,4 @@
  (defvar pyvenv-project-root nil "Auto-detected project root - set once and remembered.")
  (defvar pyvenv-project-name nil "Auto-detected project name for modeline display."))
 (provide 'python-constants)
+;;; python-constants.el ends here

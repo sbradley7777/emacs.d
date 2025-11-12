@@ -11,6 +11,8 @@
 ;; - Auto-sync runs once per repository per Emacs session
 ;; - Manual sync command (git-sync-repository) for on-demand updates
 ;; - Modular design allows independent use of Magit or Forge sync
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'git-utils)

@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Custom segment definitions for doom-modeline.
 ;;      These segments are used in modeline-config.el.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

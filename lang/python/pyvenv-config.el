@@ -4,6 +4,8 @@
 ;;      environment encountered and remembers it as THE project. The virtual
 ;;      environment is activated. The built-in pyvenv modeline indicator is disabled
 ;;      in favor of our custom doom-modeline segment (defined in pyvenv-modeline.el).
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'python-constants)

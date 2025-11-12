@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Utility functions for git integration.
 ;;      Provides helper functions for git repository detection and configuration.
+
+;;; Code:
 (require 'core-utils)
 (require 'core-logging)
 (require 'vc-git)

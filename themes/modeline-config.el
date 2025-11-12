@@ -3,6 +3,8 @@
 ;;      Modeline configuration with support for both default Emacs modeline and doom-modeline.
 ;;      Users can choose which modeline to use via the modeline-config-use-doom-modeline variable.
 ;;      Set in local.el or custom.el to enable doom-modeline.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

@@ -6,6 +6,8 @@
 ;;
 ;; Core theme and visual appearance configuration
 ;; Advanced theme utilities are in themes-utils.el
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

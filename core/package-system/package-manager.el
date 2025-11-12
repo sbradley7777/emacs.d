@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Coordinates package system initialization and module loading.
 ;;      Central entry point for the modular package management system.
+
+;;; Code:
 (require 'core-utils)
 (core-utils-with-load-timing
  "package-manager.el"
@@ -27,3 +29,4 @@
  ;; Smart package state management with caching
  (smart-package-state-management))
 (provide 'package-manager)
+;;; package-manager.el ends here

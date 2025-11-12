@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Configuration for breadcrumb navigation mode.
 ;;      Provides hierarchical navigation showing file path and code structure.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (core-utils-with-load-timing
@@ -19,3 +21,4 @@
   ;; This ensures breadcrumb colors always match the active theme's modeline colors
   ))
 (provide 'breadcrumbs-config)
+;;; breadcrumbs-config.el ends here

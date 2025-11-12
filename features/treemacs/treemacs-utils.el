@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;      Utility functions for treemacs configuration.
 ;;      Handles theme loading and custom file icon management.
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
@@ -71,3 +73,4 @@ When using nerd-icons theme, custom file icons are automatically applied."
    (t
     (core-message-warning "Invalid treemacs theme: %s. Using default." theme-name)))))
 (provide 'treemacs-utils)
+;;; treemacs-utils.el ends here

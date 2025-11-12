@@ -8,6 +8,8 @@
 ;; - Persistent storage of history and favorites
 ;;
 ;; Usage: Press C-c p to toggle the command palette
+
+;;; Code:
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)

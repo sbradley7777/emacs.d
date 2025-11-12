@@ -6,6 +6,8 @@
 ;;      - Preventing UI element flashing
 ;;      - Package system configuration
 ;; Set up minimal load path for loading constants and utilities early
+
+;;; Code:
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "core/package-system" user-emacs-directory))
 ;; Load constants first (includes emacs-local-dir and startup constants)
@@ -131,3 +133,4 @@
   (dolist (dir dirs-to-create) (core-utils-ensure-directory dir)))
 (core-message-success "early-init.el loaded successfully - performance optimizations active.")
 (provide 'early-init)
+;;; early-init.el ends here
