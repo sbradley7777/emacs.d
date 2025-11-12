@@ -43,6 +43,8 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
   - 'f-r---c' (flymake-ruff) -> 'Ruff'
   - 'p-f' (python-flymake) -> 'Python'
   - 'e-f-b' (eglot-flymake-backend) -> 'Eglot'
+  - 'e-f-c' (elisp-flymake-checkdoc) -> 'Elisp Checkdoc'
+  - 'f-a' (flymake-aspell) -> 'Aspell'
   - Others -> original name as fallback
 
   Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
@@ -67,6 +69,9 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
      ;; Match eglot-flymake-backend identifier
      ((string-match "e-f-b" backend-str)
       "Eglot")
+     ;; Match elisp-flymake-checkdoc identifier
+     ((string-match "e-f-c" backend-str)
+      "Elisp Checkdoc")
      ;; Match flymake-aspell backend identifier
      ((string-match "f-a" backend-str)
       "Aspell")
@@ -92,7 +97,7 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
   - Col: Column number (3 chars, right-aligned)
   - Type: Diagnostic type (8 chars, sortable by severity)
   - Code: Error code like F401, I001 (6 chars, extracted from message)
-  - Backend: User-friendly backend name (8 chars, shows 'Ruff' instead of 'f-r---c')
+  - Backend: User-friendly backend name (16 chars, shows 'Ruff' instead of 'f-r---c')
   - Message: Full diagnostic text (unlimited width, sortable)"
   (setq
    tabulated-list-format
@@ -104,7 +109,7 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
     ("Type"
      8
      (lambda (l1 l2) (< (plist-get (car l1) :severity) (plist-get (car l2) :severity))))
-    ("Code" 6 t) ("Backend" 8 t) ("Message" 0 t)])
+    ("Code" 6 t) ("Backend" 16 t) ("Message" 0 t)])
   ;; Override the entries function to customize data extraction
   ;; This function processes each diagnostic entry and extracts/formats the data
   ;; for our custom column layout
