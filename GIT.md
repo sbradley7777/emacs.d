@@ -510,12 +510,12 @@ Each requires a corresponding entry in `~/.authinfo`.
 
 #### Magit Window Width
 
-The default side window width is controlled by `git-config-side-window-width` in [`features/git/git-constants.el`](features/git/git-constants.el).
+The default side window width is controlled by `features-side-window-compact-width` in [`features/features-constants.el`](features/features-constants.el).
 
 To customize, add to your `local.el`:
 
 ```elisp
-(setq features-side-window-width 0.4)  ; 40% of frame width
+(setq features-side-window-compact-width 0.4)  ; 40% of frame width
 ```
 
 #### Issues Window Toggle Widths

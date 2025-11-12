@@ -14,7 +14,8 @@
   magit-utils-display-buffer-side (buffer) "Display BUFFER in side window at configured width."
   (display-buffer
    buffer
-   `(display-buffer-in-side-window (side . right) (window-width . ,features-side-window-width))))
+   `(display-buffer-in-side-window
+     (side . right) (window-width . ,features-side-window-compact-width))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Magit Buffer Formatting

@@ -4,6 +4,7 @@
 ;;      Provides commands for listing, viewing, and managing issues.
 (require 'core-utils)
 (require 'core-logging)
+(require 'features-constants)
 (require 'forge-constants)
 (require 'git-utils)
 (core-utils-with-load-timing
@@ -11,10 +12,10 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Issue List Commands
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defvar forge-issues-list--current-width 'compact "Current width state of forge issues window.")
+ (defvar forge-issues--current-width 'compact "Current width state of forge issues window.")
  (defun
-  forge-issues-list--handle-error (err error-type)
-  "Handle errors from forge-issues-list with appropriate messaging.
+  forge-issues--handle-error (err error-type)
+  "Handle errors from toggle-forge-issues-window with appropriate messaging.
 ERR is the error object, ERROR-TYPE is the type of error caught (user-error or error).
 Provides helpful guidance for 'Cannot use repository yet' errors."
   (let ((err-msg (error-message-string err)))
@@ -28,7 +29,7 @@ Provides helpful guidance for 'Cannot use repository yet' errors."
       (core-message-warning "%s" err-msg)
       (core-message-error "Failed to list issues: %s" err-msg)))))
  (defun
-  forge-issues-list--kill-orphaned-buffers ()
+  forge-issues--kill-orphaned-buffers ()
   "Kill forge buffers that lack proper initialization.
 Orphaned buffers have forge-topics-mode but nil forge--buffer-topics-spec,
 which causes errors during redisplay when the mode-line is evaluated."
@@ -42,7 +43,7 @@ which causes errors during redisplay when the mode-line is evaluated."
       (or (not (boundp 'forge--buffer-topics-spec)) (not forge--buffer-topics-spec)))
      (kill-buffer buf)))))
  (defun
-  forge-issues-list--find-forge-window ()
+  forge-issues--find-window ()
   "Find the forge topic window if it exists and is properly initialized.
 Returns the window displaying a forge topic buffer, or nil if not found."
   (let ((forge-window nil))
@@ -60,7 +61,7 @@ Returns the window displaying a forge topic buffer, or nil if not found."
      nil t)
     forge-window))
  (defun
-  forge-issues-list--resize-forge-window
+  forge-issues--resize-window
   (window new-width)
   "Resize WINDOW to NEW-WIDTH (fraction of frame width)."
   (let* ((frame-width (frame-width))
@@ -69,22 +70,21 @@ Returns the window displaying a forge topic buffer, or nil if not found."
          (delta (- desired-width current-width)))
     (when (/= delta 0) (window-resize window delta t))))
  (defun
-  forge-issues-list (&optional repo)
-  "List forge issues with toggle between 30% and 50% width.
+  toggle-forge-issues-window (&optional repo)
+  "Toggle forge issues window with size cycling between 30% and 50% width.
 When buffer is closed, opens at 30%. When buffer is open, toggles between 30% and 50%.
 Optional REPO argument specifies which repository to list issues for."
-  (interactive) (forge-issues-list--kill-orphaned-buffers)
-  (let ((existing-window (forge-issues-list--find-forge-window)))
+  (interactive) (forge-issues--kill-orphaned-buffers)
+  (let ((existing-window (forge-issues--find-window)))
     (if
      existing-window
      (if
-      (eq forge-issues-list--current-width 'compact)
+      (eq forge-issues--current-width 'compact)
       (progn
-       (forge-issues-list--resize-forge-window
-        existing-window forge-issues-expanded-width)
-       (setq forge-issues-list--current-width 'expanded))
-      (forge-issues-list--resize-forge-window existing-window forge-issues-compact-width)
-      (setq forge-issues-list--current-width 'compact))
+       (forge-issues--resize-window existing-window features-side-window-expanded-width)
+       (setq forge-issues--current-width 'expanded))
+      (forge-issues--resize-window existing-window features-side-window-compact-width)
+      (setq forge-issues--current-width 'compact))
      (condition-case err
          (progn
           (unless
@@ -96,11 +96,11 @@ Optional REPO argument specifies which repository to list issues for."
              repository
              (error "No forge repository found. Ensure this repository is tracked by forge"))
             (forge-topics-setup-buffer repository nil :type 'issue)
-            (setq forge-issues-list--current-width 'compact)))
+            (setq forge-issues--current-width 'compact)))
        (user-error
-        (forge-issues-list--handle-error err 'user-error))
+        (forge-issues--handle-error err 'user-error))
        (error
-        (forge-issues-list--handle-error err 'error))))))
+        (forge-issues--handle-error err 'error))))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Defensive Mode-Line Handling
@@ -130,11 +130,11 @@ Optional REPO argument specifies which repository to list issues for."
       "Issues")))
   (advice-add 'forge-topics-buffer-desc :around #'forge-issues--safe-buffer-desc))
 
- (with-eval-after-load 'forge-topics (forge-issues-list--kill-orphaned-buffers))
+ (with-eval-after-load 'forge-topics (forge-issues--kill-orphaned-buffers))
 
  (add-hook
   'after-init-hook
-  (lambda () (run-with-idle-timer 1.0 nil (lambda () (forge-issues-list--kill-orphaned-buffers)))))
+  (lambda () (run-with-idle-timer 1.0 nil (lambda () (forge-issues--kill-orphaned-buffers)))))
 
  (core-message-config "Forge issue commands loaded"))
 (provide 'forge-issues)

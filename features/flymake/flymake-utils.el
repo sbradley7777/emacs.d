@@ -4,20 +4,13 @@
 (require 'core-constants)
 (require 'core-utils)
 (require 'core-logging)
+(require 'features-constants)
 (core-utils-with-load-timing
  "flymake-utils.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Diagnostics Window Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defconst
-  flymake-diagnostics-compact-width
-  0.3
-  "Window width fraction for compact flymake diagnostics view (30% of frame).")
- (defconst
-  flymake-diagnostics-expanded-width
-  0.5
-  "Window width fraction for expanded flymake diagnostics view (50% of frame).")
  (defvar
   flymake-diagnostics--current-width 'compact "Current width state of flymake diagnostics window.")
 
@@ -62,9 +55,9 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
        (eq flymake-diagnostics--current-width 'compact)
        (progn
         (flymake-diagnostics--resize-window
-         existing-window flymake-diagnostics-expanded-width)
+         existing-window features-side-window-expanded-width)
         (setq flymake-diagnostics--current-width 'expanded))
-       (flymake-diagnostics--resize-window existing-window flymake-diagnostics-compact-width)
+       (flymake-diagnostics--resize-window existing-window features-side-window-compact-width)
        (setq flymake-diagnostics--current-width 'compact))
       (select-window existing-window))
      (progn

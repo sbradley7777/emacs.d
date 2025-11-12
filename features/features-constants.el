@@ -45,9 +45,13 @@
  (defconst features-corfu-count 10 "Maximum number of completion candidates shown.")
  ;; Window Constants
  (defconst
-  features-side-window-width 0.3
-  "Width for all side windows (right/left) as fraction of frame width.
-Used by flymake diagnostics, imenu-list, command palette, and other side windows.")
+  features-side-window-compact-width 0.3
+  "Width for compact side windows (30% of frame).
+Used by flymake diagnostics, forge issues, magit, and other side windows.")
+ (defconst
+  features-side-window-expanded-width 0.5
+  "Width for expanded toggleable side windows (50% of frame).
+Used by toggle commands for flymake diagnostics, forge issues, and other side windows.")
  ;; Indent Guides Constants
  (defconst
   features-indent-guides-auto-char-face-perc 40 "Base visibility percentage for indent guides.")
