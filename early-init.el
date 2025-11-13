@@ -117,14 +117,13 @@
  (early-init--running-in-snap-p)
  (progn
   ;; Disable native compilation for Snap due to library compatibility issues
-  (setq native-comp-deferred-compilation nil)
   (setq native-comp-jit-compilation nil)
   (setq native-comp-enable-subr-trampolines nil)
   (setq native-comp-eln-load-path (list core-eln-cache-dir))
   (core-message-warning "Native compilation disabled (running in Snap environment)"))
  (progn
   ;; Enable native compilation for non-Snap installations (macOS, Linux, etc.)
-  (setq native-comp-deferred-compilation t)
+  (setq native-comp-jit-compilation t)
   (setq native-comp-eln-load-path (list core-eln-cache-dir))
   (core-message-success "Native compilation enabled (standard installation)")))
 

@@ -61,7 +61,7 @@
   ;; Exclude certain buffers from being dimmed
   ;; Flymake diagnostics buffer should remain bright so errors are easily visible
   (setq
-   dimmer-exclusion-regexp-list
+   dimmer-buffer-exclusion-regexps
    '("^ \\*Minibuf-[0-9]+\\*$" "^ \\*Echo.*\\*$" "^\\*Flymake diagnostics.*\\*$"))
 
   (core-message-success "Dimmer configured for dark theme - inactive windows will be dimmed")
