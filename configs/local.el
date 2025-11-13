@@ -91,7 +91,19 @@
 ;; (setq flymake-show-diagnostics-at-end-of-line t)
 
 ;; ============================================
-;; 6. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 6. SPELL CHECKING (ASPELL)
+;; ============================================
+;; Flymake-aspell is disabled by default.
+;; - Toggle on/off in current buffer:
+;;   C-c f a (or M-x toggle-flymake-aspell)
+;; - To enable it automatically for text files (.txt, .md, etc.):
+;;   (add-hook 'text-mode-hook 'enable-flymake-aspell)
+;; - To enable it automatically for programming files (.py, .el, etc. - comments/strings only):
+;;   (add-hook 'prog-mode-hook 'enable-flymake-aspell)
+;; - You can enable both hooks if you work with both text and code files
+
+;; ============================================
+;; 7. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)

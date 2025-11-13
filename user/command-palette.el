@@ -50,6 +50,7 @@
     ("Search Packages" . search-packages)
     ("Show Package Upgrades" . show-package-upgrades)
     ("List Themes" . list-themes)
+    ("Toggle Flymake Aspell" . toggle-flymake-aspell)
     ("Pyvenv Activate" . pyvenv-activate)
     ("Pyvenv Deactivate" . pyvenv-deactivate)
     ("Pyvenv Workon" . pyvenv-workon)

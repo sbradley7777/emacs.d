@@ -59,6 +59,22 @@ Returns t if 'en' dictionary is available, nil otherwise."
    (let ((dicts (shell-command-to-string "aspell dump dicts")))
      (string-match-p "\\ben\\b" dicts))))
  (defun
+  aspell-available-p ()
+  "Check if aspell is installed and has English dictionary.
+Returns t if both conditions are met, nil otherwise. Displays appropriate
+error message if either condition fails."
+  (cond
+   ((not (executable-find "aspell"))
+    (core-message-error
+     "The command \"aspell\" was not found - please verify \"aspell\" is installed")
+    nil)
+   ((not (aspell-has-en-dictionary-p))
+    (core-message-error
+     "The \"aspell\" English dictionary was not found - please verify it is installed")
+    nil)
+   (t
+    t)))
+ (defun
   aspell-setup-flymake ()
   "Setup flymake-aspell for current buffer.
 Adds flymake-aspell to diagnostics functions without replacing existing backends.
@@ -92,6 +108,47 @@ Only runs if flymake-aspell is loaded and backend is missing."
    (add-hook 'flymake-diagnostic-functions 'flymake-aspell--check nil t) (flymake-start)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Interactive Commands
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defun
+  toggle-flymake-aspell ()
+  "Toggle flymake-aspell backend on/off in current buffer.
+Checks current state and enables if disabled, disables if enabled."
+  (interactive)
+  (if
+   (memq 'flymake-aspell--check flymake-diagnostic-functions)
+   (progn
+    (remove-hook 'flymake-diagnostic-functions 'flymake-aspell--check t)
+    (flymake-mode -1)
+    (flymake-mode 1)
+    (core-message-info "Flymake aspell disabled"))
+   (progn
+    (add-hook 'flymake-diagnostic-functions 'flymake-aspell--check nil t)
+    (flymake-start)
+    (core-message-info "Flymake aspell enabled"))))
+ (defun
+  disable-flymake-aspell () "Disable flymake-aspell backend in current buffer." (interactive)
+  (when
+   (memq 'flymake-aspell--check flymake-diagnostic-functions)
+   (remove-hook 'flymake-diagnostic-functions 'flymake-aspell--check t)
+   (flymake-mode -1)
+   (flymake-mode 1)
+   (core-message-info "Flymake aspell disabled")))
+ (defun
+  enable-flymake-aspell () "Enable flymake-aspell backend in current buffer." (interactive)
+  (unless
+   (memq 'flymake-aspell--check flymake-diagnostic-functions)
+   (add-hook 'flymake-diagnostic-functions 'flymake-aspell--check nil t)
+   (flymake-start)
+   (core-message-info "Flymake aspell enabled")))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Keybindings
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (global-set-key (kbd "C-c f a") 'toggle-flymake-aspell)
+ (global-set-key (kbd "C-c f A") 'disable-flymake-aspell)
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Aspell Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (when
@@ -99,13 +156,7 @@ Only runs if flymake-aspell is loaded and backend is missing."
   (core-message-config "Configuring spell checking with flymake-aspell")
   (setq ispell-program-name "aspell")
   (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
-  (use-package
-   flymake-aspell
-   :demand t
-   :config
-   (add-hook 'eglot-managed-mode-hook 'aspell-ensure-backend)
-   (add-hook 'text-mode-hook 'aspell-setup-flymake)
-   (add-hook 'prog-mode-hook 'aspell-setup-flymake-prog))
-  (core-message-success "Spell checking configured with flymake-aspell")))
+  (use-package flymake-aspell :demand t)
+  (core-message-success "Spell checking configured with flymake-aspell (disabled by default)")))
 (provide 'aspell-config)
 ;;; aspell-config.el ends here
