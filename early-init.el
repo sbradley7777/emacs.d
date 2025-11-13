@@ -42,6 +42,11 @@
 (setq
  byte-compile-output-dir
  (expand-file-name (format core-byte-compile-dir-pattern emacs-version) user-emacs-directory))
+;; Set docstring maximum column to match project line-length standard.
+;; This prevents byte-compiler warnings about "docstring wider than 80 characters" during
+;; batch compilation. Without this, batch mode uses the default value of 80, ignoring
+;; the `fill-column' setting in core-editing.el which only applies to interactive sessions.
+(setq byte-compile-docstring-max-column core-fill-column)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File Handling Optimizations
