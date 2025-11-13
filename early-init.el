@@ -47,6 +47,12 @@
 ;; batch compilation. Without this, batch mode uses the default value of 80, ignoring
 ;; the `fill-column' setting in core-editing.el which only applies to interactive sessions.
 (setq byte-compile-docstring-max-column core-fill-column)
+;; Configure async compilation (native-comp) to use the same docstring width setting.
+;; This form is evaluated in each async compilation subprocess before compilation begins.
+;; Without this, async compilation spawns new Emacs processes that don't load early-init.el
+;; and thus use the default 80-character limit, generating false warnings.
+(setq
+ native-comp-async-env-modifier-form `(setq byte-compile-docstring-max-column ,core-fill-column))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File Handling Optimizations

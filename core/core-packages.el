@@ -8,7 +8,6 @@
 (require 'package-metadata)
 (require 'package-repositories)
 (require 'package-installation)
-(require 'package-maintenance)
 (require 'features-constants)
 (core-utils-with-load-timing
  "core-packages.el"

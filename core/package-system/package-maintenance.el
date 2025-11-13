@@ -9,6 +9,8 @@
 (require 'core-logging)
 (require 'package-network)
 (require 'package-metadata)
+(defvar core-packages-all) ; Forward declaration - defined in core-packages.el
+(declare-function core-packages--safe-refresh-and-check "package-maintenance")
 (core-utils-with-load-timing
  "package-maintenance.el"
 
