@@ -94,6 +94,11 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
  ;; Backend Name Formatting
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
+  flymake-max-backend-name-length
+  ()
+  "Calculate the maximum length of backend names in `flymake-backend-name-mappings'."
+  (apply 'max (mapcar (lambda (mapping) (length (cdr mapping))) flymake-backend-name-mappings)))
+ (defun
   flymake-friendly-backend-name (backend-name)
   "Convert cryptic backend names to user-friendly versions.
 Looks up BACKEND-NAME in `flymake-backend-name-mappings' and returns
@@ -138,19 +143,20 @@ Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
   - Col: Column number (3 chars, right-aligned)
   - Type: Diagnostic type (8 chars, sortable by severity)
   - Code: Error code like F401, I001 (6 chars, extracted from message)
-  - Backend: User-friendly backend name (16 chars, shows 'Ruff' instead of 'f-r---c')
+  - Backend: User-friendly backend name (dynamic width based on longest name)
   - Message: Full diagnostic text (unlimited width, sortable)"
   (setq
    tabulated-list-format
-   [("Line"
-     5
-     (lambda (l1 l2) (< (plist-get (car l1) :line) (plist-get (car l2) :line)))
-     :right-align t)
-    ("Col" 3 nil :right-align t)
-    ("Type"
-     8
-     (lambda (l1 l2) (< (plist-get (car l1) :severity) (plist-get (car l2) :severity))))
-    ("Code" 6 t) ("Backend" 16 t) ("Message" 0 t)])
+   (vector
+    '("Line"
+      5
+      (lambda (l1 l2) (< (plist-get (car l1) :line) (plist-get (car l2) :line)))
+      :right-align t)
+    '("Col" 3 nil :right-align t)
+    '("Type" 8 (lambda (l1 l2) (< (plist-get (car l1) :severity) (plist-get (car l2) :severity))))
+    '("Code" 6 t)
+    (list "Backend" (flymake-max-backend-name-length) t)
+    '("Message" 0 t)))
   ;; Override the entries function to customize data extraction
   ;; This function processes each diagnostic entry and extracts/formats the data
   ;; for our custom column layout
