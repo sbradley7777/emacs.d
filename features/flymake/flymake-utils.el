@@ -11,6 +11,23 @@
  "flymake-utils.el"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Backend Name Mappings
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (defconst
+  flymake-backend-name-mappings
+  '(("e-f-b-c" . "Elisp Byte Compile")
+    ("e-f-b" . "eglot")
+    ("e-f-c" . "Elisp Checkdoc")
+    ("f-r" . "ruff")
+    ("f-a" . "aspell")
+    ("p-f" . "python")
+    ("flymake" . "Flymake"))
+  "Mapping of internal Flymake backend identifiers to user-friendly names.
+Each entry is (PATTERN . FRIENDLY-NAME) where PATTERN is a regex to match
+against the backend identifier. Patterns are checked in order, so more
+specific patterns should come first (e.g., 'e-f-b-c' before 'e-f-b').")
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Diagnostics Window Configuration
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defvar
@@ -79,16 +96,10 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
  (defun
   flymake-friendly-backend-name (backend-name)
   "Convert cryptic backend names to user-friendly versions.
-  Maps internal flymake backend identifiers to readable names:
-  - 'f-r---c' (flymake-ruff) -> 'Ruff'
-  - 'p-f' (python-flymake) -> 'Python'
-  - 'e-f-b' (eglot-flymake-backend) -> 'Eglot'
-  - 'e-f-c' (elisp-flymake-checkdoc) -> 'Elisp Checkdoc'
-  - 'f-a' (flymake-aspell) -> 'Aspell'
-  - Others -> original name as fallback
+Looks up BACKEND-NAME in `flymake-backend-name-mappings' and returns
+the first matching friendly name, or the original name if no match found.
 
-  Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
-  ;; Convert to string if backend-name is a list
+Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
   (let ((backend-str
          (cond
           ((stringp backend-name)
@@ -98,29 +109,19 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
           ((symbolp backend-name)
            (symbol-name backend-name))
           (t
-           (format "%s" backend-name)))))
-    (cond
-     ;; Match flymake-ruff backend identifier
-     ((string-match "f-r" backend-str)
-      "Ruff")
-     ;; Match python-flymake backend identifier
-     ((string-match "p-f" backend-str)
-      "Python")
-     ;; Match eglot-flymake-backend identifier
-     ((string-match "e-f-b" backend-str)
-      "Eglot")
-     ;; Match elisp-flymake-checkdoc identifier
-     ((string-match "e-f-c" backend-str)
-      "Elisp Checkdoc")
-     ;; Match flymake-aspell backend identifier
-     ((string-match "f-a" backend-str)
-      "Aspell")
-     ;; Match generic flymake backend
-     ((string-match "flymake" backend-str)
-      "Flymake")
-     ;; Fallback to original name for unknown backends
-     (t
-      backend-str))))
+           (format "%s" backend-name))))
+        (friendly-name nil))
+    ;; Search for first matching pattern in mappings
+    (catch
+     'found
+     (dolist
+      (mapping flymake-backend-name-mappings)
+      (when
+       (string-match (car mapping) backend-str)
+       (setq friendly-name (cdr mapping))
+       (throw 'found friendly-name))))
+    ;; Return friendly name or fall back to original
+    (or friendly-name backend-str)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Diagnostics Buffer Formatting
