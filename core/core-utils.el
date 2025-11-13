@@ -26,7 +26,7 @@ MODULE-NAME should be a string identifying the module being loaded."
  core-utils-format-command-found-message (command path host location)
  "Format success message when COMMAND is found.
 COMMAND is the command name, PATH is the full path, HOST is the hostname,
-LOCATION is either 'local' or 'remote'."
+LOCATION is either \\='local\\=' or \\='remote\\='."
  (core-message-success
   "The command \"%s\" was found in PATH at %s on host (%s): %s"
   command
@@ -38,7 +38,7 @@ LOCATION is either 'local' or 'remote'."
  core-utils-format-command-not-found-message (command host location)
  "Format warning message when COMMAND is not found.
 COMMAND is the command name, HOST is the hostname,
-LOCATION is either 'local' or 'remote'."
+LOCATION is either \\='local\\=' or \\='remote\\='."
  (core-message-warning
   "The command \"%s\" was not found in PATH on host (%s): %s" command location host))
 

@@ -30,12 +30,12 @@ Higher values reduce network traffic but increase latency for completions.")
  (defconst
   features-eglot-report-progress 'messages
   "Where to report LSP server progress notifications.
-Set to t for mode line, 'messages for *Messages* buffer, or nil to disable.")
+Set to t for mode line, \\='messages for *Messages* buffer, or nil to disable.")
  (defconst
   features-eglot-startup-delay 1.5
   "Delay in seconds before activating eglot after opening a file.
 Prevents two issues:
-1. 'Invalid region' flymake warnings when LSP sends diagnostics before buffer is loaded
+1. \\='Invalid region\\=' flymake warnings when LSP sends diagnostics before buffer is loaded
 2. Allows git-sync to complete before eglot starts (git-sync takes ~0.7s typically)
 The timer fires after this fixed delay regardless of idle state, ensuring eglot starts
 after both buffer initialization and git-sync operations complete.")
@@ -72,7 +72,7 @@ configured in Eglot's built-in eglot-server-programs and don't need to be listed
 This map is for modes we want to explicitly manage or customize.
 
 Users can extend this in local.el to add support for additional languages:
-  (add-to-list 'features-eglot-lsp-server-map '(rust-mode . \"rust-analyzer\"))
-  (add-to-list 'features-eglot-lsp-server-map '(go-mode . \"gopls\"))"))
+  (add-to-list \\='features-eglot-lsp-server-map \\='(rust-mode . \"rust-analyzer\"))
+  (add-to-list \\='features-eglot-lsp-server-map \\='(go-mode . \"gopls\"))"))
 (provide 'eglot-constants)
 ;;; eglot-constants.el ends here

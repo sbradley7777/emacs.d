@@ -21,9 +21,9 @@ Returns the repository root path, or nil if not in a git repository."
     (expand-file-name root)))
  (defun
   git-utils-format-repository-display (repo-root)
-  "Format REPO-ROOT for display as 'name (abbreviated-path)'.
+  "Format REPO-ROOT for display as \\='name (abbreviated-path)\\='.
 Extracts repository name from directory path.
-Example: 'glocktopography (~/gitlab/glocktopography/)'."
+Example: \\='glocktopography (~/gitlab/glocktopography/)\\='."
   (when
    repo-root
    (let ((name (file-name-nondirectory (directory-file-name repo-root))))
@@ -93,7 +93,7 @@ SUFFIXES should be a list of suffix names.
 Returns a plist with keyword versions of SUFFIXES as keys and config values as values.
 
 Example:
-  (git-utils-git-config-get-multiple \"emacs-forge.myhost.%s\" '(\"apihost\" \"webhost\" \"type\" \"user\"))
+  (git-utils-git-config-get-multiple \"emacs-forge.myhost.%s\" \\='(\"apihost\" \"webhost\" \"type\" \"user\"))
   => (:apihost \"api.example.com\" :webhost \"example.com\" :type \"gitlab\" :user \"john\")"
   (unless
    (and (stringp base-key) (not (string-empty-p base-key)))

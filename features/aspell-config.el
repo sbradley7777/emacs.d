@@ -53,7 +53,7 @@
  (defun
   aspell-has-en-dictionary-p ()
   "Check if aspell has the English dictionary installed.
-Returns t if 'en' dictionary is available, nil otherwise."
+Returns t if \\='en\\=' dictionary is available, nil otherwise."
   (when
    (executable-find "aspell")
    (let ((dicts (shell-command-to-string "aspell dump dicts")))

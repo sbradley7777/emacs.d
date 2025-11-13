@@ -74,7 +74,7 @@ Format: YYYY-MM-DD HH:MM:SS (e.g., '2025-11-07 11:20:26').")
 (defun
  core-message-diagnostic (title lines)
  "Display diagnostic section with TITLE and formatted LINES.
-TITLE is the section header text (e.g., 'Emacs Startup Log' or 'External Dependencies').
+TITLE is the section header text (e.g., \\='Emacs Startup Log\\=' or \\='External Dependencies\\=').
 A timestamp is automatically appended to the title in the format (YYYY-MM-DD HH:MM:SS).
 LINES is a list of strings to display with 2-space indentation.
 Both opening and closing separators are exactly `core-diagnostic-separator-length' characters.

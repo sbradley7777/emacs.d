@@ -40,12 +40,12 @@ EXTRA-VARS should be an alist of (variable . value) pairs."
  (defun
   lang-register-file-extensions (mode &rest patterns)
   "Register file PATTERNS to activate MODE.
-MODE is the major mode to activate (e.g., 'c-mode, 'sh-mode).
+MODE is the major mode to activate (e.g., \\='c-mode, \\='sh-mode).
 PATTERNS are regex patterns for matching filenames (e.g., \"\\\\.c\\\\'\" \"\\\\.h\\\\'\").
 
 Example:
-  (lang-register-file-extensions 'c-mode \"\\\\.c\\\\'\" \"\\\\.h\\\\'\")
-  (lang-register-file-extensions 'sh-mode \"\\\\.sh\\\\'\" \"\\\\.bash\\\\'\" \"\\\\.zsh\\\\'\")"
+  (lang-register-file-extensions \\='c-mode \"\\\\.c\\\\'\" \"\\\\.h\\\\'\")
+  (lang-register-file-extensions \\='sh-mode \"\\\\.sh\\\\'\" \"\\\\.bash\\\\'\" \"\\\\.zsh\\\\'\")"
   (dolist (pattern patterns) (add-to-list 'auto-mode-alist (cons pattern mode))))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -54,7 +54,7 @@ Example:
  (defmacro
   lang-register-dual-mode-hooks (lang-name setup-function &optional extra-hooks)
   "Register SETUP-FUNCTION for both regular and tree-sitter modes of LANG-NAME.
-LANG-NAME should be a symbol like 'python or 'bash.
+LANG-NAME should be a symbol like \\='python or \\='bash.
 EXTRA-HOOKS is an optional list of additional hook functions to register."
   (let ((base-mode-hook (intern (format "%s-mode-hook" lang-name)))
         (ts-mode-hook (intern (format "%s-ts-mode-hook" lang-name))))
@@ -77,8 +77,8 @@ This is a simpler alternative to lang-register-dual-mode-hooks that accepts
 explicit hook names instead of inferring them from a language name.
 
 Example:
-  (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'my-setup-function)
-  (lang-add-dual-mode-hooks 'js-json-mode-hook 'json-ts-mode-hook #'json-setup-common)"
+  (lang-add-dual-mode-hooks \\='python-mode-hook \\='python-ts-mode-hook #\\='my-setup-function)
+  (lang-add-dual-mode-hooks \\='js-json-mode-hook \\='json-ts-mode-hook #\\='json-setup-common)"
   (add-hook base-mode-hook hook-function) (add-hook ts-mode-hook hook-function))
  (defun
   lang-remove-dual-mode-hooks (base-mode-hook ts-mode-hook hook-function)
@@ -86,7 +86,7 @@ Example:
 Counterpart to lang-add-dual-mode-hooks for removing hooks from dual modes.
 
 Example:
-  (lang-remove-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-auto-activate)"
+  (lang-remove-dual-mode-hooks \\='python-mode-hook \\='python-ts-mode-hook #\\='pyvenv-auto-activate)"
   (remove-hook base-mode-hook hook-function) (remove-hook ts-mode-hook hook-function))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

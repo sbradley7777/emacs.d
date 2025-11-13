@@ -39,7 +39,7 @@
  (defun
   fonts-file-exists-p (filename)
   "Check if font file exists in system font directory.
-FILENAME should be the font file name (e.g., 'NFM.ttf')."
+FILENAME should be the font file name (e.g., \\='NFM.ttf\\=')."
   (file-exists-p (expand-file-name filename fonts-system-font-directory)))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

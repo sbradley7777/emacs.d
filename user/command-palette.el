@@ -245,7 +245,7 @@ If SILENT is non-nil, suppress success messages. Returns t if successful, nil ot
  (defun
   command-palette--format-command-name (cmd-symbol)
   "Convert CMD-SYMBOL to human-readable format.
-Example: 'find-file' becomes 'Find File'."
+Example: \\='find-file\\=' becomes \\='Find File\\='."
   (let ((name (symbol-name cmd-symbol)))
     (capitalize (replace-regexp-in-string "-" " " name))))
  (defun

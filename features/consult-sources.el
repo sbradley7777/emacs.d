@@ -51,9 +51,9 @@ To add more patterns, simply add regexp strings to this list.")
 ;; This source displays buffers like consult--source-buffer but filters out utility/internal buffers
 ;; and the current buffer. Must be defined at top level so it's available to minibuffer-config.el.
 (defvar
- consult--source-filtered-buffer
- nil
- "Filtered buffer source for `consult-buffer' that excludes patterns in minibuffer-config-ignored-buffer-patterns and the current buffer.")
+ consult--source-filtered-buffer nil
+ "Filtered buffer source for `consult-buffer' that excludes patterns in
+minibuffer-config-ignored-buffer-patterns and the current buffer.")
 
 (require 'core-utils)
 

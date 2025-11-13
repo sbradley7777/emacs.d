@@ -17,7 +17,7 @@
  (defun
   show-installed-packages ()
   "Show installed packages with clear status labels and update information.
-Packages are labeled as either 'Installed (by User)' or 'Dependency'.
+Packages are labeled as either \='Installed (by User)\=' or \='Dependency\='.
 Shows available version and indicates if updates are available."
   (interactive)
   (let ((buf (get-buffer-create "*Installed Packages*"))

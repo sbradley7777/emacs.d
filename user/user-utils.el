@@ -174,9 +174,9 @@ a commit message. Claude often generates commit messages with 2-space indentatio
 and this function removes that leading indentation to produce properly formatted
 commit messages.
 
-Only formats the subject line and body (including section headers like 'Changes:').
+Only formats the subject line and body (including section headers like \\='Changes:\\=').
 Stops processing and preserves original formatting when encountering known git
-trailers or git comments (lines starting with '#').
+trailers or git comments (lines starting with \\='#\\=').
 
 Known trailers include: Signed-off-by, Co-authored-by, Reviewed-by, Acked-by,
 Tested-by, Reported-by, Suggested-by, Helped-by, Cc, Fixes, Closes, Resolves,
