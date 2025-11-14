@@ -16,6 +16,7 @@
 (require 'core-user-interaction-utils)
 (require 'package-ui)
 (require 'package-maintenance)
+(require 'ring)
 (core-utils-with-load-timing
  "command-palette.el"
 

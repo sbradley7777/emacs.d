@@ -8,6 +8,7 @@
 (require 'core-utils)
 (require 'package-ui)
 (require 'package-maintenance)
+(require 'nerd-icons)
 (core-utils-with-load-timing
  "dashboard-config.el"
 
