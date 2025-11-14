@@ -287,8 +287,8 @@ Removes any existing occurrences before adding to ensure no duplicates. Returns 
      t)))
 
  (defun
-  command-palette--execute-command (cmd-symbol cmd-name)
-  "Execute command CMD-SYMBOL and add CMD-NAME to history.
+  command-palette--execute-command (cmd-symbol)
+  "Execute command CMD-SYMBOL.
 Switches to the previous window before executing the command, then closes the palette."
   ;; Use add-to-history for deduplication
   (command-palette--add-to-history cmd-symbol)
@@ -380,7 +380,7 @@ Returns width as number of columns needed to display content."
             (keybinding (command-palette--get-keybinding cmd)))
        (command-palette--make-button
         (format "  %2d. %s" index name)
-        `(lambda (_) (command-palette--execute-command ',cmd ,name))
+        `(lambda (_) (command-palette--execute-command ',cmd))
         '(:foreground "lightgreen")
         keybinding)
        (setq index (1+ index)))))
@@ -401,7 +401,7 @@ Returns width as number of columns needed to display content."
            (keybinding (command-palette--get-keybinding cmd)))
       (command-palette--make-button
        (format "  %2d. %s" index name)
-       `(lambda (_) (command-palette--execute-command ',cmd ,name))
+       `(lambda (_) (command-palette--execute-command ',cmd))
        '(:foreground "orange")
        keybinding)))
    (insert "\n"))
