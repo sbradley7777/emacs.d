@@ -71,23 +71,26 @@ minibuffer-config-ignored-buffer-patterns and the current buffer.")
      buffer-obj
      (let* ((modified (if (buffer-modified-p) "*" "-"))
             (read-only (if buffer-read-only "%" "-"))
-            (status (concat modified read-only "-"))
-            (file (when buffer-file-name (abbreviate-file-name buffer-file-name)))
-            (permissions
+            (buf-status (concat modified read-only "-"))
+            (buf-file (when buffer-file-name (abbreviate-file-name buffer-file-name)))
+            (buf-permissions
              (if
-              (and file (file-exists-p file))
-              (file-attribute-modes (file-attributes file))
+              (and buf-file (file-exists-p buf-file))
+              (file-attribute-modes (file-attributes buf-file))
               "----------"))
-            (size (file-size-human-readable (buffer-size)))
-            (mode-display
+            (buf-size (file-size-human-readable (buffer-size)))
+            (buf-mode-display
              (format "%s (%s)" (format-mode-line mode-name) (symbol-name major-mode))))
-       ;; Use marginalia--fields for proper alignment (all fields left-aligned)
-       (marginalia--fields
-        (status :face 'marginalia-modified :width 3 :format "%-3s")
-        (size :face 'marginalia-size :width 6 :format "%-6s")
-        (permissions :face 'marginalia-date :width 12 :format "%-12s")
-        (mode-display :face 'marginalia-mode :width 35 :truncate 35 :format "%-35s")
-        (file :face 'marginalia-file-name)))))))
+       ;; Format annotation string manually to avoid marginalia--fields macro issues
+       (concat
+        (propertize (format "%-3s " buf-status) 'face 'marginalia-modified)
+        (propertize (format "%-6s " buf-size) 'face 'marginalia-size)
+        (propertize (format "%-12s " buf-permissions) 'face 'marginalia-date)
+        (propertize
+         (format
+          "%-35s " (truncate-string-to-width buf-mode-display 35 nil nil t))
+         'face 'marginalia-mode)
+        (when buf-file (propertize buf-file 'face 'marginalia-file-name))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Filtered Buffer Source Configuration
