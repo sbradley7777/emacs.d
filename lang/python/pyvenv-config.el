@@ -12,72 +12,70 @@
 (require 'python-utils)
 (require 'pyvenv-utils)
 (require 'lang-utils)
-(core-utils-with-load-timing
- "pyvenv-config.el"
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Auto-detect Once Virtual Environment Support
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Main function to auto-detect and activate virtual environment once per project
- ;; Uses pyvenv-project-root as a guard to ensure activation happens only once
- (defun
-  pyvenv-auto-activate ()
-  "Auto-detect and activate Python virtual environment for current project.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Auto-detect Once Virtual Environment Support
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Main function to auto-detect and activate virtual environment once per project
+;; Uses pyvenv-project-root as a guard to ensure activation happens only once
+(defun
+ pyvenv-auto-activate ()
+ "Auto-detect and activate Python virtual environment for current project.
 
 Searches for a virtual environment in the project root and activates it.
 Only runs once per project - subsequent calls are ignored to avoid redundant
 activation. Searches for common venv directory names (.venv, venv, env).
 Updates Python interpreter path and modeline after successful activation."
-  (interactive)
-  (unless
-   pyvenv-project-root (core-message-info "Auto-detecting Python virtual environment...")
-   (let ((detected-venv (pyvenv-find-venv)))
-     (if
-      detected-venv
-      (progn
-       ;; Remember the project root to prevent re-detection
-       (let ((project-dir (file-name-directory (directory-file-name detected-venv))))
-         (setq
-          pyvenv-project-root
-          project-dir
-          pyvenv-project-name
-          (python-utils-extract-project-name project-dir)))
+ (interactive)
+ (unless
+  pyvenv-project-root (core-message-info "Auto-detecting Python virtual environment...")
+  (let ((detected-venv (pyvenv-find-venv)))
+    (if
+     detected-venv
+     (progn
+      ;; Remember the project root to prevent re-detection
+      (let ((project-dir (file-name-directory (directory-file-name detected-venv))))
+        (setq
+         pyvenv-project-root
+         project-dir
+         pyvenv-project-name
+         (python-utils-extract-project-name project-dir)))
 
-       ;; pyvenv-activate sets python-shell-virtualenv-path (Python mode's primary interpreter source)
-       (if
-        (fboundp 'pyvenv-activate)
-        (progn
-         (pyvenv-activate detected-venv)
-         (core-message-success "Activated Python venv for project: %s" pyvenv-project-name)
+      ;; pyvenv-activate sets python-shell-virtualenv-path (Python mode's primary interpreter source)
+      (if
+       (fboundp 'pyvenv-activate)
+       (progn
+        (pyvenv-activate detected-venv)
+        (core-message-success "Activated Python venv for project: %s" pyvenv-project-name)
 
-         ;; Log detected Python version for user feedback
-         (let ((python-version (pyvenv-get-python-version detected-venv)))
-           (if
-            python-version
-            (core-message-info "Using Python %s from virtual environment" python-version)
-            (core-message-warning "Could not detect Python version in virtual environment"))))
-        (core-message-warning "Warning: pyvenv-activate function not available")))
-      (core-message-warning "No Python virtual environment found")))))
+        ;; Log detected Python version for user feedback
+        (let ((python-version (pyvenv-get-python-version detected-venv)))
+          (if
+           python-version
+           (core-message-info "Using Python %s from virtual environment" python-version)
+           (core-message-warning "Could not detect Python version in virtual environment"))))
+       (core-message-warning "Warning: pyvenv-activate function not available")))
+     (core-message-warning "No Python virtual environment found")))))
 
- ;; Initialize pyvenv package and enable pyvenv-mode
- (if
-  (fboundp 'use-package)
-  (use-package
-   pyvenv
-   :config (pyvenv-mode 1)
-   ;; Disable the built-in pyvenv modeline indicator (we use our custom doom-modeline segment instead)
-   (setq pyvenv-mode-line-indicator nil))
-  (when
-   (require 'pyvenv nil t) (pyvenv-mode 1)
-   ;; Disable the built-in pyvenv modeline indicator
-   (setq pyvenv-mode-line-indicator nil)))
+;; Initialize pyvenv package and enable pyvenv-mode
+(if
+ (fboundp 'use-package)
+ (use-package
+  pyvenv
+  :config (pyvenv-mode 1)
+  ;; Disable the built-in pyvenv modeline indicator (we use our custom doom-modeline segment instead)
+  (setq pyvenv-mode-line-indicator nil))
+ (when
+  (require 'pyvenv nil t) (pyvenv-mode 1)
+  ;; Disable the built-in pyvenv modeline indicator
+  (setq pyvenv-mode-line-indicator nil)))
 
- ;; Hook into pyvenv activation/deactivation to update python-shell-interpreter for doom-modeline
- ;; Note: python-shell-virtualenv-path remains the primary interpreter source for Python mode
- (add-hook 'pyvenv-post-activate-hooks #'pyvenv-update-shell-interpreter)
- (add-hook 'pyvenv-post-deactivate-hooks #'pyvenv-update-shell-interpreter)
+;; Hook into pyvenv activation/deactivation to update python-shell-interpreter for doom-modeline
+;; Note: python-shell-virtualenv-path remains the primary interpreter source for Python mode
+(add-hook 'pyvenv-post-activate-hooks #'pyvenv-update-shell-interpreter)
+(add-hook 'pyvenv-post-deactivate-hooks #'pyvenv-update-shell-interpreter)
 
- ;; Trigger auto-detection when opening Python files (both python-mode and python-ts-mode)
- (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-auto-activate))
+;; Trigger auto-detection when opening Python files (both python-mode and python-ts-mode)
+(lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-auto-activate)
 (provide 'pyvenv-config)
 ;;; pyvenv-config.el ends here

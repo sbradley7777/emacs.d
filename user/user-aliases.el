@@ -5,15 +5,13 @@
 
 ;;; Code:
 (require 'core-utils)
-(core-utils-with-load-timing
- "user-aliases.el"
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Interactive function aliases
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Use shorter y/n prompts instead of yes/no
- (defalias 'yes-or-no-p #'y-or-n-p)
- (defalias 'list-themes #'theme-utils-list-themes)
- (defalias 'switch-theme #'theme-utils-switch-theme))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Interactive function aliases
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Use shorter y/n prompts instead of yes/no
+(defalias 'yes-or-no-p #'y-or-n-p)
+(defalias 'list-themes #'theme-utils-list-themes)
+(defalias 'switch-theme #'theme-utils-switch-theme)
 (provide 'user-aliases)
 ;;; user-aliases.el ends here
