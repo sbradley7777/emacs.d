@@ -43,6 +43,9 @@ Thumbs.db
 *.orig
 *.rej
 
+# Backups
+*.bak
+
 # Configuration files and caches.
 .mypy_cache/
 .ruff_cache/
