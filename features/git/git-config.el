@@ -40,41 +40,40 @@
 (require 'git-constants)
 (require 'magit-utils)
 (require 'git-forge-config)
-(core-utils-with-load-timing
- "git-config.el"
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Magit Configuration
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (use-package
-  magit
-  :defer t
-  :config
-  (setq
-   magit-display-buffer-function
-   #'magit-utils-display-buffer-side
-   magit-log-section-commit-count
-   magit-log-commit-count
-   magit-section-initial-visibility-alist
-   '((stashes . show)
-     (untracked . show)
-     (unpushed . show)
-     (unpulled . show)
-     (unstaged . show)
-     (staged . show)
-     (issues . show)))
-  (advice-add 'magit-status-refresh-buffer :after #'magit-utils-format-buffer)
-  (core-message-config "Magit configured for git integration"))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Forge Configuration
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (use-package
-  forge
-  :after magit
-  :config (git-forge-config-populate-forge-alist)
-  (add-hook
-   'forge-topic-mode-hook
-   (lambda () (add-to-invisibility-spec 'markdown-markup) (visual-line-mode 1)))
-  (core-message-config "Forge configured for GitHub/GitLab integration")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Magit Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package
+ magit
+ :defer t
+ :config
+ (setq
+  magit-display-buffer-function
+  #'magit-utils-display-buffer-side
+  magit-log-section-commit-count
+  magit-log-commit-count
+  magit-section-initial-visibility-alist
+  '((stashes . show)
+    (untracked . show)
+    (unpushed . show)
+    (unpulled . show)
+    (unstaged . show)
+    (staged . show)
+    (issues . show)))
+ (advice-add 'magit-status-refresh-buffer :after #'magit-utils-format-buffer)
+ (core-message-config "Magit configured for git integration"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Forge Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package
+ forge
+ :after magit
+ :config (git-forge-config-populate-forge-alist)
+ (add-hook
+  'forge-topic-mode-hook
+  (lambda () (add-to-invisibility-spec 'markdown-markup) (visual-line-mode 1)))
+ (core-message-config "Forge configured for GitHub/GitLab integration"))
 (provide 'git-config)
 ;;; git-config.el ends here
