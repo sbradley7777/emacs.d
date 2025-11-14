@@ -9,170 +9,168 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'themes-constants)
-(core-utils-with-load-timing
- "modeline-config.el"
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Configuration Variables
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defvar
-  modeline-config-use-doom-modeline t
-  "Whether to use doom-modeline instead of the default Emacs modeline.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configuration Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar
+ modeline-config-use-doom-modeline t
+ "Whether to use doom-modeline instead of the default Emacs modeline.
 Set this to nil in local.el to use the default Emacs modeline instead.")
- ;; Doom-modeline segment configuration
- ;; Users can customize these in local.el to reorder or remove segments
- (defvar
-  modeline-config-segments-left
-  '(bar ; Colored bar indicating buffer status (modified, read-only, etc.)
-    workspace-name ; Workspace/project name
-    window-number ; Window number when using window-numbering
-    modals ; Modal editing state (evil, god-mode, etc.)
-    matches ; Search match count (anzu, evil-search, etc.)
-    buffer-info ; Buffer name with icon and modification indicator
-    remote-file-indicator ; Remote/local host indicator with click handler
-    separator ; Visual separator (◆)
-    buffer-position ; Line:Column and position percentage
-    selection-info ; Selected region size/line count
-    indent-info ; Indentation type and width
-    buffer-encoding) ; File encoding (UTF-8, etc.)
-  "Left side segments for doom-modeline.
+;; Doom-modeline segment configuration
+;; Users can customize these in local.el to reorder or remove segments
+(defvar
+ modeline-config-segments-left
+ '(bar ; Colored bar indicating buffer status (modified, read-only, etc.)
+   workspace-name ; Workspace/project name
+   window-number ; Window number when using window-numbering
+   modals ; Modal editing state (evil, god-mode, etc.)
+   matches ; Search match count (anzu, evil-search, etc.)
+   buffer-info ; Buffer name with icon and modification indicator
+   remote-file-indicator ; Remote/local host indicator with click handler
+   separator ; Visual separator (◆)
+   buffer-position ; Line:Column and position percentage
+   selection-info ; Selected region size/line count
+   indent-info ; Indentation type and width
+   buffer-encoding) ; File encoding (UTF-8, etc.)
+ "Left side segments for doom-modeline.
 Each symbol represents a modeline segment. Users can customize this in local.el
 to reorder segments or remove unwanted ones. See doom-modeline documentation
 for available segment names.")
 
- (defvar
-  modeline-config-segments-right
-  '(treesitter-indicator ; Tree-sitter mode indicator (TS badge when active)
-    pyvenv-indicator ; Python virtual environment name and version (custom segment)
-    misc-info ; Miscellaneous information
-    debug ; Debug mode indicator (edebug, dap, etc.)
-    repl ; REPL connection status
-    lsp ; LSP/Eglot server status and diagnostics
-    minor-modes ; Active minor modes (truncated list)
-    input-method ; Input method indicator (for non-English text)
-    major-mode ; Major mode name with icon
-    process ; Running processes in buffer
-    check ; Syntax checker status (flymake error/warning counts)
-    vcs ; Git branch and status (modified, ahead/behind, etc.)
-    time) ; Current time display
-  "Right side segments for doom-modeline.
+(defvar
+ modeline-config-segments-right
+ '(treesitter-indicator ; Tree-sitter mode indicator (TS badge when active)
+   pyvenv-indicator ; Python virtual environment name and version (custom segment)
+   misc-info ; Miscellaneous information
+   debug ; Debug mode indicator (edebug, dap, etc.)
+   repl ; REPL connection status
+   lsp ; LSP/Eglot server status and diagnostics
+   minor-modes ; Active minor modes (truncated list)
+   input-method ; Input method indicator (for non-English text)
+   major-mode ; Major mode name with icon
+   process ; Running processes in buffer
+   check ; Syntax checker status (flymake error/warning counts)
+   vcs ; Git branch and status (modified, ahead/behind, etc.)
+   time) ; Current time display
+ "Right side segments for doom-modeline.
 Each symbol represents a modeline segment. Users can customize this in local.el
 to reorder segments or remove unwanted ones. See doom-modeline documentation
 for available segment names.")
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Default Modeline Configuration
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defun
-  modeline-config-setup-default
-  ()
-  "Configure the default Emacs modeline with standard features."
-  (core-message-config "Setting up default Emacs modeline")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Default Modeline Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ modeline-config-setup-default
+ ()
+ "Configure the default Emacs modeline with standard features."
+ (core-message-config "Setting up default Emacs modeline")
 
-  ;; Enable column number display in modeline
-  (column-number-mode 1)
+ ;; Enable column number display in modeline
+ (column-number-mode 1)
 
-  ;; Enable line number display in modeline
-  (line-number-mode 1)
+ ;; Enable line number display in modeline
+ (line-number-mode 1)
 
-  ;; Enable buffer size indication in modeline
-  (size-indication-mode 1)
+ ;; Enable buffer size indication in modeline
+ (size-indication-mode 1)
 
-  ;; Display the time in modeline with custom format (YYYY-MM-dd HH:MM)
-  (setq display-time-format core-time-format)
-  (display-time-mode 1)
+ ;; Display the time in modeline with custom format (YYYY-MM-dd HH:MM)
+ (setq display-time-format core-time-format)
+ (display-time-mode 1)
 
-  ;; Configure and enable which-function-mode.
-  ;; Only enable which-function-mode in programming modes (prevents errors in non-code buffers like treemacs)
+ ;; Configure and enable which-function-mode.
+ ;; Only enable which-function-mode in programming modes (prevents errors in non-code buffers like treemacs)
+ (setq
+  which-func-modes
+  '(emacs-lisp-mode
+    lisp-interaction-mode
+    python-mode
+    python-ts-mode
+    bash-mode
+    sh-mode
+    c-mode
+    c++-mode
+    java-mode
+    javascript-mode
+    typescript-mode
+    js-mode
+    js2-mode
+    go-mode
+    rust-mode
+    ruby-mode
+    perl-mode
+    makefile-mode))
+ (which-function-mode 1)
+
+ (core-message-success "Default modeline configured"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; doom-modeline Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ modeline-config-setup-doom-modeline
+ ()
+ "Configure and enable doom-modeline."
+ (core-message-config "Setting up doom-modeline")
+ (use-package
+  doom-modeline
+  :config
+  ;; Icon Configuration
   (setq
-   which-func-modes
-   '(emacs-lisp-mode
-     lisp-interaction-mode
-     python-mode
-     python-ts-mode
-     bash-mode
-     sh-mode
-     c-mode
-     c++-mode
-     java-mode
-     javascript-mode
-     typescript-mode
-     js-mode
-     js2-mode
-     go-mode
-     rust-mode
-     ruby-mode
-     perl-mode
-     makefile-mode))
-  (which-function-mode 1)
+   doom-modeline-icon t ; Enable icons
+   doom-modeline-major-mode-icon t ; Show major mode icon
+   doom-modeline-major-mode-color-icon t ; Colorful major mode icons
+   doom-modeline-buffer-state-icon t ; Show buffer state icon
+   doom-modeline-buffer-modification-icon t) ; Show buffer modification icon
 
-  (core-message-success "Default modeline configured"))
+  ;; Time Display
+  (setq display-time-format core-time-format) ; Format: YYYY-MM-DD HH:MM
+  (setq doom-modeline-time t) ; Enable time display (not enabled by default)
+  (display-time-mode 1) ; Activate time display
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; doom-modeline Configuration
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defun
-  modeline-config-setup-doom-modeline
-  ()
-  "Configure and enable doom-modeline."
-  (core-message-config "Setting up doom-modeline")
-  (use-package
-   doom-modeline
-   :config
-   ;; Icon Configuration
-   (setq
-    doom-modeline-icon t ; Enable icons
-    doom-modeline-major-mode-icon t ; Show major mode icon
-    doom-modeline-major-mode-color-icon t ; Colorful major mode icons
-    doom-modeline-buffer-state-icon t ; Show buffer state icon
-    doom-modeline-buffer-modification-icon t) ; Show buffer modification icon
+  ;; Git/VCS Status Display
+  (setq doom-modeline-vcs-max-length themes-modeline-vcs-max-length) ; Limit branch name length
 
-   ;; Time Display
-   (setq display-time-format core-time-format) ; Format: YYYY-MM-DD HH:MM
-   (setq doom-modeline-time t) ; Enable time display (not enabled by default)
-   (display-time-mode 1) ; Activate time display
+  ;; Python Environment Display (updated by pyvenv hooks)
+  (setq doom-modeline-env-version t doom-modeline-env-enable-python t)
 
-   ;; Git/VCS Status Display
-   (setq doom-modeline-vcs-max-length themes-modeline-vcs-max-length) ; Limit branch name length
+  ;; Position Display
+  (setq
+   doom-modeline-column-zero-based nil ; Column numbers start at 1
+   doom-modeline-percent-position nil) ; Show percentage position in addition to line:column
+  (column-number-mode 1) ; Enable column number display globally
 
-   ;; Python Environment Display (updated by pyvenv hooks)
-   (setq doom-modeline-env-version t doom-modeline-env-enable-python t)
+  ;; Modeline Height and Appearance
+  (setq
+   doom-modeline-height themes-modeline-height ; Height of the mode-line
+   doom-modeline-bar-width themes-modeline-bar-width ; Width of the mode-line bar
+   doom-modeline-hud nil ; Disable HUD-style modeline
+   doom-modeline-window-width-limit nil) ; No width limit for displaying info
 
-   ;; Position Display
-   (setq
-    doom-modeline-column-zero-based nil ; Column numbers start at 1
-    doom-modeline-percent-position nil) ; Show percentage position in addition to line:column
-   (column-number-mode 1) ; Enable column number display globally
+  ;; Enable doom-modeline
+  (doom-modeline-mode 1))
 
-   ;; Modeline Height and Appearance
-   (setq
-    doom-modeline-height themes-modeline-height ; Height of the mode-line
-    doom-modeline-bar-width themes-modeline-bar-width ; Width of the mode-line bar
-    doom-modeline-hud nil ; Disable HUD-style modeline
-    doom-modeline-window-width-limit nil) ; No width limit for displaying info
-
-   ;; Enable doom-modeline
-   (doom-modeline-mode 1))
-
-  ;; Define custom modeline format (after custom segments load)
-  ;; This waits for both modeline-segments and pyvenv-modeline to be available
+ ;; Define custom modeline format (after custom segments load)
+ ;; This waits for both modeline-segments and pyvenv-modeline to be available
+ (with-eval-after-load
+  'modeline-segments
   (with-eval-after-load
-   'modeline-segments
-   (with-eval-after-load
-    'pyvenv-modeline
+   'pyvenv-modeline
 
-    ;; Use customizable segment variables (can be modified in local.el)
-    (doom-modeline-def-modeline
-     'main modeline-config-segments-left modeline-config-segments-right)))
+   ;; Use customizable segment variables (can be modified in local.el)
+   (doom-modeline-def-modeline
+    'main modeline-config-segments-left modeline-config-segments-right)))
 
-  (core-message-success "doom-modeline configured and enabled"))
+ (core-message-success "doom-modeline configured and enabled"))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Modeline Initialization
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (if
-  modeline-config-use-doom-modeline
-  (modeline-config-setup-doom-modeline)
-  (modeline-config-setup-default)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Modeline Initialization
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if
+ modeline-config-use-doom-modeline
+ (modeline-config-setup-doom-modeline)
+ (modeline-config-setup-default))
 (provide 'modeline-config)
 ;;; modeline-config.el ends here
