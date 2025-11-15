@@ -5,6 +5,12 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-logging)
+
+;; Declare external variables to suppress byte-compiler warnings
+(defvar project-list-file) ; From project.el
+(defvar transient-history-file) ; From transient.el
+(defvar forge-database-file) ; From forge.el
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Don't litter OS with autosaves (~) and backup (#) files. Based on:
 ;; http://snarfed.org/gnu_emacs_backup_files and

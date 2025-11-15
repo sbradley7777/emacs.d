@@ -19,6 +19,14 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-logging)
+
+;; Declare external variables to suppress byte-compiler warnings
+(defvar dired-dwim-target) ; From dired.el
+(defvar dired-recursive-copies) ; From dired.el
+(defvar dired-recursive-deletes) ; From dired.el
+(defvar dired-kill-when-opening-new-dired-buffer) ; From dired.el
+(defvar dired-auto-revert-buffer) ; From dired.el
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Built-in Dired Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

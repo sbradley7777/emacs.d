@@ -4,6 +4,11 @@
 ;;      Loads configuration modules in the correct order.
 
 ;;; Code:
+;; Declare external variables to suppress byte-compiler warnings
+(defvar default-file-name-handler-alist) ; Defined in early-init.el
+(defvar which-func-update-delay) ; From which-func.el
+(defvar native-comp-deferred-compilation-deny-list) ; From comp.el
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure early-init.el is loaded (for batch mode compatibility)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

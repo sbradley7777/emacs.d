@@ -16,6 +16,12 @@
 (require 'core-logging)
 (core-message-loading "Loading early-init.el...")
 
+;; Declare external variables to suppress byte-compiler warnings
+(defvar package-enable-at-startup) ; From package.el
+(defvar package-quickstart) ; From package.el
+(defvar native-comp-async-env-modifier-form) ; From comp.el
+(defvar which-func-update-delay) ; From which-func.el
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance Optimizations - Startup Phase
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -44,6 +44,13 @@
 ;;; Code:
 (require 'core-utils)
 (require 'core-logging)
+
+;; Declare external variables to suppress byte-compiler warnings
+(defvar ispell-program-name) ; From ispell.el
+(defvar ispell-extra-args) ; From ispell.el
+(defvar flymake-aspell-only-comments-and-strings) ; From flymake-aspell.el
+(defvar flymake-diagnostic-functions) ; From flymake.el
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

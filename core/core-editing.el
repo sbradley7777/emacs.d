@@ -4,6 +4,12 @@
 
 ;;; Code:
 (require 'core-constants)
+
+;; Declare external variables to suppress byte-compiler warnings
+(defvar auto-revert-check-vc-info) ; From autorevert.el
+(defvar whitespace-line-column) ; From whitespace.el
+(defvar whitespace-style) ; From whitespace.el
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced editing preferences
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -23,6 +23,10 @@
 
 ;;; Code:
 (require 'core-logging)
+
+;; Declare external variables to suppress byte-compiler warnings
+(defvar eglot-events-buffer-size) ; From eglot.el
+
 (core-message-loading "=== local.el: Loading local user configuration ===")
 ;; ============================================
 ;; 1. THEME CONFIGURATION

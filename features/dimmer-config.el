@@ -5,6 +5,16 @@
 
 ;;; Code:
 (require 'core-logging)
+
+;; Declare external variables to suppress byte-compiler warnings
+(defvar dimmer-fraction) ; From dimmer.el
+(defvar dimmer-adjustment-mode) ; From dimmer.el
+(defvar dimmer-use-colourspace) ; From dimmer.el
+(defvar dimmer-prevent-dimming-predicates) ; From dimmer.el
+(defvar dimmer-buffer-exclusion-predicates) ; From dimmer.el
+(defvar dimmer-exclusion-predicates) ; From dimmer.el
+(defvar dimmer-exclusion-regexp-list) ; From dimmer.el
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dimmer Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

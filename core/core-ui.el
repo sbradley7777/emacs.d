@@ -4,6 +4,22 @@
 
 ;;; Code:
 (require 'core-constants)
+
+;; Declare external variables to suppress byte-compiler warnings
+(defvar display-line-numbers-type) ; From display-line-numbers.el
+(defvar display-line-numbers-width-start) ; From display-line-numbers.el
+(defvar display-line-numbers-grow-only) ; From display-line-numbers.el
+(defvar diff-default-read-only) ; From diff-mode.el
+(defvar show-paren-delay) ; From paren.el
+(defvar show-paren-style) ; From paren.el
+(defvar savehist-file) ; From savehist.el
+(defvar savehist-additional-variables) ; From savehist.el
+(defvar recentf-save-file) ; From recentf.el
+(defvar recentf-max-saved-items) ; From recentf.el
+(defvar recentf-exclude) ; From recentf.el
+(defvar recentf-auto-cleanup) ; From recentf.el
+(defvar recentf-auto-save-timer) ; From recentf.el
+
 ;; Modern line number display (Emacs 30.2+)
 (global-display-line-numbers-mode 1)
 (setq

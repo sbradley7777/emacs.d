@@ -4,6 +4,11 @@
 ;;      Provides filtered buffer views that exclude utility and internal buffers.
 
 ;;; Code:
+;; Declare external variables to suppress byte-compiler warnings
+(defvar consult--source-buffer) ; From consult.el
+(defvar consult--source-project-buffer) ; From consult.el
+(defvar consult--source-recent-file) ; From consult.el
+(defvar recentf-list) ; From recentf.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Buffer Filtering Patterns
