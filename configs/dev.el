@@ -25,6 +25,7 @@
 ;;; Code:
 (require 'core-logging)
 (require 'core-constants)
+(require 'subr-x)
 (core-message-debug "Loading development configuration...")
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

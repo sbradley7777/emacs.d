@@ -112,7 +112,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
        (lines nil))
    (dolist
     (result (reverse config-load-results))
-    (let ((name (nth 0 result))
+    (let ((_name (nth 0 result))
           (status (nth 1 result))
           (time (nth 2 result))
           (desc (nth 3 result)))

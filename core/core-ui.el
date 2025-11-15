@@ -98,7 +98,7 @@
   30 t
   (lambda
    ()
-   (let ((recentf-auto-cleanup 'never))
+   (let ((_recentf-auto-cleanup 'never))
      (recentf-save-list)))))
 
 (normal-erase-is-backspace-mode 0)

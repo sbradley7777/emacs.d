@@ -22,8 +22,7 @@
  core-rotate-log-files (base-filename)
  "Rotate log files, keeping up to `core-log-max-files' files.
 BASE-FILENAME is the base name without directory."
- (let ((log-dir (expand-file-name core-log-dir))
-       (base-path (expand-file-name base-filename core-log-dir)))
+ (let ((base-path (expand-file-name base-filename core-log-dir)))
    (when
     (file-exists-p base-path)
     ;; Move existing numbered files up

@@ -68,8 +68,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add helpful logging messages for backup and auto-save operations
 (defun
- core-files-log-backup-operation (file) "Log when a backup file is created for FILE."
- ; (when file (core-message-info "Backup created for: %s" (file-name-nondirectory file)))
+ core-files-log-backup-operation (_file) "Log when a backup file is created for FILE."
+ ; (when _file (core-message-info "Backup created for: %s" (file-name-nondirectory _file)))
  )
 
 (defun
