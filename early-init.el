@@ -21,6 +21,7 @@
 (defvar package-quickstart) ; From package.el
 (defvar native-comp-async-env-modifier-form) ; From comp.el
 (defvar which-func-update-delay) ; From which-func.el
+(defvar byte-compile-output-dir) ; From bytecomp.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance Optimizations - Startup Phase
