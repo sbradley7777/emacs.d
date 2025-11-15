@@ -51,6 +51,10 @@
 (defvar flymake-aspell-only-comments-and-strings) ; From flymake-aspell.el
 (defvar flymake-diagnostic-functions) ; From flymake.el
 
+;; Declare external functions to suppress byte-compiler warnings
+(declare-function flymake-start "flymake" (&optional deferred force-diagnostics))
+(declare-function use-package "use-package" (name &rest args))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

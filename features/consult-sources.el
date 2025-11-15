@@ -10,6 +10,11 @@
 (defvar consult--source-recent-file) ; From consult.el
 (defvar recentf-list) ; From recentf.el
 
+;; Declare external functions to suppress byte-compiler warnings
+(declare-function consult--buffer-state "consult" ())
+(declare-function consult--buffer-query "consult" (&rest args))
+(declare-function consult--buffer-file-hash "consult" ())
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Buffer Filtering Patterns
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

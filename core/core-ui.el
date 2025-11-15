@@ -20,6 +20,10 @@
 (defvar recentf-auto-cleanup) ; From recentf.el
 (defvar recentf-auto-save-timer) ; From recentf.el
 
+;; Declare external functions to suppress byte-compiler warnings
+(declare-function recentf-load-list "recentf" ())
+(declare-function recentf-save-list "recentf" ())
+
 ;; Modern line number display (Emacs 30.2+)
 (global-display-line-numbers-mode 1)
 (setq

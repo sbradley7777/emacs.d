@@ -5,6 +5,13 @@
 
 ;;; Code:
 (require 'core-logging)
+
+;; Declare external functions to suppress byte-compiler warnings
+(declare-function use-package-only-one "use-package-core" (label args f))
+(declare-function use-package-error "use-package-core" (msg))
+(declare-function use-package-process-keywords "use-package-core" (name plist &optional state))
+(declare-function use-package-concat "use-package-core" (elems &optional after-each))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom use-package :description keyword
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

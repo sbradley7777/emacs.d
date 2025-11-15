@@ -10,6 +10,10 @@
 (defvar whitespace-line-column) ; From whitespace.el
 (defvar whitespace-style) ; From whitespace.el
 
+;; Declare external functions to suppress byte-compiler warnings
+(declare-function
+ global-display-fill-column-indicator-mode "display-fill-column-indicator" (&optional arg))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced editing preferences
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -6,6 +6,10 @@
 ;;; Code:
 (require 'core-utils)
 
+;; Declare external functions to suppress byte-compiler warnings
+(declare-function theme-utils-list-themes "theme-utils" ())
+(declare-function theme-utils-switch-theme "theme-utils" (theme-name))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive function aliases
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

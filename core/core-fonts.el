@@ -18,6 +18,11 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-logging)
+
+;; Declare external functions to suppress byte-compiler warnings
+(declare-function package-installed-p "package" (package &optional min-version))
+(declare-function nerd-icons-install-fonts "nerd-icons" (&optional silent))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Font Path and Caching Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
