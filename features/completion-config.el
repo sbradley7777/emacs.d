@@ -4,8 +4,6 @@
 ;;;      Provides universal auto-completion for all modes and languages.
 
 ;;; Code:
-(require 'core-utils)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Completion System Components
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -46,116 +44,112 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'features-constants)
-(require 'core-utils)
 (require 'core-logging)
-(core-utils-with-load-timing
- "completion-config.el"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Corfu Auto-Completion Framework
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package
+ corfu
+ :init
+ ;; Enable corfu globally for all buffers
+ (global-corfu-mode)
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Corfu Auto-Completion Framework
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (use-package
-  corfu
-  :init
-  ;; Enable corfu globally for all buffers
-  (global-corfu-mode)
+ :config
+ ;; Auto-completion settings
+ (setq
+  corfu-auto t ; Enable automatic completion
+  corfu-auto-delay features-corfu-auto-delay ; Short delay before showing completions
+  corfu-auto-prefix features-corfu-auto-prefix ; Start completing after N characters
+  corfu-cycle t ; Enable cycling through candidates with TAB
+  corfu-preview-current 'insert ; Preview current candidate
+  corfu-preselect 'prompt ; Preselect based on prompt
+  corfu-on-exact-match nil) ; Don't auto-complete on exact match
 
-  :config
-  ;; Auto-completion settings
-  (setq
-   corfu-auto t ; Enable automatic completion
-   corfu-auto-delay features-corfu-auto-delay ; Short delay before showing completions
-   corfu-auto-prefix features-corfu-auto-prefix ; Start completing after N characters
-   corfu-cycle t ; Enable cycling through candidates with TAB
-   corfu-preview-current 'insert ; Preview current candidate
-   corfu-preselect 'prompt ; Preselect based on prompt
-   corfu-on-exact-match nil) ; Don't auto-complete on exact match
+ ;; Configure TAB for completion and indentation
+ (setq tab-always-indent 'complete)
 
-  ;; Configure TAB for completion and indentation
-  (setq tab-always-indent 'complete)
+ ;; Performance optimizations
+ (setq
+  corfu-min-width features-corfu-min-width ; Minimum popup width
+  corfu-max-width features-corfu-max-width ; Maximum popup width
+  corfu-count features-corfu-count) ; Maximum number of candidates shown
 
-  ;; Performance optimizations
-  (setq
-   corfu-min-width features-corfu-min-width ; Minimum popup width
-   corfu-max-width features-corfu-max-width ; Maximum popup width
-   corfu-count features-corfu-count) ; Maximum number of candidates shown
+ ;; Key bindings for Corfu UI (robust for GUI and terminal)
+ (define-key corfu-map (kbd "TAB") #'corfu-next) ; Terminal-friendly
+ (define-key corfu-map (kbd "<tab>") #'corfu-next) ; GUI-friendly
+ (define-key corfu-map (kbd "S-TAB") #'corfu-previous) ; Terminal-friendly
+ (define-key corfu-map (kbd "<backtab>") #'corfu-previous) ; GUI-friendly
+ (define-key corfu-map (kbd "RET") #'corfu-insert) ; Terminal-friendly
+ (define-key corfu-map (kbd "<return>") #'corfu-insert) ; GUI-friendly
 
-  ;; Key bindings for Corfu UI (robust for GUI and terminal)
-  (define-key corfu-map (kbd "TAB") #'corfu-next) ; Terminal-friendly
-  (define-key corfu-map (kbd "<tab>") #'corfu-next) ; GUI-friendly
-  (define-key corfu-map (kbd "S-TAB") #'corfu-previous) ; Terminal-friendly
-  (define-key corfu-map (kbd "<backtab>") #'corfu-previous) ; GUI-friendly
-  (define-key corfu-map (kbd "RET") #'corfu-insert) ; Terminal-friendly
-  (define-key corfu-map (kbd "<return>") #'corfu-insert) ; GUI-friendly
+ ;; Global key bindings for manual completion trigger
+ (global-set-key (kbd "C-c TAB") #'completion-at-point) ; Ctrl+c then TAB
+ (global-set-key (kbd "M-TAB") #'completion-at-point) ; Alt+TAB (traditional)
+ (global-set-key (kbd "C-M-i") #'completion-at-point) ; Ctrl+Alt+i (traditional alternative)
 
-  ;; Global key bindings for manual completion trigger
-  (global-set-key (kbd "C-c TAB") #'completion-at-point) ; Ctrl+c then TAB
-  (global-set-key (kbd "M-TAB") #'completion-at-point) ; Alt+TAB (traditional)
-  (global-set-key (kbd "C-M-i") #'completion-at-point) ; Ctrl+Alt+i (traditional alternative)
+ (core-message-config "Corfu auto-completion configured successfully")
 
-  (core-message-config "Corfu auto-completion configured successfully")
+ ;; Add debugging information
+ (core-message-debug "Corfu global mode enabled: %s" (if global-corfu-mode "YES" "NO"))
+ (core-message-debug "Corfu auto setting: %s" corfu-auto)
+ (core-message-debug "Corfu auto delay: %s" corfu-auto-delay)
+ (core-message-debug "Corfu auto prefix: %s" corfu-auto-prefix))
 
-  ;; Add debugging information
-  (core-message-debug "Corfu global mode enabled: %s" (if global-corfu-mode "YES" "NO"))
-  (core-message-debug "Corfu auto setting: %s" corfu-auto)
-  (core-message-debug "Corfu auto delay: %s" corfu-auto-delay)
-  (core-message-debug "Corfu auto prefix: %s" corfu-auto-prefix))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Corfu Terminal Support
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Terminal support for Corfu
+(use-package
+ corfu-terminal
+ :after corfu
+ :config
+ (unless (display-graphic-p) (corfu-terminal-mode +1))
+ (core-message-config "Corfu terminal support enabled"))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Corfu Terminal Support
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Terminal support for Corfu
- (use-package
-  corfu-terminal
-  :after corfu
-  :config
-  (unless (display-graphic-p) (corfu-terminal-mode +1))
-  (core-message-config "Corfu terminal support enabled"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Corfu Documentation Popup
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Show documentation while browsing completions
+(with-eval-after-load
+ 'corfu
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Corfu Documentation Popup
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Show documentation while browsing completions
- (with-eval-after-load
-  'corfu
+ ;; In GUI mode: use popupinfo (child frame popup)
+ (when
+  (display-graphic-p)
+  (require 'corfu-popupinfo)
+  (corfu-popupinfo-mode 1)
+  (setq corfu-popupinfo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
 
-  ;; In GUI mode: use popupinfo (child frame popup)
-  (when
-   (display-graphic-p)
-   (require 'corfu-popupinfo)
-   (corfu-popupinfo-mode 1)
-   (setq corfu-popupinfo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
+  ;; Add keybindings to manually toggle documentation in completion menu
+  (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle) ; Alt+d to toggle
+  (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-down) ; Alt+n scroll down
+  (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-up) ; Alt+p scroll up
 
-   ;; Add keybindings to manually toggle documentation in completion menu
-   (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle) ; Alt+d to toggle
-   (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-down) ; Alt+n scroll down
-   (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-up) ; Alt+p scroll up
+  (core-message-config "Corfu documentation popup enabled (GUI mode)")
+  (core-message-debug "Popupinfo keybindings: M-d (toggle), M-n/M-p (scroll)"))
 
-   (core-message-config "Corfu documentation popup enabled (GUI mode)")
-   (core-message-debug "Popupinfo keybindings: M-d (toggle), M-n/M-p (scroll)"))
+ ;; In terminal mode: use echo (shows documentation in echo area/minibuffer)
+ (unless
+  (display-graphic-p)
+  (require 'corfu-echo)
+  (corfu-echo-mode 1)
+  (setq corfu-echo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
+  (core-message-config "Corfu documentation echo enabled (terminal mode)")
+  (core-message-debug "Documentation appears in echo area (minibuffer)")))
 
-  ;; In terminal mode: use echo (shows documentation in echo area/minibuffer)
-  (unless
-   (display-graphic-p)
-   (require 'corfu-echo)
-   (corfu-echo-mode 1)
-   (setq corfu-echo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
-   (core-message-config "Corfu documentation echo enabled (terminal mode)")
-   (core-message-debug "Documentation appears in echo area (minibuffer)")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Corfu Completion Icons
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Add type icons to completion candidates
+(use-package
+ kind-icon
+ :after corfu
+ :config
+ (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
+ (core-message-config "Corfu completion icons enabled"))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Corfu Completion Icons
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Add type icons to completion candidates
- (use-package
-  kind-icon
-  :after corfu
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
-  (core-message-config "Corfu completion icons enabled"))
-
- ;; Add cape backends for in-buffer completion
- (add-hook 'completion-at-point-functions #'cape-dabbrev)
- (add-hook 'completion-at-point-functions #'cape-file))
+;; Add cape backends for in-buffer completion
+(add-hook 'completion-at-point-functions #'cape-dabbrev)
+(add-hook 'completion-at-point-functions #'cape-file)
 (provide 'completion-config)
 ;;; completion-config.el ends here

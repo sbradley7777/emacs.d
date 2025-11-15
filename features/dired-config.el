@@ -18,46 +18,42 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-utils)
 (require 'core-logging)
-(core-utils-with-load-timing
- "dired-config.el"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Built-in Dired Settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Better dired defaults
+(setq dired-dwim-target t) ; Suggest other visible dired buffer as copy/move target
+(setq dired-recursive-copies 'always) ; Always copy directories recursively
+(setq dired-recursive-deletes 'top) ; Ask once for recursive deletes
+(setq dired-listing-switches "-alh") ; Human-readable sizes in listings
+(setq dired-kill-when-opening-new-dired-buffer t) ; Kill old dired buffer when opening new one
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Built-in Dired Settings
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Better dired defaults
- (setq dired-dwim-target t) ; Suggest other visible dired buffer as copy/move target
- (setq dired-recursive-copies 'always) ; Always copy directories recursively
- (setq dired-recursive-deletes 'top) ; Ask once for recursive deletes
- (setq dired-listing-switches "-alh") ; Human-readable sizes in listings
- (setq dired-kill-when-opening-new-dired-buffer t) ; Kill old dired buffer when opening new one
+;; Auto-refresh dired buffers when files change
+(setq dired-auto-revert-buffer t)
 
- ;; Auto-refresh dired buffers when files change
- (setq dired-auto-revert-buffer t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Nerd Icons Dired
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configure nerd-icons-dired for icon support in dired buffers
+;; Provides file-type icons using Nerd Fonts (works in both GUI and terminal with proper font)
+(use-package
+ nerd-icons-dired
+ :hook (dired-mode . nerd-icons-dired-mode)
+ :config (core-message-config "Nerd icons dired mode configured"))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Nerd Icons Dired
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Configure nerd-icons-dired for icon support in dired buffers
- ;; Provides file-type icons using Nerd Fonts (works in both GUI and terminal with proper font)
- (use-package
-  nerd-icons-dired
-  :hook (dired-mode . nerd-icons-dired-mode)
-  :config (core-message-config "Nerd icons dired mode configured"))
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Dired Subtree
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Configure dired-subtree for inline directory expansion
- ;; Press 'i' on a directory to expand/collapse it inline (like a tree view)
- (use-package
-  dired-subtree
-  :after dired
-  :bind
-  (:map
-   dired-mode-map ("i" . dired-subtree-toggle)
-   ("TAB" . dired-subtree-cycle)) ; TAB to cycle expand/collapse depth
-  :config (core-message-config "Dired subtree configured - use 'i' to toggle subtrees")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dired Subtree
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configure dired-subtree for inline directory expansion
+;; Press 'i' on a directory to expand/collapse it inline (like a tree view)
+(use-package
+ dired-subtree
+ :after dired
+ :bind
+ (:map
+  dired-mode-map ("i" . dired-subtree-toggle)
+  ("TAB" . dired-subtree-cycle)) ; TAB to cycle expand/collapse depth
+ :config (core-message-config "Dired subtree configured - use 'i' to toggle subtrees"))
 (provide 'dired-config)
 ;;; dired-config.el ends here

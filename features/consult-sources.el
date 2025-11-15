@@ -55,8 +55,6 @@ To add more patterns, simply add regexp strings to this list.")
  "Filtered buffer source for `consult-buffer' that excludes patterns in
 minibuffer-config-ignored-buffer-patterns and the current buffer.")
 
-(require 'core-utils)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Annotation Function (must be defined before being used in source configuration)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -123,66 +121,64 @@ minibuffer-config-ignored-buffer-patterns and the current buffer.")
          minibuffer-config-ignored-buffer-patterns)))
       all-buffers)))))
 
-(core-utils-with-load-timing
- "consult-sources.el"
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Project Buffer Source Customization
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Customize the built-in project buffer source to filter out utility/internal buffers
- (with-eval-after-load
-  'consult
-  ;; Apply custom annotation to default buffer source for consistent alignment
-  (plist-put consult--source-buffer :category nil)
-  (plist-put consult--source-buffer :annotate #'consult-sources--buffer-annotation)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Project Buffer Source Customization
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Customize the built-in project buffer source to filter out utility/internal buffers
+(with-eval-after-load
+ 'consult
+ ;; Apply custom annotation to default buffer source for consistent alignment
+ (plist-put consult--source-buffer :category nil)
+ (plist-put consult--source-buffer :annotate #'consult-sources--buffer-annotation)
 
-  ;; Assign unique narrowing key to project buffer source. By default it shares 'b' with regular buffers, causing conflicts
-  (plist-put consult--source-project-buffer :narrow ?p)
-  (plist-put consult--source-project-buffer :hidden nil)
-  ;; Remove category to allow custom annotations
-  (plist-put consult--source-project-buffer :category nil)
-  ;; Add shared custom annotation function
-  (plist-put consult--source-project-buffer :annotate #'consult-sources--buffer-annotation)
+ ;; Assign unique narrowing key to project buffer source. By default it shares 'b' with regular buffers, causing conflicts
+ (plist-put consult--source-project-buffer :narrow ?p)
+ (plist-put consult--source-project-buffer :hidden nil)
+ ;; Remove category to allow custom annotations
+ (plist-put consult--source-project-buffer :category nil)
+ ;; Add shared custom annotation function
+ (plist-put consult--source-project-buffer :annotate #'consult-sources--buffer-annotation)
 
-  ;; Filter git repository buffers to exclude patterns from minibuffer-config-ignored-buffer-patterns
-  ;; and ensure only buffers in the current git repository are shown
-  (plist-put
-   consult--source-project-buffer
-   :items
-   (lambda
-    ()
-    (when-let ((git-root (vc-git-root default-directory)))
-      (let* ((repo-root (expand-file-name git-root))
-             (all-buffers (consult--buffer-query :sort 'visibility :as #'buffer-name))
-             ;; Filter to only buffers whose files are in the current git repository
-             (git-buffers
-              (seq-filter
-               (lambda
-                (buf)
-                (when-let ((file (buffer-file-name (get-buffer buf))))
-                  (string-prefix-p repo-root (expand-file-name file))))
-               all-buffers)))
-        ;; Then remove buffers matching ignored patterns
-        (seq-remove
-         (lambda
-          (buf)
-          (seq-some
-           (lambda (pattern) (string-match-p pattern buf))
-           minibuffer-config-ignored-buffer-patterns))
-         git-buffers)))))
+ ;; Filter git repository buffers to exclude patterns from minibuffer-config-ignored-buffer-patterns
+ ;; and ensure only buffers in the current git repository are shown
+ (plist-put
+  consult--source-project-buffer
+  :items
+  (lambda
+   ()
+   (when-let ((git-root (vc-git-root default-directory)))
+     (let* ((repo-root (expand-file-name git-root))
+            (all-buffers (consult--buffer-query :sort 'visibility :as #'buffer-name))
+            ;; Filter to only buffers whose files are in the current git repository
+            (git-buffers
+             (seq-filter
+              (lambda
+               (buf)
+               (when-let ((file (buffer-file-name (get-buffer buf))))
+                 (string-prefix-p repo-root (expand-file-name file))))
+              all-buffers)))
+       ;; Then remove buffers matching ignored patterns
+       (seq-remove
+        (lambda
+         (buf)
+         (seq-some
+          (lambda (pattern) (string-match-p pattern buf))
+          minibuffer-config-ignored-buffer-patterns))
+        git-buffers)))))
 
-  (core-message-config "Project buffer source customized with filtering")
+ (core-message-config "Project buffer source customized with filtering")
 
-  ;; Limit recent files shown to 10 and show full paths (not abbreviated)
-  (plist-put
-   consult--source-recent-file
-   :items
-   (lambda
-    ()
-    (let ((ht (consult--buffer-file-hash))
-          ;; Use full paths instead of abbreviated paths
-          (items recentf-list))
-      (seq-take (seq-remove (lambda (x) (gethash x ht)) items) 10))))
+ ;; Limit recent files shown to 10 and show full paths (not abbreviated)
+ (plist-put
+  consult--source-recent-file
+  :items
+  (lambda
+   ()
+   (let ((ht (consult--buffer-file-hash))
+         ;; Use full paths instead of abbreviated paths
+         (items recentf-list))
+     (seq-take (seq-remove (lambda (x) (gethash x ht)) items) 10))))
 
-  (core-message-config "Recent file source limited to 10 files")))
+ (core-message-config "Recent file source limited to 10 files"))
 (provide 'consult-sources)
 ;;; consult-sources.el ends here
