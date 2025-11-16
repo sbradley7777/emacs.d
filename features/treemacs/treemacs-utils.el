@@ -11,6 +11,9 @@
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar nerd-icons-extension-icon-alist) ; From nerd-icons.el
 
+;; Declare external functions to suppress byte-compiler warnings
+(declare-function treemacs-load-theme "treemacs-themes" (theme-name))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom File Icon Mappings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

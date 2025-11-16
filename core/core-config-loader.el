@@ -6,6 +6,9 @@
 ;;; Code:
 (require 'core-logging)
 
+;; Declare external variables to suppress byte-compiler warnings
+(defvar use-package-keywords) ; From use-package-core.el
+
 ;; Declare external functions to suppress byte-compiler warnings
 (declare-function use-package-only-one "use-package-core" (label args f))
 (declare-function use-package-error "use-package-core" (msg))
