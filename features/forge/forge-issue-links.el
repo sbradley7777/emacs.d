@@ -83,7 +83,7 @@ Extracts markdown links from post body and appends them as clickable raw URLs."
  ;; Call the original function to insert the post content
  (funcall orig-fun post)
  ;; Extract and append links if any are found
- (when-let* ((body (oref post body))
+ (when-let* ((body (with-no-warnings (oref post body)))
              (links (forge-issue-links--extract-markdown-links body))
              (links-section (forge-issue-links--format-links-section links)))
    (save-excursion
