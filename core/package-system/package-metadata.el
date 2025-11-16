@@ -7,10 +7,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-logging)
-(declare-function package-metadata-save-all "package-metadata")
-(declare-function package-metadata-read-cache-info "package-metadata")
-(declare-function package-metadata-normalize-timestamp "package-metadata")
-(declare-function package-metadata-load-variables "package-metadata")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants and Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
