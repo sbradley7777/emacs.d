@@ -107,18 +107,18 @@ Example:
  (let ((result nil))
    (dolist
     (suffix suffixes)
-    (unless
-     (stringp suffix)
-     (core-message-warning "Skipping non-string suffix: %s" suffix)
-     (setq result (plist-put result (intern (concat ":" (format "%s" suffix))) nil))
-     (cl-continue))
-    (condition-case err
-        (let ((value (git-utils-git-config-get (format base-key suffix))))
-          (setq result (plist-put result (intern (concat ":" suffix)) value)))
-      (error
-       (core-message-warning
-        "Failed to get config for suffix '%s': %s" suffix (error-message-string err))
-       (setq result (plist-put result (intern (concat ":" suffix)) nil)))))
+    (if
+     (not (stringp suffix))
+     (progn
+      (core-message-warning "Skipping non-string suffix: %s" suffix)
+      (setq result (plist-put result (intern (concat ":" (format "%s" suffix))) nil)))
+     (condition-case err
+         (let ((value (git-utils-git-config-get (format base-key suffix))))
+           (setq result (plist-put result (intern (concat ":" suffix)) value)))
+       (error
+        (core-message-warning
+         "Failed to get config for suffix '%s': %s" suffix (error-message-string err))
+        (setq result (plist-put result (intern (concat ":" suffix)) nil))))))
    result))
 
 (core-message-config "Git utility functions loaded")
