@@ -12,6 +12,9 @@
 (require 'tramp-utils)
 (require 'lang-utils)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  pyvenv-remote-find-venv (remote-dir)
  "Find virtual environment for remote directory.
@@ -32,11 +35,13 @@ First tries to find it remotely, falls back to local equivalent if needed."
         (pyvenv-find-venv)))))
   ;; Local directory - use existing function
   (pyvenv-find-venv)))
+
 (defun
  pyvenv-remote-search-venv (remote-dir)
  "Search for virtual environment in remote directory using centralized detection.
 Uses python-utils-find-venv-path which is TRAMP-compatible via locate-dominating-file."
  (python-utils-find-venv-path remote-dir))
+
 (defun
  pyvenv-remote-activate () "TRAMP-aware virtual environment activation."
  (if
@@ -76,6 +81,7 @@ Uses python-utils-find-venv-path which is TRAMP-compatible via locate-dominating
 
   ;; Local file: use existing activation
   (when (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate))))
+
 (defun
  pyvenv-remote-setup-connection
  (host venv-path)

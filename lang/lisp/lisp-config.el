@@ -7,9 +7,17 @@
 (require 'core-logging)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Emacs Lisp indentation and formatting
+;; Automatic formatting with elisp-autofmt
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Function to convert tabs to spaces in buffer
+(use-package
+ elisp-autofmt
+ :hook (emacs-lisp-mode . elisp-autofmt-mode)
+ :bind (:map emacs-lisp-mode-map ("C-c C-f" . elisp-autofmt-buffer))
+ :config (core-message-config "elisp-autofmt configured for automatic formatting on save"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  lisp-config--untabify-buffer
  ()
@@ -20,14 +28,5 @@
 (add-hook
  'emacs-lisp-mode-hook
  (lambda () (add-hook 'before-save-hook #'lisp-config--untabify-buffer nil t)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Automatic formatting with elisp-autofmt
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package
- elisp-autofmt
- :hook (emacs-lisp-mode . elisp-autofmt-mode)
- :bind (:map emacs-lisp-mode-map ("C-c C-f" . elisp-autofmt-buffer))
- :config (core-message-config "elisp-autofmt configured for automatic formatting on save"))
 (provide 'lisp-config)
 ;;; lisp-config.el ends here

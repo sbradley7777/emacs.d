@@ -10,7 +10,7 @@
 (require 'core-logging)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Helper Functions
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  pyvenv-modeline-file-in-project-p
@@ -20,9 +20,6 @@
   (boundp 'pyvenv-project-root) pyvenv-project-root buffer-file-name
   (string-prefix-p (expand-file-name pyvenv-project-root) (expand-file-name buffer-file-name))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Clickable Python Venv Indicator
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  pyvenv-modeline-show-info
  ()
@@ -40,6 +37,7 @@
      (abbreviate-file-name venv-path)
      (or python-version "Unknown")))
   (core-message-warning "No Python virtual environment active")))
+
 (defun
  pyvenv-modeline-indicator () "Return modeline indicator for Python venv with click handler."
  (when

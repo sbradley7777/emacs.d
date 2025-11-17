@@ -10,16 +10,14 @@
 (require 'python-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Shared Utility Functions
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Path normalization for both local and remote (TRAMP) files
 (defun
  pyvenv-normalize-path
  (path)
  "Normalize path for comparison. Handles both local and TRAMP paths."
  (if (file-remote-p path) (file-local-name path) (expand-file-name path)))
 
-;; Get Python version by executing python --version (TRAMP-compatible)
 (defun
  pyvenv-get-version-from-executable (python-executable)
  "Get Python version from PYTHON-EXECUTABLE.
@@ -43,7 +41,6 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
           version)
         (core-message-debug "Failed to parse version from: %s" output) nil))))))
 
-;; Extract Python version from virtual environment for logging
 (defun
  pyvenv-get-python-version (venv-path) "Get Python version from virtual environment."
  (when
@@ -51,8 +48,6 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
   (let ((python-executable (expand-file-name "bin/python" venv-path)))
     (pyvenv-get-version-from-executable python-executable))))
 
-;; Search for virtual environment using centralized project detection
-;; Returns the venv path if found, nil otherwise
 (defun
  pyvenv-find-venv
  (&optional start-dir)
@@ -74,9 +69,6 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
           (abbreviate-file-name (expand-file-name pyvenv-venv-directory-name project-root)))))
       nil))))
 
-;; Hook function to update python-shell-interpreter for doom-modeline compatibility
-;; pyvenv sets python-shell-virtualenv-path (Python mode's primary), but doom-modeline reads
-;; python-shell-interpreter, so we update both on activation/deactivation
 (defun
  pyvenv-update-shell-interpreter
  ()
