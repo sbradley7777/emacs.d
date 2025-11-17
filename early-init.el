@@ -24,6 +24,23 @@
 (defvar byte-compile-output-dir) ; From bytecomp.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar
+ default-file-name-handler-alist
+ file-name-handler-alist
+ "Backup of default file-name-handler-alist for restoration after init.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ early-init--running-in-snap-p
+ ()
+ "Return non-nil if Emacs is running from a Snap package."
+ (string-match-p "/snap/" invocation-directory))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance Optimizations - Startup Phase
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Maximize garbage collection threshold during startup for faster loading
@@ -64,11 +81,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File Handling Optimizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Optimize file-name-handler-alist during startup (restore in init.el)
-(defvar
- default-file-name-handler-alist
- file-name-handler-alist
- "Backup of default file-name-handler-alist for restoration after init.")
 ;; Temporarily disable file name handlers for faster startup
 (setq file-name-handler-alist nil)
 
@@ -115,11 +127,6 @@
 ;; behavior in the Snap package itself, not user configuration. The compilation attempts can
 ;; be safely ignored as they don't affect functionality, but may generate background noise
 ;; in compilation buffers. This is an acceptable limitation for Snap environments.
-(defun
- early-init--running-in-snap-p
- ()
- "Return non-nil if Emacs is running from a Snap package."
- (string-match-p "/snap/" invocation-directory))
 (if
  (early-init--running-in-snap-p)
  (progn

@@ -10,6 +10,79 @@
 (defvar native-comp-deferred-compilation-deny-list) ; From comp.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar init-start-time (current-time) "Time when Emacs initialization started.")
+(defvar config-load-results '() "List of configuration loading results for diagnostics.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Directory auto-detection function
+(defun
+ init--auto-detect-config-directories ()
+ "Automatically detect all directories containing .el files for `load-path'.
+Recursively searches subdirectories and excludes directories in ignore-on-load.
+Returns a list of absolute directory paths suitable for adding to `load-path'."
+ (let ((all-dirs '()))
+   (dolist
+    (dir (directory-files user-emacs-directory t "^[^.]"))
+    (when
+     (file-directory-p dir)
+     (let ((dir-name (file-name-nondirectory dir)))
+       (unless
+        (member dir-name ignore-on-load)
+        ;; Check if this directory has .el files
+        (when (directory-files dir t "\\.el$") (push dir all-dirs))
+        ;; Recursively check subdirectories for .el files
+        (dolist
+         (subdir (directory-files dir t "^[^.]"))
+         (when
+          (and (file-directory-p subdir) (directory-files subdir t "\\.el$"))
+          (push subdir all-dirs)))))))
+   (nreverse all-dirs)))
+
+(defun
+ init--configure-native-comp-for-snap
+ ()
+ "Exclude the read-only Snap directory from native compilation."
+ (add-to-list 'native-comp-deferred-compilation-deny-list "/snap/emacs/.*"))
+
+(defun
+ init--show-config-diagnostics () "Display configuration loading diagnostics."
+ (let ((total-time (float-time (time-subtract (current-time) init-start-time)))
+       (successful 0)
+       (failed 0)
+       (lines nil))
+   (dolist
+    (result (reverse config-load-results))
+    (let ((_name (nth 0 result))
+          (status (nth 1 result))
+          (time (nth 2 result))
+          (desc (nth 3 result)))
+      (if
+       (eq status 'success)
+       (progn
+        (core-utils-increment-counter successful) (push (format "✅  %s (%.3fs)" desc time) lines))
+       (core-utils-increment-counter failed)
+       (push (format "❌  %s (%.3fs) - %s" desc time (nth 4 result)) lines))))
+   (push " " lines)
+   (push "=== Summary ===" lines)
+   (push
+    (format "🛠️  Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
+    lines)
+   (core-message-diagnostic "Configuration Loading Summary" (nreverse lines))))
+
+(defun
+ init-optimize-gc-for-long-session ()
+ "Optimize garbage collection for long-running sessions.
+Can be called manually when needed for intensive work sessions."
+ (interactive)
+ (setq
+  gc-cons-threshold core-gc-long-session-threshold ; Long session threshold
+  gc-cons-percentage core-gc-percentage-normal)) ; Normal GC percentage
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure early-init.el is loaded (for batch mode compatibility)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; In interactive mode, early-init.el loads automatically before init.el
@@ -50,29 +123,6 @@
 ;;    - "configs"  : Template configuration files, not active modules
 ;;    - "local"    : Runtime data (package cache, recentf, etc.)
 ;; 5. Add discovered directories to load-path for module loading
-;; Directory auto-detection function
-(defun
- init--auto-detect-config-directories ()
- "Automatically detect all directories containing .el files for `load-path'.
-Recursively searches subdirectories and excludes directories in ignore-on-load.
-Returns a list of absolute directory paths suitable for adding to `load-path'."
- (let ((all-dirs '()))
-   (dolist
-    (dir (directory-files user-emacs-directory t "^[^.]"))
-    (when
-     (file-directory-p dir)
-     (let ((dir-name (file-name-nondirectory dir)))
-       (unless
-        (member dir-name ignore-on-load)
-        ;; Check if this directory has .el files
-        (when (directory-files dir t "\\.el$") (push dir all-dirs))
-        ;; Recursively check subdirectories for .el files
-        (dolist
-         (subdir (directory-files dir t "^[^.]"))
-         (when
-          (and (file-directory-p subdir) (directory-files subdir t "\\.el$"))
-          (push subdir all-dirs)))))))
-   (nreverse all-dirs)))
 ;; Apply auto-detection: discover and add configuration directories to load-path
 (mapc (lambda (dir) (add-to-list 'load-path dir)) (init--auto-detect-config-directories))
 
@@ -97,42 +147,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;; This prevents startup errors caused by trying to modify variables that
 ;; have not yet been defined. This hook-based approach is the most robust way
 ;; to configure native compilation.
-(defun
- init--configure-native-comp-for-snap
- ()
- "Exclude the read-only Snap directory from native compilation."
- (add-to-list 'native-comp-deferred-compilation-deny-list "/snap/emacs/.*"))
 (add-hook 'native-comp-init-hook #'init--configure-native-comp-for-snap)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Error handling and robustness
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar init-start-time (current-time) "Time when Emacs initialization started.")
-(defvar config-load-results '() "List of configuration loading results for diagnostics.")
-(defun
- init--show-config-diagnostics () "Display configuration loading diagnostics."
- (let ((total-time (float-time (time-subtract (current-time) init-start-time)))
-       (successful 0)
-       (failed 0)
-       (lines nil))
-   (dolist
-    (result (reverse config-load-results))
-    (let ((_name (nth 0 result))
-          (status (nth 1 result))
-          (time (nth 2 result))
-          (desc (nth 3 result)))
-      (if
-       (eq status 'success)
-       (progn
-        (core-utils-increment-counter successful) (push (format "✅  %s (%.3fs)" desc time) lines))
-       (core-utils-increment-counter failed)
-       (push (format "❌  %s (%.3fs) - %s" desc time (nth 4 result)) lines))))
-   (push " " lines)
-   (push "=== Summary ===" lines)
-   (push
-    (format "🛠️  Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
-    lines)
-   (core-message-diagnostic "Configuration Loading Summary" (nreverse lines))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configuration loading infrastructure
@@ -343,15 +358,6 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;; - Emacs' built-in GC triggers are sufficient for light buffer usage
 ;; - Manual optimization available via M-x optimize-gc-for-long-session if needed
 ;; - This approach avoids over-optimization complexity for predictable, light workflows
-(defun
- init-optimize-gc-for-long-session ()
- "Optimize garbage collection for long-running sessions.
-Can be called manually when needed for intensive work sessions."
- (interactive)
- (setq
-  gc-cons-threshold core-gc-long-session-threshold ; Long session threshold
-  gc-cons-percentage core-gc-percentage-normal) ; Normal GC percentage
- )
 (core-message-success "init.el loaded successfully.")
 (provide 'init)
 ;;; init.el ends here
