@@ -30,7 +30,7 @@
            (and lang grammar-available)
            (format "libtree-sitter-%s%s" lang (car dynamic-library-suffixes))
            "none")))
-    (message
+    (core-message-plain
      "Tree-Sitter> Mode Name: %s | Mode Symbol: %s | Parent Mode: %s | Tree-sitter: %s | Grammar Installed: %s"
      mode-display-name
      (symbol-name major-mode)

@@ -44,6 +44,7 @@
 ;;; Code:
 (require 'core-utils)
 (require 'core-logging)
+(require 'core-process-utils)
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar ispell-program-name) ; From ispell.el
@@ -66,8 +67,8 @@
 Returns t if \\='en\\=' dictionary is available, nil otherwise."
  (when
   (executable-find "aspell")
-  (let ((dicts (shell-command-to-string "aspell dump dicts")))
-    (string-match-p "\\ben\\b" dicts))))
+  (let ((dicts (core-process-run-sync "aspell" nil "dump" "dicts")))
+    (when dicts (string-match-p "\\ben\\b" dicts)))))
 (defun
  aspell-available-p ()
  "Check if aspell is installed and has English dictionary.
