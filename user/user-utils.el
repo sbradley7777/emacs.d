@@ -13,7 +13,7 @@
 (defvar corfu--visible) ; From corfu.el (internal variable)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Reload init.el on the Fly:
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  user-reload-init-file ()
@@ -27,9 +27,6 @@ Saves init.el buffer if it's currently open before reloading."
    (load-file init-file)
    (core-message-success "init.el reloaded successfully")))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Copy Entire Buffer to Kill Ring:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  user-copy-whole-buffer
  ()
@@ -39,9 +36,6 @@ This is equivalent to doing M-x mark-whole-buffer followed by M-w."
  (kill-ring-save (point-min) (point-max))
  (core-message-info "Buffer copied to kill ring"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Smart Page Navigation Functions:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  user-smart-page-up ()
  "Page up with smart boundary handling.
@@ -51,6 +45,7 @@ When reaching the beginning of buffer, move point to beginning."
      (scroll-down)
    (beginning-of-buffer
     (goto-char (point-min)))))
+
 (defun
  user-smart-page-down ()
  "Page down with smart boundary handling.
@@ -61,9 +56,6 @@ When reaching the end of buffer, move point to end."
    (end-of-buffer
     (goto-char (point-max)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Smart TAB Completion Functions:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  user-smart-tab ()
  "Context-aware TAB key behavior for completion and indentation.
@@ -78,6 +70,7 @@ This provides a unified TAB key experience across different editing contexts."
   (minibufferp)
   (minibuffer-complete)
   (if corfu-mode (or (completion-at-point) (indent-for-tab-command)) (indent-for-tab-command))))
+
 (defun
  user-completion-or-indent
  ()
@@ -91,9 +84,6 @@ Useful for binding to keys where you want completion priority over indentation."
  (interactive)
  (if (and corfu-mode (not corfu--visible)) (completion-at-point) (indent-for-tab-command)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Custom Buffer Cycling Functions:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  user-buffer-should-skip-p (buffer)
  "Return t if BUFFER should be skipped during cycling.
@@ -114,6 +104,7 @@ Buffers EXCLUDED from cycling:
      (string= name "*Messages*")
      ;; Allow buffers visiting files (not dired, not special buffers)
      (buffer-file-name buffer)))))
+
 (defun
  user-cycle-buffer (direction)
  "Cycle through buffers in DIRECTION (:forward or :backward).
@@ -147,6 +138,7 @@ Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
         (setq target-buffer (nth next-index valid-buffers))))))
    ;; Switch to target buffer if found
    (when target-buffer (switch-to-buffer target-buffer))))
+
 (defun
  user-next-buffer ()
  "Cycle forward to the next buffer in the buffer list.
@@ -155,6 +147,7 @@ Skips internal buffers, dired buffers, and other filtered buffers.
 Only cycles through file-visiting buffers and the *Messages* buffer.
 If called from an excluded buffer, jumps to the first valid buffer."
  (interactive) (user-cycle-buffer :forward))
+
 (defun
  user-previous-buffer ()
  "Cycle backward to the previous buffer in the buffer list.
@@ -164,9 +157,6 @@ Only cycles through file-visiting buffers and the *Messages* buffer.
 If called from an excluded buffer, jumps to the last valid buffer."
  (interactive) (user-cycle-buffer :backward))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Format Git Commit Messages:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  user-git-commit-format ()
  "Remove 2 leading spaces from the subject line and body of a git commit message.
@@ -201,9 +191,6 @@ See-also, Reference."
      (goto-char (point-min))
      (while (re-search-forward "^  " nil t) (replace-match "") (beginning-of-line 2))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Side Window Mutual Exclusion:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  user-close-exclusive-side-windows ()
  "Close all exclusive side windows (F1: Flymake, F5: Imenu-list, F9: Command Palette).
@@ -221,6 +208,7 @@ This ensures only one of these windows is open at a time."
    (and command-palette-window (window-live-p command-palette-window))
    (delete-window command-palette-window)
    (setq command-palette-window nil))))
+
 (defun
  user-imenu-list-smart-toggle ()
  "Toggle Imenu-list with mutual exclusion from other side windows.

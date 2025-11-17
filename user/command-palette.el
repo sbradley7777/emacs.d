@@ -17,6 +17,29 @@
 (require 'package-ui)
 (require 'package-maintenance)
 (require 'ring)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar command-palette-window nil "Window displaying the command palette.")
+(defvar command-palette-history nil "Ring buffer storing recently executed commands from palette.")
+(defvar
+ command-palette-favorites
+ nil
+ "List of favorite commands displayed in the palette. Loaded from file or defaults.")
+(defvar
+ command-palette-previous-window nil "Window that was active before opening the command palette.")
+(defvar
+ command-palette-mode-map
+ (let ((map (make-sparse-keymap)))
+   (define-key map (kbd "q") 'command-palette-toggle)
+   (define-key map (kbd "p") 'command-palette-add-favorite)
+   (define-key map (kbd "r") 'command-palette-remove-favorite)
+   (define-key map (kbd "v") 'command-palette-validate-commands)
+   map)
+ "Keymap for command palette buffer.")
+(defvar command-palette--mx-flag nil "Flag set when M-x is invoked.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,7 +86,6 @@
    ("Toggle Git Issues Window" . toggle-forge-issues-window)
    ("Generate Forge Authinfo Entries" . forge-authinfo-generate-entries))
  "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
-
 (defconst
  command-palette-excluded-commands
  '(command-palette-toggle
@@ -85,31 +107,7 @@
  "Commands to exclude from M-x history tracking.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Variables
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar command-palette-window nil "Window displaying the command palette.")
-(defvar
- command-palette-history
- (make-ring command-palette-history-size)
- "Ring buffer storing recently executed commands from palette.")
-(defvar
- command-palette-favorites
- nil
- "List of favorite commands displayed in the palette. Loaded from file or defaults.")
-(defvar
- command-palette-previous-window nil "Window that was active before opening the command palette.")
-(defvar
- command-palette-mode-map
- (let ((map (make-sparse-keymap)))
-   (define-key map (kbd "q") 'command-palette-toggle)
-   (define-key map (kbd "p") 'command-palette-add-favorite)
-   (define-key map (kbd "r") 'command-palette-remove-favorite)
-   (define-key map (kbd "v") 'command-palette-validate-commands)
-   map)
- "Keymap for command palette buffer.")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Directory Management
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  command-palette--ensure-data-directory
@@ -117,9 +115,6 @@
  "Ensure the command palette data directory exists, creating it if necessary."
  (core-utils-ensure-directory command-palette-data-dir))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Persistence Functions - History
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  command-palette--save-history
  ()
@@ -173,9 +168,6 @@ If SILENT is non-nil, suppress success messages. Returns t if successful, nil ot
      (core-message-warning "Failed to load command palette history: %s" (error-message-string err))
      nil))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Persistence Functions - Favorites
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  command-palette--save-favorites
  ()
@@ -233,15 +225,13 @@ If SILENT is non-nil, suppress success messages. Returns t if successful, nil ot
    (unless silent (core-message-info "Using default command palette favorites"))
    nil)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Helper Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  command-palette--format-command-name (cmd-symbol)
  "Convert CMD-SYMBOL to human-readable format.
 Example: \\='find-file\\=' becomes \\='Find File\\='."
  (let ((name (symbol-name cmd-symbol)))
    (capitalize (replace-regexp-in-string "-" " " name))))
+
 (defun
  command-palette--get-keybinding
  (cmd-symbol)
@@ -250,6 +240,7 @@ Example: \\='find-file\\=' becomes \\='Find File\\='."
   (commandp cmd-symbol)
   (let ((keys (where-is-internal cmd-symbol nil t)))
     (when keys (key-description keys)))))
+
 (defun
  command-palette--add-to-history (cmd-symbol)
  "Add CMD-SYMBOL to command history if it's not excluded or in favorites.
@@ -305,6 +296,7 @@ Switches to the previous window before executing the command, then closes the pa
           (window-list)))))
    (when target-window (select-window target-window))
    (call-interactively cmd-symbol)))
+
 (defun
  command-palette--make-button (label action face &optional keybinding)
  "Create a clickable button with LABEL that executes ACTION. Use FACE for styling.
@@ -327,6 +319,7 @@ If KEYBINDING is provided, display it in parentheses with a red color."
     (insert " ")
     (insert (propertize (format "(%s)" keybinding) 'face '(:foreground "#e74c3c"))))
    (insert "\n")))
+
 (defun
  command-palette--calculate-window-width ()
  "Calculate window width based on longest line in current buffer.
@@ -341,6 +334,7 @@ Returns width as number of columns needed to display content."
      (forward-line 1))
     ;; Add 2 for a small margin
     (+ max-width 2))))
+
 (defun
  command-palette--refresh-buffer () "Refresh the command palette buffer contents."
  (let ((buffer (get-buffer command-palette-buffer-name)))
@@ -354,6 +348,7 @@ Returns width as number of columns needed to display content."
        (command-palette--render-content)
        (goto-char (point-min))
        (forward-line (1- line)))))))
+
 (defun
  command-palette--render-content () "Render the command palette buffer content."
 
@@ -432,9 +427,6 @@ Returns width as number of columns needed to display content."
    '(:foreground "gray" :slant italic)))
  (insert (propertize "    • 'q' - quit" 'face '(:foreground "gray" :slant italic))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Interactive Commands
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  command-palette-add-favorite ()
  "Promote a recent command from history to the favorites list.
@@ -468,6 +460,7 @@ persisted to disk immediately. Useful for pinning frequently-used commands."
        (command-palette--refresh-buffer)
        (core-message-success "Promoted #%d '%s' to favorites" index cmd-name))
      (core-message-warning "Invalid index or cancelled")))))
+
 (defun
  command-palette-remove-favorite ()
  "Remove a command from the favorites list by index number.
@@ -490,6 +483,7 @@ Does not affect the command's availability in M-x."
        (command-palette--refresh-buffer)
        (core-message-success "Removed favorite #%d: '%s'" index cmd-name))
      (core-message-warning "Invalid index or cancelled")))))
+
 (defun
  command-palette-clear-history
  ()
@@ -501,6 +495,7 @@ Use this to reset your recent commands list while keeping your favorites intact.
  (setq command-palette-history (make-ring command-palette-history-size))
  (command-palette--refresh-buffer)
  (core-message-success "Command palette history cleared"))
+
 (defun
  command-palette-validate-commands
  ()
@@ -545,6 +540,7 @@ Use this to reset your recent commands list while keeping your favorites intact.
      "Validation complete: removed %d favorite(s) and %d history item(s)"
      removed-favorites
      removed-history))))
+
 (defun
  command-palette-toggle ()
  "Toggle the command palette side window display.
@@ -582,10 +578,6 @@ side windows (Flymake diagnostics, Imenu-list)."
     (goto-char (point-min))
     (forward-line 3))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; M-x Command Tracking
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar command-palette--mx-flag nil "Flag set when M-x is invoked.")
 (defun
  command-palette--track-command () "Track commands executed via M-x using post-command-hook."
  ;; Set flag when M-x is invoked
@@ -604,6 +596,9 @@ side windows (Flymake diagnostics, Imenu-list)."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Initialize ring buffer
+(setq command-palette-history (make-ring command-palette-history-size))
+
 ;; Load saved data
 (command-palette--load-favorites)
 (command-palette--load-history)
