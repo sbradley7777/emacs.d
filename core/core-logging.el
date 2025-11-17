@@ -2,11 +2,28 @@
 ;;; Commentary:
 ;; Lightweight message utility functions with Unicode prefixes.
 ;; This file has no dependencies to avoid circular dependency issues.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Message Utility Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Code:
 (require 'subr-x)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Constants
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Diagnostic formatting constants
+(defconst
+ core-diagnostic-date-format "%Y-%m-%d %H:%M:%S"
+ "Date format used in diagnostic output.
+Format: YYYY-MM-DD HH:MM:SS (e.g., '2025-11-07 11:20:26').")
+(defconst
+ core-diagnostic-separator-length 80 "Length of diagnostic section separators in characters.")
+(defconst
+ core-diagnostic-closing-separator
+ (make-string core-diagnostic-separator-length ?=)
+ "Closing separator for diagnostic sections (80 equals signs).")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Message utility functions with Unicode prefixes
 (defun
  core-message-success
  (format-string &rest args)
@@ -58,19 +75,7 @@
 Useful for system diagnostics, debug output, and structured information that doesn't need visual emphasis."
  (apply #'message format-string args))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Diagnostic Message Utilities
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defconst
- core-diagnostic-date-format "%Y-%m-%d %H:%M:%S"
- "Date format used in diagnostic output.
-Format: YYYY-MM-DD HH:MM:SS (e.g., '2025-11-07 11:20:26').")
-(defconst
- core-diagnostic-separator-length 80 "Length of diagnostic section separators in characters.")
-(defconst
- core-diagnostic-closing-separator
- (make-string core-diagnostic-separator-length ?=)
- "Closing separator for diagnostic sections (80 equals signs).")
+;; Diagnostic message utilities
 (defun
  core-message-diagnostic (title lines)
  "Display diagnostic section with TITLE and formatted LINES.
@@ -106,9 +111,7 @@ Output format:
    (core-message-plain "  %s" line)))
  (core-message-plain "  %s\n" core-diagnostic-closing-separator) (core-message-plain ""))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Warning Buffer Integration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Warning buffer integration
 (defun
  core-logging-duplicate-warnings-to-messages (orig-fun type message &optional level buffer-name)
  "Advice to duplicate warning messages to *Messages* buffer.
