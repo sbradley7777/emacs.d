@@ -3,7 +3,7 @@
 ;; WHAT: Markdown rendering functions for Forge issues and pull requests
 ;; WHY:  Provides improved markdown display with hidden markup and styled links
 ;; PROVIDES: forge-markdown--fontify-with-hiding and helper functions
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions for rendering markdown content in Forge topic buffers with:
 ;; - Markdown markup hiding ([](url) syntax hidden)
 ;; - URL hiding/compression

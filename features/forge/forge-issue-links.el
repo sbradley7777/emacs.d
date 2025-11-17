@@ -3,11 +3,11 @@
 ;; WHAT: Automatically append raw URLs to Forge issue/PR displays
 ;; WHY:  Terminal emulators can click raw URLs but not markdown-rendered links over SSH
 ;; PROVIDES: Hook that extracts markdown links and appends them as clickable raw URLs
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This addresses GitHub issue #35 by working around the terminal limitation documented
 ;; in issue #30. While markdown links [text](url) aren't clickable in terminal Emacs,
 ;; raw URLs are Command+clickable in iTerm2 and similar terminal emulators.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Implementation:
 ;; - Advises `forge-insert-post-content` to append extracted URLs after post body
 ;; - Extracts all markdown link URLs using regex pattern

@@ -44,7 +44,7 @@
 (global-set-key (kbd "C-c g r") 'diff-hl-revert-hunk) ; Revert current change
 
 ;; Keyboard commands for controlling the buffer.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scroll buffer down/up
 (global-set-key (kbd "ESC <left>") 'scroll-down) ; Scroll buffer down
 (global-set-key (kbd "ESC <right>") 'scroll-up) ; Scroll buffer up
@@ -60,9 +60,9 @@
 (global-set-key (kbd "<f11>") 'user-smart-page-up) ; Page up with smart boundary handling
 (global-set-key (kbd "<f12>") 'user-smart-page-down) ; Page down with smart boundary handling
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Consult Enhanced Navigation Commands
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (with-eval-after-load
  'consult
  (global-set-key (kbd "C-x b") 'consult-buffer) ; Better buffer switching with preview

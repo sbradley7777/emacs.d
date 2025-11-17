@@ -106,10 +106,10 @@
 ;; 1. Host system libraries vs Snap's bundled libraries (Ubuntu-based)
 ;; 2. Linker errors with .relr.dyn sections (newer ELF feature incompatibility)
 ;; 3. Library path conflicts between /var/lib/snapd/snap/.../lib and system libs
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Detection: Snap installations run from /var/lib/snapd/snap/emacs/*/usr/bin/
 ;; Solution: Disable native compilation for Snap, enable for other platforms (macOS, Linux, etc.)
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; KNOWN ISSUE: Even with comprehensive disabling (deferred, JIT, and trampolines all set to nil),
 ;; Snap's Emacs may still attempt some background compilation. This appears to be hardcoded
 ;; behavior in the Snap package itself, not user configuration. The compilation attempts can

@@ -17,12 +17,12 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Set package archive priorities (higher number = higher priority)
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Search order for packages (Emacs tries highest priority first):
 ;; 1. GNU ELPA (20)     - Official GNU packages with FSF copyright assignment (https://elpa.gnu.org/)
 ;; 2. NonGNU ELPA (15)  - Semi-official packages without copyright assignment (https://elpa.nongnu.org/)
 ;; 3. MELPA (10)        - Latest development versions from community (https://melpa.org/)
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This ensures we get the latest fixes (like doom-themes issue #793) while maintaining security
 (setq
  package-archive-priorities

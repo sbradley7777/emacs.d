@@ -2,13 +2,13 @@
 ;;; Commentary:
 ;; Interactive helper to generate ~/.authinfo entries for forge hosts
 ;; configured in ~/.gitconfig but missing authentication credentials.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IMPORTANT: Automatically appends ^forge suffix to usernames
 ;; The ^forge suffix is required by the ghub/forge package to identify
 ;; tokens used for Forge operations vs. other API access.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Format: machine APIHOST login USERNAME^forge password TOKEN
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NOTE: Disabled when editing remote files via TRAMP to prevent
 ;; attempting to modify local ~/.authinfo from remote context.
 

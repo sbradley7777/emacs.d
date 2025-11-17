@@ -3,7 +3,7 @@
 ;; WHAT: Forge configuration and customizations for improved markdown rendering
 ;; WHY:  Provides better visual display of issues/PRs with hidden markup and styled links
 ;; PROVIDES: Improved markdown rendering in forge topic buffers
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customizations include:
 ;; - Override forge--fontify-markdown to hide markdown markup
 ;; - Ensure links are properly styled (colors set in theme)

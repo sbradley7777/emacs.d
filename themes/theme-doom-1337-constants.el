@@ -3,7 +3,7 @@
 ;; WHAT: Color constants for doom-1337 theme
 ;; WHY:  Centralizes color definitions for reuse across theme customizations
 ;; PROVIDES: Color palette constants for doom-1337 theme
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; All color constants used by doom-1337 theme customizations including:
 ;; - Comment and doc colors
 ;; - Modeline color palette
@@ -13,9 +13,9 @@
 ;;; Code:
 (require 'core-utils)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Color Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
  doom-1337-comment-color
  "#989898"
@@ -25,7 +25,7 @@
 (defconst doom-1337-modeline-inactive-bg "#3a3a3a" "Inactive modeline background - darker gray.")
 (defconst doom-1337-modeline-fg "#d0d0d0" "Default modeline foreground - light gray.")
 ;; Accent colors for modeline segments (optimized for gray background)
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IMPORTANT: For consistent color rendering across local and remote (SSH) sessions,
 ;; ensure COLORTERM=truecolor is set in your shell configuration:
 ;;   - Add to ~/.bashrc or ~/.zshrc: export COLORTERM=truecolor

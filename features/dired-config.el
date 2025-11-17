@@ -1,19 +1,19 @@
 ;;; dired-config.el --- Dired Configuration with Nerd Icons -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Enhanced dired configuration with icon support and inline directory expansion.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      TERMINAL FONT REQUIREMENT:
 ;;      To see icons in terminal mode (SSH or local terminal), your terminal emulator
 ;;      must use a Nerd Font. Install a Nerd Font on the machine running the terminal:
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      macOS (for iTerm2/Terminal.app):
 ;;        brew install font-fira-code-nerd-font
 ;;        Then configure iTerm2 → Preferences → Profiles → Text → Font → "FiraCode Nerd Font Mono"
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      Linux (for local terminal):
 ;;        Download from https://www.nerdfonts.com/
 ;;        Extract to ~/.local/share/fonts/ and run: fc-cache -fv
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      Without a Nerd Font, you'll see empty boxes instead of icons.
 
 ;;; Code:

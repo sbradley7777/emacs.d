@@ -2,11 +2,11 @@
 ;;; Commentary:
 ;;      Centralized font management for icon packages and typography.
 ;;      Handles automatic installation and verification of required fonts.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      IMPORTANT: Package installation (via package.el) only installs Emacs Lisp code.
 ;;      Font installation is a separate step that downloads actual font files (.ttf, .otf)
 ;;      to your system font directory (~/.local/share/fonts/) so icons are visible.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      FONT INSTALLATION DETAILS:
 ;;      - Fonts are installed SYSTEM-WIDE, not just for Emacs
 ;;      - Location: ~/.local/share/fonts/ (Linux) or ~/Library/Fonts/ (macOS)

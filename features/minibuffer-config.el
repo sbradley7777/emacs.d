@@ -2,36 +2,36 @@
 ;;; Commentary:
 ;;      Modern minibuffer completion stack using Vertico, Orderless, Marginalia, and Consult.
 ;;      Provides enhanced command/file/buffer navigation with fuzzy matching and rich annotations.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PACKAGE ARCHITECTURE:
 ;; ---------------------
 ;; This configuration integrates four complementary packages that work together to create
 ;; a powerful minibuffer completion experience:
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 1. Orderless (Matching Engine):
 ;;    - Provides flexible, space-separated fuzzy matching
 ;;    - Lets you type non-contiguous characters to find matches
 ;;    - Example: "buf li" matches "buffer-list", "build-library", etc.
 ;;    - Works underneath all completion UIs, powering the search
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 2. Vertico (UI/Display Layer):
 ;;    - Displays completion candidates in a vertical list
 ;;    - Shows more candidates at once (default: 15)
 ;;    - Provides smooth cycling through options
 ;;    - Pure UI - relies on Orderless for matching
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 3. Marginalia (Annotation Layer):
 ;;    - Adds contextual information to completion candidates
 ;;    - Shows file sizes, modification times, keybindings, documentation
 ;;    - Makes it easier to identify the right choice
 ;;    - Works alongside Vertico to enrich the display
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 4. Consult (Enhanced Commands):
 ;;    - Provides powerful replacement commands (consult-buffer, consult-line, etc.)
 ;;    - Adds live preview while browsing candidates
 ;;    - Integrates with all three packages above
 ;;    - Uses Vertico for display, Orderless for matching, Marginalia for annotations
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HOW THEY WORK TOGETHER:
 ;; ------------------------
 ;; When you press C-x b (consult-buffer):
@@ -39,9 +39,9 @@
 ;; 2. Vertico displays candidates vertically with cycling
 ;; 3. Orderless matches your fuzzy input against buffer names
 ;; 4. Marginalia shows buffer size, mode, and file path
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Example flow: C-x b → type "py ma" → matches "python-mode.el", shows file size
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; COMPARISON TO CORFU:
 ;; --------------------
 ;; Note: This stack is distinct from Corfu (configured in completion-config.el):
@@ -87,14 +87,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vertico provides several optional extensions that enhance functionality.
 ;; These are built-in to vertico but need to be explicitly loaded.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vertico-directory:
 ;; - Provides Ido-like directory navigation in file completion
 ;; - DEL (backspace) goes up one directory level
 ;; - RET on a directory enters it immediately
 ;; - Auto-cleanup of trailing slashes for better UX
 ;; - Essential for efficient file navigation
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vertico-mouse:
 ;; - Adds mouse support for scrolling and selection
 ;; - Click on candidates to select them
@@ -150,18 +150,18 @@
 ;; Consult provides powerful replacement commands for common Emacs operations.
 ;; See user-keybindings.el for keybindings (C-x b, C-s, M-y, M-g g).
 ;; All commands integrate with Vertico, Orderless, and Marginalia.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CONSULT-BUFFER SOURCES AND NARROWING:
 ;; --------------------------------------
 ;; consult-buffer combines multiple sources of candidates, each with a narrowing key.
 ;; The sources come from `consult-buffer-sources` which includes:
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Active Sources (visible categories in consult-buffer):
 ;; - Filtered Buffers (d): Open buffers with filtered patterns excluded (custom source)
 ;; - Project Buffers (p): Project buffers with filtered patterns excluded (if in a project)
 ;; - All Buffers (b): All open buffers (no filtering)
 ;; - Files (f): Recent files from recentf-list (limited to 10 most recent)
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The following sources are available in Consult but excluded:
 ;; - Bookmarks (not needed)
 ;; - Registers (not needed)
@@ -169,14 +169,14 @@
 ;; - Hidden buffers (starting with space)
 ;; - Modified buffers (buffers with unsaved changes)
 ;; - Other buffers (from other frames/windows)
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; The "File" category shows recent files from `recentf-list`, which is managed by
 ;; recentf-mode (enabled in core-ui.el). The list includes:
 ;; - Recently opened files (limited to 10 via consult-buffer-recent-file-limit)
 ;; - Files are saved to ~/.emacs.d/local/recentf
 ;; - List persists across Emacs sessions
 ;; - Automatically cleaned up (non-existent files removed on startup)
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NARROWING FEATURE:
 ;; -------------------
 ;; Press "<" followed by a key to narrow to a specific source:
@@ -185,7 +185,7 @@
 ;; - <b - Show all buffers (unfiltered, includes everything)
 ;; - <f - Show only recent files (10 most recent)
 ;; - Press "<" again to remove narrowing and show all sources
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; INTEGRATION:
 ;; -------------
 ;; All consult commands automatically benefit from:

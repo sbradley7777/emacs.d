@@ -1,9 +1,9 @@
 ;;; local.el --- Local User Configuration (Not Version Controlled) -*- lexical-binding: t -*-
 ;;; Commentary:
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This file is for local, user-specific Emacs configuration that should NOT be
 ;; committed to version control. It's loaded automatically by init.el if it exists.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PURPOSE:
 ;; --------
 ;; • Machine-specific settings (paths, system-dependent configurations)
@@ -11,7 +11,7 @@
 ;; • Experimental settings you want to test without affecting the main config
 ;; • Private or sensitive configuration (API keys, personal info, etc.)
 ;; • Override any settings from the main configuration
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; USAGE:
 ;; ------
 ;; This file is loaded AFTER all the main configuration modules, so you can:
@@ -19,7 +19,7 @@
 ;; • Add additional packages or features
 ;; • Customize keybindings
 ;; • Set machine-specific variables
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; Code:
 (require 'core-logging)
@@ -47,7 +47,7 @@
 ;; ============================================
 ;; macOS XQuartz Key Mapping Fix
 ;; In XQuartz make sure that the following is enabled in "Settings"-> "Input" -> "Option key sends Alt_L and Alt_R".
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Fix Command/Alt key swapping when using Emacs GUI over SSH from macOS with XQuartz
 (when
  (and (display-graphic-p) (eq system-type 'gnu/linux))
@@ -69,10 +69,10 @@
 ;; - A value of `3` shows basic connection messages.
 ;; - A value of `6` provides detailed debugging, which is recommended
 ;;   for troubleshooting.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setting this to any value greater than 2 will cause the TRAMP
 ;; connection buffer to appear.
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (setq tramp-verbose 6)
 
 ;; ============================================
@@ -89,7 +89,7 @@
 ;; When enabled, error/warning messages appear directly in the code like:
 ;;   def foo(x):
 ;;       return x + "string"  # ❌ Operator not supported between int and str
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This can make the code look cluttered, so it's disabled by default.
 ;; To enable, uncomment the line below:
 ;; (setq flymake-show-diagnostics-at-end-of-line t)
