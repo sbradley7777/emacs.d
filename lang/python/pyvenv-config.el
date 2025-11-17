@@ -14,10 +14,8 @@
 (require 'lang-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Auto-detect Once Virtual Environment Support
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Main function to auto-detect and activate virtual environment once per project
-;; Uses pyvenv-project-root as a guard to ensure activation happens only once
 (defun
  pyvenv-auto-activate ()
  "Auto-detect and activate Python virtual environment for current project.

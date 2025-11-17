@@ -11,13 +11,8 @@
 (require 'highlight-indent-guides)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Makefile mode configuration (built-in mode)
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; File associations for Makefile variants
-(lang-register-file-extensions 'makefile-mode "\\(?:Makefile\\|makefile\\)\\'" "\\.mk\\'")
-(lang-register-file-extensions 'makefile-gmake-mode "GNUmakefile\\'")
-
-;; Helper function for common Makefile settings
 (defun
  makefile-setup-common-settings
  ()
@@ -26,6 +21,40 @@
   indent-tabs-mode t ; Use tabs (required by Make syntax)
   tab-width core-tab-width ; Set tab width for better readability
   show-trailing-whitespace t)) ; Show trailing whitespace clearly
+
+(defun
+ makefile-validate-tabs
+ ()
+ "Check if Makefile uses proper tabs for recipe indentation."
+ (interactive)
+ (save-excursion
+  (goto-char (point-min))
+  (let ((tab-recipe-count 0)
+        (space-recipe-count 0))
+    ;; Look for recipe lines (lines that start with whitespace after a target)
+    (while
+     (re-search-forward "^\\([[:space:]]+\\)" nil t)
+     (let ((indent (match-string 1)))
+       (if
+        (string-match-p "\t" indent) (core-utils-increment-counter tab-recipe-count)
+        (when (string-match-p "^ +" indent) (core-utils-increment-counter space-recipe-count)))))
+
+    (cond
+     ((> space-recipe-count 0)
+      (core-message-warning
+       "Warning: Found %d recipe lines with spaces instead of tabs!" space-recipe-count))
+     ((> tab-recipe-count 0)
+      (core-message-success
+       "Makefile syntax valid: %d recipe lines properly use tabs" tab-recipe-count))
+     (t
+      (core-message-info "No recipe lines detected in this Makefile"))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Makefile mode configuration (built-in mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; File associations for Makefile variants
+(lang-register-file-extensions 'makefile-mode "\\(?:Makefile\\|makefile\\)\\'" "\\.mk\\'")
+(lang-register-file-extensions 'makefile-gmake-mode "GNUmakefile\\'")
 
 ;; Makefile-specific configuration
 (add-hook
@@ -78,34 +107,6 @@
   'makefile-mode-hook
   (lambda
    () "Set up compilation for Makefiles." (set (make-local-variable 'compile-command) "make "))))
-
-;; Function to validate Makefile syntax (tabs vs spaces)
-(defun
- makefile-validate-tabs
- ()
- "Check if Makefile uses proper tabs for recipe indentation."
- (interactive)
- (save-excursion
-  (goto-char (point-min))
-  (let ((tab-recipe-count 0)
-        (space-recipe-count 0))
-    ;; Look for recipe lines (lines that start with whitespace after a target)
-    (while
-     (re-search-forward "^\\([[:space:]]+\\)" nil t)
-     (let ((indent (match-string 1)))
-       (if
-        (string-match-p "\t" indent) (core-utils-increment-counter tab-recipe-count)
-        (when (string-match-p "^ +" indent) (core-utils-increment-counter space-recipe-count)))))
-
-    (cond
-     ((> space-recipe-count 0)
-      (core-message-warning
-       "Warning: Found %d recipe lines with spaces instead of tabs!" space-recipe-count))
-     ((> tab-recipe-count 0)
-      (core-message-success
-       "Makefile syntax valid: %d recipe lines properly use tabs" tab-recipe-count))
-     (t
-      (core-message-info "No recipe lines detected in this Makefile"))))))
 
 ;; Automatically validate Makefile syntax when opening
 (add-hook
