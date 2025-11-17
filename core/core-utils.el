@@ -6,7 +6,30 @@
 (require 'core-logging)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Command Path Utilities
+;; Macros
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmacro
+ core-utils-defconst-path (name subpath base-dir docstring)
+ "Define a path constant NAME by combining SUBPATH with BASE-DIR.
+NAME is the symbol name for the constant.
+SUBPATH is the subdirectory or file path relative to BASE-DIR.
+BASE-DIR is the base directory (e.g., emacs-local-dir, user-emacs-directory).
+DOCSTRING is the documentation string for the constant.
+
+Example:
+  (core-utils-defconst-path
+   my-config-dir \"config/\" emacs-local-dir
+   \"Directory for configuration files.\")"
+ (declare (indent 1)) `(defconst ,name (expand-file-name ,subpath ,base-dir) ,docstring))
+
+(defmacro
+ core-utils-increment-counter
+ (counter-var)
+ "Increment COUNTER-VAR and return new value."
+ `(setq ,counter-var (1+ ,counter-var)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  core-utils-format-command-found-message (command path host location)
@@ -45,35 +68,6 @@ Properly detects local vs remote (TRAMP) paths based on default-directory."
     (progn (core-utils-format-command-found-message command command-path host location) t)
     (progn (core-utils-format-command-not-found-message command host location) nil))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Path Constant Definition Utilities
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defmacro
- core-utils-defconst-path (name subpath base-dir docstring)
- "Define a path constant NAME by combining SUBPATH with BASE-DIR.
-NAME is the symbol name for the constant.
-SUBPATH is the subdirectory or file path relative to BASE-DIR.
-BASE-DIR is the base directory (e.g., emacs-local-dir, user-emacs-directory).
-DOCSTRING is the documentation string for the constant.
-
-Example:
-  (core-utils-defconst-path
-   my-config-dir \"config/\" emacs-local-dir
-   \"Directory for configuration files.\")"
- (declare (indent 1)) `(defconst ,name (expand-file-name ,subpath ,base-dir) ,docstring))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Counter Utilities
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defmacro
- core-utils-increment-counter
- (counter-var)
- "Increment COUNTER-VAR and return new value."
- `(setq ,counter-var (1+ ,counter-var)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Window Management Utilities
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  core-utils-find-window-by-buffer-name (buffer-name-pattern &optional exact-match)
  "Find window displaying buffer matching BUFFER-NAME-PATTERN.
@@ -108,9 +102,6 @@ Example:
  (let ((window (core-utils-find-window-by-buffer-name buffer-name-pattern exact-match)))
    (when window (quit-window nil window) t)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Directory Management Utilities
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  core-utils-ensure-directory (dir-path)
  "Ensure DIR-PATH exists, creating it if necessary.

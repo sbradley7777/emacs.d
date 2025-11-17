@@ -68,11 +68,9 @@
  auto-save-interval core-auto-save-interval ; Auto-save every N keystrokes
  auto-save-timeout core-auto-save-timeout) ; Auto-save after N seconds of idle time
 
-;; Auto-save files in the same directory structure but in our autosaves folder
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Backup and Auto-save Logging
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Add helpful logging messages for backup and auto-save operations
 (defun
  core-files-log-backup-operation (_file) "Log when a backup file is created for FILE."
  ; (when _file (core-message-info "Backup created for: %s" (file-name-nondirectory _file)))
@@ -82,6 +80,7 @@
  core-files-log-auto-save-operation () "Log when an auto-save operation occurs."
  ; (when buffer-file-name (core-message-info "Auto-saved: %s" (file-name-nondirectory buffer-file-name)))
  )
+
 ;; Hook into backup operations
 (add-hook
  'before-save-hook

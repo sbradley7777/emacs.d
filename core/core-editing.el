@@ -64,7 +64,9 @@
  (display-graphic-p)
  (setq select-enable-clipboard t select-enable-primary t save-interprogram-paste-before-kill t)
 
- ;; Configure OSC 52 clipboard support for terminal
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Functions
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
   osc-52-copy (text) "Copy TEXT to system clipboard using OSC 52 escape sequence."
   (let ((encoded (base64-encode-string text t)))

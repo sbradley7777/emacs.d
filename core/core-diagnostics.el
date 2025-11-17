@@ -7,8 +7,17 @@
 (require 'core-logging)
 (require 'tree-sitter-utils)
 (require 'core-process-utils)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Operating System Detection
+;; Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar
+ diagnostics-external-dependencies-results
+ nil
+ "Store results from the last external dependencies check.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  diagnostics-get-os-version-info () "Get operating system version information."
@@ -157,14 +166,6 @@
           (push (format "  - %s (%s)" name (abbreviate-file-name file)) lines))))))
    (core-message-diagnostic "Emacs Startup Log" (nreverse lines))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; External Dependencies Diagnostics
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar
- diagnostics-external-dependencies-results
- nil
- "Store results from the last external dependencies check.")
-
 (defun
  diagnostics-check-executable (name &optional description optional)
  "Check if executable NAME is available.
@@ -184,6 +185,7 @@ OPTIONAL marks the tool as optional (warning instead of error)."
   (find-font (font-spec :name font-name))
   (list :status 'ok :message (format "Font '%s' installed" font-name) :font font-name)
   (list :status 'warning :message (format "Font '%s' not found" font-name) :font font-name)))
+
 (defun
  diagnostics-check-package (package-symbol) "Check if PACKAGE-SYMBOL is installed and loadable."
  (cond
@@ -213,6 +215,7 @@ Only checks when working on a remote file."
    (and (boundp 'tramp-remote-path) (member 'tramp-own-remote-path tramp-remote-path))
    (list :status 'ok :message "TRAMP remote PATH configured")
    (list :status 'warning :message "TRAMP remote PATH may not use remote user's PATH"))))
+
 (defun
  diagnostics-check-lsp-servers () "Check LSP server availability for configured languages."
  (let ((results nil))
@@ -232,6 +235,7 @@ Only checks when working on a remote file."
     (and (file-directory-p font-dir) (directory-files font-dir nil "NFM\\.ttf$"))
     (list :status 'ok :message "Nerd Fonts installed")
     (list :status 'warning :message "Nerd Fonts not found in ~/.local/share/fonts/"))))
+
 (defun
  diagnostics-show-external-dependencies ()
  "Check and display status of external dependencies.

@@ -16,7 +16,17 @@
 (declare-function use-package-concat "use-package-core" (elems &optional after-each))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Custom use-package :description keyword
+;; Macros
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmacro
+ load-module (name &rest args)
+ "Load a configuration module with automatic :ensure nil and :demand t.
+NAME is the module name (symbol).
+ARGS are additional use-package keywords like :after, :description, :config, etc."
+ `(use-package ,name :ensure nil :demand t ,@args))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  core-config-loader-normalize/:description
@@ -31,6 +41,7 @@
      arg)
     (t
      (use-package-error ":description expects a string"))))))
+
 (defun
  core-config-loader-handler/:description
  (name _keyword description rest state)
@@ -55,9 +66,6 @@
              (signal (car err) (cdr err)))))))
     nil)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Keyword Registration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Register the custom keyword (before :ensure, so it wraps everything)
 (setq
  use-package-keywords
@@ -73,16 +81,6 @@
 ;; Set the handlers
 (defalias 'use-package-normalize/:description 'core-config-loader-normalize/:description)
 (defalias 'use-package-handler/:description 'core-config-loader-handler/:description)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Config Module Macro
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defmacro
- load-module (name &rest args)
- "Load a configuration module with automatic :ensure nil and :demand t.
-NAME is the module name (symbol).
-ARGS are additional use-package keywords like :after, :description, :config, etc."
- `(use-package ,name :ensure nil :demand t ,@args))
 
 (core-message-config "Configuration loader with :description keyword and load-module macro ready")
 (provide 'core-config-loader)
