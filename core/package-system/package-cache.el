@@ -12,14 +12,14 @@
 (declare-function package-activate-all "package" ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package State Caching Configuration
+;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
  package-cache-max-age (* 7 24 60 60) ; 7 days in seconds
  "Maximum age of package cache before considering it stale.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Cache Management Functions
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  package-cache-fresh-p () "Check if package cache exists and is recent enough to use."
@@ -30,6 +30,7 @@
            (float-time
             (time-subtract (current-time) (seconds-to-time (plist-get cache-info :timestamp))))))
       (< cache-age package-cache-max-age)))))
+
 (defun
  save-package-state () "Cache current working package configuration to disk."
  (when
@@ -43,6 +44,7 @@
         (core-message-info "Package state cached (%d packages)" package-count))
     (error
      (core-message-warning "Failed to save package cache: %s" (error-message-string err))))))
+
 (defun
  load-cached-package-state () "Load cached package state using built-in package system."
  (let ((cache-info (package-metadata-read-cache-info)))
@@ -63,24 +65,22 @@
              (length package-alist)
              (/ cache-age 86400)))))
       (error
-       (core-message-warning "Failed to load package cache: %s" (error-message-string err))))))
+       (core-message-warning "Failed to load package cache: %s" (error-message-string err)))))))
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Cache Utility Functions
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defun
-  package-cache-info
-  ()
-  "Display information about the package cache."
-  (interactive)
-  (package-metadata-info))
- (defun
-  package-cache-clear ()
-  "Clear the package metadata cache file.
+(defun
+ package-cache-info
+ ()
+ "Display information about the package cache."
+ (interactive)
+ (package-metadata-info))
+
+(defun
+ package-cache-clear ()
+ "Clear the package metadata cache file.
 
 Removes cached package information to force a fresh refresh from repositories
 on the next package operation. Useful when package metadata seems out of date
 or corrupted."
-  (interactive) (package-metadata-reset)))
+ (interactive) (package-metadata-reset))
 (provide 'package-cache)
 ;;; package-cache.el ends here

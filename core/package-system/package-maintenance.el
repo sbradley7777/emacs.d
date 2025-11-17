@@ -12,7 +12,7 @@
 (defvar core-packages-all) ; Forward declaration - defined in core-packages.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package Upgrade Utilities
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  package-upgrade-all ()
@@ -68,6 +68,7 @@ Shows summary of upgraded packages or reports if no upgrades are available."
       failed-packages
       (core-message-error "Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
     (core-message-success "All packages are up to date"))))
+
 (defun
  core-packages--safe-refresh-and-check (timeout-seconds)
  "Safely refresh package contents and return available upgrades.
@@ -120,9 +121,6 @@ showing current version -> new version for each package."
       (length package-archives))
      (core-message-package "No package updates available - all packages are up to date.")))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package Cleanup Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  core-packages-cleanup ()
  "Clean up unused packages and reset package metadata cache.
@@ -170,9 +168,6 @@ Removes orphaned package dependencies using package-autoremove and resets metada
     cleanup-count
     (if (> cleanup-count 1) "s" ""))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Automatic Weekly Update Check with Persistent Storage
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  core-packages-check-weekly-updates ()
  "Check for package updates once per week during interactive sessions.

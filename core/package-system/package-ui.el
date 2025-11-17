@@ -12,7 +12,7 @@
 (declare-function package-upgrade "package" (pkg &optional dont-select))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Interactive Package Management Functions
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  show-installed-packages ()
@@ -111,6 +111,7 @@ Shows available version and indicates if updates are available."
 
     (goto-char (point-min)) (setq buffer-read-only t) (help-mode))
    (switch-to-buffer buf)))
+
 (defun
  search-packages ()
  "Search for packages by name or keyword in available repositories.

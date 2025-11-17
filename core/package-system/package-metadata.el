@@ -9,7 +9,7 @@
 (require 'core-logging)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants and Variables
+;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
  package-metadata-file
@@ -17,7 +17,7 @@
  "File to store all package system persistent metadata.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Utility Functions
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  package-metadata-normalize-timestamp (timestamp)
@@ -33,6 +33,7 @@ TIMESTAMP can be a string (already human-readable), list (Emacs time format), or
   ;; Nil or other - use current time
   (t
    (format-time-string "%Y-%m-%d %H:%M:%S"))))
+
 (defun
  package-metadata-load-variables ()
  "Load metadata variables from file if it exists.
@@ -45,9 +46,6 @@ Returns t if file was loaded successfully, nil otherwise."
      (core-message-warning "Failed to load package metadata: %s" (error-message-string err))
      nil))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Refresh Timestamp Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  package-metadata-read-refresh-timestamp ()
  "Read the last package refresh timestamp from persistent storage.
@@ -79,9 +77,6 @@ TIMESTAMP should be a float from (float-time (current-time))."
  (let ((human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
    (package-metadata-save-all :refresh-timestamp human-readable)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Cache Information Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  package-metadata-read-cache-info ()
  "Read cache timestamp and count from persistent storage.
@@ -106,6 +101,7 @@ Returns a plist with :timestamp (as float) and :count, or defaults if not found.
         (when
          (boundp 'package-cache-count) (if (numberp package-cache-count) package-cache-count 0))))
    (list :timestamp (or timestamp 0) :count (or count 0))))
+
 (defun
  package-metadata-write-cache-info (timestamp count)
  "Write cache timestamp and count to persistent storage.
@@ -114,9 +110,6 @@ COUNT should be the number of packages in the cache."
  (let ((human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
    (package-metadata-save-all :cache-timestamp human-readable :cache-count count)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; File Management Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  package-metadata-save-all (&rest args)
  "Save all metadata to file with updated values.
@@ -167,6 +160,7 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
         (insert ";;; package-metadata.el ends here\n"))
      (error
       (core-message-error "Failed to save package metadata: %s" (error-message-string err))))))
+
 (defun
  package-metadata-reset () "Delete the metadata file to reset all package system state."
  (when
@@ -177,6 +171,7 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
        (core-message-success "Package metadata reset successfully"))
     (error
      (core-message-error "Failed to delete metadata file: %s" (error-message-string err))))))
+
 (defun
  package-metadata-info () "Display current package metadata information."
  (if
