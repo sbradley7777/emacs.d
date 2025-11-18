@@ -6,6 +6,7 @@ This directory contains scripts and utilities for managing the Emacs configurati
 
 - [Available Scripts](#available-scripts)
 - [Configuration Testing](#configuration-testing)
+- [Code Quality Linting](#code-quality-linting)
 - [elisp-autofmt Pre-commit Hook](#elisp-autofmt-pre-commit-hook)
   - [Requirements](#requirements)
   - [Usage](#usage)
@@ -30,6 +31,9 @@ Automated installation and setup script for the Emacs configuration.
 ### Configuration Testing (`test-config.sh`)
 Comprehensive configuration testing script that validates your Emacs setup in batch mode. See [`TESTING.md`](TESTING.md) for detailed documentation.
 
+### Code Quality Linting (`elisp-lint.sh`)
+Comprehensive linting tool for Emacs Lisp files that performs three types of checks: checkdoc (style and documentation), byte-compile isolated (Flymake-style), and byte-compile with init.el loaded (integration testing).
+
 ### Formatting Hook (`elisp-autofmt-hook`)
 Pre-commit hook wrapper for automatic Emacs Lisp code formatting.
 
@@ -47,6 +51,92 @@ For comprehensive testing documentation including detailed usage examples, troub
 ```
 
 The test script validates module loading, provides timing diagnostics, and verifies Emacs 30.2+ requirements.
+
+---
+
+## Code Quality Linting
+
+The `elisp-lint.sh` script provides comprehensive code quality analysis for Emacs Lisp files through three complementary check types.
+
+### Check Types
+
+1. **Checkdoc (Static Analysis)**
+   - Documentation style checks
+   - Docstring formatting validation
+   - Comment conventions
+   - Filters out false-positive "80 columns wide" warnings (project uses 127-char standard)
+
+2. **Byte-Compile Isolated (Flymake-style)**
+   - Compiles file without loading dependencies
+   - Catches undefined variables and missing functions
+   - Static compilation warnings
+   - Pure syntax and reference checks
+
+3. **Byte-Compile with init.el Loaded (Integration)**
+   - Compiles file after loading full Emacs environment
+   - Tests integration with actual configuration
+   - Catches runtime configuration issues
+   - Validates real-world usage scenarios
+
+### Usage
+
+```bash
+# Check a single file
+~/github/emacs.d/scripts/elisp-lint.sh ~/github/emacs.d/init.el
+
+# Check all files in a directory
+~/github/emacs.d/scripts/elisp-lint.sh ~/github/emacs.d
+
+# Check with debug output (shows actual Emacs commands)
+~/github/emacs.d/scripts/elisp-lint.sh --debug ~/github/emacs.d/features/corfu-config.el
+
+# Show help
+~/github/emacs.d/scripts/elisp-lint.sh --help
+```
+
+### Output Format
+
+The script provides:
+- **Detailed warnings** organized by check type
+- **Overall statistics** showing files with issues vs. total files analyzed
+- **Error summary** grouped by error type (normalized descriptions)
+- **Exit code**: 0 if all checks pass, 1 if issues found
+
+### Example Output
+
+```
+========================================================================================================================
+CHECKDOC WARNINGS (Static Analysis)
+========================================================================================================================
+--- Checkdoc (Static Analysis) ---
+File: ~/github/emacs.d/user/user-utils.el
+  user-utils.el:34: Keycode M-x embedded in doc string.  Use \<keymap> & \[function] instead
+  user-utils.el:64: Lisp symbol 'completion-at-point' should appear in quotes
+
+========================================================================================================================
+SUMMARY: Overall Statistics
+========================================================================================================================
+Check Type                                     | Files Analyzed | Files with Issues |     Total Issues | Status
+-----------------------------------------------+----------------+-------------------+------------------+----------------
+Checkdoc (static analysis)                     |              1 |                 1 |                1 | ✗ FAIL
+Byte-Compile Isolated (Flymake-style)          |              1 |                 0 |                0 | ✓ PASS
+Byte-Compile with init.el loaded               |              1 |                 0 |                0 | ✓ PASS
+========================================================================================================================
+```
+
+### When to Use
+
+- **During development**: Check individual files you're actively working on
+- **Before committing**: Verify code quality on modified files
+- **Code review**: Deep analysis of new or refactored code
+- **CI/CD**: Automated quality checks in pipeline
+
+### Notes
+
+- Requires `init.el` in the target directory (or searches parent directories)
+- Does not create `.elc` byte-compiled files
+- Excludes `elpa/` directory automatically
+- Compliant with shellcheck and bashate standards
 
 ---
 
