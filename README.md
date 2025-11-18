@@ -56,6 +56,9 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`package-cache.el`](core/package-system/package-cache.el) - Package state caching system (stores cache in `~/.emacs.d/local/package-metadata.el`)
     - [`package-network.el`](core/package-system/package-network.el) - Network-aware package operations
     - [`package-repositories.el`](core/package-system/package-repositories.el) - Repository configuration and security
+    - [`package-installation.el`](core/package-system/package-installation.el) - Package installation and dependency management
+    - [`package-metadata.el`](core/package-system/package-metadata.el) - Package metadata extraction and parsing
+    - [`package-ui.el`](core/package-system/package-ui.el) - Interactive package browsing and management UI
     - [`package-maintenance.el`](core/package-system/package-maintenance.el) - Package upgrade and cleanup utilities
   - [`core-constants.el`](core/core-constants.el) - Modern Emacs 30.2+ constants and configuration values
   - [`core-packages.el`](core/core-packages.el) - Package declarations and configurations
@@ -105,13 +108,13 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`highlight-indent-guides-config.el`](features/highlight-indent-guides-config.el) - Visual indentation guides
   - [`imenu-list-config.el`](features/imenu-list-config.el) - Symbol navigation sidebar for code structure
   - [`rainbow-delimiters-config.el`](features/rainbow-delimiters-config.el) - Enhanced delimiter visibility
+  - [`aspell-config.el`](features/aspell-config.el) - Spell checking configuration with Aspell integration
   - **[`tramp/`](features/tramp/)** - Remote file access configuration
     - [`tramp-config.el`](features/tramp/tramp-config.el) - TRAMP remote file access with Python support
     - [`tramp-constants.el`](features/tramp/tramp-constants.el) - TRAMP configuration constants
     - [`tramp-utils.el`](features/tramp/tramp-utils.el) - TRAMP utility functions for remote development
   - **[`tree-sitter/`](features/tree-sitter/)** - Tree-sitter integration
     - [`tree-sitter-config.el`](features/tree-sitter/tree-sitter-config.el) - Automatic tree-sitter mode switching
-    - [`tree-sitter-constants.el`](features/tree-sitter/tree-sitter-constants.el) - Tree-sitter configuration constants
     - [`tree-sitter-utils.el`](features/tree-sitter/tree-sitter-utils.el) - Tree-sitter utility functions
   - **[`treemacs/`](features/treemacs/)** - File tree navigation
     - [`treemacs-config.el`](features/treemacs/treemacs-config.el) - File tree navigation and project management
@@ -134,6 +137,7 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - **[`python/`](lang/python/)** - Python development environment
     - [`python-config.el`](lang/python/python-config.el) - Core Python development settings
     - [`python-constants.el`](lang/python/python-constants.el) - Python configuration constants (LSP paths, etc.)
+    - [`python-utils.el`](lang/python/python-utils.el) - Python utility functions and helpers
     - [`pyvenv-config.el`](lang/python/pyvenv-config.el) - Virtual environment management with auto-detection
     - [`pyvenv-modeline.el`](lang/python/pyvenv-modeline.el) - Python environment modeline display
     - [`pyvenv-remote.el`](lang/python/pyvenv-remote.el) - TRAMP-aware virtual environment support

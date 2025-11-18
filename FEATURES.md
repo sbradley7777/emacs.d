@@ -422,6 +422,70 @@ Specialized handling for [YAML](https://yaml.org/) files with structure-aware fe
 - **Syntax highlighting** with nested structure visualization
 - **Auto-indent on newline** for consistent formatting
 
+### Spell Checking
+
+Comprehensive spell checking powered by [Aspell](http://aspell.net/) with [flymake-aspell](https://github.com/leotaku/flycheck-aspell) integration:
+
+**Features** ([`features/aspell-config.el`](features/aspell-config.el)):
+- **Real-time spell checking** integrated with Flymake diagnostics
+- **Context-aware checking** - spell checks comments and docstrings in code files
+- **Text file support** - full spell checking for markdown, text, and documentation files
+- **Personal dictionary support** - `~/.aspell.en.pws` for custom technical terms
+- **Flymake integration** - misspellings appear in diagnostics buffer alongside code errors
+- **Error navigation** - use `F2`/`F3` to navigate spelling errors like code errors
+
+**Installation Requirements:**
+
+Linux (RHEL/Fedora/CentOS):
+```bash
+sudo yum install aspell aspell-en
+# or
+sudo dnf install aspell aspell-en
+```
+
+Linux (Debian/Ubuntu):
+```bash
+sudo apt-get install aspell aspell-en
+```
+
+macOS (Homebrew):
+```bash
+brew install aspell  # Includes English dictionaries by default
+```
+
+Verify installation:
+```bash
+aspell dump dicts  # Should list "en" or "en_US"
+```
+
+**Personal Dictionary (Recommended):**
+
+Create `~/.aspell.en.pws` to reduce false positives for technical terms:
+```
+personal_ws-1.1 en 0
+defun
+setq
+elisp
+magit
+eglot
+corfu
+async
+kwargs
+isinstance
+virtualenv
+json
+yaml
+toml
+```
+
+**Note:** Update the count on line 1 to match the number of words.
+
+**Benefits:**
+- **Catch typos early** - real-time spell checking during development
+- **Professional documentation** - ensure high-quality writing in comments and docs
+- **Integrated workflow** - same interface as code error checking
+- **Customizable** - add project-specific terminology to personal dictionary
+
 ## Code Style and Standards
 
 ### Automated Formatting

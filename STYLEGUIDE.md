@@ -78,6 +78,7 @@ emacs.d/
 │   │   └── flymake-utils.el     # Flymake utility functions
 │   ├── rainbow-delimiters-config.el    # Enhanced delimiter visibility
 │   ├── highlight-indent-guides-config.el    # Visual indentation guides
+│   ├── aspell-config.el         # Spell checking with Aspell integration
 │   ├── tramp/                   # Remote file access
 │   │   ├── tramp-config.el      # TRAMP configuration
 │   │   ├── tramp-constants.el   # TRAMP configuration constants
@@ -87,7 +88,6 @@ emacs.d/
 │   │   └── treemacs-utils.el    # Treemacs utility functions
 │   └── tree-sitter/             # Tree-sitter integration
 │       ├── tree-sitter-config.el    # Tree-sitter configuration
-│       ├── tree-sitter-constants.el # Tree-sitter configuration constants
 │       └── tree-sitter-utils.el     # Tree-sitter utility functions
 ├── [`lang/`](lang/)                        # Language-specific configurations
 │   ├── lisp-config.el                  # Lisp and Emacs Lisp development settings
