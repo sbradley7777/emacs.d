@@ -14,22 +14,19 @@
 (require 'themes-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Theme Configuration Variables
+;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Allow all themes without confirmation prompts
-(setq custom-safe-themes t)
-
-;; User-configurable theme variables (can be set in local.el)
 (defvar
  themes-config-preferred-theme 'doom-1337
  "User's preferred theme. Can be overridden in local.el.
-Examples: 'doom-1337, 'doom-zenburn, 'doom-one, 'doom-gruvbox, 'wombat")
+Examples: \\='doom-1337, \\='doom-zenburn, \\='doom-one, \\='doom-gruvbox, \\='wombat")
+
 (defvar
  themes-config-customizations nil
  "User's theme-specific customizations. Can be overridden in local.el.
 Format: ((theme-name . ((var1 . value1) (var2 . value2))) ...)
-Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
-;; Doom themes configuration - applied before theme loading
+Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
+
 (defvar
  themes-config-doom-default-customizations
  `((doom-themes-enable-bold . t)
@@ -39,7 +36,7 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
  "Default doom themes customizations.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Theme-Specific Setup Functions
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  themes-config-apply-theme-specific-customizations
@@ -53,9 +50,6 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
   (t
    nil)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Core Theme Loading
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  themes-config-load-configured-theme
  ()
@@ -98,9 +92,10 @@ Example: '((doom-zenburn . ((doom-themes-enable-bold . t))))")
           "Failed to load theme '%s': %s" theme (error-message-string err)))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load Theme on Startup
+;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load user's preferred theme after all configuration is complete
+(setq custom-safe-themes t)
+
 (add-hook 'emacs-startup-hook #'themes-config-load-configured-theme)
 
 ;; Make this module available for loading with (require 'themes-config)

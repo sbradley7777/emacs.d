@@ -16,10 +16,16 @@
 (declare-function consult--buffer-file-hash "consult" ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Buffer Filtering Patterns
+;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Define buffer name patterns to hide from consult-buffer sources.
-;; These patterns are used by custom sources to filter out utility and internal buffers.
+(defvar
+ consult--source-filtered-buffer nil
+ "Filtered buffer source for `consult-buffer' that excludes patterns in
+minibuffer-config-ignored-buffer-patterns and the current buffer.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Constants
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
  minibuffer-config-ignored-buffer-patterns
  '(
@@ -55,53 +61,7 @@ Patterns included:
 To add more patterns, simply add regexp strings to this list.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Custom Filtered Buffer Source Declaration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Define custom filtered buffer source that excludes patterns from minibuffer-config-ignored-buffer-patterns.
-;; This source displays buffers like consult--source-buffer but filters out utility/internal buffers
-;; and the current buffer. Must be defined at top level so it's available to minibuffer-config.el.
-(defvar
- consult--source-filtered-buffer nil
- "Filtered buffer source for `consult-buffer' that excludes patterns in
-minibuffer-config-ignored-buffer-patterns and the current buffer.")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Annotation Function (must be defined before being used in source configuration)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- consult-sources--buffer-annotation
- (buf)
- "Annotate buffer BUF with status, size, permissions, mode-name (major-mode), and abbreviated file path."
- (let ((buffer-obj (get-buffer buf)))
-   (when
-    buffer-obj
-    (with-current-buffer
-     buffer-obj
-     (let* ((modified (if (buffer-modified-p) "*" "-"))
-            (read-only (if buffer-read-only "%" "-"))
-            (buf-status (concat modified read-only "-"))
-            (buf-file (when buffer-file-name (abbreviate-file-name buffer-file-name)))
-            (buf-permissions
-             (if
-              (and buf-file (file-exists-p buf-file))
-              (file-attribute-modes (file-attributes buf-file))
-              "----------"))
-            (buf-size (file-size-human-readable (buffer-size)))
-            (buf-mode-display
-             (format "%s (%s)" (format-mode-line mode-name) (symbol-name major-mode))))
-       ;; Format annotation string manually to avoid marginalia--fields macro issues
-       (concat
-        (propertize (format "%-3s " buf-status) 'face 'marginalia-modified)
-        (propertize (format "%-6s " buf-size) 'face 'marginalia-size)
-        (propertize (format "%-12s " buf-permissions) 'face 'marginalia-date)
-        (propertize
-         (format
-          "%-35s " (truncate-string-to-width buf-mode-display 35 nil nil t))
-         'face 'marginalia-mode)
-        (when buf-file (propertize buf-file 'face 'marginalia-file-name))))))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Filtered Buffer Source Configuration
+;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq
  consult--source-filtered-buffer
@@ -131,10 +91,6 @@ minibuffer-config-ignored-buffer-patterns and the current buffer.")
          minibuffer-config-ignored-buffer-patterns)))
       all-buffers)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Project Buffer Source Customization
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Customize the built-in project buffer source to filter out utility/internal buffers
 (with-eval-after-load
  'consult
  ;; Apply custom annotation to default buffer source for consistent alignment
@@ -190,5 +146,40 @@ minibuffer-config-ignored-buffer-patterns and the current buffer.")
      (seq-take (seq-remove (lambda (x) (gethash x ht)) items) 10))))
 
  (core-message-config "Recent file source limited to 10 files"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ consult-sources--buffer-annotation
+ (buf)
+ "Annotate buffer BUF with status, size, permissions, mode-name (major-mode), and abbreviated file path."
+ (let ((buffer-obj (get-buffer buf)))
+   (when
+    buffer-obj
+    (with-current-buffer
+     buffer-obj
+     (let* ((modified (if (buffer-modified-p) "*" "-"))
+            (read-only (if buffer-read-only "%" "-"))
+            (buf-status (concat modified read-only "-"))
+            (buf-file (when buffer-file-name (abbreviate-file-name buffer-file-name)))
+            (buf-permissions
+             (if
+              (and buf-file (file-exists-p buf-file))
+              (file-attribute-modes (file-attributes buf-file))
+              "----------"))
+            (buf-size (file-size-human-readable (buffer-size)))
+            (buf-mode-display
+             (format "%s (%s)" (format-mode-line mode-name) (symbol-name major-mode))))
+       ;; Format annotation string manually to avoid marginalia--fields macro issues
+       (concat
+        (propertize (format "%-3s " buf-status) 'face 'marginalia-modified)
+        (propertize (format "%-6s " buf-size) 'face 'marginalia-size)
+        (propertize (format "%-12s " buf-permissions) 'face 'marginalia-date)
+        (propertize
+         (format
+          "%-35s " (truncate-string-to-width buf-mode-display 35 nil nil t))
+         'face 'marginalia-mode)
+        (when buf-file (propertize buf-file 'face 'marginalia-file-name))))))))
 (provide 'consult-sources)
 ;;; consult-sources.el ends here

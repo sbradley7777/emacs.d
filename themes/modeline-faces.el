@@ -10,12 +10,12 @@
 (require 'themes-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Face Application Logic
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  modeline-faces-apply-for-theme (theme)
  "Apply modeline face customizations for THEME if available.
-THEME should be a symbol like 'doom-1337 or 'doom-zenburn."
+THEME should be a symbol like \\='doom-1337 or \\='doom-zenburn."
  (let ((theme-name (symbol-name theme)))
    (cond
     ((string= theme-name "doom-1337")
@@ -24,22 +24,21 @@ THEME should be a symbol like 'doom-1337 or 'doom-zenburn."
     (t
      (core-message-debug "No custom modeline faces defined for theme: %s" theme-name)))))
 
-;; Apply faces after both doom-modeline AND the theme are loaded
-;; This runs when doom-modeline loads, then again when the theme changes
-(with-eval-after-load
- 'doom-modeline
- (when
-  (boundp 'themes-config-preferred-theme)
-  (modeline-faces-apply-for-theme themes-config-preferred-theme)))
-
-;; Also hook into theme loading to reapply faces when theme changes
 (defun
  modeline-faces--on-theme-change (&rest _) "Apply modeline faces when theme changes."
  (when
   (and (boundp 'themes-config-preferred-theme) (featurep 'doom-modeline))
   (modeline-faces-apply-for-theme themes-config-preferred-theme)))
 
-;; Add to theme load hooks
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(with-eval-after-load
+ 'doom-modeline
+ (when
+  (boundp 'themes-config-preferred-theme)
+  (modeline-faces-apply-for-theme themes-config-preferred-theme)))
+
 (add-hook 'after-load-theme-hook #'modeline-faces--on-theme-change)
 (provide 'modeline-faces)
 ;;; modeline-faces.el ends here

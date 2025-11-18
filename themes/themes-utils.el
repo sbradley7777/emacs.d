@@ -13,7 +13,7 @@
 (require 'themes-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Generic Theme Customization Functions
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  themes-utils--apply-doom-customizations
@@ -29,6 +29,7 @@
     (core-message-warning
      "Some doom-themes features disabled for terminal compatibility: %s"
      (error-message-string err)))))
+
 (defun
  themes-utils--apply-customizations (theme) "Apply customizations for the specified THEME."
  ;; Apply doom-themes configuration for all themes
@@ -37,24 +38,19 @@
  (when-let ((customs (cdr (assq theme themes-config-customizations))))
    (dolist (custom customs) (set (car custom) (cdr custom)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Theme Discovery Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  themes-utils--get-available-doom-themes () "Get a list of all available doom themes."
  (sort
   (seq-filter
    (lambda (theme) (string-match-p "^doom-" (symbol-name theme))) (custom-available-themes))
   (lambda (a b) (string< (symbol-name a) (symbol-name b)))))
+
 (defun
  themes-utils--get-other-themes
  ()
  "Get a list of other (non-doom) themes that work well."
  '(wombat tango-dark leuven))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Interactive Theme Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;###autoload
 (defun
  theme-utils-switch-theme

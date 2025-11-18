@@ -6,16 +6,16 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File Location Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tree-sitter
 (core-utils-defconst-path
  features-treesit-grammars-dir
  "tree-sitter/"
  emacs-local-dir
  "Directory for tree-sitter grammar libraries.")
-;; TRAMP Remote File Access
 (core-utils-defconst-path
  features-tramp-cache-file
  "tramp"
@@ -26,22 +26,19 @@
  "tramp-autosave"
  emacs-local-dir
  "Directory for TRAMP remote file autosaves.")
-;; Treemacs
 (core-utils-defconst-path
  features-treemacs-persist-file
  "treemacs-persist"
  emacs-local-dir
  "File for treemacs workspace and project state persistence.")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; UI and Interaction Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Completion (Corfu) Constants
 (defconst features-corfu-auto-delay 0.2 "Corfu completion delay in seconds.")
 (defconst features-corfu-auto-prefix 1 "Start completing after this many characters.")
 (defconst features-corfu-min-width 20 "Minimum corfu popup width.")
 (defconst features-corfu-max-width 100 "Maximum corfu popup width.")
 (defconst features-corfu-count 10 "Maximum number of completion candidates shown.")
+
 ;; Window Constants
 (defconst
  features-side-window-compact-width 0.3
@@ -51,6 +48,7 @@ Used by flymake diagnostics, forge issues, magit, and other side windows.")
  features-side-window-expanded-width 0.5
  "Width for expanded toggleable side windows (50% of frame).
 Used by toggle commands for flymake diagnostics, forge issues, and other side windows.")
+
 ;; Indent Guides Constants
 (defconst
  features-indent-guides-auto-char-face-perc 40 "Base visibility percentage for indent guides.")
@@ -59,15 +57,13 @@ Used by toggle commands for flymake diagnostics, forge issues, and other side wi
  80
  "Top-level visibility percentage for indent guides.")
 (defconst features-indent-guides-delay 0.1 "Delay before showing indent guides.")
+
 ;; Which-key Constants
 (defconst features-which-key-idle-delay 0.3 "Which-key display delay.")
 (defconst features-which-key-max-description-length 40 "Maximum which-key description length.")
 (defconst features-which-key-column-padding 1 "Which-key column padding.")
 (defconst features-which-key-separator " → " "Separator displayed between key and description.")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Color Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rainbow Delimiters Color Palette
 (defconst features-color-delimiter-1 "#ff6b6b" "Bright red for delimiter depth 1.")
 (defconst features-color-delimiter-2 "#ffa500" "Bright orange for delimiter depth 2.")
@@ -81,6 +77,7 @@ Used by toggle commands for flymake diagnostics, forge issues, and other side wi
 (defconst features-color-delimiter-unmatched "#f44336" "Error red for unmatched delimiters.")
 (defconst features-color-delimiter-error-bg "#f44336" "Background color for delimiter errors.")
 (defconst features-color-delimiter-error-fg "#ffffff" "Foreground color for delimiter errors.")
+
 ;; Indent Guide Colors
 (defconst features-color-indent-guide-odd "#2a2a2a" "Odd level indent guide background.")
 (defconst features-color-indent-guide-even "#3a3a3a" "Even level indent guide background.")

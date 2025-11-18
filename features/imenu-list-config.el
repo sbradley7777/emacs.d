@@ -5,8 +5,17 @@
 ;;; Code:
 (require 'core-logging)
 (require 'features-constants)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Imenu-List Configuration
+;; Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar
+ imenu-list-excluded-modes
+ '(treemacs-mode dashboard-mode)
+ "Major modes that should not trigger imenu-list updates.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package
  imenu-list
@@ -19,25 +28,6 @@
  (setq imenu-list-auto-update nil) ; Disable idle timer updates
  (setq imenu-list-focus-after-activation t) ; Focus sidebar when opened
  (setq imenu-list-after-jump-hook nil) ; Don't change focus after jumping to symbol
-
- ;; Manually update when switching buffers, but skip special buffers
- (defvar
-  imenu-list-excluded-modes
-  '(treemacs-mode dashboard-mode)
-  "Major modes that should not trigger imenu-list updates.")
-
- (defun
-  imenu-list-smart-update
-  ()
-  "Update imenu-list only for regular file buffers, not special buffers like treemacs."
-  (let ((ilist-open (get-buffer "*Ilist*"))
-        (excluded-mode (memq major-mode imenu-list-excluded-modes))
-        (hidden-buf (string-prefix-p " " (buffer-name)))
-        (special-buf (string-prefix-p "*" (buffer-name))))
-    ;; Update if conditions are met
-    (when
-     (and ilist-open (not excluded-mode) (not hidden-buf) (not special-buf))
-     (imenu-list-update t)))) ;; Force update with t parameter
 
  ;; Update on buffer/window changes
  (add-hook 'buffer-list-update-hook #'imenu-list-smart-update)
@@ -56,5 +46,21 @@
  (define-key imenu-list-major-mode-map (kbd "s") 'imenu-list-show-current-symbol)
 
  (core-message-success "Imenu-list configured for terminal-based symbol navigation"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ imenu-list-smart-update
+ ()
+ "Update imenu-list only for regular file buffers, not special buffers like treemacs."
+ (let ((ilist-open (get-buffer "*Ilist*"))
+       (excluded-mode (memq major-mode imenu-list-excluded-modes))
+       (hidden-buf (string-prefix-p " " (buffer-name)))
+       (special-buf (string-prefix-p "*" (buffer-name))))
+   ;; Update if conditions are met
+   (when
+    (and ilist-open (not excluded-mode) (not hidden-buf) (not special-buf))
+    (imenu-list-update t))))
 (provide 'imenu-list-config)
 ;;; imenu-list-config.el ends here

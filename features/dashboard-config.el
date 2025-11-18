@@ -8,16 +8,10 @@
 (require 'package-ui)
 (require 'package-maintenance)
 (require 'nerd-icons)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Dashboard Configuration
+;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- dashboard--insert-separator () "Insert a centered horizontal line separator."
- (let* ((line-width 80)
-        (separator (make-string line-width ?─))
-        (padding (/ (- (window-width) line-width) 2))
-        (spaces (make-string (max 0 padding) ?\s)))
-   (insert "\n\n" spaces separator "\n")))
 (use-package
  dashboard
  :ensure t
@@ -90,5 +84,16 @@
  (dashboard-setup-startup-hook)
  ;; Force dashboard refresh when opening files at startup
  (add-hook 'emacs-startup-hook #'dashboard-insert-startupify-lists))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ dashboard--insert-separator () "Insert a centered horizontal line separator."
+ (let* ((line-width 80)
+        (separator (make-string line-width ?─))
+        (padding (/ (- (window-width) line-width) 2))
+        (spaces (make-string (max 0 padding) ?\s)))
+   (insert "\n\n" spaces separator "\n")))
 (provide 'dashboard-config)
 ;;; dashboard-config.el ends here

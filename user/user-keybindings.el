@@ -7,10 +7,8 @@
 (require 'user-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Keyboard behavior and Custom HotKeys (aka: keyboard-modifiers or shortcuts):
+;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; List of hotkeys: http://www.math.uh.edu/~bgb/emacs_keys.html | Use CTRL-h k to describe keys (describe-key)
-
 ;; Set up the keyboard so the delete key on both regular keyboard and keypad delete the character under the cursor
 ;; and to the right under X, instead of the default backspace behavior.
 (global-set-key (kbd "<delete>") 'delete-char)
@@ -43,9 +41,6 @@
 (global-set-key (kbd "C-c g d") 'diff-hl-diff-goto-hunk) ; Show diff for current change
 (global-set-key (kbd "C-c g r") 'diff-hl-revert-hunk) ; Revert current change
 
-;; Keyboard commands for controlling the buffer.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Scroll buffer down/up
 (global-set-key (kbd "ESC <left>") 'scroll-down) ; Scroll buffer down
 (global-set-key (kbd "ESC <right>") 'scroll-up) ; Scroll buffer up
 ;; Buffer navigation
@@ -60,9 +55,6 @@
 (global-set-key (kbd "<f11>") 'user-smart-page-up) ; Page up with smart boundary handling
 (global-set-key (kbd "<f12>") 'user-smart-page-down) ; Page down with smart boundary handling
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Consult Enhanced Navigation Commands
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (with-eval-after-load
  'consult
  (global-set-key (kbd "C-x b") 'consult-buffer) ; Better buffer switching with preview

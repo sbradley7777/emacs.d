@@ -11,9 +11,8 @@
 (declare-function theme-utils-switch-theme "theme-utils" (theme-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Interactive function aliases
+;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Use shorter y/n prompts instead of yes/no
 (defalias 'yes-or-no-p #'y-or-n-p)
 (defalias 'list-themes #'theme-utils-list-themes)
 (defalias 'switch-theme #'theme-utils-switch-theme)
