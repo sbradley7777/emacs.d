@@ -43,7 +43,7 @@ repos:
     hooks:
       - id: bashate
         description: "The utility bashate is an automated style checker for bash scripts "
-        args: ["--ignore=E006"]
+        args: ["--ignore=E006", '--max-line-length', '127']
 
   - repo: https://github.com/codespell-project/codespell
     # To run 'codespell' manually and fix typos:
