@@ -38,7 +38,7 @@
    (define-key map (kbd "v") 'command-palette-validate-commands)
    map)
  "Keymap for command palette buffer.")
-(defvar command-palette--mx-flag nil "Flag set when M-x is invoked.")
+(defvar command-palette--mx-flag nil "Non-nil means M-x was invoked.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -299,7 +299,7 @@ Switches to the previous window before executing the command, then closes the pa
 
 (defun
  command-palette--make-button (label action face &optional keybinding)
- "Create a clickable button with LABEL that executes ACTION. Use FACE for styling.
+ "Create a clickable button with LABEL that execute ACTION. Use FACE for styling.
 If KEYBINDING is provided, display it in parentheses with a red color."
  (let ((start (point)))
    (insert "  " label)

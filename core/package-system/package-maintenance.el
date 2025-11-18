@@ -170,8 +170,8 @@ Removes orphaned package dependencies using package-autoremove and resets metada
 
 (defun
  core-packages-check-weekly-updates ()
- "Check for package updates once per week during interactive sessions.
-Automatically check for package updates once per week during interactive Emacs sessions.
+ "Check for package update once per week during interactive sessions.
+Automatically check for package update once per week during interactive Emacs sessions.
 This provides awareness of available updates without automatically installing them.
 
 How it works:

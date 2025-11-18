@@ -126,8 +126,8 @@ Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
 (defun
  flymake-setup-custom-format (error-code-extractor)
  "Set up custom diagnostics buffer format with Code column.
-  Creates a custom tabulated-list-format that adds a 'Code' column for error codes
-  and replaces cryptic backend names with user-friendly versions.
+Creates a custom tabulated-list-format that adds a 'Code' column for error codes
+and replaces cryptic backend names with user-friendly versions.
   ERROR-CODE-EXTRACTOR is a function that takes a message and returns an error code string.
 
   Column layout:

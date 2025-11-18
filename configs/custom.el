@@ -33,3 +33,5 @@
 ;; Display a message to confirm loading
 (require 'core-logging)
 (core-message-success "custom.el loaded - menu customizations are working!")
+(provide 'custom)
+;;; custom.el ends here

@@ -25,7 +25,7 @@ THEME should be a symbol like \\='doom-1337 or \\='doom-zenburn."
      (core-message-debug "No custom modeline faces defined for theme: %s" theme-name)))))
 
 (defun
- modeline-faces--on-theme-change (&rest _) "Apply modeline faces when theme changes."
+ modeline-faces--on-theme-change (&rest _) "Apply modeline faces when theme change."
  (when
   (and (boundp 'themes-config-preferred-theme) (featurep 'doom-modeline))
   (modeline-faces-apply-for-theme themes-config-preferred-theme)))

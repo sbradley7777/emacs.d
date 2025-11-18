@@ -72,7 +72,7 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
 (defun
  pyvenv-update-shell-interpreter
  ()
- "Update python-shell-interpreter when virtual environment changes for modeline display."
+ "Update python-shell-interpreter when virtual environment change for modeline display."
  (if
   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
   (let ((venv-python (expand-file-name "bin/python" pyvenv-virtual-env)))

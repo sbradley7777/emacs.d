@@ -31,7 +31,7 @@ ARGS are additional use-package keywords like :after, :description, :config, etc
 (defun
  core-config-loader-normalize/:description
  (_name _keyword args)
- "Normalize :description keyword - just returns the description string."
+ "Normalize :description keyword - just return the description string."
  (use-package-only-one
   (symbol-name :description) args
   (lambda

@@ -4,6 +4,8 @@
 ;;      Provides filtered buffer views that exclude utility and internal buffers.
 
 ;;; Code:
+(require 'subr-x) ; For when-let
+
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar consult--source-buffer) ; From consult.el
 (defvar consult--source-project-buffer) ; From consult.el
@@ -20,8 +22,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
  consult--source-filtered-buffer nil
- "Filtered buffer source for `consult-buffer' that excludes patterns in
-minibuffer-config-ignored-buffer-patterns and the current buffer.")
+ "Filtered buffer source for `consult-buffer' excluding certain patterns.
+Excludes patterns in minibuffer-config-ignored-buffer-patterns and the current buffer.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants

@@ -120,7 +120,7 @@ not globally, to keep .git/config files clean."
       (unless
        (boundp 'forge-alist)
        (core-message-error
-        "forge-alist variable not defined. Ensure forge is properly loaded")
+        "Forge-alist variable not defined. Ensure forge is properly loaded")
        (cl-return-from git-forge-config-populate-forge-alist nil))
       (let ((hosts (git-forge-config-parse-hosts))
             (added-count 0))

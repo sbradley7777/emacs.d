@@ -25,7 +25,7 @@
 (defun
  makefile-validate-tabs
  ()
- "Check if Makefile uses proper tabs for recipe indentation."
+ "Check if Makefile use proper tabs for recipe indentation."
  (interactive)
  (save-excursion
   (goto-char (point-min))
