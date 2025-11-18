@@ -19,26 +19,28 @@
 (require 'forge-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Shared State and Utilities
+;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
  git-auto-sync--synced-repositories-table (make-hash-table :test 'equal)
  "Hash table tracking repositories synced this session.
 Keys are repository root paths, values are timestamps.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-auto-sync--is-repository-synced-p (repo-root)
  "Check if REPO-ROOT has been synced this session.
 Returns the timestamp if synced, nil otherwise."
  (gethash repo-root git-auto-sync--synced-repositories-table))
+
 (defun
  git-auto-sync--mark-repository-synced
  (repo-root)
  "Mark REPO-ROOT as synced with current timestamp."
  (puthash repo-root (current-time) git-auto-sync--synced-repositories-table))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Magit Auto-Sync
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-auto-sync-magit-fetch (repo-root)
  "Fetch Git data for REPO-ROOT using Magit.
@@ -50,10 +52,6 @@ Loads Magit if not already loaded and fetches all remotes."
    "Fetching magit git data for project: %s" (git-utils-format-repository-display repo-root))
   (magit-fetch-all nil)))
 
-;; Magit Completion Detection
-;; Magit doesn't provide a post-fetch hook, so we use :before advice on magit-process-sentinel
-;; to detect when git fetch processes complete. We check the process command to identify fetch
-;; operations and show completion messages only for repositories we initiated sync for.
 (defun
  git-auto-sync--before-magit-sentinel-advice (process event)
  "Advice to detect Magit fetch completion and show status message.
@@ -94,13 +92,7 @@ which contains the actual git command, not the shell wrapper."
          (core-message-error
           "Failed to fetch magit git data for project: %s"
           (git-utils-format-repository-display repo-root)))))))))
-(with-eval-after-load
- 'magit
- (advice-add 'magit-process-sentinel :before #'git-auto-sync--before-magit-sentinel-advice))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Forge Auto-Sync
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-auto-sync-forge-pull (repo-root)
  "Fetch Forge data for REPO-ROOT using Forge.
@@ -142,10 +134,6 @@ a fetch (retrieves remote data without modifying local state), not a pull (fetch
       (git-utils-format-repository-display repo-root)
       (error-message-string err))))))
 
-;; Forge Completion and Error Detection
-;; Forge doesn't provide post-pull hooks, and errors can timeout silently without
-;; calling callbacks. We use :around advice on forge--glab-get to inject timeout
-;; detection for the initial API call.
 (defun
  git-sync--around-forge-glab-get-advice (orig-fun obj resource &optional params &rest args)
  "Advice to wrap forge--glab-get and inject timeout detection.
@@ -199,9 +187,6 @@ OBJ, RESOURCE, PARAMS, and ARGS are the original arguments."
     ;; Pass through unchanged for non-auto-synced calls or non-initial resources
     (apply orig-fun obj resource params args))))
 
-;; Forge Success Detection
-;; We also need to detect successful completions. We use :around advice on forge--pull
-;; to inject a success callback.
 (defun
  git-auto-sync--around-forge-pull-advice (orig-fun repo &optional callback since)
  "Advice to wrap forge--pull and inject success detection.
@@ -222,14 +207,6 @@ REPO, CALLBACK, and SINCE are the original forge--pull arguments."
     ;; Pass through unchanged for non-auto-synced calls
     (funcall orig-fun repo callback since))))
 
-(with-eval-after-load
- 'forge
- (advice-add 'forge--pull :around #'git-auto-sync--around-forge-pull-advice)
- (advice-add 'forge--glab-get :around #'git-sync--around-forge-glab-get-advice))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Core Sync Function (Manual and Auto both use this)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-sync-repository ()
  "Manually sync both Magit and Forge data for the current repository.
@@ -243,9 +220,6 @@ When called, it marks the repository as synced for this session."
    (git-auto-sync-magit-fetch repo-root)
    (git-auto-sync-forge-pull repo-root)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Auto-Sync (Automatic on File Open)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-auto-sync-repository-once ()
  "Auto-sync both Magit and Forge data once per repository when first file is opened.
@@ -259,6 +233,16 @@ Skips remote files accessed via TRAMP."
      "Skipping git auto-sync for remote repository (TRAMP): %s"
      (git-utils-format-repository-display repo-root))
     (unless (git-auto-sync--is-repository-synced-p repo-root) (git-sync-repository)))))
+
+(with-eval-after-load
+ 'magit
+ (advice-add 'magit-process-sentinel :before #'git-auto-sync--before-magit-sentinel-advice))
+
+(with-eval-after-load
+ 'forge
+ (advice-add 'forge--pull :around #'git-auto-sync--around-forge-pull-advice)
+ (advice-add 'forge--glab-get :around #'git-sync--around-forge-glab-get-advice))
+
 (add-hook 'find-file-hook #'git-auto-sync-repository-once)
 (core-message-config
  "Git and Forge auto-sync configured (auto on file open, manual via git-sync-repository)")

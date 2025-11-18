@@ -11,10 +11,10 @@
 ;;; Code:
 (require 'core-logging)
 (require 'forge-markdown)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Forge Markdown Rendering Configuration
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Helper function to wrap forge--fontify-markdown with markdown-hide-markup enabled
 (defun
  forge-config--fontify-with-hidden-markup
  (orig-fun text &optional indent)
@@ -22,8 +22,9 @@
  (let ((markdown-hide-markup t))
    (funcall orig-fun text indent)))
 
-;; Override forge--fontify-markdown with improved version that hides markup
-;; This makes issue/PR content cleaner by hiding [](url) syntax and showing only link text
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (with-eval-after-load
  'forge-topic
  (advice-add 'forge--fontify-markdown :around #'forge-config--fontify-with-hidden-markup)

@@ -19,27 +19,7 @@
 (require 'git-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Forge Configuration from Git Config
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; These functions read [emacs-forge "HOST"] sections from ~/.gitconfig to populate forge-alist.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Example ~/.gitconfig entries:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;   [emacs-forge "gitlab.example.com"]
-;;       apihost = gitlab.example.com/api/v4
-;;       webhost = gitlab.example.com
-;;       type = gitlab
-;;       user = YOUR_USERNAME
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;   [emacs-forge "github.enterprise.com"]
-;;       apihost = github.enterprise.com/api/v3
-;;       webhost = github.enterprise.com
-;;       type = github
-;;       user = YOUR_USERNAME
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; This configuration is read automatically when Forge loads (see git-config.el).
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Forge Host Parsing
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-forge-config-parse-hosts ()
@@ -187,29 +167,6 @@ not globally, to keep .git/config files clean."
     (core-message-error
      "Failed to read forge config from ~/.gitconfig: %s" (error-message-string err)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Repository-Specific Username Configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; These functions automatically configure forge usernames in repository-local .git/config files.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; How it works:
-;;   1. When a file is opened, find-file-hook triggers git-forge-config-setup-repo-on-file-open
-;;   2. Magit is loaded on-demand if not already available
-;;   3. The repository's forge host is detected from remote.origin.url
-;;   4. The username is looked up from the [emacs-forge] section in ~/.gitconfig
-;;   5. The username is set in the LOCAL .git/config (not global ~/.gitconfig)
-;;   6. Only the username for THIS repository's specific host is configured
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Example:
-;;   Repository: git@gitlab.example.com:user/project.git
-;;   Adds to .git/config: [gitlab "gitlab.example.com/api/v4"] user = YOUR_USERNAME
-;;   Does NOT add GitHub or other unrelated hosts
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Benefits:
-;;   - Clean per-repository configuration
-;;   - No pollution of git configs with unrelated hosts
-;;   - Works automatically without manual intervention
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-forge-config-get-repo-host ()
  "Get the forge host for the current git repository.
@@ -289,7 +246,8 @@ This is called as advice before forge-pull to ensure username is set."
   (and (git-utils-find-repository-root) (fboundp 'magit-get) (fboundp 'magit-set))
   (git-forge-config-set-repo-username)))
 
-;; Add advice to run before forge-pull
+(add-hook 'find-file-hook #'git-forge-config-setup-repo-on-file-open)
+
 (with-eval-after-load 'forge (advice-add 'forge-pull :before #'git-forge-config-before-forge-pull))
 
 (core-message-config "Git forge configuration utilities loaded")

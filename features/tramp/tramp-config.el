@@ -20,30 +20,17 @@
 (require 'features-constants)
 (require 'tramp-constants)
 (require 'tramp-utils)
-
-;; Load TRAMP
 (require 'tramp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Configuration
+;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Default connection method and shell
 (setq tramp-default-method "ssh")
 (setq tramp-default-remote-shell tramp-default-shell)
-
-;; Cache and auto-save locations
 (setq tramp-persistency-file-name features-tramp-cache-file)
 (setq tramp-auto-save-directory features-tramp-autosave-dir)
-;; Ensure directory exists
 (core-utils-ensure-directory features-tramp-autosave-dir)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Remote Path Configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Add each additional path to tramp-remote-path
 (dolist (path tramp-user-paths) (add-to-list 'tramp-remote-path path))
-
-;; Include user's PATH from shell profile
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 (provide 'tramp-config)
 ;;; tramp-config.el ends here

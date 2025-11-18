@@ -10,7 +10,7 @@
 (require 'core-process-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Git Repository Detection
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-utils-find-repository-root (&optional directory)
@@ -18,6 +18,7 @@
 Returns the repository root path, or nil if not in a git repository."
  (when-let ((root (vc-git-root (or directory default-directory))))
    (expand-file-name root)))
+
 (defun
  git-utils-format-repository-display (repo-root)
  "Format REPO-ROOT for display as \\='name (abbreviated-path)\\='.
@@ -28,9 +29,6 @@ Example: \\='glocktopography (~/gitlab/glocktopography/)\\='."
   (let ((name (file-name-nondirectory (directory-file-name repo-root))))
     (format "%s (%s)" name (abbreviate-file-name repo-root)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Git Config Utility Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  git-utils--validate-config-key (key)
  "Validate that KEY is a non-empty string suitable for git config.

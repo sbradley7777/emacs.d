@@ -8,10 +8,15 @@
 (require 'features-constants)
 (require 'forge-constants)
 (require 'git-utils)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Issue List Commands
+;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar forge-issues--current-width 'compact "Current width state of forge issues window.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  forge-issues--handle-error (err error-type)
  "Handle errors from toggle-forge-issues-window with appropriate messaging.
@@ -27,6 +32,7 @@ Provides helpful guidance for 'Cannot use repository yet' errors."
      (eq error-type 'user-error)
      (core-message-warning "%s" err-msg)
      (core-message-error "Failed to list issues: %s" err-msg)))))
+
 (defun
  forge-issues--kill-orphaned-buffers ()
  "Kill forge buffers that lack proper initialization.
@@ -41,6 +47,7 @@ which causes errors during redisplay when the mode-line is evaluated."
      (derived-mode-p 'forge-topics-mode)
      (or (not (boundp 'forge--buffer-topics-spec)) (not forge--buffer-topics-spec)))
     (kill-buffer buf)))))
+
 (defun
  forge-issues--find-window ()
  "Find the forge topic window if it exists and is properly initialized.
@@ -59,6 +66,7 @@ Returns the window displaying a forge topic buffer, or nil if not found."
        (setq forge-window win))))
     nil t)
    forge-window))
+
 (defun
  forge-issues--resize-window
  (window new-width)
@@ -68,6 +76,7 @@ Returns the window displaying a forge topic buffer, or nil if not found."
         (current-width (window-width window))
         (delta (- desired-width current-width)))
    (when (/= delta 0) (window-resize window delta t))))
+
 (defun
  toggle-forge-issues-window (&optional repo)
  "Toggle forge issues window with size cycling between 30% and 50% width.
@@ -102,7 +111,7 @@ Optional REPO argument specifies which repository to list issues for."
        (forge-issues--handle-error err 'error))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Defensive Mode-Line Handling
+;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (with-eval-after-load
  'forge-topics

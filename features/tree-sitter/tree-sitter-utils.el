@@ -9,7 +9,7 @@
 (require 'features-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Grammar Management
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  treesit-utils-get-installed-grammars ()
@@ -42,9 +42,6 @@ Returns a list of plists with :name and :file keys."
 Returns the count of .so/.dylib grammar files found in the tree-sitter grammar directory."
  (length (treesit-utils-get-installed-grammars)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Mode Mapping and Parsing
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  treesit-utils-get-mode-mapping (lang)
  "Get the (REGULAR-MODE TS-MODE) pair for LANG by querying treesit-auto.
@@ -58,12 +55,14 @@ Returns nil if no mapping is found."
      (let ((ts-mode (treesit-auto-recipe-ts-mode recipe))
            (remap (treesit-auto-recipe-remap recipe)))
        (when (and ts-mode remap) (list remap ts-mode)))))))
+
 (defun
  treesit-utils-is-ts-mode-p (mode-symbol)
  "Check if MODE-SYMBOL is a tree-sitter mode.
 MODE-SYMBOL should be a symbol like 'python-ts-mode or 'python-mode.
 Returns t if the mode is a tree-sitter mode (ends with -ts-mode), nil otherwise."
  (when mode-symbol (string-match-p "-ts-mode$" (symbol-name mode-symbol))))
+
 (defun
  treesit-utils-extract-lang-from-mode (mode-symbol)
  "Extract language name from tree-sitter MODE-SYMBOL.

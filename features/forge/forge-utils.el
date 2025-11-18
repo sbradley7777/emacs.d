@@ -10,8 +10,9 @@
 (require 'forge-constants)
 (require 'git-forge-config)
 (require 'git-utils)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Authinfo Parsing
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  forge-utils-parse-authinfo ()
@@ -65,9 +66,6 @@ Returns one of:
       (dolist (entry entries) (when (string= (plist-get entry :machine) host) (setq found t)))
       (if found :authenticated :no-credentials)))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Forge Host Diagnostics
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  forge-utils-diagnostics-show-hosts ()
  "Display all configured forge hosts and their authentication status.
@@ -142,12 +140,6 @@ and whether they have credentials configured in ~/.authinfo."
         lines)))
    (core-message-diagnostic "Forge Host Diagnostics" (nreverse lines))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; TRAMP Support
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ghub--git-get uses call-process which only works on local system.
-;; magit-get uses process-file which respects default-directory (works with TRAMP).
-;; For remote repositories, delegate to magit-get; for local, use original implementation.
 (defun
  forge-utils--ghub-use-magit-get (orig-fun var)
  "Advice for ghub--git-get to delegate to magit-get for remote repositories.
@@ -163,7 +155,9 @@ via process-file. For local directories, use original ghub implementation."
   ;; Local: use original ghub implementation
   (funcall orig-fun var)))
 
-;; Apply advice when ghub loads
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (with-eval-after-load
  'ghub
  (advice-add 'ghub--git-get :around #'forge-utils--ghub-use-magit-get)

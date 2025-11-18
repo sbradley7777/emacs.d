@@ -15,10 +15,8 @@
 (declare-function treemacs-load-theme "treemacs-themes" (theme-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Custom File Icon Mappings
+;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; You can search for the icons and their names from this url:
-;;   - https://www.nerdfonts.com/cheat-sheet
 (defvar
  treemacs-nerd-icons-file-icon-mappings
  '(("makefile" nerd-icons-sucicon "nf-seti-makefile" :face nerd-icons-dorange)
@@ -37,7 +35,7 @@ These are added to nerd-icons-extension-icon-alist for treemacs to use.
 To browse available icons: M-x nerd-icons-insert")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Theme Loading Functions
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  treemacs-apply-nerd-icons-file-icons ()

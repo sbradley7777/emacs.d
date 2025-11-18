@@ -13,15 +13,33 @@
 (declare-function treemacs-load-theme "treemacs-themes" (theme-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Treemacs Configuration
+;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Available Themes:
-;; - "Default" : Built-in theme with simple text indicators (works everywhere)
-;; - "nerd-icons" : Nerd Font symbols (requires Nerd Fonts installation)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Note: User can override the default theme in local.el
+(defun
+ treemacs-smart-toggle ()
+ "Smart toggle for Treemacs file tree sidebar.
 
-;; Load and configure Treemacs immediately
+Behavior depends on current Treemacs state:
+- If Treemacs window is selected: closes it
+- If Treemacs is visible but not selected: selects it
+- If Treemacs is not visible: opens it at the current file's project root
+
+Opens exclusively at the current project for focused navigation."
+ (interactive)
+ (cond
+  ;; If treemacs window is selected, close it
+  ((and (treemacs-get-local-window) (treemacs-is-treemacs-window-selected?))
+   (delete-window))
+  ;; If treemacs is visible but not selected, select it
+  ((treemacs-get-local-window)
+   (treemacs-select-window))
+  ;; Treemacs not visible, open it at current project
+  (t
+   (treemacs-add-and-display-current-project-exclusively))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when
  (package-installed-p 'treemacs)
  (require 'treemacs)
@@ -75,37 +93,7 @@
     `("%e" mode-line-front-space
       ,(format "Treemacs: %s" (treemacs-theme->name treemacs--current-theme))))))
 
- ;; Simplified treemacs toggle function
- (defun
-  treemacs-smart-toggle ()
-  "Smart toggle for Treemacs file tree sidebar.
-
-Behavior depends on current Treemacs state:
-- If Treemacs window is selected: closes it
-- If Treemacs is visible but not selected: selects it
-- If Treemacs is not visible: opens it at the current file's project root
-
-Opens exclusively at the current project for focused navigation."
-  (interactive)
-  (cond
-   ;; If treemacs window is selected, close it
-   ((and (treemacs-get-local-window) (treemacs-is-treemacs-window-selected?))
-    (delete-window))
-   ;; If treemacs is visible but not selected, select it
-   ((treemacs-get-local-window)
-    (treemacs-select-window))
-   ;; Treemacs not visible, open it at current project
-   (t
-    (treemacs-add-and-display-current-project-exclusively))))
-
- (core-message-success "Treemacs loaded and configured successfully")
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Dired Integration
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; NOTE: Dired icons are now handled by nerd-icons-dired (see features/dired-config.el)
- ;; treemacs-icons-dired is NOT enabled to avoid conflicts with nerd-icons-dired
- ) ;; End of (when (package-installed-p 'treemacs))
+ (core-message-success "Treemacs loaded and configured successfully"))
 
 ;; Ensure fallback function is defined
 (unless
