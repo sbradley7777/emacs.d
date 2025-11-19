@@ -9,6 +9,14 @@
 (defvar which-func-update-delay) ; From which-func.el
 (defvar native-comp-deferred-compilation-deny-list) ; From comp.el
 
+;; Variables from core-constants.el
+(defvar ignore-on-load)
+(defvar core-gc-long-session-threshold)
+(defvar core-gc-percentage-normal)
+(defvar core-gc-normal-threshold)
+(defvar core-idle-update-delay-normal)
+(defvar core-gc-check-threshold)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
