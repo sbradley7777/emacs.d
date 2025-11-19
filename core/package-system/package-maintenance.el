@@ -179,7 +179,7 @@ How it works:
 - Checks if 7 days have passed since last package list refresh (persistent across sessions)
 - Refreshes package contents from repositories (MELPA, GNU ELPA, etc.)
 - Notifies user if updates are available but does NOT install them
-- User can run M-x show-package-upgrades for details or M-x package-list-packages to install
+- User can run \\[show-package-upgrades] for details or \\[package-list-packages] to install
 
 Benefits:
 - Stay informed about available updates (like the doom-themes fix we just applied)

@@ -31,7 +31,7 @@ Saves init.el buffer if it's currently open before reloading."
  user-copy-whole-buffer
  ()
  "Copy the entire buffer to the kill ring.
-This is equivalent to doing M-x mark-whole-buffer followed by M-w."
+This is equivalent to doing \\[mark-whole-buffer] followed by `M-w'."
  (interactive)
  (kill-ring-save (point-min) (point-max))
  (core-message-info "Buffer copied to kill ring"))

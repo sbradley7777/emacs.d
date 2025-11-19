@@ -20,9 +20,9 @@
 
 (defun
  flymake-ruff-extract-error-code (message)
- "Extract error code from ruff diagnostic message.
+ "Extract error code from ruff diagnostic MESSAGE.
 Ruff messages typically contain error codes like F401, I001, E402, etc.
-This function extracts those codes using regex pattern ([A-Z][0-9]+)."
+This function extracts those codes using a regex matching one uppercase letter followed by digits."
  (let ((msg-text
         (cond
          ;; Handle simple string messages

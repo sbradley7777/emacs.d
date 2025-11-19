@@ -38,7 +38,7 @@
    (define-key map (kbd "v") 'command-palette-validate-commands)
    map)
  "Keymap for command palette buffer.")
-(defvar command-palette--mx-flag nil "Non-nil means M-x was invoked.")
+(defvar command-palette--mx-flag nil "Non-nil means `M-x' was invoked.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
@@ -104,7 +104,7 @@
    delete-backward-char
    y-or-n-p-insert-other
    undefined)
- "Commands to exclude from M-x history tracking.")
+ "Commands to exclude from `M-x' history tracking.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -467,7 +467,7 @@ persisted to disk immediately. Useful for pinning frequently-used commands."
 
 Prompts for an index number from the favorites list, then permanently removes
 that command from favorites. The change is persisted to disk immediately.
-Does not affect the command's availability in M-x."
+Does not affect the command's availability in `M-x'."
  (interactive)
  (if
   (= (length command-palette-favorites) 0) (core-message-warning "No favorites to remove")
@@ -579,7 +579,7 @@ side windows (Flymake diagnostics, Imenu-list)."
     (forward-line 3))))
 
 (defun
- command-palette--track-command () "Track commands executed via M-x using post-command-hook."
+ command-palette--track-command () "Track commands executed via `M-x' using `post-command-hook'."
  ;; Set flag when M-x is invoked
  (when
   (memq this-command '(execute-extended-command execute-extended-command-for-buffer))

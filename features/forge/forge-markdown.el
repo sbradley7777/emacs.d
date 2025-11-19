@@ -60,7 +60,7 @@ Fills region if forge-post-fill-region is set, and applies indentation if INDENT
 (defun
  forge-markdown--make-urls-clickable (string)
  "Add click handlers to URLs in STRING.
-Makes both plain URLs and markdown link URLs clickable with mouse-1.
+Makes both plain URLs and markdown link URLs clickable with `mouse-1'.
 For markdown links [text](url), finds the link text and extracts the URL from the invisible portion."
  (with-temp-buffer
   (insert string) (goto-char (point-min))
@@ -140,7 +140,7 @@ Preserves interactive properties (keymap, help-echo, follow-link) for clickable 
  "Fontify markdown TEXT with markup hiding enabled.
 This is an improved version of forge--fontify-markdown that hides markdown
 markup characters and URLs for cleaner display in forge topic buffers.
-Makes links clickable with mouse-1 and RET.
+Makes links clickable with `mouse-1' and `RET'.
 Optional INDENT specifies indentation level."
  (with-temp-buffer
   (forge-markdown--setup-buffer text) (forge-markdown--apply-post-processing indent)

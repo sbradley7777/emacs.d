@@ -32,7 +32,7 @@ Each entry is a list of (FILENAME ICON-FUNCTION ICON-NAME :face FACE).
 FILENAME must be lowercase (treemacs downcases filenames before lookup).
 These are added to nerd-icons-extension-icon-alist for treemacs to use.
 
-To browse available icons: M-x nerd-icons-insert")
+To browse available icons: \\[nerd-icons-insert]")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
