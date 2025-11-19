@@ -34,7 +34,7 @@ Set this to nil in local.el to use the default Emacs modeline instead.")
    buffer-encoding) ; File encoding (UTF-8, etc.)
  "Left side segments for doom-modeline.
 Each symbol represents a modeline segment.  Users can customize this in local.el
-to reorder segments or remove unwanted ones. See doom-modeline documentation
+to reorder segments or remove unwanted ones.  See doom-modeline documentation
 for available segment names.")
 
 (defvar
@@ -54,7 +54,7 @@ for available segment names.")
    time) ; Current time display
  "Right side segments for doom-modeline.
 Each symbol represents a modeline segment.  Users can customize this in local.el
-to reorder segments or remove unwanted ones. See doom-modeline documentation
+to reorder segments or remove unwanted ones.  See doom-modeline documentation
 for available segment names.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

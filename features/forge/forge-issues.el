@@ -80,7 +80,7 @@ Returns the window displaying a forge topic buffer, or nil if not found."
 (defun
  toggle-forge-issues-window (&optional repo)
  "Toggle forge issues window with size cycling between 30% and 50% width.
-When buffer is closed, opens at 30%. When buffer is open, toggles between 30% and 50%.
+When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% and 50%.
 Optional REPO argument specifies which repository to list issues for."
  (interactive) (forge-issues--kill-orphaned-buffers)
  (let ((existing-window (forge-issues--find-window)))

@@ -77,7 +77,7 @@
 
 Shows doom-themes and built-in Emacs themes in a dedicated buffer.
 Press RET on a theme name to preview it immediately.  The currently
-active theme is highlighted. Provides a visual way to browse and
+active theme is highlighted.  Provides a visual way to browse and
 test different color schemes."
  (interactive)
  (let* ((doom-themes (themes-utils--get-available-doom-themes))

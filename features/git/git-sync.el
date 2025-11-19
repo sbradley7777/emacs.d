@@ -100,7 +100,7 @@ Loads Forge if not already loaded and fetches issues/PRs from the forge API.
 If the repository is not yet in the Forge database, adds it automatically.
 
 Note: We use 'Fetching' in the message for consistency with git-auto-sync-magit-fetch,
-even though the underlying function is named forge-pull. The operation is semantically
+even though the underlying function is named forge-pull.  The operation is semantically
 a fetch (retrieves remote data without modifying local state), not a pull (fetch + merge)."
  (require 'forge nil t)
  (when

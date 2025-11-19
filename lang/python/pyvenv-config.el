@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;      AUTO-DETECT ONCE APPROACH: Automatically detects the first Python virtual
 ;;      environment encountered and remembers it as THE project.  The virtual
-;;      environment is activated. The built-in pyvenv modeline indicator is disabled
+;;      environment is activated.  The built-in pyvenv modeline indicator is disabled
 ;;      in favor of our custom doom-modeline segment (defined in pyvenv-modeline.el).
 
 ;;; Code:
@@ -22,7 +22,7 @@
 
 Searches for a virtual environment in the project root and activates it.
 Only runs once per project - subsequent calls are ignored to avoid redundant
-activation. Searches for common venv directory names (.venv, venv, env).
+activation.  Searches for common venv directory names (.venv, venv, env).
 Updates Python interpreter path and modeline after successful activation."
  (interactive)
  (unless
