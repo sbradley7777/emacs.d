@@ -816,7 +816,7 @@ isolated_count=0
 loaded_count=0
 
 if [ -f "$CHECKDOC_OUT" ]; then
-    checkdoc_count=$(grep -c "^File:" "$CHECKDOC_OUT" || echo "0")
+    checkdoc_count=$(grep -c "^File:" "$CHECKDOC_OUT")
 fi
 
 if [ -f "$ISOLATED_OUT" ]; then
@@ -825,7 +825,8 @@ if [ -f "$ISOLATED_OUT" ]; then
 fi
 
 if [ -f "$LOADED_OUT" ]; then
-    loaded_count=$(grep -E ":(Warning|Error):|^[[:space:]]*[^:]+!$" "$LOADED_OUT" | grep -cv "^---\|^File:" || echo "0")
+    # shellcheck disable=SC2126  # Need grep pipeline for filtering before counting
+    loaded_count=$(grep -E ":(Warning|Error):|^[[:space:]]*[^:]+!$" "$LOADED_OUT" | grep -v "^---\|^File:" | wc -l)
 fi
 
 # Display detailed results first if there are issues
