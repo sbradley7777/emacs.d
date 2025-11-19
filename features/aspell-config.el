@@ -38,7 +38,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; USAGE:
 ;;   Spell checking integrates with Flymake and shows errors in the same way as
-;;   coding errors. Misspelled words appear with the same highlighting as Flymake
+;;   coding errors.  Misspelled words appear with the same highlighting as Flymake
 ;;   errors and can be viewed in the Flymake diagnostics buffer (F1).
 
 ;;; Code:
@@ -73,7 +73,7 @@ Returns t if \\='en\\=' dictionary is available, nil otherwise."
 (defun
  aspell-available-p ()
  "Check if aspell is installed and has English dictionary.
-Returns t if both conditions are met, nil otherwise. Displays appropriate
+Returns t if both conditions are met, nil otherwise.  Displays appropriate
 error message if either condition fails."
  (cond
   ((not (executable-find "aspell"))

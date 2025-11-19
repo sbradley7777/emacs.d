@@ -28,7 +28,7 @@
    ("flymake" . "Flymake"))
  "Mapping of internal Flymake backend identifiers to user-friendly names.
 Each entry is (PATTERN . FRIENDLY-NAME) where PATTERN is a regex to match
-against the backend identifier. Patterns are checked in order, so more
+against the backend identifier.  Patterns are checked in order, so more
 specific patterns should come first (e.g., 'e-f-b-c' before 'e-f-b').")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,7 +60,7 @@ Returns the window displaying *Flymake diagnostics* buffer, or nil if not found.
 (defun
  toggle-flymake-diagnostics-window ()
  "Toggle the Flymake diagnostics window with size cycling.
-When buffer is closed, opens at 30%. When buffer is open, toggles between 30% and 50%.
+When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% and 50%.
 Automatically focuses the diagnostics window when opened or resized.
 Displays syntax errors, warnings, and notes from all active Flymake backends."
  (interactive)

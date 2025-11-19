@@ -147,7 +147,7 @@ ORIG-FUN is the original ghub--git-get function.
 VAR is the git config variable to read.
 
 When default-directory is remote (TRAMP), use magit-get which handles TRAMP
-via process-file. For local directories, use original ghub implementation."
+via process-file.  For local directories, use original ghub implementation."
  (if
   (file-remote-p default-directory)
   ;; Remote: use magit-get (handles TRAMP)

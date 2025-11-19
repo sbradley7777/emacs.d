@@ -13,9 +13,9 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pyvenv-normalize-path
- (path)
- "Normalize path for comparison. Handles both local and TRAMP paths."
+ pyvenv-normalize-path (path)
+ "Normalize path for comparison.  Handles both local and TRAMP paths.
+PATH is the file path to normalize."
  (if (file-remote-p path) (file-local-name path) (expand-file-name path)))
 
 (defun
@@ -42,16 +42,18 @@ Uses process-file for TRAMP compatibility - works for both local and remote file
         (core-message-debug "Failed to parse version from: %s" output) nil))))))
 
 (defun
- pyvenv-get-python-version (venv-path) "Get Python version from virtual environment."
+ pyvenv-get-python-version (venv-path)
+ "Get Python version from virtual environment.
+VENV-PATH is the path to the virtual environment directory."
  (when
   venv-path
   (let ((python-executable (expand-file-name "bin/python" venv-path)))
     (pyvenv-get-version-from-executable python-executable))))
 
 (defun
- pyvenv-find-venv
- (&optional start-dir)
- "Find virtual environment by searching current directory and parents."
+ pyvenv-find-venv (&optional start-dir)
+ "Find virtual environment by searching current directory and parents.
+START-DIR is the starting directory for the search (defaults to current directory)."
  (let ((current-dir (or start-dir default-directory)))
    (core-message-loading
     "Searching for Python venv starting from: %s" (abbreviate-file-name current-dir))

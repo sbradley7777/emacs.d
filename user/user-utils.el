@@ -162,7 +162,7 @@ If called from an excluded buffer, jumps to the last valid buffer."
  "Remove 2 leading spaces from the subject line and body of a git commit message.
 
 This function is used to format Claude-generated git commit messages when editing
-a commit message. Claude often generates commit messages with 2-space indentation,
+a commit message.  Claude often generates commit messages with 2-space indentation,
 and this function removes that leading indentation to produce properly formatted
 commit messages.
 

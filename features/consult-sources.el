@@ -48,7 +48,7 @@ Excludes patterns in minibuffer-config-ignored-buffer-patterns and the current b
    ;; "\\*info\\*"
    )
  "List of regexp patterns for buffer names to hide from consult-buffer.
-Each pattern is matched against buffer names. Matching buffers are excluded
+Each pattern is matched against buffer names.  Matching buffers are excluded
 from consult-buffer completion.
 
 Patterns included:

@@ -97,12 +97,12 @@ Optional REPO argument specifies which repository to list issues for."
         (progn
          (unless
           (require 'forge-topics nil t)
-          (error "Forge package not available. Install it with: M-x package-install RET forge"))
+          (error "Forge package not available.  Install it with: M-x package-install RET forge"))
          (unless (git-utils-find-repository-root) (user-error "Not in a git repository"))
          (let ((repository (or repo (forge-get-repository :tracked))))
            (unless
             repository
-            (error "No forge repository found. Ensure this repository is tracked by forge"))
+            (error "No forge repository found.  Ensure this repository is tracked by forge"))
            (forge-topics-setup-buffer repository nil :type 'issue)
            (setq forge-issues--current-width 'compact)))
       (user-error

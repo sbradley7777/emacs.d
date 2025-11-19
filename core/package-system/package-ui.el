@@ -117,7 +117,7 @@ Shows available version and indicates if updates are available."
  "Search for packages by name or keyword in available repositories.
 
 Prompts for a search term and displays matching packages from all configured
-package repositories. Shows package descriptions and installation status.
+package repositories.  Shows package descriptions and installation status.
 Useful for discovering new packages or finding alternatives."
  (interactive)
  (let ((search-term (core-user-read-string "Search packages: ")))

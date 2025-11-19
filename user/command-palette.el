@@ -26,7 +26,7 @@
 (defvar
  command-palette-favorites
  nil
- "List of favorite commands displayed in the palette. Loaded from file or defaults.")
+ "List of favorite commands displayed in the palette.  Loaded from file or defaults.")
 (defvar
  command-palette-previous-window nil "Window that was active before opening the command palette.")
 (defvar
@@ -85,7 +85,7 @@
    ("Git Sync Repository" . git-sync-repository)
    ("Toggle Git Issues Window" . toggle-forge-issues-window)
    ("Generate Forge Authinfo Entries" . forge-authinfo-generate-entries))
- "Default list of favorite commands. Format: ((\"Display Name\" . command-symbol) ...).")
+ "Default list of favorite commands.  Format: ((\"Display Name\" . command-symbol) ...).")
 (defconst
  command-palette-excluded-commands
  '(command-palette-toggle
@@ -148,7 +148,7 @@
 (defun
  command-palette--load-history (&optional silent)
  "Load command history from persistent storage.
-If SILENT is non-nil, suppress success messages. Returns t if successful, nil otherwise."
+If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise."
  (when
   (file-exists-p command-palette-history-file)
   (condition-case err
@@ -202,7 +202,7 @@ If SILENT is non-nil, suppress success messages. Returns t if successful, nil ot
 (defun
  command-palette--load-favorites (&optional silent)
  "Load favorites from persistent storage.
-If SILENT is non-nil, suppress success messages. Returns t if successful, nil otherwise."
+If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise."
  (if
   (file-exists-p command-palette-favorites-file)
   (condition-case err
@@ -244,7 +244,7 @@ Example: \\='find-file\\=' becomes \\='Find File\\='."
 (defun
  command-palette--add-to-history (cmd-symbol)
  "Add CMD-SYMBOL to command history if it's not excluded or in favorites.
-Removes any existing occurrences before adding to ensure no duplicates. Returns t if added, nil if excluded."
+Removes any existing occurrences before adding to ensure no duplicates.  Returns t if added, nil if excluded."
  (when
   (and
    (symbolp cmd-symbol)
@@ -299,7 +299,7 @@ Switches to the previous window before executing the command, then closes the pa
 
 (defun
  command-palette--make-button (label action face &optional keybinding)
- "Create a clickable button with LABEL that execute ACTION. Use FACE for styling.
+ "Create a clickable button with LABEL that execute ACTION.  Use FACE for styling.
 If KEYBINDING is provided, display it in parentheses with a red color."
  (let ((start (point)))
    (insert "  " label)
@@ -432,12 +432,12 @@ Returns width as number of columns needed to display content."
  "Promote a recent command from history to the favorites list.
 
 Prompts for an index number from the recent commands list, then moves that
-command to the favorites section and removes it from history. The command is
-persisted to disk immediately. Useful for pinning frequently-used commands."
+command to the favorites section and removes it from history.  The command is
+persisted to disk immediately.  Useful for pinning frequently-used commands."
  (interactive)
  (if
   (= (ring-length command-palette-history) 0)
-  (core-message-warning "No recent commands to promote. Execute commands via M-x first.")
+  (core-message-warning "No recent commands to promote.  Execute commands via M-x first.")
   (let* ((max-index (ring-length command-palette-history))
          (index
           (core-user-read-number
@@ -466,7 +466,7 @@ persisted to disk immediately. Useful for pinning frequently-used commands."
  "Remove a command from the favorites list by index number.
 
 Prompts for an index number from the favorites list, then permanently removes
-that command from favorites. The change is persisted to disk immediately.
+that command from favorites.  The change is persisted to disk immediately.
 Does not affect the command's availability in `M-x'."
  (interactive)
  (if
@@ -546,7 +546,7 @@ Use this to reset your recent commands list while keeping your favorites intact.
  "Toggle the command palette side window display.
 
 Opens the command palette in a side window showing favorite and recent commands.
-If already open, closes it. When opening, automatically closes other exclusive
+If already open, closes it.  When opening, automatically closes other exclusive
 side windows (Flymake diagnostics, Imenu-list)."
  (interactive)
  (if

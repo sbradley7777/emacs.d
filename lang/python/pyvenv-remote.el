@@ -18,6 +18,7 @@
 (defun
  pyvenv-remote-find-venv (remote-dir)
  "Find virtual environment for remote directory.
+REMOTE-DIR is the remote directory to search for a virtual environment.
 First tries to find it remotely, falls back to local equivalent if needed."
  (core-message-debug "Searching for venv in: %s" (abbreviate-file-name remote-dir))
  (if
@@ -39,6 +40,7 @@ First tries to find it remotely, falls back to local equivalent if needed."
 (defun
  pyvenv-remote-search-venv (remote-dir)
  "Search for virtual environment in remote directory using centralized detection.
+REMOTE-DIR is the remote directory to search for a virtual environment.
 Uses python-utils-find-venv-path which is TRAMP-compatible via locate-dominating-file."
  (python-utils-find-venv-path remote-dir))
 
@@ -83,9 +85,10 @@ Uses python-utils-find-venv-path which is TRAMP-compatible via locate-dominating
   (when (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate))))
 
 (defun
- pyvenv-remote-setup-connection
- (host venv-path)
- "Setup connection-local variables for virtual environment."
+ pyvenv-remote-setup-connection (host venv-path)
+ "Setup connection-local variables for virtual environment.
+HOST is the remote host identifier.
+VENV-PATH is the path to the virtual environment on the remote host."
  (let ((profile-name
         (intern (format "pyvenv-remote-%s" (secure-hash 'md5 (format "%s-%s" host venv-path))))))
    (tramp-create-python-connection-profile profile-name host venv-path)))

@@ -16,9 +16,11 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- forge-config--fontify-with-hidden-markup
- (orig-fun text &optional indent)
- "Wrap forge--fontify-markdown to enable markdown-hide-markup."
+ forge-config--fontify-with-hidden-markup (orig-fun text &optional indent)
+ "Wrap forge--fontify-markdown to enable markdown-hide-markup.
+ORIG-FUN is the original function being advised.
+TEXT is the markdown text to fontify.
+INDENT is the optional indentation level."
  (let ((markdown-hide-markup t))
    (funcall orig-fun text indent)))
 

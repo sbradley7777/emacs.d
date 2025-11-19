@@ -6,7 +6,7 @@
 ;;; Commentary:
 
 ;; TRAMP (Transparent Remote Access, Multiple Protocol) configuration for
-;; seamless remote file editing. This module provides:
+;; seamless remote file editing.  This module provides:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; - SSH-based remote file access
 ;; - Python development support with virtual environments

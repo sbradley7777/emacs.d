@@ -15,6 +15,7 @@
 (defun
  git-utils-find-repository-root (&optional directory)
  "Find git repository root using built-in vc-git.
+DIRECTORY is the starting directory to search from (defaults to current directory).
 Returns the repository root path, or nil if not in a git repository."
  (when-let ((root (vc-git-root (or directory default-directory))))
    (expand-file-name root)))
@@ -32,7 +33,7 @@ Example: \\='glocktopography (~/gitlab/glocktopography/)\\='."
 (defun
  git-utils--validate-config-key (key)
  "Validate that KEY is a non-empty string suitable for git config.
-Returns t if valid, nil otherwise. Logs warning if invalid.
+Returns t if valid, nil otherwise.  Logs warning if invalid.
 Allows regex metacharacters that are safe for git config --get-regexp."
  (cond
   ((not (stringp key))
@@ -50,7 +51,7 @@ Allows regex metacharacters that are safe for git config --get-regexp."
 (defun
  git-utils--validate-hostname (hostname)
  "Validate that HOSTNAME is a valid hostname format.
-Returns t if valid, nil otherwise. Does not validate DNS resolution."
+Returns t if valid, nil otherwise.  Does not validate DNS resolution."
  (and
   (stringp hostname)
   (not (string-empty-p hostname))
@@ -59,7 +60,7 @@ Returns t if valid, nil otherwise. Does not validate DNS resolution."
 
 (defun
  git-utils--ensure-git-available ()
- "Check if git command is available. Return t if available, nil otherwise.
+ "Check if git command is available.  Return t if available, nil otherwise.
 Logs a warning if git is not found."
  (if
   (core-utils-check-command-in-path "git") t (core-message-warning "git command not found") nil))

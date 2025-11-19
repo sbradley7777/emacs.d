@@ -5,7 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IMPORTANT: Automatically appends ^forge suffix to usernames
 ;; The ^forge suffix is required by the ghub/forge package to identify
-;; tokens used for Forge operations vs. other API access.
+;; tokens used for Forge operations vs.  other API access.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Format: machine APIHOST login USERNAME^forge password TOKEN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -51,7 +51,7 @@ Returns t if valid, nil otherwise."
  forge-authinfo-generate-entries ()
  "Generate ~/.authinfo entries for forge hosts missing authentication.
 Reads [emacs-forge] sections from ~/.gitconfig and checks which hosts
-are missing credentials in ~/.authinfo. For each missing host, prompts
+are missing credentials in ~/.authinfo.  For each missing host, prompts
 the user for authentication token and generates the authinfo entry.
 Only prompts for hosts that are properly configured in ~/.gitconfig.
 

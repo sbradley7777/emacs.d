@@ -157,7 +157,7 @@ OBJ, RESOURCE, PARAMS, and ARGS are the original arguments."
             (unless
              completed
              (core-message-error
-              "Failed to fetch forge git data for project: %s. The fetch of git data timed out after %d seconds"
+              "Failed to fetch forge git data for project: %s.  The fetch of git data timed out after %d seconds"
               (git-utils-format-repository-display repo-root)
               forge-api-timeout-seconds)))))
          (wrapped-callback

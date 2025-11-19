@@ -4,7 +4,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      TERMINAL FONT REQUIREMENT:
 ;;      To see icons in terminal mode (SSH or local terminal), your terminal emulator
-;;      must use a Nerd Font. Install a Nerd Font on the machine running the terminal:
+;;      must use a Nerd Font.  Install a Nerd Font on the machine running the terminal:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      macOS (for iTerm2/Terminal.app):
 ;;        brew install font-fira-code-nerd-font

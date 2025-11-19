@@ -29,9 +29,9 @@ ARGS are additional use-package keywords like :after, :description, :config, etc
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-config-loader-normalize/:description
- (_name _keyword args)
- "Normalize :description keyword - just return the description string."
+ core-config-loader-normalize/:description (_name _keyword args)
+ "Normalize :description keyword - just return the description string.
+ARGS contains the keyword arguments to validate."
  (use-package-only-one
   (symbol-name :description) args
   (lambda
@@ -43,9 +43,12 @@ ARGS are additional use-package keywords like :after, :description, :config, etc
      (use-package-error ":description expects a string"))))))
 
 (defun
- core-config-loader-handler/:description
- (name _keyword description rest state)
- "Handle :description keyword to track module loading with timing."
+ core-config-loader-handler/:description (name _keyword description rest state)
+ "Handle :description keyword to track module loading with timing.
+NAME is the module name.
+DESCRIPTION is the module description string.
+REST contains remaining keyword arguments.
+STATE contains use-package processing state."
  (let ((body (use-package-process-keywords name rest state)))
    (use-package-concat
     `((let ((load-time (current-time))

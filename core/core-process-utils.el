@@ -19,7 +19,7 @@ QUIET is a boolean - if non-nil, don't log errors for non-zero exit codes.
 ARGS are the command-line arguments as separate strings.
 
 Logs errors via core-message-error for consistent error reporting unless
-QUIET is non-nil. Exceptions are always logged regardless of QUIET.
+QUIET is non-nil.  Exceptions are always logged regardless of QUIET.
 
 Example:
   (core-process-run-sync \"git\" nil \"config\" \"--global\" \"--get\" \"user.name\")

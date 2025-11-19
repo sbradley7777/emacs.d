@@ -115,12 +115,12 @@ not globally, to keep .git/config files clean."
       (unless
        (require 'forge nil t)
        (core-message-error
-        "Forge package not available. Install it with: M-x package-install RET forge")
+        "Forge package not available.  Install it with: M-x package-install RET forge")
        (cl-return-from git-forge-config-populate-forge-alist nil))
       (unless
        (boundp 'forge-alist)
        (core-message-error
-        "Forge-alist variable not defined. Ensure forge is properly loaded")
+        "Forge-alist variable not defined.  Ensure forge is properly loaded")
        (cl-return-from git-forge-config-populate-forge-alist nil))
       (let ((hosts (git-forge-config-parse-hosts))
             (added-count 0))

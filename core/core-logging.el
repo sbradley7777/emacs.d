@@ -25,54 +25,65 @@ Format: YYYY-MM-DD HH:MM:SS (e.g., '2025-11-07 11:20:26').")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Message utility functions with Unicode prefixes
 (defun
- core-message-success
- (format-string &rest args)
- "Display success message with ✅ prefix."
+ core-message-success (format-string &rest args)
+ "Display success message with ✅ prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "✅  " format-string) args))
 (defun
- core-message-error
- (format-string &rest args)
- "Display error message with ❌ prefix."
+ core-message-error (format-string &rest args)
+ "Display error message with ❌ prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "❌  " format-string) args))
 (defun
- core-message-warning
- (format-string &rest args)
- "Display warning message with ⚠️ prefix."
+ core-message-warning (format-string &rest args)
+ "Display warning message with ⚠️ prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "⚠️  " format-string) args))
 (defun
- core-message-info
- (format-string &rest args)
- "Display info message with ℹ️ prefix."
+ core-message-info (format-string &rest args)
+ "Display info message with ℹ️ prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "ℹ️  " format-string) args))
 (defun
- core-message-loading
- (format-string &rest args)
- "Display loading message with 🔄 prefix."
+ core-message-loading (format-string &rest args)
+ "Display loading message with 🔄 prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "🔄  " format-string) args))
 (defun
- core-message-package
- (format-string &rest args)
- "Display package message with 📦 prefix."
+ core-message-package (format-string &rest args)
+ "Display package message with 📦 prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "📦  " format-string) args))
 (defun
- core-message-config
- (format-string &rest args)
- "Display config message with ⚙️ prefix."
+ core-message-config (format-string &rest args)
+ "Display config message with ⚙️ prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "⚙️  " format-string) args))
 (defun
- core-message-debug
- (format-string &rest args)
- "Display debug message with 🛠️ prefix."
+ core-message-debug (format-string &rest args)
+ "Display debug message with 🛠️ prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "🛠️  " format-string) args))
 (defun
- core-message-theme
- (format-string &rest args)
- "Display theme message with 🎨 prefix."
+ core-message-theme (format-string &rest args)
+ "Display theme message with 🎨 prefix.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message (concat "🎨  " format-string) args))
 (defun
  core-message-plain (format-string &rest args)
  "Display plain message without Unicode prefix.
-Useful for system diagnostics, debug output, and structured information that doesn't need visual emphasis."
+Useful for system diagnostics, debug output, and structured information that doesn't need visual emphasis.
+FORMAT-STRING is the message format string.
+ARGS are the format arguments."
  (apply #'message format-string args))
 
 ;; Diagnostic message utilities
@@ -115,6 +126,11 @@ Output format:
 (defun
  core-logging-duplicate-warnings-to-messages (orig-fun type message &optional level buffer-name)
  "Advice to duplicate warning messages to *Messages* buffer.
+ORIG-FUN is the original function being advised.
+TYPE is the warning type.
+MESSAGE is the warning message.
+LEVEL is the warning level (optional).
+BUFFER-NAME is the target buffer name (optional).
 Calls the original display-warning function and also logs to *Messages*.
 Filters out :debug level warnings to reduce noise."
  (prog1

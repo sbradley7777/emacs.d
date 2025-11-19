@@ -18,12 +18,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
  themes-config-preferred-theme 'doom-1337
- "User's preferred theme. Can be overridden in local.el.
+ "User's preferred theme.  Can be overridden in local.el.
 Examples: \\='doom-1337, \\='doom-zenburn, \\='doom-one, \\='doom-gruvbox, \\='wombat")
 
 (defvar
  themes-config-customizations nil
- "User's theme-specific customizations. Can be overridden in local.el.
+ "User's theme-specific customizations.  Can be overridden in local.el.
 Format: ((theme-name . ((var1 . value1) (var2 . value2))) ...)
 Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
 

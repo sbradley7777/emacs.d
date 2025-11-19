@@ -1,7 +1,7 @@
 ;;; pyvenv-config.el --- Auto-detect Once Python Virtual Environment Management -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      AUTO-DETECT ONCE APPROACH: Automatically detects the first Python virtual
-;;      environment encountered and remembers it as THE project. The virtual
+;;      environment encountered and remembers it as THE project.  The virtual
 ;;      environment is activated. The built-in pyvenv modeline indicator is disabled
 ;;      in favor of our custom doom-modeline segment (defined in pyvenv-modeline.el).
 
