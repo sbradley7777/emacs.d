@@ -65,6 +65,12 @@
 # Debug mode flag
 DEBUG=false
 
+# Patterns to filter out from checkdoc (configured to use 127 char limit, ignore 80 char warnings)
+CHECKDOC_FILTER_PATTERNS="Some lines are over 80 columns wide"
+
+# Patterns to filter out from isolated byte-compile (expected errors without init.el)
+ISOLATED_FILTER_PATTERNS="Cannot open load file"
+
 # Prints a horizontal separator line (120 '=' characters).
 #
 # Outputs:
@@ -205,9 +211,9 @@ run_checkdoc_check() {
 
     local checkdoc_result
     if [ "$DEBUG" = true ]; then
-        checkdoc_result=$(emacs --batch --eval "(setq byte-compile-docstring-max-column 127)" --eval "(checkdoc-file \"$file\")" 2>&1 | tee /dev/stderr | grep -v -E "(Loading|Loaded)" | grep -v "^$" | grep -v "Some lines are over 80 columns wide")
+        checkdoc_result=$(emacs --batch --eval "(setq byte-compile-docstring-max-column 127)" --eval "(checkdoc-file \"$file\")" 2>&1 | tee /dev/stderr | grep -v -E "(Loading|Loaded)" | grep -v "^$" | grep -v "$CHECKDOC_FILTER_PATTERNS")
     else
-        checkdoc_result=$(emacs --batch --eval "(setq byte-compile-docstring-max-column 127)" --eval "(checkdoc-file \"$file\")" 2>&1 | grep -v -E "(Loading|Loaded)" | grep -v "^$" | grep -v "Some lines are over 80 columns wide")
+        checkdoc_result=$(emacs --batch --eval "(setq byte-compile-docstring-max-column 127)" --eval "(checkdoc-file \"$file\")" 2>&1 | grep -v -E "(Loading|Loaded)" | grep -v "^$" | grep -v "$CHECKDOC_FILTER_PATTERNS")
     fi
 
     if [ -n "$checkdoc_result" ]; then
@@ -217,13 +223,14 @@ run_checkdoc_check() {
 
 # Runs isolated byte-compile (Flymake-style) without loading init.el.
 # This catches static analysis warnings like undefined variables.
+# Filters out expected errors using ISOLATED_FILTER_PATTERNS after AWK processing.
 #
 # Parameters:
 #   file - Absolute path to .el file
 #   display_file - Path with ~ substitution for display
 #
 # Returns:
-#   Byte-compile warnings (empty if no warnings)
+#   Byte-compile warnings (empty if no warnings), excluding filtered patterns
 run_isolated_byte_compile() {
     local file="$1"
     local display_file="$2"
@@ -236,12 +243,14 @@ run_isolated_byte_compile() {
         isolated_result=$(emacs --batch \
             --eval "(setq byte-compile-dest-file-function (lambda (_) nil))" \
             --eval "(byte-compile-file \"$file\")" 2>&1 | tee /dev/stderr | grep -v -E "(Loading|Loaded)" | grep -v "^$" | \
-            awk "$(get_byte_compile_awk_script)")
+            awk "$(get_byte_compile_awk_script)" | \
+            grep -v "$ISOLATED_FILTER_PATTERNS")
     else
         isolated_result=$(emacs --batch \
             --eval "(setq byte-compile-dest-file-function (lambda (_) nil))" \
             --eval "(byte-compile-file \"$file\")" 2>&1 | grep -v -E "(Loading|Loaded)" | grep -v "^$" | \
-            awk "$(get_byte_compile_awk_script)")
+            awk "$(get_byte_compile_awk_script)" | \
+            grep -v "$ISOLATED_FILTER_PATTERNS")
     fi
 
     if [ -n "$isolated_result" ]; then
@@ -356,15 +365,16 @@ parse_checkdoc_errors() {
             if [[ $line =~ :[0-9]+:\ (.+)$ ]]; then
                 msg="${BASH_REMATCH[1]}"
                 msg=$(normalize_error_message "$msg" "checkdoc")
-                echo "Checkdoc|Note|$msg" >> "$SUMMARY_BY_TYPE"
+                echo "Checkdoc (static)|Note|$msg" >> "$SUMMARY_BY_TYPE"
             else
-                echo "Checkdoc|Note|$line" >> "$SUMMARY_BY_TYPE"
+                echo "Checkdoc (static)|Note|$line" >> "$SUMMARY_BY_TYPE"
             fi
         done
     fi
 }
 
 # Parses isolated byte-compile output and generates summary entries.
+# Filters out errors using ISOLATED_FILTER_PATTERNS.
 #
 # Reads from:
 #   $ISOLATED_OUT - Isolated byte-compile results file
@@ -373,15 +383,15 @@ parse_checkdoc_errors() {
 #   $SUMMARY_BY_TYPE - Summary file
 parse_isolated_errors() {
     if [ -f "$ISOLATED_OUT" ]; then
-        grep -E ":(Warning|Error):" "$ISOLATED_OUT" | while IFS= read -r line; do
+        grep -E ":(Warning|Error):" "$ISOLATED_OUT" | grep -v "$ISOLATED_FILTER_PATTERNS" | while IFS= read -r line; do
             if [[ $line =~ :Warning:\ (.+)$ ]]; then
                 desc="${BASH_REMATCH[1]}"
                 desc=$(normalize_error_message "$desc" "byte-compile")
-                echo "Isolated|Warning|$desc" >> "$SUMMARY_BY_TYPE"
+                echo "Byte-Compile (isolated)|Warning|$desc" >> "$SUMMARY_BY_TYPE"
             elif [[ $line =~ :Error:\ (.+)$ ]]; then
                 desc="${BASH_REMATCH[1]}"
                 desc=$(normalize_error_message "$desc" "byte-compile")
-                echo "Isolated|Error|$desc" >> "$SUMMARY_BY_TYPE"
+                echo "Byte-Compile (isolated)|Error|$desc" >> "$SUMMARY_BY_TYPE"
             fi
         done
     fi
@@ -400,14 +410,14 @@ parse_loaded_errors() {
             if [[ $line =~ :Warning:\ (.+)$ ]]; then
                 desc="${BASH_REMATCH[1]}"
                 desc=$(normalize_error_message "$desc" "byte-compile")
-                echo "Loaded|Warning|$desc" >> "$SUMMARY_BY_TYPE"
+                echo "Byte-Compile (loaded)|Warning|$desc" >> "$SUMMARY_BY_TYPE"
             elif [[ $line =~ :Error:\ (.+)$ ]]; then
                 desc="${BASH_REMATCH[1]}"
                 desc=$(normalize_error_message "$desc" "byte-compile")
-                echo "Loaded|Error|$desc" >> "$SUMMARY_BY_TYPE"
+                echo "Byte-Compile (loaded)|Error|$desc" >> "$SUMMARY_BY_TYPE"
             elif [[ $line =~ ^[[:space:]]*([^:]+!)$ ]]; then
                 desc="${BASH_REMATCH[1]}"
-                echo "Loaded|Error|$desc" >> "$SUMMARY_BY_TYPE"
+                echo "Byte-Compile (loaded)|Error|$desc" >> "$SUMMARY_BY_TYPE"
             fi
         done
     fi
@@ -494,8 +504,8 @@ display_error_summary() {
         print_separator
         echo "SUMMARY: Errors by Type"
         print_separator
-        printf "%-80s | %-15s | %-10s | %8s\n" "Description" "Check Type" "Error Type" "Count"
-        printf "%s-+-%s-+-%s-+-%s\n" "$(printf '%.0s-' {1..80})" "$(printf '%.0s-' {1..15})" "$(printf '%.0s-' {1..10})" "$(printf '%.0s-' {1..8})"
+        printf "%-65s | %-25s | %-10s | %8s\n" "Description" "Check Type" "Error Type" "Count"
+        printf "%s-+-%s-+-%s-+-%s\n" "$(printf '%.0s-' {1..65})" "$(printf '%.0s-' {1..25})" "$(printf '%.0s-' {1..10})" "$(printf '%.0s-' {1..8})"
 
         sort "$SUMMARY_BY_TYPE" | uniq -c | sort -rn | while IFS= read -r line; do
             count=$(echo "$line" | awk '{print $1}')
@@ -508,7 +518,7 @@ display_error_summary() {
             error_type="${error_type%"${error_type##*[![:space:]]}"}"
             description="${description#"${description%%[![:space:]]*}"}"
             description="${description%"${description##*[![:space:]]}"}"
-            printf "%-80s | %-15s | %-10s | %8s\n" "${description:0:80}" "$check_type" "$error_type" "$count"
+            printf "%-65s | %-25s | %-10s | %8s\n" "${description:0:65}" "$check_type" "$error_type" "$count"
         done
 
         print_separator
@@ -698,6 +708,7 @@ check_file() {
             echo "$checkdoc_result"
             echo ""
         } >> "$CHECKDOC_OUT"
+        # Checkdoc results are actual warnings (already filtered), so mark as having issues
         has_checkdoc=1
     fi
 
@@ -708,7 +719,10 @@ check_file() {
             echo "$isolated_result"
             echo ""
         } >> "$ISOLATED_OUT"
-        has_isolated=1
+        # Only mark as having issues if there are actual Warning/Error lines
+        if echo "$isolated_result" | grep -qE ":(Warning|Error):"; then
+            has_isolated=1
+        fi
     fi
 
     if [ -n "$loaded_result" ]; then
@@ -718,7 +732,10 @@ check_file() {
             echo "$loaded_result"
             echo ""
         } >> "$LOADED_OUT"
-        has_loaded=1
+        # Only mark as having issues if there are actual Warning/Error lines or error messages ending with !
+        if echo "$loaded_result" | grep -qE ":(Warning|Error):|!$"; then
+            has_loaded=1
+        fi
     fi
 
     # Update statistics
@@ -803,7 +820,8 @@ if [ -f "$CHECKDOC_OUT" ]; then
 fi
 
 if [ -f "$ISOLATED_OUT" ]; then
-    isolated_count=$(grep -cE "(Warning|Error):" "$ISOLATED_OUT" || echo "0")
+    # shellcheck disable=SC2126  # Need grep pipeline for filtering before counting
+    isolated_count=$(grep -E "(Warning|Error):" "$ISOLATED_OUT" | grep -v "$ISOLATED_FILTER_PATTERNS" | wc -l)
 fi
 
 if [ -f "$LOADED_OUT" ]; then
