@@ -57,7 +57,7 @@ and EXECUTABLE is the LSP server command name.
 This map includes both regular and tree-sitter modes for consistency.
 Eglot will only activate LSP if the server executable is found in PATH.
 
-Note: Many modes (rust-mode, go-mode, ruby-mode, typescript-mode, etc.) are already
+Note: Many modes (rust-mode, go-mode, `ruby-mode', typescript-mode, etc.) are already
 configured in Eglot's built-in eglot-server-programs and don't need to be listed here.
 This map is for modes we want to explicitly manage or customize.
 

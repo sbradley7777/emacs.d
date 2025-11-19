@@ -16,7 +16,7 @@ Returns the command output as a trimmed string on success, or nil on failure.
 
 COMMAND is the executable name (e.g., \"git\", \"uname\").
 QUIET is a boolean - if non-nil, don't log errors for non-zero exit codes.
-ARGS are the command-line arguments as separate strings.
+ARGS are the `command-line' arguments as separate strings.
 
 Logs errors via core-message-error for consistent error reporting unless
 QUIET is non-nil.  Exceptions are always logged regardless of QUIET.

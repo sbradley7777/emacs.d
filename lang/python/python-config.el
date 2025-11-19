@@ -16,7 +16,7 @@
 (defun
  python-setup-common
  ()
- "Common setup for both python-mode and python-ts-mode."
+ "Common setup for both `python-mode' and python-ts-mode."
  (setq python-indent-guess-indent-offset t)
  (lang-setup-minimal 'python-indent core-tab-width))
 

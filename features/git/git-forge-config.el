@@ -221,7 +221,7 @@ This ensures each repository only gets username config for its own host."
 (defun
  git-forge-config-setup-repo-on-file-open ()
  "Hook function to set repository username when opening files in git repos.
-Called automatically via find-file-hook.
+Called automatically via `find-file-hook'.
 Loads Magit if needed, then sets username for the repository's forge host."
  (when
   (buffer-file-name)

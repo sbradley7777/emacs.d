@@ -12,8 +12,8 @@
 (defun
  core-user-read-string (prompt &optional initial-input history default-value)
  "Read a string from the user with PROMPT.
-Wrapper around read-string with consistent behavior and error handling.
-INITIAL-INPUT, HISTORY, and DEFAULT-VALUE are passed through to read-string."
+Wrapper around `read-string' with consistent behavior and error handling.
+INITIAL-INPUT, HISTORY, and DEFAULT-VALUE are passed through to `read-string'."
  (condition-case err
      (read-string prompt initial-input history default-value)
    (error
@@ -46,7 +46,7 @@ Returns the number or nil if invalid/cancelled."
 (defun
  core-user-read-password (prompt)
  "Read a password from the user with PROMPT.
-Wrapper around read-passwd with consistent behavior."
+Wrapper around `read-passwd' with consistent behavior."
  (condition-case err
      (read-passwd prompt)
    (error

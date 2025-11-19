@@ -55,6 +55,6 @@
 (defconst
  doom-1337-search-highlight-color
  doom-1337-color-green
- "Search match highlighting - used by isearch, query-replace, and orderless.")
+ "Search match highlighting - used by isearch, `query-replace', and orderless.")
 (provide 'theme-doom-1337-constants)
 ;;; theme-doom-1337-constants.el ends here

@@ -21,7 +21,7 @@ PATH is the file path to normalize."
 (defun
  pyvenv-get-version-from-executable (python-executable)
  "Get Python version from PYTHON-EXECUTABLE.
-Uses process-file for TRAMP compatibility - works for both local and remote files."
+Uses `process-file' for TRAMP compatibility - works for both local and remote files."
  (when
   (and python-executable (file-executable-p python-executable))
   (with-temp-buffer

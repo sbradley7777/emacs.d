@@ -124,7 +124,7 @@ showing current version -> new version for each package."
 (defun
  core-packages-cleanup ()
  "Clean up unused packages and reset package metadata cache.
-Removes orphaned package dependencies using package-autoremove and resets metadata."
+Removes orphaned package dependencies using `package-autoremove' and resets metadata."
  (interactive)
  (let ((cleanup-count 0))
    (core-message-package "Starting package cleanup...")

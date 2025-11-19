@@ -15,13 +15,13 @@
 (defun
  bash-setup-common
  ()
- "Common setup for both sh-mode and bash-ts-mode."
+ "Common setup for both `sh-mode' and bash-ts-mode."
  (lang-setup-full 'sh-basic-offset core-tab-width '((sh-indentation . core-tab-width))))
 
 (defun
  enhance-bash-syntax-highlighting ()
  "Add enhanced syntax highlighting for bash scripts.
-Only applies to sh-mode as bash-ts-mode uses tree-sitter highlighting."
+Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
  (unless
   (derived-mode-p 'bash-ts-mode)
   (font-lock-add-keywords

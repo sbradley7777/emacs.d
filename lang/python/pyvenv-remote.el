@@ -41,7 +41,7 @@ First tries to find it remotely, falls back to local equivalent if needed."
  pyvenv-remote-search-venv (remote-dir)
  "Search for virtual environment in remote directory using centralized detection.
 REMOTE-DIR is the remote directory to search for a virtual environment.
-Uses python-utils-find-venv-path which is TRAMP-compatible via locate-dominating-file."
+Uses python-utils-find-venv-path which is TRAMP-compatible via `locate-dominating-file'."
  (python-utils-find-venv-path remote-dir))
 
 (defun

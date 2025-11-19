@@ -102,7 +102,7 @@ Only runs if flymake-aspell is loaded and buffer is not *scratch*."
 
 (defun
  aspell-setup-flymake-prog ()
- "Setup flymake-aspell for prog-mode to check comments and strings only.
+ "Setup flymake-aspell for `prog-mode' to check comments and strings only.
 Only runs if flymake-aspell is loaded and buffer is not *scratch*."
  (when
   (and

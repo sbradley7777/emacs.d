@@ -12,7 +12,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- flymake-ruff-setup () "Common Flymake Ruff setup for both python-mode and python-ts-mode."
+ flymake-ruff-setup () "Common Flymake Ruff setup for both `python-mode' and python-ts-mode."
  ;; Remove the default python checker (with backend name: p-f) to avoid duplicates
  (remove-hook 'flymake-diagnostic-functions 'python-flymake t)
  ;; Add the ruff checker (flymake-mode is enabled by prog-mode-hook)

@@ -131,7 +131,7 @@ TYPE is the warning type.
 MESSAGE is the warning message.
 LEVEL is the warning level (optional).
 BUFFER-NAME is the target buffer name (optional).
-Calls the original display-warning function and also logs to *Messages*.
+Calls the original `display-warning' function and also logs to *Messages*.
 Filters out :debug level warnings to reduce noise."
  (prog1
   (apply orig-fun type message level buffer-name nil)

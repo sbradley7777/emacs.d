@@ -61,7 +61,7 @@ When reaching the end of buffer, move point to end."
  "Context-aware TAB key behavior for completion and indentation.
 
 In minibuffer: Performs minibuffer completion.
-With corfu-mode active: Triggers completion-at-point, falling back to indentation.
+With corfu-mode active: Triggers `completion-at-point', falling back to indentation.
 Otherwise: Performs standard indentation only.
 
 This provides a unified TAB key experience across different editing contexts."
@@ -77,7 +77,7 @@ This provides a unified TAB key experience across different editing contexts."
  "Trigger completion when Corfu is inactive, otherwise indent.
 
 This function checks if Corfu completion is currently visible:
-- If Corfu is enabled but not showing completions: triggers completion-at-point
+- If Corfu is enabled but not showing completions: triggers `completion-at-point'
 - Otherwise: performs standard indentation
 
 Useful for binding to keys where you want completion priority over indentation."

@@ -29,7 +29,7 @@
 (defvar
  default-file-name-handler-alist
  file-name-handler-alist
- "Backup of default file-name-handler-alist for restoration after init.")
+ "Backup of default `file-name-handler-alist' for restoration after init.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions

@@ -45,7 +45,7 @@ Caching improves formatting performance by avoiding redundant analysis.")
 (defconst
  core-byte-compile-dir-pattern "elc/%s"
  "Format pattern for version-specific byte-compiled files directory.
-The %s placeholder is replaced with emacs-version to isolate compiled files by Emacs version.")
+The %s placeholder is replaced with variable `emacs-version' to isolate compiled files by Emacs version.")
 
 ;; Project and Version Control
 (core-utils-defconst-path

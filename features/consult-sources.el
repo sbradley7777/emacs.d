@@ -157,7 +157,7 @@ To add more patterns, simply add regexp strings to this list.")
 (defun
  consult-sources--buffer-annotation
  (buf)
- "Annotate buffer BUF with status, size, permissions, mode-name (major-mode), and abbreviated file path."
+ "Annotate buffer BUF with status, size, permissions, `mode-name' (major-mode), and abbreviated file path."
  (let ((buffer-obj (get-buffer buf)))
    (when
     buffer-obj

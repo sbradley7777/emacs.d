@@ -17,7 +17,7 @@
  "Find Python project root using built-in locate-dominating-file.
 Returns the project root path, or nil if not in a Python project.
 Uses markers from pyvenv-project-markers to identify project root.
-DIRECTORY defaults to default-directory if not provided."
+DIRECTORY defaults to `default-directory' if not provided."
  (let ((current-dir (or directory default-directory)))
    (cl-some (lambda (marker) (locate-dominating-file current-dir marker)) pyvenv-project-markers)))
 
@@ -32,7 +32,7 @@ Returns project name as a string, or nil if PROJECT-ROOT is nil."
  python-utils-find-venv-path (&optional directory)
  "Find virtual environment path by locating project root and venv directory.
 Returns the venv path if found, nil otherwise.
-DIRECTORY defaults to default-directory if not provided.
+DIRECTORY defaults to `default-directory' if not provided.
 TRAMP-compatible - works with both local and remote files."
  (when-let ((project-root (python-utils-find-project-root directory)))
    (let ((venv-path (expand-file-name pyvenv-venv-directory-name project-root)))

@@ -13,7 +13,7 @@
  "Define a path constant NAME by combining SUBPATH with BASE-DIR.
 NAME is the symbol name for the constant.
 SUBPATH is the subdirectory or file path relative to BASE-DIR.
-BASE-DIR is the base directory (e.g., emacs-local-dir, user-emacs-directory).
+BASE-DIR is the base directory (e.g., emacs-local-dir, `user-emacs-directory').
 DOCSTRING is the documentation string for the constant.
 
 Example:
@@ -56,7 +56,7 @@ LOCATION is either \\='local\\=' or \\='remote\\='."
  "Check if COMMAND exists in PATH and log message if not found.
 Returns t if command is found, nil otherwise.
 
-Properly detects local vs remote (TRAMP) paths based on default-directory."
+Properly detects local vs remote (TRAMP) paths based on `default-directory'."
  (let* ((is-remote (file-remote-p default-directory))
         (host
          (if
@@ -72,7 +72,7 @@ Properly detects local vs remote (TRAMP) paths based on default-directory."
  core-utils-find-window-by-buffer-name (buffer-name-pattern &optional exact-match)
  "Find window displaying buffer matching BUFFER-NAME-PATTERN.
 If EXACT-MATCH is non-nil, match buffer name exactly using string=.
-Otherwise, use string-prefix-p for prefix matching (default).
+Otherwise, use `string-prefix-p' for prefix matching (default).
 Returns the window if found, nil otherwise.
 
 Example:
@@ -93,7 +93,7 @@ Example:
  core-utils-close-window-by-buffer-name (buffer-name-pattern &optional exact-match)
  "Close window displaying buffer matching BUFFER-NAME-PATTERN.
 If EXACT-MATCH is non-nil, match buffer name exactly using string=.
-Otherwise, use string-prefix-p for prefix matching (default).
+Otherwise, use `string-prefix-p' for prefix matching (default).
 Returns t if window was found and closed, nil otherwise.
 
 Example:
