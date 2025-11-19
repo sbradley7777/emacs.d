@@ -72,17 +72,27 @@ Shows summary of upgraded packages or reports if no upgrades are available."
 (defun
  core-packages--safe-refresh-and-check (timeout-seconds)
  "Safely refresh package contents and return available upgrades.
-Returns a list of available upgrades or nil if failed/no upgrades.
+Returns a list of (PKG-NAME INSTALLED-DESC AVAILABLE-DESC) or nil if failed/no upgrades.
 TIMEOUT-SECONDS specifies how long to wait before timing out."
  (when
   (and (require 'package-network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
   (condition-case err
       (progn
        (with-timeout
-        (timeout-seconds
-         (core-message-warning "Package update check timed out"))
+        (timeout-seconds (core-message-warning "Package update check timed out"))
         (package-refresh-contents))
-       (package-menu--find-upgrades))
+       ;; Manually find packages with updates (same logic as show-installed-packages)
+       (let ((upgrades '()))
+         (dolist
+          (pkg (mapcar #'car package-alist))
+          (let* ((installed-desc (cadr (assq pkg package-alist)))
+                 (installed-version (package-desc-version installed-desc))
+                 (available-desc (cadr (assq pkg package-archive-contents)))
+                 (available-version (when available-desc (package-desc-version available-desc))))
+            (when
+             (and available-version (version-list-< installed-version available-version))
+             (push (list pkg installed-desc available-desc) upgrades))))
+         (nreverse upgrades)))
     (error
      (core-message-warning "Package update check failed: %s" (error-message-string err))
      nil))))

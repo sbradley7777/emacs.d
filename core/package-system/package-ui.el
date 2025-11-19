@@ -7,6 +7,7 @@
 (require 'core-constants)
 (require 'core-logging)
 (require 'core-user-interaction-utils)
+(require 'package-network)
 
 ;; Declare external functions to suppress byte-compiler warnings
 (declare-function package-upgrade "package" (pkg &optional dont-select))
@@ -23,8 +24,18 @@ Shows available version and indicates if updates are available."
  (let ((buf (get-buffer-create "*Installed Packages*"))
        (packages-with-updates '()))
 
-   ;; Ensure package archive contents are loaded
-   (unless package-archive-contents (package-refresh-contents))
+   ;; Always refresh package archive contents to ensure accurate update information
+   (when
+    (network-responsive-p) (core-message-package "Refreshing package archive contents...")
+    (condition-case err
+        (with-timeout
+         (core-package-refresh-timeout
+          (core-message-warning "Package refresh timed out - using cached data"))
+         (package-refresh-contents)
+         (core-message-success "Package archive refreshed successfully"))
+      (error
+       (core-message-warning
+        "Failed to refresh package contents: %s" (error-message-string err)))))
    (with-current-buffer
     buf (setq buffer-read-only nil) (erase-buffer)
 
