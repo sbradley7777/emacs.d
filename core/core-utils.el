@@ -123,6 +123,16 @@ Returns t if directory exists/was created, nil if creation failed."
        nil)))))
 
 (defun
+ core-utils-extract-directory-name (path)
+ "Extract final directory name from PATH.
+Returns the directory name as a string, or nil if PATH is nil.
+
+Example:
+  (core-utils-extract-directory-name \"/home/user/projects/myapp/\")
+  => \"myapp\""
+ (when path (file-name-nondirectory (directory-file-name path))))
+
+(defun
  core-utils-scan-directory-for-pattern (dir pattern transform-fn)
  "Scan DIR for files matching PATTERN and apply TRANSFORM-FN to each match.
 DIR should be a directory path (string).

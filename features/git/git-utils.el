@@ -35,7 +35,7 @@ Extracts repository name from directory path.
 Example: \\='glocktopography (~/gitlab/glocktopography/)\\='."
  (when
   repo-root
-  (let ((name (file-name-nondirectory (directory-file-name repo-root))))
+  (let ((name (core-utils-extract-directory-name repo-root)))
     (format "%s (%s)" name (abbreviate-file-name repo-root)))))
 
 (defun

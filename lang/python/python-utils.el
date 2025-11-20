@@ -26,7 +26,7 @@ DIRECTORY defaults to `default-directory' if not provided."
  "Extract project name from PROJECT-ROOT path.
 Uses built-in file name functions to get the directory name.
 Returns project name as a string, or nil if PROJECT-ROOT is nil."
- (when project-root (file-name-nondirectory (directory-file-name project-root))))
+ (core-utils-extract-directory-name project-root))
 
 (defun
  python-utils-find-venv-path (&optional directory)
