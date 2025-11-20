@@ -201,7 +201,10 @@ Can be called manually when needed for intensive work sessions."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module core-editing :description "Editing preferences")
 (load-module core-files :description "File handling")
-(load-module core-log-writer :after core-files :description "Message logging and log rotation")
+(load-module
+ core-logging-utils
+ :after core-files
+ :description "Log file writing and rotation utilities")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)
