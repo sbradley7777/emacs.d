@@ -243,8 +243,7 @@ Skips remote files accessed via TRAMP."
  (advice-add 'forge--pull :around #'git-auto-sync--around-forge-pull-advice)
  (advice-add 'forge--glab-get :around #'git-sync--around-forge-glab-get-advice))
 
-(add-hook 'find-file-hook #'git-auto-sync-repository-once)
 (core-message-config
- "Git and Forge auto-sync configured (auto on file open, manual via git-sync-repository)")
+ "Git and Forge sync configured (manual sync via git-sync-repository, auto-sync opt-in via local.el)")
 (provide 'git-sync)
 ;;; git-sync.el ends here

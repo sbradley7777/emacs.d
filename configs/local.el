@@ -107,7 +107,16 @@
 ;; - You can enable both hooks if you work with both text and code files
 
 ;; ============================================
-;; 7. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 7. GIT AUTO-SYNC (OPTIONAL)
+;; ============================================
+;; By default, git/forge syncing is MANUAL only (use M-x git-sync-repository).
+;; To enable AUTOMATIC syncing (fetch magit data and pull forge metadata
+;; once per repository when first file is opened), uncomment the lines below:
+;; (core-message-config "Enabling automatic git/forge sync on file open")
+;; (add-hook 'find-file-hook #'git-auto-sync-repository-once)
+
+;; ============================================
+;; 8. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)

@@ -94,7 +94,6 @@ Extracts markdown links from post body and appends them as clickable raw URLs."
  'forge-topic
  (advice-add
   'forge-insert-post-content
-  :around #'forge-issue-links--insert-post-content-with-links)
- (core-message-config "Forge link extraction enabled"))
+  :around #'forge-issue-links--insert-post-content-with-links))
 (provide 'forge-issue-links)
 ;;; forge-issue-links.el ends here

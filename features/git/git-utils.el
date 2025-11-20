@@ -10,6 +10,14 @@
 (require 'core-process-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar
+ git-utils--git-available-cache 'unchecked
+ "Cached result of git command availability check.
+Value is t if git is available, nil if not available, and \\='unchecked if not yet checked.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
@@ -61,9 +69,15 @@ Returns t if valid, nil otherwise.  Does not validate DNS resolution."
 (defun
  git-utils--ensure-git-available ()
  "Check if git command is available.  Return t if available, nil otherwise.
-Logs a warning if git is not found."
+Logs a warning if git is not found.  Caches result to avoid redundant checks."
  (if
-  (core-utils-check-command-in-path "git") t (core-message-warning "git command not found") nil))
+  (eq git-utils--git-available-cache 'unchecked)
+  ;; First check - perform actual check and cache result
+  (progn
+   (setq git-utils--git-available-cache (core-utils-check-command-in-path "git"))
+   git-utils--git-available-cache)
+  ;; Already checked - return cached result (no logging)
+  git-utils--git-available-cache))
 
 (defun
  git-utils-git-config-get-regexp (pattern)

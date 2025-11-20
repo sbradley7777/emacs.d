@@ -30,7 +30,6 @@ INDENT is the optional indentation level."
 (with-eval-after-load
  'forge-topic
  (advice-add 'forge--fontify-markdown :around #'forge-config--fontify-with-hidden-markup)
- (advice-add 'forge--fontify-markdown :override #'forge-markdown--fontify-with-hiding)
- (core-message-config "Forge markdown rendering configured with markup hiding"))
+ (advice-add 'forge--fontify-markdown :override #'forge-markdown--fontify-with-hiding))
 (provide 'forge-config)
 ;;; forge-config.el ends here
