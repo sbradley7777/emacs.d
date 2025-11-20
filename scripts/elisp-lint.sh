@@ -17,8 +17,9 @@
 #                 - Directory: Recursively checks all .el files (excluding elpa/)
 #
 # OPTIONS:
-#   -h, --help    Show help message and exit
-#   -d, --debug   Enable debug mode (shows commands being executed)
+#   -h, --help       Show help message and exit
+#   -d, --debug      Enable debug mode (shows commands being executed)
+#   -p, --pre-commit Enable pre-commit mode (concise output for hooks)
 #
 # OUTPUT:
 #   The script provides:
@@ -65,6 +66,12 @@
 # Debug mode flag
 DEBUG=false
 
+# Pre-commit mode flag (concise output for pre-commit hooks)
+PRE_COMMIT_MODE=false
+
+# Pre-commit error counter
+PRE_COMMIT_ERROR_COUNT=0
+
 # Patterns to filter out from checkdoc (configured to use 127 char limit, ignore 80 char warnings)
 CHECKDOC_FILTER_PATTERNS="Some lines are over 80 columns wide"
 
@@ -102,6 +109,37 @@ replace_home() {
 debug() {
     if [ "$DEBUG" = true ]; then
         echo "[DEBUG] $*" >&2
+    fi
+}
+
+# Prints a single error in file:line:check_type:message format for pre-commit mode.
+#
+# Parameters:
+#   file - File path (absolute path)
+#   line - Line number (can be empty)
+#   check_type - Type of check (Checkdoc|Byte-Compile-Isolated|Byte-Compile-Loaded)
+#   message - Error/warning message
+#
+# Outputs:
+#   Error in file:line:message format to stdout with relative path
+print_pre_commit_error() {
+    local file="$1"
+    local line="$2"
+    local check_type="$3"
+    local message="$4"
+    local display_file
+
+    # In pre-commit mode, show relative path from current directory
+    if [ "$PRE_COMMIT_MODE" = true ]; then
+        display_file=$(realpath --relative-to="$(pwd)" "$file" 2>/dev/null || echo "$file")
+    else
+        display_file="$(replace_home "$file")"
+    fi
+
+    if [ -n "$line" ]; then
+        echo "${display_file}:${line}: ${check_type}: ${message}"
+    else
+        echo "${display_file}: ${check_type}: ${message}"
     fi
 }
 
@@ -525,6 +563,69 @@ display_error_summary() {
     fi
 }
 
+# Extracts and prints checkdoc errors in pre-commit format.
+#
+# Parameters:
+#   file - File path
+#   checkdoc_result - Raw checkdoc output
+#
+# Outputs:
+#   Errors in file:line:check_type:message format
+#
+# Side Effects:
+#   Increments PRE_COMMIT_ERROR_COUNT for each error printed
+print_checkdoc_errors_pre_commit() {
+    local file="$1"
+    local checkdoc_result="$2"
+    local count=0
+
+    while IFS= read -r line; do
+        if [[ $line =~ :([0-9]+):\ (.+)$ ]]; then
+            local line_num="${BASH_REMATCH[1]}"
+            local msg="${BASH_REMATCH[2]}"
+            print_pre_commit_error "$file" "$line_num" "Checkdoc" "$msg"
+            count=$((count + 1))
+        fi
+    done < <(echo "$checkdoc_result" | grep -v "^Warning (emacs):")
+
+    PRE_COMMIT_ERROR_COUNT=$((PRE_COMMIT_ERROR_COUNT + count))
+}
+
+# Extracts and prints byte-compile errors in pre-commit format.
+#
+# Parameters:
+#   file - File path
+#   compile_result - Raw byte-compile output
+#   check_type - Type label (Byte-Compile-Isolated or Byte-Compile-Loaded)
+#
+# Outputs:
+#   Errors in file:line:check_type:message format
+#
+# Side Effects:
+#   Increments PRE_COMMIT_ERROR_COUNT for each error printed
+print_byte_compile_errors_pre_commit() {
+    local file="$1"
+    local compile_result="$2"
+    local check_type="$3"
+    local count=0
+
+    while IFS= read -r line; do
+        # Try to extract line number if available (format: :line:Warning: or In function-name:)
+        if [[ $line =~ :([0-9]+):(Warning|Error):\ (.+)$ ]]; then
+            local line_num="${BASH_REMATCH[1]}"
+            local msg="${BASH_REMATCH[3]}"
+            print_pre_commit_error "$file" "$line_num" "$check_type" "$msg"
+            count=$((count + 1))
+        elif [[ $line =~ :(Warning|Error):\ (.+)$ ]]; then
+            local msg="${BASH_REMATCH[2]}"
+            print_pre_commit_error "$file" "" "$check_type" "$msg"
+            count=$((count + 1))
+        fi
+    done < <(echo "$compile_result" | grep -E ":(Warning|Error):")
+
+    PRE_COMMIT_ERROR_COUNT=$((PRE_COMMIT_ERROR_COUNT + count))
+}
+
 # Function to show help
 show_help() {
     cat << 'EOF'
@@ -545,8 +646,9 @@ ARGUMENTS:
                                 - Directory: Recursively checks all .el files (excluding elpa/)
 
 OPTIONS:
-    -h, --help    Show this help message and exit
-    -d, --debug   Enable debug mode (shows commands being executed)
+    -h, --help       Show this help message and exit
+    -d, --debug      Enable debug mode (shows commands being executed)
+    -p, --pre-commit Enable pre-commit mode (concise file:line:error output)
 
 EXAMPLES:
     # Check a single file
@@ -581,6 +683,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -d|--debug)
             DEBUG=true
+            shift
+            ;;
+        -p|--pre-commit)
+            PRE_COMMIT_MODE=true
             shift
             ;;
         -*)
@@ -683,7 +789,10 @@ check_file() {
     local display_file
     display_file="$(replace_home "$file")"
 
-    echo "Checking: $display_file"
+    # Suppress progress messages in pre-commit mode
+    if [ "$PRE_COMMIT_MODE" = false ]; then
+        echo "Checking: $display_file"
+    fi
 
     # Run checks
     local checkdoc_result
@@ -694,6 +803,19 @@ check_file() {
 
     if [ -n "$init_el" ] && [ -f "$init_el" ]; then
         loaded_result=$(run_loaded_byte_compile "$file" "$display_file" "$init_el")
+    fi
+
+    # In pre-commit mode, print errors immediately
+    if [ "$PRE_COMMIT_MODE" = true ]; then
+        if [ -n "$checkdoc_result" ]; then
+            print_checkdoc_errors_pre_commit "$file" "$checkdoc_result"
+        fi
+        if [ -n "$isolated_result" ]; then
+            print_byte_compile_errors_pre_commit "$file" "$isolated_result" "Byte-Compile-Isolated"
+        fi
+        if [ -n "$loaded_result" ]; then
+            print_byte_compile_errors_pre_commit "$file" "$loaded_result" "Byte-Compile-Loaded"
+        fi
     fi
 
     # Write results to output files and count issues
@@ -767,13 +889,15 @@ if [ -f "$TARGET" ]; then
         fi
     fi
 
-    echo "Checking file: $(replace_home "$TARGET")"
-    if [ -n "$INIT_EL" ]; then
-        echo "Using init.el: $(replace_home "$INIT_EL")"
-    else
-        echo "Warning: init.el not found (loaded checks will be skipped)"
+    if [ "$PRE_COMMIT_MODE" = false ]; then
+        echo "Checking file: $(replace_home "$TARGET")"
+        if [ -n "$INIT_EL" ]; then
+            echo "Using init.el: $(replace_home "$INIT_EL")"
+        else
+            echo "Warning: init.el not found (loaded checks will be skipped)"
+        fi
+        echo ""
     fi
-    echo ""
 
     check_file "$TARGET" "$INIT_EL"
 
@@ -790,11 +914,13 @@ elif [ -d "$TARGET" ]; then
         INIT_EL=""
     fi
 
-    echo "Checking Emacs Lisp files in: $(replace_home "$EMACS_DIR")"
-    if [ -n "$INIT_EL" ]; then
-        echo "Using init.el: $(replace_home "$INIT_EL")"
+    if [ "$PRE_COMMIT_MODE" = false ]; then
+        echo "Checking Emacs Lisp files in: $(replace_home "$EMACS_DIR")"
+        if [ -n "$INIT_EL" ]; then
+            echo "Using init.el: $(replace_home "$INIT_EL")"
+        fi
+        echo ""
     fi
-    echo ""
 
     # Find and check all .el files (excluding elpa/)
     while IFS= read -r file; do
@@ -829,32 +955,47 @@ if [ -f "$LOADED_OUT" ]; then
     loaded_count=$(grep -E ":(Warning|Error):|^[[:space:]]*[^:]+!$" "$LOADED_OUT" | grep -v "^---\|^File:" | wc -l)
 fi
 
-# Display detailed results first if there are issues
-display_detailed_results "$checkdoc_files" "$isolated_files" "$loaded_files"
-
-# Generate error summary by type
-SUMMARY_BY_TYPE=$(mktemp)
-
-# Parse errors from all check types
-parse_checkdoc_errors
-parse_isolated_errors
-parse_loaded_errors
-
-# Display summary tables
-display_statistics_summary "$total_files" "$checkdoc_files" "$isolated_files" "$loaded_files" \
-    "$checkdoc_count" "$isolated_count" "$loaded_count" "$init_el_found"
-
-display_error_summary
-# Cleanup summary file
-rm -f "$SUMMARY_BY_TYPE"
-
-# Cleanup
-rm -rf "$RESULTS_DIR"
-
-# Exit with error code if any issues found
-if [ "$checkdoc_files" -gt 0 ] || [ "$isolated_files" -gt 0 ] || [ "$loaded_files" -gt 0 ]; then
-    exit 1
+# Display results based on mode
+if [ "$PRE_COMMIT_MODE" = true ]; then
+    # Pre-commit mode: Simple final status
+    if [ "$PRE_COMMIT_ERROR_COUNT" -gt 0 ]; then
+        echo "✗ $PRE_COMMIT_ERROR_COUNT error(s) found in $total_files file(s)"
+        rm -rf "$RESULTS_DIR"
+        exit 1
+    else
+        echo "✓ All checks passed"
+        rm -rf "$RESULTS_DIR"
+        exit 0
+    fi
 else
-    echo "All checks passed! ✓"
-    exit 0
+    # Normal mode: Detailed output
+    # Display detailed results first if there are issues
+    display_detailed_results "$checkdoc_files" "$isolated_files" "$loaded_files"
+
+    # Generate error summary by type
+    SUMMARY_BY_TYPE=$(mktemp)
+
+    # Parse errors from all check types
+    parse_checkdoc_errors
+    parse_isolated_errors
+    parse_loaded_errors
+
+    # Display summary tables
+    display_statistics_summary "$total_files" "$checkdoc_files" "$isolated_files" "$loaded_files" \
+        "$checkdoc_count" "$isolated_count" "$loaded_count" "$init_el_found"
+
+    display_error_summary
+    # Cleanup summary file
+    rm -f "$SUMMARY_BY_TYPE"
+
+    # Cleanup
+    rm -rf "$RESULTS_DIR"
+
+    # Exit with error code if any issues found
+    if [ "$checkdoc_files" -gt 0 ] || [ "$isolated_files" -gt 0 ] || [ "$loaded_files" -gt 0 ]; then
+        exit 1
+    else
+        echo "All checks passed! ✓"
+        exit 0
+    fi
 fi

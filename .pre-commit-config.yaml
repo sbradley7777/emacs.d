@@ -68,3 +68,12 @@ repos:
         #
         # Default path: ~/github/elisp-autofmt/elisp-autofmt.py
         # Repository: https://github.com/emacsmirror/elisp-autofmt
+
+      - id: elisp-lint
+        name: elisp-lint
+        description: "Comprehensive Emacs Lisp linting (checkdoc + byte-compile)"
+        entry: scripts/elisp-lint.sh --pre-commit
+        language: script
+        files: '\.el$'
+        pass_filenames: true
+        # Note: Requires init.el in repository root for loaded byte-compile checks

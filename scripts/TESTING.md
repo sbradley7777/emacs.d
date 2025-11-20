@@ -8,6 +8,8 @@ This guide provides comprehensive information about testing your Emacs configura
 - [Test Script Features](#test-script-features)
 - [Usage Examples](#usage-examples)
 - [Understanding Test Results](#understanding-test-results)
+- [Code Quality Linting](#code-quality-linting)
+- [Pre-Commit Integration](#pre-commit-integration)
 - [Manual Testing Methods](#manual-testing-methods)
 - [Test Limitations](#test-limitations)
 - [Troubleshooting](#troubleshooting)
@@ -188,6 +190,123 @@ Skipping corfu configuration (use-package unavailable)
 ```
 - **Why**: File permission issues
 - **Action**: Check file permissions, ensure readable
+
+## Code Quality Linting
+
+In addition to configuration testing, the `elisp-lint.sh` script provides comprehensive code quality analysis for individual Emacs Lisp files.
+
+### Linting vs Configuration Testing
+
+**Configuration Testing** (`test-config.sh`):
+- Tests entire configuration loading
+- Validates module initialization
+- Checks package availability
+- Measures startup performance
+- **Use when**: Testing overall config health
+
+**Code Quality Linting** (`elisp-lint.sh`):
+- Analyzes individual `.el` files
+- Checks documentation style (checkdoc)
+- Validates byte-compilation
+- Catches undefined variables/functions
+- **Use when**: Developing or reviewing specific files
+
+### Quick Linting Examples
+
+```bash
+# Lint a single file
+~/github/emacs.d/scripts/elisp-lint.sh features/completion-config.el
+
+# Lint all modified files
+git diff --name-only | grep "\.el$" | xargs -I {} ~/github/emacs.d/scripts/elisp-lint.sh {}
+
+# Debug mode for troubleshooting
+~/github/emacs.d/scripts/elisp-lint.sh --debug core/core-utils.el
+```
+
+### What Linting Catches
+
+- **Documentation issues**: Missing docstrings, unquoted symbols, formatting
+- **Undefined references**: Free variables, unknown functions
+- **Compilation warnings**: Type mismatches, deprecated APIs
+- **Integration problems**: Issues when loaded with full config
+
+### Linting Output
+
+**Detailed mode** (default):
+```
+========================================================================================================================
+CHECKDOC WARNINGS (Static Analysis)
+========================================================================================================================
+--- Checkdoc (Static Analysis) ---
+File: features/dimmer-config.el
+  dimmer-config.el:45: Lisp symbol 'load-path' should appear in quotes
+
+========================================================================================================================
+SUMMARY: Overall Statistics
+========================================================================================================================
+Check Type                                     | Files Analyzed | Files with Issues |     Total Issues | Status
+-----------------------------------------------+----------------+-------------------+------------------+----------------
+Checkdoc (static analysis)                     |              1 |                 1 |                1 | ✗ FAIL
+Byte-Compile Isolated (Flymake-style)          |              1 |                 0 |                0 | ✓ PASS
+Byte-Compile with init.el loaded               |              1 |                 0 |                0 | ✓ PASS
+```
+
+**Pre-commit mode** (`--pre-commit`):
+```
+features/dimmer-config.el:45: Checkdoc: Lisp symbol 'load-path' should appear in quotes
+✗ 1 error(s) found in 1 file(s)
+```
+
+## Pre-Commit Integration
+
+Both configuration testing and code quality linting are integrated with git pre-commit hooks.
+
+### Automatic Pre-Commit Checks
+
+When you commit `.el` files, the following hooks run automatically:
+
+1. **elisp-autofmt**: Formats code for consistent style
+2. **elisp-lint**: Runs comprehensive linting checks
+
+```bash
+# Normal commit workflow
+git add features/my-feature.el
+git commit -m "Add new feature"
+# Hooks run automatically
+```
+
+### Manual Pre-Commit Testing
+
+Test hooks without committing:
+
+```bash
+# Test linting on specific files
+pre-commit run elisp-lint --files features/completion-config.el
+
+# Test linting on all .el files
+pre-commit run elisp-lint --all-files
+
+# Test all hooks
+pre-commit run --all-files
+```
+
+### Bypass Hooks (When Necessary)
+
+```bash
+# Skip pre-commit hooks (use sparingly)
+git commit --no-verify
+```
+
+**When to bypass:**
+- Work-in-progress commits on feature branches
+- Emergency hotfixes (fix and run hooks later)
+- Known issues that will be fixed in follow-up commits
+
+**Not recommended for:**
+- Main branch commits
+- Pull request submissions
+- Shared branch work
 
 ## Manual Testing Methods
 

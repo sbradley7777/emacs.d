@@ -318,11 +318,16 @@ The repository uses [`pre-commit`](https://github.com/pre-commit/pre-commit) hoo
 
 **Enabled Hooks:**
 - **[`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt)**: Automatic Emacs Lisp formatting
+- **`elisp-lint`**: Comprehensive linting (checkdoc + byte-compile)
 - **[`trailing-whitespace`](https://github.com/pre-commit/pre-commit-hooks#trailing-whitespace)**: Remove trailing whitespace
 - **[`end-of-file-fixer`](https://github.com/pre-commit/pre-commit-hooks#end-of-file-fixer)**: Ensure files end with newlines
 - **[`check-large-files`](https://github.com/pre-commit/pre-commit-hooks#check-large-files)**: Prevent accidentally large files
 - **[`shellcheck`](https://github.com/koalaman/shellcheck)**: Shell script linting
 - **[`codespell`](https://github.com/codespell-project/codespell)**: Spell checking
+
+**Hook Execution Order for `.el` Files:**
+1. **elisp-autofmt**: Formats code for consistent style
+2. **elisp-lint**: Runs comprehensive quality checks (checkdoc + byte-compile)
 
 **Hook Configuration** ([`.pre-commit-config.yaml`](.pre-commit-config.yaml)):
 ```yaml
@@ -335,15 +340,44 @@ repos:
         entry: scripts/elisp-autofmt-hook
         language: script
         files: \.el$
+
+      - id: elisp-lint
+        name: elisp-lint
+        description: "Comprehensive Emacs Lisp linting (checkdoc + byte-compile)"
+        entry: scripts/elisp-lint.sh --pre-commit
+        language: script
+        files: \.el$
+```
+
+**Manual Hook Testing:**
+```bash
+# Test specific files
+pre-commit run elisp-lint --files features/completion-config.el
+
+# Test all .el files
+pre-commit run elisp-lint --all-files
+
+# Test all hooks
+pre-commit run --all-files
 ```
 
 ### Manual Quality Checks
 
 **Before Each Commit:**
-- Run `M-x checkdoc` on modified `.el` files
-- Verify no byte-compilation warnings
+The `elisp-lint` pre-commit hook automatically runs checkdoc and byte-compilation checks, but you can also run them manually:
+
+```bash
+# Run comprehensive linting on modified files
+scripts/elisp-lint.sh path/to/file.el
+
+# Lint all modified files
+git diff --name-only | grep "\.el$" | xargs -I {} scripts/elisp-lint.sh {}
+```
+
+**Additional Manual Checks:**
 - Check for unused variables or functions
 - Ensure consistent error handling
+- Verify proper use of standardized utilities (`core-message-*`, `core-user-*`, `core-process-*`)
 
 **Periodic Reviews:**
 - Review startup performance regularly

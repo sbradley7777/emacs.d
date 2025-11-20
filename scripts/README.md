@@ -90,6 +90,9 @@ The `elisp-lint.sh` script provides comprehensive code quality analysis for Emac
 # Check with debug output (shows actual Emacs commands)
 ~/github/emacs.d/scripts/elisp-lint.sh --debug ~/github/emacs.d/features/corfu-config.el
 
+# Pre-commit mode (concise output for hooks)
+~/github/emacs.d/scripts/elisp-lint.sh --pre-commit path/to/file.el
+
 # Show help
 ~/github/emacs.d/scripts/elisp-lint.sh --help
 ```
@@ -124,10 +127,43 @@ Byte-Compile with init.el loaded               |              1 |               
 ========================================================================================================================
 ```
 
+### Pre-Commit Integration
+
+The `elisp-lint` script is integrated with pre-commit hooks and runs automatically when you commit `.el` files.
+
+**Automatic execution:**
+```bash
+git add features/my-feature.el
+git commit -m "Add new feature"
+# Hook runs automatically with concise output
+```
+
+**Manual pre-commit testing:**
+```bash
+# Test specific files
+pre-commit run elisp-lint --files features/dimmer-config.el
+
+# Test all .el files
+pre-commit run elisp-lint --all-files
+```
+
+**Pre-commit output format:**
+The hook uses `--pre-commit` mode for concise `file:line:check_type:message` format:
+```
+features/dimmer-config.el:45: Checkdoc: Lisp symbol should appear in quotes
+core/core-utils.el:89: Byte-Compile-Isolated: reference to free variable 'foo'
+✗ 2 error(s) found in 2 file(s)
+```
+
+**Hook execution order:**
+1. `elisp-autofmt` - Formats files first
+2. `elisp-lint` - Then performs comprehensive linting
+
 ### When to Use
 
-- **During development**: Check individual files you're actively working on
-- **Before committing**: Verify code quality on modified files
+- **During development**: Check individual files you're actively working on (manual script execution)
+- **Before committing**: Automatically runs via pre-commit hook
+- **Manual testing**: Run script directly for detailed analysis and error summaries
 - **Code review**: Deep analysis of new or refactored code
 - **CI/CD**: Automated quality checks in pipeline
 
@@ -137,6 +173,7 @@ Byte-Compile with init.el loaded               |              1 |               
 - Does not create `.elc` byte-compiled files
 - Excludes `elpa/` directory automatically
 - Compliant with shellcheck and bashate standards
+- Pre-commit mode shows relative paths for easy navigation
 
 ---
 
