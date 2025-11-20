@@ -3,6 +3,14 @@
 ;; Utilities for working with forge hosts (GitHub, GitLab, etc.) including
 ;; diagnostics for viewing configured hosts and their authentication status,
 ;; and TRAMP support for remote repository operations.
+;;
+;; Authentication checking uses Emacs' built-in `auth-source' library,
+;; which supports:
+;;   - ~/.authinfo.gpg (encrypted, recommended)
+;;   - ~/.authinfo (plaintext)
+;;   - ~/.netrc
+;;   - macOS Keychain
+;;   - Secret Service API (Linux)
 
 ;;; Code:
 (require 'core-logging)
@@ -10,61 +18,43 @@
 (require 'forge-constants)
 (require 'git-forge-config)
 (require 'git-utils)
+(require 'auth-source)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  forge-utils-parse-authinfo ()
- "Parse ~/.authinfo and return list of entries.
+ "Parse authentication sources and return list of entries.
 Each entry is a plist with :machine, :login, and :password keys.
-Returns nil if file doesn't exist."
- (let ((authinfo-file (expand-file-name forge-authinfo-path)))
-   (when
-    (file-exists-p authinfo-file)
-    (with-temp-buffer
-     (insert-file-contents authinfo-file)
-     (let ((entries '()))
-       (goto-char (point-min))
-       (while
-        (not (eobp))
-        (let ((line
-               (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
-          (unless
-           (or (string-match-p "^\\s-*$" line) (string-match-p "^\\s-*#" line))
-           (let ((machine nil)
-                 (login nil)
-                 (password nil))
-             (when
-              (string-match "machine\\s-+\\([^ \t\n]+\\)" line)
-              (setq machine (match-string 1 line)))
-             (when
-              (string-match "login\\s-+\\([^ \t\n]+\\)" line) (setq login (match-string 1 line)))
-             (when
-              (string-match "password\\s-+\\([^ \t\n]+\\)" line)
-              (setq password (match-string 1 line)))
-             (when
-              (and machine login password)
-              (push (list :machine machine :login login :password password) entries)))))
-        (forward-line 1))
-       (nreverse entries))))))
+Uses `auth-source' to read from ~/.authinfo, ~/.authinfo.gpg, or configured backends.
+Returns nil if no auth sources are configured."
+ (let ((entries '())
+       (sources (auth-source-search :max 10000)))
+   (dolist
+    (source sources)
+    (let ((machine (plist-get source :host))
+          (login (plist-get source :user))
+          (secret (plist-get source :secret)))
+      (when
+       (and machine login secret)
+       (let ((password (if (functionp secret) (funcall secret) secret)))
+         (push (list :machine machine :login login :password password) entries)))))
+   (nreverse entries)))
 
 (defun
  forge-utils-check-authinfo-for-host (host)
- "Check authentication status for HOST in ~/.authinfo.
-HOST should be the API host (e.g., 'api.github.com', 'gitlab.com').
+ "Check authentication status for HOST in authentication sources.
+HOST should be the API host (e.g., \\='api.github.com\\=', \\='gitlab.com\\=').
 Returns one of:
-  :authenticated - credentials found in ~/.authinfo
-  :no-credentials - ~/.authinfo exists but no entry for this host
-  :no-authinfo - ~/.authinfo file doesn't exist"
- (let ((authinfo-file (expand-file-name forge-authinfo-path)))
-   (if
-    (not (file-exists-p authinfo-file))
-    :no-authinfo
-    (let ((entries (forge-utils-parse-authinfo))
-          (found nil))
-      (dolist (entry entries) (when (string= (plist-get entry :machine) host) (setq found t)))
-      (if found :authenticated :no-credentials)))))
+  :authenticated - credentials found in auth sources
+  :no-credentials - auth sources exist but no entry for this host
+  :no-authinfo - no auth sources configured"
+ (if
+  (null auth-sources)
+  :no-authinfo
+  (let ((found (auth-source-search :host host :max 1)))
+    (if found :authenticated :no-credentials))))
 
 (defun
  forge-utils-diagnostics-show-hosts ()

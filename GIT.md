@@ -64,8 +64,15 @@ For GitHub.com users who want to get started quickly:
 - Required scopes: `repo`, `user`, `read:org`
 - Copy the generated token
 
-### 3. Add credentials to `~/.authinfo`:
+### 3. Add credentials to `~/.authinfo` (or `~/.authinfo.gpg` for encryption):
 
+**Option A: Encrypted (Recommended)**
+```bash
+# Create encrypted credentials file (GPG will prompt for passphrase)
+echo "machine api.github.com login YOUR_GITHUB_USERNAME^forge password YOUR_TOKEN" | gpg --encrypt -r YOUR_EMAIL > ~/.authinfo.gpg
+```
+
+**Option B: Plaintext (Quick Setup)**
 ```bash
 echo "machine api.github.com login YOUR_GITHUB_USERNAME^forge password YOUR_TOKEN" >> ~/.authinfo
 chmod 600 ~/.authinfo
@@ -198,11 +205,18 @@ Each forge requires a personal access token for API authentication.
 - Never commit tokens to version control
 - Use separate tokens for different machines/purposes
 
-### Step 3: Configure Authentication (`~/.authinfo`)
+### Step 3: Configure Authentication (`~/.authinfo` or `~/.authinfo.gpg`)
 
-Forge reads authentication credentials from `~/.authinfo` ([`features/forge/forge-authinfo.el`](features/forge/forge-authinfo.el)).
+Forge uses Emacs' built-in `auth-source` library to read authentication credentials. This provides multiple secure storage options:
 
-#### Format
+**Supported backends** (in search order):
+1. `~/.authinfo.gpg` - **Encrypted credentials (recommended)** - Uses GPG encryption
+2. `~/.authinfo` - Plaintext credentials (must have 600 permissions)
+3. `~/.netrc` - Alternative plaintext format
+4. **macOS Keychain** - System keychain integration (if configured)
+5. **Secret Service API** - Linux keyring integration (if configured)
+
+#### Credential Format
 
 ```
 machine APIHOST login USERNAME^forge password TOKEN
@@ -211,11 +225,30 @@ machine APIHOST login USERNAME^forge password TOKEN
 **Important**:
 - The `^forge` suffix on the username is **required**
 - `APIHOST` must match the `apihost` value from your `~/.gitconfig`
-- File must have secure permissions (600)
+- Plaintext files (`.authinfo`, `.netrc`) must have secure permissions (600)
+- Encrypted files (`.authinfo.gpg`) are automatically decrypted by Emacs
 
 #### Manual Method
 
-Add entries manually to `~/.authinfo`:
+**Option A: Encrypted Storage (Recommended)**
+
+Create `~/.authinfo.gpg` with GPG encryption:
+
+```bash
+# GitHub (encrypted)
+echo "machine api.github.com login YOUR_USERNAME^forge password YOUR_GITHUB_TOKEN" | \
+  gpg --encrypt -r YOUR_EMAIL_ADDRESS >> ~/.authinfo.gpg
+
+# GitLab (encrypted)
+echo "machine gitlab.com/api/v4 login YOUR_USERNAME^forge password YOUR_GITLAB_TOKEN" | \
+  gpg --encrypt -r YOUR_EMAIL_ADDRESS >> ~/.authinfo.gpg
+```
+
+**Note:** GPG will prompt for your passphrase when Emacs first reads the file. The passphrase is cached during your session.
+
+**Option B: Plaintext Storage (Quick Setup)**
+
+Add entries to `~/.authinfo`:
 
 ```bash
 # GitHub
@@ -224,9 +257,11 @@ echo "machine api.github.com login YOUR_USERNAME^forge password YOUR_GITHUB_TOKE
 # GitLab
 echo "machine gitlab.com/api/v4 login YOUR_USERNAME^forge password YOUR_GITLAB_TOKEN" >> ~/.authinfo
 
-# Set secure permissions
+# Set secure permissions (REQUIRED for plaintext)
 chmod 600 ~/.authinfo
 ```
+
+**Security recommendation:** Use encrypted storage (`.authinfo.gpg`) to protect your tokens from unauthorized access.
 
 #### Automatic Method (Recommended)
 
@@ -249,15 +284,33 @@ M-x forge-authinfo-generate-entries
 - Prevents duplicate entries
 - Secure file permissions
 
-#### File Permissions
+#### File Permissions and Security
 
-The `~/.authinfo` file must have restrictive permissions:
+**For plaintext files** (`~/.authinfo`, `~/.netrc`):
+- **Required:** Restrictive permissions (600)
+- Prevents other users from reading your tokens
 
 ```bash
 chmod 600 ~/.authinfo
 ```
 
-If permissions are incorrect, you may see authentication errors.
+**For encrypted files** (`~/.authinfo.gpg`):
+- Permissions less critical (encryption provides security)
+- GPG handles passphrase protection
+- Tokens only decrypted in memory when accessed
+- Passphrase cached during Emacs session
+
+**Migration from plaintext to encrypted:**
+```bash
+# Encrypt existing plaintext file
+gpg --encrypt -r YOUR_EMAIL_ADDRESS < ~/.authinfo > ~/.authinfo.gpg
+
+# Verify encryption worked
+gpg --decrypt ~/.authinfo.gpg
+
+# Remove plaintext file (auth-source prefers .gpg)
+rm ~/.authinfo
+```
 
 ### Step 4: Verify Setup
 
@@ -570,21 +623,49 @@ M-x forge-authinfo-generate-entries
 **Symptom**: "Authentication failed" or "Invalid credentials" errors
 
 **Solutions**:
-1. Verify `~/.authinfo` has correct format:
+1. **Check which credential file is being used:**
+   - `auth-source` searches in order: `~/.authinfo.gpg` → `~/.authinfo` → `~/.netrc`
+   - If both `.authinfo.gpg` and `.authinfo` exist, only `.gpg` is used
+
+2. **Verify credential file format:**
    - Username has `^forge` suffix
    - APIHOST matches `~/.gitconfig` exactly
-   - File permissions are 600
-2. Check token is still valid (not expired or revoked)
-3. Verify token has required scopes
-4. Ensure no extra whitespace in `~/.authinfo` entries
+   - No extra whitespace in entries
 
-**Test authentication**:
+3. **Check file permissions** (for plaintext files):
+   ```bash
+   ls -la ~/.authinfo   # Should show -rw------- (600)
+   chmod 600 ~/.authinfo
+   ```
+
+4. **For encrypted files** (`~/.authinfo.gpg`):
+   - Verify GPG can decrypt: `gpg --decrypt ~/.authinfo.gpg`
+   - Check passphrase is correct
+   - Ensure GPG key is valid and not expired
+
+5. **Token validation:**
+   - Check token is still valid (not expired or revoked)
+   - Verify token has required scopes (repo, user, read:org for GitHub)
+
+**Debug which file is being used:**
+```elisp
+;; Check auth-sources configuration
+M-: auth-sources
+
+;; Test auth-source search for specific host
+M-: (auth-source-search :host "api.github.com" :max 1)
+
+;; Clear auth-source cache if needed
+M-x auth-source-forget-all-cached
+```
+
+**View credentials** (be careful - tokens will be visible):
 ```bash
-# Check file permissions
-ls -la ~/.authinfo
+# Plaintext
+cat ~/.authinfo
 
-# Verify format (should show 600 or -rw-------)
-cat ~/.authinfo  # Review entries (be careful with tokens visible)
+# Encrypted (GPG will prompt for passphrase)
+gpg --decrypt ~/.authinfo.gpg
 ```
 
 ### Forge Host Not Found

@@ -19,9 +19,10 @@
 ;;        GitHub: https://github.com/settings/tokens (scopes: repo, user, read:org)
 ;;        GitLab: https://gitlab.com/-/profile/personal_access_tokens (scopes: api, read_api, read_user)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;      STEP 3: Add credentials to ~/.authinfo
-;;        echo "machine api.github.com login YOUR_USERNAME^forge password YOUR_TOKEN" >> ~/.authinfo
-;;        chmod 600 ~/.authinfo
+;;      STEP 3: Add credentials to ~/.authinfo or ~/.authinfo.gpg (encrypted, recommended)
+;;        Encrypted:  echo "..." | gpg --encrypt -r YOUR_EMAIL > ~/.authinfo.gpg
+;;        Plaintext:  echo "machine api.github.com login YOUR_USERNAME^forge password YOUR_TOKEN" >> ~/.authinfo
+;;                    chmod 600 ~/.authinfo
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      STEP 4: Restart Emacs or run
 ;;        M-x git-forge-config-populate-forge-alist
