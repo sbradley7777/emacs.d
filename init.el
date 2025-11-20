@@ -205,6 +205,7 @@ Can be called manually when needed for intensive work sessions."
  core-logging-utils
  :after core-files
  :description "Log file writing and rotation utilities")
+(load-module core-logging-buffers :description "Messages and debug buffer logging")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)

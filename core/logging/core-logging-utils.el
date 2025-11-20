@@ -1,7 +1,7 @@
 ;;; core-logging-utils.el --- Log File Writing and Rotation Utilities -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; Generic log file writing and rotation utilities.
-;; Provides shared functions for Messages buffer logging and debug buffer auto-save.
+;; Provides shared functions for all buffer logging implementations.
 
 ;;; Code:
 (require 'core-constants)
@@ -64,19 +64,5 @@ Returns the full path to the saved log file, or nil on error."
     (core-message-error "Failed to save %s to log: %s" buffer-name (error-message-string err))
     nil)))
 
-(defun
- core-save-messages-log () "Save Messages buffer to log file with rotation and timestamp."
- (let ((log-file
-        (core-save-buffer-to-log "*Messages*" core-messages-log-file core-log-dir
-                                 ;; Footer function: add session end timestamp
-                                 (lambda
-                                  ()
-                                  (insert
-                                   (format "\n;; Session ended: %s\n" (current-time-string)))))))
-   (when
-    log-file (core-message-success "Messages log saved to %s" (abbreviate-file-name log-file)))))
-
-(add-hook 'kill-emacs-hook #'core-save-messages-log)
-(core-message-config "Message logging configured with %d file rotation" core-log-max-files)
 (provide 'core-logging-utils)
 ;;; core-logging-utils.el ends here

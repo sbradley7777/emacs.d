@@ -9,6 +9,7 @@
 
 ;;; Code:
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "core/logging" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "core/package-system" user-emacs-directory))
 ;; Load constants first (includes emacs-local-dir and startup constants)
 (require 'core-constants)

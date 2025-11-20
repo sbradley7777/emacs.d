@@ -116,7 +116,25 @@
 ;; (add-hook 'find-file-hook #'git-auto-sync-repository-once)
 
 ;; ============================================
-;; 8. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 8. DEBUG BUFFER AUTO-SAVE (OPTIONAL)
+;; ============================================
+;; Automatically save debug buffers (*Warnings*, *Compile-Log*, *Flymake diagnostics*,
+;; *EGLOT stderr/output*, etc.) to ~/.emacs.d/local/log/debug/ when Emacs exits.
+;;
+;; Each buffer maintains its own rotation history (up to 5 files):
+;;   Warnings.log → Warnings.log.1 → Warnings.log.2 → ... → Warnings.log.5
+;;   Compile-Log.log → Compile-Log.log.1 → Compile-Log.log.2 → etc.
+;;
+;; The debug directory is only created if there are buffers to save.
+;;
+;; Uncomment the following line to enable auto-save on exit:
+;; (add-hook 'kill-emacs-hook #'core-logging--save-debug-buffers-on-exit)
+;;
+;; Manual command available anytime:
+;;   M-x core-logging-save-debug-buffers  - Save debug buffers immediately
+
+;; ============================================
+;; 9. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)
