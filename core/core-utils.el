@@ -134,6 +134,22 @@ Example:
  (when path (file-name-nondirectory (directory-file-name path))))
 
 (defun
+ core-utils-find-dominating-directory-by-markers (markers &optional directory)
+ "Find dominating directory containing any file/directory from MARKERS list.
+MARKERS is a list of filenames or directory names to search for.
+DIRECTORY is the starting directory (defaults to `default-directory').
+
+Returns the directory path containing the first matching marker, or nil if none found.
+Searches upward through parent directories until a marker is found.
+
+Example:
+  (core-utils-find-dominating-directory-by-markers
+   \\='(\".git\" \"pyproject.toml\" \"Cargo.toml\"))
+  => \"/home/user/projects/myapp/\""
+ (let ((current-dir (or directory default-directory)))
+   (cl-some (lambda (marker) (locate-dominating-file current-dir marker)) markers)))
+
+(defun
  core-utils-scan-directory-for-pattern (dir pattern transform-fn)
  "Scan DIR for files matching PATTERN and apply TRANSFORM-FN to each match.
 DIR should be a directory path (string).

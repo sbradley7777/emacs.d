@@ -1,8 +1,8 @@
 ;;; python-utils.el --- Python Project Detection Utilities -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Centralized utility functions for Python project detection.
-;;      Uses Emacs built-in functions for finding project roots, extracting
-;;      project names, and locating virtual environments.  TRAMP-compatible.
+;;      Provides functions for finding project roots, extracting project names,
+;;      and locating virtual environments.  TRAMP-compatible.
 
 ;;; Code:
 (require 'core-utils)
@@ -14,12 +14,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  python-utils-find-project-root (&optional directory)
- "Find Python project root using built-in locate-dominating-file.
+ "Find Python project root using file markers.
 Returns the project root path, or nil if not in a Python project.
-Uses markers from pyvenv-project-markers to identify project root.
+Uses markers from `pyvenv-project-markers' to identify project root.
 DIRECTORY defaults to `default-directory' if not provided."
- (let ((current-dir (or directory default-directory)))
-   (cl-some (lambda (marker) (locate-dominating-file current-dir marker)) pyvenv-project-markers)))
+ (core-utils-find-dominating-directory-by-markers pyvenv-project-markers directory))
 
 (defun
  python-utils-extract-project-name (project-root)
