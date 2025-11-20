@@ -83,7 +83,9 @@
     dashboard-insert-footer))
  (dashboard-setup-startup-hook)
  ;; Force dashboard refresh when opening files at startup
- (add-hook 'emacs-startup-hook #'dashboard-insert-startupify-lists))
+ (add-hook 'emacs-startup-hook #'dashboard-insert-startupify-lists)
+ ;; Show dashboard if only scratch buffer is visible after startup
+ (add-hook 'emacs-startup-hook #'dashboard--show-if-scratch-only))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -95,5 +97,23 @@
         (padding (/ (- (window-width) line-width) 2))
         (spaces (make-string (max 0 padding) ?\s)))
    (insert "\n\n" spaces separator "\n")))
+
+(defun
+ dashboard--show-if-scratch-only ()
+ "Show dashboard if only `*scratch*' buffer is displayed.
+This handles cases where command-line arguments prevent dashboard
+from showing at startup, but result in only `*scratch*' being visible."
+ (when
+  (and
+   (string= (buffer-name) "*scratch*") (= (length (window-list)) 1)
+   ;; Check no user files are open (allow internal buffers)
+   (not
+    (cl-some
+     (lambda
+      (buf)
+      (let ((name (buffer-name buf)))
+        (and (buffer-file-name buf) (not (string-prefix-p " " name)))))
+     (buffer-list))))
+  (dashboard-insert-startupify-lists) (dashboard-initialize)))
 (provide 'dashboard-config)
 ;;; dashboard-config.el ends here
