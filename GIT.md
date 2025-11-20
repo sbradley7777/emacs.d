@@ -335,31 +335,13 @@ M-x forge-gitconfig-set-repo-username
 
 ## Usage
 
-### Automatic Synchronization
+### Git and Forge Synchronization
 
-The configuration automatically synchronizes Git and Forge data when you open files in a repository ([`features/git/git-sync.el`](features/git/git-sync.el)).
+The configuration provides both manual and optional automatic synchronization of Git refs and Forge data ([`features/git/git-sync.el`](features/git/git-sync.el)).
 
-#### How Automatic Sync Works
+#### Default Behavior: Manual Synchronization
 
-**When you open any file in a git repository:**
-1. The configuration detects if this repository has been synced this session
-2. If not synced yet, it automatically:
-   - Fetches Git refs (branches, tags, commits) via `magit-fetch-all`
-   - Pulls Forge data (issues, PRs, comments) via Forge API
-3. Marks the repository as synced for this session
-4. Subsequent file opens in the same repository skip the sync
-
-**Messages you'll see:**
-```
-ℹ️  Initiated sync for repository: ~/project-name
-ℹ️  Fetching Git data for: ~/project-name
-ℹ️  Fetching Forge data for: ~/project-name
-✅  Forge data fetched for: ~/project-name
-```
-
-**Note**: Magit fetch runs in the background and shows progress in the modeline ("Fetching..." → "Fetching...done").
-
-#### Manual Synchronization
+**By default, synchronization is manual-only to avoid unexpected network activity when opening files.**
 
 **Trigger sync on demand:**
 ```elisp
@@ -370,10 +352,54 @@ Use this when:
 - You want to refresh Git and Forge data during your session
 - You've made changes in another client (web UI, git command line)
 - You want to check for new issues or PRs without opening a new file
+- You need the latest Git refs or Forge metadata
 
-**Benefits:**
+**What happens when you run manual sync:**
+1. Detects if this repository has been synced this session
+2. Fetches Git refs (branches, tags, commits) via `magit-fetch-all`
+3. Pulls Forge data (issues, PRs, comments) via Forge API
+4. Marks the repository as synced for this session
+5. Subsequent manual syncs in the same session skip redundant fetches
+
+**Messages you'll see:**
+```
+ℹ️  Initiated sync for repository: ~/project-name
+ℹ️  Fetching magit git data for project: ~/project-name
+ℹ️  Fetching forge git data for project: ~/project-name
+✅  Fetched magit git data for project: ~/project-name
+✅  Fetched forge git data for project: ~/project-name
+```
+
+**Note**: Magit fetch runs in the background and shows progress in the modeline ("Fetching..." → "Fetching...done").
+
+#### Optional: Automatic Synchronization (Opt-In)
+
+**If you prefer automatic syncing when opening files in a repository**, you can enable it in `~/.emacs.d/local.el`:
+
+**Enable auto-sync:**
+```elisp
+;; Optional: Auto-sync Git and Forge data when opening files (default: disabled)
+(require 'git-sync)
+(add-hook 'find-file-hook #'git-auto-sync-repository-once)
+```
+
+**After enabling auto-sync, when you open any file in a git repository:**
+1. The configuration detects if this repository has been synced this session
+2. If not synced yet, it automatically:
+   - Fetches Git refs (branches, tags, commits) via `magit-fetch-all`
+   - Pulls Forge data (issues, PRs, comments) via Forge API
+3. Marks the repository as synced for this session
+4. Subsequent file opens in the same repository skip the sync
+
+**Benefits of Manual Default:**
+- **User control** - Sync only when you need updated data
+- **Reduced network activity** - No automatic background fetches on every file open
+- **Faster file opening** - No network delays when opening files
+- **Battery friendly** - Less background network activity
+
+**Benefits of Auto-Sync (when enabled):**
 - **Always up-to-date** - Start working with latest Git refs and Forge data
-- **No manual fetching** - Automatic background updates
+- **No manual intervention** - Automatic background updates
 - **Network efficient** - Only syncs once per repository per session
 - **Non-blocking** - Continue working while sync happens in background
 

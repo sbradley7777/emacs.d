@@ -881,31 +881,44 @@ Interactive command launcher with history tracking and customizable favorites:
 
 Comprehensive Git integration using Magit and Forge for repository management and forge (GitHub, GitLab, etc.) interaction.
 
-### Automatic Synchronization
+### Git and Forge Synchronization
 
-Automatic Git and Forge data synchronization ([`features/git/git-sync.el`](features/git/git-sync.el)):
+Manual and automatic Git and Forge data synchronization ([`features/git/git-sync.el`](features/git/git-sync.el)):
 
-**Features:**
-- **Auto-sync on file open** - Automatically fetches Git and Forge data when opening files in a repository
-- **Once per session** - Syncs each repository once per Emacs session to avoid redundant network calls
+**Default Behavior (Manual Sync):**
+- **Manual sync command** - `M-x git-sync-repository` synchronizes Git refs and Forge data on demand
+- **Explicit control** - Sync only when you choose, avoiding unexpected network activity
+- **Non-intrusive** - No automatic background fetches during file opening
+- **Network efficient** - Tracks synced repositories to avoid redundant fetches in same session
+
+**Optional Auto-Sync (Opt-In):**
+- **Disabled by default** - Auto-sync on file open is off to minimize startup network activity
+- **Easy to enable** - Uncomment two lines in `configs/local.el` to restore automatic syncing:
+  ```elisp
+  ;; Optional: Auto-sync Git and Forge data when opening files (default: disabled)
+  (require 'git-sync)
+  (add-hook 'find-file-hook #'git-auto-sync-repository-once)
+  ```
+- **Once per session** - When enabled, syncs each repository once per Emacs session
+- **Smart completion messages** - Success notifications when data fetch completes
+
+**Sync Features:**
 - **Magit integration** - Fetches Git refs (branches, tags, commits) via `magit-fetch-all`
 - **Forge integration** - Pulls Forge metadata (issues, PRs, comments) via Forge API
-- **Manual sync command** - `M-x git-sync-repository` for on-demand updates
-- **Non-intrusive** - Background fetching with progress indicators in modeline
-- **Smart completion messages** - Success notifications when Forge data fetch completes
+- **Background operation** - Non-blocking, allows you to continue working immediately
+- **Progress indicators** - Shows sync status in modeline
 
-**How It Works:**
-- When you open any file in a git repository, the configuration automatically:
-  1. Detects if this repository has been synced this session
-  2. If not, initiates `magit-fetch-all` to update Git refs
-  3. Initiates `forge-pull` to fetch issues, PRs, and comments from the forge API
-  4. Marks the repository as synced to prevent redundant fetches
+**How Manual Sync Works:**
+1. Run `M-x git-sync-repository` in any file within a git repository
+2. Initiates `magit-fetch-all` to update Git refs
+3. Initiates `forge-pull` to fetch issues, PRs, and comments from the forge API
+4. Marks the repository as synced to prevent redundant fetches in same session
 
 **Benefits:**
-- **Always up-to-date** - Git branches and forge data automatically refreshed when you start working
-- **Reduced friction** - No need to manually run `magit-fetch` or `forge-pull`
-- **Network efficient** - Only fetches once per repository per session
-- **Background operation** - Non-blocking, allows you to continue working immediately
+- **User control** - Sync only when needed, avoiding unexpected network delays
+- **Reduced network activity** - No automatic background fetches on every file open
+- **Flexible** - Easy opt-in for users who prefer automatic syncing
+- **Network efficient** - Only fetches once per repository per session (when auto-sync enabled)
 
 ### Magit - Git Porcelain
 

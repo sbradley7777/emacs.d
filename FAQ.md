@@ -207,6 +207,44 @@ The modular design makes it easy to add support for additional languages.
 
 For complete setup instructions, troubleshooting, and usage guide, see [`GIT.md`](GIT.md).
 
+### Q: How does Git/Forge synchronization work?
+
+**A:** The configuration provides both manual and automatic synchronization options for Git refs and Forge data.
+
+**Default Behavior (Manual Sync):**
+- **No automatic sync** - By default, Git and Forge data are NOT automatically synchronized when files are opened
+- **Manual sync command** - Use `M-x git-sync-repository` to synchronize Git refs and Forge data on demand
+- **User control** - Sync only when you choose, avoiding unexpected network activity during file opening
+- **Network efficient** - Tracks synced repositories to avoid redundant fetches in the same session
+
+**Why Manual by Default:**
+- **Reduces startup delays** - No network activity when opening files
+- **Avoids surprise pauses** - No unexpected "fetching..." delays during work
+- **User control** - Sync only when you need updated Git/Forge data
+- **Battery friendly** - Less background network activity
+
+**Optional Auto-Sync (Opt-In):**
+If you prefer automatic syncing when opening files in a repository:
+
+1. **Enable in local.el** - Uncomment two lines in `~/.emacs.d/local.el`:
+   ```elisp
+   ;; Optional: Auto-sync Git and Forge data when opening files (default: disabled)
+   (require 'git-sync)
+   (add-hook 'find-file-hook #'git-auto-sync-repository-once)
+   ```
+
+2. **Restart Emacs** - The auto-sync hook will now be active
+3. **Once per session** - Each repository syncs once per session when first file is opened
+4. **Background operation** - Non-blocking, allows you to continue working immediately
+
+**Sync Features:**
+- **Magit integration** - Fetches Git refs (branches, tags, commits) via `magit-fetch-all`
+- **Forge integration** - Pulls Forge metadata (issues, PRs, comments) via Forge API
+- **Progress indicators** - Shows sync status in modeline
+- **Smart completion** - Success/failure notifications after sync completes
+
+See [`FEATURES.md`](FEATURES.md#git-and-forge-synchronization) for detailed information.
+
 ### Q: Can I disable specific features?
 
 **A:** Yes! The modular structure allows easy feature control:

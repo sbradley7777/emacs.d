@@ -36,7 +36,7 @@ This Emacs configuration provides a professional development environment with in
 - **Project navigation** with [Treemacs](https://github.com/Alexander-Miller/treemacs) file tree sidebar and project management
 - **Custom dashboard** with quick access to recent files, package management, and system actions
 - **Command palette** with M-x history tracking, customizable favorites, and one-click command execution
-- **Git integration** with [Magit](https://magit.vc/) and [Forge](https://github.com/magit/forge) for GitHub/GitLab workflows
+- **Git integration** with [Magit](https://magit.vc/) and [Forge](https://github.com/magit/forge) for GitHub/GitLab workflows (manual sync by default, optional auto-sync)
 - **Automatic font management** for icon packages with system-wide font installation
 - **Message logging** with automatic log rotation and session history
 - **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes

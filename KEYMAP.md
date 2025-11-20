@@ -22,6 +22,7 @@ This document provides a comprehensive reference for all keybindings and executa
 - [Functions](#functions)
   - [Virtual Environment Management](#virtual-environment-management)
   - [Package Management](#package-management)
+  - [Git Integration](#git-integration)
   - [Theme Management](#theme-management)
 - [Related Documentation](#related-documentation)
 
@@ -459,6 +460,38 @@ All package management functions are accessible from the startup dashboard via i
 - **Installed Packages** button - runs `show-installed-packages`
 - **Search Packages** button - runs `search-packages`
 - **Package Cleanup** button - runs `core-packages-cleanup`
+
+### Git Integration
+
+Git and Forge synchronization commands using [Magit](https://magit.vc/) and [Forge](https://github.com/magit/forge):
+
+| Function | Description |
+|:---------|:------------|
+| `git-sync-repository` | Manually synchronize Git refs and Forge data for current repository |
+| `magit-status` | Open Magit status buffer for current repository |
+| `forge-pull` | Fetch issues and pull requests from forge (GitHub/GitLab) |
+
+**Using `git-sync-repository`:**
+- **Default behavior**: Synchronization is manual-only (no auto-sync on file open)
+- Run `M-x git-sync-repository` to sync Git refs and Forge data on demand
+- Fetches Git refs (branches, tags, commits) via `magit-fetch-all`
+- Pulls Forge metadata (issues, PRs, comments) via Forge API
+- Only syncs once per repository per session (subsequent calls skip redundant fetches)
+- Non-blocking operation - continue working while sync happens in background
+
+**Optional Auto-Sync:**
+- To enable automatic syncing when opening files, add to `~/.emacs.d/local.el`:
+  ```elisp
+  ;; Optional: Auto-sync Git and Forge data when opening files (default: disabled)
+  (require 'git-sync)
+  (add-hook 'find-file-hook #'git-auto-sync-repository-once)
+  ```
+- See [`GIT.md`](GIT.md#git-and-forge-synchronization) for complete documentation
+
+**Magit and Forge:**
+- `magit-status` - Main Git interface for staging, committing, branching, etc.
+- `forge-pull` - Fetch issues/PRs directly (also called by `git-sync-repository`)
+- For complete setup and usage guide, see [`GIT.md`](GIT.md)
 
 ### Theme Management
 
