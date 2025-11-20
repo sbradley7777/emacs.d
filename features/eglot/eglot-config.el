@@ -25,7 +25,7 @@
 (defun
  eglot-setup-lsp-for-mode (mode lsp-executable)
  "Set up eglot hook for MODE if LSP-EXECUTABLE is available.
-Checks local or remote host appropriately using tramp-is-remote-file."
+Checks local or remote host appropriately based on `default-directory'."
  (add-hook
   (intern (format "%s-hook" mode))
   (lambda
@@ -39,11 +39,7 @@ Checks local or remote host appropriately using tramp-is-remote-file."
       mode
       location
       hostname)
-     (let ((should-enable
-            (if
-             is-remote
-             (core-utils-check-command-in-path-remote-host lsp-executable)
-             (core-utils-check-command-in-path lsp-executable))))
+     (let ((should-enable (core-utils-check-command-in-path lsp-executable)))
        ;; Start eglot directly - no timer needed.
        ;; Eglot handles async connection internally, so it won't block even during git-sync.
        (when should-enable (eglot-ensure)))))))

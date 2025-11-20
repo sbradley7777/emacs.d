@@ -38,22 +38,6 @@ PYTHON-PATH: Optional additional Python path"
  (&optional file)
  "Check if FILE (or current buffer file) is accessed via TRAMP."
  (file-remote-p (or file default-directory)))
-(defun
- core-utils-check-command-in-path-remote-host (command)
- "Check if COMMAND exists in PATH on remote host (for TRAMP buffers).
-Returns t if command is found, nil otherwise.
-Only works when called from a buffer visiting a remote file via TRAMP."
- (require 'core-utils)
- (if
-  (not (file-remote-p default-directory))
-  (progn (core-message-warning "Not a remote file - cannot check remote host PATH") nil)
-  (let* ((host (file-remote-p default-directory 'host))
-         (command-path (executable-find command t)))
-    (if
-     command-path
-     (progn (core-utils-format-command-found-message command command-path host "remote") t)
-     (core-utils-format-command-not-found-message command host "remote")
-     nil))))
 
 (core-message-debug "TRAMP utilities loaded")
 (provide 'tramp-utils)

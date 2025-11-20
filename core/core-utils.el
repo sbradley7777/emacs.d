@@ -56,13 +56,14 @@ LOCATION is either \\='local\\=' or \\='remote\\='."
  "Check if COMMAND exists in PATH and log message if not found.
 Returns t if command is found, nil otherwise.
 
-Properly detects local vs remote (TRAMP) paths based on `default-directory'."
+Properly detects local vs remote (TRAMP) paths based on `default-directory'.
+When `default-directory' is remote, searches for COMMAND on the remote host."
  (let* ((is-remote (file-remote-p default-directory))
         (host
          (if
           is-remote (or (file-remote-p default-directory 'host) "unknown-remote") (system-name)))
         (location (if is-remote "remote" "local"))
-        (command-path (executable-find command)))
+        (command-path (executable-find command is-remote)))
    (if
     command-path
     (progn (core-utils-format-command-found-message command command-path host location) t)
