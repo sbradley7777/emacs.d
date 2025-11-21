@@ -34,10 +34,10 @@ PYTHON-PATH: Optional additional Python path"
 
    (connection-local-set-profiles `(:application tramp :machine ,host) profile-name)))
 (defun
- tramp-is-remote-file
- (&optional file)
- "Check if FILE (or current buffer file) is accessed via TRAMP."
- (file-remote-p (or file default-directory)))
+ tramp-is-remote-file (&optional file)
+ "Check if FILE (or current buffer file) is accessed via TRAMP.
+This function is deprecated. Use `core-utils-is-remote-file' instead."
+ (core-utils-is-remote-file file))
 
 (core-message-debug "TRAMP utilities loaded")
 (provide 'tramp-utils)

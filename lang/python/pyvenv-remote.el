@@ -22,7 +22,7 @@ REMOTE-DIR is the remote directory to search for a virtual environment.
 First tries to find it remotely, falls back to local equivalent if needed."
  (core-message-debug "Searching for venv in: %s" (abbreviate-file-name remote-dir))
  (if
-  (file-remote-p remote-dir)
+  (core-utils-is-remote-file remote-dir)
   ;; Try remote search first
   (let ((remote-venv (pyvenv-remote-search-venv remote-dir)))
     (if
@@ -47,7 +47,7 @@ Uses python-utils-find-venv-path which is TRAMP-compatible via `locate-dominatin
 (defun
  pyvenv-remote-activate () "TRAMP-aware virtual environment activation."
  (if
-  (tramp-is-remote-file)
+  (core-utils-is-remote-file)
   ;; Remote file handling
   (let* ((remote-dir default-directory)
          (host (file-remote-p remote-dir 'host)))

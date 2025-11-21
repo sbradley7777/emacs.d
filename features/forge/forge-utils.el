@@ -139,7 +139,7 @@ VAR is the git config variable to read.
 When `default-directory' is remote (TRAMP), use magit-get which handles TRAMP
 via `process-file'.  For local directories, use original ghub implementation."
  (if
-  (file-remote-p default-directory)
+  (core-utils-is-remote-file)
   ;; Remote: use magit-get (handles TRAMP)
   (progn (require 'magit-git nil t) (when (fboundp 'magit-get) (magit-get var)))
   ;; Local: use original ghub implementation

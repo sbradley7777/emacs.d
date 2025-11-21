@@ -228,7 +228,7 @@ Runs only once per repository per Emacs session.
 Skips remote files accessed via TRAMP."
  (when-let ((repo-root (git-utils-find-repository-root)))
    (if
-    (file-remote-p repo-root)
+    (core-utils-is-remote-file repo-root)
     (core-message-debug
      "Skipping git auto-sync for remote repository (TRAMP): %s"
      (git-utils-format-repository-display repo-root))

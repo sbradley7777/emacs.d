@@ -16,7 +16,7 @@
  pyvenv-normalize-path (path)
  "Normalize path for comparison.  Handles both local and TRAMP paths.
 PATH is the file path to normalize."
- (if (file-remote-p path) (file-local-name path) (expand-file-name path)))
+ (if (core-utils-is-remote-file path) (file-local-name path) (expand-file-name path)))
 
 (defun
  pyvenv-get-version-from-executable (python-executable)
@@ -79,7 +79,7 @@ START-DIR is the starting directory for the search (defaults to current director
   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
   (let ((venv-python (expand-file-name pyvenv-python-executable-path pyvenv-virtual-env)))
     (if
-     (file-remote-p venv-python)
+     (core-utils-is-remote-file venv-python)
      ;; For remote files, use the local path part (without TRAMP prefix)
      ;; doom-modeline will execute this in the context of default-directory,
      ;; which is a TRAMP path, so the execution will happen on the remote host

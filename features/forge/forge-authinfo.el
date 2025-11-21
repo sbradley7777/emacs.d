@@ -48,7 +48,7 @@ Only prompts for hosts that are properly configured in ~/.gitconfig.
 Does not run when editing remote files via TRAMP."
  (interactive)
  (if
-  (or (and buffer-file-name (file-remote-p buffer-file-name)) (file-remote-p default-directory))
+  (or (core-utils-is-remote-file buffer-file-name) (core-utils-is-remote-file))
   (core-message-warning "forge-authinfo-generate-entries disabled for remote files")
   (let* ((hosts (git-forge-config-parse-hosts))
          (existing-machines

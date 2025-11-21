@@ -173,7 +173,7 @@ DESCRIPTION is optional user-friendly name for the tool.
 OPTIONAL marks the tool as optional (warning instead of error).
 Checks based on current `default-directory' (local or remote)."
  (let ((desc (or description name))
-       (is-remote (file-remote-p default-directory)))
+       (is-remote (core-utils-is-remote-file)))
    (if
     (executable-find name is-remote)
     (list :status 'ok :message (format "%s found" desc) :tool name)
@@ -213,7 +213,7 @@ Checks based on current `default-directory' (local or remote)."
  "Check if TRAMP remote PATH is properly configured.
 Only checks when working on a remote file."
  (when
-  (file-remote-p default-directory)
+  (core-utils-is-remote-file)
   (if
    (and (boundp 'tramp-remote-path) (member 'tramp-own-remote-path tramp-remote-path))
    (list :status 'ok :message "TRAMP remote PATH configured")

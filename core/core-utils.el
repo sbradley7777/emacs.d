@@ -32,6 +32,13 @@ Example:
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
+ core-utils-is-remote-file (&optional file)
+ "Check if FILE (or `default-directory') is accessed via TRAMP.
+FILE defaults to `default-directory' if not specified.
+Returns non-nil if the file/directory is remote, nil otherwise."
+ (file-remote-p (or file default-directory)))
+
+(defun
  core-utils-format-command-found-message (command path host location)
  "Format success message when COMMAND is found.
 COMMAND is the command name, PATH is the full path, HOST is the hostname,
@@ -58,7 +65,7 @@ Returns t if command is found, nil otherwise.
 
 Properly detects local vs remote (TRAMP) paths based on `default-directory'.
 When `default-directory' is remote, searches for COMMAND on the remote host."
- (let* ((is-remote (file-remote-p default-directory))
+ (let* ((is-remote (core-utils-is-remote-file))
         (host
          (if
           is-remote (or (file-remote-p default-directory 'host) "unknown-remote") (system-name)))
