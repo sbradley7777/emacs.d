@@ -104,40 +104,6 @@ When `default-directory' is remote, searches for COMMAND on the remote host."
     (progn (core-utils-format-command-not-found-message command host location) nil))))
 
 (defun
- core-utils-find-window-by-buffer-name (buffer-name-pattern &optional exact-match)
- "Find window displaying buffer matching BUFFER-NAME-PATTERN.
-If EXACT-MATCH is non-nil, match buffer name exactly using string=.
-Otherwise, use `string-prefix-p' for prefix matching (default).
-Returns the window if found, nil otherwise.
-
-Example:
-  (core-utils-find-window-by-buffer-name \"*Flymake diagnostics\")
-  (core-utils-find-window-by-buffer-name \"*Ilist*\" t)"
- (require 'cl-lib)
- (cl-find-if
-  (lambda
-   (window)
-   (let ((buffer-name (buffer-name (window-buffer window))))
-     (if
-      exact-match
-      (string= buffer-name-pattern buffer-name)
-      (string-prefix-p buffer-name-pattern buffer-name))))
-  (window-list)))
-
-(defun
- core-utils-close-window-by-buffer-name (buffer-name-pattern &optional exact-match)
- "Close window displaying buffer matching BUFFER-NAME-PATTERN.
-If EXACT-MATCH is non-nil, match buffer name exactly using string=.
-Otherwise, use `string-prefix-p' for prefix matching (default).
-Returns t if window was found and closed, nil otherwise.
-
-Example:
-  (core-utils-close-window-by-buffer-name \"*Flymake diagnostics\")
-  (core-utils-close-window-by-buffer-name \"*Ilist*\" t)"
- (let ((window (core-utils-find-window-by-buffer-name buffer-name-pattern exact-match)))
-   (when window (quit-window nil window) t)))
-
-(defun
  core-utils-ensure-directory (dir-path)
  "Ensure DIR-PATH exists, creating it if necessary.
 Returns t if directory exists/was created, nil if creation failed."
@@ -224,17 +190,6 @@ Returns t on success, nil on failure."
      (error
       (core-message-error "Failed to set permissions on %s: %s" desc (error-message-string err))
       nil))))
-
-(defun
- core-utils-resize-window-to-fraction (window width-fraction)
- "Resize WINDOW to WIDTH-FRACTION of frame width.
-WIDTH-FRACTION is a decimal between 0.0 and 1.0 (e.g., 0.3 for 30%).
-Calculates the desired width and resizes the window horizontally."
- (let* ((frame-width (frame-width))
-        (desired-width (floor (* frame-width width-fraction)))
-        (current-width (window-width window))
-        (delta (- desired-width current-width)))
-   (when (/= delta 0) (window-resize window delta t))))
 
 ;;; Provide this module
 (provide 'core-utils)

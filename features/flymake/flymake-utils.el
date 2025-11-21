@@ -4,8 +4,9 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-utils)
 (require 'core-logging)
+(require 'core-ui-utils)
+(require 'core-utils)
 (require 'features-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,10 +64,10 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
      (if
       (eq flymake-diagnostics--current-width 'compact)
       (progn
-       (core-utils-resize-window-to-fraction
+       (core-ui-utils-resize-window-to-ratio
         existing-window features-side-window-expanded-width)
        (setq flymake-diagnostics--current-width 'expanded))
-      (core-utils-resize-window-to-fraction existing-window features-side-window-compact-width)
+      (core-ui-utils-resize-window-to-ratio existing-window features-side-window-compact-width)
       (setq flymake-diagnostics--current-width 'compact))
      (select-window existing-window))
     (progn

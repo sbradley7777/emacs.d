@@ -5,6 +5,7 @@
 
 ;;; Code:
 (require 'core-logging)
+(require 'core-ui-utils)
 (require 'core-utils)
 (require 'features-constants)
 (require 'forge-constants)
@@ -80,10 +81,10 @@ Optional REPO argument specifies which repository to list issues for."
     (if
      (eq forge-issues--current-width 'compact)
      (progn
-      (core-utils-resize-window-to-fraction
+      (core-ui-utils-resize-window-to-ratio
        existing-window features-side-window-expanded-width)
       (setq forge-issues--current-width 'expanded))
-     (core-utils-resize-window-to-fraction existing-window features-side-window-compact-width)
+     (core-ui-utils-resize-window-to-ratio existing-window features-side-window-compact-width)
      (setq forge-issues--current-width 'compact))
     (condition-case err
         (progn

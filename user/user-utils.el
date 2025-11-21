@@ -4,8 +4,9 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-utils)
 (require 'core-logging)
+(require 'core-ui-utils)
+(require 'core-utils)
 (require 'cl-lib)
 
 ;; Declare external variables to suppress byte-compiler warnings
@@ -196,10 +197,10 @@ See-also, Reference."
  "Close all exclusive side windows (F1: Flymake, F5: Imenu-list, F9: Command Palette).
 This ensures only one of these windows is open at a time."
  ;; Close Flymake diagnostics window (F1)
- (core-utils-close-window-by-buffer-name "*Flymake diagnostics")
+ (core-ui-utils-close-window-by-buffer-name "*Flymake diagnostics")
 
  ;; Close Imenu-list window (F5)
- (core-utils-close-window-by-buffer-name "*Ilist*" t)
+ (core-ui-utils-close-window-by-buffer-name "*Ilist*" t)
 
  ;; Close Command Palette window (F9)
  (when
@@ -215,7 +216,7 @@ This ensures only one of these windows is open at a time."
 This wrapper ensures that opening Imenu-list closes other exclusive side windows (F1, F9)."
  (interactive)
  ;; Find if imenu-list window is currently open
- (let ((imenu-window (core-utils-find-window-by-buffer-name "*Ilist*" t)))
+ (let ((imenu-window (core-ui-utils-find-window-by-buffer-name "*Ilist*" t)))
    ;; If not open, close other exclusive windows first
    (unless imenu-window (user-close-exclusive-side-windows))
    ;; Call the original toggle function
