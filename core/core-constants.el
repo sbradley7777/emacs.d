@@ -16,6 +16,8 @@
  "Path to ~/.emacs.d/local/ directory.")
 (defconst
  ignore-on-load '("configs" "local") "Directories to ignore when auto-detecting load paths.")
+(defconst
+ core-elisp-file-pattern "\\.el$" "Regular expression pattern matching Emacs Lisp source files.")
 
 ;; File Management (autosave, backup)
 (core-utils-defconst-path

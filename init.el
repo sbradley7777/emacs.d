@@ -11,6 +11,7 @@
 
 ;; Variables from core-constants.el
 (defvar ignore-on-load)
+(defvar core-elisp-file-pattern)
 (defvar core-gc-long-session-threshold)
 (defvar core-gc-percentage-normal)
 (defvar core-gc-normal-threshold)
@@ -41,12 +42,13 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
        (unless
         (member dir-name ignore-on-load)
         ;; Check if this directory has .el files
-        (when (directory-files dir t "\\.el$") (push dir all-dirs))
+        (when (directory-files dir t core-elisp-file-pattern) (push dir all-dirs))
         ;; Recursively check subdirectories for .el files
         (dolist
          (subdir (directory-files dir t "^[^.]"))
          (when
-          (and (file-directory-p subdir) (directory-files subdir t "\\.el$"))
+          (and
+           (file-directory-p subdir) (directory-files subdir t core-elisp-file-pattern))
           (push subdir all-dirs)))))))
    (nreverse all-dirs)))
 
