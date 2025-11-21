@@ -15,6 +15,7 @@
 ;;; Code:
 (require 'core-logging)
 (require 'core-user-interaction-utils)
+(require 'core-utils)
 (require 'forge-constants)
 (require 'git-forge-config)
 (require 'forge-utils)
@@ -28,17 +29,6 @@
 Returns formatted string suitable for ~/.authinfo.
 Automatically appends ^forge suffix to login for Forge authentication."
  (format "machine %s login %s%s password %s" machine login forge-authinfo-username-suffix token))
-
-(defun
- forge-authinfo--ensure-file-permissions (file)
- "Ensure FILE has secure 600 permissions.
-Returns t on success, nil on failure."
- (condition-case err
-     (progn (set-file-modes file #o600) t)
-   (error
-    (core-message-error
-     "Failed to set permissions on %s: %s" (abbreviate-file-name file) (error-message-string err))
-    nil)))
 
 (defun
  forge-authinfo--validate-inputs (username token)
@@ -118,7 +108,7 @@ Does not run when editing remote files via TRAMP."
                (dolist (entry (reverse new-entries)) (insert entry "\n"))
                (write-region (point-min) (point-max) authinfo-file nil 'quiet))
               (when
-               (forge-authinfo--ensure-file-permissions authinfo-file)
+               (core-utils-set-file-permissions authinfo-file #o600 "~/.authinfo")
                (core-message-success
                 "Added %d entr%s to ~/.authinfo"
                 processed-count

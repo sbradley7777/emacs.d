@@ -134,6 +134,31 @@ Example:
         (setq result (plist-put result (intern (concat ":" suffix)) nil))))))
    result))
 
+(defun
+ git-utils-extract-host-from-url (url)
+ "Extract the host portion from a git remote URL.
+URL can be in SSH, HTTPS, or git protocol format.
+Returns the hostname (e.g., \\='github.com\\=') or nil if unrecognized format.
+
+Supported formats:
+  - SSH: git@github.com:user/repo.git
+  - HTTPS: https://github.com/user/repo.git
+  - Git protocol: git://github.com/user/repo.git"
+ (when
+  (and (stringp url) (not (string-empty-p url)))
+  (cond
+   ;; SSH format: git@github.com:user/repo.git
+   ((string-match "^git@\\([^:]+\\):" url)
+    (match-string 1 url))
+   ;; HTTPS format: https://github.com/user/repo.git
+   ((string-match "^https?://\\([^/]+\\)" url)
+    (match-string 1 url))
+   ;; Git protocol: git://github.com/user/repo.git
+   ((string-match "^git://\\([^/]+\\)" url)
+    (match-string 1 url))
+   (t
+    nil))))
+
 (core-message-config "Git utility functions loaded")
 (provide 'git-utils)
 ;;; git-utils.el ends here

@@ -177,6 +177,20 @@ Example:
         (when result (push result results)))))
     (nreverse results))))
 
+(defun
+ core-utils-set-file-permissions (file mode &optional description)
+ "Set FILE to MODE (octal, e.g., #o600).
+MODE should be an octal number representing file permissions.
+DESCRIPTION is optional name for error messages (defaults to FILE).
+Returns t on success, nil on failure."
+ (let ((desc (or description (abbreviate-file-name file))))
+   (condition-case err
+       (progn
+        (set-file-modes file mode) (core-message-debug "Set permissions on %s to %o" desc mode) t)
+     (error
+      (core-message-error "Failed to set permissions on %s: %s" desc (error-message-string err))
+      nil))))
+
 ;;; Provide this module
 (provide 'core-utils)
 ;;; core-utils.el ends here

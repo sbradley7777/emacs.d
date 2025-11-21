@@ -171,22 +171,11 @@ not globally, to keep .git/config files clean."
  git-forge-config-get-repo-host ()
  "Get the forge host for the current git repository.
 Returns the host portion from the remote.origin.url, or nil if not in a git repo.
-For example: 'github.com' or 'gitlab.example.com'."
+For example: \\='github.com\\=' or \\='gitlab.example.com\\='."
  (when
   (and (git-utils-find-repository-root) (fboundp 'magit-get))
   (when-let ((url (magit-get "remote.origin.url")))
-    (cond
-     ;; SSH format: git@github.com:user/repo.git
-     ((string-match "^git@\\([^:]+\\):" url)
-      (match-string 1 url))
-     ;; HTTPS format: https://github.com/user/repo.git
-     ((string-match "^https?://\\([^/]+\\)" url)
-      (match-string 1 url))
-     ;; Git protocol: git://github.com/user/repo.git
-     ((string-match "^git://\\([^/]+\\)" url)
-      (match-string 1 url))
-     (t
-      nil)))))
+    (git-utils-extract-host-from-url url))))
 
 (defun
  git-forge-config-set-repo-username ()
