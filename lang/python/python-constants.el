@@ -29,5 +29,9 @@
  "Files/directories that indicate a Python project root.")
 (defconst
  pyvenv-venv-directory-name "venv" "Default virtual environment directory name to search for.")
+(defconst
+ pyvenv-python-executable-path
+ "bin/python"
+ "Relative path to Python executable within venv directory.")
 (provide 'python-constants)
 ;;; python-constants.el ends here
