@@ -39,6 +39,33 @@ Returns non-nil if the file/directory is remote, nil otherwise."
  (file-remote-p (or file default-directory)))
 
 (defun
+ core-utils-validate-non-empty-string (value &optional description)
+ "Validate that VALUE is a non-empty string.
+Returns t if valid, logs warning and returns nil otherwise.
+DESCRIPTION is optional name for error messages (defaults to \\='Value\\=')."
+ (cond
+  ((not (stringp value))
+   (core-message-warning "%s must be a string, got: %s" (or description "Value") (type-of value))
+   nil)
+  ((string-empty-p value)
+   (core-message-warning "%s cannot be empty" (or description "Value"))
+   nil)
+  (t
+   t)))
+
+(defun
+ core-utils-validate-hostname (hostname)
+ "Validate that HOSTNAME is a valid hostname format.
+Returns t if valid format, nil otherwise.  Does not validate DNS resolution.
+Checks RFC-compliant hostname syntax: alphanumeric start/end, hyphens and dots allowed in middle, no consecutive
+dots."
+ (and
+  (stringp hostname)
+  (not (string-empty-p hostname))
+  (string-match-p "^[a-zA-Z0-9][-a-zA-Z0-9.]*[a-zA-Z0-9]$" hostname)
+  (not (string-match-p "\\.\\." hostname))))
+
+(defun
  core-utils-format-command-found-message (command path host location)
  "Format success message when COMMAND is found.
 COMMAND is the command name, PATH is the full path, HOST is the hostname,

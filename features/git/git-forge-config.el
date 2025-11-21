@@ -36,7 +36,7 @@ Validates that extracted hostnames are properly formatted."
       (string-match "^emacs-forge\\.\\(.+\\)\\.apihost " line)
       (let ((host (match-string 1 line)))
         (if
-         (git-utils--validate-hostname host)
+         (core-utils-validate-hostname host)
          (push host hosts)
          (core-message-warning "Skipping invalid hostname in ~/.gitconfig: '%s'" host))))))
    (reverse hosts)))
@@ -47,11 +47,10 @@ Validates that extracted hostnames are properly formatted."
 Returns plist with :githost, :apihost, :webhost, :type, :user keys.
 Returns nil if HOST is invalid."
  (unless
-  (and (stringp host) (not (string-empty-p host)))
-  (core-message-warning "Invalid host parameter: %s" host)
+  (core-utils-validate-non-empty-string host "Host parameter")
   (cl-return-from git-forge-config-parse-host-config nil))
  (unless
-  (git-utils--validate-hostname host)
+  (core-utils-validate-hostname host)
   (core-message-warning "Host '%s' is not a valid hostname format" host)
   (cl-return-from git-forge-config-parse-host-config nil))
  (condition-case err
@@ -67,7 +66,7 @@ Returns nil if HOST is invalid."
        (when
         (plist-get config :webhost)
         (unless
-         (git-utils--validate-hostname (plist-get config :webhost))
+         (core-utils-validate-hostname (plist-get config :webhost))
          (core-message-warning
           "Invalid webhost format for %s: %s" host (plist-get config :webhost))))
        (plist-put config :githost host))

@@ -31,13 +31,6 @@ Automatically appends ^forge suffix to login for Forge authentication."
  (format "machine %s login %s%s password %s" machine login forge-authinfo-username-suffix token))
 
 (defun
- forge-authinfo--validate-inputs (username token)
- "Validate that USERNAME and TOKEN are non-empty strings.
-Returns t if valid, nil otherwise."
- (and
-  (stringp username) (not (string-empty-p username)) (stringp token) (not (string-empty-p token))))
-
-(defun
  forge-authinfo-generate-entries ()
  "Generate ~/.authinfo entries for forge hosts missing authentication.
 Reads [emacs-forge] sections from ~/.gitconfig and checks which hosts
@@ -89,7 +82,9 @@ Does not run when editing remote files via TRAMP."
                    (if user user (core-user-read-string (format "Username for %s: " api-host))))
                   (token (core-user-read-password (format "Token for %s: " api-host))))
              (if
-              (forge-authinfo--validate-inputs username token)
+              (and
+               (core-utils-validate-non-empty-string username "Username")
+               (core-utils-validate-non-empty-string token "Token"))
               (progn
                (push (forge-authinfo--format-entry api-host username token) new-entries)
                (setq processed-count (1+ processed-count))

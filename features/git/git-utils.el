@@ -57,16 +57,6 @@ Allows regex metacharacters that are safe for git config --get-regexp."
    t)))
 
 (defun
- git-utils--validate-hostname (hostname)
- "Validate that HOSTNAME is a valid hostname format.
-Returns t if valid, nil otherwise.  Does not validate DNS resolution."
- (and
-  (stringp hostname)
-  (not (string-empty-p hostname))
-  (string-match-p "^[a-zA-Z0-9][-a-zA-Z0-9.]*[a-zA-Z0-9]$" hostname)
-  (not (string-match-p "\\.\\." hostname))))
-
-(defun
  git-utils--ensure-git-available ()
  "Check if git command is available.  Return t if available, nil otherwise.
 Logs a warning if git is not found.  Caches result to avoid redundant checks."
