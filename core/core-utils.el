@@ -225,6 +225,17 @@ Returns t on success, nil on failure."
       (core-message-error "Failed to set permissions on %s: %s" desc (error-message-string err))
       nil))))
 
+(defun
+ core-utils-resize-window-to-fraction (window width-fraction)
+ "Resize WINDOW to WIDTH-FRACTION of frame width.
+WIDTH-FRACTION is a decimal between 0.0 and 1.0 (e.g., 0.3 for 30%).
+Calculates the desired width and resizes the window horizontally."
+ (let* ((frame-width (frame-width))
+        (desired-width (floor (* frame-width width-fraction)))
+        (current-width (window-width window))
+        (delta (- desired-width current-width)))
+   (when (/= delta 0) (window-resize window delta t))))
+
 ;;; Provide this module
 (provide 'core-utils)
 ;;; core-utils.el ends here

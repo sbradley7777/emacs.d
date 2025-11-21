@@ -43,6 +43,7 @@
 ;; 6. Corfu displays the final, context-aware list to the user.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'core-constants)
 (require 'features-constants)
 (require 'core-logging)
 
@@ -111,7 +112,11 @@
   (display-graphic-p)
   (require 'corfu-popupinfo)
   (corfu-popupinfo-mode 1)
-  (setq corfu-popupinfo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
+  (setq
+   corfu-popupinfo-delay
+   (cons
+    core-ui-instant-feedback-delay
+    core-ui-instant-feedback-delay)) ; Initial delay 0.1s, then 0.1s between candidates
 
   ;; Add keybindings to manually toggle documentation in completion menu
   (define-key corfu-map (kbd "M-d") #'corfu-popupinfo-toggle) ; Alt+d to toggle
@@ -126,7 +131,11 @@
   (display-graphic-p)
   (require 'corfu-echo)
   (corfu-echo-mode 1)
-  (setq corfu-echo-delay '(0.1 . 0.1)) ; Initial delay 0.1s, then 0.1s between candidates
+  (setq
+   corfu-echo-delay
+   (cons
+    core-ui-instant-feedback-delay
+    core-ui-instant-feedback-delay)) ; Initial delay 0.1s, then 0.1s between candidates
   (core-message-config "Corfu documentation echo enabled (terminal mode)")
   (core-message-debug "Documentation appears in echo area (minibuffer)")))
 

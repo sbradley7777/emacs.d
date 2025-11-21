@@ -5,6 +5,7 @@
 
 ;;; Code:
 (require 'core-logging)
+(require 'core-utils)
 (require 'features-constants)
 (require 'forge-constants)
 (require 'git-utils)
@@ -68,16 +69,6 @@ Returns the window displaying a forge topic buffer, or nil if not found."
    forge-window))
 
 (defun
- forge-issues--resize-window
- (window new-width)
- "Resize WINDOW to NEW-WIDTH (fraction of frame width)."
- (let* ((frame-width (frame-width))
-        (desired-width (floor (* frame-width new-width)))
-        (current-width (window-width window))
-        (delta (- desired-width current-width)))
-   (when (/= delta 0) (window-resize window delta t))))
-
-(defun
  toggle-forge-issues-window (&optional repo)
  "Toggle forge issues window with size cycling between 30% and 50% width.
 When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% and 50%.
@@ -89,9 +80,10 @@ Optional REPO argument specifies which repository to list issues for."
     (if
      (eq forge-issues--current-width 'compact)
      (progn
-      (forge-issues--resize-window existing-window features-side-window-expanded-width)
+      (core-utils-resize-window-to-fraction
+       existing-window features-side-window-expanded-width)
       (setq forge-issues--current-width 'expanded))
-     (forge-issues--resize-window existing-window features-side-window-compact-width)
+     (core-utils-resize-window-to-fraction existing-window features-side-window-compact-width)
      (setq forge-issues--current-width 'compact))
     (condition-case err
         (progn

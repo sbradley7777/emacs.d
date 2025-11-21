@@ -56,7 +56,8 @@ Used by toggle commands for flymake diagnostics, forge issues, and other side wi
  features-indent-guides-auto-top-char-face-perc
  80
  "Top-level visibility percentage for indent guides.")
-(defconst features-indent-guides-delay 0.1 "Delay before showing indent guides.")
+(defconst
+ features-indent-guides-delay core-ui-instant-feedback-delay "Delay before showing indent guides.")
 
 ;; Which-key Constants
 (defconst features-which-key-idle-delay 0.3 "Which-key display delay.")

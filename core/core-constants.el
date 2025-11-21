@@ -112,6 +112,11 @@ The %s placeholder is replaced with variable `emacs-version' to isolate compiled
 
 ;; Timing Constants
 (defconst core-idle-update-delay-normal 0.5 "Normal idle update delay.")
+(defconst
+ core-ui-instant-feedback-delay 0.1
+ "Instant UI feedback delay (100ms).
+Standard delay for visual feedback that should appear immediately when triggered,
+such as parentheses highlighting, indent guides, and completion documentation popups.")
 
 ;; Time Display
 (defconst
@@ -122,7 +127,7 @@ The %s placeholder is replaced with variable `emacs-version' to isolate compiled
 ;; Scrolling and Navigation
 (defconst core-scroll-step 1 "Scroll step for smooth scrolling.")
 (defconst core-scroll-conservatively 10000 "Conservative scrolling threshold.")
-(defconst core-show-paren-delay 0.1 "Parentheses highlighting delay.")
+(defconst core-show-paren-delay core-ui-instant-feedback-delay "Parentheses highlighting delay.")
 
 ;; File and History Management
 (defconst core-recentf-max-items 50 "Maximum recent files to remember.")

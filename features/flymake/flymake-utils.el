@@ -48,15 +48,7 @@ Returns the window displaying *Flymake diagnostics* buffer, or nil if not found.
       (setq diag-window win)))
     nil t)
    diag-window))
-(defun
- flymake-diagnostics--resize-window
- (window new-width)
- "Resize WINDOW to NEW-WIDTH (fraction of frame width)."
- (let* ((frame-width (frame-width))
-        (desired-width (floor (* frame-width new-width)))
-        (current-width (window-width window))
-        (delta (- desired-width current-width)))
-   (when (/= delta 0) (window-resize window delta t))))
+
 (defun
  toggle-flymake-diagnostics-window ()
  "Toggle the Flymake diagnostics window with size cycling.
@@ -71,10 +63,10 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
      (if
       (eq flymake-diagnostics--current-width 'compact)
       (progn
-       (flymake-diagnostics--resize-window
+       (core-utils-resize-window-to-fraction
         existing-window features-side-window-expanded-width)
        (setq flymake-diagnostics--current-width 'expanded))
-      (flymake-diagnostics--resize-window existing-window features-side-window-compact-width)
+      (core-utils-resize-window-to-fraction existing-window features-side-window-compact-width)
       (setq flymake-diagnostics--current-width 'compact))
      (select-window existing-window))
     (progn
