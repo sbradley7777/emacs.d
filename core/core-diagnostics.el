@@ -170,10 +170,13 @@
  diagnostics-check-executable (name &optional description optional)
  "Check if executable NAME is available.
 DESCRIPTION is optional user-friendly name for the tool.
-OPTIONAL marks the tool as optional (warning instead of error)."
- (let ((desc (or description name)))
+OPTIONAL marks the tool as optional (warning instead of error).
+Checks based on current `default-directory' (local or remote)."
+ (let ((desc (or description name))
+       (is-remote (file-remote-p default-directory)))
    (if
-    (executable-find name) (list :status 'ok :message (format "%s found" desc) :tool name)
+    (executable-find name is-remote)
+    (list :status 'ok :message (format "%s found" desc) :tool name)
     (list
      :status (if optional 'warning 'error)
      :message (format "%s not found" desc)

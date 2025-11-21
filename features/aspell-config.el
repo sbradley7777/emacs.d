@@ -64,9 +64,10 @@
 (defun
  aspell-has-en-dictionary-p ()
  "Check if aspell has the English dictionary installed.
-Returns t if \\='en\\=' dictionary is available, nil otherwise."
+Returns t if \\='en\\=' dictionary is available, nil otherwise.
+Checks based on current `default-directory' (local or remote)."
  (when
-  (executable-find "aspell")
+  (executable-find "aspell" (file-remote-p default-directory))
   (let ((dicts (core-process-run-sync "aspell" nil "dump" "dicts")))
     (when dicts (string-match-p "\\ben\\b" dicts)))))
 
@@ -74,9 +75,10 @@ Returns t if \\='en\\=' dictionary is available, nil otherwise."
  aspell-available-p ()
  "Check if aspell is installed and has English dictionary.
 Returns t if both conditions are met, nil otherwise.  Displays appropriate
-error message if either condition fails."
+error message if either condition fails.
+Checks based on current `default-directory' (local or remote)."
  (cond
-  ((not (executable-find "aspell"))
+  ((not (executable-find "aspell" (file-remote-p default-directory)))
    (core-message-error
     "The command \"aspell\" was not found - please verify \"aspell\" is installed")
    nil)
