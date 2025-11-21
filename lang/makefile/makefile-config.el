@@ -83,13 +83,8 @@
   (lambda () "Enable visual feedback for proper Make syntax." (highlight-indent-guides-mode 1))))
 
 ;; Additional configuration for different Makefile variants
-(add-hook
- 'makefile-gmake-mode-hook
- (lambda () "Configure GNU Make specific settings." (makefile-setup-common-settings)))
-
-(add-hook
- 'makefile-bsdmake-mode-hook
- (lambda () "Configure BSD Make specific settings." (makefile-setup-common-settings)))
+(add-hook 'makefile-gmake-mode-hook #'makefile-setup-common-settings)
+(add-hook 'makefile-bsdmake-mode-hook #'makefile-setup-common-settings)
 
 ;; Key bindings for common Makefile operations
 (with-eval-after-load
