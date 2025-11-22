@@ -14,9 +14,15 @@
 ;; Install use-package if not already present
 (unless
  (package-installed-p 'use-package)
- (core-message-package "Installing use-package...")
- (package-install 'use-package)
- (core-message-success "use-package installed successfully"))
+ (if
+  noninteractive
+  (progn
+   (core-message-error "use-package not installed - cannot run in batch mode")
+   (core-message-error "First-time setup: Run Emacs interactively to install use-package")
+   (error "Batch mode requires use-package to be installed first"))
+  (core-message-package "Installing use-package...")
+  (package-install 'use-package)
+  (core-message-success "use-package installed successfully")))
 
 ;; Configure use-package for optimal package management
 (require 'use-package)
@@ -24,10 +30,14 @@
 
 ;; Global use-package configuration
 (setq
- use-package-always-ensure t ; Always ensure packages are installed
- use-package-verbose t ; Show loading messages for debugging
- use-package-compute-statistics t ; Enable statistics collection
- use-package-minimum-reported-time core-use-package-minimum-reported-time) ; Report slow-loading packages
+ use-package-always-ensure
+ (not noninteractive) ; Auto-install in interactive mode, skip in batch mode
+ use-package-verbose
+ t ; Show loading messages for debugging
+ use-package-compute-statistics
+ t ; Enable statistics collection
+ use-package-minimum-reported-time
+ core-use-package-minimum-reported-time) ; Report slow-loading packages
 
 (core-message-debug
  "use-package settings: always-ensure=%s, verbose=%s, min-time=%.2fs"

@@ -86,6 +86,20 @@ FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message format-string args))
 
+(defun
+ core-message-batch-skip
+ (operation &optional context &rest context-args)
+ "Display batch mode skip message with ⏭️  prefix.
+OPERATION is the operation being skipped (e.g., \\='package installation\\=', \\='keyring update\\=').
+CONTEXT is an optional format string for additional context.
+CONTEXT-ARGS are format arguments for CONTEXT.
+Format: \\='⏭️  Skipping (batch mode): OPERATION\\=' with optional context appended."
+ (if
+  context
+  (let ((formatted-context (apply #'format context context-args)))
+    (message "⏭️  Skipping (batch mode): %s - %s" operation formatted-context))
+  (message "⏭️  Skipping (batch mode): %s" operation)))
+
 ;; Diagnostic message utilities
 (defun
  core-message-diagnostic (title lines)

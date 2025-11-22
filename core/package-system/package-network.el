@@ -70,35 +70,52 @@
  smart-package-state-management
  ()
  "Intelligently manage package state with hierarchical caching strategy."
- (core-message-info "Determining optimal package loading strategy...")
- (cond
-  ;; Package contents already loaded - cache for future offline use
-  ((and package-archive-contents (> (length package-archive-contents) 10))
-   (core-message-info "Package contents already loaded, updating cache...")
-   (save-package-state))
+ ;; Batch mode: Skip all network operations, use installed packages only
+ (if
+  noninteractive
+  (progn
+   (core-message-batch-skip
+    "network operations" "using %d installed packages" (length package-alist))
+   ;; CRITICAL: Verify packages are installed (first-time setup check)
+   (unless
+    (> (length package-alist) 0)
+    (core-message-error "No packages installed - cannot run in batch mode")
+    (core-message-error "First-time setup required:")
+    (core-message-error "  1. Run Emacs interactively to install packages")
+    (core-message-error "  2. Wait for package installation to complete")
+    (core-message-error "  3. Then run batch mode operations (linting, testing)")
+    (error "Batch mode requires packages to be installed first")))
+  ;; Interactive mode: Full package management logic
+  (core-message-info "Determining optimal package loading strategy...")
+  (cond
+   ;; Package contents already loaded - cache for future offline use
+   ((and package-archive-contents (> (length package-archive-contents) 10))
+    (core-message-info "Package contents already loaded, updating cache...")
+    (save-package-state))
 
-  ;; Fresh cache available - skip network operations
-  ((and (not package-archive-contents) (package-cache-fresh-p))
-   (core-message-info "Fresh package cache found, skipping network refresh...")
-   (core-message-info "Using existing package installations (fast startup mode)"))
+   ;; Fresh cache available - skip network operations
+   ((and (not package-archive-contents) (package-cache-fresh-p))
+    (core-message-info "Fresh package cache found, skipping network refresh...")
+    (core-message-info "Using existing package installations (fast startup mode)"))
 
-  ;; Network available - refresh and cache for future
-  ((and (not package-archive-contents) (network-responsive-p))
-   (core-message-info "Network connectivity confirmed, refreshing and caching...")
-   (safe-package-refresh-with-timeout)
-   (save-package-state))
+   ;; Network available - refresh and cache for future
+   ((and (not package-archive-contents) (network-responsive-p))
+    (core-message-info "Network connectivity confirmed, refreshing and caching...")
+    (safe-package-refresh-with-timeout)
+    (save-package-state))
 
-  ;; Network down, stale cache available - inform user
-  ((and
-    (not package-archive-contents) (> (plist-get (package-metadata-read-cache-info) :timestamp) 0))
-   (core-message-warning "Network unavailable, using offline mode...")
-   (load-cached-package-state)
-   (core-message-info "Consider refreshing when network returns"))
+   ;; Network down, stale cache available - inform user
+   ((and
+     (not package-archive-contents)
+     (> (plist-get (package-metadata-read-cache-info) :timestamp) 0))
+    (core-message-warning "Network unavailable, using offline mode...")
+    (load-cached-package-state)
+    (core-message-info "Consider refreshing when network returns"))
 
-  ;; No cache, no network - minimal functionality mode
-  ((not package-archive-contents)
-   (core-message-warning "No package data available (no cache, no network)")
-   (core-message-info "Emacs will start with limited package functionality"))))
+   ;; No cache, no network - minimal functionality mode
+   ((not package-archive-contents)
+    (core-message-warning "No package data available (no cache, no network)")
+    (core-message-info "Emacs will start with limited package functionality")))))
 
 (defun
  package-test-connectivity () "Test network connectivity to package repositories." (interactive)

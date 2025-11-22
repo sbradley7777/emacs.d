@@ -46,7 +46,9 @@
 (unless
  (package-installed-p 'gnu-elpa-keyring-update)
  (when
-  (network-responsive-p)
+  (and
+   (not noninteractive) ; Skip in batch mode
+   (network-responsive-p))
   (safe-package-refresh-with-timeout) ; Network-aware refresh
   (condition-case err
       (progn
@@ -54,5 +56,10 @@
        (core-message-success "GNU ELPA keyring updated for secure package verification"))
     (error
      (core-message-warning "Failed to install keyring update: %s" (error-message-string err))))))
+
+;; Log when skipping in batch mode
+(when
+ (and noninteractive (not (package-installed-p 'gnu-elpa-keyring-update)))
+ (core-message-batch-skip "keyring update check"))
 (provide 'package-repositories)
 ;;; package-repositories.el ends here

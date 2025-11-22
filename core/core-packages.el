@@ -53,7 +53,12 @@ Assembled from all category lists in load order.")
 ;; Package Installation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Install packages using robust installation function with retry from core-packages-utils
-(core-packages-install-with-retry core-packages-all)
+(unless noninteractive (core-packages-install-with-retry core-packages-all))
+
+;; Log batch mode skip
+(when
+ noninteractive
+ (core-message-batch-skip "package installation" "%d packages available" (length package-alist)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
