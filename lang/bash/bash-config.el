@@ -52,7 +52,9 @@ Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode Hooks - Apply to both sh-mode and bash-ts-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(lang-register-dual-mode-hooks sh bash-setup-common '(enhance-bash-syntax-highlighting))
+(lang-register-dual-mode-hooks sh bash-setup-common)
+(add-hook 'sh-mode-hook 'enhance-bash-syntax-highlighting)
+(add-hook 'sh-ts-mode-hook 'enhance-bash-syntax-highlighting)
 
 (core-message-success
  "Bash configuration loaded with 4-space indentation (sh-mode and bash-ts-mode)")
