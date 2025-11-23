@@ -32,9 +32,123 @@ Each entry is (PATTERN . FRIENDLY-NAME) where PATTERN is a regex to match
 against the backend identifier.  Patterns are checked in order, so more
 specific patterns should come first (e.g., 'e-f-b-c' before 'e-f-b').")
 
+(defconst
+ flymake-known-backends
+ '((flymake-aspell--check "Aspell spell checking" (text-mode prog-mode))
+   (flymake-ruff--checker "Ruff Python linter" (python-mode python-ts-mode))
+   (python-flymake "Python built-in" (python-mode python-ts-mode))
+   (elisp-flymake-byte-compile "Elisp byte-compile" (emacs-lisp-mode lisp-interaction-mode))
+   (elisp-flymake-checkdoc "Elisp checkdoc" (emacs-lisp-mode lisp-interaction-mode))
+   (eglot-flymake-backend "Eglot LSP" (multiple)))
+ "List of known Flymake backends.
+Each entry is (FUNCTION-SYMBOL DESCRIPTION MODES) where:
+- FUNCTION-SYMBOL is the backend function name
+- DESCRIPTION is a user-friendly description
+- MODES is a list of major modes this backend supports")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ diagnostics-show-flymake-backend-info ()
+ "Display Flymake backend configuration for current buffer.
+Shows a table of all known backends with their status, description, and
+supported major modes.  Marks backends active in the current buffer."
+ (interactive)
+ (let ((lines nil)
+       (active-backends
+        (when
+         (boundp 'flymake-diagnostic-functions)
+         ;; Filter out 't' which is a hook marker for buffer-local elements
+         (delq t (copy-sequence flymake-diagnostic-functions))))
+       (backend-data nil)
+       (diagnostics (when (and (boundp 'flymake-mode) flymake-mode) (flymake-diagnostics)))
+       (error-count 0)
+       (warning-count 0)
+       (note-count 0))
+   ;; Count diagnostics by severity
+   (when
+    diagnostics
+    (dolist
+     (diag diagnostics)
+     (let ((type (flymake-diagnostic-type diag)))
+       (cond
+        ((eq type :error)
+         (setq error-count (1+ error-count)))
+        ((eq type :warning)
+         (setq warning-count (1+ warning-count)))
+        ((eq type :note)
+         (setq note-count (1+ note-count)))))))
+   ;; Buffer information
+   (push (format "Buffer: %s" (buffer-name)) lines)
+   (when buffer-file-name (push (format "File: %s" (abbreviate-file-name buffer-file-name)) lines))
+   (push (format "Major Mode: %s" major-mode) lines)
+   (push
+    (format
+     "Flymake: %s" (if (and (boundp 'flymake-mode) flymake-mode) "✅ enabled" "❌ disabled"))
+    lines)
+   (when
+    (and (boundp 'flymake-mode) flymake-mode)
+    (push
+     (format
+      "Running: %s"
+      (if
+       (and (boundp 'flymake--state) flymake--state)
+       (if (flymake-is-running) "🔄 checking" "✅ idle")
+       "unknown"))
+     lines)
+    (push
+     (format
+      "Diagnostics: %d error%s, %d warning%s, %d note%s"
+      error-count
+      (if (= error-count 1) "" "s")
+      warning-count
+      (if (= warning-count 1) "" "s")
+      note-count
+      (if (= note-count 1) "" "s"))
+     lines)
+    (if
+     active-backends
+     (progn
+      (push (format "Active Backends (%d):" (length active-backends)) lines)
+      (dolist
+       (backend active-backends)
+       (let ((backend-spec (assq backend flymake-known-backends)))
+         (if
+          backend-spec
+          (push (format "  - %s (%s)" (nth 1 backend-spec) backend) lines)
+          (push (format "  - %s" backend) lines)))))
+     (push "Active Backends: None" lines)))
+   (push " " lines)
+   ;; Build backend data
+   (dolist
+    (backend-spec flymake-known-backends)
+    (let* ((backend-func (nth 0 backend-spec))
+           (description (nth 1 backend-spec))
+           (modes (nth 2 backend-spec))
+           (is-active (memq backend-func active-backends))
+           (is-available (fboundp backend-func))
+           (status
+            (cond
+             (is-active
+              "Active")
+             (is-available
+              "Available")
+             (t
+              "Not Installed")))
+           (modes-str
+            (if
+             (eq (car modes) 'multiple)
+             "multiple"
+             (mapconcat (lambda (m) (format "%s" m)) modes ", "))))
+      (push (list status (format "%s" backend-func) description modes-str) backend-data)))
+   ;; Format table using utility function
+   (let ((table-lines
+          (core-ui-utils-format-table
+           '("Status" "Backend" "Description" "Major Modes") (nreverse backend-data))))
+     (dolist (table-line table-lines) (push table-line lines)))
+   (core-message-diagnostic "Flymake Backend Configuration" (nreverse lines))))
+
 (defun
  flymake-diagnostics--find-window ()
  "Find the Flymake diagnostics window if it exists.

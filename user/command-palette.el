@@ -67,6 +67,7 @@
    ("Menu Bar Open" . menu-bar-open)
    ("Diagnostics Show All" . diagnostics-show-all)
    ("Diagnostics Show Forge Hosts" . forge-utils-diagnostics-show-hosts)
+   ("Diagnostics Flymake Backend Info" . diagnostics-show-flymake-backend-info)
    ("Save Diagnostic Buffers" . core-logging-save-debug-buffers)
    ("Show Installed Packages" . show-installed-packages)
    ("Search Packages" . search-packages)

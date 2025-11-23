@@ -8,6 +8,47 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
+ core-ui-utils-format-table (headers rows)
+ "Format HEADERS and ROWS as an aligned table with separators.
+HEADERS is a list of column header strings.
+ROWS is a list of row data, where each row is a list of column values.
+
+Returns a list of formatted strings (header, separator, and data rows).
+
+Example:
+  (core-ui-utils-format-table
+   \\='(\"Name\" \"Age\" \"City\")
+   \\='((\"Alice\" \"25\" \"NYC\")
+     (\"Bob\" \"30\" \"SF\")
+     (\"Charlie\" \"35\" \"LA\")))
+
+Returns:
+  (\"Name     Age  City\"
+   \"───────  ───  ────\"
+   \"Alice    25   NYC\"
+   \"Bob      30   SF\"
+   \"Charlie  35   LA\")"
+ (let* ((num-cols (length headers))
+        (col-widths
+         (mapcar
+          (lambda
+           (col-idx)
+           (max
+            (length (nth col-idx headers))
+            (apply 'max (mapcar (lambda (row) (length (format "%s" (nth col-idx row)))) rows))))
+          (number-sequence 0 (1- num-cols))))
+        (format-str (mapconcat (lambda (width) (format "%%-%ds" width)) col-widths "  "))
+        (lines nil))
+   ;; Header
+   (push (apply 'format format-str headers) lines)
+   ;; Separator
+   (push
+    (apply 'format format-str (mapcar (lambda (width) (make-string width ?─)) col-widths)) lines)
+   ;; Rows
+   (dolist (row rows) (push (apply 'format format-str row) lines))
+   (nreverse lines)))
+
+(defun
  core-ui-utils-find-window-by-buffer-name (buffer-name-pattern &optional exact-match)
  "Find window displaying buffer matching BUFFER-NAME-PATTERN.
 If EXACT-MATCH is non-nil, match buffer name exactly using string=.
