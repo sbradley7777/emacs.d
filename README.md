@@ -25,7 +25,7 @@ This Emacs configuration provides a professional development environment with in
 - **Dual completion systems**:
   - [Corfu](https://github.com/minad/corfu) for in-buffer code completion with full terminal support
   - [Vertico](https://github.com/minad/vertico) + [Consult](https://github.com/minad/consult) for enhanced minibuffer completion with fuzzy matching
-- **LSP integration** via [Eglot](https://github.com/joaotavora/eglot) for Python, C, and C++ with automatic local/remote detection
+- **LSP integration** via [Eglot](https://github.com/joaotavora/eglot) for Python, C, C++, and Bash with automatic local/remote detection
 - **Visual enhancements**:
   - [Doom-modeline](https://github.com/seagle0128/doom-modeline) showing Git status, LSP indicators, and Python environment
   - [Dimmer](https://github.com/gonewest818/dimmer.el) for visual focus by dimming inactive buffers
@@ -39,7 +39,7 @@ This Emacs configuration provides a professional development environment with in
 - **Git integration** with [Magit](https://magit.vc/) and [Forge](https://github.com/magit/forge) for GitHub/GitLab workflows (manual sync by default, optional auto-sync)
 - **Automatic font management** for icon packages with system-wide font installation
 - **Message logging** with automatic log rotation and session history
-- **Multi-language support** including Python, Lisp, YAML, Markdown, TOML, and Makefile modes
+- **Multi-language support** including Python, Bash, Lisp, YAML, Markdown, TOML, and Makefile modes
 - **Code quality** with automated formatting via [elisp-autofmt](https://github.com/emacsmirror/elisp-autofmt)
 - **Modern Emacs 30.2+** - Exclusively optimized for the latest Emacs features
 

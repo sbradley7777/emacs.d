@@ -14,6 +14,7 @@ This document provides comprehensive details about all features available in thi
 - [Language Support](#language-support)
   - [Python Development Environment](#python-development-environment)
   - [Lisp/Elisp Development](#lispellisp-development)
+  - [Bash Development](#bash-development)
   - [Makefile Development](#makefile-development)
   - [Markdown Support](#markdown-support)
   - [TOML Configuration](#toml-configuration)
@@ -381,6 +382,58 @@ Enhanced support for Lisp programming with comprehensive development tools:
 - **Intelligent completion** for functions, variables, and macros
 - **Enhanced evaluation** with inline result display for Emacs Lisp development
 - **Auto-formatting** via [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) integration
+
+### Bash Development
+
+Professional Bash/shell script editing with enhanced features:
+
+**Features** ([`lang/bash/bash-config.el`](lang/bash/bash-config.el)):
+- **Flymake-shellcheck integration** for real-time syntax checking
+- **Dual mode support** works with both `sh-mode` and `bash-ts-mode`
+- **Enhanced syntax highlighting** for TODO/FIXME keywords and bash operators
+- **Auto-shell type detection** from shebang (#!)
+- **4-space indentation** standard for shell scripts
+
+**Shellcheck Integration**:
+- **Real-time linting** via [flymake-shellcheck](https://github.com/federicotdn/flymake-shellcheck) package
+- **Automatic detection** when shellcheck is available in PATH
+- **Error navigation** with F2/F3 keys
+- **Diagnostic window** toggle with F1
+
+**Installation Requirements**:
+
+Linux (RHEL/Fedora/CentOS):
+```bash
+sudo yum install ShellCheck
+```
+
+Linux (Debian/Ubuntu):
+```bash
+sudo apt-get install shellcheck
+```
+
+macOS (Homebrew):
+```bash
+brew install shellcheck
+```
+
+Verify installation:
+```bash
+shellcheck --version
+```
+
+**LSP Support** (optional):
+
+For advanced bash language server features:
+```bash
+npm install -g bash-language-server
+```
+
+**Benefits**:
+- **Catch errors early** - shellcheck finds common bash pitfalls
+- **Better syntax highlighting** - enhanced keyword and operator recognition
+- **Consistent formatting** - automatic indentation and structure
+- **Tree-sitter support** - superior syntax parsing when bash grammar installed
 
 ### Makefile Development
 
