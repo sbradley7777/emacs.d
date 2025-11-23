@@ -9,6 +9,9 @@
 (require 'core-constants)
 (require 'lang-utils)
 
+;; External declarations
+(declare-function flymake-shellcheck-load "flymake-shellcheck")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -16,7 +19,10 @@
  bash-setup-common
  ()
  "Common setup for both `sh-mode' and bash-ts-mode."
- (lang-setup-full 'sh-basic-offset core-tab-width '((sh-indentation . core-tab-width))))
+ (lang-setup-full 'sh-basic-offset core-tab-width '((sh-indentation . core-tab-width)))
+ (when
+  (and (executable-find "shellcheck") (fboundp 'flymake-shellcheck-load))
+  (flymake-shellcheck-load)))
 
 (defun
  enhance-bash-syntax-highlighting ()
@@ -50,11 +56,23 @@ Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
  'sh-mode "\\.sh\\'" "\\.bash\\'" "\\.zsh\\'" "\\.[^.]*rc\\'" "\\.env\\'")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Mode Hooks - Apply to both sh-mode and bash-ts-mode
+;; Package Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Use flymake-shellcheck package instead of built-in sh-shellcheck-flymake
+;; The built-in version in Emacs 30 has issues with bash-ts-mode and JSON parsing
+(use-package
+ flymake-shellcheck
+ :ensure t
+ :config (core-message-config "Flymake shellcheck integration configured"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mode Hooks - Apply to sh-mode, sh-ts-mode, and bash-ts-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-register-dual-mode-hooks sh bash-setup-common)
+(add-hook 'bash-ts-mode-hook 'bash-setup-common)
 (add-hook 'sh-mode-hook 'enhance-bash-syntax-highlighting)
 (add-hook 'sh-ts-mode-hook 'enhance-bash-syntax-highlighting)
+(add-hook 'bash-ts-mode-hook 'enhance-bash-syntax-highlighting)
 
 (core-message-success
  "Bash configuration loaded with 4-space indentation (sh-mode and bash-ts-mode)")

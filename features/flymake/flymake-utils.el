@@ -39,6 +39,7 @@ specific patterns should come first (e.g., 'e-f-b-c' before 'e-f-b').")
    (python-flymake "Python built-in" (python-mode python-ts-mode))
    (elisp-flymake-byte-compile "Elisp byte-compile" (emacs-lisp-mode lisp-interaction-mode))
    (elisp-flymake-checkdoc "Elisp checkdoc" (emacs-lisp-mode lisp-interaction-mode))
+   (flymake-shellcheck-backend "ShellCheck linter" (sh-mode sh-ts-mode bash-ts-mode))
    (eglot-flymake-backend "Eglot LSP" (multiple)))
  "List of known Flymake backends.
 Each entry is (FUNCTION-SYMBOL DESCRIPTION MODES) where:
