@@ -361,6 +361,40 @@ Returns width as number of columns needed to display content."
  (insert (propertize "    ━━━ COMMAND PALETTE ━━━\n\n" 'face '(:weight bold :foreground "cyan")))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;; Actions Section
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ (insert (propertize " ⚙️  Actions:\n" 'face '(:weight bold :foreground "magenta")))
+ (command-palette--make-button
+  "  📌 Promote Recent to Favorite"
+  (lambda (_) (call-interactively 'command-palette-add-favorite))
+  '(:foreground "cyan"))
+ (command-palette--make-button
+  "  🗑️  Remove Favorite by Index"
+  (lambda (_) (call-interactively 'command-palette-remove-favorite))
+  '(:foreground "red"))
+ (command-palette--make-button
+  "  🔄 Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
+ (command-palette--make-button
+  "  🔍 Validate Commands"
+  (lambda (_) (command-palette-validate-commands))
+  '(:foreground "lightblue"))
+ (command-palette--make-button
+  "  ❌ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
+
+ (insert "\n") (insert (propertize " Keys:\n" 'face '(:foreground "gray" :slant italic)))
+ (insert
+  (propertize
+   "    • 'p' - promote recent to favorite\n" 'face '(:foreground "gray" :slant italic)))
+ (insert
+  (propertize "    • 'r' - remove favorite by index\n" 'face '(:foreground "gray" :slant italic)))
+ (insert
+  (propertize
+   "    • 'v' - validate and remove nonexistent commands\n"
+   'face
+   '(:foreground "gray" :slant italic)))
+ (insert (propertize "    • 'q' - quit" 'face '(:foreground "gray" :slant italic))) (insert "\n\n")
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Favorites Section
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (insert (propertize " ⭐ Favorite Commands:\n" 'face '(:weight bold :foreground "green")))
@@ -394,41 +428,7 @@ Returns width as number of columns needed to display content."
                                    `(lambda (_) (command-palette--execute-command ',cmd))
                                    '(:foreground "orange")
                                    keybinding)))
-  (insert "\n"))
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Actions Section
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (insert (propertize " ⚙️  Actions:\n" 'face '(:weight bold :foreground "magenta")))
- (command-palette--make-button
-  "  📌 Promote Recent to Favorite"
-  (lambda (_) (call-interactively 'command-palette-add-favorite))
-  '(:foreground "cyan"))
- (command-palette--make-button
-  "  🗑️  Remove Favorite by Index"
-  (lambda (_) (call-interactively 'command-palette-remove-favorite))
-  '(:foreground "red"))
- (command-palette--make-button
-  "  🔄 Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
- (command-palette--make-button
-  "  🔍 Validate Commands"
-  (lambda (_) (command-palette-validate-commands))
-  '(:foreground "lightblue"))
- (command-palette--make-button
-  "  ❌ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
-
- (insert "\n") (insert (propertize " Keys:\n" 'face '(:foreground "gray" :slant italic)))
- (insert
-  (propertize
-   "    • 'p' - promote recent to favorite\n" 'face '(:foreground "gray" :slant italic)))
- (insert
-  (propertize "    • 'r' - remove favorite by index\n" 'face '(:foreground "gray" :slant italic)))
- (insert
-  (propertize
-   "    • 'v' - validate and remove nonexistent commands\n"
-   'face
-   '(:foreground "gray" :slant italic)))
- (insert (propertize "    • 'q' - quit" 'face '(:foreground "gray" :slant italic))))
+  (insert "\n")))
 
 (defun
  command-palette-add-favorite ()
@@ -577,9 +577,9 @@ side windows (Flymake diagnostics, Imenu-list)."
      (display-buffer-in-side-window
       buffer `((side . right) (window-width . ,window-width) (slot . 0))))
     (select-window command-palette-window)
-    ;; Move cursor to first favorite item (skip header and section title)
+    ;; Move cursor to first favorite item (skip header, actions, keys, and section title)
     (goto-char (point-min))
-    (forward-line 3))))
+    (forward-line 16))))
 
 (defun
  command-palette--track-command () "Track commands executed via `M-x' using `post-command-hook'."
