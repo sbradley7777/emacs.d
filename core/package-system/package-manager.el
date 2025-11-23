@@ -34,5 +34,9 @@
 
 ;; Smart package state management with caching
 (smart-package-state-management)
+
+;; Ensure GNU ELPA keyring is available for secure package verification
+(package-repositories-ensure-keyring)
+
 (provide 'package-manager)
 ;;; package-manager.el ends here

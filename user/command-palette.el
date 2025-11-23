@@ -71,6 +71,8 @@
    ("Show Installed Packages" . show-installed-packages)
    ("Search Packages" . search-packages)
    ("Show Package Upgrades" . show-package-upgrades)
+   ("Test Package Repositories" . package-repositories-test-connectivity)
+   ("Refresh Package Archive Lists" . package-repositories-refresh-archives)
    ("List Themes" . list-themes)
    ("Toggle Flymake Aspell" . toggle-flymake-aspell)
    ("Pyvenv Activate" . pyvenv-activate)

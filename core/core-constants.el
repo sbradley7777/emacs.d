@@ -147,9 +147,10 @@ such as parentheses highlighting, indent guides, and completion documentation po
  core-undo-outer-limit 12000000 "Maximum undo data before old entries are discarded (12MB).")
 
 ;; Archive Priorities
-(defconst core-melpa-stable-priority 20 "Priority for MELPA stable packages.")
-(defconst core-gnu-priority 15 "Priority for GNU packages.")
-(defconst core-melpa-priority 10 "Priority for MELPA packages.")
+(defconst core-melpa-priority 20 "Priority for MELPA packages (latest versions).")
+(defconst core-nongnu-priority 15 "Priority for NonGNU ELPA packages.")
+(defconst core-gnu-priority 10 "Priority for GNU ELPA packages (fallback).")
+(defconst core-melpa-stable-priority 5 "Priority for MELPA stable packages (if used).")
 
 ;; Network Timeouts
 (defconst
