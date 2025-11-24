@@ -42,8 +42,8 @@ after both buffer initialization and git-sync operations complete.")
    (c-ts-mode . "clangd")
    (c++-ts-mode . "clangd")
    (bash-ts-mode . "bash-language-server")
-   (js-json-mode . "vscode-json-language-server") ; Built-in JSON mode
-   (json-ts-mode . "vscode-json-language-server") ; Tree-sitter JSON mode
+   (js-json-mode . "vscode-json-languageserver") ; Built-in JSON mode
+   (json-ts-mode . "vscode-json-languageserver") ; Tree-sitter JSON mode
    (yaml-mode . "yaml-language-server")
    (yaml-ts-mode . "yaml-language-server")
    (toml-mode . "taplo")
