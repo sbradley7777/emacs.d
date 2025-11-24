@@ -4,16 +4,40 @@
 
 ;;; Code:
 (require 'core-utils)
+(require 'core-logging)
 (require 'features-constants)
+(require 'flymake-utils)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar flymake-config--check-timer nil "Timer for debounced backend availability check.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- flymake-config--enable-for-prog-mode
- ()
- "Enable Flymake mode for programming buffers, excluding *scratch*."
- (unless (string= (buffer-name) "*scratch*") (flymake-mode 1)))
+ flymake-config--check-all-buffers ()
+ "Check backend availability for all buffers with Flymake enabled.
+Runs the check for each buffer in its own context."
+ (setq flymake-config--check-timer nil)
+ (dolist
+  (buf (buffer-list))
+  (when
+   (buffer-live-p buf)
+   (with-current-buffer
+    buf (when (and (boundp 'flymake-mode) flymake-mode) (flymake-check-backend-availability))))))
+
+(defun
+ flymake-config--enable-for-prog-mode ()
+ "Enable Flymake mode for programming buffers, excluding *scratch*.
+Schedules a debounced backend availability check for all Flymake buffers.
+Multiple files opened in quick succession will only trigger one check."
+ (unless
+  (string= (buffer-name) "*scratch*")
+  (flymake-mode 1)
+  (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
+  (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration

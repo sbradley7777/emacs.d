@@ -8,6 +8,7 @@
 (require 'core-ui-utils)
 (require 'core-utils)
 (require 'features-constants)
+(require 'flymake-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
@@ -16,60 +17,47 @@
  flymake-diagnostics--current-width 'compact "Current width state of flymake diagnostics window.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defconst
- flymake-backend-name-mappings
- '(("e-f-b-c" . "Elisp Byte Compile")
-   ("e-f-b" . "eglot")
-   ("e-f-c" . "Elisp Checkdoc")
-   ("f-r" . "ruff")
-   ("f-a" . "aspell")
-   ("p-f" . "python")
-   ("flymake" . "Flymake"))
- "Mapping of internal Flymake backend identifiers to user-friendly names.
-Each entry is (PATTERN . FRIENDLY-NAME) where PATTERN is a regex to match
-against the backend identifier.  Patterns are checked in order, so more
-specific patterns should come first (e.g., 'e-f-b-c' before 'e-f-b').")
-
-(defconst
- flymake-known-backends
- '((flymake-aspell--check "Aspell spell checking" (text-mode prog-mode))
-   (flymake-ruff--checker "Ruff Python linter" (python-mode python-ts-mode))
-   (python-flymake "Python built-in" (python-mode python-ts-mode))
-   (elisp-flymake-byte-compile "Elisp byte-compile" (emacs-lisp-mode lisp-interaction-mode))
-   (elisp-flymake-checkdoc "Elisp checkdoc" (emacs-lisp-mode lisp-interaction-mode))
-   (flymake-shellcheck-backend "ShellCheck linter" (sh-mode sh-ts-mode bash-ts-mode))
-   (eglot-flymake-backend "Eglot LSP" (multiple)))
- "List of known Flymake backends.
-Each entry is (FUNCTION-SYMBOL DESCRIPTION MODES) where:
-- FUNCTION-SYMBOL is the backend function name
-- DESCRIPTION is a user-friendly description
-- MODES is a list of major modes this backend supports")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Functions
+;; Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- diagnostics-show-flymake-backend-info ()
- "Display Flymake backend configuration for current buffer.
-Shows a table of all known backends with their status, description, and
-supported major modes.  Marks backends active in the current buffer."
- (interactive)
- (let ((lines nil)
-       (active-backends
-        (when
-         (boundp 'flymake-diagnostic-functions)
-         ;; Filter out 't' which is a hook marker for buffer-local elements
-         (delq t (copy-sequence flymake-diagnostic-functions))))
-       (backend-data nil)
-       (diagnostics (when (and (boundp 'flymake-mode) flymake-mode) (flymake-diagnostics)))
-       (error-count 0)
-       (warning-count 0)
-       (note-count 0))
-   ;; Count diagnostics by severity
-   (when
-    diagnostics
+ flymake--get-active-backends ()
+ "Get list of active Flymake backends for current buffer.
+Filters out hook markers (t) from `flymake-diagnostic-functions'.
+Returns nil if Flymake is not active or no backends are configured."
+ (when
+  (boundp 'flymake-diagnostic-functions) (delq t (copy-sequence flymake-diagnostic-functions))))
+
+(defun
+ flymake--find-backend-spec (backend-symbol)
+ "Find backend specification in `flymake-backend-registry' for BACKEND-SYMBOL.
+Returns the backend spec entry (FUNCTION-SYMBOL DESCRIPTION MODES) or nil if not found."
+ (assq backend-symbol flymake-backend-registry))
+
+(defun
+ flymake--get-backend-description (backend-symbol)
+ "Get human-readable description for BACKEND-SYMBOL.
+Looks up the backend in `flymake-backend-registry' and returns its description.
+Falls back to the backend function name if not found in registry."
+ (let ((spec (flymake--find-backend-spec backend-symbol)))
+   (if spec (nth 1 spec) (format "%s" backend-symbol))))
+
+(defun
+ flymake--get-lsp-config ()
+ "Get LSP configuration for current `major-mode' from `features-eglot-lsp-server-map'.
+Returns cons cell (MODE . SERVER-EXECUTABLE) or nil if no LSP configured for this mode."
+ (when (boundp 'features-eglot-lsp-server-map) (assq major-mode features-eglot-lsp-server-map)))
+
+(defun
+ flymake--count-diagnostics ()
+ "Count Flymake diagnostics by severity for current buffer.
+Returns plist with :errors, :warnings, and :notes counts.
+Returns nil if Flymake is not active or no diagnostics exist."
+ (when
+  (and (boundp 'flymake-mode) flymake-mode)
+  (let ((diagnostics (flymake-diagnostics))
+        (error-count 0)
+        (warning-count 0)
+        (note-count 0))
     (dolist
      (diag diagnostics)
      (let ((type (flymake-diagnostic-type diag)))
@@ -79,8 +67,19 @@ supported major modes.  Marks backends active in the current buffer."
         ((eq type :warning)
          (setq warning-count (1+ warning-count)))
         ((eq type :note)
-         (setq note-count (1+ note-count)))))))
-   ;; Buffer information
+         (setq note-count (1+ note-count))))))
+    (list :errors error-count :warnings warning-count :notes note-count))))
+
+(defun
+ flymake--build-buffer-info-lines (diagnostic-counts active-backends)
+ "Build buffer information lines for diagnostics display.
+DIAGNOSTIC-COUNTS is a plist from `flymake--count-diagnostics'.
+ACTIVE-BACKENDS is a list of active backend symbols.
+Returns a list of formatted strings describing the buffer state."
+ (let ((lines nil)
+       (error-count (plist-get diagnostic-counts :errors))
+       (warning-count (plist-get diagnostic-counts :warnings))
+       (note-count (plist-get diagnostic-counts :notes)))
    (push (format "Buffer: %s" (buffer-name)) lines)
    (when buffer-file-name (push (format "File: %s" (abbreviate-file-name buffer-file-name)) lines))
    (push (format "Major Mode: %s" major-mode) lines)
@@ -114,16 +113,23 @@ supported major modes.  Marks backends active in the current buffer."
       (push (format "Active Backends (%d):" (length active-backends)) lines)
       (dolist
        (backend active-backends)
-       (let ((backend-spec (assq backend flymake-known-backends)))
+       (let ((backend-spec (flymake--find-backend-spec backend)))
          (if
           backend-spec
           (push (format "  - %s (%s)" (nth 1 backend-spec) backend) lines)
           (push (format "  - %s" backend) lines)))))
-     (push "Active Backends: None" lines)))
-   (push " " lines)
-   ;; Build backend data
+     (push "Active Backends: None" lines))
+    (push " " lines))
+   (nreverse lines)))
+
+(defun
+ flymake--build-backend-table-data (active-backends)
+ "Build backend table data for diagnostics display.
+ACTIVE-BACKENDS is a list of active backend symbols.
+Returns a list of lists, each containing (STATUS BACKEND DESCRIPTION MODES)."
+ (let ((backend-data nil))
    (dolist
-    (backend-spec flymake-known-backends)
+    (backend-spec flymake-backend-registry)
     (let* ((backend-func (nth 0 backend-spec))
            (description (nth 1 backend-spec))
            (modes (nth 2 backend-spec))
@@ -143,11 +149,62 @@ supported major modes.  Marks backends active in the current buffer."
              "multiple"
              (mapconcat (lambda (m) (format "%s" m)) modes ", "))))
       (push (list status (format "%s" backend-func) description modes-str) backend-data)))
-   ;; Format table using utility function
-   (let ((table-lines
-          (core-ui-utils-format-table
-           '("Status" "Backend" "Description" "Major Modes") (nreverse backend-data))))
-     (dolist (table-line table-lines) (push table-line lines)))
+   (nreverse backend-data)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ flymake-check-backend-availability ()
+ "Check Flymake backend status and log appropriate messages.
+Provides success messages when backends are active, warnings about missing LSP servers,
+or info messages for unconfigured modes.  Remains silent when eglot is configured but
+still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-server-map'."
+ (when
+  (and (boundp 'flymake-mode) flymake-mode)
+  (let* ((active-backends (flymake--get-active-backends))
+         (mode-name (symbol-name major-mode))
+         (lsp-config (flymake--get-lsp-config))
+         (lsp-server (cdr lsp-config)))
+    (cond
+     ;; Case 1: Has active backends - show success message
+     (active-backends
+      (let ((backend-names
+             (mapconcat
+              (lambda (backend) (flymake--get-backend-description backend)) active-backends ", ")))
+        (core-message-success "Flymake: Active backends for %s: %s" mode-name backend-names)))
+     ;; Case 2: LSP configured but server not installed
+     ((and lsp-config lsp-server (not (executable-find lsp-server)))
+      (core-message-warning
+       "Flymake: No backends active for %s. LSP server \"%s\" not found in PATH."
+       mode-name
+       lsp-server))
+     ;; Case 3: LSP configured and server exists (eglot may still be connecting, stay silent)
+     (lsp-config
+      nil)
+     ;; Case 4: No backends and no LSP configured
+     (t
+      (core-message-info
+       "Flymake: No backends configured for %s. Consider adding LSP support or custom backend."
+       mode-name))))))
+
+(defun
+ diagnostics-show-flymake-backend-info ()
+ "Display Flymake backend configuration for current buffer.
+Shows a table of all known backends with their status, description, and
+supported major modes.  Marks backends active in the current buffer."
+ (interactive)
+ (let* ((active-backends (flymake--get-active-backends))
+        (diagnostic-counts (flymake--count-diagnostics))
+        (info-lines (flymake--build-buffer-info-lines diagnostic-counts active-backends))
+        (backend-data (flymake--build-backend-table-data active-backends))
+        (table-lines
+         (core-ui-utils-format-table
+          '("Status" "Backend" "Description" "Major Modes") backend-data))
+        (lines nil))
+   ;; Combine buffer info and table
+   (dolist (info-line info-lines) (push info-line lines))
+   (dolist (table-line table-lines) (push table-line lines))
    (core-message-diagnostic "Flymake Backend Configuration" (nreverse lines))))
 
 (defun
@@ -199,12 +256,14 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
 (defun
  flymake-max-backend-name-length
  ()
- "Calculate the maximum length of backend names in `flymake-backend-name-mappings'."
- (apply 'max (mapcar (lambda (mapping) (length (cdr mapping))) flymake-backend-name-mappings)))
+ "Calculate the maximum length of backend names in `flymake-diagnostics-backend-abbreviations'."
+ (apply
+  'max
+  (mapcar (lambda (mapping) (length (cdr mapping))) flymake-diagnostics-backend-abbreviations)))
 (defun
  flymake-friendly-backend-name (backend-name)
  "Convert cryptic backend names to user-friendly versions.
-Looks up BACKEND-NAME in `flymake-backend-name-mappings' and returns
+Looks up BACKEND-NAME in `flymake-diagnostics-backend-abbreviations' and returns
 the first matching friendly name, or the original name if no match found.
 
 Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
@@ -223,7 +282,7 @@ Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
    (catch
     'found
     (dolist
-     (mapping flymake-backend-name-mappings)
+     (mapping flymake-diagnostics-backend-abbreviations)
      (when
       (string-match (car mapping) backend-str)
       (setq friendly-name (cdr mapping))

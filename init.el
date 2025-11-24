@@ -224,7 +224,8 @@ Can be called manually when needed for intensive work sessions."
  tree-sitter-config
  :after (tree-sitter-utils core-packages)
  :description "Tree-sitter grammar management")
-(load-module flymake-config :after core-packages :description "Flymake configuration")
+(load-module flymake-constants :after core-packages :description "Flymake configuration constants")
+(load-module flymake-config :after flymake-constants :description "Flymake configuration")
 (load-module flymake-utils :after flymake-config :description "Flymake utility functions")
 (load-module aspell-config :after flymake-utils :description "Spell checking with aspell")
 (load-module diff-hl-config :after core-packages :description "Git diff highlighting")
