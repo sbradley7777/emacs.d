@@ -9,9 +9,20 @@
 (require 'core-constants)
 (require 'lang-utils)
 
+;; External declarations
+(declare-function flymake-collection-markdownlint "flymake-collection")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ markdown-flymake-setup ()
+ "Enable markdownlint checker for Markdown files via flymake-collection.
+Uses flymake-collection-markdownlint backend if markdownlint is available in PATH."
+ (when
+  (and (executable-find "markdownlint") (fboundp 'flymake-collection-markdownlint))
+  (add-hook 'flymake-diagnostic-functions 'flymake-collection-markdownlint nil t)))
+
 (defun
  markdown-setup-common
  ()
@@ -21,7 +32,13 @@
  (setq markdown-enable-math t)
  (setq markdown-fontify-code-blocks-natively t)
  (visual-line-mode 1)
- (setq fill-column core-fill-column))
+ (setq fill-column core-fill-column)
+ (markdown-flymake-setup)
+ (flymake-mode 1)
+ (when
+  (boundp 'flymake-config--check-timer)
+  (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
+  (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Markdown Mode Configuration

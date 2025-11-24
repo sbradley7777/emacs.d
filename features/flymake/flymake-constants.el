@@ -13,6 +13,9 @@
  '(("e-f-b-c" . "Elisp Byte Compile")
    ("e-f-c" . "Elisp Checkdoc")
    ("e-f-b" . "Eglot LSP")
+   ("f-c-y" . "YAMLLint")
+   ("f-c-j" . "JSONLint")
+   ("f-c-m" . "MarkdownLint")
    ("f-r" . "Ruff Python linter")
    ("f-a" . "Aspell spell checker")
    ("f-s" . "ShellCheck linter")
@@ -36,6 +39,9 @@ Patterns are checked in order, so more specific patterns should come first
    (elisp-flymake-checkdoc "Elisp Checkdoc" (emacs-lisp-mode lisp-interaction-mode))
    (flymake-shellcheck--backend "ShellCheck linter" (sh-mode sh-ts-mode bash-ts-mode))
    (sh-shellcheck-flymake "ShellCheck built-in" (sh-mode sh-ts-mode bash-ts-mode))
+   (flymake-collection-yamllint "YAMLLint" (yaml-mode yaml-ts-mode))
+   (flymake-collection-jsonlint "JSONLint" (js-json-mode json-ts-mode))
+   (flymake-collection-markdownlint "MarkdownLint" (markdown-mode markdown-ts-mode))
    (eglot-flymake-backend "Eglot LSP" (multiple)))
  "Registry of known Flymake backends with their descriptions and supported modes.
 Used by backend availability checking to display user-friendly backend names.

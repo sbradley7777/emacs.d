@@ -35,7 +35,7 @@ Themes, visual enhancements, icons, and interface helpers.")
 Completion, navigation, and file browsing functionality.")
 (defvar
  core-packages-development
- '(flymake-ruff flymake-aspell elisp-autofmt treesit-auto diff-hl magit forge)
+ '(flymake-ruff flymake-aspell flymake-collection elisp-autofmt treesit-auto diff-hl magit forge)
  "Programming-specific development tools.
 Linting, formatting, spell checking, code analysis, tree-sitter support, git diff visualization, and git integration.")
 (defvar
@@ -68,6 +68,7 @@ Assembled from all category lists in load order.")
 (use-package toml-mode :mode ("\\.toml\\'" . toml-mode)) ; TOML file support
 (use-package markdown-mode :mode ("\\.md\\'" . markdown-mode)) ; Markdown file support
 (use-package flymake-ruff :defer t) ; Deferred loading for ruff integration
+(use-package flymake-collection :defer t) ; Collection of flymake checkers for multiple languages
 (use-package imenu-anywhere :defer t) ; Cross-buffer symbol search (keybinding in keybindings.el)
 
 ;; NOTE: json-mode is intentionally NOT installed
