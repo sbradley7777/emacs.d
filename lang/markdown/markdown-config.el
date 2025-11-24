@@ -18,9 +18,9 @@
 (defun
  markdown-flymake-setup ()
  "Enable markdownlint checker for Markdown files via flymake-collection.
-Uses flymake-collection-markdownlint backend if markdownlint is available in PATH."
+Uses flymake-collection-markdownlint backend if mdl is available in PATH."
  (when
-  (and (executable-find "markdownlint") (fboundp 'flymake-collection-markdownlint))
+  (and (executable-find "mdl") (fboundp 'flymake-collection-markdownlint))
   (add-hook 'flymake-diagnostic-functions 'flymake-collection-markdownlint nil t)))
 
 (defun
