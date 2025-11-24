@@ -41,7 +41,10 @@ after both buffer initialization and git-sync operations complete.")
    (c++-mode . "clangd")
    (c-ts-mode . "clangd")
    (c++-ts-mode . "clangd")
-   (bash-ts-mode . "bash-language-server")
+   ;; NOTE: bash-language-server disabled - see eglot-config.el for details
+   ;; (sh-mode . "bash-language-server")
+   ;; (bash-ts-mode . "bash-language-server")
+   ;; (sh-ts-mode . "bash-language-server")
    (js-json-mode . "vscode-json-languageserver") ; Built-in JSON mode
    (json-ts-mode . "vscode-json-languageserver") ; Tree-sitter JSON mode
    (yaml-mode . "yaml-language-server")
