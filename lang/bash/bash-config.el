@@ -8,6 +8,7 @@
 (require 'core-logging)
 (require 'core-constants)
 (require 'lang-utils)
+(require 'flymake-lang-setup)
 
 ;; External declarations
 (declare-function flymake-shellcheck-load "flymake-shellcheck")
@@ -20,9 +21,7 @@
  ()
  "Common setup for both `sh-mode' and bash-ts-mode."
  (lang-setup-full 'sh-basic-offset core-tab-width '((sh-indentation . core-tab-width)))
- (when
-  (and (executable-find "shellcheck") (fboundp 'flymake-shellcheck-load))
-  (flymake-shellcheck-load)))
+ (lang-setup-flymake-package "shellcheck" 'flymake-shellcheck-load))
 
 (defun
  enhance-bash-syntax-highlighting ()

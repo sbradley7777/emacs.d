@@ -89,6 +89,18 @@ For languages that only have a standalone linter, no LSP server."
  (lang-trigger-flymake-check-timer))
 
 (defun
+ lang-setup-flymake-package (binary load-function)
+ "Set up flymake backend using package LOAD-FUNCTION if BINARY is available.
+BINARY is the executable name (e.g., \"shellcheck\", \"ruff\").
+LOAD-FUNCTION is the package setup function symbol (e.g., \\='flymake-shellcheck-load).
+
+For flymake packages that provide their own load functions instead of
+direct backend functions. The load function typically handles adding
+the backend to `flymake-diagnostic-functions' and enabling flymake-mode."
+ (when
+  (and (core-utils-check-command-in-path binary) (fboundp load-function)) (funcall load-function)))
+
+(defun
  lang-trigger-flymake-check-timer ()
  "Trigger flymake configuration check timer.
 Cancels existing timer and schedules new check after 3 seconds.

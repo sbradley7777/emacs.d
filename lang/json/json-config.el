@@ -8,6 +8,7 @@
 (require 'core-utils)
 (require 'core-logging)
 (require 'lang-utils)
+(require 'flymake-lang-setup)
 
 ;; External declarations
 (declare-function flymake-collection-jsonlint "flymake-collection")
@@ -16,24 +17,11 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- json-flymake-setup ()
- "Enable jsonlint checker for JSON files via flymake-collection.
-Uses flymake-collection-jsonlint backend if jsonlint is available in PATH."
- (when
-  (and (executable-find "jsonlint") (fboundp 'flymake-collection-jsonlint))
-  (add-hook 'flymake-diagnostic-functions 'flymake-collection-jsonlint nil t)))
-
-(defun
  json-setup-common
  ()
  "Common setup for both js-json-mode and json-ts-mode."
  (lang-setup-minimal 'js-indent-level 2)
- (json-flymake-setup)
- (flymake-mode 1)
- (when
-  (boundp 'flymake-config--check-timer)
-  (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
-  (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers))))
+ (lang-setup-flymake-dual-backend "jsonlint" 'flymake-collection-jsonlint))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; JSON Mode Configuration
