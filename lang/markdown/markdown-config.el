@@ -8,6 +8,7 @@
 (require 'core-logging)
 (require 'core-constants)
 (require 'lang-utils)
+(require 'flymake-lang-setup)
 
 ;; External declarations
 (declare-function flymake-collection-markdownlint "flymake-collection")
@@ -15,29 +16,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- markdown-flymake-setup ()
- "Enable markdownlint checker for Markdown files via flymake-collection.
-Uses flymake-collection-markdownlint backend if mdl is available in PATH.
-This runs alongside eglot LSP backend for comprehensive diagnostics."
- (when
-  (and (executable-find "mdl") (fboundp 'flymake-collection-markdownlint))
-  (add-hook 'flymake-diagnostic-functions 'flymake-collection-markdownlint nil t)))
-
-(defun
- markdown-ensure-mdl-backend ()
- "Ensure mdl backend is active after eglot start.
-Eglot can sometimes reset the diagnostic functions list, so we re-add mdl."
- (when
-  (and
-   (bound-and-true-p eglot--managed-mode)
-   (executable-find "mdl")
-   (fboundp 'flymake-collection-markdownlint))
-  (unless
-   (memq 'flymake-collection-markdownlint flymake-diagnostic-functions)
-   (add-hook 'flymake-diagnostic-functions 'flymake-collection-markdownlint nil t)
-   (flymake-start))))
-
 (defun
  markdown-setup-common
  ()
@@ -48,13 +26,7 @@ Eglot can sometimes reset the diagnostic functions list, so we re-add mdl."
  (setq markdown-fontify-code-blocks-natively t)
  (visual-line-mode 1)
  (setq fill-column core-fill-column)
- (markdown-flymake-setup)
- (flymake-mode 1)
- (add-hook 'eglot-managed-mode-hook 'markdown-ensure-mdl-backend nil t)
- (when
-  (boundp 'flymake-config--check-timer)
-  (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
-  (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers))))
+ (lang-setup-flymake-dual-backend "mdl" 'flymake-collection-markdownlint))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP Configuration
