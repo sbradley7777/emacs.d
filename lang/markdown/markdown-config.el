@@ -26,7 +26,7 @@
  (setq markdown-fontify-code-blocks-natively t)
  (visual-line-mode 1)
  (setq fill-column core-fill-column)
- (lang-setup-flymake-dual-backend "mdl" 'flymake-collection-markdownlint))
+ (lang-setup-flymake-backend-dual "mdl" 'flymake-collection-markdownlint))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP Configuration

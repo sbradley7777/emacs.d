@@ -18,7 +18,7 @@
 (declare-function flymake-start "flymake")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Functions
+;; Low-Level Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  lang-setup-flymake-backend (binary backend-function)
@@ -59,48 +59,6 @@ This addresses the issue where eglot can reset `flymake-diagnostic-functions'."
   t))
 
 (defun
- lang-setup-flymake-dual-backend
- (binary backend-function)
- "Set up dual flymake backend: standalone + eglot persistence.
-BINARY is the executable name (e.g., \"mdl\", \"yamllint\").
-BACKEND-FUNCTION is the flymake backend symbol (e.g., \\='flymake-collection-markdownlint).
-
-This handles the common pattern where a language has both:
-1. A standalone flymake backend (linter)
-2. An LSP server via eglot
-
-The function sets up the backend, enables flymake, ensures persistence after eglot,
-and triggers the configuration check timer."
- (lang-setup-flymake-backend binary backend-function)
- (flymake-mode 1)
- (lang-add-eglot-backend-hook binary backend-function)
- (lang-trigger-flymake-check-timer))
-
-(defun
- lang-setup-flymake-standalone-backend
- (binary backend-function)
- "Set up standalone flymake backend (no eglot).
-BINARY is the executable name (e.g., \"jsonlint\").
-BACKEND-FUNCTION is the flymake backend symbol (e.g., \\='flymake-collection-jsonlint).
-
-For languages that only have a standalone linter, no LSP server."
- (lang-setup-flymake-backend binary backend-function)
- (flymake-mode 1)
- (lang-trigger-flymake-check-timer))
-
-(defun
- lang-setup-flymake-package (binary load-function)
- "Set up flymake backend using package LOAD-FUNCTION if BINARY is available.
-BINARY is the executable name (e.g., \"shellcheck\", \"ruff\").
-LOAD-FUNCTION is the package setup function symbol (e.g., \\='flymake-shellcheck-load).
-
-For flymake packages that provide their own load functions instead of
-direct backend functions. The load function typically handles adding
-the backend to `flymake-diagnostic-functions' and enabling flymake-mode."
- (when
-  (and (core-utils-check-command-in-path binary) (fboundp load-function)) (funcall load-function)))
-
-(defun
  lang-trigger-flymake-check-timer ()
  "Trigger flymake configuration check timer.
 Cancels existing timer and schedules new check after 3 seconds.
@@ -109,6 +67,74 @@ This ensures all flymake backends are properly registered after mode setup."
   (boundp 'flymake-config--check-timer)
   (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
   (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; High-Level Backend Setup Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ lang-setup-flymake-backend-direct
+ (binary backend-function)
+ "Set up direct flymake backend (standalone, no LSP).
+BINARY is the executable name (e.g., \"jsonlint\").
+BACKEND-FUNCTION is the flymake backend symbol (e.g., \\='flymake-collection-jsonlint).
+
+For languages that only have a standalone linter, no LSP server.
+Uses direct backend functions that are manually added to `flymake-diagnostic-functions'.
+
+If BINARY is not found in PATH, setup is silently skipped."
+ (lang-setup-flymake-backend binary backend-function)
+ (flymake-mode 1)
+ (lang-trigger-flymake-check-timer))
+
+(defun
+ lang-setup-flymake-backend-package (binary load-function)
+ "Set up package-based flymake backend (standalone, no LSP).
+BINARY is the executable name (e.g., \"shellcheck\", \"ruff\").
+LOAD-FUNCTION is the package setup function symbol (e.g., \\='flymake-shellcheck-load).
+
+For flymake packages that provide their own load functions instead of
+direct backend functions. The load function typically handles adding
+the backend to `flymake-diagnostic-functions' and enabling flymake-mode.
+
+If BINARY is not found in PATH, setup is silently skipped."
+ (when
+  (and (core-utils-check-command-in-path binary) (fboundp load-function))
+  (funcall load-function)
+  (lang-trigger-flymake-check-timer)))
+
+(defun
+ lang-setup-flymake-backend-dual (binary function)
+ "Set up dual flymake backend: direct or package + LSP via eglot.
+BINARY is the executable name (e.g., \"mdl\", \"shellcheck\").
+FUNCTION is either a direct backend (e.g., \\='flymake-collection-markdownlint)
+or a package load function (e.g., \\='flymake-shellcheck-load).
+
+Automatically detects function type based on naming convention:
+- Functions ending with \\='-load\\=' are package load functions
+- Others are direct backend functions
+
+This handles the common pattern where a language has both:
+1. A standalone flymake backend (linter or package)
+2. An LSP server via eglot
+
+IMPORTANT LIMITATION:
+- Direct backends: Adds eglot hook to persist backend after eglot starts
+- Package backends: Does NOT add eglot hook (package backends add internal
+  functions we cannot track, and typically handle persistence themselves)
+
+If BINARY is not found in PATH, setup is silently skipped."
+ ;; Auto-detect function type and call appropriate setup
+ (if
+  (string-suffix-p "-load" (symbol-name function))
+  ;; Package load function - no eglot hook needed
+  ;; Package internally adds its own backend function (e.g., flymake-shellcheck--checker)
+  ;; which we cannot track or persist via our hook mechanism
+  (lang-setup-flymake-backend-package binary function)
+  ;; Direct backend function - add eglot hook for persistence
+  ;; Eglot can reset flymake-diagnostic-functions, so we ensure backend persists
+  (progn
+   (lang-setup-flymake-backend-direct binary function)
+   (lang-add-eglot-backend-hook binary function))))
 
 (provide 'flymake-lang-setup)
 ;;; flymake-lang-setup.el ends here
