@@ -8,6 +8,7 @@
 (require 'core-logging)
 (require 'core-constants)
 (require 'lang-utils)
+(require 'flymake-lang-setup)
 (require 'cc-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -18,7 +19,8 @@
  ()
  "Common setup for both `c-mode' and c-ts-mode."
  (lang-setup-full 'c-basic-offset core-tab-width)
- (c-set-offset 'substatement-open 0))
+ (c-set-offset 'substatement-open 0)
+ (lang-setup-flymake-backend-lsp))
 
 (defun
  c++-setup-common
@@ -26,7 +28,8 @@
  "Common setup for both c++-mode and c++-ts-mode."
  (lang-setup-full 'c-basic-offset core-tab-width)
  (c-set-offset 'substatement-open 0)
- (c-set-offset 'innamespace 0))
+ (c-set-offset 'innamespace 0)
+ (lang-setup-flymake-backend-lsp))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; C/C++ Mode Configuration

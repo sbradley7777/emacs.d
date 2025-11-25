@@ -103,6 +103,16 @@ If BINARY is not found in PATH, setup is silently skipped."
   (lang-trigger-flymake-check-timer)))
 
 (defun
+ lang-setup-flymake-backend-lsp ()
+ "Set up flymake for LSP-only diagnostics via eglot.
+Enables flymake-mode to receive diagnostics from eglot LSP backend.
+No standalone linter is configured.
+
+This is for languages that only have LSP server diagnostics (e.g., clangd for C/C++,
+taplo for TOML) and do not have a separate standalone linter."
+ (flymake-mode 1))
+
+(defun
  lang-setup-flymake-backend-dual (binary function)
  "Set up dual flymake backend: direct or package + LSP via eglot.
 BINARY is the executable name (e.g., \"mdl\", \"shellcheck\").
