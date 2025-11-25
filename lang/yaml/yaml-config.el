@@ -23,6 +23,20 @@ Uses flymake-collection-yamllint backend if yamllint is available in PATH."
   (add-hook 'flymake-diagnostic-functions 'flymake-collection-yamllint nil t)))
 
 (defun
+ yaml-ensure-yamllint-backend ()
+ "Ensure yamllint backend is active after eglot start.
+Eglot can sometimes reset the diagnostic functions list, so we re-add yamllint."
+ (when
+  (and
+   (bound-and-true-p eglot--managed-mode)
+   (executable-find "yamllint")
+   (fboundp 'flymake-collection-yamllint))
+  (unless
+   (memq 'flymake-collection-yamllint flymake-diagnostic-functions)
+   (add-hook 'flymake-diagnostic-functions 'flymake-collection-yamllint nil t)
+   (flymake-start))))
+
+(defun
  yaml-setup-common
  ()
  "Common setup for both `yaml-mode' and yaml-ts-mode."
@@ -30,6 +44,7 @@ Uses flymake-collection-yamllint backend if yamllint is available in PATH."
  (local-set-key (kbd "C-m") 'newline-and-indent)
  (yaml-flymake-setup)
  (flymake-mode 1)
+ (add-hook 'eglot-managed-mode-hook 'yaml-ensure-yamllint-backend nil t)
  (when
   (boundp 'flymake-config--check-timer)
   (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
