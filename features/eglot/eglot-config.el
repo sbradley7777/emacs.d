@@ -19,22 +19,6 @@
 (setq eglot-send-changes-idle-time features-eglot-send-changes-idle-time)
 (setq eglot-report-progress features-eglot-report-progress)
 
-;; Configure bash-language-server
-;; NOTE: bash-language-server v5.6.0 appears broken (produces no LSP output)
-;; Commented out until fixed - using flymake-shellcheck instead
-;; Remove bash modes from eglot-server-programs to prevent Eglot from trying to start
-(with-eval-after-load
- 'eglot
- (setq eglot-server-programs (assq-delete-all 'sh-mode eglot-server-programs))
- (setq eglot-server-programs (assq-delete-all 'bash-ts-mode eglot-server-programs)))
-;; (with-eval-after-load
-;;  'eglot
-;;  ;; Explicitly add bash-language-server to eglot-server-programs
-;;  (add-to-list
-;;   'eglot-server-programs '((sh-mode bash-ts-mode sh-ts-mode) . ("bash-language-server" "start")))
-;;  ;; Configure shellcheck path
-;;  (add-to-list 'eglot-workspace-configuration '(:bashIde (:shellcheckPath "shellcheck"))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
