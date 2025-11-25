@@ -18,10 +18,25 @@
 (defun
  markdown-flymake-setup ()
  "Enable markdownlint checker for Markdown files via flymake-collection.
-Uses flymake-collection-markdownlint backend if mdl is available in PATH."
+Uses flymake-collection-markdownlint backend if mdl is available in PATH.
+This runs alongside eglot LSP backend for comprehensive diagnostics."
  (when
   (and (executable-find "mdl") (fboundp 'flymake-collection-markdownlint))
   (add-hook 'flymake-diagnostic-functions 'flymake-collection-markdownlint nil t)))
+
+(defun
+ markdown-ensure-mdl-backend ()
+ "Ensure mdl backend is active after eglot start.
+Eglot can sometimes reset the diagnostic functions list, so we re-add mdl."
+ (when
+  (and
+   (bound-and-true-p eglot--managed-mode)
+   (executable-find "mdl")
+   (fboundp 'flymake-collection-markdownlint))
+  (unless
+   (memq 'flymake-collection-markdownlint flymake-diagnostic-functions)
+   (add-hook 'flymake-diagnostic-functions 'flymake-collection-markdownlint nil t)
+   (flymake-start))))
 
 (defun
  markdown-setup-common
@@ -35,10 +50,18 @@ Uses flymake-collection-markdownlint backend if mdl is available in PATH."
  (setq fill-column core-fill-column)
  (markdown-flymake-setup)
  (flymake-mode 1)
+ (add-hook 'eglot-managed-mode-hook 'markdown-ensure-mdl-backend nil t)
  (when
   (boundp 'flymake-config--check-timer)
   (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
   (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LSP Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(with-eval-after-load
+ 'eglot
+ (add-to-list 'eglot-server-programs '((markdown-mode markdown-ts-mode) . ("marksman"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Markdown Mode Configuration
@@ -72,6 +95,7 @@ Uses flymake-collection-markdownlint backend if mdl is available in PATH."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-register-dual-mode-hooks markdown markdown-setup-common)
 
-(core-message-success "Markdown configuration loaded (markdown-mode and markdown-ts-mode)")
+(core-message-success
+ "Markdown configuration loaded (markdown-mode and markdown-ts-mode with marksman LSP and mdl linter)")
 (provide 'markdown-config)
 ;;; markdown-config.el ends here
