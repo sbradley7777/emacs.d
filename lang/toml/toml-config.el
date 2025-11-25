@@ -8,6 +8,7 @@
 (require 'core-logging)
 (require 'core-constants)
 (require 'lang-utils)
+(require 'flymake-lang-setup)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -18,7 +19,8 @@
  "Common setup for both toml-mode and toml-ts-mode."
  (setq indent-tabs-mode nil)
  (setq tab-width core-tab-width)
- (electric-indent-mode 1))
+ (electric-indent-mode 1)
+ (lang-setup-flymake-backend-lsp))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TOML Mode Configuration
