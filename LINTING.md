@@ -73,50 +73,25 @@ Both backends run independently and report diagnostics to the same buffer. You s
 
 ## Language Support
 
-### Python
-- **Pattern**: LSP-only
-- **LSP Server**: [`pylsp`](https://github.com/python-lsp/python-lsp-server) (python-lsp-server)
-  - Includes ruff linting via [`python-lsp-ruff`](https://github.com/python-lsp/python-lsp-ruff) plugin
-- **Configuration**: [lang/python/python-config.el:25](lang/python/python-config.el#L25)
+The table below shows the backend pattern used for each language. See the [Architecture Patterns](#architecture-patterns) section above for detailed explanations of **Standalone-only**, **LSP-only**, and **Dual Backend** patterns.
 
-### YAML
-- **Pattern**: Dual backend
-- **Standalone Linter**: [`yamllint`](https://github.com/adrienverge/yamllint)
-- **LSP Server**: [`yaml-language-server`](https://github.com/redhat-developer/yaml-language-server)
-- **Configuration**: [lang/yaml/yaml-config.el:24](lang/yaml/yaml-config.el#L24)
+| Language | Mode(s) | Backend Pattern | Standalone Tool | LSP Server |
+|----------|---------|-----------------|-----------------|------------|
+| **Python** | `python-mode`, `python-ts-mode` | **LSP-only** | - | [`pylsp`](https://github.com/python-lsp/python-lsp-server) (with [`ruff`](https://github.com/python-lsp/python-lsp-ruff) plugin) |
+| **YAML** | `yaml-mode`, `yaml-ts-mode` | **Dual Backend** | [`yamllint`](https://github.com/adrienverge/yamllint) | [`yaml-language-server`](https://github.com/redhat-developer/yaml-language-server) |
+| **JSON** | `js-json-mode`, `json-ts-mode` | **Dual Backend** | [`jsonlint`](https://github.com/zaach/jsonlint) | [`vscode-json-languageserver`](https://github.com/microsoft/vscode/tree/main/extensions/json-language-features/server) |
+| **Markdown** | `markdown-mode`, `markdown-ts-mode` | **Dual Backend** | [`mdl`](https://github.com/markdownlint/markdownlint) (markdownlint) | [`marksman`](https://github.com/artempyanykh/marksman) |
+| **Bash/Shell** | `sh-mode`, `bash-ts-mode`, `sh-ts-mode` | **Standalone** | [`shellcheck`](https://github.com/koalaman/shellcheck) | - |
+| **C** | `c-mode`, `c-ts-mode` | **LSP-only** | - | [`clangd`](https://github.com/llvm/llvm-project/tree/main/clang-tools-extra/clangd) |
+| **C++** | `c++-mode`, `c++-ts-mode` | **LSP-only** | - | [`clangd`](https://github.com/llvm/llvm-project/tree/main/clang-tools-extra/clangd) |
+| **TOML** | `toml-mode`, `toml-ts-mode` | **LSP-only** | - | [`taplo`](https://github.com/tamasfe/taplo) |
+| **Emacs Lisp** | `emacs-lisp-mode` | **None** | Built-in (`checkdoc`, `byte-compile`) | - |
+| **Makefile** | `makefile-mode`, `makefile-gmake-mode` | **None** | - | - |
 
-### JSON
-- **Pattern**: Dual backend
-- **Standalone Linter**: [`jsonlint`](https://github.com/zaach/jsonlint)
-- **LSP Server**: [`vscode-json-languageserver`](https://github.com/microsoft/vscode/tree/main/extensions/json-language-features/server)
-- **Configuration**: [lang/json/json-config.el:24](lang/json/json-config.el#L24)
-
-### Markdown
-- **Pattern**: Dual backend
-- **Standalone Linter**: [`mdl`](https://github.com/markdownlint/markdownlint) (markdownlint, Ruby-based)
-- **LSP Server**: [`marksman`](https://github.com/artempyanykh/marksman)
-- **Configuration**: [lang/markdown/markdown-config.el:29](lang/markdown/markdown-config.el#L29)
-
-### Bash/Shell Scripts
-- **Pattern**: Standalone-only
-- **Standalone Linter**: [`shellcheck`](https://github.com/koalaman/shellcheck)
-- **LSP Server**: [`bash-language-server`](https://github.com/bash-lsp/bash-language-server) (currently disabled - v5.6.0 has issues)
-- **Configuration**: [lang/bash/bash-config.el:24](lang/bash/bash-config.el#L24)
-
-### C/C++
-- **Pattern**: LSP-only
-- **LSP Server**: [`clangd`](https://github.com/llvm/llvm-project/tree/main/clang-tools-extra/clangd)
-- **Configuration**: [lang/c/c-config.el:23](lang/c/c-config.el#L23)
-
-### TOML
-- **Pattern**: LSP-only
-- **LSP Server**: [`taplo`](https://github.com/tamasfe/taplo)
-- **Configuration**: [lang/toml/toml-config.el:23](lang/toml/toml-config.el#L23)
-
-### Emacs Lisp
-- **Pattern**: Standalone-only
-- **Built-in Tools**: `checkdoc` + `byte-compile`
-- **Configuration**: Built-in Emacs features
+**Notes:**
+- All tools are **optional** - the configuration automatically detects and enables only what's installed
+- **Tree-sitter modes** (`*-ts-mode`) are used automatically when the grammar is available
+- **Bash**: `bash-language-server` is currently disabled due to issues in v5.6.0
 
 ## Required Tools Summary
 
