@@ -8,12 +8,46 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
+ core-ui-utils-calculate-column-widths (headers rows &optional min-widths)
+ "Calculate dynamic column widths for HEADERS and ROWS.
+HEADERS is a list of column header strings.
+ROWS is a list of row data, where each row is a list of column values.
+MIN-WIDTHS is an optional list of minimum widths per column.
+
+Returns a list of integers representing the calculated width for each column.
+Each width is the maximum of:
+  1. Header length
+  2. Longest data item in that column
+  3. Minimum width (if specified)
+
+Example:
+  (core-ui-utils-calculate-column-widths
+   \\='(\"Name\" \"Age\" \"City\")
+   \\='((\"Alice\" \"25\" \"NYC\")
+     (\"Bob\" \"30\" \"SF\"))
+   \\='(10 3 5))
+  => (10 3 5)  ; Name=10 (min), Age=3, City=5 (min)"
+ (let ((num-cols (length headers)))
+   (mapcar
+    (lambda
+     (col-idx)
+     (let ((header-width (length (nth col-idx headers)))
+           (data-width
+            (if
+             rows
+             (apply 'max (mapcar (lambda (row) (length (format "%s" (nth col-idx row)))) rows)) 0))
+           (min-width (if min-widths (nth col-idx min-widths) 0)))
+       (max header-width data-width min-width)))
+    (number-sequence 0 (1- num-cols)))))
+
+(defun
  core-ui-utils-format-table (headers rows)
  "Format HEADERS and ROWS as an aligned table with separators.
 HEADERS is a list of column header strings.
 ROWS is a list of row data, where each row is a list of column values.
 
 Returns a list of formatted strings (header, separator, and data rows).
+Uses `core-ui-utils-calculate-column-widths' for dynamic column sizing.
 
 Example:
   (core-ui-utils-format-table
@@ -28,15 +62,7 @@ Returns:
    \"Alice    25   NYC\"
    \"Bob      30   SF\"
    \"Charlie  35   LA\")"
- (let* ((num-cols (length headers))
-        (col-widths
-         (mapcar
-          (lambda
-           (col-idx)
-           (max
-            (length (nth col-idx headers))
-            (apply 'max (mapcar (lambda (row) (length (format "%s" (nth col-idx row)))) rows))))
-          (number-sequence 0 (1- num-cols))))
+ (let* ((col-widths (core-ui-utils-calculate-column-widths headers rows))
         (format-str (mapconcat (lambda (width) (format "%%-%ds" width)) col-widths "  "))
         (lines nil))
    ;; Header

@@ -325,25 +325,51 @@ Creates a custom `tabulated-list-format' that adds a 'Code' column for error cod
 and replaces cryptic backend names with user-friendly versions.
   ERROR-CODE-EXTRACTOR is a function that takes a message and returns an error code string.
 
-  Column layout:
-  - Line: Line number (5 chars, right-aligned, sortable)
-  - Col: Column number (3 chars, right-aligned)
-  - Type: Diagnostic type (8 chars, sortable by severity)
-  - Code: Error code like F401, I001 (6 chars, extracted from message)
-  - Backend: User-friendly backend name (dynamic width based on longest name)
+  Column layout (all widths calculated dynamically from actual data):
+  - Line: Line number (right-aligned, sortable)
+  - Col: Column number (right-aligned)
+  - Type: Diagnostic type (sortable by severity)
+  - Code: Error code like F401, I001 (extracted from message)
+  - Backend: User-friendly backend name
   - Message: Full diagnostic text (unlimited width, sortable)"
- (setq
-  tabulated-list-format
-  (vector
-   '("Line"
-     5
-     (lambda (l1 l2) (< (plist-get (car l1) :line) (plist-get (car l2) :line)))
-     :right-align t)
-   '("Col" 3 nil :right-align t)
-   '("Type" 8 (lambda (l1 l2) (< (plist-get (car l1) :severity) (plist-get (car l2) :severity))))
-   '("Code" 6 t)
-   (list "Backend" (flymake-max-backend-name-length) t)
-   '("Message" 0 t)))
+ ;; Get diagnostics data to calculate column widths
+ (let* ((original-entries (flymake--diagnostics-buffer-entries))
+        (headers '("Line" "Col" "Type" "Code" "Backend" "Message"))
+        ;; Convert entries to rows format for width calculation
+        (rows
+         (mapcar
+          (lambda
+           (entry)
+           (let* ((values (cadr entry))
+                  (line (aref values 0))
+                  (col (aref values 1))
+                  (type (aref values 2))
+                  (message (aref values 4))
+                  (error-code
+                   (if (functionp error-code-extractor) (funcall error-code-extractor message) ""))
+                  (backend (flymake-friendly-backend-name (aref values 3))))
+             (list line col type error-code backend message)))
+          original-entries))
+        ;; Calculate dynamic widths with minimum thresholds for readability
+        (widths (core-ui-utils-calculate-column-widths headers rows '(4 3 7 4 10 0)))
+        (line-width (nth 0 widths))
+        (col-width (nth 1 widths))
+        (type-width (nth 2 widths))
+        (code-width (nth 3 widths))
+        (backend-width (nth 4 widths)))
+   (setq
+    tabulated-list-format
+    (vector
+     (list
+      "Line"
+      line-width
+      '(lambda (l1 l2) (< (plist-get (car l1) :line) (plist-get (car l2) :line)))
+      :right-align t)
+     (list "Col" col-width nil :right-align t)
+     (list
+      "Type" type-width
+      '(lambda (l1 l2) (< (plist-get (car l1) :severity) (plist-get (car l2) :severity))))
+     (list "Code" code-width t) (list "Backend" backend-width t) '("Message" 0 t))))
  ;; Override the entries function to customize data extraction
  ;; This function processes each diagnostic entry and extracts/formats the data
  ;; for our custom column layout
