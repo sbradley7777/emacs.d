@@ -28,12 +28,11 @@ to human-readable names (like \\='Eglot LSP\\=').
 Each entry is (ABBREVIATION-PATTERN . FRIENDLY-NAME) where ABBREVIATION-PATTERN
 is a regex to match against abbreviated backend identifiers shown in the diagnostics buffer.
 Patterns are checked in order, so more specific patterns should come first
-(e.g., \\='e-f-b-c\\=' before \\='e-f-b\\=').")
+\(e.g., \\='e-f-b-c\\=' before \\='e-f-b\\=').")
 
 (defconst
  flymake-backend-registry
  '((flymake-aspell--check "Aspell spell checking" (text-mode prog-mode))
-   (flymake-ruff--run-checker "Ruff Python linter" (python-mode python-ts-mode))
    (python-flymake "Python built-in" (python-mode python-ts-mode))
    (elisp-flymake-byte-compile "Elisp Byte Compile" (emacs-lisp-mode lisp-interaction-mode))
    (elisp-flymake-checkdoc "Elisp Checkdoc" (emacs-lisp-mode lisp-interaction-mode))
@@ -51,7 +50,7 @@ Each entry is (FUNCTION-SYMBOL DESCRIPTION MODES) where:
 - FUNCTION-SYMBOL is the backend function name (e.g., \\='flymake-ruff--run-checker)
 - DESCRIPTION is the user-friendly name shown in diagnostics (e.g., \\='Ruff Python linter\\=')
 - MODES is either:
-  - List of major-mode symbols this backend supports (e.g., (python-mode python-ts-mode))
+  - List of `major-mode' symbols this backend supports (e.g., (python-mode python-ts-mode))
   - \\='(multiple) for backends that support many modes (e.g., eglot-flymake-backend)
 
 This registry is used by:
