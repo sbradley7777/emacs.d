@@ -20,7 +20,7 @@
  (setq indent-tabs-mode nil)
  (setq tab-width core-tab-width)
  (electric-indent-mode 1)
- (lang-setup-flymake-backend-lsp))
+ (flymake-lang-setup-lsp-backend))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TOML Mode Configuration

@@ -21,7 +21,7 @@
  ()
  "Common setup for both js-json-mode and json-ts-mode."
  (lang-setup-minimal 'js-indent-level 2)
- (lang-setup-flymake-backend-dual "jsonlint" 'flymake-collection-jsonlint))
+ (flymake-lang-setup-dual-backend "jsonlint" 'flymake-collection-jsonlint))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; JSON Mode Configuration

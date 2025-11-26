@@ -22,7 +22,7 @@
  "Common setup for both `python-mode' and python-ts-mode."
  (setq python-indent-guess-indent-offset t)
  (lang-setup-minimal 'python-indent core-tab-width)
- (lang-setup-flymake-backend-lsp))
+ (flymake-lang-setup-lsp-backend))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python Shell Integration
