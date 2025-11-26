@@ -29,15 +29,21 @@ Runs the check for each buffer in its own context."
     buf (when (and (boundp 'flymake-mode) flymake-mode) (flymake-check-backend-availability))))))
 
 (defun
+ flymake-schedule-backend-check
+ ()
+ "Schedule a debounced backend availability check.
+Cancels existing timer and schedules new check after 3 seconds.
+This ensures all flymake backends are properly registered after mode setup.
+Multiple calls in quick succession will only trigger one check."
+ (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
+ (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers)))
+
+(defun
  flymake-config--enable-for-prog-mode ()
  "Enable Flymake mode for programming buffers, excluding *scratch*.
 Schedules a debounced backend availability check for all Flymake buffers.
 Multiple files opened in quick succession will only trigger one check."
- (unless
-  (string= (buffer-name) "*scratch*")
-  (flymake-mode 1)
-  (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
-  (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers))))
+ (unless (string= (buffer-name) "*scratch*") (flymake-mode 1) (flymake-schedule-backend-check)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration

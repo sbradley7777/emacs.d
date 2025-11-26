@@ -12,9 +12,8 @@
 (require 'core-utils)
 
 ;; External declarations
-(defvar flymake-config--check-timer)
 (defvar eglot--managed-mode)
-(declare-function flymake-config--check-all-buffers "flymake-config")
+(declare-function flymake-schedule-backend-check "flymake-config")
 (declare-function flymake-start "flymake")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -68,12 +67,8 @@ This addresses the issue where eglot can reset `flymake-diagnostic-functions'."
 (defun
  lang-trigger-flymake-check-timer ()
  "Trigger flymake configuration check timer.
-Cancels existing timer and schedules new check after 3 seconds.
-This ensures all flymake backends are properly registered after mode setup."
- (when
-  (boundp 'flymake-config--check-timer)
-  (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
-  (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers))))
+Delegates to `flymake-schedule-backend-check' for timer management."
+ (flymake-schedule-backend-check))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; High-Level Backend Setup Functions

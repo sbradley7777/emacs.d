@@ -28,6 +28,51 @@ Returns nil if Flymake is not active or no backends are configured."
   (boundp 'flymake-diagnostic-functions) (delq t (copy-sequence flymake-diagnostic-functions))))
 
 (defun
+ flymake--format-running-status ()
+ "Format flymake running status as a string.
+Returns string indicating whether flymake is checking or idle."
+ (if
+  (and (boundp 'flymake--state) flymake--state)
+  (if (flymake-is-running) "🔄 checking" "✅ idle")
+  "unknown"))
+
+(defun
+ flymake--format-diagnostic-counts (error-count warning-count note-count)
+ "Format diagnostic counts as a string.
+ERROR-COUNT is the number of errors.
+WARNING-COUNT is the number of warnings.
+NOTE-COUNT is the number of notes.
+Returns formatted string like \\='3 errors, 2 warnings, 1 note\\='."
+ (format
+  "Diagnostics: %d error%s, %d warning%s, %d note%s"
+  error-count
+  (if (= error-count 1) "" "s")
+  warning-count
+  (if (= warning-count 1) "" "s")
+  note-count
+  (if (= note-count 1) "" "s")))
+
+(defun
+ flymake--format-backend-list (active-backends)
+ "Format active backends list as strings.
+ACTIVE-BACKENDS is a list of active backend symbols.
+Returns list of formatted strings describing each backend."
+ (let ((lines nil))
+   (if
+    active-backends
+    (progn
+     (push (format "Active Backends (%d):" (length active-backends)) lines)
+     (dolist
+      (backend active-backends)
+      (let ((backend-spec (flymake--find-backend-spec backend)))
+        (if
+         backend-spec
+         (push (format "  - %s (%s)" (nth 1 backend-spec) backend) lines)
+         (push (format "  - %s" backend) lines)))))
+    (push "Active Backends: None" lines))
+   (nreverse lines)))
+
+(defun
  flymake--find-backend-spec (backend-symbol)
  "Find backend specification in `flymake-backend-registry' for BACKEND-SYMBOL.
 Returns the backend spec entry (FUNCTION-SYMBOL DESCRIPTION MODES) or nil if not found."
@@ -76,10 +121,8 @@ Returns nil if Flymake is not active or no diagnostics exist."
 DIAGNOSTIC-COUNTS is a plist from `flymake--count-diagnostics'.
 ACTIVE-BACKENDS is a list of active backend symbols.
 Returns a list of formatted strings describing the buffer state."
- (let ((lines nil)
-       (error-count (plist-get diagnostic-counts :errors))
-       (warning-count (plist-get diagnostic-counts :warnings))
-       (note-count (plist-get diagnostic-counts :notes)))
+ (let ((lines nil))
+   ;; Basic buffer info
    (push (format "Buffer: %s" (buffer-name)) lines)
    (when buffer-file-name (push (format "File: %s" (abbreviate-file-name buffer-file-name)) lines))
    (push (format "Major Mode: %s" major-mode) lines)
@@ -87,39 +130,21 @@ Returns a list of formatted strings describing the buffer state."
     (format
      "Flymake: %s" (if (and (boundp 'flymake-mode) flymake-mode) "✅ enabled" "❌ disabled"))
     lines)
+
+   ;; Flymake-specific info (only when flymake is enabled)
    (when
     (and (boundp 'flymake-mode) flymake-mode)
+    (push (format "Running: %s" (flymake--format-running-status)) lines)
     (push
-     (format
-      "Running: %s"
-      (if
-       (and (boundp 'flymake--state) flymake--state)
-       (if (flymake-is-running) "🔄 checking" "✅ idle")
-       "unknown"))
+     (flymake--format-diagnostic-counts
+      (plist-get diagnostic-counts :errors)
+      (plist-get diagnostic-counts :warnings)
+      (plist-get diagnostic-counts :notes))
      lines)
-    (push
-     (format
-      "Diagnostics: %d error%s, %d warning%s, %d note%s"
-      error-count
-      (if (= error-count 1) "" "s")
-      warning-count
-      (if (= warning-count 1) "" "s")
-      note-count
-      (if (= note-count 1) "" "s"))
-     lines)
-    (if
-     active-backends
-     (progn
-      (push (format "Active Backends (%d):" (length active-backends)) lines)
-      (dolist
-       (backend active-backends)
-       (let ((backend-spec (flymake--find-backend-spec backend)))
-         (if
-          backend-spec
-          (push (format "  - %s (%s)" (nth 1 backend-spec) backend) lines)
-          (push (format "  - %s" backend) lines)))))
-     (push "Active Backends: None" lines))
+    (dolist
+     (backend-line (flymake--format-backend-list active-backends)) (push backend-line lines))
     (push " " lines))
+
    (nreverse lines)))
 
 (defun
@@ -333,7 +358,8 @@ and replaces cryptic backend names with user-friendly versions.
               (values (cadr entry)) ; Column values array
               (message (aref values 4)) ; Original message text
               ;; Extract error code from message using provided function
-              (error-code (if error-code-extractor (funcall error-code-extractor message) ""))
+              (error-code
+               (if (functionp error-code-extractor) (funcall error-code-extractor message) ""))
               ;; Convert backend name to friendly version
               (backend-name (flymake-friendly-backend-name (aref values 3))))
          ;; Return formatted entry with our custom column data
