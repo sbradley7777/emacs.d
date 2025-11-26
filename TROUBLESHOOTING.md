@@ -606,16 +606,8 @@ The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. Th
 **Symptoms**: Git commits fail due to [`pre-commit`](https://github.com/pre-commit/pre-commit) hook errors
 
 **Solutions**:
-1. **Install [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt)**:
-   ```bash
-   git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
-   ```
-2. **Install [`pre-commit`](https://github.com/pre-commit/pre-commit)**:
-   ```bash
-   pip install pre-commit  # https://github.com/pre-commit/pre-commit
-   pre-commit install
-   ```
-3. **Skip hooks temporarily** (for urgent commits):
+1. **Install required tools**: See [CONTRIBUTING.md](CONTRIBUTING.md#requirements) for [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) and [`pre-commit`](https://github.com/pre-commit/pre-commit) installation instructions
+2. **Skip hooks temporarily** (for urgent commits):
    ```bash
    git commit --no-verify -m "Commit message"
    ```

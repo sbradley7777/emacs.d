@@ -124,23 +124,23 @@ Both backends run independently and report diagnostics to the same buffer. You s
 
 | Tool | Language | Repository |
 |------|----------|------------|
-| `yamllint` | YAML | [adrienverge/yamllint](https://github.com/adrienverge/yamllint) |
-| `jsonlint` | JSON | [zaach/jsonlint](https://github.com/zaach/jsonlint) |
-| `mdl` | Markdown | [markdownlint/markdownlint](https://github.com/markdownlint/markdownlint) |
-| `shellcheck` | Bash/Shell | [koalaman/shellcheck](https://github.com/koalaman/shellcheck) |
+| `yamllint` | YAML | [`adrienverge/yamllint`](https://github.com/adrienverge/yamllint) |
+| `jsonlint` | JSON | [`zaach/jsonlint`](https://github.com/zaach/jsonlint) |
+| `mdl` | Markdown | [`markdownlint/markdownlint`](https://github.com/markdownlint/markdownlint) |
+| `shellcheck` | Bash/Shell | [`koalaman/shellcheck`](https://github.com/koalaman/shellcheck) |
 
 ### LSP Servers
 
 | Tool | Language | Repository |
 |------|----------|------------|
-| `pylsp` | Python | [python-lsp/python-lsp-server](https://github.com/python-lsp/python-lsp-server) |
-| `python-lsp-ruff` | Python (plugin) | [python-lsp/python-lsp-ruff](https://github.com/python-lsp/python-lsp-ruff) |
-| `yaml-language-server` | YAML | [redhat-developer/yaml-language-server](https://github.com/redhat-developer/yaml-language-server) |
-| `vscode-json-languageserver` | JSON | [microsoft/vscode (json-language-features)](https://github.com/microsoft/vscode/tree/main/extensions/json-language-features/server) |
-| `marksman` | Markdown | [artempyanykh/marksman](https://github.com/artempyanykh/marksman) |
-| `clangd` | C/C++ | [llvm/llvm-project (clangd)](https://github.com/llvm/llvm-project/tree/main/clang-tools-extra/clangd) |
-| `taplo` | TOML | [tamasfe/taplo](https://github.com/tamasfe/taplo) |
-| `bash-language-server` | Bash/Shell | [bash-lsp/bash-language-server](https://github.com/bash-lsp/bash-language-server) |
+| `pylsp` | Python | [`python-lsp/python-lsp-server`](https://github.com/python-lsp/python-lsp-server) |
+| `python-lsp-ruff` | Python (plugin) | [`python-lsp/python-lsp-ruff`](https://github.com/python-lsp/python-lsp-ruff) |
+| `yaml-language-server` | YAML | [`redhat-developer/yaml-language-server`](https://github.com/redhat-developer/yaml-language-server) |
+| `vscode-json-languageserver` | JSON | [`microsoft/vscode`](https://github.com/microsoft/vscode/tree/main/extensions/json-language-features/server) |
+| `marksman` | Markdown | [`artempyanykh/marksman`](https://github.com/artempyanykh/marksman) |
+| `clangd` | C/C++ | [`llvm/llvm-project`](https://github.com/llvm/llvm-project/tree/main/clang-tools-extra/clangd) |
+| `taplo` | TOML | [`tamasfe/taplo`](https://github.com/tamasfe/taplo) |
+| `bash-language-server` | Bash/Shell | [`bash-lsp/bash-language-server`](https://github.com/bash-lsp/bash-language-server) |
 
 ## How It Works
 

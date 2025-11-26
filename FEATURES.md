@@ -113,7 +113,7 @@ Interactive package management commands for browsing, updating, and maintaining 
 
 **Interactive Commands:**
 
-**`M-x show-installed-packages`** ([`core/core-packages.el:148-244`](core/core-packages.el)):
+**`M-x show-installed-packages`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
 - **Comprehensive package listing** showing all installed packages with status labels
 - **Update availability indicator** (`*` marker) for packages with available updates
 - **Clear status labels**: "Installed (by User)" vs "Dependency" for easy identification
@@ -121,19 +121,19 @@ Interactive package management commands for browsing, updating, and maintaining 
 - **Detailed columns**: Package name, installed version, update status, and description
 - **Sorted display**: Alphabetically sorted for easy navigation
 
-**`M-x search-packages`** ([`core/core-packages.el:246-252`](core/core-packages.el)):
+**`M-x search-packages`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
 - **Keyword-based search** across all available package repositories
 - **Interactive results**: Browse and install packages directly from search results
 - **Repository coverage**: Searches MELPA, GNU ELPA, and all configured repositories
 
-**`M-x show-package-upgrades`** ([`core/core-packages.el:278-309`](core/core-packages.el)):
+**`M-x show-package-upgrades`** ([`core/package-system/package-maintenance.el`](core/package-system/package-maintenance.el)):
 - **Manual update check** on demand (bypasses weekly automatic check)
 - **Detailed upgrade information**: Shows current version → new version for each package
 - **Repository diagnostics**: Confirms successful contact with all package repositories
 - **Network-aware**: Includes timeout protection and error handling
 - **Usage instructions**: Provides next steps for installing updates via `package-list-packages`
 
-**`M-x core-packages-cleanup`** ([`core/core-packages.el:316-361`](core/core-packages.el)):
+**`M-x core-packages-cleanup`** ([`core/package-system/package-maintenance.el`](core/package-system/package-maintenance.el)):
 - **Automatic dependency removal**: Uses built-in `package-autoremove` to clean orphaned packages
 - **Metadata cache reset**: Clears package metadata for fresh repository state
 - **Safe operation**: Auto-accepts removal prompts for streamlined cleanup
@@ -264,7 +264,7 @@ Powered by [Corfu](https://github.com/minad/corfu) for comprehensive auto-comple
 
 Automatic tree-sitter mode switching powered by [treesit-auto](https://github.com/renzmann/treesit-auto):
 
-**Features** ([`core/core-packages.el:146-148`](core/core-packages.el)):
+**Features** ([`core/core-packages.el`](core/core-packages.el)):
 - **Automatic mode switching** - uses tree-sitter modes when grammars are installed
 - **Fallback support** - gracefully falls back to regular modes if grammar is missing
 - **Prompt installation** - offers to install grammars when first needed

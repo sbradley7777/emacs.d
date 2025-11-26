@@ -183,26 +183,11 @@ The `elisp-autofmt-hook` script automatically formats Emacs Lisp files using [el
 
 ### Requirements
 
-1. **elisp-autofmt**: The formatting tool must be installed
-   ```bash
-   # Clone the elisp-autofmt repository
-   git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
-   ```
+1. **[`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt)**: The formatting tool must be installed
+2. **Python 3**: Required to run `elisp-autofmt.py`
+3. **[`pre-commit`](https://github.com/pre-commit/pre-commit)**: For automatic hook execution
 
-2. **Python 3**: Required to run elisp-autofmt.py
-   ```bash
-   # Verify Python 3 is available
-   python3 --version
-   ```
-
-3. **pre-commit**: For automatic hook execution
-   ```bash
-   # Install pre-commit
-   pip install pre-commit  # https://github.com/pre-commit/pre-commit
-
-   # Install hooks in your repository
-   pre-commit install
-   ```
+See [CONTRIBUTING.md](../CONTRIBUTING.md#requirements) for complete installation instructions.
 
 ### Usage
 

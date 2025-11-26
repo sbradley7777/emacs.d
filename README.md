@@ -216,14 +216,10 @@ This configuration leverages specific improvements and features only available i
 ### Optional Dependencies
 
 **For Code Quality (Development):**
-```bash
-# Required for pre-commit formatting hooks
-git clone https://github.com/emacsmirror/elisp-autofmt.git ~/github/elisp-autofmt
 
-# Optional: automatic code quality enforcement
-pip install pre-commit  # https://github.com/pre-commit/pre-commit
-pre-commit install  # Run in repository root after cloning
-```
+If you plan to contribute or develop this configuration, install [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt) and [`pre-commit`](https://github.com/pre-commit/pre-commit) for automatic code formatting and quality checks.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md#requirements) for complete setup instructions.
 
 **Important**: Ensure your `~/.bash_profile` includes `$HOME/.local/bin` in your PATH, if you plan on using user-local packages.
 
