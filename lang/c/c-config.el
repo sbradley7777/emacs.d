@@ -48,6 +48,6 @@
 (lang-register-dual-mode-hooks c c-setup-common)
 (lang-register-dual-mode-hooks c++ c++-setup-common)
 
-(core-message-success "C/C++ configuration loaded (c-mode, c++-mode, c-ts-mode, c++-ts-mode)")
+(core-message-lang-loaded "C/C++" "c-mode, c++-mode, c-ts-mode, c++-ts-mode")
 (provide 'c-config)
 ;;; c-config.el ends here

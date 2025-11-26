@@ -21,26 +21,33 @@
 ;; Low-Level Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
+ lang-validate-backend-available-p (binary backend-function)
+ "Return non-nil if BINARY exists in PATH and BACKEND-FUNCTION is defined.
+BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\", \"shellcheck\").
+BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
+This is the standard validation check used before enabling any flymake backend."
+ (and (core-utils-check-command-in-path binary) (fboundp backend-function)))
+
+(defun
  lang-setup-flymake-backend (binary backend-function)
  "Set up standalone flymake BACKEND-FUNCTION if BINARY is available.
 BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 Adds BACKEND-FUNCTION to `flymake-diagnostic-functions' buffer-locally."
  (when
-  (and (core-utils-check-command-in-path binary) (fboundp backend-function))
+  (lang-validate-backend-available-p binary backend-function)
   (add-hook 'flymake-diagnostic-functions backend-function nil t)))
 
 (defun
  lang-ensure-flymake-backend-after-eglot (binary backend-function)
- "Ensure BACKEND-FUNCTION is active after eglot starts.
+ "Ensure BACKEND-FUNCTION is active after eglot start.
 BINARY is the name of the executable to check for (e.g., \"mdl\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 Eglot can sometimes reset the diagnostic functions list, so we re-add the backend if missing."
  (when
   (and
    (bound-and-true-p eglot--managed-mode)
-   (core-utils-check-command-in-path binary)
-   (fboundp backend-function))
+   (lang-validate-backend-available-p binary backend-function))
   (unless
    (memq backend-function flymake-diagnostic-functions)
    (add-hook 'flymake-diagnostic-functions backend-function nil t)
@@ -48,7 +55,7 @@ Eglot can sometimes reset the diagnostic functions list, so we re-add the backen
 
 (defun
  lang-add-eglot-backend-hook (binary backend-function)
- "Add hook to ensure BACKEND-FUNCTION persists after eglot starts.
+ "Add hook to ensure BACKEND-FUNCTION persists after eglot start.
 BINARY is the name of the executable (e.g., \"mdl\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 This addresses the issue where eglot can reset `flymake-diagnostic-functions'."
@@ -98,14 +105,14 @@ the backend to `flymake-diagnostic-functions' and enabling flymake-mode.
 
 If BINARY is not found in PATH, setup is silently skipped."
  (when
-  (and (core-utils-check-command-in-path binary) (fboundp load-function))
+  (lang-validate-backend-available-p binary load-function)
   (funcall load-function)
   (lang-trigger-flymake-check-timer)))
 
 (defun
  lang-setup-flymake-backend-lsp ()
  "Set up flymake for LSP-only diagnostics via eglot.
-Enables flymake-mode to receive diagnostics from eglot LSP backend.
+Enables `flymake-mode' to receive diagnostics from eglot LSP backend.
 No standalone linter is configured.
 
 This is for languages that only have LSP server diagnostics (e.g., clangd for C/C++,

@@ -92,7 +92,6 @@ Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
 (add-hook 'sh-ts-mode-hook 'enhance-bash-syntax-highlighting)
 (add-hook 'bash-ts-mode-hook 'enhance-bash-syntax-highlighting)
 
-(core-message-success
- "Bash configuration loaded (sh-mode and bash-ts-mode with flymake-shellcheck)")
+(core-message-lang-loaded "Bash" "sh-mode and bash-ts-mode with flymake-shellcheck")
 (provide 'bash-config)
 ;;; bash-config.el ends here

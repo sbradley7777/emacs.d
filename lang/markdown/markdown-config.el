@@ -67,7 +67,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-register-dual-mode-hooks markdown markdown-setup-common)
 
-(core-message-success
- "Markdown configuration loaded (markdown-mode and markdown-ts-mode with marksman LSP and mdl linter)")
+(core-message-lang-loaded
+ "Markdown" "markdown-mode and markdown-ts-mode with marksman LSP and mdl linter")
 (provide 'markdown-config)
 ;;; markdown-config.el ends here

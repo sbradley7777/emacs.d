@@ -36,6 +36,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-add-dual-mode-hooks 'js-json-mode-hook 'json-ts-mode-hook #'json-setup-common)
 
-(core-message-success "JSON configuration loaded (js-json-mode and json-ts-mode)")
+(core-message-lang-loaded "JSON" "js-json-mode and json-ts-mode")
 (provide 'json-config)
 ;;; json-config.el ends here

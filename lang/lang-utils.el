@@ -11,6 +11,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Macros
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Hook Registration Decision Tree:
+;;
+;; Use `lang-register-dual-mode-hooks' (macro) when:
+;;   - The mode follows standard naming: MODE-mode and MODE-ts-mode
+;;   - Examples: python-mode/python-ts-mode, bash-mode/bash-ts-mode, yaml-mode/yaml-ts-mode
+;;   - Benefit: Concise, infers hook names automatically from language name
+;;
+;; Use `lang-add-dual-mode-hooks' (function) when:
+;;   - The mode has non-standard naming that doesn't follow MODE-mode pattern
+;;   - Examples: js-json-mode/json-ts-mode, c++-mode/c++-ts-mode
+;;   - Benefit: Explicit hook names, handles edge cases
+;;
+;; Prefer the macro for consistency unless naming requires the function.
+
 (defmacro
  lang-register-dual-mode-hooks (lang-name setup-function &optional extra-hooks)
  "Register SETUP-FUNCTION for both regular and tree-sitter modes of LANG-NAME.

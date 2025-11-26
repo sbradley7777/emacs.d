@@ -87,6 +87,19 @@ ARGS are the format arguments."
  (apply #'message format-string args))
 
 (defun
+ core-message-lang-loaded (language-name modes-and-backend)
+ "Display language configuration loaded message with ✅ prefix.
+LANGUAGE-NAME is the name of the language (e.g., \\='Python\\=', \\='Bash\\=', \\='C/C++\\=').
+MODES-AND-BACKEND is a description of modes and backend configuration.
+This follows the standard format: \\='LANGUAGE configuration loaded (MODES-AND-BACKEND)\\='
+
+Examples:
+  (core-message-lang-loaded \"Python\" \"python-mode and python-ts-mode with pylsp LSP\")
+  (core-message-lang-loaded \"Bash\" \"sh-mode and bash-ts-mode with flymake-shellcheck\")
+  (core-message-lang-loaded \"JSON\" \"js-json-mode and json-ts-mode\")"
+ (core-message-success "%s configuration loaded (%s)" language-name modes-and-backend))
+
+(defun
  core-message-batch-skip
  (operation &optional context &rest context-args)
  "Display batch mode skip message with ⏭️  prefix.

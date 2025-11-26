@@ -36,6 +36,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-register-dual-mode-hooks yaml yaml-setup-common)
 
-(core-message-success "YAML configuration loaded (yaml-mode and yaml-ts-mode)")
+(core-message-lang-loaded "YAML" "yaml-mode and yaml-ts-mode")
 (provide 'yaml-config)
 ;;; yaml-config.el ends here
