@@ -44,10 +44,19 @@ Patterns are checked in order, so more specific patterns should come first
    (flymake-collection-markdownlint "MarkdownLint" (markdown-mode markdown-ts-mode))
    (eglot-flymake-backend "Eglot LSP" (multiple)))
  "Registry of known Flymake backends with their descriptions and supported modes.
-Used by backend availability checking to display user-friendly backend names.
+Used by backend availability checking to display user-friendly backend names
+and to show which backends are available for the current `major-mode'.
+
 Each entry is (FUNCTION-SYMBOL DESCRIPTION MODES) where:
-- FUNCTION-SYMBOL is the backend function name (e.g., flymake-ruff--run-checker)
-- DESCRIPTION is a user-friendly description (e.g., \\='Ruff Python linter\\=')
-- MODES is a list of major modes this backend supports")
+- FUNCTION-SYMBOL is the backend function name (e.g., \\='flymake-ruff--run-checker)
+- DESCRIPTION is the user-friendly name shown in diagnostics (e.g., \\='Ruff Python linter\\=')
+- MODES is either:
+  - List of major-mode symbols this backend supports (e.g., (python-mode python-ts-mode))
+  - \\='(multiple) for backends that support many modes (e.g., eglot-flymake-backend)
+
+This registry is used by:
+- `flymake-check-backend-availability' to display friendly backend names
+- `diagnostics-show-flymake-backend-info' to show available backends per mode
+- `flymake--get-backend-description' to convert function symbols to readable names")
 (provide 'flymake-constants)
 ;;; flymake-constants.el ends here

@@ -282,9 +282,12 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
  flymake-max-backend-name-length
  ()
  "Calculate the maximum length of backend names in `flymake-diagnostics-backend-abbreviations'."
- (apply
-  'max
-  (mapcar (lambda (mapping) (length (cdr mapping))) flymake-diagnostics-backend-abbreviations)))
+ (if
+  flymake-diagnostics-backend-abbreviations
+  (apply
+   'max
+   (mapcar (lambda (mapping) (length (cdr mapping))) flymake-diagnostics-backend-abbreviations))
+  10))
 (defun
  flymake-friendly-backend-name (backend-name)
  "Convert cryptic backend names to user-friendly versions.

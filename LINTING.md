@@ -226,6 +226,107 @@ If LSP isn't connecting:
 
 See [TROUBLESHOOTING.md](TROUBLESHOOTING.md#lsp-and-tool-executable-issues) for detailed troubleshooting steps.
 
+## Adding New Language Support
+
+To add Flymake and LSP support for a new language, follow this standard pattern:
+
+### 1. Create Language Config File
+
+Create `lang/{language}/{language}-config.el` following the standard structure:
+
+```elisp
+;;; language-config.el --- Language Mode Configuration -*- lexical-binding: t -*-
+;;; Commentary:
+;; Description of language support
+
+;;; Code:
+(require 'core-utils)
+(require 'core-logging)
+(require 'lang-utils')
+(require 'flymake-lang-setup)
+
+;; Define setup function(s)
+(defun language-setup-common ()
+  "Common setup for language-mode."
+  (lang-setup-full 'language-indent-offset 2)
+  ;; Choose ONE of the backend setup functions below
+  )
+
+;; Register mode hooks
+(add-hook 'language-mode-hook 'language-setup-common)
+
+;; Log configuration loaded
+(core-message-lang-loaded "Language" "language-mode")
+(provide 'language-config)
+;;; language-config.el ends here
+```
+
+### 2. Choose Backend Setup Function
+
+Select the appropriate backend setup based on available tools:
+
+#### Option A: Standalone linter only
+```elisp
+(flymake-lang-setup-direct-backend "linter-binary" 'flymake-collection-linter)
+```
+**Use when:** Language has a standalone linter but no LSP server
+
+#### Option B: Package with -load function
+```elisp
+(flymake-lang-setup-package-loader "tool-binary" 'flymake-tool-load)
+```
+**Use when:** Flymake package provides a `-load` function that handles setup
+
+#### Option C: LSP diagnostics only
+```elisp
+(flymake-lang-setup-lsp-backend)
+```
+**Use when:** Language only has LSP server diagnostics (no standalone linter)
+
+#### Option D: Both linter and LSP (dual backend)
+```elisp
+(flymake-lang-setup-dual-backend "linter-binary" 'flymake-collection-linter)
+```
+**Use when:** Both standalone linter and LSP provide complementary value
+
+### 3. Register Backend (if using standalone linter)
+
+Add entry to `features/flymake/flymake-constants.el`:
+
+```elisp
+(defconst flymake-backend-registry
+  '(...
+    (flymake-collection-linter "Linter Name" (language-mode language-ts-mode))
+    ...))
+```
+
+### 4. Configure LSP Server (if using LSP)
+
+Add entry to `features/eglot/eglot-constants.el`:
+
+```elisp
+(defconst features-eglot-lsp-server-map
+  '(...
+    (language-mode . "lsp-server-binary")
+    (language-ts-mode . "lsp-server-binary")
+    ...))
+```
+
+### 5. Update Documentation
+
+Add language to the table in this file (LINTING.md) under [Language Support](#language-support).
+
+### Backend Function Selection Guide
+
+The `flymake-lang-setup-dual-backend` function automatically detects function type:
+- Functions ending with `-load` → treated as package loaders
+- All other functions → treated as direct backends
+
+**Direct backends** get eglot hook to persist after eglot starts.
+**Package loaders** do NOT get eglot hook (they manage persistence internally).
+
+For more details, see the decision tree documentation in `features/flymake/flymake-lang-setup.el`.
+
 ## Related Documentation
 
 - [FEATURES.md](FEATURES.md) - Complete feature list including language support details
