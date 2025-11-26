@@ -9,53 +9,69 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
- flymake-diagnostics-backend-abbreviations
- '(("e-f-b-c" . "Elisp Byte Compile")
-   ("e-f-c" . "Elisp Checkdoc")
-   ("e-f-b" . "Eglot LSP")
-   ("f-c-y" . "YAMLLint")
-   ("f-c-j" . "JSONLint")
-   ("f-c-m" . "MarkdownLint")
-   ("f-r" . "Ruff Python linter")
-   ("f-a" . "Aspell spell checker")
-   ("f-s" . "ShellCheck linter")
-   ("s-s-f" . "ShellCheck built-in")
-   ("p-f" . "Python built-in")
-   ("flymake" . "Flymake"))
- "Mapping of abbreviated Flymake backend names to user-friendly display names.
-Used by the diagnostics table to convert abbreviated backend identifiers (like \\='e-f-b\\=')
-to human-readable names (like \\='Eglot LSP\\=').
-Each entry is (ABBREVIATION-PATTERN . FRIENDLY-NAME) where ABBREVIATION-PATTERN
-is a regex to match against abbreviated backend identifiers shown in the diagnostics buffer.
-Patterns are checked in order, so more specific patterns should come first
-\(e.g., \\='e-f-b-c\\=' before \\='e-f-b\\=').")
-
-(defconst
  flymake-backend-registry
- '((flymake-aspell--check "Aspell spell checking" (text-mode prog-mode))
-   (python-flymake "Python built-in" (python-mode python-ts-mode))
-   (elisp-flymake-byte-compile "Elisp Byte Compile" (emacs-lisp-mode lisp-interaction-mode))
-   (elisp-flymake-checkdoc "Elisp Checkdoc" (emacs-lisp-mode lisp-interaction-mode))
-   (flymake-shellcheck--backend "ShellCheck linter" (sh-mode sh-ts-mode bash-ts-mode))
-   (sh-shellcheck-flymake "ShellCheck built-in" (sh-mode sh-ts-mode bash-ts-mode))
-   (flymake-collection-yamllint "YAMLLint" (yaml-mode yaml-ts-mode))
-   (flymake-collection-jsonlint "JSONLint" (js-json-mode json-ts-mode))
-   (flymake-collection-markdownlint "MarkdownLint" (markdown-mode markdown-ts-mode))
-   (eglot-flymake-backend "Eglot LSP" (multiple)))
- "Registry of known Flymake backends with their descriptions and supported modes.
-Used by backend availability checking to display user-friendly backend names
-and to show which backends are available for the current `major-mode'.
+ '((flymake-aspell--check
+    "Aspell spell checking"
+    (text-mode prog-mode)
+    :abbreviation "f-a--"
+    :type direct)
+   (python-flymake "Python built-in" (python-mode python-ts-mode) :abbreviation "p-f" :type direct)
+   (elisp-flymake-byte-compile
+    "Elisp Byte Compile"
+    (emacs-lisp-mode lisp-interaction-mode)
+    :abbreviation "e-f-b-c"
+    :type direct)
+   (elisp-flymake-checkdoc
+    "Elisp Checkdoc"
+    (emacs-lisp-mode lisp-interaction-mode)
+    :abbreviation "e-f-c"
+    :type direct)
+   (flymake-shellcheck--backend
+    "ShellCheck linter"
+    (sh-mode sh-ts-mode bash-ts-mode)
+    :abbreviation "f-s--"
+    :loader flymake-shellcheck-load
+    :type loader-based)
+   (sh-shellcheck-flymake
+    "ShellCheck built-in"
+    (sh-mode sh-ts-mode bash-ts-mode)
+    :abbreviation "s-s-f"
+    :type direct)
+   (flymake-collection-yamllint
+    "YAMLLint"
+    (yaml-mode yaml-ts-mode)
+    :abbreviation "f-c-y"
+    :type direct)
+   (flymake-collection-jsonlint
+    "JSONLint"
+    (js-json-mode json-ts-mode)
+    :abbreviation "f-c-j"
+    :type direct)
+   (flymake-collection-markdownlint
+    "MarkdownLint"
+    (markdown-mode markdown-ts-mode)
+    :abbreviation "f-c-m"
+    :type direct)
+   (eglot-flymake-backend "Eglot LSP" (multiple) :abbreviation "e-f-b" :type lsp))
+ "Registry of Flymake backends with metadata and configuration.
 
-Each entry is (FUNCTION-SYMBOL DESCRIPTION MODES) where:
-- FUNCTION-SYMBOL is the backend function name (e.g., \\='flymake-ruff--run-checker)
-- DESCRIPTION is the user-friendly name shown in diagnostics (e.g., \\='Ruff Python linter\\=')
-- MODES is either:
-  - List of `major-mode' symbols this backend supports (e.g., (python-mode python-ts-mode))
-  - \\='(multiple) for backends that support many modes (e.g., eglot-flymake-backend)
+Format: (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)
 
-This registry is used by:
-- `flymake-check-backend-availability' to display friendly backend names
-- `diagnostics-show-flymake-backend-info' to show available backends per mode
-- `flymake--get-backend-description' to convert function symbols to readable names")
+Where:
+- FUNCTION-SYMBOL: Backend function name (symbol)
+- DESCRIPTION: User-friendly display name (string)
+- MODES: List of `major-mode' symbols or (multiple)
+- PROPERTIES: Plist with :abbreviation, :loader, :type
+
+Properties:
+- :abbreviation - Short identifier used in diagnostics buffer (e.g., \\='e-f-b\\=')
+- :loader - Function symbol to call for loading this backend (optional)
+- :type - Backend type: \\='direct, \\='loader-based, or \\='lsp
+
+Example:
+  (flymake-collection-yamllint \"YAMLLint\" (yaml-mode yaml-ts-mode) :abbreviation \"f-c-y\" :type direct)
+
+This registry stores all backend metadata in one place, replacing the need for
+separate backend and abbreviation mapping constants.")
 (provide 'flymake-constants)
 ;;; flymake-constants.el ends here

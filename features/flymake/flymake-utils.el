@@ -87,6 +87,38 @@ Falls back to the backend function name if not found in registry."
    (if spec (nth 1 spec) (format "%s" backend-symbol))))
 
 (defun
+ flymake--registry-get-property (backend-symbol property)
+ "Get PROPERTY for BACKEND-SYMBOL from `flymake-backend-registry'.
+PROPERTY is a keyword like :abbreviation, :loader, or :type.
+Returns nil if backend not found or property not set.
+
+The registry format is (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)
+where PROPERTIES is a plist starting at index 3."
+ (let ((spec (assq backend-symbol flymake-backend-registry)))
+   (when spec (plist-get (nthcdr 3 spec) property))))
+
+;; (defun
+;;  flymake--registry-get-abbreviation (backend-symbol)
+;;  "Get diagnostics abbreviation for BACKEND-SYMBOL from registry.
+;; Returns the :abbreviation property or nil if not set."
+;;  (flymake--registry-get-property backend-symbol :abbreviation))
+
+;; (defun
+;;  flymake--registry-get-loader (backend-symbol)
+;;  "Get loader function for BACKEND-SYMBOL from registry.
+;; Returns the :loader property (function symbol) or nil if backend is direct type."
+;;  (flymake--registry-get-property backend-symbol :loader))
+
+;; (defun
+;;  flymake--registry-is-loader-p (function-symbol)
+;;  "Return non-nil if FUNCTION-SYMBOL is a loader function.
+;; Checks if any backend in `flymake-backend-registry' has this function as its :loader property.
+;; This provides explicit identification of loader functions beyond naming conventions."
+;;  (cl-some
+;;   (lambda (entry) (eq function-symbol (plist-get (nthcdr 3 entry) :loader)))
+;;   flymake-backend-registry))
+
+(defun
  flymake--get-lsp-config ()
  "Get LSP configuration for current `major-mode' from `features-eglot-lsp-server-map'.
 Returns cons cell (MODE . SERVER-EXECUTABLE) or nil if no LSP configured for this mode."
@@ -279,22 +311,17 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
       (core-message-warning "Flymake is not available"))))))
 
 (defun
- flymake-max-backend-name-length
- ()
- "Calculate the maximum length of backend names in `flymake-diagnostics-backend-abbreviations'."
- (if
-  flymake-diagnostics-backend-abbreviations
-  (apply
-   'max
-   (mapcar (lambda (mapping) (length (cdr mapping))) flymake-diagnostics-backend-abbreviations))
-  10))
-(defun
  flymake-friendly-backend-name (backend-name)
- "Convert cryptic backend names to user-friendly versions.
-Looks up BACKEND-NAME in `flymake-diagnostics-backend-abbreviations' and returns
-the first matching friendly name, or the original name if no match found.
+ "Convert backend abbreviations to user-friendly names.
+Looks up BACKEND-NAME (abbreviation string) in `flymake-backend-registry' and returns
+the friendly description, or the original name if no match found.
 
-Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
+BACKEND-NAME can be:
+- String abbreviation (e.g., \\='f-s--\\=', \\='e-f-b\\=')
+- Backend symbol (e.g., \\='flymake-shellcheck--backend)
+- List format (e.g., (flymake flymake))
+
+Returns the friendly name from the registry or the original name as fallback."
  (let ((backend-str
         (cond
          ((stringp backend-name)
@@ -306,15 +333,17 @@ Handles both string and list formats (e.g., (flymake flymake) or \"flymake\")."
          (t
           (format "%s" backend-name))))
        (friendly-name nil))
-   ;; Search for first matching pattern in mappings
+   ;; Search unified registry for matching abbreviation
    (catch
     'found
     (dolist
-     (mapping flymake-diagnostics-backend-abbreviations)
-     (when
-      (string-match (car mapping) backend-str)
-      (setq friendly-name (cdr mapping))
-      (throw 'found friendly-name))))
+     (entry flymake-backend-registry)
+     (let ((abbrev (plist-get (nthcdr 3 entry) :abbreviation))
+           (description (nth 1 entry)))
+       (when
+        (and abbrev (string= abbrev backend-str))
+        (setq friendly-name description)
+        (throw 'found friendly-name)))))
    ;; Return friendly name or fall back to original
    (or friendly-name backend-str)))
 
