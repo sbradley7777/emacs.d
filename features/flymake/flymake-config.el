@@ -50,5 +50,8 @@ Multiple files opened in quick succession will only trigger one check."
    (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
 
 (add-hook 'prog-mode-hook 'flymake-config--enable-for-prog-mode)
+
+;; Set up custom diagnostics buffer formatting with friendly backend names
+(add-hook 'flymake-diagnostics-buffer-mode-hook (lambda () (flymake-setup-custom-format nil)))
 (provide 'flymake-config)
 ;;; flymake-config.el ends here

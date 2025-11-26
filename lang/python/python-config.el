@@ -2,13 +2,16 @@
 ;;; Commentary:
 ;;      Basic Python editing settings, indentation, and shell configuration.
 ;;      Supports both python-mode and python-ts-mode with shared configuration.
+;;      Uses pylsp LSP server for diagnostics (including ruff linting via python-lsp-ruff plugin).
 
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
+(require 'core-logging)
 (require 'python-constants)
 (require 'python)
 (require 'lang-utils)
+(require 'flymake-lang-setup)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -18,7 +21,8 @@
  ()
  "Common setup for both `python-mode' and python-ts-mode."
  (setq python-indent-guess-indent-offset t)
- (lang-setup-minimal 'python-indent core-tab-width))
+ (lang-setup-minimal 'python-indent core-tab-width)
+ (lang-setup-flymake-backend-lsp))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python Shell Integration
@@ -36,5 +40,8 @@
 ;; Mode Hooks - Apply to both python-mode and python-ts-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-register-dual-mode-hooks python python-setup-common)
+
+(core-message-success
+ "Python configuration loaded (python-mode and python-ts-mode with pylsp LSP)")
 (provide 'python-config)
 ;;; python-config.el ends here

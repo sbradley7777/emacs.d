@@ -312,10 +312,6 @@ Can be called manually when needed for intensive work sessions."
  pyvenv-modeline
  :after pyvenv-config
  :description "Python virtual environment modeline indicator")
-(load-module
- flymake-ruff-config
- :after (core-packages python-config flymake-config pyvenv-config)
- :description "Flymake Ruff integration")
 (load-module eglot-config :after python-config :description "Eglot LSP integration")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
