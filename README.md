@@ -348,6 +348,7 @@ For detailed information about these limitations, rationale, and workarounds, se
 - [`FAQ.md`](FAQ.md) - Frequently asked questions about features and usage
 - [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) - Solutions for common issues and debugging
 - [`FEATURES.md`](FEATURES.md) - Complete feature documentation and capabilities
+- [`LINTING.md`](LINTING.md) - Code linting and diagnostics setup (Flymake + Eglot/LSP)
 
 **Additional Resources:**
 - [`GIT.md`](GIT.md) - Git integration setup and usage guide (Magit and Forge)

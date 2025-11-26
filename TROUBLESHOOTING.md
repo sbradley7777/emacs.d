@@ -134,10 +134,15 @@ M-x emacs-version
 
 ## LSP and Tool Executable Issues
 
+### Overview
+
+The configuration uses linters and LSP servers to provide code diagnostics. See [LINTING.md](LINTING.md) for the complete list of supported languages and required tools.
+
+This section covers troubleshooting when tools aren't found or aren't working correctly.
+
 ### Understanding PATH Search Behavior
 
-**Overview**:
-The configuration automatically searches for required executables (`pylsp`, `ruff`, `clangd`) in your system PATH. Understanding how this works helps diagnose "command not found" issues.
+The configuration automatically searches for required executables in your system PATH. Understanding how this works helps diagnose "command not found" issues.
 
 **How PATH Search Works**:
 
@@ -162,16 +167,7 @@ The configuration automatically searches for required executables (`pylsp`, `ruf
 
 ### pylsp (Python Language Server Protocol)
 
-**About pylsp**:
-- **Purpose**: LSP server for Python providing code completion, diagnostics, and navigation
-- **Execution**: Runs on the same host as the Python file (local for local files, remote for TRAMP files)
-- **Base Installation**: `pip install python-lsp-server`
-- **Recommended Plugin**: `pip install python-lsp-ruff` - integrates ruff linting into pylsp for LSP-based diagnostics
-
-**Configuration**:
-- Defined in `features/eglot-config.el:26` as the LSP server for `python-mode`
-- Automatically detected via PATH search on local or remote host
-- Works alongside `flymake-ruff` (see [ruff section](#ruff-python-linter) below)
+Python LSP server that provides code completion, diagnostics, and navigation. See [LINTING.md](LINTING.md#python) for installation details.
 
 **Troubleshooting "pylsp not found"**:
 
@@ -218,13 +214,13 @@ The configuration automatically searches for required executables (`pylsp`, `ruf
   1. **Via Flymake**: `flymake-ruff` package (runs locally only, analyzes via stdin)
   2. **Via LSP**: `python-lsp-ruff` plugin for `pylsp` (runs on same host as pylsp)
 - **Standalone execution**: When used via Flymake, runs **locally only** (even for remote files via TRAMP)
-- **Why local for Flymake?**: Ruff analyzes code via stdin and doesn't need filesystem access to remote host
+- **Why local for Flymake?**: `ruff` analyzes code via stdin and doesn't need filesystem access to remote host
 
 **Configuration**:
 - **Flymake integration**: Defined in `lang/python/flymake-ruff-config.el:20`
   - Only activated if `ruff` is found in **local** PATH
   - Note in `flymake-ruff-config.el:15-17` explains local-only execution
-- **LSP integration**: `python-lsp-ruff` plugin extends `pylsp` with ruff diagnostics
+- **LSP integration**: `python-lsp-ruff` plugin extends `pylsp` with `ruff` diagnostics
   - Runs on same host as `pylsp` (local or remote)
   - Installed separately: `pip install python-lsp-ruff`
 
@@ -235,7 +231,7 @@ The configuration automatically searches for required executables (`pylsp`, `ruf
    which ruff
    ```
 
-2. **Install ruff** (if missing):
+2. **Install `ruff`** (if missing):
    ```bash
    # For Flymake integration (local only)
    pip install --user ruff
@@ -251,27 +247,20 @@ The configuration automatically searches for required executables (`pylsp`, `ruf
 
 4. **Verify detection in Emacs**:
    - Open a Python file
-   - Ruff diagnostics should appear in buffer if enabled
+   - `ruff` diagnostics should appear in buffer if enabled
    - Check for "f-r---c" backend in Flymake status (Flymake integration)
    - Check `*Messages*` buffer for LSP server startup (LSP integration via `python-lsp-ruff`)
 
 **Important**:
-- **Flymake ruff**: Runs on your **local** machine only (even for remote files via TRAMP)
-- **LSP ruff** (via `python-lsp-ruff` plugin): Runs on the same host as `pylsp` (local or remote)
+- **Flymake `ruff`**: Runs on your **local** machine only (even for remote files via TRAMP)
+- **LSP `ruff`** (via `python-lsp-ruff` plugin): Runs on the same host as `pylsp` (local or remote)
 - Both can coexist - Flymake provides local analysis, LSP provides host-aware analysis
 
 ### clangd (C/C++ Language Server)
 
-**About clangd**:
-- **Purpose**: LSP server for C and C++ development
-- **Execution**: Runs on the same host as the C/C++ file (local or remote)
-- **Installation**: Typically via system package manager
+C/C++ LSP server that provides code completion, diagnostics, and navigation. See [LINTING.md](LINTING.md#cc) for installation details.
 
-**Configuration**:
-- Defined in `features/eglot-config.el:26` as the LSP server for `c-mode` and `c++-mode`
-- Automatically detected via PATH search on local or remote host
-
-**Troubleshooting "clangd not found"**:
+**Troubleshooting "`clangd` not found"**:
 
 1. **Verify installation**:
    ```bash
@@ -282,7 +271,7 @@ The configuration automatically searches for required executables (`pylsp`, `ruf
    ssh remote-host "which clangd"
    ```
 
-2. **Install clangd**:
+2. **Install `clangd`**:
    ```bash
    # Debian/Ubuntu
    sudo apt-get install clangd
@@ -297,7 +286,7 @@ The configuration automatically searches for required executables (`pylsp`, `ruf
 3. **Verify detection in Emacs**:
    - Open a C/C++ file
    - Check `*Messages*` buffer for LSP detection messages
-   - LSP should activate automatically if clangd is found
+   - LSP should activate automatically if `clangd` is found
 
 ### General Executable Debugging
 

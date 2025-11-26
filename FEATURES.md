@@ -305,14 +305,10 @@ All language configurations use a shared setup pattern ensuring identical behavi
 ```
 
 **LSP Server Support:**
-Tree-sitter modes work seamlessly with Eglot LSP:
-- **Python**: `pylsp` works with both python-mode and python-ts-mode
-- **C/C++**: `clangd` works with both c-mode/c++-mode and c-ts-mode/c++-ts-mode
-- **Bash**: `bash-language-server` works with both sh-mode and bash-ts-mode
-- **JSON**: `vscode-json-language-server` works with both json-mode and json-ts-mode
-- **YAML**: `yaml-language-server` works with both yaml-mode and yaml-ts-mode
-- **TOML**: `taplo` works with both toml-mode and toml-ts-mode
-- **Markdown**: `marksman` works with both markdown-mode and markdown-ts-mode
+Tree-sitter modes work seamlessly with Eglot LSP. See [LINTING.md](LINTING.md) for complete language support details including:
+- Python (`pylsp`), C/C++ (`clangd`), YAML (`yaml-language-server`)
+- JSON (`vscode-json-languageserver`), TOML (`taplo`), Markdown (`marksman`)
+- Bash (`bash-language-server`, currently disabled)
 
 **Benefits:**
 - **Superior syntax highlighting** - tree-sitter provides more accurate, context-aware highlighting
@@ -400,40 +396,7 @@ Professional Bash/shell script editing with enhanced features:
 - **Error navigation** with F2/F3 keys
 - **Diagnostic window** toggle with F1
 
-**Installation Requirements**:
-
-Linux (RHEL/Fedora/CentOS):
-```bash
-sudo yum install ShellCheck
-```
-
-Linux (Debian/Ubuntu):
-```bash
-sudo apt-get install shellcheck
-```
-
-macOS (Homebrew):
-```bash
-brew install shellcheck
-```
-
-Verify installation:
-```bash
-shellcheck --version
-```
-
-**LSP Support** (optional):
-
-For advanced bash language server features:
-```bash
-npm install -g bash-language-server
-```
-
-**Benefits**:
-- **Catch errors early** - shellcheck finds common bash pitfalls
-- **Better syntax highlighting** - enhanced keyword and operator recognition
-- **Consistent formatting** - automatic indentation and structure
-- **Tree-sitter support** - superior syntax parsing when bash grammar installed
+See [LINTING.md](LINTING.md#bashshell-scripts) for shellcheck installation and LSP server details.
 
 ### Makefile Development
 
@@ -917,14 +880,11 @@ Interactive command launcher with history tracking and customizable favorites:
 - **[Eglot LSP Client](https://github.com/joaotavora/eglot)** ([`features/eglot/eglot-config.el`](features/eglot/eglot-config.el)): Language Server Protocol integration for intelligent code features
   - **Automatic LSP detection** - enables LSP when server executables are found
   - **Local and remote support** - seamless TRAMP integration for SSH-based development
-  - **Supported languages**:
-    - **Python**: `pylsp` ([python-lsp-server](https://github.com/python-lsp/python-lsp-server))
-      - Base installation: `pip install python-lsp-server`
-      - Recommended plugin: `pip install python-lsp-ruff` (integrates ruff linting into LSP)
-    - **C/C++**: `clangd`
   - **Smart connection handling** - 60-second timeout for remote connections
   - **Informative logging** - shows LSP command availability checks for debugging
   - **Automatic mode hooks** - LSP activates automatically for configured languages
+
+See [LINTING.md](LINTING.md) for complete language support, required tools, and installation details.
 
 - **System Diagnostics** ([`core/diagnostics.el`](core/diagnostics.el)): OS detection, startup logging, and configuration diagnostics
 
