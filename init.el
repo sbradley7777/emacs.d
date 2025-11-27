@@ -83,15 +83,6 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
     lines)
    (core-message-diagnostic "Configuration Loading Summary" (nreverse lines))))
 
-(defun
- init-optimize-gc-for-long-session ()
- "Optimize garbage collection for long-running sessions.
-Can be called manually when needed for intensive work sessions."
- (interactive)
- (setq
-  gc-cons-threshold core-gc-long-session-threshold ; Long session threshold
-  gc-cons-percentage core-gc-percentage-normal)) ; Normal GC percentage
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure early-init.el is loaded (for batch mode compatibility)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

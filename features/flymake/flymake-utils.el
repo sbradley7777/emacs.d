@@ -102,27 +102,6 @@ where PROPERTIES is a plist starting at index 3."
  (let ((spec (assq backend-symbol flymake-backend-registry)))
    (when spec (plist-get (nthcdr 3 spec) property))))
 
-;; (defun
-;;  flymake--registry-get-abbreviation (backend-symbol)
-;;  "Get diagnostics abbreviation for BACKEND-SYMBOL from registry.
-;; Returns the :abbreviation property or nil if not set."
-;;  (flymake--registry-get-property backend-symbol :abbreviation))
-
-;; (defun
-;;  flymake--registry-get-loader (backend-symbol)
-;;  "Get loader function for BACKEND-SYMBOL from registry.
-;; Returns the :loader property (function symbol) or nil if backend is direct type."
-;;  (flymake--registry-get-property backend-symbol :loader))
-
-;; (defun
-;;  flymake--registry-is-loader-p (function-symbol)
-;;  "Return non-nil if FUNCTION-SYMBOL is a loader function.
-;; Checks if any backend in `flymake-backend-registry' has this function as its :loader property.
-;; This provides explicit identification of loader functions beyond naming conventions."
-;;  (cl-some
-;;   (lambda (entry) (eq function-symbol (plist-get (nthcdr 3 entry) :loader)))
-;;   flymake-backend-registry))
-
 (defun
  flymake--get-lsp-config ()
  "Get LSP configuration for current `major-mode' from `features-eglot-lsp-server-map'.

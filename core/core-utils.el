@@ -66,26 +66,6 @@ dots."
   (not (string-match-p "\\.\\." hostname))))
 
 (defun
- core-utils-format-command-found-message (command path host location)
- "Format success message when COMMAND is found.
-COMMAND is the command name, PATH is the full path, HOST is the hostname,
-LOCATION is either \\='local\\=' or \\='remote\\='."
- (core-message-success
-  "The command \"%s\" was found in PATH at %s on host (%s): %s"
-  command
-  (abbreviate-file-name path)
-  location
-  host))
-
-(defun
- core-utils-format-command-not-found-message (command host location)
- "Format warning message when COMMAND is not found.
-COMMAND is the command name, HOST is the hostname,
-LOCATION is either \\='local\\=' or \\='remote\\='."
- (core-message-warning
-  "The command \"%s\" was not found in PATH on host (%s): %s" command location host))
-
-(defun
  core-utils-check-command-in-path (command)
  "Check if COMMAND exists in PATH and log message if not found.
 Returns t if command is found, nil otherwise.
@@ -100,8 +80,18 @@ When `default-directory' is remote, searches for COMMAND on the remote host."
         (command-path (executable-find command is-remote)))
    (if
     command-path
-    (progn (core-utils-format-command-found-message command command-path host location) t)
-    (progn (core-utils-format-command-not-found-message command host location) nil))))
+    (progn
+     (core-message-success
+      "The command \"%s\" was found in PATH at %s on host (%s): %s"
+      command
+      (abbreviate-file-name command-path)
+      location
+      host)
+     t)
+    (progn
+     (core-message-warning
+      "The command \"%s\" was not found in PATH on host (%s): %s" command location host)
+     nil))))
 
 (defun
  core-utils-ensure-directory (dir-path)

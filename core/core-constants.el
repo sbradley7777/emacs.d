@@ -165,10 +165,5 @@ such as parentheses highlighting, indent guides, and completion documentation po
 ;; Elisp Autofmt Configuration
 (defconst core-elisp-autofmt-parallel-jobs 1 "Number of parallel jobs for elisp-autofmt.")
 
-;; Package List Display
-(defconst
- core-package-list-column-widths '(40 20 18 22)
- "Column widths for package list display table.
-List of integers representing character widths for: package-name, installed-version, update-available, status.")
 (provide 'core-constants)
 ;;; core-constants.el ends here
