@@ -45,6 +45,12 @@
  initial-buffer-choice
  (lambda
   () (if (> (length command-line-args) 1) (current-buffer) (get-buffer-create "*dashboard*"))))
+
+;; Prevent window splitting when opening multiple files from command line
+;; Only show the first file, keep others in background buffers
+(add-hook
+ 'window-setup-hook (lambda () (when (> (length command-line-args) 1) (delete-other-windows))))
+
 ;; Search preferences
 (setq case-fold-search t) ; Make searches case insensitive
 ;; Basic editor behavior
