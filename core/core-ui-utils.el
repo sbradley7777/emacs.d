@@ -41,6 +41,30 @@ Example:
     (number-sequence 0 (1- num-cols)))))
 
 (defun
+ core-ui-utils-add-column-padding (widths padding)
+ "Add PADDING to each width in WIDTHS list, except the last column.
+WIDTHS is a list of column widths.
+PADDING is the number of spaces to add to each column (except the last).
+
+Returns new widths list with padding applied.
+The last column receives no padding (typically for unlimited-width columns).
+
+Example:
+  (core-ui-utils-add-column-padding \\='(4 3 7 10) 2)
+  => (6 5 9 10)  ; First 3 columns +2, last column unchanged"
+ (let ((result nil)
+       (len (length widths)))
+   (dotimes
+    (i len)
+    (push
+     (if
+      (= i (1- len))
+      (nth i widths) ; Last column - no padding
+      (+ (nth i widths) padding)) ; Other columns - add padding
+     result))
+   (nreverse result)))
+
+(defun
  core-ui-utils-format-table (headers rows)
  "Format HEADERS and ROWS as an aligned table with separators.
 HEADERS is a list of column header strings.
