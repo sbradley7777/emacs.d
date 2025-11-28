@@ -151,30 +151,97 @@ Examples:
    (concat left (mapconcat (lambda (width) (make-string (+ width 2) ?─)) widths junction) right)))
 
 (defun
- core-logging-format-table (headers rows)
+ core-logging--build-total-row (headers rows total-spec)
+ "Build total row data based on TOTAL-SPEC.
+HEADERS is the list of column header strings.
+ROWS is the list of data rows.
+TOTAL-SPEC controls total row behavior:
+  - nil: No total row (default)
+  - \\='count-only: Show \"TOTAL: N\" in first column, \"-\" in others
+  - (list of indices): Sum columns at indices, \"-\" for others, \"TOTAL\" in first
+  - (list of names): Sum columns matching names, \"-\" for others, \"TOTAL\" in first
+
+Returns list of column values for total row, or nil if no total row.
+
+Examples:
+  (core-logging--build-total-row headers rows nil)
+  => nil
+
+  (core-logging--build-total-row headers rows \\='count-only)
+  => (\"TOTAL: 5\" \"-\" \"-\" \"-\")
+
+  (core-logging--build-total-row headers rows \\='(1 3))
+  => (\"TOTAL\" \"15\" \"-\" \"42\")
+
+  (core-logging--build-total-row headers rows \\='(\"Age\" \"Count\"))
+  => (\"TOTAL\" \"15\" \"-\" \"42\")"
+ (let ((num-cols (length headers)))
+   (pcase total-spec
+     ('nil nil)
+     ('count-only (cons (format "TOTAL: %d" (length rows)) (make-list (1- num-cols) "-")))
+     ((pred listp)
+      (let ((indices-to-sum
+             (if
+              (stringp (car total-spec))
+              (mapcar
+               (lambda (name) (cl-position name headers :test 'string=)) total-spec)
+              total-spec)))
+        (cons
+         "TOTAL"
+         (cl-loop
+          for col-idx from 1 below num-cols collect
+          (if
+           (member col-idx indices-to-sum)
+           (number-to-string
+            (cl-loop for row in rows sum (string-to-number (format "%s" (nth col-idx row)))))
+           "-"))))))))
+
+(defun
+ core-logging-format-table (headers rows &optional total-spec)
  "Format HEADERS and ROWS as a box-drawing table.
 HEADERS is a list of column header strings.
 ROWS is a list of row data, where each row is a list of column values.
+TOTAL-SPEC is an optional parameter controlling total row behavior:
+  - nil: No total row (default)
+  - \\='count-only: Show \"TOTAL: N\" in first column, \"-\" in others
+  - (list of indices): Sum columns at indices, \"-\" for others, \"TOTAL\" in first
+  - (list of names): Sum columns matching header names, \"-\" for others, \"TOTAL\" in first
 
 Returns a list of formatted strings with box-drawing characters.
 Uses `core-logging-calculate-column-widths' for dynamic column sizing.
 Automatically right-aligns numeric columns (both headers and data).
 
-Example:
+Examples:
+  ;; No total row (default)
   (core-logging-format-table
    \\='(\"Name\" \"Age\" \"City\")
    \\='((\"Alice\" \"25\" \"NYC\")
-     (\"Bob\" \"30\" \"SF\")
-     (\"Charlie\" \"35\" \"LA\")))
+     (\"Bob\" \"30\" \"SF\")))
+  => Table without total row
 
-Returns:
-  (\"┌─────────┬─────┬──────┐\"
-   \"│ Name    │ Age │ City │\"
-   \"├─────────┼─────┼──────┤\"
-   \"│ Alice   │  25 │ NYC  │\"
-   \"│ Bob     │  30 │ SF   │\"
-   \"│ Charlie │  35 │ LA   │\"
-   \"└─────────┴─────┴──────┘\")"
+  ;; Count-only total
+  (core-logging-format-table
+   \\='(\"Name\" \"Age\" \"City\")
+   \\='((\"Alice\" \"25\" \"NYC\")
+     (\"Bob\" \"30\" \"SF\"))
+   \\='count-only)
+  => Last row: │ TOTAL: 2 │ - │ - │
+
+  ;; Sum specific columns by index
+  (core-logging-format-table
+   \\='(\"Name\" \"Age\" \"Score\")
+   \\='((\"Alice\" \"25\" \"100\")
+     (\"Bob\" \"30\" \"150\"))
+   \\='(1 2))
+  => Last row: │ TOTAL │ 55 │ 250 │
+
+  ;; Sum specific columns by name
+  (core-logging-format-table
+   \\='(\"Name\" \"Age\" \"Score\")
+   \\='((\"Alice\" \"25\" \"100\")
+     (\"Bob\" \"30\" \"150\"))
+   \\='(\"Age\" \"Score\"))
+  => Last row: │ TOTAL │ 55 │ 250 │"
  (let* ((col-widths (core-logging-calculate-column-widths headers rows))
         (alignments (core-logging--detect-column-alignments headers rows))
         (lines nil))
@@ -186,6 +253,12 @@ Returns:
    (push (core-logging--build-border col-widths 'middle) lines)
    ;; Data rows: │ Data │ Data │ Data │
    (dolist (row rows) (push (core-logging--build-row row col-widths alignments) lines))
+   ;; Total row (if requested)
+   (when-let ((total-row (core-logging--build-total-row headers rows total-spec)))
+     ;; Total separator: ├───┼───┼───┤
+     (push (core-logging--build-border col-widths 'middle) lines)
+     ;; Total row: │ TOTAL │ ... │
+     (push (core-logging--build-row total-row col-widths alignments) lines))
    ;; Bottom border: └───┴───┴───┘
    (push (core-logging--build-border col-widths 'bottom) lines)
    (nreverse lines)))
