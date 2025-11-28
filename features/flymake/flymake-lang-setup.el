@@ -154,6 +154,8 @@ For languages that only have a standalone linter, no LSP server.
 Uses direct backend functions that are manually added to `flymake-diagnostic-functions'.
 
 If BINARY is not found in PATH, setup is silently skipped."
+ ;; Validation: Check backend type is 'direct
+ (flymake--validate-backend-type backend-function 'direct)
  (lang-setup-flymake-backend binary backend-function)
  (flymake-mode 1)
  (lang-trigger-flymake-check-timer))
@@ -169,6 +171,8 @@ direct backend functions. The load function typically handles adding
 the backend to `flymake-diagnostic-functions' and enabling flymake-mode.
 
 If BINARY is not found in PATH, setup is silently skipped."
+ ;; Validation: Check backend type is 'loader-based
+ (flymake--validate-backend-type load-function 'loader-based)
  (when
   (lang-validate-backend-available-p binary load-function)
   (funcall load-function)
@@ -194,6 +198,7 @@ or a package load function (e.g., \\='flymake-shellcheck-load).
 Validates backend configuration against `flymake-backend-registry':
 - Uses `:type' property to determine backend type (preferred method)
 - Validates mode compatibility for registered backends
+- Validates binary name matches `:binary' property (if present)
 - Falls back to naming convention (-load suffix) for unregistered backends
 
 Automatically detects function type:
@@ -222,6 +227,9 @@ If BINARY is not found in PATH, setup is silently skipped."
 
    ;; Validation: Check mode compatibility (using helper)
    (flymake--check-mode-compatibility function spec)
+
+   ;; Validation: Check binary name matches registry
+   (flymake--validate-binary-name function binary)
 
    ;; Determine backend type: use registry first, fallback to heuristic
    (setq

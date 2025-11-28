@@ -31,27 +31,32 @@
     (sh-mode sh-ts-mode bash-ts-mode)
     :abbreviation "f-s--"
     :loader flymake-shellcheck-load
-    :type loader-based)
+    :type loader-based
+    :binary "shellcheck")
    (sh-shellcheck-flymake
     "ShellCheck built-in"
     (sh-mode sh-ts-mode bash-ts-mode)
     :abbreviation "s-s-f"
-    :type direct)
+    :type direct
+    :binary "shellcheck")
    (flymake-collection-yamllint
     "YAMLLint"
     (yaml-mode yaml-ts-mode)
     :abbreviation "f-c-y"
-    :type direct)
+    :type direct
+    :binary "yamllint")
    (flymake-collection-jsonlint
     "JSONLint"
     (js-json-mode json-ts-mode)
     :abbreviation "f-c-j"
-    :type direct)
+    :type direct
+    :binary "jsonlint")
    (flymake-collection-markdownlint
     "MarkdownLint"
     (markdown-mode markdown-ts-mode)
     :abbreviation "f-c-m"
-    :type direct)
+    :type direct
+    :binary "markdownlint")
    (eglot-flymake-backend "Eglot LSP" (multiple) :abbreviation "e-f-b" :type lsp))
  "Registry of Flymake backends with metadata and configuration.
 
@@ -67,9 +72,11 @@ Properties:
 - :abbreviation - Short identifier used in diagnostics buffer (e.g., \\='e-f-b\\=')
 - :loader - Function symbol to call for loading this backend (optional)
 - :type - Backend type: \\='direct, \\='loader-based, or \\='lsp
+- :binary - Expected binary name for validation (optional, e.g., \"yamllint\")
 
 Example:
-  (flymake-collection-yamllint \"YAMLLint\" (yaml-mode yaml-ts-mode) :abbreviation \"f-c-y\" :type direct)
+  (flymake-collection-yamllint \"YAMLLint\" (yaml-mode yaml-ts-mode)
+   :abbreviation \"f-c-y\" :type direct :binary \"yamllint\")
 
 This registry stores all backend metadata in one place, replacing the need for
 separate backend and abbreviation mapping constants.")
