@@ -213,7 +213,6 @@ If BINARY is not found in PATH, setup is silently skipped."
  ;; Query registry for backend metadata
  (let* ((spec (flymake--find-backend-spec function))
         (backend-type (when spec (flymake--registry-get-property function :type)))
-        (supported-modes (when spec (nth 2 spec)))
         (use-loader nil))
 
    ;; Validation: Check if backend is registered
@@ -221,11 +220,8 @@ If BINARY is not found in PATH, setup is silently skipped."
     spec
     (core-message-warning "Backend %s not found in registry - using heuristic detection" function))
 
-   ;; Validation: Check mode compatibility
-   (when
-    (and spec (not (eq (car supported-modes) 'multiple)) (not (memq major-mode supported-modes)))
-    (core-message-warning
-     "Backend %s not registered for %s (supports: %s)" function major-mode supported-modes))
+   ;; Validation: Check mode compatibility (using helper)
+   (flymake--check-mode-compatibility function spec)
 
    ;; Determine backend type: use registry first, fallback to heuristic
    (setq
