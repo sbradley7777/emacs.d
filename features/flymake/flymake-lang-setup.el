@@ -191,9 +191,14 @@ BINARY is the executable name (e.g., \"mdl\", \"shellcheck\").
 FUNCTION is either a direct backend (e.g., \\='flymake-collection-markdownlint)
 or a package load function (e.g., \\='flymake-shellcheck-load).
 
-Automatically detects function type based on naming convention:
-- Functions ending with \\='-load\\=' are package load functions
-- Others are direct backend functions
+Validates backend configuration against `flymake-backend-registry':
+- Uses `:type' property to determine backend type (preferred method)
+- Validates mode compatibility for registered backends
+- Falls back to naming convention (-load suffix) for unregistered backends
+
+Automatically detects function type:
+- \\='loader-based backends: Package load functions (e.g., flymake-shellcheck-load)
+- \\='direct backends: Direct backend functions (e.g., flymake-collection-yamllint)
 
 This handles the common pattern where a language has both:
 1. A standalone flymake backend (linter or package)
@@ -205,18 +210,43 @@ IMPORTANT LIMITATION:
   functions we cannot track, and typically handle persistence themselves)
 
 If BINARY is not found in PATH, setup is silently skipped."
- ;; Auto-detect function type and call appropriate setup
- (if
-  (string-suffix-p "-load" (symbol-name function))
-  ;; Package load function - no eglot hook needed
-  ;; Package internally adds its own backend function (e.g., flymake-shellcheck--checker)
-  ;; which we cannot track or persist via our hook mechanism
-  (flymake-lang-setup-package-loader binary function)
-  ;; Direct backend function - add eglot hook for persistence
-  ;; Eglot can reset flymake-diagnostic-functions, so we ensure backend persists
-  (progn
-   (flymake-lang-setup-direct-backend binary function)
-   (lang-add-eglot-backend-hook binary function))))
+ ;; Query registry for backend metadata
+ (let* ((spec (flymake--find-backend-spec function))
+        (backend-type (when spec (flymake--registry-get-property function :type)))
+        (supported-modes (when spec (nth 2 spec)))
+        (use-loader nil))
+
+   ;; Validation: Check if backend is registered
+   (unless
+    spec
+    (core-message-warning "Backend %s not found in registry - using heuristic detection" function))
+
+   ;; Validation: Check mode compatibility
+   (when
+    (and spec (not (eq (car supported-modes) 'multiple)) (not (memq major-mode supported-modes)))
+    (core-message-warning
+     "Backend %s not registered for %s (supports: %s)" function major-mode supported-modes))
+
+   ;; Determine backend type: use registry first, fallback to heuristic
+   (setq
+    use-loader
+    (if
+     backend-type (eq backend-type 'loader-based)
+     ;; Fallback to current string suffix heuristic
+     (string-suffix-p "-load" (symbol-name function))))
+
+   ;; Setup based on type
+   (if
+    use-loader
+    ;; Package load function - no eglot hook needed
+    ;; Package internally adds its own backend function (e.g., flymake-shellcheck--checker)
+    ;; which we cannot track or persist via our hook mechanism
+    (flymake-lang-setup-package-loader binary function)
+    ;; Direct backend function - add eglot hook for persistence
+    ;; Eglot can reset flymake-diagnostic-functions, so we ensure backend persists
+    (progn
+     (flymake-lang-setup-direct-backend binary function)
+     (lang-add-eglot-backend-hook binary function)))))
 
 (provide 'flymake-lang-setup)
 ;;; flymake-lang-setup.el ends here
