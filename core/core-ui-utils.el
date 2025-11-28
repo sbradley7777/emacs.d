@@ -3,6 +3,7 @@
 ;; Utility functions for window management, buffer finding, and UI operations.
 
 ;;; Code:
+(require 'subr-x)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -65,13 +66,96 @@ Example:
    (nreverse result)))
 
 (defun
+ core-ui-utils--column-is-numeric-p (column-index rows)
+ "Check if column at COLUMN-INDEX contain only numeric values in ROWS.
+Returns t if all values are numeric (integers or floats), nil otherwise.
+Empty strings or whitespace-only values are treated as non-numeric."
+ (and
+  rows
+  (cl-every
+   (lambda
+    (row)
+    (let ((value (format "%s" (nth column-index row))))
+      (and
+       (not (string-empty-p (string-trim value)))
+       (string-match-p "\\`[0-9]+\\(?:\\.[0-9]+\\)?\\'" (string-trim value)))))
+   rows)))
+
+(defun
+ core-ui-utils--detect-column-alignments (headers rows)
+ "Detect alignment for each column based on data types.
+HEADERS is the list of column header strings.
+ROWS is the list of data rows.
+Returns a list of alignment symbols: \\='left or \\='right for each column.
+Numeric columns (and their headers) get \\='right alignment."
+ (let ((num-cols (length headers)))
+   (mapcar
+    (lambda (col-idx) (if (core-ui-utils--column-is-numeric-p col-idx rows) 'right 'left))
+    (number-sequence 0 (1- num-cols)))))
+
+(defun
+ core-ui-utils--build-row (columns widths alignments)
+ "Build a data row with vertical borders.
+COLUMNS is a list of column values.
+WIDTHS is a list of column widths.
+ALIGNMENTS is a list of alignment symbols (\\='left or \\='right) for each column.
+Returns formatted row string like: │ Data  │ Data  │ Data  │"
+ (concat
+  "│ "
+  (mapconcat
+   (lambda
+    (triplet)
+    (let* ((col (format "%s" (nth 0 triplet)))
+           (width (nth 1 triplet))
+           (align (nth 2 triplet))
+           (padding (- width (length col))))
+      (if
+       (eq align 'right)
+       (concat (make-string (max 0 padding) ?\s) col)
+       (concat col (make-string (max 0 padding) ?\s)))))
+   (cl-mapcar 'list columns widths alignments) " │ ")
+  " │"))
+
+(defun
+ core-ui-utils--build-border (widths type)
+ "Build a horizontal border line with box-drawing characters.
+WIDTHS is a list of column widths.
+TYPE is \\='top, \\='middle, or \\='bottom.
+Returns border string with appropriate box-drawing characters.
+
+Examples:
+  (core-ui-utils--build-border \\='(5 3 4) \\='top)
+  => \"┌───────┬─────┬──────┐\"
+  (core-ui-utils--build-border \\='(5 3 4) \\='middle)
+  => \"├───────┼─────┼──────┤\"
+  (core-ui-utils--build-border \\='(5 3 4) \\='bottom)
+  => \"└───────┴─────┴──────┘\""
+ (let ((left
+        (pcase type
+          ('top "┌")
+          ('middle "├")
+          ('bottom "└")))
+       (junction
+        (pcase type
+          ('top "┬")
+          ('middle "┼")
+          ('bottom "┴")))
+       (right
+        (pcase type
+          ('top "┐")
+          ('middle "┤")
+          ('bottom "┘"))))
+   (concat left (mapconcat (lambda (width) (make-string (+ width 2) ?─)) widths junction) right)))
+
+(defun
  core-ui-utils-format-table (headers rows)
- "Format HEADERS and ROWS as an aligned table with separators.
+ "Format HEADERS and ROWS as a box-drawing table.
 HEADERS is a list of column header strings.
 ROWS is a list of row data, where each row is a list of column values.
 
-Returns a list of formatted strings (header, separator, and data rows).
+Returns a list of formatted strings with box-drawing characters.
 Uses `core-ui-utils-calculate-column-widths' for dynamic column sizing.
+Automatically right-aligns numeric columns (both headers and data).
 
 Example:
   (core-ui-utils-format-table
@@ -81,21 +165,26 @@ Example:
      (\"Charlie\" \"35\" \"LA\")))
 
 Returns:
-  (\"Name     Age  City\"
-   \"───────  ───  ────\"
-   \"Alice    25   NYC\"
-   \"Bob      30   SF\"
-   \"Charlie  35   LA\")"
+  (\"┌─────────┬─────┬──────┐\"
+   \"│ Name    │ Age │ City │\"
+   \"├─────────┼─────┼──────┤\"
+   \"│ Alice   │  25 │ NYC  │\"
+   \"│ Bob     │  30 │ SF   │\"
+   \"│ Charlie │  35 │ LA   │\"
+   \"└─────────┴─────┴──────┘\")"
  (let* ((col-widths (core-ui-utils-calculate-column-widths headers rows))
-        (format-str (mapconcat (lambda (width) (format "%%-%ds" width)) col-widths "  "))
+        (alignments (core-ui-utils--detect-column-alignments headers rows))
         (lines nil))
-   ;; Header
-   (push (apply 'format format-str headers) lines)
-   ;; Separator
-   (push
-    (apply 'format format-str (mapcar (lambda (width) (make-string width ?─)) col-widths)) lines)
-   ;; Rows
-   (dolist (row rows) (push (apply 'format format-str row) lines))
+   ;; Top border: ┌───┬───┬───┐
+   (push (core-ui-utils--build-border col-widths 'top) lines)
+   ;; Header row: │ Col │ Col │ Col │
+   (push (core-ui-utils--build-row headers col-widths alignments) lines)
+   ;; Header separator: ├───┼───┼───┤
+   (push (core-ui-utils--build-border col-widths 'middle) lines)
+   ;; Data rows: │ Data │ Data │ Data │
+   (dolist (row rows) (push (core-ui-utils--build-row row col-widths alignments) lines))
+   ;; Bottom border: └───┴───┴───┘
+   (push (core-ui-utils--build-border col-widths 'bottom) lines)
    (nreverse lines)))
 
 (defun
