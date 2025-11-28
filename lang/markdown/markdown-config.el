@@ -26,7 +26,7 @@
  (setq markdown-fontify-code-blocks-natively t)
  (visual-line-mode 1)
  (setq fill-column core-fill-column)
- (flymake-lang-setup-dual-backend "mdl" 'flymake-collection-markdownlint))
+ (flymake-lang-setup-dual-backend "markdownlint" 'flymake-collection-markdownlint))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP Configuration
@@ -68,6 +68,6 @@
 (lang-register-dual-mode-hooks markdown markdown-setup-common)
 
 (core-message-lang-loaded
- "Markdown" "markdown-mode and markdown-ts-mode with marksman LSP and mdl linter")
+ "Markdown" "markdown-mode and markdown-ts-mode with marksman LSP and markdownlint linter")
 (provide 'markdown-config)
 ;;; markdown-config.el ends here
