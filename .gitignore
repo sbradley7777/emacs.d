@@ -1,12 +1,89 @@
-# List of all the files that will be ignored by git.
-# Byte-compiled
+#===============================================================================
+# Operating System Artifacts
+#===============================================================================
+# macOS
+.DS_Store
+.DS*
+._*
+.Spotlight-V100
+.Trashes
+# Windows
+Desktop.ini
+Thumbs.db
+# Linux
+.*~
+
+#===============================================================================
+# Editor Artifacts (Generic - applies to any project)
+#===============================================================================
+# Emacs editor temporary files (created when editing ANY project)
+*~
+\#*\#
+.#*
+.~lock.*
+# VS Code / Cursor
+.vscode/
+.cursor/
+# Claude Code
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
+#===============================================================================
+# Version Control Artifacts
+#===============================================================================
+*.patch
+*.diff
+*.orig
+*.rej
+*.bak
+
+#===============================================================================
+# Security - Credentials & Secrets (CRITICAL - always include)
+#===============================================================================
+# Credential files
+secrets/
+.authinfo
+.netrc
+.authinfo.gpg
+.password-store/
+# SSL/TLS certificates and private keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+# SSH private keys
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.ppk
+# Environment files (may contain API keys)
+.env
+.env.local
+.env.*.local
+*.secret
+# Backup directories (may contain secrets from edited files)
+backups/
+auto-saves/
+auto-save-list/
+
+#===============================================================================
+# Language-Specific Artifacts
+#===============================================================================
+# Python
 __pycache__/
 *.py[cod]
-
-# C extensions
 *.so
-
-# Distribution / packaging
+venv/
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+monkeytype.sqlite3
+.coverage/
+# Python packaging
 bin/
 build/
 develop-eggs/
@@ -16,86 +93,73 @@ lib/
 lib64/
 parts/
 sdist/
-var/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
-venv
-.venv
 
-# Folder view configuration files.
-.DS*
-Desktop.ini
+#===============================================================================
+# PROJECT-SPECIFIC: Emacs Configuration
+#===============================================================================
 
-# Thumbnail cache files and backup files.
-._*
-.*~
-Thumbs.db
-
-# Files that might appear on external disks.
-.Spotlight-V100
-.Trashes
-
-# Patch/diff artifacts.
-*.patch
-*.diff
-*.orig
-*.rej
-
-# Backups
-*.bak
-
-# Configuration files and caches.
-.mypy_cache/
-.ruff_cache/
-.pytype/
-monkeytype.sqlite3
-.coverage/
-.vscode/
-.cursor/
-
-# Claude Code project configuration
-CLAUDE.md
-CLAUDE.local.md
-.claude/
-
-# Emacs artifacts or files created by emacs
-*~
-\#*\#
-*.elc
-.#*
+#===============================================================================
+# Machine-Specific Configuration Files
+#===============================================================================
 /custom.el
 /local.el
 /dev.el
-package-state-cache.el
 local/
+
+#===============================================================================
+# Emacs Byte-Compiled Files
+#===============================================================================
+*.elc
+
+#===============================================================================
+# Emacs Package Management
+#===============================================================================
+package-state-cache.el
 eln-cache/
 elpa/
+straight/
+
+#===============================================================================
+# Emacs State & History Files
+#===============================================================================
 history
 recentf
 places
-tramp-autosave/
-tramp-cache
 bookmarks
 abbrev_defs
 savehist
 session.*
+
+#===============================================================================
+# Emacs Plugin/Package Data & Caches
+#===============================================================================
+# General caches
 transient/
-url/
-forge-database.sqlite
-projectile*
-semanticdb/
-srecode-map.el
-eshell/
-request/
-anaconda-mode/
-.org-id-locations
-org-roam.db
-straight/
 var/
 etc/
 .cache/
 .local/
 log/
+# Network/Remote access
+url/
+tramp-autosave/
+tramp-cache
 network-security.data
+# Project management
+projectile*
+forge-database.sqlite
+# Language support
+semanticdb/
+srecode-map.el
+anaconda-mode/
+# Shell
+eshell/
+# HTTP requests
+request/
+# Org-mode
+.org-id-locations
+org-roam.db
