@@ -8,7 +8,7 @@
 (require 'core-ui-utils)
 (require 'core-utils)
 (require 'features-constants)
-(require 'flymake-constants)
+(require 'flymake-registry)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
@@ -24,92 +24,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- flymake--mode-compatible-p (supported-modes)
- "Check if current `major-mode' is compatible with SUPPORTED-MODES.
-Returns t if current mode matches exactly or derives from any supported mode.
-Handles special case where SUPPORTED-MODES is (multiple).
-
-SUPPORTED-MODES is a list of mode symbols from registry entry."
- (or
-  (eq (car supported-modes) 'multiple)
-  (memq major-mode supported-modes)
-  (cl-some (lambda (mode) (derived-mode-p mode)) supported-modes)))
-
-(defun
- flymake--validate-binary-name (function binary)
- "Validate BINARY name against registry for FUNCTION.
-Returns t if valid or no :binary property exists, nil if mismatch.
-Logs warning message when mismatch detected.
-
-FUNCTION is the backend function symbol.
-BINARY is the executable name being passed to setup."
- (let ((expected-binary (flymake--registry-get-property function :binary)))
-   (if
-    (and expected-binary (not (string= binary expected-binary)))
-    (progn
-     (core-message-warning
-      "Backend %s expects binary '%s' but '%s' was specified" function expected-binary binary)
-     nil)
-    t)))
-
-(defun
- flymake--validate-backend-type (function expected-type)
- "Validate that FUNCTION has EXPECTED-TYPE in registry.
-EXPECTED-TYPE should be \\='direct, \\='loader-based, or \\='lsp.
-Returns t if valid or not registered, nil if type mismatch.
-Logs warning message when mismatch detected.
-
-FUNCTION is the backend function symbol.
-EXPECTED-TYPE is the type this function should have in the registry."
- (let ((actual-type (flymake--registry-get-property function :type)))
-   (if
-    (and actual-type (not (eq actual-type expected-type)))
-    (progn
-     (core-message-warning
-      "Backend %s registered as %s but called as %s backend" function actual-type expected-type)
-     nil)
-    t)))
-
-(defun
- flymake--validate-registry-entry (entry)
- "Validate a single registry ENTRY for completeness.
-Returns nil if valid, error message string if invalid.
-Does not signal errors, only returns validation result.
-
-ENTRY is a registry entry in format (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)."
- (let ((func (nth 0 entry))
-       (desc (nth 1 entry))
-       (modes (nth 2 entry))
-       (props (nthcdr 3 entry)))
-   (cond
-    ((not (plist-get props :type))
-     (format "Registry entry for %s missing :type property" func))
-    ((not (memq (plist-get props :type) '(direct loader-based lsp)))
-     (format "Registry entry for %s has invalid :type: %s" func (plist-get props :type)))
-    ((not (plist-get props :abbreviation))
-     (format "Registry entry for %s missing :abbreviation property" func))
-    (t
-     nil))))
-
-(defun
- flymake--check-mode-compatibility (function spec)
- "Check mode compatibility for FUNCTION using SPEC from registry.
-Returns t if compatible or spec is nil.
-Logs warning if mode incompatible but does not error.
-
-FUNCTION is the backend function symbol.
-SPEC is the full registry entry or nil if backend not registered."
- (if
-  (not spec) t
-  (let ((supported-modes (nth 2 spec)))
-    (if
-     (flymake--mode-compatible-p supported-modes) t
-     (progn
-      (core-message-warning
-       "Backend %s not registered for %s (supports: %s)" function major-mode supported-modes)
-      nil)))))
-
 (defun
  flymake--get-active-backends ()
  "Get list of active Flymake backends for current buffer.
@@ -162,31 +76,6 @@ Returns list of formatted strings describing each backend."
          (push (format "  - %s" backend) lines)))))
     (push "Active Backends: None" lines))
    (nreverse lines)))
-
-(defun
- flymake--find-backend-spec (backend-symbol)
- "Find backend specification in `flymake-backend-registry' for BACKEND-SYMBOL.
-Returns the backend spec entry (FUNCTION-SYMBOL DESCRIPTION MODES) or nil if not found."
- (assq backend-symbol flymake-backend-registry))
-
-(defun
- flymake--get-backend-description (backend-symbol)
- "Get human-readable description for BACKEND-SYMBOL.
-Looks up the backend in `flymake-backend-registry' and returns its description.
-Falls back to the backend function name if not found in registry."
- (let ((spec (flymake--find-backend-spec backend-symbol)))
-   (if spec (nth 1 spec) (format "%s" backend-symbol))))
-
-(defun
- flymake--registry-get-property (backend-symbol property)
- "Get PROPERTY for BACKEND-SYMBOL from `flymake-backend-registry'.
-PROPERTY is a keyword like :abbreviation, :loader, or :type.
-Returns nil if backend not found or property not set.
-
-The registry format is (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)
-where PROPERTIES is a plist starting at index 3."
- (let ((spec (assq backend-symbol flymake-backend-registry)))
-   (when spec (plist-get (nthcdr 3 spec) property))))
 
 (defun
  flymake--get-lsp-config ()

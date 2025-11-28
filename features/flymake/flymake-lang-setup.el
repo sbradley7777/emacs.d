@@ -9,6 +9,7 @@
 
 ;;; Code:
 (require 'flymake)
+(require 'flymake-registry)
 (require 'core-utils)
 
 ;; External declarations
