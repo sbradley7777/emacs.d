@@ -5,6 +5,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-logging)
+(require 'core-logging-tables)
 (require 'core-ui-utils)
 (require 'core-utils)
 (require 'features-constants)
@@ -212,7 +213,7 @@ supported major modes.  Marks backends active in the current buffer."
         (info-lines (flymake--build-buffer-info-lines diagnostic-counts active-backends))
         (backend-data (flymake--build-backend-table-data active-backends))
         (table-lines
-         (core-ui-utils-format-table
+         (core-logging-format-table
           '("Status" "Backend" "Description" "Major Modes") backend-data))
         (lines nil))
    ;; Combine buffer info and table
