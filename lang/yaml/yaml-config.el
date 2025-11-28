@@ -21,7 +21,7 @@
  "Common setup for both `yaml-mode' and yaml-ts-mode."
  (lang-setup-minimal 'yaml-indent-offset 2)
  (local-set-key (kbd "C-m") 'newline-and-indent)
- (flymake-lang-setup-dual-backend "yamllint" 'flymake-collection-yamllint))
+ (flymake-lang-setup-dual-backend 'flymake-collection-yamllint))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; YAML Mode Configuration

@@ -24,9 +24,10 @@
  lang-validate-backend-available-p (binary backend-function)
  "Return non-nil if BINARY exists in PATH and BACKEND-FUNCTION is defined.
 BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\", \"shellcheck\").
+If BINARY is nil, no binary check is performed (for backends without executables).
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 This is the standard validation check used before enabling any flymake backend."
- (and (core-utils-check-command-in-path binary) (fboundp backend-function)))
+ (and (or (null binary) (core-utils-check-command-in-path binary)) (fboundp backend-function)))
 
 (defun
  lang-setup-flymake-backend (binary backend-function)
@@ -77,30 +78,29 @@ Delegates to `flymake-schedule-backend-check' for timer management."
 ;; Backend Setup Function Selection Guide:
 ;;
 ;; These functions provide standardized patterns for setting up Flymake diagnostics in language modes.
-;; Choose the appropriate function based on the tools available for your language.
+;; All binary names are automatically looked up from `flymake-backend-registry'.
+;; Backend functions MUST be registered in the registry with :binary property set.
 ;;
 ;; 1. `flymake-lang-setup-direct-backend'
 ;;    When to use:
 ;;      - Language has a standalone linter with a direct backend function
 ;;      - Backend function comes from flymake-collection or similar packages
-;;      - You know the exact backend function symbol to register
 ;;      - No LSP server is configured for this language
 ;;    Examples:
 ;;      - YAML: flymake-collection-yamllint (when not using LSP)
 ;;      - JSON: flymake-collection-jsonlint (when not using LSP)
 ;;    Usage:
-;;      (flymake-lang-setup-direct-backend "yamllint" 'flymake-collection-yamllint)
+;;      (flymake-lang-setup-direct-backend 'flymake-collection-yamllint)
 ;;
 ;; 2. `flymake-lang-setup-package-loader'
 ;;    When to use:
 ;;      - Flymake package provides its own -load function
 ;;      - Load function handles backend registration internally
-;;      - You do NOT know the internal backend function name
 ;;      - No LSP server is configured for this language
 ;;    Examples:
-;;      - Bash/Shell: shellcheck via flymake-shellcheck-load
+;;      - Bash/Shell: flymake-shellcheck-load
 ;;    Usage:
-;;      (flymake-lang-setup-package-loader "shellcheck" 'flymake-shellcheck-load)
+;;      (flymake-lang-setup-package-loader 'flymake-shellcheck-load)
 ;;
 ;; 3. `flymake-lang-setup-lsp-backend'
 ;;    When to use:
@@ -121,12 +121,12 @@ Delegates to `flymake-schedule-backend-check' for timer management."
 ;;      - Linter catches style issues LSP might miss
 ;;      - LSP provides semantic analysis linter cannot do
 ;;    Examples:
-;;      - YAML: yamllint (style rules) + yaml-language-server (schema validation)
-;;      - JSON: jsonlint (syntax) + vscode-json-languageserver (schemas)
-;;      - Markdown: mdl (markdown style) + marksman (cross-references, links)
+;;      - YAML: flymake-collection-yamllint + yaml-language-server
+;;      - JSON: flymake-collection-jsonlint + vscode-json-languageserver
+;;      - Markdown: flymake-collection-markdownlint + marksman
 ;;    Usage:
-;;      (flymake-lang-setup-dual-backend "yamllint" 'flymake-collection-yamllint)
-;;      (flymake-lang-setup-dual-backend "shellcheck" 'flymake-shellcheck-load)
+;;      (flymake-lang-setup-dual-backend 'flymake-collection-yamllint)
+;;      (flymake-lang-setup-dual-backend 'flymake-shellcheck-load)
 ;;
 ;; Auto-detection in dual backend:
 ;;   The dual function automatically detects the function type:
@@ -145,39 +145,50 @@ Delegates to `flymake-schedule-backend-check' for timer management."
 ;;     No  -> Use #3 (flymake-lang-setup-lsp-backend)
 
 (defun
- flymake-lang-setup-direct-backend
- (binary backend-function)
+ flymake-lang-setup-direct-backend (backend-function)
  "Set up direct flymake backend (standalone, no LSP).
-BINARY is the executable name (e.g., \"jsonlint\").
 BACKEND-FUNCTION is the flymake backend symbol (e.g., \\='flymake-collection-jsonlint).
+
+Binary name is automatically looked up from `flymake-backend-registry' :binary property.
+Errors if backend is not registered or missing :binary property.
 
 For languages that only have a standalone linter, no LSP server.
 Uses direct backend functions that are manually added to `flymake-diagnostic-functions'.
 
-If BINARY is not found in PATH, setup is silently skipped."
+If binary is not found in PATH, setup is silently skipped."
  ;; Validation: Check backend type is 'direct
  (flymake--validate-backend-type backend-function 'direct)
- (lang-setup-flymake-backend binary backend-function)
- (flymake-mode 1)
- (lang-trigger-flymake-check-timer))
+ (let* ((spec (flymake--find-backend-spec backend-function))
+        (binary (when spec (flymake--get-backend-binary backend-function))))
+   (unless spec (error "Backend %s not found in flymake-backend-registry" backend-function))
+   (unless binary (error "Backend %s missing :binary property in registry" backend-function))
+   (lang-setup-flymake-backend binary backend-function)
+   (flymake-mode 1)
+   (lang-trigger-flymake-check-timer)))
 
 (defun
- flymake-lang-setup-package-loader (binary load-function)
+ flymake-lang-setup-package-loader (load-function)
  "Set up package-based flymake backend (standalone, no LSP).
-BINARY is the executable name (e.g., \"shellcheck\", \"ruff\").
 LOAD-FUNCTION is the package setup function symbol (e.g., \\='flymake-shellcheck-load).
 
-For flymake packages that provide their own load functions instead of
-direct backend functions. The load function typically handles adding
-the backend to `flymake-diagnostic-functions' and enabling flymake-mode.
+Binary name is automatically looked up from `flymake-backend-registry' :binary property.
+Errors if backend is not registered or missing :binary property.
 
-If BINARY is not found in PATH, setup is silently skipped."
+For flymake packages that provide their own load functions instead of
+direct backend functions.  The load function typically handles adding
+the backend to `flymake-diagnostic-functions' and enabling `flymake-mode'.
+
+If binary is not found in PATH, setup is silently skipped."
  ;; Validation: Check backend type is 'loader-based
  (flymake--validate-backend-type load-function 'loader-based)
- (when
-  (lang-validate-backend-available-p binary load-function)
-  (funcall load-function)
-  (lang-trigger-flymake-check-timer)))
+ (let* ((spec (flymake--find-backend-spec load-function))
+        (binary (when spec (flymake--get-backend-binary load-function))))
+   (unless spec (error "Backend %s not found in flymake-backend-registry" load-function))
+   (unless binary (error "Backend %s missing :binary property in registry" load-function))
+   (when
+    (lang-validate-backend-available-p binary load-function)
+    (funcall load-function)
+    (lang-trigger-flymake-check-timer))))
 
 (defun
  flymake-lang-setup-lsp-backend ()
@@ -190,17 +201,18 @@ taplo for TOML) and do not have a separate standalone linter."
  (flymake-mode 1))
 
 (defun
- flymake-lang-setup-dual-backend (binary function)
+ flymake-lang-setup-dual-backend (function)
  "Set up dual flymake backend: direct or package + LSP via eglot.
-BINARY is the executable name (e.g., \"mdl\", \"shellcheck\").
 FUNCTION is either a direct backend (e.g., \\='flymake-collection-markdownlint)
 or a package load function (e.g., \\='flymake-shellcheck-load).
+
+Binary name is automatically looked up from `flymake-backend-registry' :binary property.
+Errors if backend is not registered or missing :binary property.
 
 Validates backend configuration against `flymake-backend-registry':
 - Uses `:type' property to determine backend type (preferred method)
 - Validates mode compatibility for registered backends
-- Validates binary name matches `:binary' property (if present)
-- Falls back to naming convention (-load suffix) for unregistered backends
+- Requires :binary property to be set in registry
 
 Automatically detects function type:
 - \\='loader-based backends: Package load functions (e.g., flymake-shellcheck-load)
@@ -215,23 +227,21 @@ IMPORTANT LIMITATION:
 - Package backends: Does NOT add eglot hook (package backends add internal
   functions we cannot track, and typically handle persistence themselves)
 
-If BINARY is not found in PATH, setup is silently skipped."
+If binary is not found in PATH, setup is silently skipped."
  ;; Query registry for backend metadata
  (let* ((spec (flymake--find-backend-spec function))
         (backend-type (when spec (flymake--registry-get-property function :type)))
+        (binary (when spec (flymake--get-backend-binary function)))
         (use-loader nil))
 
    ;; Validation: Check if backend is registered
-   (unless
-    spec
-    (let ((msg (format "Backend %s not found in registry - using heuristic detection" function)))
-      (if flymake-require-registry-entry (error "%s" msg) (core-message-warning "%s" msg))))
+   (unless spec (error "Backend %s not found in flymake-backend-registry" function))
+
+   ;; Validation: Check binary is defined
+   (unless binary (error "Backend %s missing :binary property in registry" function))
 
    ;; Validation: Check mode compatibility (using helper)
    (flymake--check-mode-compatibility function spec)
-
-   ;; Validation: Check binary name matches registry
-   (flymake--validate-binary-name function binary)
 
    ;; Determine backend type: use registry first, fallback to heuristic
    (setq
@@ -247,12 +257,11 @@ If BINARY is not found in PATH, setup is silently skipped."
     ;; Package load function - no eglot hook needed
     ;; Package internally adds its own backend function (e.g., flymake-shellcheck--checker)
     ;; which we cannot track or persist via our hook mechanism
-    (flymake-lang-setup-package-loader binary function)
+    (flymake-lang-setup-package-loader function)
     ;; Direct backend function - add eglot hook for persistence
     ;; Eglot can reset flymake-diagnostic-functions, so we ensure backend persists
     (progn
-     (flymake-lang-setup-direct-backend binary function)
-     (lang-add-eglot-backend-hook binary function)))))
+     (flymake-lang-setup-direct-backend function) (lang-add-eglot-backend-hook binary function)))))
 
 (provide 'flymake-lang-setup)
 ;;; flymake-lang-setup.el ends here

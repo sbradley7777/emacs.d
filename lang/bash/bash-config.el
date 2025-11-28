@@ -21,7 +21,7 @@
  ()
  "Common setup for both `sh-mode' and bash-ts-mode."
  (lang-setup-full 'sh-basic-offset core-tab-width '((sh-indentation . core-tab-width)))
- (flymake-lang-setup-package-loader "shellcheck" 'flymake-shellcheck-load))
+ (flymake-lang-setup-package-loader 'flymake-shellcheck-load))
 
 (defun
  enhance-bash-syntax-highlighting ()

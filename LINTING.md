@@ -261,19 +261,41 @@ Create `lang/{language}/{language}-config.el` following the standard structure:
 ;;; language-config.el ends here
 ```
 
-### 2. Choose Backend Setup Function
+### 2. Register Backend (if using standalone linter)
 
-Select the appropriate backend setup based on available tools:
+Add entry to `features/flymake/flymake-registry.el`:
+
+```elisp
+(defconst flymake-backend-registry
+  '(...
+    (flymake-collection-linter
+     "Linter Name"
+     (language-mode language-ts-mode)
+     :abbreviation "f-c-l"
+     :type direct
+     :binary "linter-binary")
+    ...))
+```
+
+**Required properties:**
+- `:abbreviation` - Short identifier for diagnostics buffer (e.g., "f-c-l")
+- `:type` - Backend type: `direct`, `loader-based`, or `lsp`
+- `:binary` - Expected binary name for validation (e.g., "yamllint")
+
+### 3. Choose Backend Setup Function
+
+Select the appropriate backend setup based on available tools.
+Binary names are automatically looked up from the registry.
 
 #### Option A: Standalone linter only
 ```elisp
-(flymake-lang-setup-direct-backend "linter-binary" 'flymake-collection-linter)
+(flymake-lang-setup-direct-backend 'flymake-collection-linter)
 ```
 **Use when:** Language has a standalone linter but no LSP server
 
 #### Option B: Package with -load function
 ```elisp
-(flymake-lang-setup-package-loader "tool-binary" 'flymake-tool-load)
+(flymake-lang-setup-package-loader 'flymake-tool-load)
 ```
 **Use when:** Flymake package provides a `-load` function that handles setup
 
@@ -285,20 +307,9 @@ Select the appropriate backend setup based on available tools:
 
 #### Option D: Both linter and LSP (dual backend)
 ```elisp
-(flymake-lang-setup-dual-backend "linter-binary" 'flymake-collection-linter)
+(flymake-lang-setup-dual-backend 'flymake-collection-linter)
 ```
 **Use when:** Both standalone linter and LSP provide complementary value
-
-### 3. Register Backend (if using standalone linter)
-
-Add entry to `features/flymake/flymake-constants.el`:
-
-```elisp
-(defconst flymake-backend-registry
-  '(...
-    (flymake-collection-linter "Linter Name" (language-mode language-ts-mode))
-    ...))
-```
 
 ### 4. Configure LSP Server (if using LSP)
 

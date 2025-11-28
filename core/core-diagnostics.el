@@ -7,6 +7,7 @@
 (require 'core-logging)
 (require 'tree-sitter-utils)
 (require 'core-process-utils)
+(require 'eglot-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
@@ -220,15 +221,28 @@ Only checks when working on a remote file."
    (list :status 'warning :message "TRAMP remote PATH may not use remote user's PATH"))))
 
 (defun
- diagnostics-check-lsp-servers () "Check LSP server availability for configured languages."
- (let ((results nil))
-   (push (diagnostics-check-executable "pylsp" "Python LSP (pylsp)" t) results)
-   (push (diagnostics-check-executable "clangd" "C/C++ LSP (clangd)" t) results)
-   (push (diagnostics-check-executable "bash-language-server" "Bash LSP" t) results)
-   (push (diagnostics-check-executable "vscode-json-language-server" "JSON LSP" t) results)
-   (push (diagnostics-check-executable "yaml-language-server" "YAML LSP" t) results)
-   (push (diagnostics-check-executable "taplo" "TOML LSP (taplo)" t) results)
-   (push (diagnostics-check-executable "marksman" "Markdown LSP (marksman)" t) results)
+ diagnostics-check-lsp-servers ()
+ "Check LSP server availability for configured languages.
+Uses `features-eglot-lsp-server-map' to automatically check all registered LSP servers."
+ (let ((results nil)
+       (checked-binaries (make-hash-table :test 'equal)))
+   ;; Iterate through eglot LSP server map from registry
+   (dolist
+    (mode-config features-eglot-lsp-server-map)
+    (let* ((mode (car mode-config))
+           (binary (cdr mode-config))
+           (mode-name (symbol-name mode)))
+      ;; Only check each binary once (avoid duplicates for ts-mode variants)
+      (unless
+       (gethash binary checked-binaries) (puthash binary t checked-binaries)
+       (push
+        (diagnostics-check-executable binary
+                                      (format
+                                       "%s LSP (%s)"
+                                       (capitalize (replace-regexp-in-string "-.*" "" mode-name))
+                                       binary)
+                                      t)
+        results))))
    results))
 
 (defun

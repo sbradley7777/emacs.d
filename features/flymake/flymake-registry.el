@@ -152,6 +152,13 @@ Falls back to the backend function name if not found in registry."
  (let ((spec (flymake--find-backend-spec backend-symbol)))
    (if spec (nth 1 spec) (format "%s" backend-symbol))))
 
+(defun
+ flymake--get-backend-binary (backend-symbol)
+ "Get expected binary name for BACKEND-SYMBOL from registry.
+Returns the :binary property value if set, nil otherwise.
+BACKEND-SYMBOL is the backend function symbol to look up."
+ (flymake--registry-get-property backend-symbol :binary))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Validation Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

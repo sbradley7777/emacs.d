@@ -26,7 +26,7 @@
  (setq markdown-fontify-code-blocks-natively t)
  (visual-line-mode 1)
  (setq fill-column core-fill-column)
- (flymake-lang-setup-dual-backend "markdownlint" 'flymake-collection-markdownlint))
+ (flymake-lang-setup-dual-backend 'flymake-collection-markdownlint))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Markdown Mode Configuration
