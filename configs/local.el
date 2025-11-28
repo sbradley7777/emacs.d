@@ -134,7 +134,23 @@
 ;;   M-x core-logging-save-debug-buffers  - Save debug buffers immediately
 
 ;; ============================================
-;; 9. ADDITIONAL EXAMPLES (COMMENTED OUT)
+;; 9. FLYMAKE STRICT VALIDATION (OPTIONAL)
+;; ============================================
+;; Enable strict validation modes for Flymake backend configuration.
+;; By default, all validation is warnings-only (non-breaking).
+;; These options enforce stricter checking, useful for development/testing.
+
+;; Validate registry on load - errors if any registry entry is invalid
+;; (setq flymake-strict-validation t)
+
+;; Require all backends to be registered - errors if backend not in registry
+;; (setq flymake-require-registry-entry t)
+
+;; Error on mode compatibility mismatches - errors instead of warning
+;; (setq flymake-strict-mode-checking t)
+
+;; ============================================
+;; 10. ADDITIONAL EXAMPLES (COMMENTED OUT)
 ;; ============================================
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)

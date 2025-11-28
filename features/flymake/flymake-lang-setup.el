@@ -224,7 +224,8 @@ If BINARY is not found in PATH, setup is silently skipped."
    ;; Validation: Check if backend is registered
    (unless
     spec
-    (core-message-warning "Backend %s not found in registry - using heuristic detection" function))
+    (let ((msg (format "Backend %s not found in registry - using heuristic detection" function)))
+      (if flymake-require-registry-entry (error "%s" msg) (core-message-warning "%s" msg))))
 
    ;; Validation: Check mode compatibility (using helper)
    (flymake--check-mode-compatibility function spec)
