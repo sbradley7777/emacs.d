@@ -31,11 +31,10 @@
     (emacs-lisp-mode lisp-interaction-mode)
     :abbreviation "e-f-c"
     :type direct)
-   (flymake-shellcheck--backend
+   (flymake-shellcheck-load
     "ShellCheck linter"
     (sh-mode sh-ts-mode bash-ts-mode)
     :abbreviation "f-s--"
-    :loader flymake-shellcheck-load
     :type loader-based
     :binary "shellcheck")
    (sh-shellcheck-flymake
