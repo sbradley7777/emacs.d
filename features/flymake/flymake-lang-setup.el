@@ -89,14 +89,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Low-Level Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- lang-validate-backend-available-p (binary backend-function)
- "Return non-nil if BINARY exists in PATH and BACKEND-FUNCTION is defined.
-BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\", \"shellcheck\").
-If BINARY is nil, no binary check is performed (for backends without executables).
-BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
-This is the standard validation check used before enabling any flymake backend."
- (and (or (null binary) (core-utils-check-command-in-path binary)) (fboundp backend-function)))
 
 (defun
  lang-setup-flymake-backend (binary backend-function)
@@ -105,7 +97,7 @@ BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 Adds BACKEND-FUNCTION to `flymake-diagnostic-functions' buffer-locally."
  (when
-  (lang-validate-backend-available-p binary backend-function)
+  (flymake-registry-backend-available-p binary backend-function)
   (add-hook 'flymake-diagnostic-functions backend-function nil t)))
 
 (defun
@@ -117,7 +109,7 @@ Eglot can sometimes reset the diagnostic functions list, so we re-add the backen
  (when
   (and
    (bound-and-true-p eglot--managed-mode)
-   (lang-validate-backend-available-p binary backend-function))
+   (flymake-registry-backend-available-p binary backend-function))
   (unless
    (memq backend-function flymake-diagnostic-functions)
    (add-hook 'flymake-diagnostic-functions backend-function nil t)
@@ -160,8 +152,8 @@ Uses direct backend functions that are manually added to `flymake-diagnostic-fun
 If binary is not found in PATH, setup is silently skipped."
  ;; Validation: Check backend type is 'direct
  (flymake--validate-backend-type backend-function 'direct)
- (let* ((spec (flymake--find-backend-spec backend-function))
-        (binary (when spec (flymake--get-backend-binary backend-function))))
+ (let* ((spec (flymake-registry-find-backend backend-function))
+        (binary (when spec (flymake-registry-get-binary backend-function))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" backend-function))
    (unless binary (error "Backend %s missing :binary property in registry" backend-function))
    (lang-setup-flymake-backend binary backend-function)
@@ -183,12 +175,12 @@ the backend to `flymake-diagnostic-functions' and enabling `flymake-mode'.
 If binary is not found in PATH, setup is silently skipped."
  ;; Validation: Check backend type is 'loader-based
  (flymake--validate-backend-type load-function 'loader-based)
- (let* ((spec (flymake--find-backend-spec load-function))
-        (binary (when spec (flymake--get-backend-binary load-function))))
+ (let* ((spec (flymake-registry-find-backend load-function))
+        (binary (when spec (flymake-registry-get-binary load-function))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" load-function))
    (unless binary (error "Backend %s missing :binary property in registry" load-function))
    (when
-    (lang-validate-backend-available-p binary load-function)
+    (flymake-registry-backend-available-p binary load-function)
     (funcall load-function)
     (lang-trigger-flymake-check-timer))))
 
@@ -231,9 +223,9 @@ DESIGN NOTE:
 
 If binary is not found in PATH, setup is silently skipped."
  ;; Query registry for backend metadata
- (let* ((spec (flymake--find-backend-spec function))
-        (backend-type (when spec (flymake--registry-get-property function :type)))
-        (binary (when spec (flymake--get-backend-binary function)))
+ (let* ((spec (flymake-registry-find-backend function))
+        (backend-type (when spec (flymake-registry-get-property function :type)))
+        (binary (when spec (flymake-registry-get-binary function)))
         (use-loader nil))
 
    ;; Validation: Check if backend is registered

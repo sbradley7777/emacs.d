@@ -127,13 +127,13 @@ This is a strict mode option that prevents invalid configurations."
 ;; Registry Query Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- flymake--find-backend-spec (backend-symbol)
+ flymake-registry-find-backend (backend-symbol)
  "Find backend specification in `flymake-backend-registry' for BACKEND-SYMBOL.
 Returns the backend spec entry (FUNCTION-SYMBOL DESCRIPTION MODES) or nil if not found."
  (assq backend-symbol flymake-backend-registry))
 
 (defun
- flymake--registry-get-property (backend-symbol property)
+ flymake-registry-get-property (backend-symbol property)
  "Get PROPERTY for BACKEND-SYMBOL from `flymake-backend-registry'.
 PROPERTY is a keyword like :abbreviation, :loader, or :type.
 Returns nil if backend not found or property not set.
@@ -144,23 +144,32 @@ where PROPERTIES is a plist starting at index 3."
    (when spec (plist-get (nthcdr 3 spec) property))))
 
 (defun
- flymake--get-backend-description (backend-symbol)
+ flymake-registry-get-description (backend-symbol)
  "Get human-readable description for BACKEND-SYMBOL.
 Looks up the backend in `flymake-backend-registry' and returns its description.
 Falls back to the backend function name if not found in registry."
- (let ((spec (flymake--find-backend-spec backend-symbol)))
+ (let ((spec (flymake-registry-find-backend backend-symbol)))
    (if spec (nth 1 spec) (format "%s" backend-symbol))))
 
 (defun
- flymake--get-backend-binary (backend-symbol)
+ flymake-registry-get-binary (backend-symbol)
  "Get expected binary name for BACKEND-SYMBOL from registry.
 Returns the :binary property value if set, nil otherwise.
 BACKEND-SYMBOL is the backend function symbol to look up."
- (flymake--registry-get-property backend-symbol :binary))
+ (flymake-registry-get-property backend-symbol :binary))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Validation Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ flymake-registry-backend-available-p (binary backend-function)
+ "Return non-nil if BINARY exists in PATH and BACKEND-FUNCTION is defined.
+BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\", \"shellcheck\").
+If BINARY is nil, no binary check is performed (for backends without executables).
+BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
+This is the standard validation check used before enabling any flymake backend."
+ (and (or (null binary) (executable-find binary)) (fboundp backend-function)))
+
 (defun
  flymake--mode-compatible-p (supported-modes)
  "Check if current `major-mode' is compatible with SUPPORTED-MODES.
@@ -181,7 +190,7 @@ Logs warning message when mismatch detected.
 
 FUNCTION is the backend function symbol.
 BINARY is the executable name being passed to setup."
- (let ((expected-binary (flymake--registry-get-property function :binary)))
+ (let ((expected-binary (flymake-registry-get-property function :binary)))
    (if
     (and expected-binary (not (string= binary expected-binary)))
     (progn
@@ -199,7 +208,7 @@ Logs warning message when mismatch detected.
 
 FUNCTION is the backend function symbol.
 EXPECTED-TYPE is the type this function should have in the registry."
- (let ((actual-type (flymake--registry-get-property function :type)))
+ (let ((actual-type (flymake-registry-get-property function :type)))
    (if
     (and actual-type (not (eq actual-type expected-type)))
     (progn

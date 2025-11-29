@@ -70,7 +70,7 @@ Returns list of formatted strings describing each backend."
      (push (format "Active Backends (%d):" (length active-backends)) lines)
      (dolist
       (backend active-backends)
-      (let ((backend-spec (flymake--find-backend-spec backend)))
+      (let ((backend-spec (flymake-registry-find-backend backend)))
         (if
          backend-spec
          (push (format "  - %s (%s)" (nth 1 backend-spec) backend) lines)
@@ -185,7 +185,7 @@ still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-serve
      (active-backends
       (let ((backend-names
              (mapconcat
-              (lambda (backend) (flymake--get-backend-description backend)) active-backends ", ")))
+              (lambda (backend) (flymake-registry-get-description backend)) active-backends ", ")))
         (core-message-success "Flymake: Active backends for %s: %s" mode-name backend-names)))
      ;; Case 2: LSP configured but server not installed
      ((and lsp-config lsp-server (not (executable-find lsp-server)))
@@ -472,9 +472,9 @@ Examples:
   Direct backend: (:type direct :binary \"shellcheck\" :installed nil)
   Loader backend: (:type loader-based :binary nil :installed t)
   Built-in:       (:type direct :binary \"(built-in)\" :installed t)"
- (let* ((backend-type (flymake--registry-get-property backend-symbol :type))
-        (binary-name (flymake--registry-get-property backend-symbol :binary))
-        (modes (nth 2 (flymake--find-backend-spec backend-symbol))))
+ (let* ((backend-type (flymake-registry-get-property backend-symbol :type))
+        (binary-name (flymake-registry-get-property backend-symbol :binary))
+        (modes (nth 2 (flymake-registry-find-backend backend-symbol))))
    (cond
     ;; LSP backend
     ((eq backend-type 'lsp)
@@ -511,7 +511,7 @@ Returns list of validation issues, or nil if all valid."
          (issues nil))
      (dolist
       (backend active-backends)
-      (let ((spec (flymake--find-backend-spec backend)))
+      (let ((spec (flymake-registry-find-backend backend)))
         (unless
          spec
          (push (format "Buffer %s: Backend %s not in registry" (buffer-name) backend) issues))))
