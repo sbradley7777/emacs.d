@@ -487,9 +487,9 @@ Examples:
        (list :type 'lsp :lsp-server (or lsp-server "-") :installed (if installed t nil))))
     ;; Direct backend with binary
     ((and (eq backend-type 'direct) binary-name)
-     (let ((installed (executable-find binary-name)))
+     (let ((installed (if (string= binary-name "(built-in)") t (executable-find binary-name))))
        (list :type 'direct :binary binary-name :installed (if installed t nil))))
-    ;; Direct backend without binary (built-in)
+    ;; Direct backend without binary (should not happen after registry updates)
     ((eq backend-type 'direct)
      (list :type 'direct :binary "(built-in)" :installed t))
     ;; Loader-based backend

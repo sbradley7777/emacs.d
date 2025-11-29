@@ -19,18 +19,26 @@
     "Aspell spell checking"
     (text-mode prog-mode)
     :abbreviation "f-a--"
-    :type direct)
-   (python-flymake "Python built-in" (python-mode python-ts-mode) :abbreviation "p-f" :type direct)
+    :type direct
+    :binary "aspell")
+   (python-flymake
+    "Python built-in"
+    (python-mode python-ts-mode)
+    :abbreviation "p-f"
+    :type direct
+    :binary "(built-in)")
    (elisp-flymake-byte-compile
     "Elisp Byte Compile"
     (emacs-lisp-mode lisp-interaction-mode)
     :abbreviation "e-f-b-c"
-    :type direct)
+    :type direct
+    :binary "(built-in)")
    (elisp-flymake-checkdoc
     "Elisp Checkdoc"
     (emacs-lisp-mode lisp-interaction-mode)
     :abbreviation "e-f-c"
-    :type direct)
+    :type direct
+    :binary "(built-in)")
    (flymake-shellcheck-load
     "ShellCheck linter"
     (sh-mode sh-ts-mode bash-ts-mode)
@@ -165,10 +173,14 @@ BACKEND-SYMBOL is the backend function symbol to look up."
  flymake-registry-backend-available-p (binary backend-function)
  "Return non-nil if BINARY exists in PATH and BACKEND-FUNCTION is defined.
 BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\", \"shellcheck\").
-If BINARY is nil, no binary check is performed (for backends without executables).
+Special values:
+  - nil: No binary check is performed (for backends without executables)
+  - \"(built-in)\": Backend is built into Emacs, skip executable check
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 This is the standard validation check used before enabling any flymake backend."
- (and (or (null binary) (executable-find binary)) (fboundp backend-function)))
+ (and
+  (or (null binary) (string= binary "(built-in)") (executable-find binary))
+  (fboundp backend-function)))
 
 (defun
  flymake--mode-compatible-p (supported-modes)
