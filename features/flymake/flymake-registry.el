@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;; Registry of Flymake backends with metadata, query functions, and validation.
 ;; Centralizes all registry-related functionality including:
+;; - Type-safe constructor for creating backend entries
 ;; - Backend registry constant with metadata
 ;; - Query functions for retrieving backend information
 ;; - Validation functions for backend configuration
@@ -9,73 +10,180 @@
 
 ;;; Code:
 (require 'core-logging)
+(require 'core-registry)
+(require 'core-registry-query)
+(require 'core-registry-validation)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flymake Constructor
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(cl-defun
+ flymake-registry-create-backend
+ (identifier
+  description
+  modes
+  &key
+  binary
+  disabled
+  disabled-reason
+  (priority 100)
+  url
+  abbreviation
+  type
+  loader)
+ "Create flymake backend registry entry by extending base entry.
+
+Inherits common properties from base constructor:
+  :binary, :disabled, :disabled-reason, :priority, :url
+
+Flymake-specific required keywords:
+  :abbreviation - Short identifier for diagnostics display (e.g., \"p-f\")
+  :type         - Backend type: \\='direct, \\='loader-based, or \\='lsp
+
+Flymake-specific optional keywords:
+  :loader - Function symbol to call for loading this backend
+
+Example:
+  (flymake-registry-create-backend
+   \\='python-flymake \"Python built-in\" \\='(python-mode python-ts-mode)
+   :abbreviation \"p-f\"
+   :type \\='direct
+   :binary \"(built-in)\"
+   :priority 100
+   :url \"https://docs.python.org/3/library/pydoc.html\")"
+ (unless abbreviation (error "Flymake backend %s missing required :abbreviation" identifier))
+ (unless type (error "Flymake backend %s missing required :type" identifier))
+ (unless
+  (memq type '(direct loader-based lsp))
+  (error
+   "Flymake backend %s has invalid :type %s (must be direct, loader-based, or lsp)"
+   identifier
+   type))
+ (let* ((base-entry
+         (core-registry-create-base-entry
+          identifier
+          description
+          modes
+          :binary binary
+          :disabled disabled
+          :disabled-reason disabled-reason
+          :priority priority
+          :url url))
+        (base-props (nthcdr 3 base-entry))
+        (flymake-props (list :abbreviation abbreviation :type type)))
+   (when loader (setq flymake-props (plist-put flymake-props :loader loader)))
+   (let ((merged-props (core-registry-merge-properties base-props flymake-props)))
+     (append (list identifier description modes) merged-props))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Registry Constant
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
  flymake-backend-registry
- '((flymake-aspell--check
-    "Aspell spell checking"
-    (text-mode prog-mode)
-    :abbreviation "f-a--"
-    :type direct
-    :binary "aspell")
-   (python-flymake
-    "Python built-in"
-    (python-mode python-ts-mode)
-    :abbreviation "p-f"
-    :type direct
-    :binary "(built-in)")
-   (elisp-flymake-byte-compile
-    "Elisp Byte Compile"
-    (emacs-lisp-mode lisp-interaction-mode)
-    :abbreviation "e-f-b-c"
-    :type direct
-    :binary "(built-in)")
-   (elisp-flymake-checkdoc
-    "Elisp Checkdoc"
-    (emacs-lisp-mode lisp-interaction-mode)
-    :abbreviation "e-f-c"
-    :type direct
-    :binary "(built-in)")
-   (flymake-shellcheck-load
-    "ShellCheck linter"
-    (sh-mode sh-ts-mode bash-ts-mode)
-    :abbreviation "f-s--"
-    :type loader-based
-    :binary "shellcheck")
-   ;; DISABLED: sh-shellcheck-flymake (built-in Emacs 30 version)
-   ;; Requires ShellCheck 0.7.0+ for --format=json1 support.
-   ;; Current system has ShellCheck 0.6.0, so we use flymake-shellcheck package instead.
-   ;; See: https://github.com/sbradley7777/emacs.d/issues/48
-   ;; Uncomment when ShellCheck is upgraded to 0.7.0+:
-   ;; (sh-shellcheck-flymake
-   ;;  "ShellCheck built-in"
-   ;;  (sh-mode sh-ts-mode bash-ts-mode)
-   ;;  :abbreviation "s-s-f"
-   ;;  :type direct
-   ;;  :binary "shellcheck")
-   (flymake-collection-yamllint
-    "YAMLLint"
-    (yaml-mode yaml-ts-mode)
-    :abbreviation "f-c-y"
-    :type direct
-    :binary "yamllint")
-   (flymake-collection-jsonlint
-    "JSONLint"
-    (js-json-mode json-ts-mode)
-    :abbreviation "f-c-j"
-    :type direct
-    :binary "jsonlint")
-   (flymake-collection-markdownlint
-    "MarkdownLint"
-    (markdown-mode markdown-ts-mode)
-    :abbreviation "f-c-m"
-    :type direct
-    :binary "markdownlint")
-   (eglot-flymake-backend "Eglot LSP" (multiple) :abbreviation "e-f-b" :type lsp))
- "Registry of Flymake backends with metadata and configuration.
+ (list
+  (flymake-registry-create-backend
+   'flymake-aspell--check
+   "Aspell spell checking"
+   '(text-mode prog-mode)
+   :abbreviation "f-a--"
+   :type 'direct
+   :binary "aspell"
+   :priority 100
+   :url "https://github.com/GNUAspell/aspell")
+  (flymake-registry-create-backend
+   'python-flymake
+   "Python built-in"
+   '(python-mode python-ts-mode)
+   :abbreviation "p-f"
+   :type 'direct
+   :binary "(built-in)"
+   :priority 100
+   :url "https://docs.python.org/3/library/pydoc.html")
+  (flymake-registry-create-backend
+   'elisp-flymake-byte-compile
+   "Elisp Byte Compile"
+   '(emacs-lisp-mode lisp-interaction-mode)
+   :abbreviation "e-f-b-c"
+   :type 'direct
+   :binary "(built-in)"
+   :priority 100
+   :url "https://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html")
+  (flymake-registry-create-backend
+   'elisp-flymake-checkdoc
+   "Elisp Checkdoc"
+   '(emacs-lisp-mode lisp-interaction-mode)
+   :abbreviation "e-f-c"
+   :type 'direct
+   :binary "(built-in)"
+   :priority 100
+   :url "https://www.gnu.org/software/emacs/manual/html_node/elisp/Documentation-Tips.html")
+  (flymake-registry-create-backend
+   'flymake-shellcheck-load
+   "ShellCheck linter (loader)"
+   '(sh-mode sh-ts-mode bash-ts-mode)
+   :abbreviation "f-s-l"
+   :type 'loader-based
+   :binary "shellcheck"
+   :priority 100
+   :url "https://github.com/federicotdn/flymake-shellcheck")
+  (flymake-registry-create-backend
+   'flymake-shellcheck--backend
+   "ShellCheck linter (backend)"
+   '(sh-mode sh-ts-mode bash-ts-mode)
+   :abbreviation "f-s--"
+   :type 'direct
+   :binary "shellcheck"
+   :priority 100
+   :url "https://github.com/federicotdn/flymake-shellcheck")
+  (flymake-registry-create-backend
+   'sh-shellcheck-flymake
+   "ShellCheck built-in"
+   '(sh-mode sh-ts-mode bash-ts-mode)
+   :abbreviation "s-s-f"
+   :type 'direct
+   :binary "shellcheck"
+   :priority 100
+   :url "https://github.com/koalaman/shellcheck"
+   :disabled t
+   :disabled-reason "Requires ShellCheck 0.7.0+ for --format=json1 support. Current system has 0.6.0. See: https://github.com/sbradley7777/emacs.d/issues/48")
+  (flymake-registry-create-backend
+   'flymake-collection-yamllint
+   "YAMLLint"
+   '(yaml-mode yaml-ts-mode)
+   :abbreviation "f-c-y"
+   :type 'direct
+   :binary "yamllint"
+   :priority 100
+   :url "https://github.com/adrienverge/yamllint")
+  (flymake-registry-create-backend
+   'flymake-collection-jsonlint
+   "JSONLint"
+   '(js-json-mode json-ts-mode)
+   :abbreviation "f-c-j"
+   :type 'direct
+   :binary "jsonlint"
+   :priority 100
+   :url "https://github.com/zaach/jsonlint")
+  (flymake-registry-create-backend
+   'flymake-collection-markdownlint
+   "MarkdownLint"
+   '(markdown-mode markdown-ts-mode)
+   :abbreviation "f-c-m"
+   :type 'direct
+   :binary "markdownlint"
+   :priority 100
+   :url "https://github.com/DavidAnson/markdownlint")
+  (flymake-registry-create-backend
+   'eglot-flymake-backend
+   "Eglot LSP"
+   '(multiple)
+   :abbreviation "e-f-b"
+   :type 'lsp
+   :priority 100
+   :url "https://github.com/joaotavora/eglot"))
+ "Registry of Flymake backends using type-safe constructors.
+
+All entries created using `flymake-registry-create-backend' for validation.
 
 Format: (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)
 
@@ -83,20 +191,30 @@ Where:
 - FUNCTION-SYMBOL: Backend function name (symbol)
 - DESCRIPTION: User-friendly display name (string)
 - MODES: List of `major-mode' symbols or (multiple)
-- PROPERTIES: Plist with :abbreviation, :loader, :type
+- PROPERTIES: Plist with required and optional properties
 
-Properties:
-- :abbreviation - Short identifier used in diagnostics buffer (e.g., \\='e-f-b\\=')
-- :loader - Function symbol to call for loading this backend (optional)
-- :type - Backend type: \\='direct, \\='loader-based, or \\='lsp
-- :binary - Expected binary name for validation (optional, e.g., \"yamllint\")
+Required Properties:
+- :abbreviation     - Short identifier used in diagnostics (e.g., \"f-c-y\")
+- :type             - Backend type: \\='direct, \\='loader-based, or \\='lsp
+
+Optional Properties:
+- :binary           - Expected binary name (e.g., \"yamllint\")
+- :loader           - Function symbol to call for loading this backend
+- :disabled         - If t, skip this backend in setup
+- :disabled-reason  - Explanation for disabled backends
+- :priority         - Integer priority (default 100, lower = higher, 1 = highest)
+- :url              - Project homepage URL
 
 Example:
-  (flymake-collection-yamllint \"YAMLLint\" (yaml-mode yaml-ts-mode)
-   :abbreviation \"f-c-y\" :type direct :binary \"yamllint\")
+  (flymake-registry-create-backend
+   \\='flymake-collection-yamllint \"YAMLLint\" \\='(yaml-mode yaml-ts-mode)
+   :abbreviation \"f-c-y\"
+   :type \\='direct
+   :binary \"yamllint\"
+   :priority 100
+   :url \"https://github.com/adrienverge/yamllint\")
 
-This registry stores all backend metadata in one place, replacing the need for
-separate backend and abbreviation mapping constants.")
+This registry uses constructors for type safety and validation at creation time.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customization Variables
@@ -143,7 +261,7 @@ This is a strict mode option that prevents invalid configurations."
  flymake-registry-find-backend (backend-symbol)
  "Find backend specification in `flymake-backend-registry' for BACKEND-SYMBOL.
 Returns the backend spec entry (FUNCTION-SYMBOL DESCRIPTION MODES) or nil if not found."
- (assq backend-symbol flymake-backend-registry))
+ (core-registry-find-entry flymake-backend-registry backend-symbol))
 
 (defun
  flymake-registry-get-property (backend-symbol property)
@@ -153,16 +271,14 @@ Returns nil if backend not found or property not set.
 
 The registry format is (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)
 where PROPERTIES is a plist starting at index 3."
- (let ((spec (assq backend-symbol flymake-backend-registry)))
-   (when spec (plist-get (nthcdr 3 spec) property))))
+ (core-registry-get-property flymake-backend-registry backend-symbol property))
 
 (defun
  flymake-registry-get-description (backend-symbol)
  "Get human-readable description for BACKEND-SYMBOL.
 Looks up the backend in `flymake-backend-registry' and returns its description.
 Falls back to the backend function name if not found in registry."
- (let ((spec (flymake-registry-find-backend backend-symbol)))
-   (if spec (nth 1 spec) (format "%s" backend-symbol))))
+ (core-registry-get-description flymake-backend-registry backend-symbol))
 
 (defun
  flymake-registry-get-binary (backend-symbol)
@@ -171,21 +287,45 @@ Returns the :binary property value if set, nil otherwise.
 BACKEND-SYMBOL is the backend function symbol to look up."
  (flymake-registry-get-property backend-symbol :binary))
 
+(defun
+ flymake-registry-get-modes (backend-symbol)
+ "Get list of supported modes for BACKEND-SYMBOL from registry.
+Returns list of mode symbols or special value like (multiple).
+BACKEND-SYMBOL is the backend function symbol to look up."
+ (core-registry-get-modes flymake-backend-registry backend-symbol))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Validation Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  flymake-registry-backend-available-p (binary backend-function)
- "Return non-nil if BINARY exists in PATH and BACKEND-FUNCTION is defined.
+ "Return non-nil if BINARY exists, BACKEND-FUNCTION is defined, and backend is not disabled.
 BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\", \"shellcheck\").
 Special values:
   - nil: No binary check is performed (for backends without executables)
   - \"(built-in)\": Backend is built into Emacs, skip executable check
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
+
+This function enforces the :disabled flag from the registry.
+Backends marked with :disabled t will return nil, preventing them from being enabled.
+
 This is the standard validation check used before enabling any flymake backend."
- (and
-  (or (null binary) (string= binary "(built-in)") (executable-find binary))
-  (fboundp backend-function)))
+ (core-registry-entry-available-p
+  flymake-backend-registry backend-function binary backend-function nil))
+
+(defun
+ flymake-registry-remove-disabled-backends ()
+ "Remove all disabled backends from `flymake-diagnostic-functions'.
+This enforces the :disabled flag by removing backends that are marked as
+disabled in the registry but were added by external code (e.g., built-in modes).
+
+This function is called automatically via `flymake-mode-hook' to ensure
+disabled backends never run, even if added by Emacs built-in modes."
+ (when
+  (and (boundp 'flymake-diagnostic-functions) flymake-diagnostic-functions)
+  (setq
+   flymake-diagnostic-functions
+   (core-registry-filter-disabled flymake-backend-registry flymake-diagnostic-functions))))
 
 (defun
  flymake--mode-compatible-p (supported-modes)
@@ -194,10 +334,7 @@ Returns t if current mode matches exactly or derives from any supported mode.
 Handles special case where SUPPORTED-MODES is (multiple).
 
 SUPPORTED-MODES is a list of mode symbols from registry entry."
- (or
-  (eq (car supported-modes) 'multiple)
-  (memq major-mode supported-modes)
-  (cl-some (lambda (mode) (derived-mode-p mode)) supported-modes)))
+ (core-registry-mode-compatible-p supported-modes major-mode))
 
 (defun
  flymake--validate-binary-name (function binary)
@@ -241,19 +378,15 @@ Returns nil if valid, error message string if invalid.
 Does not signal errors, only returns validation result.
 
 ENTRY is a registry entry in format (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)."
- (let ((func (nth 0 entry))
-       (desc (nth 1 entry))
-       (modes (nth 2 entry))
-       (props (nthcdr 3 entry)))
-   (cond
-    ((not (plist-get props :type))
-     (format "Registry entry for %s missing :type property" func))
-    ((not (memq (plist-get props :type) '(direct loader-based lsp)))
-     (format "Registry entry for %s has invalid :type: %s" func (plist-get props :type)))
-    ((not (plist-get props :abbreviation))
-     (format "Registry entry for %s missing :abbreviation property" func))
-    (t
-     nil))))
+ (or
+  (core-registry-validate-entry entry '(:type :abbreviation))
+  (let ((func (nth 0 entry))
+        (props (nthcdr 3 entry)))
+    (cond
+     ((not (memq (plist-get props :type) '(direct loader-based lsp)))
+      (format "Registry entry for %s has invalid :type: %s" func (plist-get props :type)))
+     (t
+      nil)))))
 
 (defun
  flymake--check-mode-compatibility (function spec)

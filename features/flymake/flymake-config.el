@@ -56,6 +56,9 @@ Triggers a debounced backend availability check via `flymake-schedule-backend-ch
 
 (add-hook 'prog-mode-hook 'flymake-config--enable-for-prog-mode)
 
+;; Enforce :disabled flag from registry by removing disabled backends
+(add-hook 'flymake-mode-hook 'flymake-registry-remove-disabled-backends)
+
 ;; Set up custom diagnostics buffer formatting with friendly backend names
 ;; nil = no custom error-code extractor (uses default, shows "-" in Code column)
 (add-hook 'flymake-diagnostics-buffer-mode-hook (lambda () (flymake-setup-custom-format nil)))

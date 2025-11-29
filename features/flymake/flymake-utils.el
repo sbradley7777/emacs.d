@@ -213,14 +213,10 @@ Includes backend binary/LSP server information and installation status."
    (push "Flymake Buffers" lines)
    (dolist (line (flymake--build-all-buffers-table)) (push line lines))
    (push "" lines)
-   ;; Validation issues (if any)
-   (when-let ((validation-lines (flymake--format-validation-issues)))
-     (dolist (line validation-lines) (push line lines))
-     (push "" lines))
-   ;; Table 2: Flymake LSP Backends
-   (push "Flymake LSP Backends" lines)
-   (dolist (line (flymake--build-lsp-backends-table)) (push line lines))
-   (push "" lines)
+   ;; Table 2: Flymake LSP Backends (TEMPORARILY DISABLED - Phase 3)
+   ;; (push "Flymake LSP Backends" lines)
+   ;; (dolist (line (flymake--build-lsp-backends-table)) (push line lines))
+   ;; (push "" lines)
    ;; Table 3: Flymake Direct Backends
    (push "Flymake Direct Backends" lines)
    (dolist (line (flymake--build-direct-backends-table)) (push line lines))
@@ -228,6 +224,10 @@ Includes backend binary/LSP server information and installation status."
    ;; Table 4: Flymake Loader Backends
    (push "Flymake Loader Backends" lines)
    (dolist (line (flymake--build-loader-backends-table)) (push line lines))
+   ;; Validation issues (if any) - at bottom
+   (when-let ((validation-lines (flymake--format-validation-issues)))
+     (push "" lines)
+     (dolist (line validation-lines) (push line lines)))
    ;; Display all tables
    (core-message-diagnostic "Flymake Comprehensive Diagnostics" (nreverse lines))))
 
@@ -502,7 +502,9 @@ Examples:
 (defun
  flymake--validate-buffer-backends (buffer)
  "Validate backends in BUFFER against registry.
-Returns list of validation issues, or nil if all valid."
+Returns list of validation issues, or nil if all valid.
+Only flags backends completely missing from registry as issues.
+Disabled backends in registry are not flagged as issues."
  (with-current-buffer
   buffer
   (when
@@ -768,11 +770,22 @@ Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-
     (list "No LSP backends registered"))))
 
 (defun
- flymake--build-direct-backends-table ()
- "Build Flymake Direct Backends table.
+ flymake--build-backends-table-by-type (backend-type empty-message)
+ "Build Flymake backends table filtered by BACKEND-TYPE.
 Returns list of formatted table lines with total row showing buffer count.
-Creates one row per mode/backend combination."
- (let* ((headers '("Major Mode" "Backend" "Description" "Installed" "Binary" "Buffers"))
+Creates one row per mode/backend combination.
+
+BACKEND-TYPE is the backend type symbol to filter (e.g., \\='direct, \\='loader-based).
+EMPTY-MESSAGE is the message to display when no backends of this type exist."
+ (let* ((headers
+         '("Major Mode"
+           "Backend"
+           "Description"
+           "Priority"
+           "Enabled"
+           "Installed"
+           "Binary"
+           "Buffers"))
         (rows nil)
         (buffer-counts (flymake--count-buffers-per-backend-per-mode)))
    (dolist
@@ -780,12 +793,16 @@ Creates one row per mode/backend combination."
     (let* ((backend-symbol (nth 0 entry))
            (description (nth 1 entry))
            (modes (nth 2 entry))
+           (props (nthcdr 3 entry))
+           (priority (or (plist-get props :priority) 100))
+           (disabled (plist-get props :disabled))
            (info (flymake--get-backend-binary-info backend-symbol)))
       (when
-       (eq (plist-get info :type) 'direct)
+       (eq (plist-get info :type) backend-type)
        (let* ((binary (plist-get info :binary))
               (installed (plist-get info :installed))
-              (installed-str (if installed "yes" "no")))
+              (installed-str (if installed "yes" "no"))
+              (enabled-str (if (not disabled) "yes" "no")))
          (dolist
           (mode modes)
           (let* ((key (cons backend-symbol mode))
@@ -796,6 +813,8 @@ Creates one row per mode/backend combination."
               (format "%s" mode)
               (format "%s" backend-symbol)
               description
+              (number-to-string priority)
+              enabled-str
               installed-str
               binary
               (number-to-string buffer-count))
@@ -805,7 +824,7 @@ Creates one row per mode/backend combination."
     (let* ((reversed-rows (nreverse rows))
            (table-lines (core-logging-format-table headers reversed-rows))
            (total-buffers
-            (apply '+ (mapcar (lambda (row) (string-to-number (nth 5 row))) reversed-rows)))
+            (apply '+ (mapcar (lambda (row) (string-to-number (nth 7 row))) reversed-rows)))
            (row-count (length reversed-rows))
            (col-widths (core-logging-calculate-column-widths headers reversed-rows))
            (total-label-with-count
@@ -815,73 +834,29 @@ Creates one row per mode/backend combination."
                    (padding (- width (length label) (length count-str))))
               (concat label (make-string (max 1 padding) ?\s) count-str)))
            (total-row
-            (list total-label-with-count "-" "-" "-" "-" (number-to-string total-buffers)))
-           (total-alignments '(left left left left left right)))
+            (list total-label-with-count "-" "-" "-" "-" "-" "-" (number-to-string total-buffers)))
+           (total-alignments '(left left left left left left left right)))
       (append
        (butlast table-lines)
        (list
         (core-logging--build-border col-widths 'middle)
         (core-logging--build-row total-row col-widths total-alignments)
         (core-logging--build-border col-widths 'bottom))))
-    (list "No direct backends registered"))))
+    (list empty-message))))
+
+(defun
+ flymake--build-direct-backends-table ()
+ "Build Flymake Direct Backends table.
+Returns list of formatted table lines with total row showing buffer count.
+Creates one row per mode/backend combination."
+ (flymake--build-backends-table-by-type 'direct "No direct backends registered"))
 
 (defun
  flymake--build-loader-backends-table ()
  "Build Flymake Loader Backends table.
 Returns list of formatted table lines with total row showing buffer count.
 Creates one row per mode/backend combination."
- (let* ((headers '("Major Mode" "Backend" "Description" "Installed" "Binary" "Buffers"))
-        (rows nil)
-        (buffer-counts (flymake--count-buffers-per-backend-per-mode)))
-   (dolist
-    (entry flymake-backend-registry)
-    (let* ((backend-symbol (nth 0 entry))
-           (description (nth 1 entry))
-           (modes (nth 2 entry))
-           (info (flymake--get-backend-binary-info backend-symbol)))
-      (when
-       (eq (plist-get info :type) 'loader-based)
-       (let* ((binary (plist-get info :binary))
-              (installed (plist-get info :installed))
-              (installed-str (if installed "yes" "no")))
-         (dolist
-          (mode modes)
-          (let* ((key (cons backend-symbol mode))
-                 (count-entry (assoc key buffer-counts))
-                 (buffer-count (if count-entry (cdr count-entry) 0)))
-            (push
-             (list
-              (format "%s" mode)
-              (format "%s" backend-symbol)
-              description
-              installed-str
-              binary
-              (number-to-string buffer-count))
-             rows)))))))
-   (if
-    rows
-    (let* ((reversed-rows (nreverse rows))
-           (table-lines (core-logging-format-table headers reversed-rows))
-           (total-buffers
-            (apply '+ (mapcar (lambda (row) (string-to-number (nth 5 row))) reversed-rows)))
-           (row-count (length reversed-rows))
-           (col-widths (core-logging-calculate-column-widths headers reversed-rows))
-           (total-label-with-count
-            (let* ((width (nth 0 col-widths))
-                   (label "Total")
-                   (count-str (number-to-string row-count))
-                   (padding (- width (length label) (length count-str))))
-              (concat label (make-string (max 1 padding) ?\s) count-str)))
-           (total-row
-            (list total-label-with-count "-" "-" "-" "-" (number-to-string total-buffers)))
-           (total-alignments '(left left left left left right)))
-      (append
-       (butlast table-lines)
-       (list
-        (core-logging--build-border col-widths 'middle)
-        (core-logging--build-row total-row col-widths total-alignments)
-        (core-logging--build-border col-widths 'bottom))))
-    (list "No loader backends registered"))))
+ (flymake--build-backends-table-by-type 'loader-based "No loader backends registered"))
 
 (provide 'flymake-utils)
 ;;; flymake-utils.el ends here
