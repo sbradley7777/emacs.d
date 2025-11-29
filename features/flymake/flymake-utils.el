@@ -557,12 +557,10 @@ Returns list of formatted table lines with total row."
           (lambda
            (info)
            (list
-            (plist-get info :buffer)
-            (plist-get info :mode)
-            (plist-get info :backend-count)
-            (plist-get info :backends)
-            (plist-get info :diagnostics)
-            (plist-get info :status)))
+            (plist-get info :buffer) (plist-get info :mode) (plist-get info :backend-count)
+            (let ((backends (plist-get info :backends)))
+              (if (string-empty-p backends) "-" backends))
+            (plist-get info :diagnostics) (plist-get info :status)))
           buffer-info))
         (table-lines (core-logging-format-table headers rows)))
    (if
@@ -774,7 +772,7 @@ Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-
  "Build Flymake Direct Backends table.
 Returns list of formatted table lines with total row showing buffer count.
 Creates one row per mode/backend combination."
- (let* ((headers '("Major Mode" "Backend" "Description" "Binary" "Installed" "Buffers"))
+ (let* ((headers '("Major Mode" "Backend" "Description" "Installed" "Binary" "Buffers"))
         (rows nil)
         (buffer-counts (flymake--count-buffers-per-backend-per-mode)))
    (dolist
@@ -798,8 +796,8 @@ Creates one row per mode/backend combination."
               (format "%s" mode)
               (format "%s" backend-symbol)
               description
-              binary
               installed-str
+              binary
               (number-to-string buffer-count))
              rows)))))))
    (if
@@ -832,7 +830,7 @@ Creates one row per mode/backend combination."
  "Build Flymake Loader Backends table.
 Returns list of formatted table lines with total row showing buffer count.
 Creates one row per mode/backend combination."
- (let* ((headers '("Major Mode" "Backend" "Description" "Binary" "Installed" "Buffers"))
+ (let* ((headers '("Major Mode" "Backend" "Description" "Installed" "Binary" "Buffers"))
         (rows nil)
         (buffer-counts (flymake--count-buffers-per-backend-per-mode)))
    (dolist
@@ -856,8 +854,8 @@ Creates one row per mode/backend combination."
               (format "%s" mode)
               (format "%s" backend-symbol)
               description
-              binary
               installed-str
+              binary
               (number-to-string buffer-count))
              rows)))))))
    (if
