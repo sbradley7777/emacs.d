@@ -204,8 +204,8 @@ still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-serve
 
 (defun
  diagnostics-show-flymake-backend-info ()
- "Display comprehensive Flymake diagnostics with 4 tables.
-Shows buffers, LSP backends, direct backends, and loader backends.
+ "Display comprehensive Flymake diagnostics including buffers and all backend types.
+Shows 4 tables: buffers, LSP backends, direct backends, and loader backends.
 Includes backend binary/LSP server information and installation status."
  (interactive)
  (let ((lines nil))

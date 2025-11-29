@@ -41,8 +41,7 @@ Multiple calls in quick succession will only trigger one check."
 (defun
  flymake-config--enable-for-prog-mode ()
  "Enable Flymake mode for programming buffers, excluding *scratch*.
-Schedules a debounced backend availability check for all Flymake buffers.
-Multiple files opened in quick succession will only trigger one check."
+Triggers a debounced backend availability check via `flymake-schedule-backend-check'."
  (unless (string= (buffer-name) "*scratch*") (flymake-mode 1) (flymake-schedule-backend-check)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

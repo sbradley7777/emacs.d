@@ -6,6 +6,75 @@
 ;; Usage:
 ;;   (require 'flymake-lang-setup)
 ;;   (lang-trigger-flymake-check-timer)
+;;
+;; Backend Setup Function Selection Guide:
+;;
+;; These functions provide standardized patterns for setting up Flymake diagnostics in language modes.
+;; All binary names are automatically looked up from `flymake-backend-registry'.
+;; Backend functions MUST be registered in the registry with :binary property set.
+;;
+;; 1. `flymake-lang-setup-direct-backend'
+;;    When to use:
+;;      - Language has a standalone linter with a direct backend function
+;;      - Backend function comes from flymake-collection or similar packages
+;;      - No LSP server is configured for this language
+;;    Examples:
+;;      - YAML: flymake-collection-yamllint (when not using LSP)
+;;      - JSON: flymake-collection-jsonlint (when not using LSP)
+;;    Usage:
+;;      (flymake-lang-setup-direct-backend 'flymake-collection-yamllint)
+;;
+;; 2. `flymake-lang-setup-package-loader'
+;;    When to use:
+;;      - Flymake package provides its own -load function
+;;      - Load function handles backend registration internally
+;;      - No LSP server is configured for this language
+;;    Examples:
+;;      - Bash/Shell: flymake-shellcheck-load
+;;    Usage:
+;;      (flymake-lang-setup-package-loader 'flymake-shellcheck-load)
+;;
+;; 3. `flymake-lang-setup-lsp-backend'
+;;    When to use:
+;;      - Language ONLY has LSP server diagnostics
+;;      - No standalone linter available or needed
+;;      - LSP provides comprehensive diagnostics
+;;    Examples:
+;;      - Python: pylsp with ruff plugin (linting via LSP)
+;;      - C/C++: clangd (comprehensive semantic analysis)
+;;      - TOML: taplo (schema validation and linting)
+;;    Usage:
+;;      (flymake-lang-setup-lsp-backend)
+;;
+;; 4. `flymake-lang-setup-dual-backend'
+;;    When to use:
+;;      - Language has BOTH standalone linter AND LSP server
+;;      - Both tools provide complementary diagnostics
+;;      - Linter catches style issues LSP might miss
+;;      - LSP provides semantic analysis linter cannot do
+;;    Examples:
+;;      - YAML: flymake-collection-yamllint + yaml-language-server
+;;      - JSON: flymake-collection-jsonlint + vscode-json-languageserver
+;;      - Markdown: flymake-collection-markdownlint + marksman
+;;    Usage:
+;;      (flymake-lang-setup-dual-backend 'flymake-collection-yamllint)
+;;      (flymake-lang-setup-dual-backend 'flymake-shellcheck-load)
+;;
+;; Auto-detection in dual backend:
+;;   The dual function automatically detects the function type:
+;;   - Functions ending with '-load' are treated as package loaders
+;;   - All other functions are treated as direct backends
+;;   - Direct backends get eglot persistence hooks
+;;   - Package loaders do not (they handle their own persistence)
+;;
+;; Decision flowchart:
+;;   Has standalone linter?
+;;     Yes -> Has LSP server too?
+;;       Yes -> Use #4 (flymake-lang-setup-dual-backend)
+;;       No  -> Is it a -load function?
+;;         Yes -> Use #2 (flymake-lang-setup-package-loader)
+;;         No  -> Use #1 (flymake-lang-setup-direct-backend)
+;;     No  -> Use #3 (flymake-lang-setup-lsp-backend)
 
 ;;; Code:
 (require 'flymake)
@@ -75,74 +144,7 @@ Delegates to `flymake-schedule-backend-check' for timer management."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; High-Level Backend Setup Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Backend Setup Function Selection Guide:
-;;
-;; These functions provide standardized patterns for setting up Flymake diagnostics in language modes.
-;; All binary names are automatically looked up from `flymake-backend-registry'.
-;; Backend functions MUST be registered in the registry with :binary property set.
-;;
-;; 1. `flymake-lang-setup-direct-backend'
-;;    When to use:
-;;      - Language has a standalone linter with a direct backend function
-;;      - Backend function comes from flymake-collection or similar packages
-;;      - No LSP server is configured for this language
-;;    Examples:
-;;      - YAML: flymake-collection-yamllint (when not using LSP)
-;;      - JSON: flymake-collection-jsonlint (when not using LSP)
-;;    Usage:
-;;      (flymake-lang-setup-direct-backend 'flymake-collection-yamllint)
-;;
-;; 2. `flymake-lang-setup-package-loader'
-;;    When to use:
-;;      - Flymake package provides its own -load function
-;;      - Load function handles backend registration internally
-;;      - No LSP server is configured for this language
-;;    Examples:
-;;      - Bash/Shell: flymake-shellcheck-load
-;;    Usage:
-;;      (flymake-lang-setup-package-loader 'flymake-shellcheck-load)
-;;
-;; 3. `flymake-lang-setup-lsp-backend'
-;;    When to use:
-;;      - Language ONLY has LSP server diagnostics
-;;      - No standalone linter available or needed
-;;      - LSP provides comprehensive diagnostics
-;;    Examples:
-;;      - Python: pylsp with ruff plugin (linting via LSP)
-;;      - C/C++: clangd (comprehensive semantic analysis)
-;;      - TOML: taplo (schema validation and linting)
-;;    Usage:
-;;      (flymake-lang-setup-lsp-backend)
-;;
-;; 4. `flymake-lang-setup-dual-backend'
-;;    When to use:
-;;      - Language has BOTH standalone linter AND LSP server
-;;      - Both tools provide complementary diagnostics
-;;      - Linter catches style issues LSP might miss
-;;      - LSP provides semantic analysis linter cannot do
-;;    Examples:
-;;      - YAML: flymake-collection-yamllint + yaml-language-server
-;;      - JSON: flymake-collection-jsonlint + vscode-json-languageserver
-;;      - Markdown: flymake-collection-markdownlint + marksman
-;;    Usage:
-;;      (flymake-lang-setup-dual-backend 'flymake-collection-yamllint)
-;;      (flymake-lang-setup-dual-backend 'flymake-shellcheck-load)
-;;
-;; Auto-detection in dual backend:
-;;   The dual function automatically detects the function type:
-;;   - Functions ending with '-load' are treated as package loaders
-;;   - All other functions are treated as direct backends
-;;   - Direct backends get eglot persistence hooks
-;;   - Package loaders do not (they handle their own persistence)
-;;
-;; Decision flowchart:
-;;   Has standalone linter?
-;;     Yes -> Has LSP server too?
-;;       Yes -> Use #4 (flymake-lang-setup-dual-backend)
-;;       No  -> Is it a -load function?
-;;         Yes -> Use #2 (flymake-lang-setup-package-loader)
-;;         No  -> Use #1 (flymake-lang-setup-direct-backend)
-;;     No  -> Use #3 (flymake-lang-setup-lsp-backend)
+;; See Commentary section for Backend Setup Function Selection Guide
 
 (defun
  flymake-lang-setup-direct-backend (backend-function)
@@ -222,7 +224,7 @@ This handles the common pattern where a language has both:
 1. A standalone flymake backend (linter or package)
 2. An LSP server via eglot
 
-IMPORTANT LIMITATION:
+DESIGN NOTE:
 - Direct backends: Adds eglot hook to persist backend after eglot starts
 - Package backends: Does NOT add eglot hook (package backends add internal
   functions we cannot track, and typically handle persistence themselves)
