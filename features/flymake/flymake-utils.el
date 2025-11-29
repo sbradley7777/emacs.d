@@ -140,35 +140,6 @@ Returns a list of formatted strings describing the buffer state."
    (nreverse lines)))
 
 (defun
- flymake--build-backend-table-data (active-backends)
- "Build backend table data for diagnostics display.
-ACTIVE-BACKENDS is a list of active backend symbols.
-Returns a list of lists, each containing (STATUS BACKEND DESCRIPTION MODES)."
- (let ((backend-data nil))
-   (dolist
-    (backend-spec flymake-backend-registry)
-    (let* ((backend-func (nth 0 backend-spec))
-           (description (nth 1 backend-spec))
-           (modes (nth 2 backend-spec))
-           (is-active (memq backend-func active-backends))
-           (is-available (fboundp backend-func))
-           (status
-            (cond
-             (is-active
-              "Active")
-             (is-available
-              "Available")
-             (t
-              "Not Installed")))
-           (modes-str
-            (if
-             (eq (car modes) 'multiple)
-             "multiple"
-             (mapconcat (lambda (m) (format "%s" m)) modes ", "))))
-      (push (list status (format "%s" backend-func) description modes-str) backend-data)))
-   (nreverse backend-data)))
-
-(defun
  flymake-check-backend-availability ()
  "Check Flymake backend status and log appropriate messages.
 Provides success messages when backends are active, warnings about missing LSP servers,
@@ -648,60 +619,6 @@ Returns alist of ((backend-symbol . mode-symbol) . count)."
                 (entry (assoc key counts)))
            (if entry (setcdr entry (1+ (cdr entry))) (push (cons key 1) counts))))))))
    counts))
-
-(defun
- flymake--build-registry-overview-table ()
- "Build Flymake Registry Overview table.
-Returns list of formatted table lines with total row."
- (let* ((lsp-count 0)
-        (direct-count 0)
-        (loader-count 0)
-        (lsp-active 0)
-        (direct-active 0)
-        (loader-active 0)
-        (lsp-not-installed 0)
-        (direct-not-installed 0)
-        (loader-not-installed 0)
-        (active-backends (flymake--count-active-buffers-per-backend)))
-   (dolist
-    (entry flymake-backend-registry)
-    (let* ((backend-symbol (nth 0 entry))
-           (info (flymake--get-backend-binary-info backend-symbol))
-           (type (plist-get info :type))
-           (installed (plist-get info :installed))
-           (active (assq backend-symbol active-backends)))
-      (cond
-       ((eq type 'lsp)
-        (setq lsp-count (1+ lsp-count))
-        (when active (setq lsp-active (1+ lsp-active)))
-        (unless installed (setq lsp-not-installed (1+ lsp-not-installed))))
-       ((eq type 'direct)
-        (setq direct-count (1+ direct-count))
-        (when active (setq direct-active (1+ direct-active)))
-        (unless installed (setq direct-not-installed (1+ direct-not-installed))))
-       ((eq type 'loader-based)
-        (setq loader-count (1+ loader-count))
-        (when active (setq loader-active (1+ loader-active)))
-        (unless installed (setq loader-not-installed (1+ loader-not-installed)))))))
-   (let* ((headers '("Type" "Total" "Active" "Not Installed"))
-          (rows
-           (list
-            (list
-             "LSP"
-             (number-to-string lsp-count)
-             (number-to-string lsp-active)
-             (number-to-string lsp-not-installed))
-            (list
-             "Direct"
-             (number-to-string direct-count)
-             (number-to-string direct-active)
-             (number-to-string direct-not-installed))
-            (list
-             "Loader"
-             (number-to-string loader-count)
-             (number-to-string loader-active)
-             (number-to-string loader-not-installed)))))
-     (core-logging-format-table headers rows '(1 2 3)))))
 
 (defun
  flymake--lsp-running-for-mode-p (mode)
