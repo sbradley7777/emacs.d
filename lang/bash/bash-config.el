@@ -64,6 +64,12 @@ Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
  :ensure t
  :config (core-message-config "Flymake shellcheck integration configured"))
 
+;; Disable built-in sh-shellcheck-flymake to prevent conflicts
+;; Built-in version requires ShellCheck 0.7.0+ for --format=json1 support
+;; Current system has ShellCheck 0.6.0, causing "could not parse JSON stream" errors
+;; See: https://github.com/sbradley7777/emacs.d/issues/48
+(with-eval-after-load 'sh-script (advice-add 'sh-shellcheck-flymake :override #'ignore))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -45,12 +45,17 @@
     :abbreviation "f-s--"
     :type loader-based
     :binary "shellcheck")
-   (sh-shellcheck-flymake
-    "ShellCheck built-in"
-    (sh-mode sh-ts-mode bash-ts-mode)
-    :abbreviation "s-s-f"
-    :type direct
-    :binary "shellcheck")
+   ;; DISABLED: sh-shellcheck-flymake (built-in Emacs 30 version)
+   ;; Requires ShellCheck 0.7.0+ for --format=json1 support.
+   ;; Current system has ShellCheck 0.6.0, so we use flymake-shellcheck package instead.
+   ;; See: https://github.com/sbradley7777/emacs.d/issues/48
+   ;; Uncomment when ShellCheck is upgraded to 0.7.0+:
+   ;; (sh-shellcheck-flymake
+   ;;  "ShellCheck built-in"
+   ;;  (sh-mode sh-ts-mode bash-ts-mode)
+   ;;  :abbreviation "s-s-f"
+   ;;  :type direct
+   ;;  :binary "shellcheck")
    (flymake-collection-yamllint
     "YAMLLint"
     (yaml-mode yaml-ts-mode)
