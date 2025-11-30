@@ -6,27 +6,28 @@
 ;;; Code:
 ;; Declare external functions to suppress byte-compiler warnings
 (declare-function package-activate-all "package" ())
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load Package Management Modules in Order
+;; Load Package Management Modules in Dependency Order
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load foundational modules first (these don't call package.el functions at top level)
-(require 'package-cache) ; Package state caching system
-(require 'package-network) ; Network-aware package operations
-
+;; Layer 1: Foundation - Pure utilities with no package.el dependencies
+(require 'package-metadata) ; Metadata persistence (no package.el calls)
+(require 'package-cache) ; Package state caching (no package.el calls at load)
+(require 'package-network-utils) ; Pure network testing utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package System Initialization
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IMPORTANT: Initialize package.el BEFORE loading modules that use package functions
-;; (package-repositories.el calls package-installed-p at line 47)
+;; (package-repositories.el calls package-installed-p at line 159)
 ;; (package-bootstrap.el calls package-installed-p at line 16)
 (unless package--initialized (package-initialize))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load Remaining Package Management Modules
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; These modules can now safely use package.el functions
-(require 'package-repositories) ; Repository configuration and security
+;; Layer 2: Domain - Repository management (requires package.el)
+(require 'package-repositories) ; Repository configuration, security, health checking
+
+;; Layer 3: Orchestration - High-level package operations
+(require 'package-operations) ; High-level package operations and orchestration
 (require 'package-bootstrap) ; Use-package installation and configuration
 (require 'package-installation) ; Robust package installation utilities
 (require 'package-maintenance) ; Package upgrade and cleanup utilities

@@ -7,7 +7,8 @@
 (require 'core-constants)
 (require 'core-logging)
 (require 'core-user-interaction-utils)
-(require 'package-network)
+(require 'package-operations)
+(require 'package-repositories)
 
 ;; Declare external functions to suppress byte-compiler warnings
 (declare-function package-upgrade "package" (pkg &optional dont-select))
@@ -26,7 +27,8 @@ Shows available version and indicates if updates are available."
 
    ;; Always refresh package archive contents to ensure accurate update information
    (when
-    (network-responsive-p) (core-message-package "Refreshing package archive contents...")
+    (package-repositories-responsive-p)
+    (core-message-package "Refreshing package archive contents...")
     (condition-case err
         (with-timeout
          (core-package-refresh-timeout

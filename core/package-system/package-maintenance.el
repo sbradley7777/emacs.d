@@ -7,7 +7,8 @@
 (require 'core-constants)
 (require 'core-logging)
 (require 'core-utils)
-(require 'package-network)
+(require 'package-operations)
+(require 'package-repositories)
 (require 'package-metadata)
 (defvar core-packages-all) ; Forward declaration - defined in core-packages.el
 
@@ -23,7 +24,7 @@ that have newer versions available.  Requires network connectivity.
 Shows summary of upgraded packages or reports if no upgrades are available."
  (interactive) (core-message-debug "Checking for package upgrades...")
  (unless
-  (network-responsive-p)
+  (package-repositories-responsive-p)
   (core-message-error "Network unavailable - cannot check for package upgrades"))
  (safe-package-refresh-with-timeout)
  (let ((upgradeable-packages '())
@@ -75,7 +76,7 @@ Shows summary of upgraded packages or reports if no upgrades are available."
 Returns a list of (PKG-NAME INSTALLED-DESC AVAILABLE-DESC) or nil if failed/no upgrades.
 TIMEOUT-SECONDS specifies how long to wait before timing out."
  (when
-  (and (require 'package-network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
+  (package-repositories-responsive-p)
   (condition-case err
       (progn
        (with-timeout
@@ -213,7 +214,7 @@ Benefits:
      ;; Only during interactive sessions, not batch mode
      (not noninteractive)
      ;; Only if network is available
-     (require 'package-network nil t) (fboundp 'network-responsive-p) (network-responsive-p))
+     (package-repositories-responsive-p))
     ;; Perform weekly check
     (progn
      (core-message-package "Checking for package updates (weekly check)...")
