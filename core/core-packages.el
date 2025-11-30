@@ -5,9 +5,10 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
-(require 'package-metadata)
-(require 'package-repositories)
-(require 'package-installation)
+(require 'pkg-system-metadata)
+(require 'pkg-system-repositories)
+(require 'pkg-system-installation)
+(require 'pkg-system-maintenance)
 (require 'features-constants)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Categories
@@ -53,7 +54,7 @@ Assembled from all category lists in load order.")
 ;; Package Installation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Install packages using robust installation function with retry from core-packages-utils
-(unless noninteractive (core-packages-install-with-retry core-packages-all))
+(unless noninteractive (pkg-system-installation-install-with-retry core-packages-all))
 
 ;; Log batch mode skip
 (when
@@ -100,6 +101,6 @@ Assembled from all category lists in load order.")
 ;; Automatic Weekly Update Check
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Run automatic weekly update check from core-packages-utils
-(core-packages-check-weekly-updates)
+(pkg-system-maintenance-check-weekly-updates)
 (provide 'core-packages)
 ;;; core-packages.el ends here

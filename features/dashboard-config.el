@@ -5,8 +5,8 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'package-ui)
-(require 'package-maintenance)
+(require 'pkg-system-ui)
+(require 'pkg-system-maintenance)
 (require 'nerd-icons)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -45,19 +45,19 @@
      (,(nerd-icons-codicon "nf-cod-package" :height 1.1 :v-adjust 0.0)
       "Update"
       "Check for package updates"
-      (lambda (&rest _) (show-package-upgrades)))
+      (lambda (&rest _) (pkg-system-ui-show-upgrades)))
      (,(nerd-icons-octicon "nf-oct-list_unordered" :height 1.1 :v-adjust 0.0)
       "Installed Packages"
       "List installed packages"
-      (lambda (&rest _) (show-installed-packages)))
+      (lambda (&rest _) (pkg-system-ui-show-installed)))
      (,(nerd-icons-octicon "nf-oct-search" :height 1.1 :v-adjust 0.0)
       "Search Packages"
       "Search for packages"
-      (lambda (&rest _) (search-packages)))
+      (lambda (&rest _) (pkg-system-ui-search)))
      (,(nerd-icons-codicon "nf-cod-trash" :height 1.1 :v-adjust 0.0)
       "Package Cleanup"
       "Remove unused packages and reset metadata cache"
-      (lambda (&rest _) (core-packages-cleanup)))
+      (lambda (&rest _) (pkg-system-maintenance-cleanup)))
      (,(nerd-icons-octicon "nf-oct-tools" :height 1.1 :v-adjust 0.0)
       "Settings"
       "Open settings"

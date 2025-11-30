@@ -7,11 +7,32 @@
 (require 'core-constants)
 (require 'core-logging)
 (require 'core-utils)
+(require 'pkg-system-repositories)
+(require 'pkg-system-refresh)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-packages-install-safely
+ pkg-system-installation-ensure-keyring ()
+ "Ensure GNU ELPA keyring is available before installing other packages.
+This maintains security with signature verification.
+Should be called during initialization after package system is configured."
+ (unless
+  (package-installed-p 'gnu-elpa-keyring-update)
+  (if
+   noninteractive (core-message-batch-skip "keyring update check")
+   (when
+    (pkg-system-repositories-responsive-p) (pkg-system-refresh-with-timeout)
+    (condition-case err
+        (progn
+         (package-install 'gnu-elpa-keyring-update)
+         (core-message-success "GNU ELPA keyring updated for secure package verification"))
+      (error
+       (core-message-warning
+        "Failed to install keyring update: %s" (error-message-string err))))))))
+
+(defun
+ pkg-system-installation-install-safely
  (package-list)
  "Install packages from PACKAGE-LIST with comprehensive error handling."
  (let ((failed-packages '())
@@ -55,16 +76,16 @@
    failed-packages))
 
 (defun
- core-packages-install-with-retry (package-list &optional max-retries)
+ pkg-system-installation-install-with-retry (package-list &optional max-retries)
  "Install packages with automatic retry on network failures.
 PACKAGE-LIST is the list of packages to install.
 MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  (let ((max-retries (or max-retries 2))
-       (failed-packages (core-packages-install-safely package-list)))
+       (failed-packages (pkg-system-installation-install-safely package-list)))
    (when
     (and failed-packages (> max-retries 0))
     (core-message-loading "Retrying failed packages after network refresh...")
     (package-refresh-contents)
-    (core-packages-install-with-retry failed-packages (1- max-retries)))))
-(provide 'package-installation)
-;;; package-installation.el ends here
+    (pkg-system-installation-install-with-retry failed-packages (1- max-retries)))))
+(provide 'pkg-system-installation)
+;;; pkg-system-installation.el ends here

@@ -81,5 +81,5 @@ For repository-aware testing with caching, use package-repositories functions."
       (setq status nil)))
    status))
 
-(provide 'package-network-utils)
-;;; package-network-utils.el ends here
+(provide 'pkg-system-network-utils)
+;;; pkg-system-network-utils.el ends here

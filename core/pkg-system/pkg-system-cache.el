@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'core-logging)
 (require 'package)
-(require 'package-metadata)
+(require 'pkg-system-metadata)
 
 ;; Declare external functions to suppress byte-compiler warnings
 (declare-function package-activate-all "package" ())
@@ -15,24 +15,24 @@
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
- package-cache-max-age (* 7 24 60 60) ; 7 days in seconds
+ pkg-system-cache-max-age (* 7 24 60 60) ; 7 days in seconds
  "Maximum age of package cache before considering it stale.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- package-cache-fresh-p () "Check if package cache exists and is recent enough to use."
- (let ((cache-info (package-metadata-read-cache-info)))
+ pkg-system-cache-fresh-p () "Check if package cache exists and is recent enough to use."
+ (let ((cache-info (pkg-system-metadata-read-cache-info)))
    (when
     (> (plist-get cache-info :timestamp) 0)
     (let ((cache-age
            (float-time
             (time-subtract (current-time) (seconds-to-time (plist-get cache-info :timestamp))))))
-      (< cache-age package-cache-max-age)))))
+      (< cache-age pkg-system-cache-max-age)))))
 
 (defun
- save-package-state () "Cache current working package configuration to disk."
+ pkg-system-cache-save-state () "Cache current working package configuration to disk."
  (when
   (and
    package-archive-contents
@@ -40,14 +40,14 @@
   (condition-case err
       (let ((cache-timestamp (float-time (current-time)))
             (package-count (length package-archive-contents)))
-        (package-metadata-write-cache-info cache-timestamp package-count)
+        (pkg-system-metadata-write-cache-info cache-timestamp package-count)
         (core-message-info "Package state cached (%d packages)" package-count))
     (error
      (core-message-warning "Failed to save package cache: %s" (error-message-string err))))))
 
 (defun
- load-cached-package-state () "Load cached package state using built-in package system."
- (let ((cache-info (package-metadata-read-cache-info)))
+ pkg-system-cache-load-cached-state () "Load cached package state using built-in package system."
+ (let ((cache-info (pkg-system-metadata-read-cache-info)))
    (when
     (> (plist-get cache-info :timestamp) 0)
     (condition-case err
@@ -68,19 +68,12 @@
        (core-message-warning "Failed to load package cache: %s" (error-message-string err)))))))
 
 (defun
- package-cache-info
- ()
- "Display information about the package cache."
- (interactive)
- (package-metadata-info))
-
-(defun
- package-cache-clear ()
+ pkg-system-cache-clear ()
  "Clear the package metadata cache file.
 
 Removes cached package information to force a fresh refresh from repositories
 on the next package operation.  Useful when package metadata seems out of date
 or corrupted."
- (interactive) (package-metadata-reset))
-(provide 'package-cache)
-;;; package-cache.el ends here
+ (interactive) (pkg-system-metadata-reset))
+(provide 'pkg-system-cache)
+;;; pkg-system-cache.el ends here

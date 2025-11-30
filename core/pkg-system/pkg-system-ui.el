@@ -7,8 +7,8 @@
 (require 'core-constants)
 (require 'core-logging)
 (require 'core-user-interaction-utils)
-(require 'package-operations)
-(require 'package-repositories)
+(require 'pkg-system-operations)
+(require 'pkg-system-repositories)
 
 ;; Declare external functions to suppress byte-compiler warnings
 (declare-function package-upgrade "package" (pkg &optional dont-select))
@@ -17,7 +17,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- show-installed-packages ()
+ pkg-system-ui-show-installed ()
  "Show installed packages with clear status labels and update information.
 Packages are labeled as either \='Installed (by User)\=' or \='Dependency\='.
 Shows available version and indicates if updates are available."
@@ -27,7 +27,7 @@ Shows available version and indicates if updates are available."
 
    ;; Always refresh package archive contents to ensure accurate update information
    (when
-    (package-repositories-responsive-p)
+    (pkg-system-repositories-responsive-p)
     (core-message-package "Refreshing package archive contents...")
     (condition-case err
         (with-timeout
@@ -82,7 +82,7 @@ Shows available version and indicates if updates are available."
           (package-initialize))
         (core-message-success "Updated %d packages" (length packages-with-updates))
         (sit-for 1)
-        (show-installed-packages))))
+        (pkg-system-ui-show-installed))))
      (insert "\n\n"))
 
     ;; Insert table header
@@ -126,7 +126,7 @@ Shows available version and indicates if updates are available."
    (switch-to-buffer buf)))
 
 (defun
- search-packages ()
+ pkg-system-ui-search ()
  "Search for packages by name or keyword in available repositories.
 
 Prompts for a search term and displays matching packages from all configured
@@ -138,5 +138,68 @@ Useful for discovering new packages or finding alternatives."
     (and search-term (not (string-empty-p search-term)))
     ;; Use package-show-package-list with keywords parameter to avoid async refresh issues
     (package-show-package-list t (list search-term)))))
-(provide 'package-ui)
-;;; package-ui.el ends here
+
+(defun
+ pkg-system-ui--safe-refresh-and-check (timeout-seconds)
+ "Safely refresh package contents and return available upgrades.
+Returns a list of (PKG-NAME INSTALLED-DESC AVAILABLE-DESC) or nil if failed/no upgrades.
+TIMEOUT-SECONDS specifies how long to wait before timing out."
+ (when
+  (pkg-system-repositories-responsive-p)
+  (condition-case err
+      (progn
+       (with-timeout
+        (timeout-seconds (core-message-warning "Package update check timed out"))
+        (package-refresh-contents))
+       ;; Manually find packages with updates (same logic as show-installed-packages)
+       (let ((upgrades '()))
+         (dolist
+          (pkg (mapcar #'car package-alist))
+          (let* ((installed-desc (cadr (assq pkg package-alist)))
+                 (installed-version (package-desc-version installed-desc))
+                 (available-desc (cadr (assq pkg package-archive-contents)))
+                 (available-version (when available-desc (package-desc-version available-desc))))
+            (when
+             (and available-version (version-list-< installed-version available-version))
+             (push (list pkg installed-desc available-desc) upgrades))))
+         (nreverse upgrades)))
+    (error
+     (core-message-warning "Package update check failed: %s" (error-message-string err))
+     nil))))
+
+(defun
+ pkg-system-ui-show-upgrades
+ ()
+ "Show only installed packages that have available upgrades.
+Refreshes package contents and displays a list of packages with available updates,
+showing current version -> new version for each package."
+ (interactive)
+ (core-message-package "Checking for package updates (manual check)...")
+ (core-message-debug "Configured repositories: %s" (mapcar #'car package-archives))
+ (let ((upgrades (pkg-system-ui--safe-refresh-and-check core-package-refresh-timeout)))
+   (if
+    upgrades
+    (progn
+     (core-message-success
+      "Package refresh completed successfully - contacted %d repositories"
+      (length package-archives))
+     (core-message-package "Found %d packages with updates available:" (length upgrades))
+     (dolist
+      (pkg upgrades)
+      (let ((pkg-name (car pkg))
+            (current-desc (cadr pkg))
+            (new-desc (caddr pkg)))
+        (core-message-package
+         "  %s: %s → %s"
+         pkg-name
+         (package-desc-version current-desc)
+         (package-desc-version new-desc))))
+     (core-message-package "Run M-x package-list-packages, then 'U' and 'x' to install updates"))
+    (progn
+     (core-message-success
+      "Package refresh completed successfully - contacted %d repositories"
+      (length package-archives))
+     (core-message-package "No package updates available - all packages are up to date.")))))
+
+(provide 'pkg-system-ui)
+;;; pkg-system-ui.el ends here

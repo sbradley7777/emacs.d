@@ -443,10 +443,10 @@ Interactive package management commands for browsing, updating, and maintaining 
 
 | Function | Description |
 |:---------|:------------|
-| `show-installed-packages` | View all installed packages with update indicators and status labels |
-| `search-packages` | Search for packages by name or keyword across repositories |
-| `show-package-upgrades` | Check for available package updates (manual override of weekly check) |
-| `core-packages-cleanup` | Remove unused package dependencies and reset metadata cache |
+| `package-ui-show-installed` | View all installed packages with update indicators and status labels |
+| `package-ui-search` | Search for packages by name or keyword across repositories |
+| `package-ui-show-upgrades` | Check for available package updates (manual override of weekly check) |
+| `package-maintenance-cleanup` | Remove unused package dependencies and reset metadata cache |
 
 **Features:**
 - **Package browser** - displays all packages with "Installed (by User)" or "Dependency" labels
@@ -456,10 +456,10 @@ Interactive package management commands for browsing, updating, and maintaining 
 
 **Dashboard Integration:**
 All package management functions are accessible from the startup dashboard via icon buttons:
-- **Update** button - runs `show-package-upgrades`
-- **Installed Packages** button - runs `show-installed-packages`
-- **Search Packages** button - runs `search-packages`
-- **Package Cleanup** button - runs `core-packages-cleanup`
+- **Update** button - runs `package-ui-show-upgrades`
+- **Installed Packages** button - runs `package-ui-show-installed`
+- **Search Packages** button - runs `package-ui-search`
+- **Package Cleanup** button - runs `package-maintenance-cleanup`
 
 ### Git Integration
 

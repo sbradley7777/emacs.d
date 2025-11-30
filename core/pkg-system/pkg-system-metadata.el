@@ -12,7 +12,7 @@
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
- package-metadata-file
+ pkg-system-metadata-file
  core-package-metadata-file
  "File to store all package system persistent metadata.")
 
@@ -20,7 +20,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- package-metadata-normalize-timestamp (timestamp)
+ pkg-system-metadata-normalize-timestamp (timestamp)
  "Convert timestamp to human-readable format if needed.
 TIMESTAMP can be a string (already human-readable), list (Emacs time format), or nil."
  (cond
@@ -35,22 +35,22 @@ TIMESTAMP can be a string (already human-readable), list (Emacs time format), or
    (format-time-string "%Y-%m-%d %H:%M:%S"))))
 
 (defun
- package-metadata-load-variables ()
+ pkg-system-metadata-load-variables ()
  "Load metadata variables from file if it exists.
 Returns t if file was loaded successfully, nil otherwise."
  (when
-  (file-exists-p package-metadata-file)
+  (file-exists-p pkg-system-metadata-file)
   (condition-case err
-      (progn (load package-metadata-file) t)
+      (progn (load pkg-system-metadata-file) t)
     (error
      (core-message-warning "Failed to load package metadata: %s" (error-message-string err))
      nil))))
 
 (defun
- package-metadata-read-refresh-timestamp ()
+ pkg-system-metadata-read-refresh-timestamp ()
  "Read the last package refresh timestamp from persistent storage.
 Returns the timestamp as a float, or 0 if no previous check recorded."
- (package-metadata-load-variables)
+ (pkg-system-metadata-load-variables)
  (if
   (boundp 'package-last-refresh-timestamp)
   (condition-case err
@@ -71,17 +71,17 @@ Returns the timestamp as a float, or 0 if no previous check recorded."
   0))
 
 (defun
- package-metadata-write-refresh-timestamp (timestamp)
+ pkg-system-metadata-write-refresh-timestamp (timestamp)
  "Write the package refresh timestamp to persistent storage.
 TIMESTAMP should be a float from (float-time (current-time))."
  (let ((human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
-   (package-metadata-save-all :refresh-timestamp human-readable)))
+   (pkg-system-metadata-save-all :refresh-timestamp human-readable)))
 
 (defun
- package-metadata-read-cache-info ()
+ pkg-system-metadata-read-cache-info ()
  "Read cache timestamp and count from persistent storage.
 Returns a plist with :timestamp (as float) and :count, or defaults if not found."
- (package-metadata-load-variables)
+ (pkg-system-metadata-load-variables)
  (let ((timestamp
         (when
          (boundp 'package-cache-timestamp)
@@ -103,38 +103,38 @@ Returns a plist with :timestamp (as float) and :count, or defaults if not found.
    (list :timestamp (or timestamp 0) :count (or count 0))))
 
 (defun
- package-metadata-write-cache-info (timestamp count)
+ pkg-system-metadata-write-cache-info (timestamp count)
  "Write cache timestamp and count to persistent storage.
 TIMESTAMP should be a float from (float-time (current-time)).
 COUNT should be the number of packages in the cache."
  (let ((human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
-   (package-metadata-save-all :cache-timestamp human-readable :cache-count count)))
+   (pkg-system-metadata-save-all :cache-timestamp human-readable :cache-count count)))
 
 (defun
- package-metadata-save-all (&rest args)
+ pkg-system-metadata-save-all (&rest args)
  "Save all metadata to file with updated values.
 ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cache-count."
  (let* ((plist (apply #'list args))
         ;; Load current values or use defaults
         (current-refresh
          (if
-          (package-metadata-load-variables)
-          (package-metadata-normalize-timestamp
+          (pkg-system-metadata-load-variables)
+          (pkg-system-metadata-normalize-timestamp
            (when (boundp 'package-last-refresh-timestamp) package-last-refresh-timestamp))
           nil))
-        (current-cache-info (package-metadata-read-cache-info))
+        (current-cache-info (pkg-system-metadata-read-cache-info))
         ;; Use provided values or current values
         (refresh-ts (or (plist-get plist :refresh-timestamp) current-refresh))
         (cache-ts
          (or
           (plist-get plist :cache-timestamp)
-          (package-metadata-normalize-timestamp
+          (pkg-system-metadata-normalize-timestamp
            (seconds-to-time (plist-get current-cache-info :timestamp)))))
         (cache-count (or (plist-get plist :cache-count) (plist-get current-cache-info :count))))
 
    (condition-case err
        (with-temp-file
-        package-metadata-file
+        pkg-system-metadata-file
         (insert
          ";;; package-metadata.el --- Package management persistent metadata -*- lexical-binding: t -*-\n")
         (insert ";;;\n")
@@ -157,35 +157,20 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
         (when cache-ts (insert (format "(setq package-cache-timestamp \"%s\")\n" cache-ts)))
         (when cache-count (insert (format "(setq package-cache-count %d)\n" cache-count)))
         (insert "\n")
-        (insert ";;; package-metadata.el ends here\n"))
+        (insert ";;; pkg-system-metadata.el ends here\n"))
      (error
       (core-message-error "Failed to save package metadata: %s" (error-message-string err))))))
 
 (defun
- package-metadata-reset () "Delete the metadata file to reset all package system state."
+ pkg-system-metadata-reset () "Delete the metadata file to reset all package system state."
  (when
-  (file-exists-p package-metadata-file)
+  (file-exists-p pkg-system-metadata-file)
   (condition-case err
       (progn
-       (delete-file package-metadata-file)
+       (delete-file pkg-system-metadata-file)
        (core-message-success "Package metadata reset successfully"))
     (error
      (core-message-error "Failed to delete metadata file: %s" (error-message-string err))))))
 
-(defun
- package-metadata-info () "Display current package metadata information."
- (if
-  (file-exists-p package-metadata-file)
-  (progn
-   (package-metadata-load-variables)
-   (let ((refresh-ts
-          (when (boundp 'package-last-refresh-timestamp) package-last-refresh-timestamp))
-         (cache-ts (when (boundp 'package-cache-timestamp) package-cache-timestamp))
-         (cache-count (when (boundp 'package-cache-count) package-cache-count)))
-     (core-message-package "Package Metadata:")
-     (core-message-plain "    Last refresh: %s" (or refresh-ts "Never"))
-     (core-message-plain "    Cache created: %s" (or cache-ts "Never"))
-     (core-message-plain "    Package count: %s" (or cache-count "Unknown"))))
-  (core-message-package "No package metadata found")))
-(provide 'package-metadata)
-;;; package-metadata.el ends here
+(provide 'pkg-system-metadata)
+;;; pkg-system-metadata.el ends here

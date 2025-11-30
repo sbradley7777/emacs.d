@@ -7,16 +7,17 @@
 (require 'core-constants)
 (require 'core-logging)
 (require 'core-utils)
-(require 'package-operations)
-(require 'package-repositories)
-(require 'package-metadata)
+(require 'pkg-system-operations)
+(require 'pkg-system-repositories)
+(require 'pkg-system-metadata)
+(require 'pkg-system-refresh)
 (defvar core-packages-all) ; Forward declaration - defined in core-packages.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- package-upgrade-all ()
+ pkg-system-maintenance-upgrade-all ()
  "Upgrade all installed packages to their latest available versions.
 
 Checks for updates across all configured repositories and upgrades packages
@@ -24,9 +25,9 @@ that have newer versions available.  Requires network connectivity.
 Shows summary of upgraded packages or reports if no upgrades are available."
  (interactive) (core-message-debug "Checking for package upgrades...")
  (unless
-  (package-repositories-responsive-p)
+  (pkg-system-repositories-responsive-p)
   (core-message-error "Network unavailable - cannot check for package upgrades"))
- (safe-package-refresh-with-timeout)
+ (pkg-system-refresh-with-timeout)
  (let ((upgradeable-packages '())
        (failed-packages '())
        (upgraded-count 0))
@@ -71,69 +72,7 @@ Shows summary of upgraded packages or reports if no upgrades are available."
     (core-message-success "All packages are up to date"))))
 
 (defun
- core-packages--safe-refresh-and-check (timeout-seconds)
- "Safely refresh package contents and return available upgrades.
-Returns a list of (PKG-NAME INSTALLED-DESC AVAILABLE-DESC) or nil if failed/no upgrades.
-TIMEOUT-SECONDS specifies how long to wait before timing out."
- (when
-  (package-repositories-responsive-p)
-  (condition-case err
-      (progn
-       (with-timeout
-        (timeout-seconds (core-message-warning "Package update check timed out"))
-        (package-refresh-contents))
-       ;; Manually find packages with updates (same logic as show-installed-packages)
-       (let ((upgrades '()))
-         (dolist
-          (pkg (mapcar #'car package-alist))
-          (let* ((installed-desc (cadr (assq pkg package-alist)))
-                 (installed-version (package-desc-version installed-desc))
-                 (available-desc (cadr (assq pkg package-archive-contents)))
-                 (available-version (when available-desc (package-desc-version available-desc))))
-            (when
-             (and available-version (version-list-< installed-version available-version))
-             (push (list pkg installed-desc available-desc) upgrades))))
-         (nreverse upgrades)))
-    (error
-     (core-message-warning "Package update check failed: %s" (error-message-string err))
-     nil))))
-
-(defun
- show-package-upgrades
- ()
- "Show only installed packages that have available upgrades.
-Refreshes package contents and displays a list of packages with available updates,
-showing current version -> new version for each package."
- (interactive)
- (core-message-package "Checking for package updates (manual check)...")
- (core-message-debug "Configured repositories: %s" (mapcar #'car package-archives))
- (let ((upgrades (core-packages--safe-refresh-and-check core-package-refresh-timeout)))
-   (if
-    upgrades
-    (progn
-     (core-message-success
-      "Package refresh completed successfully - contacted %d repositories"
-      (length package-archives))
-     (core-message-package "Found %d packages with updates available:" (length upgrades))
-     (dolist
-      (pkg upgrades)
-      (let ((pkg-name (car pkg))
-            (current-desc (cadr pkg))
-            (new-desc (caddr pkg)))
-        (core-message-package
-         "  %s: %s → %s"
-         pkg-name
-         (package-desc-version current-desc)
-         (package-desc-version new-desc))))
-     (core-message-package "Run M-x package-list-packages, then 'U' and 'x' to install updates"))
-    (progn
-     (core-message-success
-      "Package refresh completed successfully - contacted %d repositories"
-      (length package-archives))
-     (core-message-package "No package updates available - all packages are up to date.")))))
-
-(defun
- core-packages-cleanup ()
+ pkg-system-maintenance-cleanup ()
  "Clean up unused packages and reset package metadata cache.
 Removes orphaned package dependencies using `package-autoremove' and resets metadata."
  (interactive)
@@ -167,8 +106,8 @@ Removes orphaned package dependencies using `package-autoremove' and resets meta
    (core-message-loading "Resetting package metadata cache...")
    (condition-case err
        (progn
-        (require 'package-metadata)
-        (when (fboundp 'package-metadata-reset) (package-metadata-reset))
+        (require 'pkg-system-metadata)
+        (when (fboundp 'pkg-system-metadata-reset) (pkg-system-metadata-reset))
         (core-message-success "Package metadata cache reset"))
      (error
       (core-message-warning "Metadata reset failed: %s" (error-message-string err))))
@@ -180,7 +119,7 @@ Removes orphaned package dependencies using `package-autoremove' and resets meta
     (if (> cleanup-count 1) "s" ""))))
 
 (defun
- core-packages-check-weekly-updates ()
+ pkg-system-maintenance-check-weekly-updates ()
  "Check for package update once per week during interactive sessions.
 Automatically check for package update once per week during interactive Emacs sessions.
 This provides awareness of available updates without automatically installing them.
@@ -190,7 +129,7 @@ How it works:
 - Checks if 7 days have passed since last package list refresh (persistent across sessions)
 - Refreshes package contents from repositories (MELPA, GNU ELPA, etc.)
 - Notifies user if updates are available but does NOT install them
-- User can run \\[show-package-upgrades] for details or \\[package-list-packages] to install
+- User can run \\[pkg-system-ui-show-upgrades] for details or \\[package-list-packages] to install
 
 Benefits:
 - Stay informed about available updates (like the doom-themes fix we just applied)
@@ -198,12 +137,12 @@ Benefits:
 - Prevents surprise breakage from automatic updates
 - Weekly frequency avoids slowing down daily startup times
 - Persistent storage prevents duplicate checks across Emacs restarts"
- (let ((last-check-timestamp (package-metadata-read-refresh-timestamp))
+ (let ((last-check-timestamp (pkg-system-metadata-read-refresh-timestamp))
        (days-since-last-check
         (/
          (float-time
           (time-subtract
-           (current-time) (seconds-to-time (package-metadata-read-refresh-timestamp))))
+           (current-time) (seconds-to-time (pkg-system-metadata-read-refresh-timestamp))))
          (* 24 60 60))))
    (if
     (and
@@ -214,7 +153,7 @@ Benefits:
      ;; Only during interactive sessions, not batch mode
      (not noninteractive)
      ;; Only if network is available
-     (package-repositories-responsive-p))
+     (pkg-system-repositories-responsive-p))
     ;; Perform weekly check
     (progn
      (core-message-package "Checking for package updates (weekly check)...")
@@ -239,22 +178,22 @@ Benefits:
                 (if
                  upgrades
                  (core-message-package
-                  "Found %d package updates available. Run M-x show-package-upgrades for details."
+                  "Found %d package updates available. Run M-x pkg-system-ui-show-upgrades for details."
                   (length upgrades))
                  (core-message-package
                   "No package updates available - all packages are up to date.")))
               ;; Only update timestamp after EVERYTHING completed successfully
-              (package-metadata-write-refresh-timestamp (float-time (current-time))))
+              (pkg-system-metadata-write-refresh-timestamp (float-time (current-time))))
              (core-message-warning "Package refresh incomplete - will retry next startup"))))
        (error
         (core-message-error "Package refresh failed: %s" (error-message-string err))
         ;; Still mark as checked to prevent repeated attempts
-        (package-metadata-write-refresh-timestamp (float-time (current-time))))))
+        (pkg-system-metadata-write-refresh-timestamp (float-time (current-time))))))
     ;; Skip check and inform user
     (when
      (not noninteractive)
      (core-message-package
       "Skipping package check (%.1f days since last check, checking weekly)"
       days-since-last-check)))))
-(provide 'package-maintenance)
-;;; package-maintenance.el ends here
+(provide 'pkg-system-maintenance)
+;;; pkg-system-maintenance.el ends here

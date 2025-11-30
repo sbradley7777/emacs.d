@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-logging)
-(require 'package-operations)
+(require 'pkg-system-operations)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use-Package Bootstrap and Configuration
@@ -44,5 +44,5 @@
  use-package-always-ensure
  use-package-verbose
  use-package-minimum-reported-time)
-(provide 'package-bootstrap)
-;;; package-bootstrap.el ends here
+(provide 'pkg-system-bootstrap)
+;;; pkg-system-bootstrap.el ends here

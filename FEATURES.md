@@ -113,7 +113,7 @@ Interactive package management commands for browsing, updating, and maintaining 
 
 **Interactive Commands:**
 
-**`M-x show-installed-packages`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
+**`M-x package-ui-show-installed`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
 - **Comprehensive package listing** showing all installed packages with status labels
 - **Update availability indicator** (`*` marker) for packages with available updates
 - **Clear status labels**: "Installed (by User)" vs "Dependency" for easy identification
@@ -121,19 +121,19 @@ Interactive package management commands for browsing, updating, and maintaining 
 - **Detailed columns**: Package name, installed version, update status, and description
 - **Sorted display**: Alphabetically sorted for easy navigation
 
-**`M-x search-packages`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
+**`M-x package-ui-search`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
 - **Keyword-based search** across all available package repositories
 - **Interactive results**: Browse and install packages directly from search results
 - **Repository coverage**: Searches MELPA, GNU ELPA, and all configured repositories
 
-**`M-x show-package-upgrades`** ([`core/package-system/package-maintenance.el`](core/package-system/package-maintenance.el)):
+**`M-x package-ui-show-upgrades`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
 - **Manual update check** on demand (bypasses weekly automatic check)
 - **Detailed upgrade information**: Shows current version → new version for each package
 - **Repository diagnostics**: Confirms successful contact with all package repositories
 - **Network-aware**: Includes timeout protection and error handling
 - **Usage instructions**: Provides next steps for installing updates via `package-list-packages`
 
-**`M-x core-packages-cleanup`** ([`core/package-system/package-maintenance.el`](core/package-system/package-maintenance.el)):
+**`M-x package-maintenance-cleanup`** ([`core/package-system/package-maintenance.el`](core/package-system/package-maintenance.el)):
 - **Automatic dependency removal**: Uses built-in `package-autoremove` to clean orphaned packages
 - **Metadata cache reset**: Clears package metadata for fresh repository state
 - **Safe operation**: Auto-accepts removal prompts for streamlined cleanup
@@ -765,10 +765,10 @@ Professional startup screen with quick access to recent files, package managemen
 **Dashboard Navigation Buttons:**
 - **Home** - browse dashboard homepage (documentation)
 - **Restart** - restart Emacs session
-- **Update** - check for package updates (`show-package-upgrades`)
-- **Installed Packages** - view all installed packages (`show-installed-packages`)
-- **Search Packages** - search for new packages (`search-packages`)
-- **Package Cleanup** - remove unused packages and reset cache (`core-packages-cleanup`)
+- **Update** - check for package updates (`package-ui-show-upgrades`)
+- **Installed Packages** - view all installed packages (`package-ui-show-installed`)
+- **Search Packages** - search for new packages (`package-ui-search`)
+- **Package Cleanup** - remove unused packages and reset cache (`package-maintenance-cleanup`)
 - **Settings** - open `init.el` configuration file
 - **Quit** - exit Emacs with save prompts
 

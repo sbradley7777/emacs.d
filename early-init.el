@@ -10,7 +10,7 @@
 ;;; Code:
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "core/logging" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "core/package-system" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "core/pkg-system" user-emacs-directory))
 ;; Load constants first (includes emacs-local-dir and startup constants)
 (require 'core-constants)
 ;; Load message utilities for consistent logging
@@ -110,7 +110,7 @@
 ;; Package System Initialization (early)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bootstrap the package system and install use-package
-(require 'package-manager)
+(require 'pkg-system-manager)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Native Compilation Configuration
