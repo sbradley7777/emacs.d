@@ -112,7 +112,9 @@ For detailed installation instructions, see [`scripts/install.sh`](scripts/insta
 emacs --debug-init
 
 # Simple batch test
-emacs --batch --load ~/.emacs.d/init.el --eval "(message \"Configuration loaded\")"
+# Note: Disable trampolines to prevent ~/.emacs.d/eln-cache/ creation in wrong location
+#       This configuration uses ~/.emacs.d/local/eln-cache/ instead
+emacs --batch --eval "(setq native-comp-enable-subr-trampolines nil)" --eval "(load-file \"~/.emacs.d/init.el\")" --eval "(message \"Configuration loaded\")"
 ```
 
 For comprehensive testing documentation and troubleshooting, see [`scripts/TESTING.md`](scripts/TESTING.md).

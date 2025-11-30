@@ -720,7 +720,9 @@ This test will:
 **Manual testing commands**:
 ```bash
 # Test configuration in batch mode
-emacs --batch --load ~/.emacs.d/early-init.el --load ~/.emacs.d/init.el --eval "(message \"Test complete\")"
+# Note: Disable trampolines to prevent ~/.emacs.d/eln-cache/ creation in wrong location
+#       This configuration uses ~/.emacs.d/local/eln-cache/ instead
+emacs --batch --eval "(setq native-comp-enable-subr-trampolines nil)" --eval "(load-file \"~/.emacs.d/init.el\")" --eval "(message \"Test complete\")"
 
 # Interactive debug mode (shows detailed errors)
 emacs --debug-init

@@ -207,7 +207,7 @@ test_configuration() {
     local exit_code
 
     # Test if Emacs can load the configuration without errors
-    if emacs --batch --load "$EMACS_DIR/init.el" --eval '(message "Configuration loaded successfully")' >"$temp_output" 2>&1; then
+    if emacs --batch --eval "(setq native-comp-enable-subr-trampolines nil)" --eval "(load-file \"$EMACS_DIR/init.el\")" --eval '(message "Configuration loaded successfully")' >"$temp_output" 2>&1; then
         log SUCCESS "Configuration loads without errors"
         # Clean up temp file
         rm -f "$temp_output"
@@ -218,7 +218,7 @@ test_configuration() {
         # Check if it's likely a package-related issue
         if grep -q -E "(package|melpa|install|download|network|timeout)" "$temp_output" 2>/dev/null; then
             log WARN "Detected package/network-related warnings (this is often normal on first run)"
-            log INFO "Try running: emacs --batch --load \"$EMACS_DIR/init.el\" --eval '(message \"Test\")'"
+            log INFO "Try running: emacs --batch --eval \"(setq native-comp-enable-subr-trampolines nil)\" --eval \"(load-file \\\"$EMACS_DIR/init.el\\\")\" --eval '(message \"Test\")'"
             # Clean up temp file since we're not providing it for debugging
             rm -f "$temp_output"
         else

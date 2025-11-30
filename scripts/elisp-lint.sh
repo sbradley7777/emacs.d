@@ -73,10 +73,12 @@ PRE_COMMIT_MODE=false
 PRE_COMMIT_ERROR_COUNT=0
 
 # Patterns to filter out from checkdoc (configured to use 127 char limit, ignore 80 char warnings)
-CHECKDOC_FILTER_PATTERNS="Some lines are over 80 columns wide"
+# Also filter early-init.el loading messages that appear in stderr
+CHECKDOC_FILTER_PATTERNS="Some lines are over 80 columns wide\|Unable to activate package\|Required package.*is unavailable\|use-package not installed\|First-time setup:\|Batch mode requires"
 
 # Patterns to filter out from isolated byte-compile (expected errors without init.el)
-ISOLATED_FILTER_PATTERNS="Cannot open load file"
+# Also filter early-init.el loading messages that appear in stderr
+ISOLATED_FILTER_PATTERNS="Cannot open load file\|Unable to activate package\|Required package.*is unavailable\|use-package not installed\|First-time setup:\|Batch mode requires"
 
 # Prints a horizontal separator line (120 '=' characters).
 #
@@ -237,21 +239,30 @@ AWK_SCRIPT
 # Parameters:
 #   file - Absolute path to .el file
 #   display_file - Path with ~ substitution for display
+#   early_init_el - Path to early-init.el (or empty if not found)
 #
 # Returns:
 #   Checkdoc output with warnings (empty if no warnings)
 run_checkdoc_check() {
     local file="$1"
     local display_file="$2"
+    local early_init_el="$3"
 
     debug "Running checkdoc on $display_file"
-    debug "Command: emacs --batch --eval \"(setq byte-compile-docstring-max-column 127)\" --eval \"(checkdoc-file \\\"$file\\\")\""
+
+    local load_early_init=""
+    if [ -n "$early_init_el" ] && [ -f "$early_init_el" ]; then
+        load_early_init="--eval \"(load-file \\\"$early_init_el\\\")\""
+        debug "Loading early-init.el: $early_init_el"
+    fi
+
+    debug "Command: emacs --batch $load_early_init --eval \"(setq byte-compile-docstring-max-column 127)\" --eval \"(checkdoc-file \\\"$file\\\")\""
 
     local checkdoc_result
     if [ "$DEBUG" = true ]; then
-        checkdoc_result=$(emacs --batch --eval "(setq byte-compile-docstring-max-column 127)" --eval "(checkdoc-file \"$file\")" 2>&1 | tee /dev/stderr | grep -v -E "(Loading|Loaded)" | grep -v "^$" | grep -v "$CHECKDOC_FILTER_PATTERNS")
+        checkdoc_result=$(eval emacs --batch "$load_early_init" --eval "\"(setq byte-compile-docstring-max-column 127)\"" --eval "\"(checkdoc-file \\\"$file\\\")\"" 2>&1 | tee /dev/stderr | grep -v -E "(Loading|Loaded)" | grep -v "^$" | grep -v "$CHECKDOC_FILTER_PATTERNS")
     else
-        checkdoc_result=$(emacs --batch --eval "(setq byte-compile-docstring-max-column 127)" --eval "(checkdoc-file \"$file\")" 2>&1 | grep -v -E "(Loading|Loaded)" | grep -v "^$" | grep -v "$CHECKDOC_FILTER_PATTERNS")
+        checkdoc_result=$(eval emacs --batch "$load_early_init" --eval "\"(setq byte-compile-docstring-max-column 127)\"" --eval "\"(checkdoc-file \\\"$file\\\")\"" 2>&1 | grep -v -E "(Loading|Loaded)" | grep -v "^$" | grep -v "$CHECKDOC_FILTER_PATTERNS")
     fi
 
     if [ -n "$checkdoc_result" ]; then
@@ -266,27 +277,36 @@ run_checkdoc_check() {
 # Parameters:
 #   file - Absolute path to .el file
 #   display_file - Path with ~ substitution for display
+#   early_init_el - Path to early-init.el (or empty if not found)
 #
 # Returns:
 #   Byte-compile warnings (empty if no warnings), excluding filtered patterns
 run_isolated_byte_compile() {
     local file="$1"
     local display_file="$2"
+    local early_init_el="$3"
 
     debug "Running isolated byte-compile on $display_file"
-    debug "Command: emacs --batch --eval \"(setq byte-compile-dest-file-function (lambda (_) nil))\" --eval \"(byte-compile-file \\\"$file\\\")\""
+
+    local load_early_init=""
+    if [ -n "$early_init_el" ] && [ -f "$early_init_el" ]; then
+        load_early_init="--eval \"(load-file \\\"$early_init_el\\\")\""
+        debug "Loading early-init.el: $early_init_el"
+    fi
+
+    debug "Command: emacs --batch $load_early_init --eval \"(setq byte-compile-dest-file-function (lambda (_) nil))\" --eval \"(byte-compile-file \\\"$file\\\")\""
 
     local isolated_result
     if [ "$DEBUG" = true ]; then
-        isolated_result=$(emacs --batch \
-            --eval "(setq byte-compile-dest-file-function (lambda (_) nil))" \
-            --eval "(byte-compile-file \"$file\")" 2>&1 | tee /dev/stderr | grep -v -E "(Loading|Loaded)" | grep -v "^$" | \
+        isolated_result=$(eval emacs --batch "$load_early_init" \
+            --eval "\"(setq byte-compile-dest-file-function (lambda (_) nil))\"" \
+            --eval "\"(byte-compile-file \\\"$file\\\")\"" 2>&1 | tee /dev/stderr | grep -v -E "(Loading|Loaded)" | grep -v "^$" | \
             awk "$(get_byte_compile_awk_script)" | \
             grep -v "$ISOLATED_FILTER_PATTERNS")
     else
-        isolated_result=$(emacs --batch \
-            --eval "(setq byte-compile-dest-file-function (lambda (_) nil))" \
-            --eval "(byte-compile-file \"$file\")" 2>&1 | grep -v -E "(Loading|Loaded)" | grep -v "^$" | \
+        isolated_result=$(eval emacs --batch "$load_early_init" \
+            --eval "\"(setq byte-compile-dest-file-function (lambda (_) nil))\"" \
+            --eval "\"(byte-compile-file \\\"$file\\\")\"" 2>&1 | grep -v -E "(Loading|Loaded)" | grep -v "^$" | \
             awk "$(get_byte_compile_awk_script)" | \
             grep -v "$ISOLATED_FILTER_PATTERNS")
     fi
@@ -741,6 +761,28 @@ find_init_el() {
     return 1
 }
 
+# Finds early-init.el by searching upward from given directory.
+#
+# Parameters:
+#   dir - Starting directory to search from
+#
+# Returns:
+#   Path to early-init.el if found (via stdout)
+#
+# Exit Code:
+#   0 if found, 1 if not found
+find_early_init_el() {
+    local dir="$1"
+    while [ "$dir" != "/" ]; do
+        if [ -f "$dir/early-init.el" ]; then
+            echo "$dir/early-init.el"
+            return 0
+        fi
+        dir=$(dirname "$dir")
+    done
+    return 1
+}
+
 # Temporary files for storing results
 RESULTS_DIR=$(mktemp -d)
 CHECKDOC_OUT="$RESULTS_DIR/checkdoc.txt"
@@ -778,6 +820,7 @@ update_stats() {
 # Parameters:
 #   file - Absolute path to .el file
 #   init_el - Path to init.el (or empty if not found)
+#   early_init_el - Path to early-init.el (or empty if not found)
 #
 # Side Effects:
 #   - Writes results to $CHECKDOC_OUT, $ISOLATED_OUT, $LOADED_OUT
@@ -786,6 +829,7 @@ update_stats() {
 check_file() {
     local file="$1"
     local init_el="$2"
+    local early_init_el="$3"
     local display_file
     display_file="$(replace_home "$file")"
 
@@ -798,8 +842,8 @@ check_file() {
     local checkdoc_result
     local isolated_result
     local loaded_result
-    checkdoc_result=$(run_checkdoc_check "$file" "$display_file")
-    isolated_result=$(run_isolated_byte_compile "$file" "$display_file")
+    checkdoc_result=$(run_checkdoc_check "$file" "$display_file" "$early_init_el")
+    isolated_result=$(run_isolated_byte_compile "$file" "$display_file" "$early_init_el")
 
     if [ -n "$init_el" ] && [ -f "$init_el" ]; then
         loaded_result=$(run_loaded_byte_compile "$file" "$display_file" "$init_el")
@@ -889,6 +933,13 @@ if [ -f "$TARGET" ]; then
         fi
     fi
 
+    # Find early-init.el for batch mode native compilation path configuration
+    if [[ "$(basename "$TARGET")" == "early-init.el" ]]; then
+        EARLY_INIT_EL="$TARGET"
+    else
+        EARLY_INIT_EL=$(find_early_init_el "$FILE_DIR") || EARLY_INIT_EL=""
+    fi
+
     if [ "$PRE_COMMIT_MODE" = false ]; then
         echo "Checking file: $(replace_home "$TARGET")"
         if [ -n "$INIT_EL" ]; then
@@ -896,10 +947,13 @@ if [ -f "$TARGET" ]; then
         else
             echo "Warning: init.el not found (loaded checks will be skipped)"
         fi
+        if [ -n "$EARLY_INIT_EL" ]; then
+            echo "Using early-init.el: $(replace_home "$EARLY_INIT_EL")"
+        fi
         echo ""
     fi
 
-    check_file "$TARGET" "$INIT_EL"
+    check_file "$TARGET" "$INIT_EL" "$EARLY_INIT_EL"
 
 elif [ -d "$TARGET" ]; then
     # Directory mode
@@ -914,17 +968,27 @@ elif [ -d "$TARGET" ]; then
         INIT_EL=""
     fi
 
+    # Check if early-init.el exists for batch mode native compilation path configuration
+    if [ -f "$EMACS_DIR/early-init.el" ]; then
+        EARLY_INIT_EL="$EMACS_DIR/early-init.el"
+    else
+        EARLY_INIT_EL=""
+    fi
+
     if [ "$PRE_COMMIT_MODE" = false ]; then
         echo "Checking Emacs Lisp files in: $(replace_home "$EMACS_DIR")"
         if [ -n "$INIT_EL" ]; then
             echo "Using init.el: $(replace_home "$INIT_EL")"
+        fi
+        if [ -n "$EARLY_INIT_EL" ]; then
+            echo "Using early-init.el: $(replace_home "$EARLY_INIT_EL")"
         fi
         echo ""
     fi
 
     # Find and check all .el files (excluding elpa/)
     while IFS= read -r file; do
-        check_file "$file" "$INIT_EL"
+        check_file "$file" "$INIT_EL" "$EARLY_INIT_EL"
     done < <(find "$EMACS_DIR" -name "*.el" -not -path "*/elpa/*" | sort)
 fi
 
