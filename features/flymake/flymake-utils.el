@@ -8,6 +8,7 @@
 (require 'core-logging-tables)
 (require 'core-ui-utils)
 (require 'core-utils)
+(require 'eglot-registry)
 (require 'features-constants)
 (require 'flymake-registry)
 
@@ -80,9 +81,15 @@ Returns list of formatted strings describing each backend."
 
 (defun
  flymake--get-lsp-config ()
- "Get LSP configuration for current `major-mode' from `features-eglot-lsp-server-map'.
+ "Get LSP configuration for current `major-mode' from `features-eglot-lsp-server-registry'.
 Returns cons cell (MODE . SERVER-EXECUTABLE) or nil if no LSP configured for this mode."
- (when (boundp 'features-eglot-lsp-server-map) (assq major-mode features-eglot-lsp-server-map)))
+ (when
+  (boundp 'features-eglot-lsp-server-registry)
+  (let ((server-symbol (eglot-registry-find-server-for-mode major-mode)))
+    (when
+     server-symbol
+     (let ((binary (eglot-registry-get-binary server-symbol)))
+       (when binary (cons major-mode binary)))))))
 
 (defun
  flymake--count-diagnostics ()
@@ -144,7 +151,7 @@ Returns a list of formatted strings describing the buffer state."
  "Check Flymake backend status and log appropriate messages.
 Provides success messages when backends are active, warnings about missing LSP servers,
 or info messages for unconfigured modes.  Remains silent when eglot is configured but
-still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-server-map'."
+still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-server-registry'."
  (when
   (and (boundp 'flymake-mode) flymake-mode)
   (let* ((active-backends (flymake--get-active-backends))
@@ -184,10 +191,10 @@ Includes backend binary/LSP server information and installation status."
    (push "Flymake Buffers" lines)
    (dolist (line (flymake--build-all-buffers-table)) (push line lines))
    (push "" lines)
-   ;; Table 2: Flymake LSP Backends (TEMPORARILY DISABLED - Phase 3)
-   ;; (push "Flymake LSP Backends" lines)
-   ;; (dolist (line (flymake--build-lsp-backends-table)) (push line lines))
-   ;; (push "" lines)
+   ;; Table 2: Flymake LSP Backends
+   (push "Flymake LSP Backends" lines)
+   (dolist (line (flymake--build-lsp-backends-table)) (push line lines))
+   (push "" lines)
    ;; Table 3: Flymake Direct Backends
    (push "Flymake Direct Backends" lines)
    (dolist (line (flymake--build-direct-backends-table)) (push line lines))
@@ -436,7 +443,7 @@ Column layout (all widths calculated dynamically from actual data):
  flymake--get-backend-binary-info (backend-symbol)
  "Get binary/LSP server information for BACKEND-SYMBOL.
 Returns plist with :type, :binary/:lsp-server, :installed keys.
-Checks registry first, then `features-eglot-lsp-server-map' for LSP backends.
+Checks registry first, then `features-eglot-lsp-server-registry' for LSP backends.
 
 Examples:
   LSP backend:    (:type lsp :lsp-server \"pylsp\" :installed t)
@@ -452,8 +459,9 @@ Examples:
      (let* ((mode (car modes))
             (lsp-server
              (when
-              (boundp 'features-eglot-lsp-server-map)
-              (cdr (assq mode features-eglot-lsp-server-map))))
+              (boundp 'features-eglot-lsp-server-registry)
+              (let ((server-symbol (eglot-registry-find-server-for-mode mode)))
+                (when server-symbol (eglot-registry-get-binary server-symbol)))))
             (installed (and lsp-server (executable-find lsp-server))))
        (list :type 'lsp :lsp-server (or lsp-server "-") :installed (if installed t nil))))
     ;; Direct backend with binary
@@ -638,30 +646,37 @@ Returns t if at least one buffer with MODE has eglot managing it."
  flymake--build-lsp-backends-table ()
  "Build Flymake LSP Backends table.
 Returns list of formatted table lines with total row showing running count.
-Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-map'."
+Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-registry'."
  (let* ((headers '("Major Mode" "Backend" "Description" "Binary" "Installed" "Running"))
         (rows nil))
    (when
-    (boundp 'features-eglot-lsp-server-map)
+    (boundp 'features-eglot-lsp-server-registry)
     (dolist
-     (mode-lsp-pair features-eglot-lsp-server-map)
-     (let* ((mode (car mode-lsp-pair))
-            (lsp-server (cdr mode-lsp-pair))
-            (backend-symbol 'eglot-flymake-backend)
-            (description "Eglot LSP")
-            (installed (executable-find lsp-server))
-            (running (flymake--lsp-running-for-mode-p mode))
-            (installed-str (if installed "yes" "no"))
-            (running-str (if running "yes" "no")))
-       (push
-        (list
-         (format "%s" mode)
-         (format "%s" backend-symbol)
-         description
-         lsp-server
-         installed-str
-         running-str)
-        rows))))
+     (entry features-eglot-lsp-server-registry)
+     (let* ((server-symbol (nth 0 entry))
+            (description (nth 1 entry))
+            (modes (nth 2 entry))
+            (props (nthcdr 3 entry))
+            (lsp-server (plist-get props :binary))
+            (disabled (plist-get props :disabled))
+            (backend-symbol 'eglot-flymake-backend))
+       (unless
+        disabled
+        (dolist
+         (mode modes)
+         (let* ((installed (executable-find lsp-server))
+                (running (flymake--lsp-running-for-mode-p mode))
+                (installed-str (if installed "yes" "no"))
+                (running-str (if running "yes" "no")))
+           (push
+            (list
+             (format "%s" mode)
+             (format "%s" backend-symbol)
+             description
+             lsp-server
+             installed-str
+             running-str)
+            rows)))))))
    (if
     rows
     (let* ((reversed-rows (nreverse rows))

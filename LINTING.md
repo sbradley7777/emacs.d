@@ -181,8 +181,16 @@ To add LSP support for additional languages, add to your `local.el`:
 
 ```elisp
 ;; Example: Add Rust LSP support
-(with-eval-after-load 'eglot-constants
-  (add-to-list 'features-eglot-lsp-server-map '(rust-mode . "rust-analyzer")))
+(with-eval-after-load 'eglot-registry
+  (setq features-eglot-lsp-server-registry
+        (append features-eglot-lsp-server-registry
+                (list (eglot-registry-create-server
+                       'rust-analyzer
+                       "Rust Language Server"
+                       '(rust-mode rust-ts-mode)
+                       :binary "rust-analyzer"
+                       :priority 100
+                       :url "https://rust-analyzer.github.io/")))))
 ```
 
 The LSP server will automatically activate when the binary is found in PATH.
@@ -313,15 +321,19 @@ Binary names are automatically looked up from the registry.
 
 ### 4. Configure LSP Server (if using LSP)
 
-Add entry to `features/eglot/eglot-constants.el`:
+Add entry to `features/eglot/eglot-registry.el`:
 
 ```elisp
-(defconst features-eglot-lsp-server-map
-  '(...
-    (language-mode . "lsp-server-binary")
-    (language-ts-mode . "lsp-server-binary")
-    ...))
+(eglot-registry-create-server
+ 'lsp-server-symbol
+ "Language Name Language Server"
+ '(language-mode language-ts-mode)
+ :binary "lsp-server-binary"
+ :priority 100
+ :url "https://github.com/project/lsp-server")
 ```
+
+Add this entry to the `features-eglot-lsp-server-registry` list constant.
 
 ### 5. Update Documentation
 

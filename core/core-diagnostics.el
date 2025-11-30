@@ -7,7 +7,7 @@
 (require 'core-logging)
 (require 'tree-sitter-utils)
 (require 'core-process-utils)
-(require 'eglot-constants)
+(require 'eglot-registry)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
@@ -223,26 +223,23 @@ Only checks when working on a remote file."
 (defun
  diagnostics-check-lsp-servers ()
  "Check LSP server availability for configured languages.
-Uses `features-eglot-lsp-server-map' to automatically check all registered LSP servers."
+Uses `features-eglot-lsp-server-registry' to automatically check all registered LSP servers."
  (let ((results nil)
        (checked-binaries (make-hash-table :test 'equal)))
-   ;; Iterate through eglot LSP server map from registry
+   ;; Iterate through eglot LSP server registry
    (dolist
-    (mode-config features-eglot-lsp-server-map)
-    (let* ((mode (car mode-config))
-           (binary (cdr mode-config))
-           (mode-name (symbol-name mode)))
-      ;; Only check each binary once (avoid duplicates for ts-mode variants)
+    (entry features-eglot-lsp-server-registry)
+    (let* ((server-symbol (nth 0 entry))
+           (description (nth 1 entry))
+           (modes (nth 2 entry))
+           (props (nthcdr 3 entry))
+           (binary (plist-get props :binary))
+           (disabled (plist-get props :disabled)))
+      ;; Only check each binary once (avoid duplicates) and skip disabled servers
       (unless
-       (gethash binary checked-binaries) (puthash binary t checked-binaries)
+       (or disabled (gethash binary checked-binaries)) (puthash binary t checked-binaries)
        (push
-        (diagnostics-check-executable binary
-                                      (format
-                                       "%s LSP (%s)"
-                                       (capitalize (replace-regexp-in-string "-.*" "" mode-name))
-                                       binary)
-                                      t)
-        results))))
+        (diagnostics-check-executable binary (format "%s (%s)" description binary) t) results))))
    results))
 
 (defun

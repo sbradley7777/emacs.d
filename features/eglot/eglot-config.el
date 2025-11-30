@@ -9,6 +9,7 @@
 (require 'core-logging)
 (require 'tramp-utils)
 (require 'eglot-constants)
+(require 'eglot-registry)
 (require 'features-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -24,7 +25,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  eglot-setup-lsp-for-mode (mode lsp-executable)
- "Set up eglot hook for MODE if LSP-executable is available.
+ "Set up eglot hook for MODE if LSP-EXECUTABLE is available.
+MODE is the major mode symbol to configure.
+LSP-EXECUTABLE is the name of the LSP server executable to check for.
 Checks local or remote host appropriately based on `default-directory'."
  (add-hook
   (intern (format "%s-hook" mode))
@@ -45,9 +48,12 @@ Checks local or remote host appropriately based on `default-directory'."
        (when should-enable (eglot-ensure)))))))
 
 (dolist
- (mode-config features-eglot-lsp-server-map)
- (let ((mode (car mode-config))
-       (lsp-executable (cdr mode-config)))
-   (eglot-setup-lsp-for-mode mode lsp-executable)))
+ (entry features-eglot-lsp-server-registry)
+ (let* ((lsp-server-symbol (nth 0 entry))
+        (modes (nth 2 entry))
+        (props (nthcdr 3 entry))
+        (lsp-executable (plist-get props :binary))
+        (disabled (plist-get props :disabled)))
+   (unless disabled (dolist (mode modes) (eglot-setup-lsp-for-mode mode lsp-executable)))))
 (provide 'eglot-config)
 ;;; eglot-config.el ends here
