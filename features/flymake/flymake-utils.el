@@ -676,16 +676,8 @@ Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-
            (running-count (cl-count-if (lambda (row) (string= (nth 5 row) "yes")) reversed-rows))
            (row-count (length reversed-rows))
            (total-spec
-            (lambda
-             (headers rows)
-             (let* ((col-widths (core-logging-calculate-column-widths headers rows))
-                    (width (nth 0 col-widths))
-                    (label "Total")
-                    (count-str (number-to-string row-count))
-                    (padding (- width (length label) (length count-str)))
-                    (total-label-with-count
-                     (concat label (make-string (max 1 padding) ?\s) count-str)))
-               (list total-label-with-count "-" "-" "-" "-" (number-to-string running-count))))))
+            (core-logging-total-with-count-label
+             "Total" row-count "-" "-" "-" "-" (number-to-string running-count))))
       (core-logging-format-table headers reversed-rows total-spec))
     (list "No LSP backends registered"))))
 
@@ -746,24 +738,8 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
             (apply '+ (mapcar (lambda (row) (string-to-number (nth 7 row))) reversed-rows)))
            (row-count (length reversed-rows))
            (total-spec
-            (lambda
-             (headers rows)
-             (let* ((col-widths (core-logging-calculate-column-widths headers rows))
-                    (width (nth 0 col-widths))
-                    (label "Total")
-                    (count-str (number-to-string row-count))
-                    (padding (- width (length label) (length count-str)))
-                    (total-label-with-count
-                     (concat label (make-string (max 1 padding) ?\s) count-str)))
-               (list
-                total-label-with-count
-                "-"
-                "-"
-                "-"
-                "-"
-                "-"
-                "-"
-                (number-to-string total-buffers))))))
+            (core-logging-total-with-count-label
+             "Total" row-count "-" "-" "-" "-" "-" "-" (number-to-string total-buffers))))
       (core-logging-format-table headers reversed-rows total-spec))
     (list empty-message))))
 

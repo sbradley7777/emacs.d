@@ -68,6 +68,135 @@ Example:
      result))
    (nreverse result)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Total Row Helper Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-logging-total-with-count-label (label count-value &rest other-columns)
+ "Return total-spec that formats LABEL with COUNT-VALUE in first column.
+LABEL is the text prefix (e.g., \"Total\").
+COUNT-VALUE is the numeric count to display after label.
+OTHER-COLUMNS are remaining column values (strings or numbers).
+
+Returns a lambda function suitable for use as TOTAL-SPEC parameter
+in `core-logging-format-table'.
+
+The function calculates column widths to determine proper padding between
+LABEL and COUNT-VALUE, ensuring the combined text fits the first column width.
+
+Example:
+  (core-logging-total-with-count-label \"Total\" 5 \"-\" \"100\")
+  Returns lambda that produces: [\"Total     5\" \"-\" \"100\"]
+  (with padding adjusted to match first column width)"
+ (lambda
+  (headers rows)
+  (let* ((col-widths (core-logging-calculate-column-widths headers rows))
+         (width (nth 0 col-widths))
+         (count-str (number-to-string count-value))
+         (padding (- width (length label) (length count-str)))
+         (total-label (concat label (make-string (max 1 padding) ?\s) count-str)))
+    (cons total-label other-columns))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Column Aggregation Helper Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-logging-sum-column (rows column-index)
+ "Sum numeric values in COLUMN-INDEX across all ROWS.
+ROWS is a list of row data (list of lists).
+COLUMN-INDEX is zero-based integer indicating which column to sum.
+
+Returns string representation of sum.
+Non-numeric values are treated as zero.
+
+Example:
+  (core-logging-sum-column \\='((\"Item\" \"10\") (\"Item\" \"20\")) 1)
+  => \"30\""
+ (number-to-string
+  (cl-loop for row in rows sum (string-to-number (format "%s" (nth column-index row))))))
+
+(defun
+ core-logging-average-column (rows column-index)
+ "Calculate average of numeric values in COLUMN-INDEX across all ROWS.
+ROWS is a list of row data (list of lists).
+COLUMN-INDEX is zero-based integer indicating which column to average.
+
+Returns string with one decimal place.
+Returns \"0.0\" if ROWS is empty.
+Non-numeric values are treated as zero.
+
+Example:
+  (core-logging-average-column \\='((\"A\" \"10\") (\"B\" \"20\")) 1)
+  => \"15.0\""
+ (if
+  (zerop (length rows)) "0.0"
+  (format
+   "%.1f"
+   (/
+    (cl-loop
+     for row in rows sum (string-to-number (format "%s" (nth column-index row))))
+    (float (length rows))))))
+
+(defun
+ core-logging-count-matches (rows column-index value)
+ "Count rows where COLUMN-INDEX equals VALUE.
+ROWS is a list of row data (list of lists).
+COLUMN-INDEX is zero-based integer indicating which column to check.
+VALUE is the string value to match against.
+
+Returns string representation of count.
+
+Example:
+  (core-logging-count-matches
+   \\='((\"Item\" \"active\") (\"Item\" \"inactive\") (\"Item\" \"active\"))
+   1 \"active\")
+  => \"2\""
+ (number-to-string
+  (cl-count-if (lambda (row) (string= (format "%s" (nth column-index row)) value)) rows)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Data Transformation Helper Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-logging-plist-to-rows (plists column-keys)
+ "Convert list of PLISTS to table rows using COLUMN-KEYS.
+PLISTS is a list of property lists.
+COLUMN-KEYS is a list of plist keys to extract (in order).
+
+Returns list of rows suitable for `core-logging-format-table'.
+Missing keys are rendered as \"-\".
+
+Example:
+  (core-logging-plist-to-rows
+   \\='((:name \"Alice\" :age 25)
+     (:name \"Bob\" :age 30))
+   \\='(:name :age))
+  => ((\"Alice\" \"25\") (\"Bob\" \"30\"))"
+ (mapcar
+  (lambda
+   (plist) (mapcar (lambda (key) (format "%s" (or (plist-get plist key) "-"))) column-keys))
+  plists))
+
+(defun
+ core-logging-alist-to-rows (alists column-keys)
+ "Convert list of ALISTS to table rows using COLUMN-KEYS.
+ALISTS is a list of association lists.
+COLUMN-KEYS is a list of alist keys to extract (in order).
+
+Returns list of rows suitable for `core-logging-format-table'.
+Missing keys are rendered as \"-\".
+
+Example:
+  (core-logging-alist-to-rows
+   \\='(((name . \"Alice\") (age . 25))
+     ((name . \"Bob\") (age . 30)))
+   \\='(name age))
+  => ((\"Alice\" \"25\") (\"Bob\" \"30\"))"
+ (mapcar
+  (lambda
+   (alist) (mapcar (lambda (key) (format "%s" (or (cdr (assoc key alist)) "-"))) column-keys))
+  alists))
+
 (defun
  core-logging--column-is-numeric-p (column-index rows)
  "Check if column at COLUMN-INDEX contain only numeric values in ROWS.
