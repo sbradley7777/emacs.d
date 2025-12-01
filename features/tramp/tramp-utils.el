@@ -39,6 +39,22 @@ PYTHON-PATH: Optional additional Python path"
 This function is deprecated. Use `core-utils-is-remote-file' instead."
  (core-utils-is-remote-file file))
 
+(defun
+ tramp-utils-show-connection-info
+ ()
+ "Display TRAMP connection or local directory information in minibuffer."
+ (interactive)
+ (if-let* ((host (file-remote-p default-directory 'host)))
+   (let ((method (file-remote-p default-directory 'method))
+         (user (file-remote-p default-directory 'user)))
+     (message
+      "Remote Connection | Method: %s | User: %s | Host: %s | Path: %s"
+      method
+      (or user "default")
+      host
+      (file-remote-p default-directory 'localname)))
+   (core-message-info "Local Directory: %s" (abbreviate-file-name default-directory))))
+
 (core-message-debug "TRAMP utilities loaded")
 (provide 'tramp-utils)
 ;;; tramp-utils.el ends here

@@ -6,7 +6,16 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
+(require 'core-logging)
 (require 'features-constants)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Constants
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defconst
+ treesit-utils-grammar-prefix
+ "libtree-sitter-"
+ "Prefix for tree-sitter grammar shared library files.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -18,7 +27,7 @@ Returns a list of plists with :name and :file keys."
  (if
   (not (and (fboundp 'treesit-available-p) (treesit-available-p))) '()
   (let ((grammars '())
-        (pattern "libtree-sitter-\\([^.]+\\)\\.\\(so\\|dylib\\)$")
+        (pattern (format "%s\\([^.]+\\)\\.\\(so\\|dylib\\)$" treesit-utils-grammar-prefix))
         (transform-fn (lambda (file lang-name _ext) (list :name lang-name :file file))))
     ;; Scan the primary grammar directory
     (when-let ((results
@@ -72,5 +81,34 @@ or nil if MODE-SYMBOL is not a tree-sitter mode."
  (when
   (treesit-utils-is-ts-mode-p mode-symbol)
   (replace-regexp-in-string "-ts-mode$" "" (symbol-name mode-symbol))))
+
+(defun
+ treesit-utils-get-grammar-filename (lang)
+ "Get the expected grammar filename for LANG.
+LANG should be a string like \"python\" or \"bash\".
+Returns filename like \"libtree-sitter-python.so\" (or .dylib on macOS).
+Returns nil if LANG is nil."
+ (when lang (format "%s%s%s" treesit-utils-grammar-prefix lang (car dynamic-library-suffixes))))
+
+(defun
+ treesit-utils-show-info () "Display tree-sitter status information in minibuffer." (interactive)
+ (if
+  (treesit-available-p)
+  (let* ((mode-display-name (format-mode-line mode-name))
+         (parent-mode (get major-mode 'derived-mode-parent))
+         (parent-mode-name (if parent-mode (symbol-name parent-mode) "none"))
+         (is-ts-mode (treesit-utils-is-ts-mode-p major-mode))
+         (lang (treesit-utils-extract-lang-from-mode major-mode))
+         (grammar-available (when lang (treesit-language-available-p (intern lang))))
+         (grammar-file
+          (if (and lang grammar-available) (treesit-utils-get-grammar-filename lang) "none")))
+    (core-message-plain
+     "Tree-Sitter> Mode Name: %s | Mode Symbol: %s | Parent Mode: %s | Tree-sitter: %s | Grammar Installed: %s"
+     mode-display-name
+     (symbol-name major-mode)
+     parent-mode-name
+     (if is-ts-mode "yes" "no")
+     grammar-file))
+  (core-message-warning "Tree-sitter: not available in this Emacs build")))
 (provide 'tree-sitter-utils)
 ;;; tree-sitter-utils.el ends here
