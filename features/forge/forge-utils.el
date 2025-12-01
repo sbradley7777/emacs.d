@@ -14,6 +14,7 @@
 
 ;;; Code:
 (require 'core-logging)
+(require 'core-logging-tables)
 (require 'core-utils)
 (require 'forge-constants)
 (require 'git-forge-config)
@@ -64,7 +65,7 @@ and whether they have credentials configured in ~/.authinfo."
  (interactive)
  (let* ((hosts (git-forge-config-parse-hosts))
         (total-hosts (length hosts))
-        (lines nil)
+        (rows nil)
         (github-count 0)
         (gitlab-count 0)
         (authenticated-count 0)
@@ -73,62 +74,52 @@ and whether they have credentials configured in ~/.authinfo."
    (if
     (zerop total-hosts)
     (core-message-diagnostic
-     "Forge Host Diagnostics" (list "⚠️  No forge hosts configured in ~/.gitconfig"))
-    (dolist
-     (host-id hosts)
-     (let* ((config (git-forge-config-parse-host-config host-id))
-            (forge-type (plist-get config :type))
-            (api-host (plist-get config :apihost))
-            (user (plist-get config :user))
-            (auth-status (forge-utils-check-authinfo-for-host api-host)))
-       (push (format "%s (%s)" host-id (capitalize (or forge-type "unknown"))) lines)
-       (when
-        (and user api-host (not (string= host-id api-host)))
-        (push (format "  User: %s | API: %s" user api-host) lines))
-       (when
-        (and user (or (not api-host) (string= host-id api-host)))
-        (push (format "  User: %s" user) lines))
-       (cond
-        ((eq auth-status :authenticated)
-         (push "  ✅  Authenticated" lines)
-         (setq authenticated-count (1+ authenticated-count)))
-        ((eq auth-status :no-credentials)
-         (push "  ⚠️  No credentials in ~/.authinfo" lines)
-         (setq missing-creds-count (1+ missing-creds-count)))
-        ((eq auth-status :no-authinfo)
-         (push "  ❌  ~/.authinfo file not found" lines)
-         (setq no-authinfo-count (1+ no-authinfo-count))))
-       (cond
-        ((string= forge-type "github")
-         (setq github-count (1+ github-count)))
-        ((string= forge-type "gitlab")
-         (setq gitlab-count (1+ gitlab-count)))))))
-   (push " " lines)
-   (push "=== Summary ===" lines)
-   (let ((format-str "%-22s"))
-     (when
-      (> authenticated-count 0)
-      (push (format (concat "✅  " format-str " %d") "Authenticated" authenticated-count) lines))
-     (when
-      (> missing-creds-count 0)
-      (push
-       (format (concat "⚠️  " format-str " %d") "Missing credentials" missing-creds-count) lines))
-     (when
-      (> no-authinfo-count 0)
-      (push
-       (format (concat "❌  " format-str " %d") "Without ~/.authinfo" no-authinfo-count) lines))
-     (let ((type-summary
-            (string-join
-             (delq
-              nil
+     "Forge Host Diagnostics" (list "No forge hosts configured in ~/.gitconfig"))
+    (progn
+     (dolist
+      (host-id hosts)
+      (let* ((config (git-forge-config-parse-host-config host-id))
+             (forge-type (plist-get config :type))
+             (api-host (plist-get config :apihost))
+             (user (plist-get config :user))
+             (auth-status (forge-utils-check-authinfo-for-host api-host))
+             (auth-status-str
+              (cond
+               ((eq auth-status :authenticated)
+                (setq authenticated-count (1+ authenticated-count))
+                "authenticated")
+               ((eq auth-status :no-credentials)
+                (setq missing-creds-count (1+ missing-creds-count))
+                "no credentials")
+               ((eq auth-status :no-authinfo)
+                (setq no-authinfo-count (1+ no-authinfo-count))
+                "no authinfo"))))
+        (cond
+         ((string= forge-type "github")
+          (setq github-count (1+ github-count)))
+         ((string= forge-type "gitlab")
+          (setq gitlab-count (1+ gitlab-count))))
+        (push
+         (list
+          host-id
+          (capitalize (or forge-type "unknown"))
+          (or user "-")
+          (or api-host "-")
+          auth-status-str)
+         rows)))
+     (let* ((headers '("Host" "Type" "User" "API Host" "Auth Status"))
+            (reversed-rows (nreverse rows))
+            (total-spec
+             (lambda
+              (headers rows)
               (list
-               (when (> github-count 0) (format "%d GitHub" github-count))
-               (when (> gitlab-count 0) (format "%d GitLab" gitlab-count))))
-             ", ")))
-       (push
-        (format (concat "ℹ️  " format-str " %d (%s)") "Total hosts" total-hosts type-summary)
-        lines)))
-   (core-message-diagnostic "Forge Host Diagnostics" (nreverse lines))))
+               "TOTAL"
+               (number-to-string total-hosts)
+               "-"
+               "-"
+               (format "%d/%d" authenticated-count total-hosts)))))
+       (core-message-diagnostic
+        "Forge Host Diagnostics" (core-logging-format-table headers reversed-rows total-spec)))))))
 
 (defun
  forge-utils--ghub-use-magit-get (orig-fun var)

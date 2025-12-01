@@ -71,8 +71,12 @@ Example:
 (defun
  core-logging--column-is-numeric-p (column-index rows)
  "Check if column at COLUMN-INDEX contain only numeric values in ROWS.
-Returns t if all values are numeric (integers or floats), nil otherwise.
-Empty strings or whitespace-only values are treated as non-numeric."
+Returns t if all values are numeric (integers, floats, or fractions).
+Empty strings or whitespace-only values are treated as non-numeric.
+Numeric patterns recognized:
+  - Integers: \"123\"
+  - Floats: \"123.45\"
+  - Fractions: \"3/5\", \"10/20\""
  (and
   rows
   (cl-every
@@ -81,7 +85,7 @@ Empty strings or whitespace-only values are treated as non-numeric."
     (let ((value (format "%s" (nth column-index row))))
       (and
        (not (string-empty-p (string-trim value)))
-       (string-match-p "\\`[0-9]+\\(?:\\.[0-9]+\\)?\\'" (string-trim value)))))
+       (string-match-p "\\`[0-9]+\\(?:\\.[0-9]+\\|/[0-9]+\\)?\\'" (string-trim value)))))
    rows)))
 
 (defun
@@ -160,6 +164,7 @@ TOTAL-SPEC controls total row behavior:
   - \\='count-only: Show \"TOTAL: N\" in first column, \"-\" in others
   - (list of indices): Sum columns at indices, \"-\" for others, \"TOTAL\" in first
   - (list of names): Sum columns matching names, \"-\" for others, \"TOTAL\" in first
+  - (function): Custom function (lambda (headers rows) ...) that returns total row data
 
 Returns list of column values for total row, or nil if no total row.
 
@@ -174,11 +179,15 @@ Examples:
   => (\"TOTAL\" \"15\" \"-\" \"42\")
 
   (core-logging--build-total-row headers rows \\='(\"Age\" \"Count\"))
-  => (\"TOTAL\" \"15\" \"-\" \"42\")"
+  => (\"TOTAL\" \"15\" \"-\" \"42\")
+
+  (core-logging--build-total-row headers rows (lambda (h r) (list \"Custom\" \"Total\")))
+  => (\"Custom\" \"Total\")"
  (let ((num-cols (length headers)))
    (pcase total-spec
      ('nil nil)
      ('count-only (cons (format "TOTAL: %d" (length rows)) (make-list (1- num-cols) "-")))
+     ((pred functionp) (funcall total-spec headers rows))
      ((pred listp)
       (let ((indices-to-sum
              (if
@@ -197,6 +206,27 @@ Examples:
            "-"))))))))
 
 (defun
+ core-logging--detect-total-row-alignments (total-row)
+ "Detect alignment for TOTAL-ROW based on data types.
+TOTAL-ROW is a list of column values for the total row.
+Returns a list of alignment symbols: \\='left or \\='right for each column.
+Numeric columns get \\='right alignment, text columns get \\='left.
+First column is always \\='left aligned (typically contains \"TOTAL\" label).
+Numeric patterns recognized: integers, floats, and fractions (e.g., \"3/5\")."
+ (let ((num-cols (length total-row)))
+   (cl-loop
+    for col-idx from 0 below num-cols collect
+    (if
+     (= col-idx 0) 'left
+     (let ((value (format "%s" (nth col-idx total-row))))
+       (if
+        (and
+         (not (string-empty-p (string-trim value)))
+         (not (string= (string-trim value) "-"))
+         (string-match-p "\\`[0-9]+\\(?:\\.[0-9]+\\|/[0-9]+\\)?\\'" (string-trim value)))
+        'right 'left))))))
+
+(defun
  core-logging-format-table (headers rows &optional total-spec)
  "Format HEADERS and ROWS as a box-drawing table.
 HEADERS is a list of column header strings.
@@ -206,6 +236,7 @@ TOTAL-SPEC is an optional parameter controlling total row behavior:
   - \\='count-only: Show \"TOTAL: N\" in first column, \"-\" in others
   - (list of indices): Sum columns at indices, \"-\" for others, \"TOTAL\" in first
   - (list of names): Sum columns matching header names, \"-\" for others, \"TOTAL\" in first
+  - (function): Custom function (lambda (headers rows) ...) that returns total row data
 
 Returns a list of formatted strings with box-drawing characters.
 Uses `core-logging-calculate-column-widths' for dynamic column sizing.
@@ -241,7 +272,16 @@ Examples:
    \\='((\"Alice\" \"25\" \"100\")
      (\"Bob\" \"30\" \"150\"))
    \\='(\"Age\" \"Score\"))
-  => Last row: │ TOTAL │ 55 │ 250 │"
+  => Last row: │ TOTAL │ 55 │ 250 │
+
+  ;; Custom total row function
+  (core-logging-format-table
+   \\='(\"Name\" \"Count\" \"Value\")
+   \\='((\"A\" \"10\" \"100\")
+     (\"B\" \"20\" \"200\"))
+   (lambda (headers rows)
+     (list \"Custom\" (number-to-string (length rows)) \"Total\")))
+  => Last row: │ Custom │ 2 │ Total │"
  (let* ((col-widths (core-logging-calculate-column-widths headers rows))
         (alignments (core-logging--detect-column-alignments headers rows))
         (lines nil))
@@ -258,7 +298,8 @@ Examples:
      ;; Total separator: ├───┼───┼───┤
      (push (core-logging--build-border col-widths 'middle) lines)
      ;; Total row: │ TOTAL │ ... │
-     (push (core-logging--build-row total-row col-widths alignments) lines))
+     (let ((total-alignments (core-logging--detect-total-row-alignments total-row)))
+       (push (core-logging--build-row total-row col-widths total-alignments) lines)))
    ;; Bottom border: └───┴───┴───┘
    (push (core-logging--build-border col-widths 'bottom) lines)
    (nreverse lines)))

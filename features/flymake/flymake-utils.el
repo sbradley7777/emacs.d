@@ -542,8 +542,7 @@ Returns list of formatted table lines with total row."
             (let ((backends (plist-get info :backends)))
               (if (string-empty-p backends) "-" backends))
             (plist-get info :diagnostics) (plist-get info :status)))
-          buffer-info))
-        (table-lines (core-logging-format-table headers rows)))
+          buffer-info)))
    (if
     rows
     (let* ((total-backends 0)
@@ -560,23 +559,17 @@ Returns list of formatted table lines with total row."
           (setq total-errors (+ total-errors (string-to-number (match-string 1 diag-str))))
           (setq total-warnings (+ total-warnings (string-to-number (match-string 2 diag-str))))
           (setq total-notes (+ total-notes (string-to-number (match-string 3 diag-str)))))))
-      (let* ((total-row
+      (let ((total-spec
+             (lambda
+              (headers rows)
               (list
                "TOTAL"
                (number-to-string (length rows))
                (number-to-string total-backends)
                "-"
                (format "%d/%d/%d" total-errors total-warnings total-notes)
-               "-"))
-             (col-widths
-              (core-logging-calculate-column-widths headers (append rows (list total-row))))
-             (total-alignments '(left right right left left left)))
-        (append
-         (butlast table-lines)
-         (list
-          (core-logging--build-border col-widths 'middle)
-          (core-logging--build-row total-row col-widths total-alignments)
-          (core-logging--build-border col-widths 'bottom)))))
+               "-"))))
+        (core-logging-format-table headers rows total-spec)))
     (list "No buffers with flymake-mode enabled"))))
 
 (defun
@@ -680,25 +673,20 @@ Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-
    (if
     rows
     (let* ((reversed-rows (nreverse rows))
-           (table-lines (core-logging-format-table headers reversed-rows))
            (running-count (cl-count-if (lambda (row) (string= (nth 5 row) "yes")) reversed-rows))
            (row-count (length reversed-rows))
-           (col-widths (core-logging-calculate-column-widths headers reversed-rows))
-           (total-label-with-count
-            (let* ((width (nth 0 col-widths))
-                   (label "Total")
-                   (count-str (number-to-string row-count))
-                   (padding (- width (length label) (length count-str))))
-              (concat label (make-string (max 1 padding) ?\s) count-str)))
-           (total-row
-            (list total-label-with-count "-" "-" "-" "-" (number-to-string running-count)))
-           (total-alignments '(left left left left left right)))
-      (append
-       (butlast table-lines)
-       (list
-        (core-logging--build-border col-widths 'middle)
-        (core-logging--build-row total-row col-widths total-alignments)
-        (core-logging--build-border col-widths 'bottom))))
+           (total-spec
+            (lambda
+             (headers rows)
+             (let* ((col-widths (core-logging-calculate-column-widths headers rows))
+                    (width (nth 0 col-widths))
+                    (label "Total")
+                    (count-str (number-to-string row-count))
+                    (padding (- width (length label) (length count-str)))
+                    (total-label-with-count
+                     (concat label (make-string (max 1 padding) ?\s) count-str)))
+               (list total-label-with-count "-" "-" "-" "-" (number-to-string running-count))))))
+      (core-logging-format-table headers reversed-rows total-spec))
     (list "No LSP backends registered"))))
 
 (defun
@@ -754,26 +742,29 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
    (if
     rows
     (let* ((reversed-rows (nreverse rows))
-           (table-lines (core-logging-format-table headers reversed-rows))
            (total-buffers
             (apply '+ (mapcar (lambda (row) (string-to-number (nth 7 row))) reversed-rows)))
            (row-count (length reversed-rows))
-           (col-widths (core-logging-calculate-column-widths headers reversed-rows))
-           (total-label-with-count
-            (let* ((width (nth 0 col-widths))
-                   (label "Total")
-                   (count-str (number-to-string row-count))
-                   (padding (- width (length label) (length count-str))))
-              (concat label (make-string (max 1 padding) ?\s) count-str)))
-           (total-row
-            (list total-label-with-count "-" "-" "-" "-" "-" "-" (number-to-string total-buffers)))
-           (total-alignments '(left left left left left left left right)))
-      (append
-       (butlast table-lines)
-       (list
-        (core-logging--build-border col-widths 'middle)
-        (core-logging--build-row total-row col-widths total-alignments)
-        (core-logging--build-border col-widths 'bottom))))
+           (total-spec
+            (lambda
+             (headers rows)
+             (let* ((col-widths (core-logging-calculate-column-widths headers rows))
+                    (width (nth 0 col-widths))
+                    (label "Total")
+                    (count-str (number-to-string row-count))
+                    (padding (- width (length label) (length count-str)))
+                    (total-label-with-count
+                     (concat label (make-string (max 1 padding) ?\s) count-str)))
+               (list
+                total-label-with-count
+                "-"
+                "-"
+                "-"
+                "-"
+                "-"
+                "-"
+                (number-to-string total-buffers))))))
+      (core-logging-format-table headers reversed-rows total-spec))
     (list empty-message))))
 
 (defun

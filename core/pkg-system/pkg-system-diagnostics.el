@@ -5,6 +5,7 @@
 
 ;;; Code:
 (require 'core-logging)
+(require 'core-logging-tables)
 (require 'pkg-system-repositories)
 (require 'pkg-system-metadata)
 (require 'pkg-system-network-utils)
@@ -57,24 +58,19 @@ Shows status, response time, and availability for each configured repository."
               (row)
               (list (nth 0 row) (nth 1 row) (nth 2 row) (format time-format-string (nth 3 row))))
              (nreverse rows)))
-           (table-lines (core-logging-format-table headers formatted-rows))
            (row-count (length formatted-rows))
-           (col-widths (core-logging-calculate-column-widths headers formatted-rows))
-           (total-row
-            (list
-             "Total"
-             (number-to-string row-count)
-             (format "%d/%d" available-count total-repos)
-             (format time-format-string total-time)))
-           (total-alignments '(left right right right)))
+           ;; Custom total row function
+           (total-spec
+            (lambda
+             (headers rows)
+             (list
+              "Total"
+              (number-to-string row-count)
+              (format "%d/%d" available-count total-repos)
+              (format time-format-string total-time)))))
       (core-message-diagnostic
        "Package Repository Connectivity"
-       (append
-        (butlast table-lines)
-        (list
-         (core-logging--build-border col-widths 'middle)
-         (core-logging--build-row total-row col-widths total-alignments)
-         (core-logging--build-border col-widths 'bottom)))))
+       (core-logging-format-table headers formatted-rows total-spec)))
     (core-message-diagnostic
      "Package Repository Connectivity" (list "No repositories configured")))))
 
