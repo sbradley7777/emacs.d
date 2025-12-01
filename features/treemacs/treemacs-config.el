@@ -15,9 +15,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- treemacs-smart-toggle ()
- "Smart toggle for Treemacs file tree sidebar.
+(if
+ (package-installed-p 'treemacs)
+ (defun
+  treemacs-smart-toggle ()
+  "Smart toggle for Treemacs file tree sidebar.
 
 Behavior depends on current Treemacs state:
 - If Treemacs window is selected: closes it
@@ -25,17 +27,23 @@ Behavior depends on current Treemacs state:
 - If Treemacs is not visible: opens it at the current file's project root
 
 Opens exclusively at the current project for focused navigation."
- (interactive)
- (cond
-  ;; If treemacs window is selected, close it
-  ((and (treemacs-get-local-window) (treemacs-is-treemacs-window-selected?))
-   (delete-window))
-  ;; If treemacs is visible but not selected, select it
-  ((treemacs-get-local-window)
-   (treemacs-select-window))
-  ;; Treemacs not visible, open it at current project
-  (t
-   (treemacs-add-and-display-current-project-exclusively))))
+  (interactive)
+  (cond
+   ;; If treemacs window is selected, close it
+   ((and (treemacs-get-local-window) (treemacs-is-treemacs-window-selected?))
+    (delete-window))
+   ;; If treemacs is visible but not selected, select it
+   ((treemacs-get-local-window)
+    (treemacs-select-window))
+   ;; Treemacs not visible, open it at current project
+   (t
+    (treemacs-add-and-display-current-project-exclusively))))
+ (defun
+  treemacs-smart-toggle
+  ()
+  "Fallback function when treemacs is not available."
+  (interactive)
+  (core-message-error "Treemacs not available - package not installed")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
@@ -94,15 +102,5 @@ Opens exclusively at the current project for focused navigation."
       ,(format "Treemacs: %s" (treemacs-theme->name treemacs--current-theme))))))
 
  (core-message-success "Treemacs loaded and configured successfully"))
-
-;; Ensure fallback function is defined
-(unless
- (fboundp 'treemacs-smart-toggle)
- (defun
-  treemacs-smart-toggle
-  ()
-  "Fallback function when treemacs is not available."
-  (interactive)
-  (core-message-error "Treemacs not available - package not installed")))
 (provide 'treemacs-config)
 ;;; treemacs-config.el ends here
