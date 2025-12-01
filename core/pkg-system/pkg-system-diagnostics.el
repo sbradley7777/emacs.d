@@ -13,7 +13,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pkg-system-diagnostics-show-repositories-connectivity ()
+ diagnostics-show-package-repositories ()
  "Display package repository connectivity diagnostics as a table.
 Shows status, response time, and availability for each configured repository."
  (interactive)
@@ -79,7 +79,6 @@ Shows status, response time, and availability for each configured repository."
  ()
  "Display current health cache status for all repositories.
 Shows last test time and result for each repository."
- (interactive)
  (core-message-info "Repository Health Status:")
  (core-message-plain "")
  (if
@@ -100,10 +99,7 @@ Shows last test time and result for each repository."
  (core-message-info "Cache TTL: %d seconds" pkg-system-repository-cache-ttl))
 
 (defun
- pkg-system-diagnostics-show-metadata-info
- ()
- "Display current package metadata information."
- (interactive)
+ pkg-system-diagnostics-show-metadata-info () "Display current package metadata information."
  (if
   (file-exists-p pkg-system-metadata-file)
   (progn
@@ -122,18 +118,17 @@ Shows last test time and result for each repository."
  pkg-system-diagnostics-show-cache-info
  ()
  "Display information about the package cache."
- (interactive)
  (pkg-system-diagnostics-show-metadata-info))
 
 (defun
- pkg-system-diagnostics-show-system-status
+ diagnostics-show-package-system
  ()
  "Display comprehensive package system diagnostics.
 Shows repository connectivity, cache status, and metadata information."
  (interactive)
  (core-message-info "=== Package System Diagnostics ===")
  (core-message-plain "")
- (pkg-system-diagnostics-show-repositories-connectivity)
+ (diagnostics-show-package-repositories)
  (core-message-plain "")
  (pkg-system-diagnostics-show-repository-cache)
  (core-message-plain "")

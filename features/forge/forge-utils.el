@@ -58,7 +58,7 @@ Returns one of:
     (if found :authenticated :no-credentials))))
 
 (defun
- forge-utils-diagnostics-show-hosts ()
+ diagnostics-show-forge-hosts ()
  "Display all configured forge hosts and their authentication status.
 Shows forge hosts from ~/.gitconfig along with their configuration details
 and whether they have credentials configured in ~/.authinfo."

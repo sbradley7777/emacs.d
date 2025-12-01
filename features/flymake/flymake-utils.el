@@ -181,7 +181,7 @@ still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-serve
        mode-name))))))
 
 (defun
- diagnostics-show-flymake-backend-info ()
+ diagnostics-show-flymake-backends ()
  "Display comprehensive Flymake diagnostics including buffers and all backend types.
 Shows 4 tables: buffers, LSP backends, direct backends, and loader backends.
 Includes backend binary/LSP server information and installation status."

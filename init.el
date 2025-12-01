@@ -170,7 +170,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
  core-diagnostics
  :after tree-sitter-utils
  :description "System and configuration diagnostics"
- :config (diagnostics-show-system-info))
+ :config (diagnostics-show-system))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 2: Package and Resource Management

@@ -57,7 +57,7 @@
 ;; Enhanced Configuration Diagnostics
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- diagnostics-show-system-info () "Show system information in Messages buffer."
+ diagnostics-show-system () "Show system information in Messages buffer." (interactive)
  (let ((lines nil)
        (os-info (diagnostics-get-os-version-info))
        (package-count (if (boundp 'package-activated-list) (length package-activated-list) 0))
@@ -320,7 +320,7 @@ Validates tools and resources not managed by Emacs package system:
  "Show complete diagnostics: system info and external dependencies."
  (interactive)
  (let ((suggest-key-bindings nil))
-   (diagnostics-show-system-info)
+   (diagnostics-show-system)
    (diagnostics-show-external-dependencies)))
 (provide 'core-diagnostics)
 ;;; core-diagnostics.el ends here
