@@ -169,8 +169,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 (load-module
  core-diagnostics
  :after tree-sitter-utils
- :description "System and configuration diagnostics"
- :config (diagnostics-show-system))
+ :description "System and configuration diagnostics")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 2: Package and Resource Management
@@ -352,6 +351,8 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display detailed loading diagnostics
 (init--show-config-diagnostics)
+;; Show system diagnostics (after all packages loaded)
+(diagnostics-show-system)
 ;; Show version-aware configuration status
 (core-message-success "Emacs %s configuration loaded successfully" emacs-version)
 
