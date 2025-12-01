@@ -1,7 +1,7 @@
-;;; package-diagnostics.el --- Package System Diagnostics -*- lexical-binding: t -*-
+;;; pkg-system-diagnostics.el --- Package System Diagnostics -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Diagnostic and reporting commands for package system troubleshooting.
-;;      Provides comprehensive status reports for repositories, cache, and metadata.
+;;      Provides comprehensive status reports for repositories and package status.
 
 ;;; Code:
 (require 'core-logging)
@@ -13,17 +13,29 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- diagnostics-show-package-repositories ()
- "Display package repository connectivity diagnostics as a table.
-Shows status, response time, and availability for each configured repository."
- (interactive)
+ pkg-system-diagnostics--get-installed-count
+ ()
+ "Return count of installed packages."
+ (if (boundp 'package-activated-list) (length package-activated-list) 0))
+
+(defun
+ pkg-system-diagnostics--get-upgrades-count ()
+ "Return count of packages with available updates.
+Returns nil if package-archive-contents is not loaded."
+ (when
+  (and (boundp 'package-archive-contents) package-archive-contents)
+  (length (package-menu--find-upgrades))))
+
+(defun
+ pkg-system-diagnostics--show-repositories
+ ()
+ "Display package repository connectivity as a table (non-interactive)."
  (let ((headers '("Name" "URL" "Status" "Time (s)"))
        (rows nil)
        (times nil)
        (total-time 0.0)
        (available-count 0)
        (total-repos (length package-archives)))
-   ;; Test each repository and collect data
    (dolist
     (archive package-archives)
     (let* ((name (car archive))
@@ -38,20 +50,14 @@ Shows status, response time, and availability for each configured repository."
        (setq total-time (+ total-time elapsed)))
       (push elapsed times)
       (push (list name url status elapsed) rows)))
-   ;; Build table with total row
    (if
     rows
-    (let* ( ;; Add total time to times list for width calculation
-           (all-times (cons total-time times))
-           ;; Find max integer part width for decimal alignment
+    (let* ((all-times (cons total-time times))
            (max-int-width
             (apply
              'max (mapcar (lambda (time) (length (number-to-string (truncate time)))) all-times)))
-           ;; Total width: max-int-width + 1 (decimal point) + 2 (decimal places)
            (time-width (+ max-int-width 3))
-           ;; Build format string dynamically (Emacs format doesn't support %*)
            (time-format-string (format "%%%d.2f" time-width))
-           ;; Format all time values with consistent padding for decimal alignment
            (formatted-rows
             (mapcar
              (lambda
@@ -59,7 +65,6 @@ Shows status, response time, and availability for each configured repository."
               (list (nth 0 row) (nth 1 row) (nth 2 row) (format time-format-string (nth 3 row))))
              (nreverse rows)))
            (row-count (length formatted-rows))
-           ;; Custom total row function
            (total-spec
             (lambda
              (headers rows)
@@ -75,64 +80,50 @@ Shows status, response time, and availability for each configured repository."
      "Package Repository Connectivity" (list "No repositories configured")))))
 
 (defun
- pkg-system-diagnostics-show-repository-cache
+ pkg-system-diagnostics--show-package-status
  ()
- "Display current health cache status for all repositories.
-Shows last test time and result for each repository."
- (core-message-info "Repository Health Status:")
- (core-message-plain "")
- (if
-  (null pkg-system-repository-health-cache)
-  (core-message-info "No cached repository status (cache is empty)")
-  (dolist
-   (entry pkg-system-repository-health-cache)
-   (let* ((url (car entry))
-          (status (cadr entry))
-          (timestamp (cddr entry))
-          (age (network-utils--elapsed-since timestamp))
-          (archive-name (pkg-system-repositories--lookup-name url)))
-     (if
-      status
-      (core-message-success "%s (%s) - available (tested %.1fs ago)" archive-name url age)
-      (core-message-error "%s (%s) - unavailable (tested %.1fs ago)" archive-name url age)))))
- (core-message-plain "")
- (core-message-info "Cache TTL: %d seconds" pkg-system-repository-cache-ttl))
+ "Display package installation and update status as a table (non-interactive)."
+ (let* ((installed (pkg-system-diagnostics--get-installed-count))
+        (upgrades (pkg-system-diagnostics--get-upgrades-count))
+        (headers '("Package Type" "Count"))
+        (rows
+         (list
+          (list "Installed Packages" (number-to-string installed))
+          (list "Updates Available" (if upgrades (number-to-string upgrades) "Unknown")))))
+   (core-message-diagnostic "Package Status" (core-logging-format-table headers rows))))
 
 (defun
- pkg-system-diagnostics-show-metadata-info () "Display current package metadata information."
+ pkg-system-diagnostics--show-metadata
+ ()
+ "Display package metadata and cache information as a table (non-interactive)."
  (if
   (file-exists-p pkg-system-metadata-file)
   (progn
    (pkg-system-metadata-load-variables)
-   (let ((refresh-ts
-          (when (boundp 'package-last-refresh-timestamp) package-last-refresh-timestamp))
-         (cache-ts (when (boundp 'package-cache-timestamp) package-cache-timestamp))
-         (cache-count (when (boundp 'package-cache-count) package-cache-count)))
-     (core-message-package "Package Metadata:")
-     (core-message-plain "    Last refresh: %s" (or refresh-ts "Never"))
-     (core-message-plain "    Cache created: %s" (or cache-ts "Never"))
-     (core-message-plain "    Package count: %s" (or cache-count "Unknown"))))
-  (core-message-package "No package metadata found")))
+   (let* ((refresh-ts
+           (when (boundp 'package-last-refresh-timestamp) package-last-refresh-timestamp))
+          (cache-ts (when (boundp 'package-cache-timestamp) package-cache-timestamp))
+          (headers '("Operation" "Timestamp"))
+          (rows
+           (list
+            (list "Last Refresh" (or refresh-ts "Never"))
+            (list "Cache Created" (or cache-ts "Never")))))
+     (core-message-diagnostic "Package Metadata" (core-logging-format-table headers rows))))
+  (core-message-diagnostic "Package Metadata" (list "No package metadata found"))))
 
 (defun
- pkg-system-diagnostics-show-cache-info
- ()
- "Display information about the package cache."
- (pkg-system-diagnostics-show-metadata-info))
-
-(defun
- diagnostics-show-package-system
+ diagnostics-show-pkg-system
  ()
  "Display comprehensive package system diagnostics.
-Shows repository connectivity, cache status, and metadata information."
+Shows repository connectivity, package status, and metadata information."
  (interactive)
  (core-message-info "=== Package System Diagnostics ===")
  (core-message-plain "")
- (diagnostics-show-package-repositories)
+ (pkg-system-diagnostics--show-repositories)
  (core-message-plain "")
- (pkg-system-diagnostics-show-repository-cache)
+ (pkg-system-diagnostics--show-package-status)
  (core-message-plain "")
- (pkg-system-diagnostics-show-metadata-info))
+ (pkg-system-diagnostics--show-metadata))
 
 (provide 'pkg-system-diagnostics)
 ;;; pkg-system-diagnostics.el ends here
