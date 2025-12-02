@@ -30,13 +30,13 @@ Keys are repository root paths, values are timestamps.")
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- git-auto-sync--is-repository-synced-p (repo-root)
+ git--auto-sync-is-repository-synced-p (repo-root)
  "Check if REPO-ROOT has been synced this session.
 Returns the timestamp if synced, nil otherwise."
  (gethash repo-root git-auto-sync--synced-repositories-table))
 
 (defun
- git-auto-sync--mark-repository-synced
+ git--auto-sync-mark-repository-synced
  (repo-root)
  "Mark REPO-ROOT as synced with current timestamp."
  (puthash repo-root (current-time) git-auto-sync--synced-repositories-table))
@@ -84,7 +84,7 @@ which contains the actual git command, not the shell wrapper."
              (let ((default-directory process-dir))
                (git-utils-find-repository-root))))
        (when
-        (and repo-root (git-auto-sync--is-repository-synced-p repo-root))
+        (and repo-root (git--auto-sync-is-repository-synced-p repo-root))
         (if
          (zerop exit-code)
          (core-message-success
@@ -135,12 +135,12 @@ a fetch (retrieves remote data without modifying local state), not a pull (fetch
       (error-message-string err))))))
 
 (defun
- git-sync--around-forge-glab-get-advice (orig-fun obj resource &optional params &rest args)
+ git--sync-around-forge-glab-get-advice (orig-fun obj resource &optional params &rest args)
  "Advice to wrap forge--glab-get and inject timeout detection.
 ORIG-FUN is the original forge--glab-get function.
 OBJ, RESOURCE, PARAMS, and ARGS are the original arguments."
  (let* ((repo-root (git-utils-find-repository-root))
-        (is-sync-op (and repo-root (git-auto-sync--is-repository-synced-p repo-root)))
+        (is-sync-op (and repo-root (git--auto-sync-is-repository-synced-p repo-root)))
         (plist args)
         (original-callback (plist-get plist :callback))
         (original-errorback (plist-get plist :errorback)))
@@ -188,14 +188,14 @@ OBJ, RESOURCE, PARAMS, and ARGS are the original arguments."
     (apply orig-fun obj resource params args))))
 
 (defun
- git-auto-sync--around-forge-pull-advice (orig-fun repo &optional callback since)
+ git--auto-sync-around-forge-pull-advice (orig-fun repo &optional callback since)
  "Advice to wrap forge--pull and inject success detection.
 ORIG-FUN is the original forge--pull function.
 REPO, CALLBACK, and SINCE are the original forge--pull arguments."
  (let ((repo-root (git-utils-find-repository-root))
        (original-callback callback))
    (if
-    (and repo-root (git-auto-sync--is-repository-synced-p repo-root))
+    (and repo-root (git--auto-sync-is-repository-synced-p repo-root))
     ;; Inject wrapped callback for success message
     (funcall
      orig-fun repo
@@ -214,7 +214,7 @@ This function can be called multiple times and will sync each time.
 When called, it marks the repository as synced for this session."
  (interactive)
  (when-let ((repo-root (git-utils-find-repository-root)))
-   (git-auto-sync--mark-repository-synced repo-root)
+   (git--auto-sync-mark-repository-synced repo-root)
    (core-message-info
     "Initiated sync for repository: %s" (git-utils-format-repository-display repo-root))
    (git-auto-sync-magit-fetch repo-root)
@@ -232,7 +232,7 @@ Skips remote files accessed via TRAMP."
     (core-message-debug
      "Skipping git auto-sync for remote repository (TRAMP): %s"
      (git-utils-format-repository-display repo-root))
-    (unless (git-auto-sync--is-repository-synced-p repo-root) (git-sync-repository)))))
+    (unless (git--auto-sync-is-repository-synced-p repo-root) (git-sync-repository)))))
 
 (with-eval-after-load
  'magit
@@ -240,8 +240,8 @@ Skips remote files accessed via TRAMP."
 
 (with-eval-after-load
  'forge
- (advice-add 'forge--pull :around #'git-auto-sync--around-forge-pull-advice)
- (advice-add 'forge--glab-get :around #'git-sync--around-forge-glab-get-advice))
+ (advice-add 'forge--pull :around #'git--auto-sync-around-forge-pull-advice)
+ (advice-add 'forge--glab-get :around #'git--sync-around-forge-glab-get-advice))
 
 (core-message-config
  "Git and Forge sync configured (manual sync via git-sync-repository, auto-sync opt-in via local.el)")

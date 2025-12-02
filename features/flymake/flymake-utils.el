@@ -210,7 +210,7 @@ Includes backend binary/LSP server information and installation status."
    (core-message-diagnostic "Flymake Comprehensive Diagnostics" (nreverse lines))))
 
 (defun
- flymake-diagnostics--find-window ()
+ flymake--diagnostics-find-window ()
  "Find the Flymake diagnostics window if it exists.
 Returns the window displaying *Flymake diagnostics* buffer, or nil if not found."
  (let ((diag-window nil))
@@ -231,7 +231,7 @@ When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% a
 Automatically focuses the diagnostics window when opened or resized.
 Displays syntax errors, warnings, and notes from all active Flymake backends."
  (interactive)
- (let ((existing-window (flymake-diagnostics--find-window)))
+ (let ((existing-window (flymake--diagnostics-find-window)))
    (if
     existing-window
     (progn
@@ -251,7 +251,7 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
       (fboundp 'flymake-show-buffer-diagnostics)
       (progn
        (flymake-show-buffer-diagnostics) (setq flymake-diagnostics--current-width 'compact)
-       (let ((diag-window (flymake-diagnostics--find-window)))
+       (let ((diag-window (flymake--diagnostics-find-window)))
          (when diag-window (select-window diag-window))))
       (core-message-warning "Flymake is not available"))))))
 

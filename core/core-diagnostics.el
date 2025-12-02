@@ -44,7 +44,7 @@
    (format "%s (version unknown)" system-type))))
 
 (defun
- core-diagnostics--count-config-files ()
+ core--diagnostics-count-config-files ()
  "Count total .el configuration files in `user-emacs-directory'.
 Includes root-level .el files (init.el, early-init.el, custom.el, local.el, dev.el).
 Excludes directories in `core-ignore-on-load' list (local, elpa, configs, etc.).
@@ -72,7 +72,7 @@ Returns count of actual configuration files."
    count))
 
 (defun
- core-diagnostics--count-loaded-modules ()
+ core--diagnostics-count-loaded-modules ()
  "Count successfully loaded configuration modules from `core-config-load-results'.
 Returns count of modules with status \\='success."
  (if
@@ -93,7 +93,7 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
    "Disabled")))
 
 (defun
- core-diagnostics--show-system-info () "Display system information as a table (non-interactive)."
+ core--diagnostics-show-system-info () "Display system information as a table (non-interactive)."
  (let* ((os-info (diagnostics-get-os-version-info))
         (package-count (if (boundp 'package-activated-list) (length package-activated-list) 0))
         (user-info
@@ -117,13 +117,13 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
    (core-message-diagnostic "System Information" (core-logging-format-table headers rows))))
 
 (defun
- core-diagnostics--show-config-details
+ core--diagnostics-show-config-details
  ()
  "Display configuration details as a table (non-interactive)."
  (let* ((config-dir (abbreviate-file-name user-emacs-directory))
         (local-dir (abbreviate-file-name core-emacs-local-dir))
-        (total-files (core-diagnostics--count-config-files))
-        (loaded-files (core-diagnostics--count-loaded-modules))
+        (total-files (core--diagnostics-count-config-files))
+        (loaded-files (core--diagnostics-count-loaded-modules))
         (custom-file-path
          (if (file-exists-p core-custom-file) (abbreviate-file-name core-custom-file) "-"))
         (local-file-path
@@ -150,7 +150,7 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
    (core-message-diagnostic "Configuration Details" (core-logging-format-table headers rows))))
 
 (defun
- core-diagnostics--show-grammars
+ core--diagnostics-show-grammars
  ()
  "Display installed tree-sitter grammars as a table (non-interactive)."
  (let ((grammar-count
@@ -187,11 +187,11 @@ custom configuration file status, and tree-sitter grammar installations in table
  (interactive)
  (core-message-info "=== System Diagnostics ===")
  (core-message-plain "")
- (core-diagnostics--show-system-info)
+ (core--diagnostics-show-system-info)
  (core-message-plain "")
- (core-diagnostics--show-config-details)
+ (core--diagnostics-show-config-details)
  (core-message-plain "")
- (core-diagnostics--show-grammars))
+ (core--diagnostics-show-grammars))
 
 (provide 'core-diagnostics)
 ;;; core-diagnostics.el ends here

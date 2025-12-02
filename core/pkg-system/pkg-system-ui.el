@@ -140,7 +140,7 @@ Useful for discovering new packages or finding alternatives."
     (package-show-package-list t (list search-term)))))
 
 (defun
- pkg-system-ui--safe-refresh-and-check (timeout-seconds)
+ pkg-system--ui-safe-refresh-and-check (timeout-seconds)
  "Safely refresh package contents and return available upgrades.
 Returns a list of (PKG-NAME INSTALLED-DESC AVAILABLE-DESC) or nil if failed/no upgrades.
 TIMEOUT-SECONDS specifies how long to wait before timing out."
@@ -176,7 +176,7 @@ showing current version -> new version for each package."
  (interactive)
  (core-message-package "Checking for package updates (manual check)...")
  (core-message-debug "Configured repositories: %s" (mapcar #'car package-archives))
- (let ((upgrades (pkg-system-ui--safe-refresh-and-check core-package-refresh-timeout)))
+ (let ((upgrades (pkg-system--ui-safe-refresh-and-check core-package-refresh-timeout)))
    (if
     upgrades
     (progn

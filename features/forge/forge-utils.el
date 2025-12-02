@@ -122,7 +122,7 @@ and whether they have credentials configured in ~/.authinfo."
         "Forge Host Diagnostics" (core-logging-format-table headers reversed-rows total-spec)))))))
 
 (defun
- forge-utils--ghub-use-magit-get (orig-fun var)
+ forge--utils-ghub-use-magit-get (orig-fun var)
  "Advice for ghub--git-get to delegate to magit-get for remote repositories.
 ORIG-FUN is the original ghub--git-get function.
 VAR is the git config variable to read.
@@ -141,7 +141,7 @@ via `process-file'.  For local directories, use original ghub implementation."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (with-eval-after-load
  'ghub
- (advice-add 'ghub--git-get :around #'forge-utils--ghub-use-magit-get)
+ (advice-add 'ghub--git-get :around #'forge--utils-ghub-use-magit-get)
  (core-message-config "Forge TRAMP support configured"))
 (provide 'forge-utils)
 ;;; forge-utils.el ends here

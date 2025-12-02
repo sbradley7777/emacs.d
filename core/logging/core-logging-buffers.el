@@ -42,9 +42,7 @@
 ;; Functions - Messages Buffer Logging
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-logging-save-messages-buffer
- ()
- "Save Messages buffer to log file with rotation and timestamp."
+ logging--save-messages-buffer () "Save Messages buffer to log file with rotation and timestamp."
  (let ((log-file
         (core-save-buffer-to-log
          "*Messages*" core-messages-log-file core-log-dir
@@ -67,7 +65,7 @@ Checks buffer name against exclusion patterns."
     (lambda (pattern) (string-match-p pattern buffer-name)) logging-debug-exclusion-patterns))))
 
 (defun
- core-logging--sanitize-buffer-name (buffer-name)
+ logging--sanitize-buffer-name (buffer-name)
  "Convert BUFFER-NAME to safe filename.
 Example: \\='*EGLOT (elisp-mode) stderr*\\=' → \\='EGLOT-elisp-mode-stderr\\='"
  (string-trim (replace-regexp-in-string "[*/ ():]+" "-" buffer-name) "-" "-"))
@@ -97,7 +95,7 @@ Only creates the debug directory if there are buffers to save."
        (buf-pair buffers-to-save)
        (let* ((buf (car buf-pair))
               (buf-name (cdr buf-pair))
-              (safe-name (core-logging--sanitize-buffer-name buf-name))
+              (safe-name (logging--sanitize-buffer-name buf-name))
               (log-filename (concat safe-name ".log")))
          (with-current-buffer
           buf
@@ -126,7 +124,7 @@ Only creates the debug directory if there are buffers to save."
 ;; Hook Registration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Messages buffer logging (always enabled)
-(add-hook 'kill-emacs-hook #'core-logging-save-messages-buffer)
+(add-hook 'kill-emacs-hook #'logging--save-messages-buffer)
 
 (provide 'core-logging-buffers)
 ;;; core-logging-buffers.el ends here

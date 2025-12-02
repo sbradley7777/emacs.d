@@ -85,7 +85,7 @@
  ;; Force dashboard refresh when opening files at startup
  (add-hook 'emacs-startup-hook #'dashboard-insert-startupify-lists)
  ;; Show dashboard if only scratch buffer is visible after startup
- (add-hook 'emacs-startup-hook #'dashboard--show-if-scratch-only))
+ (add-hook 'emacs-startup-hook #'dashboard--config-show-if-scratch-only))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -99,7 +99,7 @@
    (insert "\n\n" spaces separator "\n")))
 
 (defun
- dashboard--show-if-scratch-only ()
+ dashboard--config-show-if-scratch-only ()
  "Show dashboard if only `*scratch*' buffer is displayed.
 This handles cases where command-line arguments prevent dashboard
 from showing at startup, but result in only `*scratch*' being visible."

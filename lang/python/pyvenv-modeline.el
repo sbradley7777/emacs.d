@@ -13,7 +13,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pyvenv-modeline-file-in-project-p
+ pyvenv--modeline-file-in-project-p
  ()
  "Check if current buffer's file is under the pyvenv project root."
  (and
@@ -41,7 +41,7 @@
 (defun
  pyvenv-modeline-indicator () "Return modeline indicator for Python venv with click handler."
  (when
-  (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (pyvenv-modeline-file-in-project-p))
+  (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (pyvenv--modeline-file-in-project-p))
   (let* ((venv-name (core-utils-extract-directory-name pyvenv-virtual-env))
          (indicator (format " 🐍 %s " venv-name)))
     (propertize
@@ -65,7 +65,7 @@
  (doom-modeline-def-segment
   pyvenv-indicator "Display Python virtual environment with clickable icon."
   (when
-   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (pyvenv-modeline-file-in-project-p))
+   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (pyvenv--modeline-file-in-project-p))
    (let ((icon
           (doom-modeline-icon
            'mdicon

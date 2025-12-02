@@ -46,7 +46,7 @@ Returns a deduplicated list of (TEXT . URL) cons cells found in markdown [text](
      (nreverse result))))
 
 (defun
- forge-issue-links--format-links-section (links)
+ forge--issue-links-format-links-section (links)
  "Format LINKS as a markdown section with raw URLs for terminal clickability.
 LINKS is a list of (TEXT . URL) cons cells.
 Returns formatted and fontified string with section header and bullet list of URLs with titles.
@@ -82,7 +82,7 @@ Extracts markdown links from post body and appends them as clickable raw URLs."
  ;; Extract and append links if any are found
  (when-let* ((body (with-no-warnings (oref post body)))
              (links (forge--issue-links-extract-markdown-links body))
-             (links-section (forge-issue-links--format-links-section links)))
+             (links-section (forge--issue-links-format-links-section links)))
    (save-excursion
     ;; Move back to before the trailing newlines added by original function
     (backward-char 2) (insert links-section))))

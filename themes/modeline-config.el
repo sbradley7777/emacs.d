@@ -106,7 +106,7 @@ for available segment names.")
  (core-message-success "Default modeline configured"))
 
 (defun
- modeline-config-setup-doom-modeline
+ modeline--config-setup-doom-modeline
  ()
  "Configure and enable doom-modeline."
  (core-message-config "Setting up doom-modeline")
@@ -164,6 +164,7 @@ for available segment names.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if themes-use-doom-modeline (modeline-config-setup-doom-modeline) (modeline-config-setup-default))
+(if
+ themes-use-doom-modeline (modeline--config-setup-doom-modeline) (modeline-config-setup-default))
 (provide 'modeline-config)
 ;;; modeline-config.el ends here

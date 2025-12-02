@@ -9,7 +9,7 @@
 ;;   - core-registry-get-property        - Get property value
 ;;   - core-registry-get-description     - Get description string
 ;;   - core-registry-get-modes           - Get supported modes
-;;   - core-registry-get-all-identifiers - Get all identifiers
+;;   - registry--get-all-identifiers - Get all identifiers
 ;;   - core-registry-find-by-mode        - Find entries for a mode
 ;;   - core-registry-find-all-by-mode    - Find all entries for a mode
 ;;
@@ -63,14 +63,14 @@ IDENTIFIER is the entry identifier symbol."
    (when entry (nth 2 entry))))
 
 (defun
- core-registry-get-all-identifiers (registry &optional filter-fn)
+ registry--get-all-identifiers (registry &optional filter-fn)
  "Get list of all identifiers in REGISTRY.
 If FILTER-FN is provided, only include entries where (FILTER-FN entry) is non-nil.
 REGISTRY is the registry to query.
 FILTER-FN is optional predicate function receiving entry as argument.
 
 Example:
-  (core-registry-get-all-identifiers reg
+  (registry--get-all-identifiers reg
     (lambda (e) (not (plist-get (nthcdr 3 e) :disabled))))"
  (let ((identifiers nil))
    (dolist

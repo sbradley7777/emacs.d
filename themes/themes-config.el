@@ -66,7 +66,7 @@ Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
      (progn
       (core-message-theme "Loading theme: %s" theme)
       ;; Apply generic doom customizations before loading
-      (themes-utils--apply-customizations theme)
+      (themes--utils-apply-customizations theme)
 
       ;; Load the theme
       (condition-case err

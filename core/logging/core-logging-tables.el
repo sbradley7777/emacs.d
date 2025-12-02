@@ -198,7 +198,7 @@ Example:
   alists))
 
 (defun
- core-logging--column-is-numeric-p (column-index rows)
+ logging--column-is-numeric-p (column-index rows)
  "Check if column at COLUMN-INDEX contain only numeric values in ROWS.
 Returns t if all values are numeric (integers, floats, or fractions).
 Empty strings or whitespace-only values are treated as non-numeric.
@@ -218,7 +218,7 @@ Numeric patterns recognized:
    rows)))
 
 (defun
- core-logging--detect-column-alignments (headers rows)
+ logging--detect-column-alignments (headers rows)
  "Detect alignment for each column based on data types.
 HEADERS is the list of column header strings.
 ROWS is the list of data rows.
@@ -226,7 +226,7 @@ Returns a list of alignment symbols: \\='left or \\='right for each column.
 Numeric columns (and their headers) get \\='right alignment."
  (let ((num-cols (length headers)))
    (mapcar
-    (lambda (col-idx) (if (core-logging--column-is-numeric-p col-idx rows) 'right 'left))
+    (lambda (col-idx) (if (logging--column-is-numeric-p col-idx rows) 'right 'left))
     (number-sequence 0 (1- num-cols)))))
 
 (defun
@@ -412,7 +412,7 @@ Examples:
      (list \"Custom\" (number-to-string (length rows)) \"Total\")))
   => Last row: │ Custom │ 2 │ Total │"
  (let* ((col-widths (core-logging-calculate-column-widths headers rows))
-        (alignments (core-logging--detect-column-alignments headers rows))
+        (alignments (logging--detect-column-alignments headers rows))
         (lines nil))
    ;; Top border: ┌───┬───┬───┐
    (push (core-logging--build-border col-widths 'top) lines)

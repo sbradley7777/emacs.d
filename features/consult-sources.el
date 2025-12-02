@@ -77,7 +77,7 @@ To add more patterns, simply add regexp strings to this list.")
   :history 'buffer-name-history
   :state #'consult--buffer-state
   :default t
-  :annotate #'consult-sources--buffer-annotation
+  :annotate #'consult--sources-buffer-annotation
   :items
   (lambda
    ()
@@ -98,7 +98,7 @@ To add more patterns, simply add regexp strings to this list.")
  'consult
  ;; Apply custom annotation to default buffer source for consistent alignment
  (plist-put consult--source-buffer :category nil)
- (plist-put consult--source-buffer :annotate #'consult-sources--buffer-annotation)
+ (plist-put consult--source-buffer :annotate #'consult--sources-buffer-annotation)
 
  ;; Assign unique narrowing key to project buffer source. By default it shares 'b' with regular buffers, causing conflicts
  (plist-put consult--source-project-buffer :narrow ?p)
@@ -106,7 +106,7 @@ To add more patterns, simply add regexp strings to this list.")
  ;; Remove category to allow custom annotations
  (plist-put consult--source-project-buffer :category nil)
  ;; Add shared custom annotation function
- (plist-put consult--source-project-buffer :annotate #'consult-sources--buffer-annotation)
+ (plist-put consult--source-project-buffer :annotate #'consult--sources-buffer-annotation)
 
  ;; Filter git repository buffers to exclude patterns from features-ignored-buffer-patterns
  ;; and ensure only buffers in the current git repository are shown
@@ -153,7 +153,7 @@ To add more patterns, simply add regexp strings to this list.")
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- consult-sources--buffer-annotation
+ consult--sources-buffer-annotation
  (buf)
  "Annotate buffer BUF with status, size, permissions, `mode-name' (major-mode), and abbreviated file path."
  (let ((buffer-obj (get-buffer buf)))

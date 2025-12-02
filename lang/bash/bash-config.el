@@ -24,7 +24,7 @@
  (flymake-lang-setup-package-loader 'flymake-shellcheck-load))
 
 (defun
- enhance-bash-syntax-highlighting ()
+ bash--config-enhance-syntax-highlighting ()
  "Add enhanced syntax highlighting for bash scripts.
 Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
  (unless
@@ -94,9 +94,9 @@ Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-register-dual-mode-hooks sh bash-setup-common)
 (add-hook 'bash-ts-mode-hook 'bash-setup-common)
-(add-hook 'sh-mode-hook 'enhance-bash-syntax-highlighting)
-(add-hook 'sh-ts-mode-hook 'enhance-bash-syntax-highlighting)
-(add-hook 'bash-ts-mode-hook 'enhance-bash-syntax-highlighting)
+(add-hook 'sh-mode-hook 'bash--config-enhance-syntax-highlighting)
+(add-hook 'sh-ts-mode-hook 'bash--config-enhance-syntax-highlighting)
+(add-hook 'bash-ts-mode-hook 'bash--config-enhance-syntax-highlighting)
 
 (core-message-lang-loaded "Bash" "sh-mode and bash-ts-mode with flymake-shellcheck")
 (provide 'bash-config)

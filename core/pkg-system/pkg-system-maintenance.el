@@ -17,7 +17,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pkg-system-maintenance-upgrade-all ()
+ pkg-system--maintenance-upgrade-all ()
  "Upgrade all installed packages to their latest available versions.
 
 Checks for updates across all configured repositories and upgrades packages

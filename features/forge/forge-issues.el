@@ -36,7 +36,7 @@ Provides helpful guidance for 'Cannot use repository yet' errors."
      (core-message-error "Failed to list issues: %s" err-msg)))))
 
 (defun
- forge-issues--kill-orphaned-buffers ()
+ forge--issues-kill-orphaned-buffers ()
  "Kill forge buffers that lack proper initialization.
 Orphaned buffers have forge-topics-mode but nil forge--buffer-topics-spec,
 which causes errors during redisplay when the mode-line is evaluated."
@@ -74,7 +74,7 @@ Returns the window displaying a forge topic buffer, or nil if not found."
  "Toggle forge issues window with size cycling between 30% and 50% width.
 When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% and 50%.
 Optional REPO argument specifies which repository to list issues for."
- (interactive) (forge-issues--kill-orphaned-buffers)
+ (interactive) (forge--issues-kill-orphaned-buffers)
  (let ((existing-window (forge-issues--find-window)))
    (if
     existing-window
@@ -131,11 +131,11 @@ Optional REPO argument specifies which repository to list issues for."
      "Issues")))
  (advice-add 'forge-topics-buffer-desc :around #'forge-issues--safe-buffer-desc))
 
-(with-eval-after-load 'forge-topics (forge-issues--kill-orphaned-buffers))
+(with-eval-after-load 'forge-topics (forge--issues-kill-orphaned-buffers))
 
 (add-hook
  'after-init-hook
- (lambda () (run-with-idle-timer 1.0 nil (lambda () (forge-issues--kill-orphaned-buffers)))))
+ (lambda () (run-with-idle-timer 1.0 nil (lambda () (forge--issues-kill-orphaned-buffers)))))
 
 (core-message-config "Forge issue commands loaded")
 (provide 'forge-issues)

@@ -16,7 +16,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- themes-utils--apply-doom-customizations
+ themes--utils-apply-doom-customizations
  ()
  "Apply doom-themes-specific customizations."
  (require 'doom-themes)
@@ -31,15 +31,15 @@
      (error-message-string err)))))
 
 (defun
- themes-utils--apply-customizations (theme) "Apply customizations for the specified THEME."
+ themes--utils-apply-customizations (theme) "Apply customizations for the specified THEME."
  ;; Apply doom-themes configuration for all themes
- (themes-utils--apply-doom-customizations)
+ (themes--utils-apply-doom-customizations)
  ;; Apply any user customizations from local.el
  (when-let ((customs (cdr (assq theme themes-config-customizations))))
    (dolist (custom customs) (set (car custom) (cdr custom)))))
 
 (defun
- themes-utils--get-available-doom-themes () "Get a list of all available doom themes."
+ themes--utils-get-available-doom-themes () "Get a list of all available doom themes."
  (sort
   (seq-filter
    (lambda (theme) (string-match-p "^doom-" (symbol-name theme))) (custom-available-themes))
@@ -62,7 +62,7 @@
     (completing-read
      "Select theme: "
      (append
-      (mapcar #'symbol-name (themes-utils--get-available-doom-themes))
+      (mapcar #'symbol-name (themes--utils-get-available-doom-themes))
       (mapcar #'symbol-name (themes-utils--get-other-themes)))
      nil t nil nil "doom-zenburn"))))
  (core-message-theme "Interactive theme switch requested: %s" theme)
@@ -80,7 +80,7 @@ Press RET on a theme name to preview it immediately.  The currently
 active theme is highlighted.  Provides a visual way to browse and
 test different color schemes."
  (interactive)
- (let* ((doom-themes (themes-utils--get-available-doom-themes))
+ (let* ((doom-themes (themes--utils-get-available-doom-themes))
         (other-themes (themes-utils--get-other-themes))
         (current-theme (car custom-enabled-themes))
         (buffer-name "*Available Themes*")

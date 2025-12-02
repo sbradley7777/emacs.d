@@ -83,7 +83,7 @@ or nil if MODE-SYMBOL is not a tree-sitter mode."
   (replace-regexp-in-string "-ts-mode$" "" (symbol-name mode-symbol))))
 
 (defun
- treesit-utils-get-grammar-filename (lang)
+ treesit--utils-get-grammar-filename (lang)
  "Get the expected grammar filename for LANG.
 LANG should be a string like \"python\" or \"bash\".
 Returns filename like \"libtree-sitter-python.so\" (or .dylib on macOS).
@@ -101,7 +101,7 @@ Returns nil if LANG is nil."
          (lang (treesit-utils-extract-lang-from-mode major-mode))
          (grammar-available (when lang (treesit-language-available-p (intern lang))))
          (grammar-file
-          (if (and lang grammar-available) (treesit-utils-get-grammar-filename lang) "none")))
+          (if (and lang grammar-available) (treesit--utils-get-grammar-filename lang) "none")))
     (core-message-plain
      "Tree-Sitter> Mode Name: %s | Mode Symbol: %s | Parent Mode: %s | Tree-sitter: %s | Grammar Installed: %s"
      mode-display-name

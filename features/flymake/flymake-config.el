@@ -17,7 +17,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- flymake-config--check-all-buffers ()
+ flymake--config-check-all-buffers ()
  "Check backend availability for all buffers with Flymake enabled.
 Runs the check for each buffer in its own context."
  (setq flymake-config--check-timer nil)
@@ -36,10 +36,10 @@ Cancels existing timer and schedules new check after 3 seconds.
 This ensures all flymake backends are properly registered after mode setup.
 Multiple calls in quick succession will only trigger one check."
  (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
- (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake-config--check-all-buffers)))
+ (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake--config-check-all-buffers)))
 
 (defun
- flymake-config--enable-for-prog-mode ()
+ flymake--config-enable-for-prog-mode ()
  "Enable Flymake mode for programming buffers, excluding *scratch*.
 Triggers a debounced backend availability check via `flymake-schedule-backend-check'."
  (unless (string= (buffer-name) "*scratch*") (flymake-mode 1) (flymake-schedule-backend-check)))
@@ -54,7 +54,7 @@ Triggers a debounced backend availability check via `flymake-schedule-backend-ch
    (side . right)
    (window-parameters . ((no-delete-other-windows . t) (no-other-window . nil)))))
 
-(add-hook 'prog-mode-hook 'flymake-config--enable-for-prog-mode)
+(add-hook 'prog-mode-hook 'flymake--config-enable-for-prog-mode)
 
 ;; Enforce :disabled flag from registry by removing disabled backends
 (add-hook 'flymake-mode-hook 'flymake-registry-remove-disabled-backends)

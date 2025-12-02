@@ -20,7 +20,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pkg-system-metadata-normalize-timestamp (timestamp)
+ pkg-system--metadata-normalize-timestamp (timestamp)
  "Convert timestamp to human-readable format if needed.
 TIMESTAMP can be a string (already human-readable), list (Emacs time format), or nil."
  (cond
@@ -119,7 +119,7 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
         (current-refresh
          (if
           (pkg-system-metadata-load-variables)
-          (pkg-system-metadata-normalize-timestamp
+          (pkg-system--metadata-normalize-timestamp
            (when (boundp 'package-last-refresh-timestamp) package-last-refresh-timestamp))
           nil))
         (current-cache-info (pkg-system-metadata-read-cache-info))
@@ -128,7 +128,7 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
         (cache-ts
          (or
           (plist-get plist :cache-timestamp)
-          (pkg-system-metadata-normalize-timestamp
+          (pkg-system--metadata-normalize-timestamp
            (seconds-to-time (plist-get current-cache-info :timestamp)))))
         (cache-count (or (plist-get plist :cache-count) (plist-get current-cache-info :count))))
 

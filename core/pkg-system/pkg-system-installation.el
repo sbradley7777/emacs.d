@@ -32,7 +32,7 @@ Should be called during initialization after package system is configured."
         "Failed to install keyring update: %s" (error-message-string err))))))))
 
 (defun
- pkg-system-installation-install-safely
+ pkg-system--installation-install-safely
  (package-list)
  "Install packages from PACKAGE-LIST with comprehensive error handling."
  (let ((failed-packages '())
@@ -81,7 +81,7 @@ Should be called during initialization after package system is configured."
 PACKAGE-LIST is the list of packages to install.
 MAX-RETRIES is the maximum number of retry attempts (default: 2)."
  (let ((max-retries (or max-retries 2))
-       (failed-packages (pkg-system-installation-install-safely package-list)))
+       (failed-packages (pkg-system--installation-install-safely package-list)))
    (when
     (and failed-packages (> max-retries 0))
     (core-message-loading "Retrying failed packages after network refresh...")

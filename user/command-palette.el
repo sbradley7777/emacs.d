@@ -37,8 +37,8 @@
  (let ((map (make-sparse-keymap)))
    (define-key map (kbd "q") 'command-palette-toggle)
    (define-key map (kbd "p") 'command-palette-add-favorite)
-   (define-key map (kbd "r") 'command-palette-remove-favorite)
-   (define-key map (kbd "v") 'command-palette-validate-commands)
+   (define-key map (kbd "r") 'command--palette-remove-favorite)
+   (define-key map (kbd "v") 'command--palette-validate-commands)
    map)
  "Keymap for command palette buffer.")
 (defvar user--command-palette-mx-flag nil "Non-nil means `M-x' was invoked.")
@@ -98,7 +98,7 @@
  user-command-palette-excluded-commands
  '(command-palette-toggle
    command-palette-add-favorite
-   command-palette-remove-favorite
+   command--palette-remove-favorite
    command-palette-clear-history
    keyboard-quit
    keyboard-escape-quit
@@ -118,7 +118,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- command-palette--ensure-data-directory
+ command--palette-ensure-data-directory
  ()
  "Ensure the command palette data directory exists, creating it if necessary."
  (core-utils-ensure-directory command-palette-data-dir))
@@ -127,7 +127,7 @@
  command-palette--save-history
  ()
  "Save command history to persistent storage."
- (command-palette--ensure-data-directory)
+ (command--palette-ensure-data-directory)
  (condition-case err
      (with-temp-file
       user--command-palette-history-file
@@ -179,10 +179,10 @@ If SILENT is non-nil, suppress success messages.  Returns t if successful, nil o
      nil))))
 
 (defun
- command-palette--save-favorites
+ command--palette-save-favorites
  ()
  "Save favorites list to persistent storage."
- (command-palette--ensure-data-directory)
+ (command--palette-ensure-data-directory)
  (condition-case err
      (with-temp-file
       user-command-palette-favorites-file
@@ -237,7 +237,7 @@ If SILENT is non-nil, suppress success messages.  Returns t if successful, nil o
    nil)))
 
 (defun
- command-palette--format-command-name (cmd-symbol)
+ command--palette-format-command-name (cmd-symbol)
  "Convert CMD-SYMBOL to human-readable format.
 Example: \\='find-file\\=' becomes \\='Find File\\='."
  (let ((name (symbol-name cmd-symbol)))
@@ -268,7 +268,7 @@ Removes any existing occurrences before adding to ensure no duplicates.  Returns
      (mapcar (lambda (item) (cons (cdr item) (car item))) user-command-palette-favorites))))
   ;; Remove all existing occurrences of this command from the ring
   (let ((new-ring (make-ring user-command-palette-history-size))
-        (cmd-name (command-palette--format-command-name cmd-symbol))
+        (cmd-name (command--palette-format-command-name cmd-symbol))
         (len (ring-length user--command-palette-history)))
     ;; Iterate from oldest to newest to preserve order when inserting
     (dotimes
@@ -280,11 +280,11 @@ Removes any existing occurrences before adding to ensure no duplicates.  Returns
     (setq user--command-palette-history new-ring)
     ;; Insert the command at the front (most recent position)
     (ring-insert user--command-palette-history (cons cmd-name cmd-symbol))
-    (command-palette--refresh-buffer)
+    (command--palette-refresh-buffer)
     t)))
 
 (defun
- command-palette--execute-command (cmd-symbol)
+ command--palette-execute-command (cmd-symbol)
  "Execute command CMD-SYMBOL.
 Switches to the previous window before executing the command, then closes the palette."
  ;; Use add-to-history for deduplication
@@ -334,7 +334,7 @@ If KEYBINDING is provided, display it in parentheses with a red color."
    (insert "\n")))
 
 (defun
- command-palette--calculate-window-width ()
+ command--palette-calculate-window-width ()
  "Calculate window width based on longest line in current buffer.
 Returns width as number of columns needed to display content."
  (save-excursion
@@ -349,7 +349,7 @@ Returns width as number of columns needed to display content."
     (+ max-width 2))))
 
 (defun
- command-palette--refresh-buffer () "Refresh the command palette buffer contents."
+ command--palette-refresh-buffer () "Refresh the command palette buffer contents."
  (let ((buffer (get-buffer user-command-palette-buffer-name)))
    (when
     buffer
@@ -358,12 +358,12 @@ Returns width as number of columns needed to display content."
      (let ((inhibit-read-only t)
            (line (line-number-at-pos)))
        (erase-buffer)
-       (command-palette--render-content)
+       (command--palette-render-content)
        (goto-char (point-min))
        (forward-line (1- line)))))))
 
 (defun
- command-palette--render-content () "Render the command palette buffer content."
+ command--palette-render-content () "Render the command palette buffer content."
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Header
@@ -380,13 +380,13 @@ Returns width as number of columns needed to display content."
   '(:foreground "cyan"))
  (command-palette--make-button
   "  🗑️  Remove Favorite by Index"
-  (lambda (_) (call-interactively 'command-palette-remove-favorite))
+  (lambda (_) (call-interactively 'command--palette-remove-favorite))
   '(:foreground "red"))
  (command-palette--make-button
   "  🔄 Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
  (command-palette--make-button
   "  🔍 Validate Commands"
-  (lambda (_) (command-palette-validate-commands))
+  (lambda (_) (command--palette-validate-commands))
   '(:foreground "lightblue"))
  (command-palette--make-button
   "  ❌ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
@@ -415,7 +415,7 @@ Returns width as number of columns needed to display content."
            (cmd (cdr item))
            (keybinding (command-palette--get-keybinding cmd)))
       (command-palette--make-button (format "  %2d. %s" index name)
-                                    `(lambda (_) (command-palette--execute-command ',cmd))
+                                    `(lambda (_) (command--palette-execute-command ',cmd))
                                     '(:foreground "lightgreen")
                                     keybinding)
       (setq index (1+ index)))))
@@ -435,7 +435,7 @@ Returns width as number of columns needed to display content."
           (index (1+ i))
           (keybinding (command-palette--get-keybinding cmd)))
      (command-palette--make-button (format "  %2d. %s" index name)
-                                   `(lambda (_) (command-palette--execute-command ',cmd))
+                                   `(lambda (_) (command--palette-execute-command ',cmd))
                                    '(:foreground "orange")
                                    keybinding)))
   (insert "\n")))
@@ -470,12 +470,12 @@ persisted to disk immediately.  Useful for pinning frequently-used commands."
             (unless
              (eq (cdr hist-item) cmd-symbol) (ring-insert-at-beginning new-ring hist-item))))
          (setq user--command-palette-history new-ring))
-       (command-palette--refresh-buffer)
+       (command--palette-refresh-buffer)
        (core-message-success "Promoted #%d '%s' to favorites" index cmd-name))
      (core-message-warning "Invalid index or cancelled")))))
 
 (defun
- command-palette-remove-favorite ()
+ command--palette-remove-favorite ()
  "Remove a command from the favorites list by index number.
 
 Prompts for an index number from the favorites list, then permanently removes
@@ -494,7 +494,7 @@ Does not affect the command's availability in `M-x'."
             (cmd-name (car item-to-remove)))
        (setq
         user-command-palette-favorites (cl-remove item-to-remove user-command-palette-favorites))
-       (command-palette--refresh-buffer)
+       (command--palette-refresh-buffer)
        (core-message-success "Removed favorite #%d: '%s'" index cmd-name))
      (core-message-warning "Invalid index or cancelled")))))
 
@@ -507,11 +507,11 @@ Removes all entries from the recent commands section while preserving favorites.
 Use this to reset your recent commands list while keeping your favorites intact."
  (interactive)
  (setq user--command-palette-history (make-ring user-command-palette-history-size))
- (command-palette--refresh-buffer)
+ (command--palette-refresh-buffer)
  (core-message-success "Command palette history cleared"))
 
 (defun
- command-palette-validate-commands
+ command--palette-validate-commands
  ()
  "Validate all commands in favorites and history, removing any that no longer exist."
  (interactive)
@@ -545,7 +545,7 @@ Use this to reset your recent commands list while keeping your favorites intact.
           (core-message-warning "Removed invalid history item: %s (%s)" cmd-name cmd-symbol)))))
      (setq user--command-palette-history new-ring))
    ;; Refresh buffer
-   (command-palette--refresh-buffer)
+   (command--palette-refresh-buffer)
    ;; Report results
    (if
     (and (= removed-favorites 0) (= removed-history 0))
@@ -576,9 +576,9 @@ side windows (Flymake diagnostics, Imenu-list)."
      buffer
      (let ((inhibit-read-only t))
        (erase-buffer)
-       (command-palette--render-content)
+       (command--palette-render-content)
        ;; Calculate width based on content
-       (setq window-width (command-palette--calculate-window-width)))
+       (setq window-width (command--palette-calculate-window-width)))
      (setq buffer-read-only t)
      (setq-local cursor-type nil)
      (use-local-map user-command-palette-mode-map)
@@ -622,7 +622,7 @@ side windows (Flymake diagnostics, Imenu-list)."
 
 ;; Save on exit
 (add-hook 'kill-emacs-hook #'command-palette--save-history)
-(add-hook 'kill-emacs-hook #'command-palette--save-favorites)
+(add-hook 'kill-emacs-hook #'command--palette-save-favorites)
 
 (core-message-success "Command palette loaded!")
 (provide 'command-palette)

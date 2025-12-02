@@ -57,12 +57,12 @@
  ;; We only block dimmer-command-handler and dimmer-config-change-handler
  ;; but allow dimmer-process-all to run so the minibuffer stays bright
  (defun
-  dimmer--disable-when-minibuffer-active
+  dimmer--config-disable-when-minibuffer-active
   (orig-fun &rest args)
   "Advice for dimmer functions to prevent excessive updates when minibuffer is active."
   (unless (active-minibuffer-window) (apply orig-fun args)))
- (advice-add 'dimmer-command-handler :around #'dimmer--disable-when-minibuffer-active)
- (advice-add 'dimmer-config-change-handler :around #'dimmer--disable-when-minibuffer-active)
+ (advice-add 'dimmer-command-handler :around #'dimmer--config-disable-when-minibuffer-active)
+ (advice-add 'dimmer-config-change-handler :around #'dimmer--config-disable-when-minibuffer-active)
 
  ;; Exclude certain buffers from being dimmed
  ;; Flymake diagnostics buffer should remain bright so errors are easily visible

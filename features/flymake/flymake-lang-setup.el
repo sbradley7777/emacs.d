@@ -5,7 +5,7 @@
 ;;
 ;; Usage:
 ;;   (require 'flymake-lang-setup)
-;;   (lang-trigger-flymake-check-timer)
+;;   (flymake--lang-trigger-check-timer)
 ;;
 ;; Backend Setup Function Selection Guide:
 ;;
@@ -101,7 +101,7 @@ Adds BACKEND-FUNCTION to `flymake-diagnostic-functions' buffer-locally."
   (add-hook 'flymake-diagnostic-functions backend-function nil t)))
 
 (defun
- lang-ensure-flymake-backend-after-eglot (binary backend-function)
+ flymake--lang-ensure-backend-after-eglot (binary backend-function)
  "Ensure BACKEND-FUNCTION is active after eglot start.
 BINARY is the name of the executable to check for (e.g., \"mdl\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
@@ -123,12 +123,12 @@ BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-colle
 This addresses the issue where eglot can reset `flymake-diagnostic-functions'."
  (add-hook
   'eglot-managed-mode-hook
-  (lambda () (lang-ensure-flymake-backend-after-eglot binary backend-function))
+  (lambda () (flymake--lang-ensure-backend-after-eglot binary backend-function))
   nil
   t))
 
 (defun
- lang-trigger-flymake-check-timer ()
+ flymake--lang-trigger-check-timer ()
  "Trigger flymake configuration check timer.
 Delegates to `flymake-schedule-backend-check' for timer management."
  (flymake-schedule-backend-check))
@@ -158,7 +158,7 @@ If binary is not found in PATH, setup is silently skipped."
    (unless binary (error "Backend %s missing :binary property in registry" backend-function))
    (lang-setup-flymake-backend binary backend-function)
    (flymake-mode 1)
-   (lang-trigger-flymake-check-timer)))
+   (flymake--lang-trigger-check-timer)))
 
 (defun
  flymake-lang-setup-package-loader (load-function)
@@ -182,7 +182,7 @@ If binary is not found in PATH, setup is silently skipped."
    (when
     (flymake-registry-backend-available-p binary load-function)
     (funcall load-function)
-    (lang-trigger-flymake-check-timer))))
+    (flymake--lang-trigger-check-timer))))
 
 (defun
  flymake-lang-setup-lsp-backend ()
