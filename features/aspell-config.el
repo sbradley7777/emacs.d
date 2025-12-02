@@ -62,7 +62,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- aspell-has-en-dictionary-p ()
+ aspell--config-has-en-dictionary-p ()
  "Check if aspell has the English dictionary installed.
 Returns t if \\='en\\=' dictionary is available, nil otherwise.
 Checks based on current `default-directory' (local or remote)."
@@ -82,7 +82,7 @@ Checks based on current `default-directory' (local or remote)."
    (core-message-error
     "The command \"aspell\" was not found - please verify \"aspell\" is installed")
    nil)
-  ((not (aspell-has-en-dictionary-p))
+  ((not (aspell--config-has-en-dictionary-p))
    (core-message-error
     "The \"aspell\" English dictionary was not found - please verify it is installed")
    nil)
@@ -90,7 +90,7 @@ Checks based on current `default-directory' (local or remote)."
    t)))
 
 (defun
- aspell-setup-flymake ()
+ aspell--config-setup-flymake ()
  "Setup flymake-aspell for current buffer.
 Adds flymake-aspell to diagnostics functions without replacing existing backends.
 Only runs if flymake-aspell is loaded and buffer is not *scratch*."
@@ -103,7 +103,7 @@ Only runs if flymake-aspell is loaded and buffer is not *scratch*."
   (flymake-aspell-setup) (unless flymake-mode (flymake-mode 1))))
 
 (defun
- aspell-setup-flymake-prog ()
+ aspell--config-setup-flymake-prog ()
  "Setup flymake-aspell for `prog-mode' to check comments and strings only.
 Only runs if flymake-aspell is loaded and buffer is not *scratch*."
  (when
@@ -112,7 +112,7 @@ Only runs if flymake-aspell is loaded and buffer is not *scratch*."
    ;; Skip *scratch* buffer to avoid triggering Emacs security warnings
    ;; about untrusted content when flymake-mode enables built-in checkers
    (not (string= (buffer-name) "*scratch*")))
-  (setq-local flymake-aspell-only-comments-and-strings t) (aspell-setup-flymake)))
+  (setq-local flymake-aspell-only-comments-and-strings t) (aspell--config-setup-flymake)))
 
 (defun
  aspell-ensure-backend ()
@@ -142,7 +142,10 @@ Checks current state and enables if disabled, disables if enabled."
    (core-message-info "Flymake aspell enabled"))))
 
 (defun
- disable-flymake-aspell () "Disable flymake-aspell backend in current buffer." (interactive)
+ aspell--config-disable-flymake
+ ()
+ "Disable flymake-aspell backend in current buffer."
+ (interactive)
  (when
   (memq 'flymake-aspell--check flymake-diagnostic-functions)
   (remove-hook 'flymake-diagnostic-functions 'flymake-aspell--check t)
@@ -162,7 +165,7 @@ Checks current state and enables if disabled, disables if enabled."
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when
- (and (core-utils-check-command-in-path "aspell") (aspell-has-en-dictionary-p))
+ (and (core-utils-check-command-in-path "aspell") (aspell--config-has-en-dictionary-p))
  (core-message-config "Configuring spell checking with flymake-aspell")
  (setq ispell-program-name "aspell")
  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
@@ -170,6 +173,6 @@ Checks current state and enables if disabled, disables if enabled."
  (core-message-success "Spell checking configured with flymake-aspell (disabled by default)"))
 
 (global-set-key (kbd "C-c f a") 'toggle-flymake-aspell)
-(global-set-key (kbd "C-c f A") 'disable-flymake-aspell)
+(global-set-key (kbd "C-c f A") 'aspell--config-disable-flymake)
 (provide 'aspell-config)
 ;;; aspell-config.el ends here

@@ -19,7 +19,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- lisp-config--untabify-buffer
+ lisp--config-untabify-buffer
  ()
  "Convert all tabs to spaces in the current buffer."
  (untabify (point-min) (point-max)))
@@ -27,6 +27,6 @@
 ;; Add hook to convert tabs to spaces when saving Emacs Lisp files
 (add-hook
  'emacs-lisp-mode-hook
- (lambda () (add-hook 'before-save-hook #'lisp-config--untabify-buffer nil t)))
+ (lambda () (add-hook 'before-save-hook #'lisp--config-untabify-buffer nil t)))
 (provide 'lisp-config)
 ;;; lisp-config.el ends here

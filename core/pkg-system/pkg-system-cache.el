@@ -68,7 +68,7 @@
        (core-message-warning "Failed to load package cache: %s" (error-message-string err)))))))
 
 (defun
- pkg-system-cache-clear ()
+ pkg-system--cache-clear ()
  "Clear the package metadata cache file.
 
 Removes cached package information to force a fresh refresh from repositories

@@ -101,7 +101,7 @@ Example:
 ;; Column Aggregation Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-logging-sum-column (rows column-index)
+ logging--sum-column (rows column-index)
  "Sum numeric values in COLUMN-INDEX across all ROWS.
 ROWS is a list of row data (list of lists).
 COLUMN-INDEX is zero-based integer indicating which column to sum.
@@ -110,13 +110,13 @@ Returns string representation of sum.
 Non-numeric values are treated as zero.
 
 Example:
-  (core-logging-sum-column \\='((\"Item\" \"10\") (\"Item\" \"20\")) 1)
+  (logging--sum-column \\='((\"Item\" \"10\") (\"Item\" \"20\")) 1)
   => \"30\""
  (number-to-string
   (cl-loop for row in rows sum (string-to-number (format "%s" (nth column-index row))))))
 
 (defun
- core-logging-average-column (rows column-index)
+ logging--average-column (rows column-index)
  "Calculate average of numeric values in COLUMN-INDEX across all ROWS.
 ROWS is a list of row data (list of lists).
 COLUMN-INDEX is zero-based integer indicating which column to average.
@@ -126,7 +126,7 @@ Returns \"0.0\" if ROWS is empty.
 Non-numeric values are treated as zero.
 
 Example:
-  (core-logging-average-column \\='((\"A\" \"10\") (\"B\" \"20\")) 1)
+  (logging--average-column \\='((\"A\" \"10\") (\"B\" \"20\")) 1)
   => \"15.0\""
  (if
   (zerop (length rows)) "0.0"
@@ -138,7 +138,7 @@ Example:
     (float (length rows))))))
 
 (defun
- core-logging-count-matches (rows column-index value)
+ logging--count-matches (rows column-index value)
  "Count rows where COLUMN-INDEX equals VALUE.
 ROWS is a list of row data (list of lists).
 COLUMN-INDEX is zero-based integer indicating which column to check.
@@ -147,7 +147,7 @@ VALUE is the string value to match against.
 Returns string representation of count.
 
 Example:
-  (core-logging-count-matches
+  (logging--count-matches
    \\='((\"Item\" \"active\") (\"Item\" \"inactive\") (\"Item\" \"active\"))
    1 \"active\")
   => \"2\""
@@ -158,7 +158,7 @@ Example:
 ;; Data Transformation Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-logging-plist-to-rows (plists column-keys)
+ logging--plist-to-rows (plists column-keys)
  "Convert list of PLISTS to table rows using COLUMN-KEYS.
 PLISTS is a list of property lists.
 COLUMN-KEYS is a list of plist keys to extract (in order).
@@ -167,7 +167,7 @@ Returns list of rows suitable for `core-logging-format-table'.
 Missing keys are rendered as \"-\".
 
 Example:
-  (core-logging-plist-to-rows
+  (logging--plist-to-rows
    \\='((:name \"Alice\" :age 25)
      (:name \"Bob\" :age 30))
    \\='(:name :age))
@@ -178,7 +178,7 @@ Example:
   plists))
 
 (defun
- core-logging-alist-to-rows (alists column-keys)
+ logging--alist-to-rows (alists column-keys)
  "Convert list of ALISTS to table rows using COLUMN-KEYS.
 ALISTS is a list of association lists.
 COLUMN-KEYS is a list of alist keys to extract (in order).
@@ -187,7 +187,7 @@ Returns list of rows suitable for `core-logging-format-table'.
 Missing keys are rendered as \"-\".
 
 Example:
-  (core-logging-alist-to-rows
+  (logging--alist-to-rows
    \\='(((name . \"Alice\") (age . 25))
      ((name . \"Bob\") (age . 30)))
    \\='(name age))
@@ -230,7 +230,7 @@ Numeric columns (and their headers) get \\='right alignment."
     (number-sequence 0 (1- num-cols)))))
 
 (defun
- core-logging--build-row (columns widths alignments)
+ logging--build-row (columns widths alignments)
  "Build a data row with vertical borders.
 COLUMNS is a list of column values.
 WIDTHS is a list of column widths.
@@ -253,18 +253,18 @@ Returns formatted row string like: │ Data  │ Data  │ Data  │"
   " │"))
 
 (defun
- core-logging--build-border (widths type)
+ logging--build-border (widths type)
  "Build a horizontal border line with box-drawing characters.
 WIDTHS is a list of column widths.
 TYPE is \\='top, \\='middle, or \\='bottom.
 Returns border string with appropriate box-drawing characters.
 
 Examples:
-  (core-logging--build-border \\='(5 3 4) \\='top)
+  (logging--build-border \\='(5 3 4) \\='top)
   => \"┌───────┬─────┬──────┐\"
-  (core-logging--build-border \\='(5 3 4) \\='middle)
+  (logging--build-border \\='(5 3 4) \\='middle)
   => \"├───────┼─────┼──────┤\"
-  (core-logging--build-border \\='(5 3 4) \\='bottom)
+  (logging--build-border \\='(5 3 4) \\='bottom)
   => \"└───────┴─────┴──────┘\""
  (let ((left
         (pcase type
@@ -284,7 +284,7 @@ Examples:
    (concat left (mapconcat (lambda (width) (make-string (+ width 2) ?─)) widths junction) right)))
 
 (defun
- core-logging--build-total-row (headers rows total-spec)
+ logging--build-total-row (headers rows total-spec)
  "Build total row data based on TOTAL-SPEC.
 HEADERS is the list of column header strings.
 ROWS is the list of data rows.
@@ -298,19 +298,19 @@ TOTAL-SPEC controls total row behavior:
 Returns list of column values for total row, or nil if no total row.
 
 Examples:
-  (core-logging--build-total-row headers rows nil)
+  (logging--build-total-row headers rows nil)
   => nil
 
-  (core-logging--build-total-row headers rows \\='count-only)
+  (logging--build-total-row headers rows \\='count-only)
   => (\"TOTAL: 5\" \"-\" \"-\" \"-\")
 
-  (core-logging--build-total-row headers rows \\='(1 3))
+  (logging--build-total-row headers rows \\='(1 3))
   => (\"TOTAL\" \"15\" \"-\" \"42\")
 
-  (core-logging--build-total-row headers rows \\='(\"Age\" \"Count\"))
+  (logging--build-total-row headers rows \\='(\"Age\" \"Count\"))
   => (\"TOTAL\" \"15\" \"-\" \"42\")
 
-  (core-logging--build-total-row headers rows (lambda (h r) (list \"Custom\" \"Total\")))
+  (logging--build-total-row headers rows (lambda (h r) (list \"Custom\" \"Total\")))
   => (\"Custom\" \"Total\")"
  (let ((num-cols (length headers)))
    (pcase total-spec
@@ -415,22 +415,22 @@ Examples:
         (alignments (logging--detect-column-alignments headers rows))
         (lines nil))
    ;; Top border: ┌───┬───┬───┐
-   (push (core-logging--build-border col-widths 'top) lines)
+   (push (logging--build-border col-widths 'top) lines)
    ;; Header row: │ Col │ Col │ Col │
-   (push (core-logging--build-row headers col-widths alignments) lines)
+   (push (logging--build-row headers col-widths alignments) lines)
    ;; Header separator: ├───┼───┼───┤
-   (push (core-logging--build-border col-widths 'middle) lines)
+   (push (logging--build-border col-widths 'middle) lines)
    ;; Data rows: │ Data │ Data │ Data │
-   (dolist (row rows) (push (core-logging--build-row row col-widths alignments) lines))
+   (dolist (row rows) (push (logging--build-row row col-widths alignments) lines))
    ;; Total row (if requested)
-   (when-let ((total-row (core-logging--build-total-row headers rows total-spec)))
+   (when-let ((total-row (logging--build-total-row headers rows total-spec)))
      ;; Total separator: ├───┼───┼───┤
-     (push (core-logging--build-border col-widths 'middle) lines)
+     (push (logging--build-border col-widths 'middle) lines)
      ;; Total row: │ TOTAL │ ... │
      (let ((total-alignments (logging--detect-total-row-alignments total-row)))
-       (push (core-logging--build-row total-row col-widths total-alignments) lines)))
+       (push (logging--build-row total-row col-widths total-alignments) lines)))
    ;; Bottom border: └───┴───┴───┘
-   (push (core-logging--build-border col-widths 'bottom) lines)
+   (push (logging--build-border col-widths 'bottom) lines)
    (nreverse lines)))
 
 (provide 'core-logging-tables)

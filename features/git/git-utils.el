@@ -39,7 +39,7 @@ Example: \\='glocktopography (~/gitlab/glocktopography/)\\='."
     (format "%s (%s)" name (abbreviate-file-name repo-root)))))
 
 (defun
- git-utils--validate-config-key (key)
+ git--utils-validate-config-key (key)
  "Validate that KEY is a non-empty string suitable for git config.
 Returns t if valid, nil otherwise.  Logs warning if invalid.
 Allows regex metacharacters that are safe for git config --get-regexp."
@@ -75,7 +75,7 @@ Logs a warning if git is not found.  Caches result to avoid redundant checks."
 Returns list of strings, one per matching config line.
 Returns nil if git is not installed, PATTERN is invalid, or no matches found."
  (when
-  (and (git--utils-ensure-git-available) (git-utils--validate-config-key pattern))
+  (and (git--utils-ensure-git-available) (git--utils-validate-config-key pattern))
   (when-let ((output (core-process-run-sync "git" t "config" "--global" "--get-regexp" pattern)))
     (when (> (length output) 0) (split-string output "\n" t)))))
 
@@ -84,7 +84,7 @@ Returns nil if git is not installed, PATTERN is invalid, or no matches found."
  "Get git config value for KEY using git config --global --get.
 Returns the value as a string, or nil if not found, KEY is invalid, or git not installed."
  (when
-  (and (git--utils-ensure-git-available) (git-utils--validate-config-key key))
+  (and (git--utils-ensure-git-available) (git--utils-validate-config-key key))
   (core-process-run-sync "git" t "config" "--global" "--get" key)))
 
 (defun

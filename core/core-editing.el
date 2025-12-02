@@ -68,11 +68,11 @@
  ;; Functions
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (defun
-  osc-52-copy (text) "Copy TEXT to system clipboard using OSC 52 escape sequence."
+  core--osc-52-copy (text) "Copy TEXT to system clipboard using OSC 52 escape sequence."
   (let ((encoded (base64-encode-string text t)))
     (send-string-to-terminal (concat "\e]52;c;" encoded "\a"))))
 
  ;; Hook into Emacs clipboard system
- (setq interprogram-cut-function 'osc-52-copy))
+ (setq interprogram-cut-function 'core--osc-52-copy))
 (provide 'core-editing)
 ;;; core-editing.el ends here

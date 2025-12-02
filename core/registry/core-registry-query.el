@@ -11,11 +11,11 @@
 ;;   - core-registry-get-modes           - Get supported modes
 ;;   - registry--get-all-identifiers - Get all identifiers
 ;;   - core-registry-find-by-mode        - Find entries for a mode
-;;   - core-registry-find-all-by-mode    - Find all entries for a mode
+;;   - registry--find-all-by-mode    - Find all entries for a mode
 ;;
 ;; Iteration helpers:
-;;   - core-registry-map-entries         - Map function over entries
-;;   - core-registry-filter-entries      - Filter entries by predicate
+;;   - registry--map-entries         - Map function over entries
+;;   - registry--filter-entries      - Filter entries by predicate
 
 ;;; Code:
 (require 'cl-lib)
@@ -106,7 +106,7 @@ Example:
    result))
 
 (defun
- core-registry-find-all-by-mode (registry mode &optional filter-fn)
+ registry--find-all-by-mode (registry mode &optional filter-fn)
  "Find all entries in REGISTRY that support MODE.
 Return list of identifiers (first elements) of matching entries.
 If FILTER-FN is provided, only consider entries where (FILTER-FN entry) is non-nil.
@@ -126,26 +126,26 @@ FILTER-FN is optional predicate function."
 ;; Iteration Helpers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-registry-map-entries (registry function)
+ registry--map-entries (registry function)
  "Apply FUNCTION to each entry in REGISTRY, return list of results.
 FUNCTION receives the full entry and should return a value.
 REGISTRY is the registry to iterate over.
 FUNCTION is the mapping function.
 
 Example:
-  (core-registry-map-entries reg
+  (registry--map-entries reg
     (lambda (entry) (list (car entry) (nth 1 entry))))"
  (mapcar function registry))
 
 (defun
- core-registry-filter-entries (registry predicate)
+ registry--filter-entries (registry predicate)
  "Return entries from REGISTRY where PREDICATE return non-nil.
 PREDICATE receives the full entry.
 REGISTRY is the registry to filter.
 PREDICATE is the filter function.
 
 Example:
-  (core-registry-filter-entries reg
+  (registry--filter-entries reg
     (lambda (e) (eq (plist-get (nthcdr 3 e) :type) \\='lsp)))"
  (cl-remove-if-not predicate registry))
 

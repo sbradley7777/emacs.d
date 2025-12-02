@@ -137,7 +137,7 @@ Results are cached per `pkg-system-repository-cache-ttl'."
        responsive
        (progn
         (core-message-debug
-         "Repository %s responsive (%.2fs)" url (network-utils--elapsed-since start-time))
+         "Repository %s responsive (%.2fs)" url (pkg-system--network-elapsed-since start-time))
         (push archive available-repos))
        (push name unavailable-repos))))
    (when

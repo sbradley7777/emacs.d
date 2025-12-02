@@ -42,7 +42,7 @@ Returns nil if package-archive-contents is not loaded."
            (url (cdr archive))
            (start-time (current-time))
            (responsive (pkg-system-repositories-test-url url))
-           (elapsed (network-utils--elapsed-since start-time))
+           (elapsed (pkg-system--network-elapsed-since start-time))
            (status (if responsive "online" "offline")))
       (when
        responsive

@@ -78,7 +78,7 @@
     dashboard-insert-navigator
     dashboard-insert-newline
     dashboard-insert-init-info
-    dashboard--insert-separator
+    dashboard--config-insert-separator
     dashboard-insert-items
     dashboard-insert-footer))
  (dashboard-setup-startup-hook)
@@ -91,7 +91,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- dashboard--insert-separator () "Insert a centered horizontal line separator."
+ dashboard--config-insert-separator () "Insert a centered horizontal line separator."
  (let* ((line-width 80)
         (separator (make-string line-width ?─))
         (padding (/ (- (window-width) line-width) 2))

@@ -20,7 +20,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- forge-issues--handle-error (err error-type)
+ forge--issues-handle-error (err error-type)
  "Handle errors from toggle-forge-issues-window with appropriate messaging.
 ERR is the error object, ERROR-TYPE is the type of error caught (user-error or error).
 Provides helpful guidance for 'Cannot use repository yet' errors."
@@ -51,7 +51,7 @@ which causes errors during redisplay when the mode-line is evaluated."
     (kill-buffer buf)))))
 
 (defun
- forge-issues--find-window ()
+ forge--issues-find-window ()
  "Find the forge topic window if it exists and is properly initialized.
 Returns the window displaying a forge topic buffer, or nil if not found."
  (let ((forge-window nil))
@@ -75,7 +75,7 @@ Returns the window displaying a forge topic buffer, or nil if not found."
 When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% and 50%.
 Optional REPO argument specifies which repository to list issues for."
  (interactive) (forge--issues-kill-orphaned-buffers)
- (let ((existing-window (forge-issues--find-window)))
+ (let ((existing-window (forge--issues-find-window)))
    (if
     existing-window
     (if
@@ -99,9 +99,9 @@ Optional REPO argument specifies which repository to list issues for."
            (forge-topics-setup-buffer repository nil :type 'issue)
            (setq forge-issues--current-width 'compact)))
       (user-error
-       (forge-issues--handle-error err 'user-error))
+       (forge--issues-handle-error err 'user-error))
       (error
-       (forge-issues--handle-error err 'error))))))
+       (forge--issues-handle-error err 'error))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
@@ -109,7 +109,7 @@ Optional REPO argument specifies which repository to list issues for."
 (with-eval-after-load
  'forge-topics
  (defun
-  forge-issues--safe-buffer-desc
+  forge--issues-safe-buffer-desc
   (orig-func &rest args)
   "Safely call forge-topics-buffer-desc, returning fallback if buffer is orphaned."
   (if
@@ -129,7 +129,7 @@ Optional REPO argument specifies which repository to list issues for."
            (or (not (boundp 'forge--buffer-topics-spec)) (not forge--buffer-topics-spec)))
           (kill-buffer orphaned-buf))))))
      "Issues")))
- (advice-add 'forge-topics-buffer-desc :around #'forge-issues--safe-buffer-desc))
+ (advice-add 'forge-topics-buffer-desc :around #'forge--issues-safe-buffer-desc))
 
 (with-eval-after-load 'forge-topics (forge--issues-kill-orphaned-buffers))
 

@@ -4,7 +4,7 @@
 ;;
 ;; Validation functions:
 ;;   - core-registry-validate-entry       - Validate single entry structure
-;;   - core-registry-validate-all         - Validate entire registry
+;;   - registry--validate-all         - Validate entire registry
 ;;   - core-registry-mode-compatible-p    - Check mode compatibility
 ;;
 ;; These functions ensure registry entries are well-formed and
@@ -69,7 +69,7 @@ Example:
      nil))))
 
 (defun
- core-registry-validate-all (registry &optional required-properties)
+ registry--validate-all (registry &optional required-properties)
  "Validate all entries in REGISTRY.
 Signals error if any entry is invalid.
 REGISTRY is the registry to validate.

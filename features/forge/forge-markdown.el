@@ -32,7 +32,7 @@ FACE-VAL can be a single face symbol, a quoted face symbol, or a list of faces."
    face-val)))
 
 (defun
- forge-markdown--setup-buffer
+ forge--markdown-setup-buffer
  (text)
  "Set up a temporary buffer with TEXT for markdown fontification.
 Enables gfm-mode, markdown hiding features, and applies fontification."
@@ -143,7 +143,7 @@ markup characters and URLs for cleaner display in forge topic buffers.
 Makes links clickable with `mouse-1' and `RET'.
 Optional INDENT specifies indentation level."
  (with-temp-buffer
-  (forge-markdown--setup-buffer text) (forge--markdown-apply-post-processing indent)
+  (forge--markdown-setup-buffer text) (forge--markdown-apply-post-processing indent)
   (let ((fontified-string (forge--markdown-convert-face-properties (buffer-string))))
     ;; Make URLs clickable after converting face properties
     (forge--markdown-make-urls-clickable fontified-string))))

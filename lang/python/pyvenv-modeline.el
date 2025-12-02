@@ -21,7 +21,7 @@
   (string-prefix-p (expand-file-name pyvenv-project-root) (expand-file-name buffer-file-name))))
 
 (defun
- pyvenv-modeline-show-info
+ pyvenv--modeline-show-info
  ()
  "Display Python virtual environment info in minibuffer when clicked."
  (interactive)
@@ -39,7 +39,7 @@
   (core-message-warning "No Python virtual environment active")))
 
 (defun
- pyvenv-modeline-indicator () "Return modeline indicator for Python venv with click handler."
+ pyvenv--modeline-indicator () "Return modeline indicator for Python venv with click handler."
  (when
   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (pyvenv--modeline-file-in-project-p))
   (let* ((venv-name (core-utils-extract-directory-name pyvenv-virtual-env))
@@ -54,7 +54,7 @@
      'mode-line-highlight
      'local-map
      (let ((map (make-sparse-keymap)))
-       (define-key map [mode-line mouse-1] #'pyvenv-modeline-show-info)
+       (define-key map [mode-line mouse-1] #'pyvenv--modeline-show-info)
        map)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,7 +76,7 @@
      (propertize
       icon 'help-echo "Click to show Python venv info" 'mouse-face 'mode-line-highlight 'local-map
       (let ((map (make-sparse-keymap)))
-        (define-key map [mode-line mouse-1] #'pyvenv-modeline-show-info)
+        (define-key map [mode-line mouse-1] #'pyvenv--modeline-show-info)
         map)))))
 
  (core-message-success "Python venv modeline segment loaded"))
@@ -92,7 +92,7 @@
   (lambda
    ()
    (setq-default
-    global-mode-string (append global-mode-string (list '(:eval (pyvenv-modeline-indicator)))))))
+    global-mode-string (append global-mode-string (list '(:eval (pyvenv--modeline-indicator)))))))
  (add-hook 'pyvenv-post-deactivate-hooks (lambda () (setq-default global-mode-string nil))))
 (provide 'pyvenv-modeline)
 ;;; pyvenv-modeline.el ends here

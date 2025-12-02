@@ -61,7 +61,7 @@ for available segment names.")
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- modeline-config-setup-default
+ modeline--config-setup-default
  ()
  "Configure the default Emacs modeline with standard features."
  (core-message-config "Setting up default Emacs modeline")
@@ -165,6 +165,6 @@ for available segment names.")
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (if
- themes-use-doom-modeline (modeline--config-setup-doom-modeline) (modeline-config-setup-default))
+ themes-use-doom-modeline (modeline--config-setup-doom-modeline) (modeline--config-setup-default))
 (provide 'modeline-config)
 ;;; modeline-config.el ends here

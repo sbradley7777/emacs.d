@@ -20,7 +20,7 @@
 ;;   and extend with additional properties.
 ;;
 ;; Example:
-;;   (defun my-registry-create-entry (id desc modes &key binary my-prop)
+;;   (defun registry--my-create-entry (id desc modes &key binary my-prop)
 ;;     (let* ((base (core-registry-create-base-entry id desc modes :binary binary))
 ;;            (base-props (nthcdr 3 base))
 ;;            (my-props (list :my-prop my-prop)))

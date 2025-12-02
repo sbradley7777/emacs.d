@@ -24,7 +24,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- forge-authinfo--format-entry (machine login token)
+ forge--authinfo-format-entry (machine login token)
  "Format a single authinfo line from MACHINE, LOGIN, and TOKEN.
 Returns formatted string suitable for ~/.authinfo.
 Automatically appends ^forge suffix to login for Forge authentication."
@@ -86,7 +86,7 @@ Does not run when editing remote files via TRAMP."
                (core-utils-validate-non-empty-string username "Username")
                (core-utils-validate-non-empty-string token "Token"))
               (progn
-               (push (forge-authinfo--format-entry api-host username token) new-entries)
+               (push (forge--authinfo-format-entry api-host username token) new-entries)
                (setq processed-count (1+ processed-count))
                (core-message-success "Prepared entry for %s" api-host))
               (core-message-warning "Skipping %s (empty username or token)" api-host)

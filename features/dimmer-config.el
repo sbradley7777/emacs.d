@@ -77,7 +77,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- toggle-dimmer ()
+ dimmer--config-toggle ()
  "Toggle dimmer-mode on and off.
 When enabled, inactive windows are dimmed for better visual focus.
 When disabled, all windows have normal brightness."

@@ -36,7 +36,7 @@
  user-command-palette-mode-map
  (let ((map (make-sparse-keymap)))
    (define-key map (kbd "q") 'command-palette-toggle)
-   (define-key map (kbd "p") 'command-palette-add-favorite)
+   (define-key map (kbd "p") 'command--palette-add-favorite)
    (define-key map (kbd "r") 'command--palette-remove-favorite)
    (define-key map (kbd "v") 'command--palette-validate-commands)
    map)
@@ -97,9 +97,9 @@
 (defconst
  user-command-palette-excluded-commands
  '(command-palette-toggle
-   command-palette-add-favorite
+   command--palette-add-favorite
    command--palette-remove-favorite
-   command-palette-clear-history
+   command--palette-clear-history
    keyboard-quit
    keyboard-escape-quit
    abort-recursive-edit
@@ -124,7 +124,7 @@
  (core-utils-ensure-directory command-palette-data-dir))
 
 (defun
- command-palette--save-history
+ command--palette-save-history
  ()
  "Save command history to persistent storage."
  (command--palette-ensure-data-directory)
@@ -155,7 +155,7 @@
     (core-message-error "Failed to save command palette history: %s" (error-message-string err)))))
 
 (defun
- command-palette--load-history (&optional silent)
+ command--palette-load-history (&optional silent)
  "Load command history from persistent storage.
 If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise."
  (when
@@ -210,7 +210,7 @@ If SILENT is non-nil, suppress success messages.  Returns t if successful, nil o
      "Failed to save command palette favorites: %s" (error-message-string err)))))
 
 (defun
- command-palette--load-favorites (&optional silent)
+ command--palette-load-favorites (&optional silent)
  "Load favorites from persistent storage.
 If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise."
  (if
@@ -244,7 +244,7 @@ Example: \\='find-file\\=' becomes \\='Find File\\='."
    (capitalize (replace-regexp-in-string "-" " " name))))
 
 (defun
- command-palette--get-keybinding
+ command--palette-get-keybinding
  (cmd-symbol)
  "Get the first keybinding for CMD-SYMBOL as a string, or nil if none exists."
  (when
@@ -253,7 +253,7 @@ Example: \\='find-file\\=' becomes \\='Find File\\='."
     (when keys (key-description keys)))))
 
 (defun
- command-palette--add-to-history (cmd-symbol)
+ command--palette-add-to-history (cmd-symbol)
  "Add CMD-SYMBOL to command history if it's not excluded or in favorites.
 Removes any existing occurrences before adding to ensure no duplicates.  Returns t if added, nil if excluded."
  (when
@@ -288,7 +288,7 @@ Removes any existing occurrences before adding to ensure no duplicates.  Returns
  "Execute command CMD-SYMBOL.
 Switches to the previous window before executing the command, then closes the palette."
  ;; Use add-to-history for deduplication
- (command-palette--add-to-history cmd-symbol)
+ (command--palette-add-to-history cmd-symbol)
  ;; Close the command palette window
  (when
   (and user-command-palette-window (window-live-p user-command-palette-window))
@@ -311,7 +311,7 @@ Switches to the previous window before executing the command, then closes the pa
    (call-interactively cmd-symbol)))
 
 (defun
- command-palette--make-button (label action face &optional keybinding)
+ command--palette-make-button (label action face &optional keybinding)
  "Create a clickable button with LABEL that execute ACTION.  Use FACE for styling.
 If KEYBINDING is provided, display it in parentheses with a red color."
  (let ((start (point)))
@@ -374,21 +374,21 @@ Returns width as number of columns needed to display content."
  ;; Actions Section
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  (insert (propertize " ⚙️  Actions:\n" 'face '(:weight bold :foreground "magenta")))
- (command-palette--make-button
+ (command--palette-make-button
   "  📌 Promote Recent to Favorite"
-  (lambda (_) (call-interactively 'command-palette-add-favorite))
+  (lambda (_) (call-interactively 'command--palette-add-favorite))
   '(:foreground "cyan"))
- (command-palette--make-button
+ (command--palette-make-button
   "  🗑️  Remove Favorite by Index"
   (lambda (_) (call-interactively 'command--palette-remove-favorite))
   '(:foreground "red"))
- (command-palette--make-button
-  "  🔄 Clear History" (lambda (_) (command-palette-clear-history)) '(:foreground "yellow"))
- (command-palette--make-button
+ (command--palette-make-button
+  "  🔄 Clear History" (lambda (_) (command--palette-clear-history)) '(:foreground "yellow"))
+ (command--palette-make-button
   "  🔍 Validate Commands"
   (lambda (_) (command--palette-validate-commands))
   '(:foreground "lightblue"))
- (command-palette--make-button
+ (command--palette-make-button
   "  ❌ Close Palette" (lambda (_) (command-palette-toggle)) '(:foreground "gray"))
 
  (insert "\n") (insert (propertize " Keys:\n" 'face '(:foreground "gray" :slant italic)))
@@ -413,8 +413,8 @@ Returns width as number of columns needed to display content."
     (item user-command-palette-favorites)
     (let* ((name (car item))
            (cmd (cdr item))
-           (keybinding (command-palette--get-keybinding cmd)))
-      (command-palette--make-button (format "  %2d. %s" index name)
+           (keybinding (command--palette-get-keybinding cmd)))
+      (command--palette-make-button (format "  %2d. %s" index name)
                                     `(lambda (_) (command--palette-execute-command ',cmd))
                                     '(:foreground "lightgreen")
                                     keybinding)
@@ -433,15 +433,15 @@ Returns width as number of columns needed to display content."
           (name (car item))
           (cmd (cdr item))
           (index (1+ i))
-          (keybinding (command-palette--get-keybinding cmd)))
-     (command-palette--make-button (format "  %2d. %s" index name)
+          (keybinding (command--palette-get-keybinding cmd)))
+     (command--palette-make-button (format "  %2d. %s" index name)
                                    `(lambda (_) (command--palette-execute-command ',cmd))
                                    '(:foreground "orange")
                                    keybinding)))
   (insert "\n")))
 
 (defun
- command-palette-add-favorite ()
+ command--palette-add-favorite ()
  "Promote a recent command from history to the favorites list.
 
 Prompts for an index number from the recent commands list, then moves that
@@ -499,7 +499,7 @@ Does not affect the command's availability in `M-x'."
      (core-message-warning "Invalid index or cancelled")))))
 
 (defun
- command-palette-clear-history
+ command--palette-clear-history
  ()
  "Clear all recent commands from the command palette history.
 
@@ -593,7 +593,7 @@ side windows (Flymake diagnostics, Imenu-list)."
     (forward-line 16))))
 
 (defun
- command-palette--track-command () "Track commands executed via `M-x' using `post-command-hook'."
+ command--palette-track-command () "Track commands executed via `M-x' using `post-command-hook'."
  ;; Set flag when M-x is invoked
  (when
   (memq this-command '(execute-extended-command execute-extended-command-for-buffer))
@@ -605,7 +605,7 @@ side windows (Flymake diagnostics, Imenu-list)."
    (not
     (memq this-command '(execute-extended-command execute-extended-command-for-buffer)))
    (not (memq this-command user-command-palette-excluded-commands)))
-  (command-palette--add-to-history this-command) (setq user--command-palette-mx-flag nil)))
+  (command--palette-add-to-history this-command) (setq user--command-palette-mx-flag nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization
@@ -614,14 +614,14 @@ side windows (Flymake diagnostics, Imenu-list)."
 (setq user--command-palette-history (make-ring user-command-palette-history-size))
 
 ;; Load saved data
-(command-palette--load-favorites)
-(command-palette--load-history)
+(command--palette-load-favorites)
+(command--palette-load-history)
 
 ;; Enable M-x command tracking via post-command-hook
-(add-hook 'post-command-hook #'command-palette--track-command)
+(add-hook 'post-command-hook #'command--palette-track-command)
 
 ;; Save on exit
-(add-hook 'kill-emacs-hook #'command-palette--save-history)
+(add-hook 'kill-emacs-hook #'command--palette-save-history)
 (add-hook 'kill-emacs-hook #'command--palette-save-favorites)
 
 (core-message-success "Command palette loaded!")

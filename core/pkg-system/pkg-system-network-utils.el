@@ -37,7 +37,7 @@ Uses asynchronous retrieval to properly timeout even during TCP connection phase
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- network-utils--elapsed-since (start-time)
+ pkg-system--network-elapsed-since (start-time)
  "Calculate seconds elapsed since START-TIME.
 START-TIME should be from `current-time'."
  (float-time (time-subtract (current-time) start-time)))

@@ -91,7 +91,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun
- lang-setup-flymake-backend (binary backend-function)
+ flymake--lang-setup-backend (binary backend-function)
  "Set up standalone flymake BACKEND-FUNCTION if BINARY is available.
 BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
@@ -116,7 +116,7 @@ Eglot can sometimes reset the diagnostic functions list, so we re-add the backen
    (flymake-start))))
 
 (defun
- lang-add-eglot-backend-hook (binary backend-function)
+ flymake--lang-add-eglot-hook (binary backend-function)
  "Add hook to ensure BACKEND-FUNCTION persists after eglot start.
 BINARY is the name of the executable (e.g., \"mdl\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
@@ -156,7 +156,7 @@ If binary is not found in PATH, setup is silently skipped."
         (binary (when spec (flymake-registry-get-binary backend-function))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" backend-function))
    (unless binary (error "Backend %s missing :binary property in registry" backend-function))
-   (lang-setup-flymake-backend binary backend-function)
+   (flymake--lang-setup-backend binary backend-function)
    (flymake-mode 1)
    (flymake--lang-trigger-check-timer)))
 
@@ -255,7 +255,8 @@ If binary is not found in PATH, setup is silently skipped."
     ;; Direct backend function - add eglot hook for persistence
     ;; Eglot can reset flymake-diagnostic-functions, so we ensure backend persists
     (progn
-     (flymake-lang-setup-direct-backend function) (lang-add-eglot-backend-hook binary function)))))
+     (flymake-lang-setup-direct-backend function)
+     (flymake--lang-add-eglot-hook binary function)))))
 
 (provide 'flymake-lang-setup)
 ;;; flymake-lang-setup.el ends here

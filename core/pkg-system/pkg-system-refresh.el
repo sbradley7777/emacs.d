@@ -56,20 +56,20 @@ Only contacts responsive repositories to prevent hanging on offline repos."
              (timeout-seconds
               (core-message-error
                "Package refresh timed out after %.1fs (limit: %ds)"
-               (network-utils--elapsed-since start-time)
+               (pkg-system--network-elapsed-since start-time)
                timeout-seconds)
               (core-message-info "Using any cached package data available"))
              (package-refresh-contents)
              (core-message-success
               "Package refresh completed in %.2fs (%d packages available)"
-              (network-utils--elapsed-since start-time)
+              (pkg-system--network-elapsed-since start-time)
               (length package-archive-contents))
              ;; Event-based cache invalidation on success
              (pkg-system-repositories-clear-cache))
           (error
            (core-message-error
             "Package refresh failed after %.2fs: %s"
-            (network-utils--elapsed-since start-time)
+            (pkg-system--network-elapsed-since start-time)
             (error-message-string err))
            (core-message-info "Will attempt to use cached package data if available")))))))))
 

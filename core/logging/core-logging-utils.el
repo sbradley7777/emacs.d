@@ -12,7 +12,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-rotate-log-files (base-filename directory)
+ logging--rotate-log-files (base-filename directory)
  "Rotate log files in DIRECTORY, keeping up to `core-log-max-files' files.
 BASE-FILENAME is the base name without directory path."
  (let ((base-path (expand-file-name base-filename directory)))
@@ -49,7 +49,7 @@ Returns the full path to the saved log file, or nil on error."
       ;; Ensure directory exists
       (unless (file-directory-p directory) (make-directory directory t))
       ;; Rotate existing log files
-      (core-rotate-log-files log-filename directory)
+      (logging--rotate-log-files log-filename directory)
       ;; Save buffer contents
       (let ((log-file (expand-file-name log-filename directory)))
         (with-current-buffer

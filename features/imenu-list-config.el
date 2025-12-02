@@ -30,7 +30,7 @@
  (setq imenu-list-after-jump-hook nil) ; Don't change focus after jumping to symbol
 
  ;; Update on buffer/window changes
- (add-hook 'buffer-list-update-hook #'imenu-list-smart-update)
+ (add-hook 'buffer-list-update-hook #'imenu--list-smart-update)
 
  ;; Terminal-friendly display options
  (setq imenu-list-mode-line-format '("%e" mode-line-front-space "Symbols")) ; Simple modeline
@@ -51,7 +51,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- imenu-list-smart-update
+ imenu--list-smart-update
  ()
  "Update imenu-list only for regular file buffers, not special buffers like treemacs."
  (let ((ilist-open (get-buffer "*Ilist*"))

@@ -16,7 +16,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pyvenv-remote-find-venv (remote-dir)
+ pyvenv--remote-find-venv (remote-dir)
  "Find virtual environment for remote directory.
 REMOTE-DIR is the remote directory to search for a virtual environment.
 First tries to find it remotely, falls back to local equivalent if needed."
@@ -24,7 +24,7 @@ First tries to find it remotely, falls back to local equivalent if needed."
  (if
   (core-utils-is-remote-file remote-dir)
   ;; Try remote search first
-  (let ((remote-venv (pyvenv-remote-search-venv remote-dir)))
+  (let ((remote-venv (pyvenv--remote-search-venv remote-dir)))
     (if
      remote-venv (progn (core-message-debug "Found remote venv: %s" remote-venv) remote-venv)
      ;; Fallback to local equivalent search
@@ -38,14 +38,14 @@ First tries to find it remotely, falls back to local equivalent if needed."
   (pyvenv-find-venv)))
 
 (defun
- pyvenv-remote-search-venv (remote-dir)
+ pyvenv--remote-search-venv (remote-dir)
  "Search for virtual environment in remote directory using centralized detection.
 REMOTE-DIR is the remote directory to search for a virtual environment.
 Uses python-utils-find-venv-path which is TRAMP-compatible via `locate-dominating-file'."
  (python-utils-find-venv-path remote-dir))
 
 (defun
- pyvenv-remote-activate () "TRAMP-aware virtual environment activation."
+ pyvenv--remote-activate () "TRAMP-aware virtual environment activation."
  (if
   (core-utils-is-remote-file)
   ;; Remote file handling
@@ -53,12 +53,12 @@ Uses python-utils-find-venv-path which is TRAMP-compatible via `locate-dominatin
          (host (file-remote-p remote-dir 'host)))
 
     ;; Find venv using proper remote detection
-    (let ((venv-path (pyvenv-remote-find-venv remote-dir)))
+    (let ((venv-path (pyvenv--remote-find-venv remote-dir)))
       (if
        venv-path
        (progn
         ;; Setup connection profile with remote path
-        (pyvenv-remote-setup-connection host venv-path)
+        (pyvenv--remote-setup-connection host venv-path)
 
         ;; Update project state (use buffer-local variables for remote files)
         (let* ((project-dir (file-name-directory (directory-file-name venv-path)))
@@ -85,7 +85,7 @@ Uses python-utils-find-venv-path which is TRAMP-compatible via `locate-dominatin
   (when (fboundp 'pyvenv-auto-activate) (pyvenv-auto-activate))))
 
 (defun
- pyvenv-remote-setup-connection (host venv-path)
+ pyvenv--remote-setup-connection (host venv-path)
  "Setup connection-local variables for virtual environment.
 HOST is the remote host identifier.
 VENV-PATH is the path to the virtual environment on the remote host."
@@ -95,8 +95,8 @@ VENV-PATH is the path to the virtual environment on the remote host."
 
 ;; Replace existing hooks for both python-mode and python-ts-mode
 (lang-remove-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-auto-activate)
-;; Add pyvenv-remote-activate back for virtual environment detection and modeline
-(lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv-remote-activate)
+;; Add pyvenv--remote-activate back for virtual environment detection and modeline
+(lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv--remote-activate)
 
 (core-message-debug "TRAMP-aware pyvenv support loaded")
 (provide 'pyvenv-remote)

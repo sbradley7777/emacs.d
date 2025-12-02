@@ -75,7 +75,7 @@ Returns the timestamp as a float, or 0 if no previous check recorded."
  "Write the package refresh timestamp to persistent storage.
 TIMESTAMP should be a float from (float-time (current-time))."
  (let ((human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
-   (pkg-system-metadata-save-all :refresh-timestamp human-readable)))
+   (pkg-system--metadata-save-all :refresh-timestamp human-readable)))
 
 (defun
  pkg-system-metadata-read-cache-info ()
@@ -108,10 +108,10 @@ Returns a plist with :timestamp (as float) and :count, or defaults if not found.
 TIMESTAMP should be a float from (float-time (current-time)).
 COUNT should be the number of packages in the cache."
  (let ((human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
-   (pkg-system-metadata-save-all :cache-timestamp human-readable :cache-count count)))
+   (pkg-system--metadata-save-all :cache-timestamp human-readable :cache-count count)))
 
 (defun
- pkg-system-metadata-save-all (&rest args)
+ pkg-system--metadata-save-all (&rest args)
  "Save all metadata to file with updated values.
 ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cache-count."
  (let* ((plist (apply #'list args))

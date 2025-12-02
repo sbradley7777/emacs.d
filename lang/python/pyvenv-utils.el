@@ -13,7 +13,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pyvenv-normalize-path (path)
+ pyvenv--normalize-path (path)
  "Normalize path for comparison.  Handles both local and TRAMP paths.
 PATH is the file path to normalize."
  (if (core-utils-is-remote-file path) (file-local-name path) (expand-file-name path)))

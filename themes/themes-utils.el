@@ -46,7 +46,7 @@
   (lambda (a b) (string< (symbol-name a) (symbol-name b)))))
 
 (defun
- themes-utils--get-other-themes
+ themes--utils-get-other-themes
  ()
  "Get a list of other (non-doom) themes that work well."
  '(wombat tango-dark leuven))
@@ -63,7 +63,7 @@
      "Select theme: "
      (append
       (mapcar #'symbol-name (themes--utils-get-available-doom-themes))
-      (mapcar #'symbol-name (themes-utils--get-other-themes)))
+      (mapcar #'symbol-name (themes--utils-get-other-themes)))
      nil t nil nil "doom-zenburn"))))
  (core-message-theme "Interactive theme switch requested: %s" theme)
  (setq themes-config-preferred-theme theme)
@@ -81,7 +81,7 @@ active theme is highlighted.  Provides a visual way to browse and
 test different color schemes."
  (interactive)
  (let* ((doom-themes (themes--utils-get-available-doom-themes))
-        (other-themes (themes-utils--get-other-themes))
+        (other-themes (themes--utils-get-other-themes))
         (current-theme (car custom-enabled-themes))
         (buffer-name "*Available Themes*")
         (lines '())
