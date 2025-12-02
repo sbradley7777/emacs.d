@@ -1,7 +1,7 @@
 ;;; modeline-config.el --- Modeline Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;      Modeline configuration with support for both default Emacs modeline and doom-modeline.
-;;      Users can choose which modeline to use via the modeline-config-use-doom-modeline variable.
+;;      Users can choose which modeline to use via the themes-use-doom-modeline variable.
 ;;      Set in local.el or custom.el to enable doom-modeline.
 
 ;;; Code:
@@ -14,12 +14,12 @@
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
- modeline-config-use-doom-modeline t
+ themes-use-doom-modeline t
  "Whether to use doom-modeline instead of the default Emacs modeline.
 Set this to nil in local.el to use the default Emacs modeline instead.")
 
 (defvar
- modeline-config-segments-left
+ themes-modeline-segments-left
  '(bar ; Colored bar indicating buffer status (modified, read-only, etc.)
    workspace-name ; Workspace/project name
    window-number ; Window number when using window-numbering
@@ -38,7 +38,7 @@ to reorder segments or remove unwanted ones.  See doom-modeline documentation
 for available segment names.")
 
 (defvar
- modeline-config-segments-right
+ themes-modeline-segments-right
  '(treesitter-indicator ; Tree-sitter mode indicator (TS badge when active)
    pyvenv-indicator ; Python virtual environment name and version (custom segment)
    misc-info ; Miscellaneous information
@@ -157,16 +157,13 @@ for available segment names.")
 
    ;; Use customizable segment variables (can be modified in local.el)
    (doom-modeline-def-modeline
-    'main modeline-config-segments-left modeline-config-segments-right)))
+    'main themes-modeline-segments-left themes-modeline-segments-right)))
 
  (core-message-success "doom-modeline configured and enabled"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if
- modeline-config-use-doom-modeline
- (modeline-config-setup-doom-modeline)
- (modeline-config-setup-default))
+(if themes-use-doom-modeline (modeline-config-setup-doom-modeline) (modeline-config-setup-default))
 (provide 'modeline-config)
 ;;; modeline-config.el ends here

@@ -58,12 +58,12 @@ STATE contains use-package processing state."
             (progn
              ,@body
              (let ((elapsed (float-time (time-subtract (current-time) load-time))))
-               (add-to-list 'config-load-results (list module-name 'success elapsed desc))
+               (add-to-list 'core-config-load-results (list module-name 'success elapsed desc))
                (core-message-success "Loaded %s (%.3fs)" desc elapsed)))
           (error
            (let ((elapsed (float-time (time-subtract (current-time) load-time))))
              (add-to-list
-              'config-load-results
+              'core-config-load-results
               (list module-name 'failed elapsed desc (error-message-string err)))
              (core-message-error "Failed to load %s: %s" desc (error-message-string err))
              (signal (car err) (cdr err)))))))

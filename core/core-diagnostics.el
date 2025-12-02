@@ -11,7 +11,7 @@
 (require 'core-process-utils)
 
 ;; Declare external variables to suppress byte-compiler warnings
-(defvar config-load-results) ; From init.el
+(defvar core-config-load-results) ; From init.el
 (defvar native-comp-enable-subr-trampolines) ; From comp.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -73,11 +73,11 @@ Returns count of actual configuration files."
 
 (defun
  core-diagnostics--count-loaded-modules ()
- "Count successfully loaded configuration modules from `config-load-results'.
+ "Count successfully loaded configuration modules from `core-config-load-results'.
 Returns count of modules with status \\='success."
  (if
-  (boundp 'config-load-results)
-  (cl-count-if (lambda (result) (eq (nth 1 result) 'success)) config-load-results)
+  (boundp 'core-config-load-results)
+  (cl-count-if (lambda (result) (eq (nth 1 result) 'success)) core-config-load-results)
   0))
 
 (defun

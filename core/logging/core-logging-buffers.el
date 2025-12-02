@@ -26,7 +26,7 @@
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
- core-logging-debug-exclusion-patterns
+ logging-debug-exclusion-patterns
  '("^[^*]" ; Regular file buffers
    "\\*dashboard\\*"
    "\\*Messages\\*"
@@ -64,8 +64,7 @@ Checks buffer name against exclusion patterns."
   buffer-name
   (not
    (cl-some
-    (lambda (pattern) (string-match-p pattern buffer-name))
-    core-logging-debug-exclusion-patterns))))
+    (lambda (pattern) (string-match-p pattern buffer-name)) logging-debug-exclusion-patterns))))
 
 (defun
  core-logging--sanitize-buffer-name (buffer-name)

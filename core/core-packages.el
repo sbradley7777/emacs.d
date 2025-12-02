@@ -44,7 +44,7 @@ Linting, formatting, spell checking, code analysis, tree-sitter support, git dif
  "Language-specific modes and tools.
 File type handlers and language-specific utilities.")
 (defvar
- core-packages-all
+ pkg-system-packages-all
  (append
   core-packages-interface core-packages-editing core-packages-development core-packages-languages)
  "Complete list of all packages to install.
@@ -54,7 +54,7 @@ Assembled from all category lists in load order.")
 ;; Package Installation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Install packages using robust installation function with retry from core-packages-utils
-(unless noninteractive (pkg-system-installation-install-with-retry core-packages-all))
+(unless noninteractive (pkg-system-installation-install-with-retry pkg-system-packages-all))
 
 ;; Log batch mode skip
 (when

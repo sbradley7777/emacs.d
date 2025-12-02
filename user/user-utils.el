@@ -204,11 +204,11 @@ This ensures only one of these windows is open at a time."
 
  ;; Close Command Palette window (F9)
  (when
-  (boundp 'command-palette-window)
+  (boundp 'user-command-palette-window)
   (when
-   (and command-palette-window (window-live-p command-palette-window))
-   (delete-window command-palette-window)
-   (setq command-palette-window nil))))
+   (and user-command-palette-window (window-live-p user-command-palette-window))
+   (delete-window user-command-palette-window)
+   (setq user-command-palette-window nil))))
 
 (defun
  user-imenu-list-smart-toggle ()

@@ -22,7 +22,7 @@
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar init-start-time (current-time) "Time when Emacs initialization started.")
-(defvar config-load-results '() "List of configuration loading results for diagnostics.")
+(defvar core-config-load-results '() "List of configuration loading results for diagnostics.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -65,7 +65,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
        (failed 0)
        (lines nil))
    (dolist
-    (result (reverse config-load-results))
+    (result (reverse core-config-load-results))
     (let ((_name (nth 0 result))
           (status (nth 1 result))
           (time (nth 2 result))

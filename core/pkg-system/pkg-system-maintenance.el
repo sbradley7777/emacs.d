@@ -11,7 +11,7 @@
 (require 'pkg-system-repositories)
 (require 'pkg-system-metadata)
 (require 'pkg-system-refresh)
-(defvar core-packages-all) ; Forward declaration - defined in core-packages.el
+(defvar pkg-system-packages-all) ; Forward declaration - defined in core-packages.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -83,8 +83,8 @@ Removes orphaned package dependencies using `package-autoremove' and resets meta
    (core-message-loading "Removing unused package dependencies...")
    (condition-case err
        (progn
-        ;; Use core-packages-all as wanted packages if package-selected-packages is empty
-        (let ((package-selected-packages (or package-selected-packages core-packages-all))
+        ;; Use pkg-system-packages-all as wanted packages if package-selected-packages is empty
+        (let ((package-selected-packages (or package-selected-packages pkg-system-packages-all))
               (before-count (length package-alist)))
 
           ;; Override confirmation prompts to auto-accept

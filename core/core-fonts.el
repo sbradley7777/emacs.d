@@ -27,7 +27,7 @@
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar
- fonts-system-font-directory
+ core--fonts-system-font-directory
  (cond
   ((eq system-type 'darwin)
    "~/Library/Fonts/")
@@ -44,7 +44,7 @@
  fonts-file-exists-p (filename)
  "Check if font file exists in system font directory.
 FILENAME should be the font file name (e.g., \\='NFM.ttf\\=')."
- (file-exists-p (expand-file-name filename fonts-system-font-directory)))
+ (file-exists-p (expand-file-name filename core--fonts-system-font-directory)))
 
 (defun
  fonts-install-nerd-icons ()
