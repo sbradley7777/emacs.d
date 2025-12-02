@@ -16,7 +16,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- forge-config--fontify-with-hidden-markup (orig-fun text &optional indent)
+ forge--config-fontify-with-hidden-markup (orig-fun text &optional indent)
  "Wrap forge--fontify-markdown to enable markdown-hide-markup.
 ORIG-FUN is the original function being advised.
 TEXT is the markdown text to fontify.
@@ -29,7 +29,7 @@ INDENT is the optional indentation level."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (with-eval-after-load
  'forge-topic
- (advice-add 'forge--fontify-markdown :around #'forge-config--fontify-with-hidden-markup)
+ (advice-add 'forge--fontify-markdown :around #'forge--config-fontify-with-hidden-markup)
  (advice-add 'forge--fontify-markdown :override #'forge-markdown--fontify-with-hiding))
 (provide 'forge-config)
 ;;; forge-config.el ends here

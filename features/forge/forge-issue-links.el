@@ -23,7 +23,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- forge-issue-links--extract-markdown-links (text)
+ forge--issue-links-extract-markdown-links (text)
  "Extract all markdown links from TEXT.
 Returns a deduplicated list of (TEXT . URL) cons cells found in markdown [text](url) format."
  (let ((links '())
@@ -73,7 +73,7 @@ Returns nil if LINKS is empty."
     (forge--fontify-markdown markdown-text))))
 
 (defun
- forge-issue-links--insert-post-content-with-links (orig-fun post)
+ forge--issue-links-insert-post-content-links (orig-fun post)
  "Advice for `forge-insert-post-content' to append raw URLs.
 ORIG-FUN is the original function, POST is the forge post object.
 Extracts markdown links from post body and appends them as clickable raw URLs."
@@ -81,7 +81,7 @@ Extracts markdown links from post body and appends them as clickable raw URLs."
  (funcall orig-fun post)
  ;; Extract and append links if any are found
  (when-let* ((body (with-no-warnings (oref post body)))
-             (links (forge-issue-links--extract-markdown-links body))
+             (links (forge--issue-links-extract-markdown-links body))
              (links-section (forge-issue-links--format-links-section links)))
    (save-excursion
     ;; Move back to before the trailing newlines added by original function
@@ -92,8 +92,6 @@ Extracts markdown links from post body and appends them as clickable raw URLs."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (with-eval-after-load
  'forge-topic
- (advice-add
-  'forge-insert-post-content
-  :around #'forge-issue-links--insert-post-content-with-links))
+ (advice-add 'forge-insert-post-content :around #'forge--issue-links-insert-post-content-links))
 (provide 'forge-issue-links)
 ;;; forge-issue-links.el ends here

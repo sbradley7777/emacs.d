@@ -207,7 +207,7 @@ This ensures each repository only gets username config for its own host."
                "Failed to set local username: %s" (error-message-string err))))))))))))
 
 (defun
- git-forge-config-setup-repo-on-file-open ()
+ git--forge-config-setup-repo-on-file-open ()
  "Hook function to set repository username when opening files in git repos.
 Called automatically via `find-file-hook'.
 Loads Magit if needed, then sets username for the repository's forge host."
@@ -223,7 +223,7 @@ Loads Magit if needed, then sets username for the repository's forge host."
 
 ;; Auto-configure username when opening files in git repositories
 ;; Hook is added immediately, but function checks if Magit is loaded before running
-(add-hook 'find-file-hook #'git-forge-config-setup-repo-on-file-open)
+(add-hook 'find-file-hook #'git--forge-config-setup-repo-on-file-open)
 
 ;; Also ensure username is set before Forge operations
 (defun
@@ -234,7 +234,7 @@ This is called as advice before forge-pull to ensure username is set."
   (and (git-utils-find-repository-root) (fboundp 'magit-get) (fboundp 'magit-set))
   (git-forge-config-set-repo-username)))
 
-(add-hook 'find-file-hook #'git-forge-config-setup-repo-on-file-open)
+(add-hook 'find-file-hook #'git--forge-config-setup-repo-on-file-open)
 
 (with-eval-after-load 'forge (advice-add 'forge-pull :before #'git-forge-config-before-forge-pull))
 

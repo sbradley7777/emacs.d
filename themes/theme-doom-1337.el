@@ -20,7 +20,9 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- themes-doom-1337-apply-face-customizations () "Apply all face customizations for doom-1337 theme."
+ themes--doom-1337-apply-face-customizations
+ ()
+ "Apply all face customizations for doom-1337 theme."
  (custom-set-faces
   ;; Comment and documentation faces
   `(font-lock-comment-face ((t (:foreground ,themes-doom-1337-comment-color :slant italic))))
@@ -166,7 +168,7 @@
  themes-doom-1337-setup
  ()
  "Apply all doom-1337 theme customizations."
- (themes-doom-1337-apply-face-customizations)
+ (themes--doom-1337-apply-face-customizations)
  (themes-doom-1337-modeline-faces-apply)
  (themes-doom-1337-breadcrumb-faces-apply)
  (themes-doom-1337-markdown-faces-apply)

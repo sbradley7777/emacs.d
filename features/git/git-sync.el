@@ -53,7 +53,7 @@ Loads Magit if not already loaded and fetches all remotes."
   (magit-fetch-all nil)))
 
 (defun
- git-auto-sync--before-magit-sentinel-advice (process event)
+ git--auto-sync-before-magit-sentinel-advice (process event)
  "Advice to detect Magit fetch completion and show status message.
 PROCESS is the git process that finished.
 EVENT is the event string describing how the process finished.
@@ -236,7 +236,7 @@ Skips remote files accessed via TRAMP."
 
 (with-eval-after-load
  'magit
- (advice-add 'magit-process-sentinel :before #'git-auto-sync--before-magit-sentinel-advice))
+ (advice-add 'magit-process-sentinel :before #'git--auto-sync-before-magit-sentinel-advice))
 
 (with-eval-after-load
  'forge

@@ -11,7 +11,7 @@
 ;;   - Automatically saves diagnostic/warning/compile buffers on Emacs exit
 ;;   - Saved to ~/.emacs.d/local/log/debug/ with rotation
 ;;   - Disabled by default - users enable via local.el:
-;;     (add-hook 'kill-emacs-hook #'core-logging--save-debug-buffers-on-exit)
+;;     (add-hook 'kill-emacs-hook #'logging--save-debug-buffers-on-exit)
 ;;
 ;; Manual command:
 ;;   M-x core-logging-save-debug-buffers - Save debug buffers immediately
@@ -57,7 +57,7 @@
 ;; Functions - Debug Buffer Logging
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-logging--should-save-debug-buffer-p (buffer-name)
+ logging--should-save-debug-buffer-p (buffer-name)
  "Return non-nil if BUFFER-NAME should be saved as a debug buffer.
 Checks buffer name against exclusion patterns."
  (and
@@ -73,7 +73,7 @@ Example: \\='*EGLOT (elisp-mode) stderr*\\=' → \\='EGLOT-elisp-mode-stderr\\='
  (string-trim (replace-regexp-in-string "[*/ ():]+" "-" buffer-name) "-" "-"))
 
 (defun
- core-logging--save-debug-buffers-on-exit ()
+ logging--save-debug-buffers-on-exit ()
  "Save debug buffers to ~/.emacs.d/local/log/debug/ with rotation.
 Each debug buffer is saved with rotation history (e.g., Warnings.log → Warnings.log.1).
 Only saves buffers with content that match debug patterns.
@@ -86,7 +86,7 @@ Only creates the debug directory if there are buffers to save."
     (buf (buffer-list))
     (let ((buf-name (buffer-name buf)))
       (when
-       (and (core-logging--should-save-debug-buffer-p buf-name) (> (buffer-size buf) 0))
+       (and (logging--should-save-debug-buffer-p buf-name) (> (buffer-size buf) 0))
        (push (cons buf buf-name) buffers-to-save))))
    ;; Only create directory and save if we have buffers
    (when
@@ -120,7 +120,7 @@ Only creates the debug directory if there are buffers to save."
  ()
  "Manually save debug buffers to ~/.emacs.d/local/log/debug/."
  (interactive)
- (core-logging--save-debug-buffers-on-exit))
+ (logging--save-debug-buffers-on-exit))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hook Registration

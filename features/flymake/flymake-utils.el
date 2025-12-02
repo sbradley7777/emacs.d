@@ -584,7 +584,7 @@ Returns list of formatted strings, or nil if no issues."
    (when all-issues (cons "\nValidation Issues:" all-issues))))
 
 (defun
- flymake--count-active-buffers-per-backend ()
+ flymake--count-active-buffers-backend ()
  "Count how many buffers are using each backend.
 Returns alist of (backend-symbol . count)."
  (let ((backend-counts nil))
@@ -602,7 +602,7 @@ Returns alist of (backend-symbol . count)."
    backend-counts))
 
 (defun
- flymake--count-buffers-per-backend-per-mode ()
+ flymake--count-buffers-per-backend-mode ()
  "Count how many buffers are using each backend for each mode.
 Returns alist of ((backend-symbol . mode-symbol) . count)."
  (let ((counts nil))
@@ -699,7 +699,7 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
            "Binary"
            "Buffers"))
         (rows nil)
-        (buffer-counts (flymake--count-buffers-per-backend-per-mode)))
+        (buffer-counts (flymake--count-buffers-per-backend-mode)))
    (dolist
     (entry flymake-backend-registry)
     (let* ((backend-symbol (nth 0 entry))

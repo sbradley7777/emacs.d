@@ -69,13 +69,13 @@ TIMESTAMP is the time of last test as returned by `current-time'.")
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pkg-system-repositories--lookup-name (url)
+ pkg-system--repositories-lookup-name (url)
  "Look up repository name for URL in `package-archives'.
 Returns repository name or \"unknown\" if not found."
  (or (car (rassoc url package-archives)) "unknown"))
 
 (defun
- pkg-system-repositories--cache-valid-p (url)
+ pkg-system--repositories-cache-valid-p (url)
  "Check if cached health status for URL is still valid based on TTL.
 Returns the cached status (t or nil) if valid, or nil if cache expired or missing."
  (let ((cached-entry (assoc url pkg-system-repository-health-cache)))
@@ -87,7 +87,7 @@ Returns the cached status (t or nil) if valid, or nil if cache expired or missin
       (when (< age pkg-system-repository-cache-ttl) status)))))
 
 (defun
- pkg-system-repositories--update-health-cache (url status)
+ pkg-system--repositories-update-health-cache (url status)
  "Update health cache for URL with STATUS and current timestamp.
 Also invalidates cache on successful operations (event-based invalidation)."
  (let ((timestamp (current-time)))
@@ -108,7 +108,7 @@ Also invalidates cache on successful operations (event-based invalidation)."
 Returns t if repository responds successfully, nil otherwise.
 Uses cached result if available and fresh per `pkg-system-repository-cache-ttl'.
 Uses asynchronous retrieval to properly handle TCP connection timeouts."
- (let ((cached-status (pkg-system-repositories--cache-valid-p repository-url)))
+ (let ((cached-status (pkg-system--repositories-cache-valid-p repository-url)))
    (if
     cached-status
     (progn
@@ -117,7 +117,7 @@ Uses asynchronous retrieval to properly handle TCP connection timeouts."
      cached-status)
     (let* ((timeout-seconds (or timeout pkg-system-repository-test-timeout))
            (status (network-utils-test-url repository-url timeout-seconds)))
-      (pkg-system-repositories--update-health-cache repository-url status)
+      (pkg-system--repositories-update-health-cache repository-url status)
       status))))
 
 (defun

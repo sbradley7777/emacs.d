@@ -13,13 +13,13 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pkg-system-diagnostics--get-installed-count
+ pkg-system--diagnostics-get-installed-count
  ()
  "Return count of installed packages."
  (if (boundp 'package-activated-list) (length package-activated-list) 0))
 
 (defun
- pkg-system-diagnostics--get-upgrades-count ()
+ pkg-system--diagnostics-get-upgrades-count ()
  "Return count of packages with available updates.
 Returns nil if package-archive-contents is not loaded."
  (when
@@ -27,7 +27,7 @@ Returns nil if package-archive-contents is not loaded."
   (length (package-menu--find-upgrades))))
 
 (defun
- pkg-system-diagnostics--show-repositories
+ pkg-system--diagnostics-show-repositories
  ()
  "Display package repository connectivity as a table (non-interactive)."
  (let ((headers '("Name" "URL" "Status" "Time (s)"))
@@ -80,11 +80,11 @@ Returns nil if package-archive-contents is not loaded."
      "Package Repository Connectivity" (list "No repositories configured")))))
 
 (defun
- pkg-system-diagnostics--show-package-status
+ pkg-system--diagnostics-show-package-status
  ()
  "Display package installation and update status as a table (non-interactive)."
- (let* ((installed (pkg-system-diagnostics--get-installed-count))
-        (upgrades (pkg-system-diagnostics--get-upgrades-count))
+ (let* ((installed (pkg-system--diagnostics-get-installed-count))
+        (upgrades (pkg-system--diagnostics-get-upgrades-count))
         (headers '("Package Type" "Count"))
         (rows
          (list
@@ -93,7 +93,7 @@ Returns nil if package-archive-contents is not loaded."
    (core-message-diagnostic "Package Status" (core-logging-format-table headers rows))))
 
 (defun
- pkg-system-diagnostics--show-metadata
+ pkg-system--diagnostics-show-metadata
  ()
  "Display package metadata and cache information as a table (non-interactive)."
  (if
@@ -119,11 +119,11 @@ Shows repository connectivity, package status, and metadata information."
  (interactive)
  (core-message-info "=== Package System Diagnostics ===")
  (core-message-plain "")
- (pkg-system-diagnostics--show-repositories)
+ (pkg-system--diagnostics-show-repositories)
  (core-message-plain "")
- (pkg-system-diagnostics--show-package-status)
+ (pkg-system--diagnostics-show-package-status)
  (core-message-plain "")
- (pkg-system-diagnostics--show-metadata))
+ (pkg-system--diagnostics-show-metadata))
 
 (provide 'pkg-system-diagnostics)
 ;;; pkg-system-diagnostics.el ends here

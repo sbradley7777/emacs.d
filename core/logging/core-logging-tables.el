@@ -335,7 +335,7 @@ Examples:
            "-"))))))))
 
 (defun
- core-logging--detect-total-row-alignments (total-row)
+ logging--detect-total-row-alignments (total-row)
  "Detect alignment for TOTAL-ROW based on data types.
 TOTAL-ROW is a list of column values for the total row.
 Returns a list of alignment symbols: \\='left or \\='right for each column.
@@ -427,7 +427,7 @@ Examples:
      ;; Total separator: ├───┼───┼───┤
      (push (core-logging--build-border col-widths 'middle) lines)
      ;; Total row: │ TOTAL │ ... │
-     (let ((total-alignments (core-logging--detect-total-row-alignments total-row)))
+     (let ((total-alignments (logging--detect-total-row-alignments total-row)))
        (push (core-logging--build-row total-row col-widths total-alignments) lines)))
    ;; Bottom border: └───┴───┴───┘
    (push (core-logging--build-border col-widths 'bottom) lines)

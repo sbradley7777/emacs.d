@@ -22,7 +22,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-treesit-reload-buffers-for-language (lang)
+ core--treesit-reload-buffers-for-language (lang)
  "Reload all buffers that could use the newly installed LANG grammar.
 Switches buffers from regular mode to tree-sitter mode when grammar becomes available.
 Dynamically discovers mode mappings from treesit-auto configuration."
@@ -83,7 +83,7 @@ After successful installation, automatically reloads buffers to use the new gram
     (when
      (treesit-language-available-p lang)
      (core-message-success "%s grammar installed successfully" lang)
-     (core-treesit-reload-buffers-for-language lang)))))
+     (core--treesit-reload-buffers-for-language lang)))))
 
 (core-message-success "Tree-sitter grammar management configured")
 (core-message-info

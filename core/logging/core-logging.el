@@ -151,7 +151,7 @@ Output format:
 
 ;; Warning buffer integration
 (defun
- core-logging-duplicate-warnings-to-messages (orig-fun type message &optional level buffer-name)
+ logging--duplicate-warnings-to-messages (orig-fun type message &optional level buffer-name)
  "Advice to duplicate warning messages to *Messages* buffer.
 ORIG-FUN is the original function being advised.
 TYPE is the warning type.
@@ -186,6 +186,6 @@ Filters out :debug level warnings to reduce noise."
      (message "[%s] %s: %s" (upcase type-str) (upcase level-str) message)))))
 
 ;; Add advice to display-warning to duplicate warnings to *Messages* buffer
-(advice-add 'display-warning :around #'core-logging-duplicate-warnings-to-messages)
+(advice-add 'display-warning :around #'logging--duplicate-warnings-to-messages)
 (provide 'core-logging)
 ;;; core-logging.el ends here

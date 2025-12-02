@@ -39,7 +39,7 @@ Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- themes-config-apply-theme-specific-customizations
+ themes--config-apply-theme-specific-customizations
  (theme)
  "Apply theme-specific customizations for THEME if available."
  (cond
@@ -76,7 +76,7 @@ Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
            (load-theme theme t)
            (core-message-success "Successfully loaded theme: %s" theme)
            ;; Apply theme-specific customizations after loading
-           (themes-config-apply-theme-specific-customizations theme)
+           (themes--config-apply-theme-specific-customizations theme)
            ;; Apply modeline face customizations if available
            (when (fboundp 'modeline-faces-apply-for-theme) (modeline-faces-apply-for-theme theme))
            ;; Customize region (selection) to be distinct from hl-line
