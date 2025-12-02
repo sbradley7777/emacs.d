@@ -11,37 +11,37 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load Path Auto-Detection Configuration
 (defconst
- emacs-local-dir
+ core-emacs-local-dir
  (expand-file-name "local/" user-emacs-directory)
  "Path to ~/.emacs.d/local/ directory.")
 (defconst
- ignore-on-load '("configs" "local") "Directories to ignore when auto-detecting load paths.")
+ core-ignore-on-load '("configs" "local") "Directories to ignore when auto-detecting load paths.")
 (defconst
  core-elisp-file-pattern "\\.el$" "Regular expression pattern matching Emacs Lisp source files.")
 
 ;; File Management (autosave, backup)
 (core-utils-defconst-path
- core-files-autosave-dir "autosaves/" emacs-local-dir "Directory for autosave files.")
+ core-files-autosave-dir "autosaves/" core-emacs-local-dir "Directory for autosave files.")
 (core-utils-defconst-path
  core-files-auto-save-list-dir
  "auto-save-list/"
- emacs-local-dir
+ core-emacs-local-dir
  "Directory for auto-save list files.")
 (core-utils-defconst-path
- core-files-backup-dir "backups/" emacs-local-dir "Directory for backup files.")
+ core-files-backup-dir "backups/" core-emacs-local-dir "Directory for backup files.")
 
 ;; Package System
 (core-utils-defconst-path
- core-packages-dir "elpa" emacs-local-dir "Directory for installed packages.")
+ core-packages-dir "elpa" core-emacs-local-dir "Directory for installed packages.")
 (core-utils-defconst-path
- core-eln-cache-dir "eln-cache" emacs-local-dir "Directory for native compilation cache.")
+ core-eln-cache-dir "eln-cache" core-emacs-local-dir "Directory for native compilation cache.")
 (core-utils-defconst-path
  core-package-metadata-file
  "package-metadata.el"
- emacs-local-dir
+ core-emacs-local-dir
  "File storing package system persistent metadata and cache.")
 (core-utils-defconst-path
- core-elisp-autofmt-cache-dir "elisp-autofmt-cache" emacs-local-dir
+ core-elisp-autofmt-cache-dir "elisp-autofmt-cache" core-emacs-local-dir
  "Directory for elisp-autofmt cache files.
 Caching improves formatting performance by avoiding redundant analysis.")
 (defconst
@@ -51,25 +51,25 @@ The %s placeholder is replaced with variable `emacs-version' to isolate compiled
 
 ;; Project and Version Control
 (core-utils-defconst-path
- core-projects-file "projects.el" emacs-local-dir "File storing known projects list.")
+ core-projects-file "projects.el" core-emacs-local-dir "File storing known projects list.")
 (core-utils-defconst-path
- core-forge-db-file "forge-database.sqlite" emacs-local-dir "SQLite database for forge data.")
+ core-forge-db-file "forge-database.sqlite" core-emacs-local-dir "SQLite database for forge data.")
 
 ;; Transient and Command History
 (core-utils-defconst-path
  core-transient-history-file
  "transient/history.el"
- emacs-local-dir
+ core-emacs-local-dir
  "File storing transient command history.")
 
 ;; Editor History and State
 (core-utils-defconst-path
- core-savehist-file "history" emacs-local-dir "File storing minibuffer and command history.")
+ core-savehist-file "history" core-emacs-local-dir "File storing minibuffer and command history.")
 (core-utils-defconst-path
- core-recentf-file "recentf" emacs-local-dir "File storing recently opened files list.")
+ core-recentf-file "recentf" core-emacs-local-dir "File storing recently opened files list.")
 
 ;; Logging
-(core-utils-defconst-path core-log-dir "log" emacs-local-dir "Directory for log files.")
+(core-utils-defconst-path core-log-dir "log" core-emacs-local-dir "Directory for log files.")
 (defconst core-log-max-files 5 "Maximum number of rotated log files to keep.")
 (defconst core-messages-log-file "messages.log" "Base name for messages log file.")
 

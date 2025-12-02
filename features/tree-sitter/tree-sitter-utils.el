@@ -13,7 +13,7 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
- treesit-utils-grammar-prefix
+ tree-sitter-grammar-prefix
  "libtree-sitter-"
  "Prefix for tree-sitter grammar shared library files.")
 
@@ -27,7 +27,7 @@ Returns a list of plists with :name and :file keys."
  (if
   (not (and (fboundp 'treesit-available-p) (treesit-available-p))) '()
   (let ((grammars '())
-        (pattern (format "%s\\([^.]+\\)\\.\\(so\\|dylib\\)$" treesit-utils-grammar-prefix))
+        (pattern (format "%s\\([^.]+\\)\\.\\(so\\|dylib\\)$" tree-sitter-grammar-prefix))
         (transform-fn (lambda (file lang-name _ext) (list :name lang-name :file file))))
     ;; Scan the primary grammar directory
     (when-let ((results
@@ -88,7 +88,7 @@ or nil if MODE-SYMBOL is not a tree-sitter mode."
 LANG should be a string like \"python\" or \"bash\".
 Returns filename like \"libtree-sitter-python.so\" (or .dylib on macOS).
 Returns nil if LANG is nil."
- (when lang (format "%s%s%s" treesit-utils-grammar-prefix lang (car dynamic-library-suffixes))))
+ (when lang (format "%s%s%s" tree-sitter-grammar-prefix lang (car dynamic-library-suffixes))))
 
 (defun
  treesit-utils-show-info () "Display tree-sitter status information in minibuffer." (interactive)

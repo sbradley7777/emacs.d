@@ -17,7 +17,7 @@
  :ensure t
  :config (breadcrumb-mode 1)
  ;; Note: Theme-specific breadcrumb colors are applied by each theme's setup function
- ;; (e.g., doom-1337-breadcrumb-faces-apply in theme-doom-1337.el)
+ ;; (e.g., themes-doom-1337-breadcrumb-faces-apply in theme-doom-1337.el)
  ;; This ensures breadcrumb colors always match the active theme's modeline colors
  )
 (provide 'breadcrumbs-config)

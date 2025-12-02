@@ -50,7 +50,7 @@
 ;; Both systems complement each other for a complete completion experience.
 
 ;;; Code:
-(require 'theme-doom-1337-constants)
+(require 'themes-doom-1337-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
@@ -97,10 +97,11 @@
  (custom-set-faces
   ;; Use doom-1337's accent colors for match highlighting - each search term gets distinct color
   ;; Primary face uses shared search highlight color for consistency with isearch/query-replace
-  `(orderless-match-face-0 ((t (:foreground ,doom-1337-search-highlight-color :weight bold))))
-  `(orderless-match-face-1 ((t (:foreground ,doom-1337-color-purple :weight bold))))
-  `(orderless-match-face-2 ((t (:foreground ,doom-1337-color-cyan :weight bold))))
-  `(orderless-match-face-3 ((t (:foreground ,doom-1337-color-blue :weight bold))))))
+  `(orderless-match-face-0
+    ((t (:foreground ,themes-doom-1337-search-highlight-color :weight bold))))
+  `(orderless-match-face-1 ((t (:foreground ,themes-doom-1337-color-purple :weight bold))))
+  `(orderless-match-face-2 ((t (:foreground ,themes-doom-1337-color-cyan :weight bold))))
+  `(orderless-match-face-3 ((t (:foreground ,themes-doom-1337-color-blue :weight bold))))))
 
 (use-package
  marginalia

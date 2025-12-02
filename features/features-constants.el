@@ -14,22 +14,22 @@
 (core-utils-defconst-path
  features-treesit-grammars-dir
  "tree-sitter/"
- emacs-local-dir
+ core-emacs-local-dir
  "Directory for tree-sitter grammar libraries.")
 (core-utils-defconst-path
  features-tramp-cache-file
  "tramp"
- emacs-local-dir
+ core-emacs-local-dir
  "File for TRAMP connection cache and persistence data.")
 (core-utils-defconst-path
  features-tramp-autosave-dir
  "tramp-autosave"
- emacs-local-dir
+ core-emacs-local-dir
  "Directory for TRAMP remote file autosaves.")
 (core-utils-defconst-path
  features-treemacs-persist-file
  "treemacs-persist"
- emacs-local-dir
+ core-emacs-local-dir
  "File for treemacs workspace and project state persistence.")
 
 ;; Completion (Corfu) Constants

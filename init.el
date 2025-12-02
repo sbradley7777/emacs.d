@@ -10,7 +10,7 @@
 (defvar native-comp-deferred-compilation-deny-list) ; From comp.el
 
 ;; Variables from core-constants.el
-(defvar ignore-on-load)
+(defvar core-ignore-on-load)
 (defvar core-elisp-file-pattern)
 (defvar core-gc-long-session-threshold)
 (defvar core-gc-percentage-normal)
@@ -31,7 +31,7 @@
 (defun
  init--auto-detect-config-directories ()
  "Automatically detect all directories containing .el files for `load-path'.
-Recursively searches subdirectories and excludes directories in ignore-on-load.
+Recursively searches subdirectories and excludes directories in core-ignore-on-load.
 Returns a list of absolute directory paths suitable for adding to `load-path'."
  (let ((all-dirs '()))
    (dolist
@@ -40,7 +40,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
      (file-directory-p dir)
      (let ((dir-name (file-name-nondirectory dir)))
        (unless
-        (member dir-name ignore-on-load)
+        (member dir-name core-ignore-on-load)
         ;; Check if this directory has .el files
         (when (directory-files dir t core-elisp-file-pattern) (push dir all-dirs))
         ;; Recursively check subdirectories for .el files
@@ -88,7 +88,8 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; In interactive mode, early-init.el loads automatically before init.el
 ;; In batch mode, it doesn't load automatically, so we load it here if needed
-(unless (boundp 'emacs-local-dir) (load (expand-file-name "early-init.el" user-emacs-directory)))
+(unless
+ (boundp 'core-emacs-local-dir) (load (expand-file-name "early-init.el" user-emacs-directory)))
 ;; Note: logging utilities are now loaded in early-init.el, so we can use them immediately
 (core-message-loading "Loading init.el...")
 
@@ -117,10 +118,10 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;; It eliminates the need to manually maintain a list of directories when new modules are added.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Process:
-;; 1. Use core constants loaded by early-init.el to access ignore-on-load list
+;; 1. Use core constants loaded by early-init.el to access core-ignore-on-load list
 ;; 2. Scan all directories in user-emacs-directory for .el files
 ;; 3. Include nested directories (e.g., lang/python, core/package-system)
-;; 4. Exclude runtime directories defined in ignore-on-load constant:
+;; 4. Exclude runtime directories defined in core-ignore-on-load constant:
 ;;    - "configs"  : Template configuration files, not active modules
 ;;    - "local"    : Runtime data (package cache, recentf, etc.)
 ;; 5. Add discovered directories to load-path for module loading
@@ -161,12 +162,12 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 1: Foundation Layer - System Infrastructure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module features-constants :description "Feature module configuration constants")
-(load-module
+(core-load-module features-constants :description "Feature module configuration constants")
+(core-load-module
  tree-sitter-utils
  :after features-constants
  :description "Tree-sitter utility functions")
-(load-module
+(core-load-module
  core-diagnostics
  :after tree-sitter-utils
  :description "System and configuration diagnostics")
@@ -174,146 +175,152 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 2: Package and Resource Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module core-packages :description "Package system setup and declarations")
-(load-module core-fonts :description "Font management")
+(core-load-module core-packages :description "Package system setup and declarations")
+(core-load-module core-fonts :description "Font management")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 3: User Interface Layer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module core-ui :after core-packages :description "Basic UI setup")
-(load-module core-gui-mode :after core-ui :description "GUI mode configuration")
-(load-module themes-config :after core-packages :description "Theme configuration")
-(load-module modeline-config :after core-packages :description "Modeline configuration")
-(load-module modeline-segments :after modeline-config :description "Custom modeline segments")
-(load-module modeline-faces :after modeline-config :description "Modeline face customizations")
-(load-module themes-utils :after themes-config :description "Theme utilities")
+(core-load-module core-ui :after core-packages :description "Basic UI setup")
+(core-load-module core-gui-mode :after core-ui :description "GUI mode configuration")
+(core-load-module themes-config :after core-packages :description "Theme configuration")
+(core-load-module modeline-config :after core-packages :description "Modeline configuration")
+(core-load-module modeline-segments :after modeline-config :description "Custom modeline segments")
+(core-load-module
+ modeline-faces
+ :after modeline-config
+ :description "Modeline face customizations")
+(core-load-module themes-utils :after themes-config :description "Theme utilities")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 4: Core Editing and File Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module core-editing :description "Editing preferences")
-(load-module core-files :description "File handling")
-(load-module
+(core-load-module core-editing :description "Editing preferences")
+(core-load-module core-files :description "File handling")
+(core-load-module
  core-logging-utils
  :after core-files
  :description "Log file writing and rotation utilities")
-(load-module core-logging-buffers :description "Messages and debug buffer logging")
+(core-load-module core-logging-buffers :description "Messages and debug buffer logging")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module completion-config :after core-packages :description "Auto-completion framework")
-(load-module
+(core-load-module completion-config :after core-packages :description "Auto-completion framework")
+(core-load-module
  minibuffer-config
  :after core-packages
  :description "Minibuffer completion with Vertico stack")
-(load-module tramp-constants :description "TRAMP configuration constants")
-(load-module tramp-utils :after tramp-constants :description "TRAMP utility functions")
-(load-module tramp-config :after tramp-utils :description "TRAMP remote file access")
-(load-module
+(core-load-module tramp-constants :description "TRAMP configuration constants")
+(core-load-module tramp-utils :after tramp-constants :description "TRAMP utility functions")
+(core-load-module tramp-config :after tramp-utils :description "TRAMP remote file access")
+(core-load-module
  tree-sitter-config
  :after (tree-sitter-utils core-packages)
  :description "Tree-sitter grammar management")
-(load-module
+(core-load-module
  flymake-registry
  :after core-packages
  :description "Flymake backend registry and validation")
-(load-module flymake-config :after flymake-registry :description "Flymake configuration")
-(load-module flymake-utils :after flymake-config :description "Flymake utility functions")
-(load-module aspell-config :after flymake-utils :description "Spell checking with aspell")
-(load-module diff-hl-config :after core-packages :description "Git diff highlighting")
-(load-module git-constants :description "Git configuration constants")
-(load-module git-config :after git-constants :description "Magit and forge git integration")
-(load-module forge-constants :description "Forge configuration constants")
-(load-module
+(core-load-module flymake-config :after flymake-registry :description "Flymake configuration")
+(core-load-module flymake-utils :after flymake-config :description "Flymake utility functions")
+(core-load-module aspell-config :after flymake-utils :description "Spell checking with aspell")
+(core-load-module diff-hl-config :after core-packages :description "Git diff highlighting")
+(core-load-module git-constants :description "Git configuration constants")
+(core-load-module git-config :after git-constants :description "Magit and forge git integration")
+(core-load-module forge-constants :description "Forge configuration constants")
+(core-load-module
  forge-utils
  :after (git-utils git-forge-config forge-constants)
  :description "Forge configuration utilities and diagnostics")
-(load-module forge-markdown :after forge-utils :description "Forge markdown rendering functions")
-(load-module
+(core-load-module
+ forge-markdown
+ :after forge-utils
+ :description "Forge markdown rendering functions")
+(core-load-module
  forge-issue-links
  :after forge-markdown
  :description "Append raw URLs to forge issues for terminal clickability")
-(load-module
+(core-load-module
  forge-config
  :after forge-markdown
  :description "Forge markdown rendering and customizations")
-(load-module
+(core-load-module
  forge-authinfo
  :after (forge-utils git-forge-config)
  :description "Interactive authinfo generator for forge hosts")
-(load-module forge-issues :after git-config :description "Forge issue management commands")
-(load-module
+(core-load-module forge-issues :after git-config :description "Forge issue management commands")
+(core-load-module
  git-sync
  :after (git-utils git-config forge-config)
  :description "Automatic Git and Forge synchronization")
-(load-module
+(core-load-module
  rainbow-delimiters-config
  :after core-packages
  :description "Rainbow delimiters for better code readability")
-(load-module
+(core-load-module
  highlight-indent-guides-config
  :after core-packages
  :description "Visual indentation guides")
-(load-module
+(core-load-module
  dimmer-config
  :after core-packages
  :description "Dim inactive windows for visual focus")
-(load-module
+(core-load-module
  imenu-list-config
  :after (core-packages completion-config)
  :description "Symbol sidebar navigation")
-(load-module breadcrumbs-config :after core-packages :description "Breadcrumb navigation")
-(load-module treemacs-utils :description "Treemacs utility functions")
-(load-module
+(core-load-module breadcrumbs-config :after core-packages :description "Breadcrumb navigation")
+(core-load-module treemacs-utils :description "Treemacs utility functions")
+(core-load-module
  treemacs-config
  :after (core-packages treemacs-utils)
  :description "Project tree navigation")
-(load-module dired-config :after core-packages :description "Dired with nerd icons")
-(load-module dashboard-config :after core-packages :description "Dashboard startup screen")
+(core-load-module dired-config :after core-packages :description "Dired with nerd icons")
+(core-load-module dashboard-config :after core-packages :description "Dashboard startup screen")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 6: Language-Specific Configurations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module bash-config :description "Bash/shell script support")
-(load-module c-config :description "C/C++ language support")
-(load-module lisp-config :description "Emacs Lisp development")
-(load-module yaml-config :after core-packages :description "YAML file support")
-(load-module toml-config :after core-packages :description "TOML file support")
-(load-module json-config :description "JSON file support")
-(load-module markdown-config :after core-packages :description "Markdown file support")
-(load-module makefile-config :description "Makefile support")
+(core-load-module bash-config :description "Bash/shell script support")
+(core-load-module c-config :description "C/C++ language support")
+(core-load-module lisp-config :description "Emacs Lisp development")
+(core-load-module yaml-config :after core-packages :description "YAML file support")
+(core-load-module toml-config :after core-packages :description "TOML file support")
+(core-load-module json-config :description "JSON file support")
+(core-load-module markdown-config :after core-packages :description "Markdown file support")
+(core-load-module makefile-config :description "Makefile support")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 7: Python Development Stack (Complex Dependencies)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module python-config :description "Python configuration")
-(load-module python-constants :description "Python configuration constants")
-(load-module
+(core-load-module python-config :description "Python configuration")
+(core-load-module python-constants :description "Python configuration constants")
+(core-load-module
  pyvenv-utils
  :after python-constants
  :description "Python virtual environment utilities")
-(load-module
+(core-load-module
  pyvenv-config
  :after (pyvenv-utils core-packages)
  :description "Python virtual environments")
-(load-module
+(core-load-module
  pyvenv-remote
  :after pyvenv-config
  :description "Python virtual environments TRAMP support")
-(load-module
+(core-load-module
  pyvenv-modeline
  :after pyvenv-config
  :description "Python virtual environment modeline indicator")
-(load-module eglot-config :after python-config :description "Eglot LSP integration")
+(core-load-module eglot-config :after python-config :description "Eglot LSP integration")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 8: User Customizations (Final Layer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module user-utils :description "User utility functions")
-(load-module user-aliases :after user-utils :description "Function aliases and shortcuts")
-(load-module user-keybindings :after user-utils :description "User keybindings")
-(load-module
+(core-load-module user-utils :description "User utility functions")
+(core-load-module user-aliases :after user-utils :description "Function aliases and shortcuts")
+(core-load-module user-keybindings :after user-utils :description "User keybindings")
+(core-load-module
  command-palette
  :after user-aliases
  :description "Command palette with M-x history tracking")

@@ -25,13 +25,13 @@
 (defvar
  consult--source-filtered-buffer nil
  "Filtered buffer source for `consult-buffer' excluding certain patterns.
-Excludes patterns in minibuffer-config-ignored-buffer-patterns and the current buffer.")
+Excludes patterns in features-ignored-buffer-patterns and the current buffer.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
- minibuffer-config-ignored-buffer-patterns
+ features-ignored-buffer-patterns
  '(
    ;; Utility buffers
    "\\*Command Palette\\*" "\\*Flymake diagnostics.*\\*" "\\*Messages\\*" "\\*Completions\\*"
@@ -91,8 +91,7 @@ To add more patterns, simply add regexp strings to this list.")
         (string= buf current-buffer-name)
         ;; Exclude buffers matching ignored patterns
         (seq-some
-         (lambda (pattern) (string-match-p pattern buf))
-         minibuffer-config-ignored-buffer-patterns)))
+         (lambda (pattern) (string-match-p pattern buf)) features-ignored-buffer-patterns)))
       all-buffers)))))
 
 (with-eval-after-load
@@ -109,7 +108,7 @@ To add more patterns, simply add regexp strings to this list.")
  ;; Add shared custom annotation function
  (plist-put consult--source-project-buffer :annotate #'consult-sources--buffer-annotation)
 
- ;; Filter git repository buffers to exclude patterns from minibuffer-config-ignored-buffer-patterns
+ ;; Filter git repository buffers to exclude patterns from features-ignored-buffer-patterns
  ;; and ensure only buffers in the current git repository are shown
  (plist-put
   consult--source-project-buffer
@@ -132,8 +131,7 @@ To add more patterns, simply add regexp strings to this list.")
         (lambda
          (buf)
          (seq-some
-          (lambda (pattern) (string-match-p pattern buf))
-          minibuffer-config-ignored-buffer-patterns))
+          (lambda (pattern) (string-match-p pattern buf)) features-ignored-buffer-patterns))
         git-buffers)))))
 
  (core-message-config "Project buffer source customized with filtering")

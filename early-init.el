@@ -11,7 +11,7 @@
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "core/logging" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "core/pkg-system" user-emacs-directory))
-;; Load constants first (includes emacs-local-dir and startup constants)
+;; Load constants first (includes core-emacs-local-dir and startup constants)
 (require 'core-constants)
 ;; Load message utilities for consistent logging
 (require 'core-logging)
@@ -53,7 +53,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package System Early Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Configure package directory to use emacs-local-dir
+;; Configure package directory to use core-emacs-local-dir
 (setq package-user-dir core-packages-dir)
 ;; Disable package.el auto-initialization to prevent loading warnings
 ;; This must be done very early, before any package loading attempts

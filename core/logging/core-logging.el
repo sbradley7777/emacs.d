@@ -10,14 +10,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Diagnostic formatting constants
 (defconst
- core-diagnostic-date-format "%Y-%m-%d %H:%M:%S"
+ logging-diagnostic-date-format "%Y-%m-%d %H:%M:%S"
  "Date format used in diagnostic output.
 Format: YYYY-MM-DD HH:MM:SS (e.g., '2025-11-07 11:20:26').")
 (defconst
- core-diagnostic-separator-length 80 "Length of diagnostic section separators in characters.")
+ logging-diagnostic-separator-length 80 "Length of diagnostic section separators in characters.")
 (defconst
- core-diagnostic-closing-separator
- (make-string core-diagnostic-separator-length ?=)
+ logging-diagnostic-closing-separator
+ (make-string logging-diagnostic-separator-length ?=)
  "Closing separator for diagnostic sections (80 equals signs).")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -120,7 +120,7 @@ Format: \\='⏭️  Skipping (batch mode): OPERATION\\=' with optional context a
 TITLE is the section header text (e.g., \\='Emacs Startup Log\\=' or \\='External Dependencies\\=').
 A timestamp is automatically appended to the title in the format (YYYY-MM-DD HH:MM:SS).
 LINES is a list of strings to display with 2-space indentation.
-Both opening and closing separators are exactly `core-diagnostic-separator-length' characters.
+Both opening and closing separators are exactly `logging-diagnostic-separator-length' characters.
 The entire diagnostic section (separators and content) starts with 2 leading spaces.
 Output format:
   <empty line>
@@ -131,12 +131,12 @@ Output format:
     ========================================================================== (2 spaces + 80 chars)
   <empty line>"
  (core-message-plain "")
- (let* ((timestamp (format-time-string core-diagnostic-date-format))
+ (let* ((timestamp (format-time-string logging-diagnostic-date-format))
         (title-with-date (format "%s (%s)" title timestamp))
         (prefix "=== ")
         (suffix " ")
         (title-section (concat prefix title-with-date suffix))
-        (padding-length (- core-diagnostic-separator-length (length title-section))))
+        (padding-length (- logging-diagnostic-separator-length (length title-section))))
    (if
     (> padding-length 0)
     (core-message-plain "\n  %s%s" title-section (make-string padding-length ?=))
@@ -147,7 +147,7 @@ Output format:
    (or (string-empty-p line) (string= line " "))
    (core-message-plain " ")
    (core-message-plain "  %s" line)))
- (core-message-plain "  %s\n" core-diagnostic-closing-separator) (core-message-plain ""))
+ (core-message-plain "  %s\n" logging-diagnostic-closing-separator) (core-message-plain ""))
 
 ;; Warning buffer integration
 (defun

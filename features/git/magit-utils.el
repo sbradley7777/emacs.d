@@ -29,7 +29,7 @@
      (let* ((label-end (point))
             (line-end (line-end-position))
             (fill-prefix (make-string (current-column) ?\s))
-            (fill-column (- win-width magit-format-fill-margin)))
+            (fill-column (- win-width git-magit-format-fill-margin)))
        (when
         (> (- line-end (line-beginning-position)) fill-column)
         (fill-region-as-paragraph label-end line-end)))))))

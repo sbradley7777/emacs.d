@@ -9,9 +9,9 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
- magit-format-fill-margin
+ git-magit-format-fill-margin
  2
  "Margin offset subtracted from `fill-column' when formatting Magit buffer lines.")
-(defconst magit-log-commit-count 30 "Number of commits to display in Magit log sections.")
+(defconst git-magit-log-commit-count 30 "Number of commits to display in Magit log sections.")
 (provide 'git-constants)
 ;;; git-constants.el ends here

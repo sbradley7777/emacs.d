@@ -19,7 +19,7 @@
 ;; Macros
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmacro
- load-module (name &rest args)
+ core-load-module (name &rest args)
  "Load a configuration module with automatic :ensure nil and :demand t.
 NAME is the module name (symbol).
 ARGS are additional use-package keywords like :after, :description, :config, etc."
@@ -85,6 +85,7 @@ STATE contains use-package processing state."
 (defalias 'use-package-normalize/:description 'core-config-loader-normalize/:description)
 (defalias 'use-package-handler/:description 'core-config-loader-handler/:description)
 
-(core-message-config "Configuration loader with :description keyword and load-module macro ready")
+(core-message-config
+ "Configuration loader with :description keyword and core-load-module macro ready")
 (provide 'core-config-loader)
 ;;; core-config-loader.el ends here

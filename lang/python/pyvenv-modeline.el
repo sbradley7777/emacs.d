@@ -29,7 +29,7 @@
   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
   (let* ((project-name (if (boundp 'pyvenv-project-name) pyvenv-project-name "Unknown"))
          (venv-path pyvenv-virtual-env)
-         (python-bin (expand-file-name pyvenv-python-executable-path pyvenv-virtual-env))
+         (python-bin (expand-file-name python-pyvenv-python-executable-path pyvenv-virtual-env))
          (python-version (pyvenv-get-version-from-executable python-bin)))
     (core-message-info
      "Python Project: %s | Venv: %s | Version: %s"

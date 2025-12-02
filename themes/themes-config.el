@@ -45,7 +45,7 @@ Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
  (cond
   ((eq theme 'doom-1337)
    (require 'theme-doom-1337)
-   (doom-1337-setup))
+   (themes-doom-1337-setup))
   ;; Add other theme-specific customizations here
   (t
    nil)))

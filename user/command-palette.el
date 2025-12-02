@@ -46,7 +46,7 @@
 (core-utils-defconst-path
  command-palette-data-dir
  "command_palette/"
- emacs-local-dir
+ core-emacs-local-dir
  "Directory for command palette persistent data.")
 (core-utils-defconst-path
  command-palette-history-file
@@ -58,10 +58,11 @@
  "command-palette-favorites.el"
  command-palette-data-dir
  "File storing command palette favorites.")
-(defconst command-palette-buffer-name "*Command Palette*" "Name of the command palette buffer.")
-(defconst command-palette-history-size 20 "Maximum number of commands to store in history.")
 (defconst
- command-palette-default-favorites
+ user-command-palette-buffer-name "*Command Palette*" "Name of the command palette buffer.")
+(defconst user-command-palette-history-size 20 "Maximum number of commands to store in history.")
+(defconst
+ user-command-palette-default-favorites
  '(("User Git Commit Format" . user-git-commit-format)
    ("User Copy Whole Buffer" . user-copy-whole-buffer)
    ("Menu Bar Open" . menu-bar-open)
@@ -91,7 +92,7 @@
    ("Generate Forge Authinfo Entries" . forge-authinfo-generate-entries))
  "Default list of favorite commands.  Format: ((\"Display Name\" . command-symbol) ...).")
 (defconst
- command-palette-excluded-commands
+ user-command-palette-excluded-commands
  '(command-palette-toggle
    command-palette-add-favorite
    command-palette-remove-favorite
@@ -160,7 +161,7 @@ If SILENT is non-nil, suppress success messages.  Returns t if successful, nil o
        (load command-palette-history-file)
        (when
         (boundp 'command-palette-saved-history)
-        (setq command-palette-history (make-ring command-palette-history-size))
+        (setq command-palette-history (make-ring user-command-palette-history-size))
         (dolist
          (item (reverse command-palette-saved-history)) (ring-insert command-palette-history item))
         (unless
@@ -222,10 +223,10 @@ If SILENT is non-nil, suppress success messages.  Returns t if successful, nil o
     (error
      (core-message-warning
       "Failed to load command palette favorites: %s" (error-message-string err))
-     (setq command-palette-favorites command-palette-default-favorites)
+     (setq command-palette-favorites user-command-palette-default-favorites)
      nil))
   (progn
-   (setq command-palette-favorites command-palette-default-favorites)
+   (setq command-palette-favorites user-command-palette-default-favorites)
    (unless silent (core-message-info "Using default command palette favorites"))
    nil)))
 
@@ -253,13 +254,13 @@ Removes any existing occurrences before adding to ensure no duplicates.  Returns
   (and
    (symbolp cmd-symbol)
    (commandp cmd-symbol)
-   (not (memq cmd-symbol command-palette-excluded-commands))
+   (not (memq cmd-symbol user-command-palette-excluded-commands))
    ;; Don't add to history if it's already in favorites
    (not
     (assoc
      cmd-symbol (mapcar (lambda (item) (cons (cdr item) (car item))) command-palette-favorites))))
   ;; Remove all existing occurrences of this command from the ring
-  (let ((new-ring (make-ring command-palette-history-size))
+  (let ((new-ring (make-ring user-command-palette-history-size))
         (cmd-name (command-palette--format-command-name cmd-symbol))
         (len (ring-length command-palette-history)))
     ;; Iterate from oldest to newest to preserve order when inserting
@@ -296,7 +297,8 @@ Switches to the previous window before executing the command, then closes the pa
          ;; Find first non-palette window
          (cl-find-if
           (lambda
-           (win) (not (string= (buffer-name (window-buffer win)) command-palette-buffer-name)))
+           (win)
+           (not (string= (buffer-name (window-buffer win)) user-command-palette-buffer-name)))
           (window-list)))))
    (when target-window (select-window target-window))
    (call-interactively cmd-symbol)))
@@ -341,7 +343,7 @@ Returns width as number of columns needed to display content."
 
 (defun
  command-palette--refresh-buffer () "Refresh the command palette buffer contents."
- (let ((buffer (get-buffer command-palette-buffer-name)))
+ (let ((buffer (get-buffer user-command-palette-buffer-name)))
    (when
     buffer
     (with-current-buffer
@@ -454,7 +456,7 @@ persisted to disk immediately.  Useful for pinning frequently-used commands."
        ;; Add to favorites
        (add-to-list 'command-palette-favorites item t)
        ;; Remove from history by rebuilding the ring without this item
-       (let ((new-ring (make-ring command-palette-history-size)))
+       (let ((new-ring (make-ring user-command-palette-history-size)))
          (dotimes
           (i (ring-length command-palette-history))
           (let ((hist-item (ring-ref command-palette-history i)))
@@ -496,7 +498,7 @@ Does not affect the command's availability in `M-x'."
 Removes all entries from the recent commands section while preserving favorites.
 Use this to reset your recent commands list while keeping your favorites intact."
  (interactive)
- (setq command-palette-history (make-ring command-palette-history-size))
+ (setq command-palette-history (make-ring user-command-palette-history-size))
  (command-palette--refresh-buffer)
  (core-message-success "Command palette history cleared"))
 
@@ -520,7 +522,7 @@ Use this to reset your recent commands list while keeping your favorites intact.
           (core-message-warning "Removed invalid favorite: %s (%s)" cmd-name cmd-symbol)))))
      (setq command-palette-favorites (nreverse valid-favorites)))
    ;; Validate history
-   (let ((new-ring (make-ring command-palette-history-size))
+   (let ((new-ring (make-ring user-command-palette-history-size))
          (len (ring-length command-palette-history)))
      (dotimes
       (i len)
@@ -560,7 +562,7 @@ side windows (Flymake diagnostics, Imenu-list)."
   (when (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
   ;; Store current window before opening palette
   (setq command-palette-previous-window (selected-window))
-  (let* ((buffer (get-buffer-create command-palette-buffer-name))
+  (let* ((buffer (get-buffer-create user-command-palette-buffer-name))
          (window-width nil))
     (with-current-buffer
      buffer
@@ -594,14 +596,14 @@ side windows (Flymake diagnostics, Imenu-list)."
    command-palette--mx-flag this-command (commandp this-command)
    (not
     (memq this-command '(execute-extended-command execute-extended-command-for-buffer)))
-   (not (memq this-command command-palette-excluded-commands)))
+   (not (memq this-command user-command-palette-excluded-commands)))
   (command-palette--add-to-history this-command) (setq command-palette--mx-flag nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialize ring buffer
-(setq command-palette-history (make-ring command-palette-history-size))
+(setq command-palette-history (make-ring user-command-palette-history-size))
 
 ;; Load saved data
 (command-palette--load-favorites)

@@ -53,7 +53,7 @@
   magit-display-buffer-function
   #'magit-utils-display-buffer-side
   magit-log-section-commit-count
-  magit-log-commit-count
+  git-magit-log-commit-count
   magit-section-initial-visibility-alist
   '((stashes . show)
     (untracked . show)

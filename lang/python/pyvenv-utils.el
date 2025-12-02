@@ -47,7 +47,7 @@ Uses `process-file' for TRAMP compatibility - works for both local and remote fi
 VENV-PATH is the path to the virtual environment directory."
  (when
   venv-path
-  (let ((python-executable (expand-file-name pyvenv-python-executable-path venv-path)))
+  (let ((python-executable (expand-file-name python-pyvenv-python-executable-path venv-path)))
     (pyvenv-get-version-from-executable python-executable))))
 
 (defun
@@ -68,7 +68,8 @@ START-DIR is the starting directory for the search (defaults to current director
          project-root
          (core-message-warning
           "No venv directory found at: %s"
-          (abbreviate-file-name (expand-file-name pyvenv-venv-directory-name project-root)))))
+          (abbreviate-file-name
+           (expand-file-name python-pyvenv-venv-directory-name project-root)))))
       nil))))
 
 (defun
@@ -77,7 +78,7 @@ START-DIR is the starting directory for the search (defaults to current director
  "Update python-shell-interpreter when virtual environment change for modeline display."
  (if
   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
-  (let ((venv-python (expand-file-name pyvenv-python-executable-path pyvenv-virtual-env)))
+  (let ((venv-python (expand-file-name python-pyvenv-python-executable-path pyvenv-virtual-env)))
     (if
      (core-utils-is-remote-file venv-python)
      ;; For remote files, use the local path part (without TRAMP prefix)

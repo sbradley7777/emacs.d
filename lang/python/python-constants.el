@@ -24,13 +24,15 @@
 
 ;; Virtual environment constants
 (defconst
- pyvenv-project-markers
+ python-pyvenv-project-markers
  '(".git" "pyproject.toml" "requirements.txt")
  "Files/directories that indicate a Python project root.")
 (defconst
- pyvenv-venv-directory-name "venv" "Default virtual environment directory name to search for.")
+ python-pyvenv-venv-directory-name
+ "venv"
+ "Default virtual environment directory name to search for.")
 (defconst
- pyvenv-python-executable-path
+ python-pyvenv-python-executable-path
  "bin/python"
  "Relative path to Python executable within venv directory.")
 (provide 'python-constants)

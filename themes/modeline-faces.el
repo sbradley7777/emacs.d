@@ -20,7 +20,7 @@ THEME should be a symbol like \\='doom-1337 or \\='doom-zenburn."
    (cond
     ((string= theme-name "doom-1337")
      (require 'theme-doom-1337)
-     (doom-1337-modeline-faces-apply))
+     (themes-doom-1337-modeline-faces-apply))
     (t
      (core-message-debug "No custom modeline faces defined for theme: %s" theme-name)))))
 

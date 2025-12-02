@@ -49,7 +49,7 @@ Example:
 ;; Registry Constant
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
- features-eglot-lsp-server-registry
+ eglot-lsp-server-registry
  (list
   (eglot-registry-create-server
    'pylsp
@@ -138,7 +138,7 @@ This registry uses constructors for type safety and validation at creation time.
 (defcustom
  eglot-strict-validation nil
  "When non-nil, validate registry on load and error if invalid entries found.
-This enables strict validation of the `features-eglot-lsp-server-registry' at load time.
+This enables strict validation of the `eglot-lsp-server-registry' at load time.
 If any registry entry is missing required properties or has invalid values,
 an error will be signaled during initialization.
 
@@ -151,7 +151,7 @@ Recommended for development and testing, not for production use."
  "When non-nil, require all LSP servers to be registered in the registry.
 If nil, fall back to heuristic detection for unregistered servers.
 
-When enabled, any LSP server not found in `features-eglot-lsp-server-registry' will
+When enabled, any LSP server not found in `eglot-lsp-server-registry' will
 cause an error instead of falling back to naming convention heuristics.
 
 This is a strict mode option that enforces registry completeness."
@@ -175,9 +175,9 @@ This is a strict mode option that prevents invalid configurations."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  eglot-registry-find-server (server-symbol)
- "Find LSP server specification in `features-eglot-lsp-server-registry' for SERVER-SYMBOL.
+ "Find LSP server specification in `eglot-lsp-server-registry' for SERVER-SYMBOL.
 Returns the server spec entry (SERVER-SYMBOL DESCRIPTION MODES) or nil if not found."
- (core-registry-find-entry features-eglot-lsp-server-registry server-symbol))
+ (core-registry-find-entry eglot-lsp-server-registry server-symbol))
 
 (defun
  eglot-registry-find-server-for-mode (mode)
@@ -188,24 +188,24 @@ MODE is the major mode symbol to find (e.g., \\='python-mode).
 Example:
   (eglot-registry-find-server-for-mode \\='python-mode)
   => pylsp"
- (core-registry-find-by-mode features-eglot-lsp-server-registry mode))
+ (core-registry-find-by-mode eglot-lsp-server-registry mode))
 
 (defun
  eglot-registry-get-property (server-symbol property)
- "Get PROPERTY for SERVER-SYMBOL from `features-eglot-lsp-server-registry'.
+ "Get PROPERTY for SERVER-SYMBOL from `eglot-lsp-server-registry'.
 PROPERTY is a keyword like :binary, :url, or :disabled.
 Returns nil if server not found or property not set.
 
 The registry format is (SERVER-SYMBOL DESCRIPTION MODES . PROPERTIES)
 where PROPERTIES is a plist starting at index 3."
- (core-registry-get-property features-eglot-lsp-server-registry server-symbol property))
+ (core-registry-get-property eglot-lsp-server-registry server-symbol property))
 
 (defun
  eglot-registry-get-description (server-symbol)
  "Get human-readable description for SERVER-SYMBOL.
-Looks up the server in `features-eglot-lsp-server-registry' and returns its description.
+Looks up the server in `eglot-lsp-server-registry' and returns its description.
 Falls back to the server symbol name if not found in registry."
- (core-registry-get-description features-eglot-lsp-server-registry server-symbol))
+ (core-registry-get-description eglot-lsp-server-registry server-symbol))
 
 (defun
  eglot-registry-get-binary (server-symbol)
@@ -219,7 +219,7 @@ SERVER-SYMBOL is the LSP server identifier symbol to look up."
  "Get list of supported modes for SERVER-SYMBOL from registry.
 Returns list of mode symbols.
 SERVER-SYMBOL is the LSP server identifier symbol to look up."
- (core-registry-get-modes features-eglot-lsp-server-registry server-symbol))
+ (core-registry-get-modes eglot-lsp-server-registry server-symbol))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Validation Functions
@@ -240,12 +240,12 @@ It uses `core-registry-entry-available-p' with is-lsp=t for LSP-specific checkin
         (cl-find-if
          (lambda
           (entry) (string= (plist-get (nthcdr 3 entry) :binary) lsp-server))
-         features-eglot-lsp-server-registry)))
+         eglot-lsp-server-registry)))
    (when
     server-entry
     (let ((server-symbol (car server-entry)))
       (core-registry-entry-available-p
-       features-eglot-lsp-server-registry server-symbol lsp-server nil t)))))
+       eglot-lsp-server-registry server-symbol lsp-server nil t)))))
 
 (defun
  eglot--mode-compatible-p (supported-modes)
@@ -291,14 +291,14 @@ SPEC is the full registry entry or nil if server not registered."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  eglot--validate-registry ()
- "Validate all entries in `features-eglot-lsp-server-registry' for completeness.
+ "Validate all entries in `eglot-lsp-server-registry' for completeness.
 Signals error if any entry is missing required properties or has invalid values.
 Uses `eglot--validate-registry-entry' to check each entry.
 
 This function is automatically called at load time when `eglot-strict-validation'
 is non-nil."
  (dolist
-  (entry features-eglot-lsp-server-registry)
+  (entry eglot-lsp-server-registry)
   (let ((error-msg (eglot--validate-registry-entry entry)))
     (when error-msg (error "%s" error-msg)))))
 

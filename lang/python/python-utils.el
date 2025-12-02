@@ -16,9 +16,9 @@
  python-utils-find-project-root (&optional directory)
  "Find Python project root using file markers.
 Returns the project root path, or nil if not in a Python project.
-Uses markers from `pyvenv-project-markers' to identify project root.
+Uses markers from `python-pyvenv-project-markers' to identify project root.
 DIRECTORY defaults to `default-directory' if not provided."
- (core-utils-find-dominating-directory-by-markers pyvenv-project-markers directory))
+ (core-utils-find-dominating-directory-by-markers python-pyvenv-project-markers directory))
 
 (defun
  python-utils-extract-project-name (project-root)
@@ -34,7 +34,7 @@ Returns the venv path if found, nil otherwise.
 DIRECTORY defaults to `default-directory' if not provided.
 TRAMP-compatible - works with both local and remote files."
  (when-let ((project-root (python-utils-find-project-root directory)))
-   (let ((venv-path (expand-file-name pyvenv-venv-directory-name project-root)))
+   (let ((venv-path (expand-file-name python-pyvenv-venv-directory-name project-root)))
      (when (file-directory-p venv-path) venv-path))))
 
 (core-message-config "Python utility functions loaded")

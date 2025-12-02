@@ -47,7 +47,7 @@
  core-diagnostics--count-config-files ()
  "Count total .el configuration files in `user-emacs-directory'.
 Includes root-level .el files (init.el, early-init.el, custom.el, local.el, dev.el).
-Excludes directories in `ignore-on-load' list (local, elpa, configs, etc.).
+Excludes directories in `core-ignore-on-load' list (local, elpa, configs, etc.).
 Returns count of actual configuration files."
  (let ((count 0))
    ;; Count .el files in root of user-emacs-directory
@@ -59,7 +59,7 @@ Returns count of actual configuration files."
      (file-directory-p dir)
      (let ((dir-name (file-name-nondirectory dir)))
        (unless
-        (member dir-name ignore-on-load)
+        (member dir-name core-ignore-on-load)
         ;; Count .el files in this directory
         (setq count (+ count (length (directory-files dir nil core-elisp-file-pattern))))
         ;; Count .el files in subdirectories
@@ -121,7 +121,7 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
  ()
  "Display configuration details as a table (non-interactive)."
  (let* ((config-dir (abbreviate-file-name user-emacs-directory))
-        (local-dir (abbreviate-file-name emacs-local-dir))
+        (local-dir (abbreviate-file-name core-emacs-local-dir))
         (total-files (core-diagnostics--count-config-files))
         (loaded-files (core-diagnostics--count-loaded-modules))
         (custom-file-path

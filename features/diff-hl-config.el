@@ -5,7 +5,7 @@
 ;;      Works passively alongside terminal git workflow.
 
 ;;; Code:
-(require 'theme-doom-1337-constants)
+(require 'themes-doom-1337-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
@@ -28,14 +28,14 @@
   (setq diff-hl-margin-symbols-alist '((insert . "+") (delete . "-") (change . "~")))
   ;; Customize faces to use doom-1337 theme colors (foreground only, no background)
   ;; Color scheme matches modeline and theme aesthetic for visual consistency:
-  ;;   - insert (green):  doom-1337-color-green (success states)
-  ;;   - delete (red):    doom-1337-color-red (error states)
-  ;;   - change (yellow): doom-1337-color-yellow (modified/attention states)
+  ;;   - insert (green):  themes-doom-1337-color-green (success states)
+  ;;   - delete (red):    themes-doom-1337-color-red (error states)
+  ;;   - change (yellow): themes-doom-1337-color-yellow (modified/attention states)
   ;; Background set to unspecified ensures symbols display with colored text only, not colored blocks
   (custom-set-faces
-   `(diff-hl-insert ((t (:foreground ,doom-1337-color-green :background unspecified)))) ; Green (matches theme success)
-   `(diff-hl-delete ((t (:foreground ,doom-1337-color-red :background unspecified)))) ; Coral red (matches theme errors)
-   `(diff-hl-change ((t (:foreground ,doom-1337-color-yellow :background unspecified))))))
+   `(diff-hl-insert ((t (:foreground ,themes-doom-1337-color-green :background unspecified)))) ; Green (matches theme success)
+   `(diff-hl-delete ((t (:foreground ,themes-doom-1337-color-red :background unspecified)))) ; Coral red (matches theme errors)
+   `(diff-hl-change ((t (:foreground ,themes-doom-1337-color-yellow :background unspecified))))))
 
  ;; Update diff indicators after save
  (add-hook 'after-save-hook #'diff-hl-update)

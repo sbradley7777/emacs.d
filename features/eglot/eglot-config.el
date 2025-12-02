@@ -15,10 +15,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq eglot-connect-timeout features-eglot-connection-timeout)
-(setq eglot-autoshutdown features-eglot-autoshutdown)
-(setq eglot-send-changes-idle-time features-eglot-send-changes-idle-time)
-(setq eglot-report-progress features-eglot-report-progress)
+(setq eglot-connect-timeout eglot-connection-timeout)
+(setq eglot-autoshutdown eglot-autoshutdown)
+(setq eglot-send-changes-idle-time eglot-send-changes-idle-time)
+(setq eglot-report-progress eglot-report-progress)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -48,7 +48,7 @@ Checks local or remote host appropriately based on `default-directory'."
        (when should-enable (eglot-ensure)))))))
 
 (dolist
- (entry features-eglot-lsp-server-registry)
+ (entry eglot-lsp-server-registry)
  (let* ((lsp-server-symbol (nth 0 entry))
         (modes (nth 2 entry))
         (props (nthcdr 3 entry))
