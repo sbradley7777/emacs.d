@@ -39,7 +39,7 @@ Returns non-nil if the file/directory is remote, nil otherwise."
  (file-remote-p (or file default-directory)))
 
 (defun
- core-utils-validate-non-empty-string (value &optional description)
+ core-validate-non-empty-string (value &optional description)
  "Validate that VALUE is a non-empty string.
 Returns t if valid, logs warning and returns nil otherwise.
 DESCRIPTION is optional name for error messages (defaults to \\='Value\\=')."
@@ -124,7 +124,7 @@ Example:
  (when path (file-name-nondirectory (directory-file-name path))))
 
 (defun
- core-utils-find-dominating-directory-by-markers (markers &optional directory)
+ core-find-dominating-directory-by-markers (markers &optional directory)
  "Find dominating directory containing any file/directory from MARKERS list.
 MARKERS is a list of filenames or directory names to search for.
 DIRECTORY is the starting directory (defaults to `default-directory').
@@ -133,14 +133,14 @@ Returns the directory path containing the first matching marker, or nil if none 
 Searches upward through parent directories until a marker is found.
 
 Example:
-  (core-utils-find-dominating-directory-by-markers
+  (core-find-dominating-directory-by-markers
    \\='(\".git\" \"pyproject.toml\" \"Cargo.toml\"))
   => \"/home/user/projects/myapp/\""
  (let ((current-dir (or directory default-directory)))
    (cl-some (lambda (marker) (locate-dominating-file current-dir marker)) markers)))
 
 (defun
- core-utils-scan-directory-for-pattern (dir pattern transform-fn)
+ core-scan-directory-for-pattern (dir pattern transform-fn)
  "Scan DIR for files matching PATTERN and apply TRANSFORM-FN to each match.
 DIR should be a directory path (string).
 PATTERN should be a regular expression (string) to match against filenames.
@@ -149,7 +149,7 @@ TRANSFORM-FN is a function that takes the filename and match groups, returning a
 Returns a list of results from applying TRANSFORM-FN to each matching file.
 
 Example:
-  (core-utils-scan-directory-for-pattern
+  (core-scan-directory-for-pattern
    \"/path/to/grammars\"
    \"libtree-sitter-\\\\([^.]+\\\\)\\\\.\\\\(so\\\\|dylib\\\\)$\"
    (lambda (file lang ext)

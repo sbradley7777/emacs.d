@@ -27,8 +27,7 @@ Shows available version and indicates if updates are available."
 
    ;; Always refresh package archive contents to ensure accurate update information
    (when
-    (pkg-system-repositories-responsive-p)
-    (core-message-package "Refreshing package archive contents...")
+    (pkg-system-responsive-p) (core-message-package "Refreshing package archive contents...")
     (condition-case err
         (with-timeout
          (core-package-refresh-timeout
@@ -145,7 +144,7 @@ Useful for discovering new packages or finding alternatives."
 Returns a list of (PKG-NAME INSTALLED-DESC AVAILABLE-DESC) or nil if failed/no upgrades.
 TIMEOUT-SECONDS specifies how long to wait before timing out."
  (when
-  (pkg-system-repositories-responsive-p)
+  (pkg-system-responsive-p)
   (condition-case err
       (progn
        (with-timeout

@@ -25,7 +25,7 @@
 ;;                    chmod 600 ~/.authinfo
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      STEP 4: Restart Emacs or run
-;;        M-x git-forge-config-populate-forge-alist
+;;        M-x git-populate-forge-alist
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;      AUTOMATIC FEATURES
@@ -68,7 +68,7 @@
 (use-package
  forge
  :after magit
- :config (git-forge-config-populate-forge-alist)
+ :config (git-populate-forge-alist)
  (add-hook
   'forge-topic-mode-hook
   (lambda () (add-to-invisibility-spec 'markdown-markup) (visual-line-mode 1)))

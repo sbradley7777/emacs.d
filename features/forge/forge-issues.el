@@ -81,10 +81,9 @@ Optional REPO argument specifies which repository to list issues for."
     (if
      (eq forge-issues--current-width 'compact)
      (progn
-      (core-ui-utils-resize-window-to-ratio
-       existing-window features-side-window-expanded-width)
+      (core-resize-window-to-ratio existing-window features-side-window-expanded-width)
       (setq forge-issues--current-width 'expanded))
-     (core-ui-utils-resize-window-to-ratio existing-window features-side-window-compact-width)
+     (core-resize-window-to-ratio existing-window features-side-window-compact-width)
      (setq forge-issues--current-width 'compact))
     (condition-case err
         (progn

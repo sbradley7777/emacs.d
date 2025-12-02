@@ -180,13 +180,13 @@ Returns the server spec entry (SERVER-SYMBOL DESCRIPTION MODES) or nil if not fo
  (core-registry-find-entry eglot-lsp-server-registry server-symbol))
 
 (defun
- eglot-registry-find-server-for-mode (mode)
+ eglot-find-server-for-mode (mode)
  "Find first LSP server entry in registry that supports MODE.
 Returns the server identifier symbol, or nil if no server supports this mode.
 MODE is the major mode symbol to find (e.g., \\='python-mode).
 
 Example:
-  (eglot-registry-find-server-for-mode \\='python-mode)
+  (eglot-find-server-for-mode \\='python-mode)
   => pylsp"
  (core-registry-find-by-mode eglot-lsp-server-registry mode))
 

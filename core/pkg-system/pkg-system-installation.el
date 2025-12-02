@@ -13,7 +13,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- pkg-system-installation-ensure-keyring ()
+ pkg-system-ensure-keyring ()
  "Ensure GNU ELPA keyring is available before installing other packages.
 This maintains security with signature verification.
 Should be called during initialization after package system is configured."
@@ -22,7 +22,7 @@ Should be called during initialization after package system is configured."
   (if
    noninteractive (core-message-batch-skip "keyring update check")
    (when
-    (pkg-system-repositories-responsive-p) (pkg-system-refresh-with-timeout)
+    (pkg-system-responsive-p) (pkg-system-refresh-with-timeout)
     (condition-case err
         (progn
          (package-install 'gnu-elpa-keyring-update)
@@ -76,7 +76,7 @@ Should be called during initialization after package system is configured."
    failed-packages))
 
 (defun
- pkg-system-installation-install-with-retry (package-list &optional max-retries)
+ pkg-system-install-with-retry (package-list &optional max-retries)
  "Install packages with automatic retry on network failures.
 PACKAGE-LIST is the list of packages to install.
 MAX-RETRIES is the maximum number of retry attempts (default: 2)."
@@ -86,6 +86,6 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
     (and failed-packages (> max-retries 0))
     (core-message-loading "Retrying failed packages after network refresh...")
     (package-refresh-contents)
-    (pkg-system-installation-install-with-retry failed-packages (1- max-retries)))))
+    (pkg-system-install-with-retry failed-packages (1- max-retries)))))
 (provide 'pkg-system-installation)
 ;;; pkg-system-installation.el ends here

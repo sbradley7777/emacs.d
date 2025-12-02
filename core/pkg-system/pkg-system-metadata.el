@@ -35,7 +35,7 @@ TIMESTAMP can be a string (already human-readable), list (Emacs time format), or
    (format-time-string "%Y-%m-%d %H:%M:%S"))))
 
 (defun
- pkg-system-metadata-load-variables ()
+ pkg-system-load-variables ()
  "Load metadata variables from file if it exists.
 Returns t if file was loaded successfully, nil otherwise."
  (when
@@ -47,10 +47,10 @@ Returns t if file was loaded successfully, nil otherwise."
      nil))))
 
 (defun
- pkg-system-metadata-read-refresh-timestamp ()
+ pkg-system-read-refresh-timestamp ()
  "Read the last package refresh timestamp from persistent storage.
 Returns the timestamp as a float, or 0 if no previous check recorded."
- (pkg-system-metadata-load-variables)
+ (pkg-system-load-variables)
  (if
   (boundp 'package-last-refresh-timestamp)
   (condition-case err
@@ -71,17 +71,17 @@ Returns the timestamp as a float, or 0 if no previous check recorded."
   0))
 
 (defun
- pkg-system-metadata-write-refresh-timestamp (timestamp)
+ pkg-system-write-refresh-timestamp (timestamp)
  "Write the package refresh timestamp to persistent storage.
 TIMESTAMP should be a float from (float-time (current-time))."
  (let ((human-readable (format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time timestamp))))
    (pkg-system--metadata-save-all :refresh-timestamp human-readable)))
 
 (defun
- pkg-system-metadata-read-cache-info ()
+ pkg-system-read-cache-info ()
  "Read cache timestamp and count from persistent storage.
 Returns a plist with :timestamp (as float) and :count, or defaults if not found."
- (pkg-system-metadata-load-variables)
+ (pkg-system-load-variables)
  (let ((timestamp
         (when
          (boundp 'package-cache-timestamp)
@@ -103,7 +103,7 @@ Returns a plist with :timestamp (as float) and :count, or defaults if not found.
    (list :timestamp (or timestamp 0) :count (or count 0))))
 
 (defun
- pkg-system-metadata-write-cache-info (timestamp count)
+ pkg-system-write-cache-info (timestamp count)
  "Write cache timestamp and count to persistent storage.
 TIMESTAMP should be a float from (float-time (current-time)).
 COUNT should be the number of packages in the cache."
@@ -118,11 +118,11 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
         ;; Load current values or use defaults
         (current-refresh
          (if
-          (pkg-system-metadata-load-variables)
+          (pkg-system-load-variables)
           (pkg-system--metadata-normalize-timestamp
            (when (boundp 'package-last-refresh-timestamp) package-last-refresh-timestamp))
           nil))
-        (current-cache-info (pkg-system-metadata-read-cache-info))
+        (current-cache-info (pkg-system-read-cache-info))
         ;; Use provided values or current values
         (refresh-ts (or (plist-get plist :refresh-timestamp) current-refresh))
         (cache-ts

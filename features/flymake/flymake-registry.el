@@ -298,7 +298,7 @@ BACKEND-SYMBOL is the backend function symbol to look up."
 ;; Validation Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- flymake-registry-backend-available-p (binary backend-function)
+ flymake-backend-available-p (binary backend-function)
  "Return non-nil if BINARY exists, BACKEND-FUNCTION is defined, and backend is not disabled.
 BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\", \"shellcheck\").
 Special values:
@@ -314,7 +314,7 @@ This is the standard validation check used before enabling any flymake backend."
   flymake-backend-registry backend-function binary backend-function nil))
 
 (defun
- flymake-registry-remove-disabled-backends ()
+ flymake-remove-disabled-backends ()
  "Remove all disabled backends from `flymake-diagnostic-functions'.
 This enforces the :disabled flag by removing backends that are marked as
 disabled in the registry but were added by external code (e.g., built-in modes).

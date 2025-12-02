@@ -121,7 +121,7 @@ Uses asynchronous retrieval to properly handle TCP connection timeouts."
       status))))
 
 (defun
- pkg-system-repositories-get-available ()
+ pkg-system-get-available ()
  "Return list of available repositories from `package-archives'.
 Tests each repository and returns only those that are responsive.
 Results are cached per `pkg-system-repository-cache-ttl'."
@@ -154,11 +154,11 @@ Results are cached per `pkg-system-repository-cache-ttl'."
     (progn (core-message-error "No package repositories are currently available") nil))))
 
 (defun
- pkg-system-repositories-responsive-p ()
+ pkg-system-responsive-p ()
  "Quick network connectivity check with diagnostic feedback.
 Tests if at least one package repository is available."
  (core-message-debug "Testing connectivity to package repositories...")
- (let ((available-repos (pkg-system-repositories-get-available)))
+ (let ((available-repos (pkg-system-get-available)))
    (if
     available-repos
     (progn

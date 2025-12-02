@@ -23,7 +23,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  pkg-system-cache-fresh-p () "Check if package cache exists and is recent enough to use."
- (let ((cache-info (pkg-system-metadata-read-cache-info)))
+ (let ((cache-info (pkg-system-read-cache-info)))
    (when
     (> (plist-get cache-info :timestamp) 0)
     (let ((cache-age
@@ -40,14 +40,14 @@
   (condition-case err
       (let ((cache-timestamp (float-time (current-time)))
             (package-count (length package-archive-contents)))
-        (pkg-system-metadata-write-cache-info cache-timestamp package-count)
+        (pkg-system-write-cache-info cache-timestamp package-count)
         (core-message-info "Package state cached (%d packages)" package-count))
     (error
      (core-message-warning "Failed to save package cache: %s" (error-message-string err))))))
 
 (defun
  pkg-system-cache-load-cached-state () "Load cached package state using built-in package system."
- (let ((cache-info (pkg-system-metadata-read-cache-info)))
+ (let ((cache-info (pkg-system-read-cache-info)))
    (when
     (> (plist-get cache-info :timestamp) 0)
     (condition-case err

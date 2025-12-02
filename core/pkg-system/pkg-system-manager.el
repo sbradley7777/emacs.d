@@ -41,7 +41,7 @@
 (pkg-system-operations-manage-state)
 
 ;; Ensure GNU ELPA keyring is available for secure package verification
-(pkg-system-installation-ensure-keyring)
+(pkg-system-ensure-keyring)
 
 (provide 'pkg-system-manager)
 ;;; pkg-system-manager.el ends here

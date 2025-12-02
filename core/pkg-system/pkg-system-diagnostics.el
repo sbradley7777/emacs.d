@@ -99,7 +99,7 @@ Returns nil if package-archive-contents is not loaded."
  (if
   (file-exists-p pkg-system-metadata-file)
   (progn
-   (pkg-system-metadata-load-variables)
+   (pkg-system-load-variables)
    (let* ((refresh-ts
            (when (boundp 'package-last-refresh-timestamp) package-last-refresh-timestamp))
           (cache-ts (when (boundp 'package-cache-timestamp) package-cache-timestamp))

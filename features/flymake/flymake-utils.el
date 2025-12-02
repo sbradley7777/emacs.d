@@ -85,7 +85,7 @@ Returns list of formatted strings describing each backend."
 Returns cons cell (MODE . SERVER-EXECUTABLE) or nil if no LSP configured for this mode."
  (when
   (boundp 'features-eglot-lsp-server-registry)
-  (let ((server-symbol (eglot-registry-find-server-for-mode major-mode)))
+  (let ((server-symbol (eglot-find-server-for-mode major-mode)))
     (when
      server-symbol
      (let ((binary (eglot-registry-get-binary server-symbol)))
@@ -238,10 +238,10 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
      (if
       (eq flymake-diagnostics--current-width 'compact)
       (progn
-       (core-ui-utils-resize-window-to-ratio
+       (core-resize-window-to-ratio
         existing-window features-side-window-expanded-width)
        (setq flymake-diagnostics--current-width 'expanded))
-      (core-ui-utils-resize-window-to-ratio existing-window features-side-window-compact-width)
+      (core-resize-window-to-ratio existing-window features-side-window-compact-width)
       (setq flymake-diagnostics--current-width 'compact))
      (select-window existing-window))
     (progn
@@ -419,9 +419,7 @@ Column layout (all widths calculated dynamically from actual data):
           ;; Calculate base widths
           (base-widths
            (if
-            rows
-            (core-logging-calculate-column-widths headers rows '(4 3 7 4 10 0))
-            '(4 3 7 4 10 0)))
+            rows (logging-calculate-column-widths headers rows '(4 3 7 4 10 0)) '(4 3 7 4 10 0)))
           ;; Add column padding
           (new-widths (core-logging-add-column-padding base-widths 2)))
      ;; Update format if widths changed
@@ -460,7 +458,7 @@ Examples:
             (lsp-server
              (when
               (boundp 'features-eglot-lsp-server-registry)
-              (let ((server-symbol (eglot-registry-find-server-for-mode mode)))
+              (let ((server-symbol (eglot-find-server-for-mode mode)))
                 (when server-symbol (eglot-registry-get-binary server-symbol)))))
             (installed (and lsp-server (executable-find lsp-server))))
        (list :type 'lsp :lsp-server (or lsp-server "-") :installed (if installed t nil))))
@@ -676,7 +674,7 @@ Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-
            (running-count (cl-count-if (lambda (row) (string= (nth 5 row) "yes")) reversed-rows))
            (row-count (length reversed-rows))
            (total-spec
-            (core-logging-total-with-count-label
+            (logging-total-with-count-label
              "Total" row-count "-" "-" "-" "-" (number-to-string running-count))))
       (core-logging-format-table headers reversed-rows total-spec))
     (list "No LSP backends registered"))))
@@ -738,7 +736,7 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
             (apply '+ (mapcar (lambda (row) (string-to-number (nth 7 row))) reversed-rows)))
            (row-count (length reversed-rows))
            (total-spec
-            (core-logging-total-with-count-label
+            (logging-total-with-count-label
              "Total" row-count "-" "-" "-" "-" "-" "-" (number-to-string total-buffers))))
       (core-logging-format-table headers reversed-rows total-spec))
     (list empty-message))))

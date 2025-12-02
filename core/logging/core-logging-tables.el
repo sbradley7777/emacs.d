@@ -12,7 +12,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-logging-calculate-column-widths (headers rows &optional min-widths)
+ logging-calculate-column-widths (headers rows &optional min-widths)
  "Calculate dynamic column widths for HEADERS and ROWS.
 HEADERS is a list of column header strings.
 ROWS is a list of row data, where each row is a list of column values.
@@ -25,7 +25,7 @@ Each width is the maximum of:
   3. Minimum width (if specified)
 
 Example:
-  (core-logging-calculate-column-widths
+  (logging-calculate-column-widths
    \\='(\"Name\" \"Age\" \"City\")
    \\='((\"Alice\" \"25\" \"NYC\")
      (\"Bob\" \"30\" \"SF\"))
@@ -72,7 +72,7 @@ Example:
 ;; Total Row Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-logging-total-with-count-label (label count-value &rest other-columns)
+ logging-total-with-count-label (label count-value &rest other-columns)
  "Return total-spec that formats LABEL with COUNT-VALUE in first column.
 LABEL is the text prefix (e.g., \"Total\").
 COUNT-VALUE is the numeric count to display after label.
@@ -85,12 +85,12 @@ The function calculates column widths to determine proper padding between
 LABEL and COUNT-VALUE, ensuring the combined text fits the first column width.
 
 Example:
-  (core-logging-total-with-count-label \"Total\" 5 \"-\" \"100\")
+  (logging-total-with-count-label \"Total\" 5 \"-\" \"100\")
   Returns lambda that produces: [\"Total     5\" \"-\" \"100\"]
   (with padding adjusted to match first column width)"
  (lambda
   (headers rows)
-  (let* ((col-widths (core-logging-calculate-column-widths headers rows))
+  (let* ((col-widths (logging-calculate-column-widths headers rows))
          (width (nth 0 col-widths))
          (count-str (number-to-string count-value))
          (padding (- width (length label) (length count-str)))
@@ -368,7 +368,7 @@ TOTAL-SPEC is an optional parameter controlling total row behavior:
   - (function): Custom function (lambda (headers rows) ...) that returns total row data
 
 Returns a list of formatted strings with box-drawing characters.
-Uses `core-logging-calculate-column-widths' for dynamic column sizing.
+Uses `logging-calculate-column-widths' for dynamic column sizing.
 Automatically right-aligns numeric columns (both headers and data).
 
 Examples:
@@ -411,7 +411,7 @@ Examples:
    (lambda (headers rows)
      (list \"Custom\" (number-to-string (length rows)) \"Total\")))
   => Last row: │ Custom │ 2 │ Total │"
- (let* ((col-widths (core-logging-calculate-column-widths headers rows))
+ (let* ((col-widths (logging-calculate-column-widths headers rows))
         (alignments (logging--detect-column-alignments headers rows))
         (lines nil))
    ;; Top border: ┌───┬───┬───┐

@@ -83,8 +83,8 @@ Does not run when editing remote files via TRAMP."
                   (token (core-user-read-password (format "Token for %s: " api-host))))
              (if
               (and
-               (core-utils-validate-non-empty-string username "Username")
-               (core-utils-validate-non-empty-string token "Token"))
+               (core-validate-non-empty-string username "Username")
+               (core-validate-non-empty-string token "Token"))
               (progn
                (push (forge--authinfo-format-entry api-host username token) new-entries)
                (setq processed-count (1+ processed-count))

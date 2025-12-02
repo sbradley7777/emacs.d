@@ -26,7 +26,7 @@
  "Execute BODY with `package-archives' temporarily set to only available repositories.
 Tests repository connectivity and filters out unresponsive ones."
  `(let ((original-archives package-archives)
-        (available-repos (pkg-system-repositories-get-available)))
+        (available-repos (pkg-system-get-available)))
     (unwind-protect
      (progn (setq package-archives available-repos) ,@body)
      (setq package-archives original-archives))))

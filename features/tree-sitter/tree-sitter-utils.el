@@ -21,7 +21,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- treesit-utils-get-installed-grammars ()
+ tree-sitter-get-installed-grammars ()
  "Get list of installed tree-sitter grammars with details.
 Returns a list of plists with :name and :file keys."
  (if
@@ -31,7 +31,7 @@ Returns a list of plists with :name and :file keys."
         (transform-fn (lambda (file lang-name _ext) (list :name lang-name :file file))))
     ;; Scan the primary grammar directory
     (when-let ((results
-                (core-utils-scan-directory-for-pattern
+                (core-scan-directory-for-pattern
                  features-treesit-grammars-dir pattern transform-fn)))
       (setq grammars (append grammars results)))
     ;; Also check treesit-extra-load-path if it's set
@@ -41,15 +41,15 @@ Returns a list of plists with :name and :file keys."
       (dir treesit-extra-load-path)
       (when
        (and dir (file-directory-p dir) (not (string= dir features-treesit-grammars-dir)))
-       (when-let ((results (core-utils-scan-directory-for-pattern dir pattern transform-fn)))
+       (when-let ((results (core-scan-directory-for-pattern dir pattern transform-fn)))
          (setq grammars (append grammars results))))))
     grammars)))
 
 (defun
- treesit-utils-count-installed-grammars ()
+ tree-sitter-count-installed-grammars ()
  "Count the number of installed tree-sitter grammars.
 Returns the count of .so/.dylib grammar files found in the tree-sitter grammar directory."
- (length (treesit-utils-get-installed-grammars)))
+ (length (tree-sitter-get-installed-grammars)))
 
 (defun
  treesit-utils-get-mode-mapping (lang)
@@ -73,7 +73,7 @@ Returns t if the mode is a tree-sitter mode (ends with -ts-mode), nil otherwise.
  (when mode-symbol (string-match-p "-ts-mode$" (symbol-name mode-symbol))))
 
 (defun
- treesit-utils-extract-lang-from-mode (mode-symbol)
+ tree-sitter-extract-lang-from-mode (mode-symbol)
  "Extract language name from tree-sitter MODE-SYMBOL.
 MODE-SYMBOL should be a tree-sitter mode symbol like 'python-ts-mode.
 Returns the language name as a string (e.g., 'python' from 'python-ts-mode'),
@@ -98,7 +98,7 @@ Returns nil if LANG is nil."
          (parent-mode (get major-mode 'derived-mode-parent))
          (parent-mode-name (if parent-mode (symbol-name parent-mode) "none"))
          (is-ts-mode (treesit-utils-is-ts-mode-p major-mode))
-         (lang (treesit-utils-extract-lang-from-mode major-mode))
+         (lang (tree-sitter-extract-lang-from-mode major-mode))
          (grammar-available (when lang (treesit-language-available-p (intern lang))))
          (grammar-file
           (if (and lang grammar-available) (treesit--utils-get-grammar-filename lang) "none")))

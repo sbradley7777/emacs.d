@@ -54,7 +54,7 @@ Assembled from all category lists in load order.")
 ;; Package Installation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Install packages using robust installation function with retry from core-packages-utils
-(unless noninteractive (pkg-system-installation-install-with-retry pkg-system-packages-all))
+(unless noninteractive (pkg-system-install-with-retry pkg-system-packages-all))
 
 ;; Log batch mode skip
 (when
@@ -101,6 +101,6 @@ Assembled from all category lists in load order.")
 ;; Automatic Weekly Update Check
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Run automatic weekly update check from core-packages-utils
-(pkg-system-maintenance-check-weekly-updates)
+(pkg-system-check-weekly-updates)
 (provide 'core-packages)
 ;;; core-packages.el ends here

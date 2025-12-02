@@ -47,15 +47,13 @@
     (core-message-info "Using existing package installations (fast startup mode)"))
 
    ;; Network available - refresh and cache for future
-   ((and (not package-archive-contents) (pkg-system-repositories-responsive-p))
+   ((and (not package-archive-contents) (pkg-system-responsive-p))
     (core-message-info "At least one repository available, proceeding with package refresh...")
     (pkg-system-refresh-with-timeout)
     (when package-archive-contents (pkg-system-cache-save-state)))
 
    ;; Network down, stale cache available - inform user
-   ((and
-     (not package-archive-contents)
-     (> (plist-get (pkg-system-metadata-read-cache-info) :timestamp) 0))
+   ((and (not package-archive-contents) (> (plist-get (pkg-system-read-cache-info) :timestamp) 0))
     (core-message-warning "Network unavailable, using offline mode...")
     (pkg-system-cache-load-cached-state)
     (core-message-info "Consider refreshing when network returns"))
@@ -74,7 +72,7 @@ Clears repository health cache and re-tests all repositories."
  (core-message-loading "Forcing package refresh...")
  (pkg-system-repositories-clear-cache)
  (if
-  (pkg-system-repositories-responsive-p)
+  (pkg-system-responsive-p)
   (progn
    (pkg-system-refresh-with-timeout)
    (pkg-system-cache-save-state)

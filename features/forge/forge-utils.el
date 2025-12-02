@@ -44,7 +44,7 @@ Returns nil if no auth sources are configured."
    (nreverse entries)))
 
 (defun
- forge-utils-check-authinfo-for-host (host)
+ forge-check-authinfo-for-host (host)
  "Check authentication status for HOST in authentication sources.
 HOST should be the API host (e.g., \\='api.github.com\\=', \\='gitlab.com\\=').
 Returns one of:
@@ -82,7 +82,7 @@ and whether they have credentials configured in ~/.authinfo."
              (forge-type (plist-get config :type))
              (api-host (plist-get config :apihost))
              (user (plist-get config :user))
-             (auth-status (forge-utils-check-authinfo-for-host api-host))
+             (auth-status (forge-check-authinfo-for-host api-host))
              (auth-status-str
               (cond
                ((eq auth-status :authenticated)

@@ -18,7 +18,7 @@
 Returns the project root path, or nil if not in a Python project.
 Uses markers from `python-pyvenv-project-markers' to identify project root.
 DIRECTORY defaults to `default-directory' if not provided."
- (core-utils-find-dominating-directory-by-markers python-pyvenv-project-markers directory))
+ (core-find-dominating-directory-by-markers python-pyvenv-project-markers directory))
 
 (defun
  python-utils-extract-project-name (project-root)

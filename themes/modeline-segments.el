@@ -27,7 +27,7 @@
   (when
    (and (treesit-available-p) (bound-and-true-p major-mode))
    (let* ((is-ts-mode (treesit-utils-is-ts-mode-p major-mode))
-          (lang (treesit-utils-extract-lang-from-mode major-mode))
+          (lang (tree-sitter-extract-lang-from-mode major-mode))
           (lang-cap (if is-ts-mode (capitalize lang) "inactive"))
           (icon-face (if is-ts-mode 'doom-modeline-info 'doom-modeline-buffer-minor-mode))
           (icon

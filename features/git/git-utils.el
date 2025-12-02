@@ -29,7 +29,7 @@ Returns the repository root path, or nil if not in a git repository."
    (expand-file-name root)))
 
 (defun
- git-utils-format-repository-display (repo-root)
+ git-format-repository-display (repo-root)
  "Format REPO-ROOT for display as \\='name (abbreviated-path)\\='.
 Extracts repository name from directory path.
 Example: \\='glocktopography (~/gitlab/glocktopography/)\\='."

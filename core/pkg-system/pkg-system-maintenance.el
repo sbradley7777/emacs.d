@@ -25,7 +25,7 @@ that have newer versions available.  Requires network connectivity.
 Shows summary of upgraded packages or reports if no upgrades are available."
  (interactive) (core-message-debug "Checking for package upgrades...")
  (unless
-  (pkg-system-repositories-responsive-p)
+  (pkg-system-responsive-p)
   (core-message-error "Network unavailable - cannot check for package upgrades"))
  (pkg-system-refresh-with-timeout)
  (let ((upgradeable-packages '())
@@ -119,7 +119,7 @@ Removes orphaned package dependencies using `package-autoremove' and resets meta
     (if (> cleanup-count 1) "s" ""))))
 
 (defun
- pkg-system-maintenance-check-weekly-updates ()
+ pkg-system-check-weekly-updates ()
  "Check for package update once per week during interactive sessions.
 Automatically check for package update once per week during interactive Emacs sessions.
 This provides awareness of available updates without automatically installing them.
@@ -137,12 +137,11 @@ Benefits:
 - Prevents surprise breakage from automatic updates
 - Weekly frequency avoids slowing down daily startup times
 - Persistent storage prevents duplicate checks across Emacs restarts"
- (let ((last-check-timestamp (pkg-system-metadata-read-refresh-timestamp))
+ (let ((last-check-timestamp (pkg-system-read-refresh-timestamp))
        (days-since-last-check
         (/
          (float-time
-          (time-subtract
-           (current-time) (seconds-to-time (pkg-system-metadata-read-refresh-timestamp))))
+          (time-subtract (current-time) (seconds-to-time (pkg-system-read-refresh-timestamp))))
          (* 24 60 60))))
    (if
     (and
@@ -153,7 +152,7 @@ Benefits:
      ;; Only during interactive sessions, not batch mode
      (not noninteractive)
      ;; Only if network is available
-     (pkg-system-repositories-responsive-p))
+     (pkg-system-responsive-p))
     ;; Perform weekly check
     (progn
      (core-message-package "Checking for package updates (weekly check)...")
@@ -183,12 +182,12 @@ Benefits:
                  (core-message-package
                   "No package updates available - all packages are up to date.")))
               ;; Only update timestamp after EVERYTHING completed successfully
-              (pkg-system-metadata-write-refresh-timestamp (float-time (current-time))))
+              (pkg-system-write-refresh-timestamp (float-time (current-time))))
              (core-message-warning "Package refresh incomplete - will retry next startup"))))
        (error
         (core-message-error "Package refresh failed: %s" (error-message-string err))
         ;; Still mark as checked to prevent repeated attempts
-        (pkg-system-metadata-write-refresh-timestamp (float-time (current-time))))))
+        (pkg-system-write-refresh-timestamp (float-time (current-time))))))
     ;; Skip check and inform user
     (when
      (not noninteractive)
