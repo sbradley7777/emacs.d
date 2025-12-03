@@ -53,12 +53,12 @@
  "Directory for command palette persistent data.")
 (core-define-path
  user--command-palette-history-file
- "user--command-palette-history.el"
+ "history.el"
  command-palette-data-dir
  "File storing command palette history.")
 (core-define-path
  user-command-palette-favorites-file
- "user-command-palette-favorites.el"
+ "favorites.el"
  command-palette-data-dir
  "File storing command palette favorites.")
 (defconst
