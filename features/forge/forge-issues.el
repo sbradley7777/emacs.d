@@ -5,16 +5,10 @@
 
 ;;; Code:
 (require 'logging-init)
-(require 'core-ui-utils)
+(require 'core-side-window-utils)
 (require 'core-utils)
-(require 'features-constants)
 (require 'forge-constants)
 (require 'git-utils)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Variables
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar forge-issues--current-width 'compact "Current width state of forge issues window.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -75,32 +69,26 @@ Returns the window displaying a forge topic buffer, or nil if not found."
 When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% and 50%.
 Optional REPO argument specifies which repository to list issues for."
  (interactive) (forge--issues-kill-orphaned-buffers)
- (let ((existing-window (forge--issues-find-window)))
-   (if
-    existing-window
-    (if
-     (eq forge-issues--current-width 'compact)
-     (progn
-      (core-resize-window-to-ratio existing-window features-side-window-expanded-width)
-      (setq forge-issues--current-width 'expanded))
-     (core-resize-window-to-ratio existing-window features-side-window-compact-width)
-     (setq forge-issues--current-width 'compact))
-    (condition-case err
-        (progn
-         (unless
-          (require 'forge-topics nil t)
-          (error "Forge package not available.  Install it with: M-x package-install RET forge"))
-         (unless (git-utils-find-repository-root) (user-error "Not in a git repository"))
-         (let ((repository (or repo (forge-get-repository :tracked))))
-           (unless
-            repository
-            (error "No forge repository found.  Ensure this repository is tracked by forge"))
-           (forge-topics-setup-buffer repository nil :type 'issue)
-           (setq forge-issues--current-width 'compact)))
-      (user-error
-       (forge--issues-handle-error err 'user-error))
-      (error
-       (forge--issues-handle-error err 'error))))))
+ (core-side-window-toggle
+  "\\*forge-topics"
+  (lambda
+   ()
+   (condition-case err
+       (progn
+        (unless
+         (require 'forge-topics nil t)
+         (error "Forge package not available.  Install it with: M-x package-install RET forge"))
+        (unless (git-utils-find-repository-root) (user-error "Not in a git repository"))
+        (let ((repository (or repo (forge-get-repository :tracked))))
+          (unless
+           repository
+           (error "No forge repository found.  Ensure this repository is tracked by forge"))
+          (forge-topics-setup-buffer repository nil :type 'issue)))
+     (user-error
+      (forge--issues-handle-error err 'user-error))
+     (error
+      (forge--issues-handle-error err 'error))))
+  (lambda (pattern) (forge--issues-find-window))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration

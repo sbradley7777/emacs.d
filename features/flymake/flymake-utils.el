@@ -6,18 +6,14 @@
 (require 'core-constants)
 (require 'logging-init)
 (require 'logging-tables)
-(require 'core-ui-utils)
+(require 'core-side-window-utils)
 (require 'core-utils)
 (require 'eglot-registry)
-(require 'features-constants)
 (require 'flymake-registry)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar
- flymake-diagnostics--current-width 'compact "Current width state of flymake diagnostics window.")
-
 (defvar
  flymake-diagnostics--last-column-widths
  nil
@@ -231,29 +227,18 @@ When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% a
 Automatically focuses the diagnostics window when opened or resized.
 Displays syntax errors, warnings, and notes from all active Flymake backends."
  (interactive)
- (let ((existing-window (flymake--diagnostics-find-window)))
+ (core-side-window-toggle
+  "\\*Flymake diagnostics"
+  (lambda
+   ()
+   (when
+    (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
+   (require 'flymake nil t)
    (if
-    existing-window
-    (progn
-     (if
-      (eq flymake-diagnostics--current-width 'compact)
-      (progn
-       (core-resize-window-to-ratio
-        existing-window features-side-window-expanded-width)
-       (setq flymake-diagnostics--current-width 'expanded))
-      (core-resize-window-to-ratio existing-window features-side-window-compact-width)
-      (setq flymake-diagnostics--current-width 'compact))
-     (select-window existing-window))
-    (progn
-     (when (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
-     (require 'flymake nil t)
-     (if
-      (fboundp 'flymake-show-buffer-diagnostics)
-      (progn
-       (flymake-show-buffer-diagnostics) (setq flymake-diagnostics--current-width 'compact)
-       (let ((diag-window (flymake--diagnostics-find-window)))
-         (when diag-window (select-window diag-window))))
-      (logging-warning "Flymake is not available"))))))
+    (fboundp 'flymake-show-buffer-diagnostics)
+    (flymake-show-buffer-diagnostics)
+    (logging-warning "Flymake is not available")))
+  (lambda (pattern) (flymake--diagnostics-find-window))))
 
 (defun
  flymake-friendly-backend-name (backend-name)

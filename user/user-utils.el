@@ -5,7 +5,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'logging-init)
-(require 'core-ui-utils)
+(require 'core-side-window-utils)
 (require 'core-utils)
 (require 'cl-lib)
 
@@ -212,14 +212,14 @@ This ensures only one of these windows is open at a time."
 
 (defun
  toggle-imenu-list-window ()
- "Toggle Imenu-list with mutual exclusion from other side windows.
-This wrapper ensures that opening Imenu-list closes other exclusive side windows (F1, F9)."
+ "Toggle Imenu-list window with size cycling between 30% and 50% width.
+When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% and 50%.
+Ensures that opening Imenu-list closes other exclusive side windows (F1, F9)."
  (interactive)
- ;; Find if imenu-list window is currently open
- (let ((imenu-window (core-find-window-by-buffer-name "*Ilist*" t)))
-   ;; If not open, close other exclusive windows first
-   (unless imenu-window (user-close-exclusive-side-windows))
-   ;; Call the original toggle function
-   (when (fboundp 'imenu-list-smart-toggle) (imenu-list-smart-toggle))))
+ (core-side-window-toggle
+  "*Ilist*"
+  (lambda
+   () (user-close-exclusive-side-windows)
+   (when (fboundp 'imenu-list-smart-toggle) (imenu-list-smart-toggle)))))
 (provide 'user-utils)
 ;;; user-utils.el ends here
