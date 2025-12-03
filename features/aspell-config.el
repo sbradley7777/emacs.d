@@ -124,7 +124,7 @@ Only runs if flymake-aspell is loaded and backend is missing."
   (add-hook 'flymake-diagnostic-functions 'flymake-aspell--check nil t) (flymake-start)))
 
 (defun
- toggle-flymake-aspell ()
+ aspell-toggle-backend ()
  "Toggle flymake-aspell backend on/off in current buffer.
 Checks current state and enables if disabled, disables if enabled."
  (interactive)
@@ -171,7 +171,7 @@ Checks current state and enables if disabled, disables if enabled."
  (use-package flymake-aspell :demand t)
  (logging-success "Spell checking configured with flymake-aspell (disabled by default)"))
 
-(global-set-key (kbd "C-c f a") 'toggle-flymake-aspell)
+(global-set-key (kbd "C-c f a") 'aspell-toggle-backend)
 (global-set-key (kbd "C-c f A") 'aspell--config-disable-flymake)
 (provide 'aspell-config)
 ;;; aspell-config.el ends here

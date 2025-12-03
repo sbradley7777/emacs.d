@@ -79,7 +79,7 @@
    ("Show Package Upgrades" . pkg-system-ui-show-upgrades)
    ("Refresh Package Archive Lists" . pkg-system-operations-refresh-archives)
    ("Toggle List Themes" . toggle-list-themes-window)
-   ("Toggle Flymake Aspell" . toggle-flymake-aspell)
+   ("Toggle Aspell Backend" . aspell-toggle-backend)
    ("Pyvenv Activate" . pyvenv-activate)
    ("Pyvenv Deactivate" . pyvenv-deactivate)
    ("Pyvenv Workon" . pyvenv-workon)

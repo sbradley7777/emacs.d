@@ -99,7 +99,7 @@
 ;; ============================================
 ;; Flymake-aspell is disabled by default.
 ;; - Toggle on/off in current buffer:
-;;   C-c f a (or M-x toggle-flymake-aspell)
+;;   C-c f a (or M-x aspell-toggle-backend)
 ;; - To enable it automatically for text files (.txt, .md, etc.):
 ;;   (add-hook 'text-mode-hook 'enable-flymake-aspell)
 ;; - To enable it automatically for programming files (.py, .el, etc. - comments/strings only):
