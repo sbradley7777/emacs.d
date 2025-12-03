@@ -9,7 +9,7 @@
 ;; - Ensure links are properly styled (colors set in theme)
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'forge-markdown)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

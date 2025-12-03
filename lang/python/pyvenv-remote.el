@@ -5,7 +5,7 @@
 
 ;;; Code:
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'pyvenv-config)
 (require 'pyvenv-utils)
 (require 'python-utils)

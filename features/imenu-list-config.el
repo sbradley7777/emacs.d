@@ -3,7 +3,7 @@
 ;;      Configuration for imenu-list package providing sidebar symbol navigation
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'features-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

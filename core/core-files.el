@@ -4,7 +4,7 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar project-list-file) ; From project.el

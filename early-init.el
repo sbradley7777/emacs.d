@@ -13,8 +13,8 @@
 (add-to-list 'load-path (expand-file-name "core/pkg-system" user-emacs-directory))
 ;; Load constants first (includes core-emacs-local-dir and startup constants)
 (require 'core-constants)
-;; Load message utilities for consistent logging
-(require 'core-logging)
+;; Load message utilities for consistent logging (only messages, not full logging system)
+(require 'logging-messages)
 (logging-loading "Loading early-init.el...")
 
 ;; Declare external variables to suppress byte-compiler warnings

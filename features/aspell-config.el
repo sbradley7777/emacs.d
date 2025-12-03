@@ -43,7 +43,7 @@
 
 ;;; Code:
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'core-process-utils)
 
 ;; Declare external variables to suppress byte-compiler warnings

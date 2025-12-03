@@ -4,7 +4,7 @@
 ;;      Provides commands for listing, viewing, and managing issues.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'core-ui-utils)
 (require 'core-utils)
 (require 'features-constants)

@@ -9,7 +9,7 @@
 ;; - Strict validation mode options
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'registry-init)
 (require 'registry-query)
 (require 'registry-validation)

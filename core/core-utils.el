@@ -3,7 +3,7 @@
 ;; Utility functions and macros for configuration loading and management.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-messages) ; Only need message functions
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Macros

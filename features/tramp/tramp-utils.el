@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'core-utils)
 (require 'tramp)
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare correct signature for executable-find (Emacs 27.1+)
 (declare-function executable-find "files" (command &optional remote))

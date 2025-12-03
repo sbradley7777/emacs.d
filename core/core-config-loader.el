@@ -4,7 +4,7 @@
 ;;      Provides the :description keyword that integrates with init.el diagnostics.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-messages) ; Only need message functions
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar use-package-keywords) ; From use-package-core.el

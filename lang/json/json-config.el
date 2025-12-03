@@ -6,7 +6,7 @@
 
 ;;; Code:
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'lang-utils)
 (require 'flymake-lang-setup)
 

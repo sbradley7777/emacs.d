@@ -12,7 +12,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'core-user-interaction-utils)
 (require 'pkg-system-ui)
 (require 'pkg-system-maintenance)

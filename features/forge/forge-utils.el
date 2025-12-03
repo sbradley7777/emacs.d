@@ -13,7 +13,7 @@
 ;;   - Secret Service API (Linux)
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'logging-tables)
 (require 'core-utils)
 (require 'forge-constants)

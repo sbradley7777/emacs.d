@@ -13,7 +13,7 @@
 ;; attempting to modify local ~/.authinfo from remote context.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'core-user-interaction-utils)
 (require 'core-utils)
 (require 'forge-constants)

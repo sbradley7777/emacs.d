@@ -5,7 +5,7 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-logging)
+(require 'logging-init)
 (require 'core-user-interaction-utils)
 (require 'pkg-system-operations)
 (require 'pkg-system-repositories)

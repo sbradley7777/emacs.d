@@ -7,7 +7,7 @@
 (require 'core-utils)
 (require 'python-constants)
 (require 'pyvenv-utils)
-(require 'core-logging)
+(require 'logging-init)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions

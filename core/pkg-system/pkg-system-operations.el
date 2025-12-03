@@ -5,7 +5,7 @@
 ;;      Orchestrates repository management and network utilities for complex operations.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'pkg-system-cache)
 (require 'pkg-system-metadata)
 (require 'pkg-system-network-utils)

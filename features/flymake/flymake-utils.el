@@ -4,7 +4,7 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-logging)
+(require 'logging-init)
 (require 'logging-tables)
 (require 'core-ui-utils)
 (require 'core-utils)

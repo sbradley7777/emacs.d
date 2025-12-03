@@ -17,7 +17,7 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare external functions to suppress byte-compiler warnings
 (declare-function package-installed-p "package" (package &optional min-version))

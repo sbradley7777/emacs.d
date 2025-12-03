@@ -4,7 +4,7 @@
 ;;      consistent error handling and logging.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'subr-x)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions

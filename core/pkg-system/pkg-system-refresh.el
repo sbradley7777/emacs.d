@@ -4,7 +4,7 @@
 ;;      Provides safe refresh operations that only contact responsive repositories.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'pkg-system-network-utils)
 (require 'pkg-system-repositories)
 (require 'pkg-system-cache)

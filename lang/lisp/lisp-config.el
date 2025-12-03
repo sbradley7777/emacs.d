@@ -4,7 +4,7 @@
 
 ;;; Code:
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Automatic formatting with elisp-autofmt

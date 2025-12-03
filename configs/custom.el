@@ -31,7 +31,7 @@
  ;; If there is more than one, they won't work right.
  )
 ;; Display a message to confirm loading
-(require 'core-logging)
+(require 'logging-init)
 (logging-success "custom.el loaded - menu customizations are working!")
 (provide 'custom)
 ;;; custom.el ends here

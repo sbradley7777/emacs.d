@@ -4,7 +4,7 @@
 ;;      Provides enhanced visual focus for terminal and GUI Emacs.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar dimmer-fraction) ; From dimmer.el

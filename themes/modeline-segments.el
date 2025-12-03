@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'tree-sitter-utils)
 (require 'tramp-utils)
 

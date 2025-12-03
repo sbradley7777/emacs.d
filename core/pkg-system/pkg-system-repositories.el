@@ -6,7 +6,7 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-logging)
+(require 'logging-init)
 (require 'pkg-system-cache)
 (require 'pkg-system-metadata)
 (require 'pkg-system-network-utils)

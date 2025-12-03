@@ -10,7 +10,7 @@
 ;; - Face property normalization to prevent rendering errors
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'forge-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -4,7 +4,7 @@
 ;;      Provides column-based indentation visualization for better code structure understanding.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'features-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

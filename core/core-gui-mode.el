@@ -3,7 +3,7 @@
 ;;      GUI mode settings, UI elements control, and window management setup.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar ns-use-native-fullscreen) ; From ns-win.el (macOS)

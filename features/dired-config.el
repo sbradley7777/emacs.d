@@ -18,7 +18,7 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar dired-dwim-target) ; From dired.el

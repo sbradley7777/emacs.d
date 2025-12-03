@@ -16,7 +16,7 @@
 (declare-function consult--buffer-state "consult" ())
 (declare-function consult--buffer-query "consult" (&rest args))
 (declare-function consult--buffer-file-hash "consult" ())
-(declare-function logging-config "core-logging" (format-string &rest args))
+(declare-function logging-config "logging" (format-string &rest args))
 (declare-function vc-git-root "vc-git" (file))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

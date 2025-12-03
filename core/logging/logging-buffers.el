@@ -18,7 +18,7 @@
 
 ;;; Code:
 (require 'core-constants)
-(require 'core-logging)
+(require 'logging-messages)
 (require 'logging-utils)
 (require 'subr-x)
 

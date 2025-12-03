@@ -1,4 +1,4 @@
-;;; core-logging.el --- Message Utility Functions -*- lexical-binding: t -*-
+;;; logging-messages.el --- Message Utility Functions -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; Lightweight message utility functions with Unicode prefixes.
 ;; This file has no dependencies to avoid circular dependency issues.
@@ -185,5 +185,5 @@ Filters out :debug level warnings to reduce noise."
 
 ;; Add advice to display-warning to duplicate warnings to *Messages* buffer
 (advice-add 'display-warning :around #'logging--duplicate-warnings-to-messages)
-(provide 'core-logging)
-;;; core-logging.el ends here
+(provide 'logging-messages)
+;;; logging-messages.el ends here

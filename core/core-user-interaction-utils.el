@@ -4,7 +4,7 @@
 ;;      error handling, validation, and logging.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions

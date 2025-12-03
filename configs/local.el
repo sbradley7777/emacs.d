@@ -22,7 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar eglot-events-buffer-size) ; From eglot.el

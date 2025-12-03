@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar nerd-icons-extension-icon-alist) ; From nerd-icons.el

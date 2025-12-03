@@ -5,7 +5,7 @@
 
 ;;; Code:
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'core-constants)
 (require 'lang-utils)
 (require 'flymake-lang-setup)

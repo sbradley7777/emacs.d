@@ -5,7 +5,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'lang-utils)
 (require 'make-mode)
 (require 'highlight-indent-guides)

@@ -14,7 +14,7 @@
 ;; - Deduplicates and formats as a clean list at the bottom of each post
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Declare external functions to suppress byte-compiler warnings
 (declare-function forge--fontify-markdown "forge-post" (text))

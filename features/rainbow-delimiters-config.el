@@ -4,7 +4,7 @@
 ;;      Provides color-coded parentheses, brackets, and braces for better code navigation.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'features-constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

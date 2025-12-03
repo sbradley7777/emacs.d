@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'treemacs-utils)
 
 ;; Declare external functions to suppress byte-compiler warnings

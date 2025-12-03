@@ -12,7 +12,7 @@
 
 ;;; Code:
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'doom-themes)
 (require 'themes-doom-1337-constants)
 

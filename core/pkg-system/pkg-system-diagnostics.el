@@ -4,7 +4,7 @@
 ;;      Provides comprehensive status reports for repositories and package status.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'logging-tables)
 (require 'pkg-system-repositories)
 (require 'pkg-system-metadata)

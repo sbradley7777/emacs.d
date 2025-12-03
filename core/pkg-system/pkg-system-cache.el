@@ -4,7 +4,7 @@
 ;;      Provides intelligent cache management with freshness validation.
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'package)
 (require 'pkg-system-metadata)
 

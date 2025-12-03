@@ -4,7 +4,7 @@
 ;;      Provides detailed system context and startup logging for debugging
 
 ;;; Code:
-(require 'core-logging)
+(require 'logging-init)
 (require 'logging-tables)
 (require 'core-constants)
 (require 'tree-sitter-utils)

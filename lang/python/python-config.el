@@ -7,7 +7,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'python-constants)
 (require 'python)
 (require 'lang-utils)
