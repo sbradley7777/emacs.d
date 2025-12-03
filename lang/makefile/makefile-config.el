@@ -36,8 +36,9 @@
      (re-search-forward "^\\([[:space:]]+\\)" nil t)
      (let ((indent (match-string 1)))
        (if
-        (string-match-p "\t" indent) (core-utils-increment-counter tab-recipe-count)
-        (when (string-match-p "^ +" indent) (core-utils-increment-counter space-recipe-count)))))
+        (string-match-p "\t" indent)
+        (core-increment-counter tab-recipe-count)
+        (when (string-match-p "^ +" indent) (core-increment-counter space-recipe-count)))))
 
     (cond
      ((> space-recipe-count 0)

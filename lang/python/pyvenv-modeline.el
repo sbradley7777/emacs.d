@@ -42,7 +42,7 @@
  pyvenv--modeline-indicator () "Return modeline indicator for Python venv with click handler."
  (when
   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env (pyvenv--modeline-file-in-project-p))
-  (let* ((venv-name (core-utils-extract-directory-name pyvenv-virtual-env))
+  (let* ((venv-name (core-extract-directory-name pyvenv-virtual-env))
          (indicator (format " 🐍 %s " venv-name)))
     (propertize
      indicator

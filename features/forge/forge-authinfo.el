@@ -41,7 +41,7 @@ Only prompts for hosts that are properly configured in ~/.gitconfig.
 Does not run when editing remote files via TRAMP."
  (interactive)
  (if
-  (or (core-utils-is-remote-file buffer-file-name) (core-utils-is-remote-file))
+  (or (core-is-remote-file buffer-file-name) (core-is-remote-file))
   (core-message-warning "forge-authinfo-generate-entries disabled for remote files")
   (let* ((hosts (git-forge-config-parse-hosts))
          (existing-machines
@@ -103,7 +103,7 @@ Does not run when editing remote files via TRAMP."
                (dolist (entry (reverse new-entries)) (insert entry "\n"))
                (write-region (point-min) (point-max) authinfo-file nil 'quiet))
               (when
-               (core-utils-set-file-permissions authinfo-file #o600 "~/.authinfo")
+               (core-set-file-permissions authinfo-file #o600 "~/.authinfo")
                (core-message-success
                 "Added %d entr%s to ~/.authinfo"
                 processed-count

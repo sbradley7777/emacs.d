@@ -11,22 +11,22 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; File Location Constants
-(core-utils-defconst-path
+(core-define-path
  features-treesit-grammars-dir
  "tree-sitter/"
  core-emacs-local-dir
  "Directory for tree-sitter grammar libraries.")
-(core-utils-defconst-path
+(core-define-path
  features-tramp-cache-file
  "tramp"
  core-emacs-local-dir
  "File for TRAMP connection cache and persistence data.")
-(core-utils-defconst-path
+(core-define-path
  features-tramp-autosave-dir
  "tramp-autosave"
  core-emacs-local-dir
  "Directory for TRAMP remote file autosaves.")
-(core-utils-defconst-path
+(core-define-path
  features-treemacs-persist-file
  "treemacs-persist"
  core-emacs-local-dir

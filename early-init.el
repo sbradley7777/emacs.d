@@ -155,7 +155,7 @@
         core-files-backup-dir
         core-files-auto-save-list-dir
         core-packages-dir)))
-  (dolist (dir dirs-to-create) (core-utils-ensure-directory dir)))
+  (dolist (dir dirs-to-create) (core-ensure-directory dir)))
 (core-message-success "early-init.el loaded successfully - performance optimizations active.")
 (provide 'early-init)
 ;;; early-init.el ends here

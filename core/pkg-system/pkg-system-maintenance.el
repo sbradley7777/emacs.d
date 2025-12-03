@@ -57,7 +57,7 @@ Shows summary of upgraded packages or reports if no upgrades are available."
       (condition-case err
           (progn
            (package-install pkg)
-           (core-utils-increment-counter upgraded-count)
+           (core-increment-counter upgraded-count)
            (core-message-success "Upgraded: %s" pkg))
         (error
          (push pkg failed-packages)

@@ -165,7 +165,7 @@ Checks current state and enables if disabled, disables if enabled."
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when
- (and (core-utils-check-command-in-path "aspell") (aspell--config-has-en-dictionary-p))
+ (and (core-check-command-in-path "aspell") (aspell--config-has-en-dictionary-p))
  (core-message-config "Configuring spell checking with flymake-aspell")
  (setq ispell-program-name "aspell")
  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))

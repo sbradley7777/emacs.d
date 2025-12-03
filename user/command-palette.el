@@ -46,17 +46,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(core-utils-defconst-path
+(core-define-path
  command-palette-data-dir
  "command_palette/"
  core-emacs-local-dir
  "Directory for command palette persistent data.")
-(core-utils-defconst-path
+(core-define-path
  user--command-palette-history-file
  "user--command-palette-history.el"
  command-palette-data-dir
  "File storing command palette history.")
-(core-utils-defconst-path
+(core-define-path
  user-command-palette-favorites-file
  "user-command-palette-favorites.el"
  command-palette-data-dir
@@ -121,7 +121,7 @@
  command--palette-ensure-data-directory
  ()
  "Ensure the command palette data directory exists, creating it if necessary."
- (core-utils-ensure-directory command-palette-data-dir))
+ (core-ensure-directory command-palette-data-dir))
 
 (defun
  command--palette-save-history

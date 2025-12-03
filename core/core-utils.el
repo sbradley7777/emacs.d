@@ -9,7 +9,7 @@
 ;; Macros
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmacro
- core-utils-defconst-path (name subpath base-dir docstring)
+ core-define-path (name subpath base-dir docstring)
  "Define a path constant NAME by combining SUBPATH with BASE-DIR.
 NAME is the symbol name for the constant.
 SUBPATH is the subdirectory or file path relative to BASE-DIR.
@@ -17,13 +17,13 @@ BASE-DIR is the base directory (e.g., core-emacs-local-dir, `user-emacs-director
 DOCSTRING is the documentation string for the constant.
 
 Example:
-  (core-utils-defconst-path
+  (core-define-path
    my-config-dir \"config/\" core-emacs-local-dir
    \"Directory for configuration files.\")"
  (declare (indent 1)) `(defconst ,name (expand-file-name ,subpath ,base-dir) ,docstring))
 
 (defmacro
- core-utils-increment-counter
+ core-increment-counter
  (counter-var)
  "Increment COUNTER-VAR and return new value."
  `(setq ,counter-var (1+ ,counter-var)))
@@ -32,7 +32,7 @@ Example:
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-utils-is-remote-file (&optional file)
+ core-is-remote-file (&optional file)
  "Check if FILE (or `default-directory') is accessed via TRAMP.
 FILE defaults to `default-directory' if not specified.
 Returns non-nil if the file/directory is remote, nil otherwise."
@@ -54,7 +54,7 @@ DESCRIPTION is optional name for error messages (defaults to \\='Value\\=')."
    t)))
 
 (defun
- core-utils-validate-hostname (hostname)
+ core-validate-hostname (hostname)
  "Validate that HOSTNAME is a valid hostname format.
 Returns t if valid format, nil otherwise.  Does not validate DNS resolution.
 Checks RFC-compliant hostname syntax: alphanumeric start/end, hyphens and dots allowed in middle, no consecutive
@@ -66,13 +66,13 @@ dots."
   (not (string-match-p "\\.\\." hostname))))
 
 (defun
- core-utils-check-command-in-path (command)
+ core-check-command-in-path (command)
  "Check if COMMAND exists in PATH and log message if not found.
 Returns t if command is found, nil otherwise.
 
 Properly detects local vs remote (TRAMP) paths based on `default-directory'.
 When `default-directory' is remote, searches for COMMAND on the remote host."
- (let* ((is-remote (core-utils-is-remote-file))
+ (let* ((is-remote (core-is-remote-file))
         (host
          (if
           is-remote (or (file-remote-p default-directory 'host) "unknown-remote") (system-name)))
@@ -94,7 +94,7 @@ When `default-directory' is remote, searches for COMMAND on the remote host."
      nil))))
 
 (defun
- core-utils-ensure-directory (dir-path)
+ core-ensure-directory (dir-path)
  "Ensure DIR-PATH exists, creating it if necessary.
 Returns t if directory exists/was created, nil if creation failed."
  (let ((expanded-path (expand-file-name dir-path)))
@@ -114,12 +114,12 @@ Returns t if directory exists/was created, nil if creation failed."
        nil)))))
 
 (defun
- core-utils-extract-directory-name (path)
+ core-extract-directory-name (path)
  "Extract final directory name from PATH.
 Returns the directory name as a string, or nil if PATH is nil.
 
 Example:
-  (core-utils-extract-directory-name \"/home/user/projects/myapp/\")
+  (core-extract-directory-name \"/home/user/projects/myapp/\")
   => \"myapp\""
  (when path (file-name-nondirectory (directory-file-name path))))
 
@@ -168,7 +168,7 @@ Example:
     (nreverse results))))
 
 (defun
- core-utils-set-file-permissions (file mode &optional description)
+ core-set-file-permissions (file mode &optional description)
  "Set FILE to MODE (octal, e.g., #o600).
 MODE should be an octal number representing file permissions.
 DESCRIPTION is optional name for error messages (defaults to FILE).

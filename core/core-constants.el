@@ -20,27 +20,27 @@
  core-elisp-file-pattern "\\.el$" "Regular expression pattern matching Emacs Lisp source files.")
 
 ;; File Management (autosave, backup)
-(core-utils-defconst-path
+(core-define-path
  core-files-autosave-dir "autosaves/" core-emacs-local-dir "Directory for autosave files.")
-(core-utils-defconst-path
+(core-define-path
  core-files-auto-save-list-dir
  "auto-save-list/"
  core-emacs-local-dir
  "Directory for auto-save list files.")
-(core-utils-defconst-path
+(core-define-path
  core-files-backup-dir "backups/" core-emacs-local-dir "Directory for backup files.")
 
 ;; Package System
-(core-utils-defconst-path
+(core-define-path
  core-packages-dir "elpa" core-emacs-local-dir "Directory for installed packages.")
-(core-utils-defconst-path
+(core-define-path
  core-eln-cache-dir "eln-cache" core-emacs-local-dir "Directory for native compilation cache.")
-(core-utils-defconst-path
+(core-define-path
  core-package-metadata-file
  "package-metadata.el"
  core-emacs-local-dir
  "File storing package system persistent metadata and cache.")
-(core-utils-defconst-path
+(core-define-path
  core-elisp-autofmt-cache-dir "elisp-autofmt-cache" core-emacs-local-dir
  "Directory for elisp-autofmt cache files.
 Caching improves formatting performance by avoiding redundant analysis.")
@@ -50,41 +50,41 @@ Caching improves formatting performance by avoiding redundant analysis.")
 The %s placeholder is replaced with variable `emacs-version' to isolate compiled files by Emacs version.")
 
 ;; Project and Version Control
-(core-utils-defconst-path
+(core-define-path
  core-projects-file "projects.el" core-emacs-local-dir "File storing known projects list.")
-(core-utils-defconst-path
+(core-define-path
  core-forge-db-file "forge-database.sqlite" core-emacs-local-dir "SQLite database for forge data.")
 
 ;; Transient and Command History
-(core-utils-defconst-path
+(core-define-path
  core-transient-history-file
  "transient/history.el"
  core-emacs-local-dir
  "File storing transient command history.")
 
 ;; Editor History and State
-(core-utils-defconst-path
+(core-define-path
  core-savehist-file "history" core-emacs-local-dir "File storing minibuffer and command history.")
-(core-utils-defconst-path
+(core-define-path
  core-recentf-file "recentf" core-emacs-local-dir "File storing recently opened files list.")
 
 ;; Logging
-(core-utils-defconst-path core-log-dir "log" core-emacs-local-dir "Directory for log files.")
+(core-define-path core-log-dir "log" core-emacs-local-dir "Directory for log files.")
 (defconst core-log-max-files 5 "Maximum number of rotated log files to keep.")
 (defconst core-messages-log-file "messages.log" "Base name for messages log file.")
 
 ;; User Configuration Files
-(core-utils-defconst-path
+(core-define-path
  core-custom-file
  "custom.el"
  user-emacs-directory
  "File for Emacs custom-set-variables and faces.")
-(core-utils-defconst-path
+(core-define-path
  core-local-config-file
  "local.el"
  user-emacs-directory
  "File for user-specific local configuration.")
-(core-utils-defconst-path
+(core-define-path
  core-dev-config-file
  "dev.el"
  user-emacs-directory

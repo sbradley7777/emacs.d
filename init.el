@@ -72,9 +72,8 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
           (desc (nth 3 result)))
       (if
        (eq status 'success)
-       (progn
-        (core-utils-increment-counter successful) (push (format "✅  %s (%.3fs)" desc time) lines))
-       (core-utils-increment-counter failed)
+       (progn (core-increment-counter successful) (push (format "✅  %s (%.3fs)" desc time) lines))
+       (core-increment-counter failed)
        (push (format "❌  %s (%.3fs) - %s" desc time (nth 4 result)) lines))))
    (push " " lines)
    (push "=== Summary ===" lines)

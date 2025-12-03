@@ -36,8 +36,8 @@ PYTHON-PATH: Optional additional Python path"
 (defun
  tramp-is-remote-file (&optional file)
  "Check if FILE (or current buffer file) is accessed via TRAMP.
-This function is deprecated. Use `core-utils-is-remote-file' instead."
- (core-utils-is-remote-file file))
+This function is deprecated. Use `core-is-remote-file' instead."
+ (core-is-remote-file file))
 
 (defun
  tramp-utils-show-connection-info

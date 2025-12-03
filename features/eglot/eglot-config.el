@@ -42,7 +42,7 @@ Checks local or remote host appropriately based on `default-directory'."
       mode
       location
       hostname)
-     (let ((should-enable (core-utils-check-command-in-path lsp-executable)))
+     (let ((should-enable (core-check-command-in-path lsp-executable)))
        ;; Start eglot directly - no timer needed.
        ;; Eglot handles async connection internally, so it won't block even during git-sync.
        (when should-enable (eglot-ensure)))))))

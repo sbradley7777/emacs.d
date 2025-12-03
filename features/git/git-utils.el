@@ -35,7 +35,7 @@ Extracts repository name from directory path.
 Example: \\='glocktopography (~/gitlab/glocktopography/)\\='."
  (when
   repo-root
-  (let ((name (core-utils-extract-directory-name repo-root)))
+  (let ((name (core-extract-directory-name repo-root)))
     (format "%s (%s)" name (abbreviate-file-name repo-root)))))
 
 (defun
@@ -64,7 +64,7 @@ Logs a warning if git is not found.  Caches result to avoid redundant checks."
   (eq git-utils--git-available-cache 'unchecked)
   ;; First check - perform actual check and cache result
   (progn
-   (setq git-utils--git-available-cache (core-utils-check-command-in-path "git"))
+   (setq git-utils--git-available-cache (core-check-command-in-path "git"))
    git-utils--git-available-cache)
   ;; Already checked - return cached result (no logging)
   git-utils--git-available-cache))

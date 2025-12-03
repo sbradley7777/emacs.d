@@ -46,7 +46,7 @@ Should be called during initialization after package system is configured."
     (cond
      ;; Already installed
      ((package-installed-p package)
-      (core-utils-increment-counter skipped-count)
+      (core-increment-counter skipped-count)
       (core-message-success "Already installed: %s" package))
 
      ;; Install with error handling
@@ -54,7 +54,7 @@ Should be called during initialization after package system is configured."
       (condition-case err
           (progn
            (package-install package)
-           (core-utils-increment-counter installed-count)
+           (core-increment-counter installed-count)
            (core-message-success "Installed: %s" package))
         (error
          (push package failed-packages)
