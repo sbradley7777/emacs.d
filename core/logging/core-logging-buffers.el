@@ -48,8 +48,7 @@
          "*Messages*" core-messages-log-file core-log-dir
          ;; Footer function: add session end timestamp
          (lambda () (insert (format "\n;; Session ended: %s\n" (current-time-string)))))))
-   (when
-    log-file (core-message-success "Messages log saved to %s" (abbreviate-file-name log-file)))))
+   (when log-file (logging-success "Messages log saved to %s" (abbreviate-file-name log-file)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions - Debug Buffer Logging
@@ -108,7 +107,7 @@ Only creates the debug directory if there are buffers to save."
       ;; Report results
       (when
        (> saved-count 0)
-       (core-message-success
+       (logging-success
         "Auto-saved %d debug buffer%s with rotation"
         saved-count
         (if (> saved-count 1) "s" "")))))))

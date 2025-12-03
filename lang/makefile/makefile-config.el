@@ -42,13 +42,13 @@
 
     (cond
      ((> space-recipe-count 0)
-      (core-message-warning
+      (logging-warning
        "Warning: Found %d recipe lines with spaces instead of tabs!" space-recipe-count))
      ((> tab-recipe-count 0)
-      (core-message-success
+      (logging-success
        "Makefile syntax valid: %d recipe lines properly use tabs" tab-recipe-count))
      (t
-      (core-message-info "No recipe lines detected in this Makefile"))))))
+      (logging-info "No recipe lines detected in this Makefile"))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Makefile mode configuration (built-in mode)

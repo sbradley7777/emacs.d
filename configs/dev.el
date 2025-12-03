@@ -26,7 +26,7 @@
 (require 'core-logging)
 (require 'core-constants)
 (require 'subr-x)
-(core-message-debug "Loading development configuration...")
+(logging-debug "Loading development configuration...")
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; DEVELOPMENT CONFIGURATION
@@ -35,6 +35,6 @@
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(core-message-success "Development configuration loaded successfully")
+(logging-success "Development configuration loaded successfully")
 (provide 'dev)
 ;;; dev.el ends here

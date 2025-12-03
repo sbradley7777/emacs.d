@@ -65,14 +65,14 @@
   nil
   completion-category-overrides
   '((file (styles partial-completion))))
- (core-message-config "Orderless fuzzy matching configured"))
+ (logging-config "Orderless fuzzy matching configured"))
 
 (use-package
  vertico
  :init (vertico-mode)
  :config
  (setq vertico-cycle t vertico-count 15)
- (core-message-config "Vertico vertical completion enabled"))
+ (logging-config "Vertico vertical completion enabled"))
 
 (with-eval-after-load
  'vertico
@@ -84,7 +84,7 @@
  ;; Load vertico-mouse for mouse support
  (require 'vertico-mouse)
  (vertico-mouse-mode)
- (core-message-config "Vertico extensions enabled: directory navigation and mouse support"))
+ (logging-config "Vertico extensions enabled: directory navigation and mouse support"))
 
 (with-eval-after-load
  'vertico
@@ -106,7 +106,7 @@
 (use-package
  marginalia
  :init (marginalia-mode)
- :config (core-message-config "Marginalia annotations enabled"))
+ :config (logging-config "Marginalia annotations enabled"))
 
 (use-package
  consult
@@ -126,7 +126,7 @@
    '(consult--source-filtered-buffer
      consult--source-project-buffer consult--source-buffer consult--source-recent-file))
 
-  (core-message-config "Consult buffer sources and preview customization configured"))
+  (logging-config "Consult buffer sources and preview customization configured"))
 
  ;; Load custom consult sources (defines filtering patterns and customizes sources)
  (require 'consult-sources))

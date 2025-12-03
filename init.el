@@ -80,7 +80,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
    (push
     (format "🛠️  Total: %d successful, %d failed (%.3fs total)" successful failed total-time)
     lines)
-   (core-message-diagnostic "Configuration Loading Summary" (nreverse lines))))
+   (logging-diagnostic "Configuration Loading Summary" (nreverse lines))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure early-init.el is loaded (for batch mode compatibility)
@@ -90,7 +90,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 (unless
  (boundp 'core-emacs-local-dir) (load (expand-file-name "early-init.el" user-emacs-directory)))
 ;; Note: logging utilities are now loaded in early-init.el, so we can use them immediately
-(core-message-loading "Loading init.el...")
+(logging-loading "Loading init.el...")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Performance optimizations for faster startup
@@ -108,7 +108,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
   (setq file-name-handler-alist default-file-name-handler-alist)
   ;; Restore normal input processing
   (setq which-func-update-delay core-idle-update-delay-normal) ; Faster idle updates for responsiveness
-  (core-message-success "Emacs startup complete. Performance settings restored.")))
+  (logging-success "Emacs startup complete. Performance settings restored.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load Path Auto-Detection System
@@ -133,13 +133,13 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;; Validate that early-init.el properly set up required variables
 (unless
  (boundp 'default-file-name-handler-alist)
- (core-message-warning
+ (logging-warning
   "default-file-name-handler-alist not set by early-init.el - performance may be suboptimal")
  (setq default-file-name-handler-alist file-name-handler-alist))
 ;; Validate that early-init performance optimizations were applied
 (unless
  (> gc-cons-threshold core-gc-check-threshold)
- (core-message-warning "GC threshold not optimized by early-init.el - startup may be slower"))
+ (logging-warning "GC threshold not optimized by early-init.el - startup may be slower"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Native Compilation Configuration
@@ -338,9 +338,9 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;; Load optional local configuration file for user-specific settings
 (when
  (file-exists-p core-local-config-file)
- (core-message-loading "Loading local.el...")
+ (logging-loading "Loading local.el...")
  (load core-local-config-file 'noerror)
- (core-message-success "local.el loaded successfully"))
+ (logging-success "local.el loaded successfully"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Development configuration (not version controlled)
@@ -348,9 +348,9 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;; Load optional development configuration file for testing new configurations
 (when
  (file-exists-p core-dev-config-file)
- (core-message-debug "Loading dev.el...")
+ (logging-debug "Loading dev.el...")
  (load core-dev-config-file 'noerror)
- (core-message-success "dev.el loaded successfully"))
+ (logging-success "dev.el loaded successfully"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialization complete - show diagnostics
@@ -360,7 +360,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;; Show system diagnostics (after all packages loaded)
 (diagnostics-show-system)
 ;; Show version-aware configuration status
-(core-message-success "Emacs %s configuration loaded successfully" emacs-version)
+(logging-success "Emacs %s configuration loaded successfully" emacs-version)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Memory Management Strategy
@@ -370,6 +370,6 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 ;; - Emacs' built-in GC triggers are sufficient for light buffer usage
 ;; - Manual optimization available via M-x optimize-gc-for-long-session if needed
 ;; - This approach avoids over-optimization complexity for predictable, light workflows
-(core-message-success "init.el loaded successfully.")
+(logging-success "init.el loaded successfully.")
 (provide 'init)
 ;;; init.el ends here

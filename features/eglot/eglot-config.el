@@ -36,7 +36,7 @@ Checks local or remote host appropriately based on `default-directory'."
    (let* ((is-remote (tramp-is-remote-file))
           (hostname (if is-remote (file-remote-p default-directory 'host) (system-name)))
           (location (if is-remote "remote" "local")))
-     (core-message-info
+     (logging-info
       "Checking if the LSP command exists \"%s\" for major mode \"%s\" on host (%s): %s"
       lsp-executable
       mode

@@ -62,6 +62,6 @@
  (global-set-key (kbd "M-y") 'consult-yank-pop) ; Better kill ring browsing
  (global-set-key (kbd "M-g g") 'consult-goto-line) ; Better goto-line
  (global-set-key (kbd "M-g M-g") 'consult-goto-line) ; Alternative binding
- (core-message-config "Consult keybindings configured"))
+ (logging-config "Consult keybindings configured"))
 (provide 'user-keybindings)
 ;;; user-keybindings.el ends here

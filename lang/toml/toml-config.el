@@ -35,6 +35,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-add-dual-mode-hooks 'toml-mode-hook 'toml-ts-mode-hook #'toml-setup-common)
 
-(core-message-lang-loaded "TOML" "toml-mode and toml-ts-mode")
+(logging-lang-loaded "TOML" "toml-mode and toml-ts-mode")
 (provide 'toml-config)
 ;;; toml-config.el ends here

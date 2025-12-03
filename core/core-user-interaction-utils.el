@@ -17,7 +17,7 @@ INITIAL-INPUT, HISTORY, and DEFAULT-VALUE are passed through to `read-string'."
  (condition-case err
      (read-string prompt initial-input history default-value)
    (error
-    (core-message-error "Failed to read user input: %s" (error-message-string err))
+    (logging-error "Failed to read user input: %s" (error-message-string err))
     nil)))
 
 (defun
@@ -32,13 +32,13 @@ Returns the number or nil if invalid/cancelled."
     ((not input)
      nil)
     ((and input (= number 0) (not (string-match-p "^0+$" input)))
-     (core-message-warning "Invalid number: %s" input)
+     (logging-warning "Invalid number: %s" input)
      nil)
     ((and min (< number min))
-     (core-message-warning "Number must be at least %d" min)
+     (logging-warning "Number must be at least %d" min)
      nil)
     ((and max (> number max))
-     (core-message-warning "Number must be at most %d" max)
+     (logging-warning "Number must be at most %d" max)
      nil)
     (t
      number))))
@@ -50,9 +50,9 @@ Wrapper around `read-passwd' with consistent behavior."
  (condition-case err
      (read-passwd prompt)
    (error
-    (core-message-error "Failed to read password: %s" (error-message-string err))
+    (logging-error "Failed to read password: %s" (error-message-string err))
     nil)))
 
-(core-message-config "User interaction utilities loaded")
+(logging-config "User interaction utilities loaded")
 (provide 'core-user-interaction-utils)
 ;;; core-user-interaction-utils.el ends here

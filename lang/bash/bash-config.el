@@ -62,7 +62,7 @@ Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
 (use-package
  flymake-shellcheck
  :ensure t
- :config (core-message-config "Flymake shellcheck integration configured"))
+ :config (logging-config "Flymake shellcheck integration configured"))
 
 ;; Disable built-in sh-shellcheck-flymake to prevent conflicts
 ;; Built-in version requires ShellCheck 0.7.0+ for --format=json1 support
@@ -98,6 +98,6 @@ Only applies to `sh-mode' as bash-ts-mode uses tree-sitter highlighting."
 (add-hook 'sh-ts-mode-hook 'bash--config-enhance-syntax-highlighting)
 (add-hook 'bash-ts-mode-hook 'bash--config-enhance-syntax-highlighting)
 
-(core-message-lang-loaded "Bash" "sh-mode and bash-ts-mode with flymake-shellcheck")
+(logging-lang-loaded "Bash" "sh-mode and bash-ts-mode with flymake-shellcheck")
 (provide 'bash-config)
 ;;; bash-config.el ends here

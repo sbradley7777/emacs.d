@@ -43,7 +43,7 @@ Opens exclusively at the current project for focused navigation."
   ()
   "Fallback function when treemacs is not available."
   (interactive)
-  (core-message-error "Treemacs not available - package not installed")))
+  (logging-error "Treemacs not available - package not installed")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
@@ -101,6 +101,6 @@ Opens exclusively at the current project for focused navigation."
     `("%e" mode-line-front-space
       ,(format "Treemacs: %s" (treemacs-theme->name treemacs--current-theme))))))
 
- (core-message-success "Treemacs loaded and configured successfully"))
+ (logging-success "Treemacs loaded and configured successfully"))
 (provide 'treemacs-config)
 ;;; treemacs-config.el ends here

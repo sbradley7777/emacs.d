@@ -18,7 +18,7 @@ COMMAND is the executable name (e.g., \"git\", \"uname\").
 QUIET is a boolean - if non-nil, don't log errors for non-zero exit codes.
 ARGS are the `command-line' arguments as separate strings.
 
-Logs errors via core-message-error for consistent error reporting unless
+Logs errors via logging-error for consistent error reporting unless
 QUIET is non-nil.  Exceptions are always logged regardless of QUIET.
 
 Example:
@@ -32,16 +32,16 @@ Example:
          (zerop exit-code) (string-trim (buffer-string))
          (unless
           quiet
-          (core-message-error
+          (logging-error
            "Command '%s %s' failed with exit code %d"
            command
            (mapconcat #'identity args " ")
            exit-code))
          nil)))
    (error
-    (core-message-error "Process execution error for '%s': %s" command (error-message-string err))
+    (logging-error "Process execution error for '%s': %s" command (error-message-string err))
     nil)))
 
-(core-message-config "Process execution utilities loaded")
+(logging-config "Process execution utilities loaded")
 (provide 'core-process-utils)
 ;;; core-process-utils.el ends here

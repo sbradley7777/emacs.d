@@ -60,7 +60,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-register-dual-mode-hooks markdown markdown-setup-common)
 
-(core-message-lang-loaded
+(logging-lang-loaded
  "Markdown" "markdown-mode and markdown-ts-mode with marksman LSP and markdownlint linter")
 (provide 'markdown-config)
 ;;; markdown-config.el ends here

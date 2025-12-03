@@ -48,7 +48,7 @@ Loads Magit if not already loaded and fetches all remotes."
  (require 'magit nil t)
  (when
   (fboundp 'magit-fetch-all)
-  (core-message-info
+  (logging-info
    "Fetching magit git data for project: %s" (git-format-repository-display repo-root))
   (magit-fetch-all nil)))
 
@@ -87,9 +87,9 @@ which contains the actual git command, not the shell wrapper."
         (and repo-root (git--auto-sync-is-repository-synced-p repo-root))
         (if
          (zerop exit-code)
-         (core-message-success
+         (logging-success
           "Fetched magit git data for project: %s" (git-format-repository-display repo-root))
-         (core-message-error
+         (logging-error
           "Failed to fetch magit git data for project: %s"
           (git-format-repository-display repo-root)))))))))
 
@@ -115,19 +115,19 @@ a fetch (retrieves remote data without modifying local state), not a pull (fetch
           (let ((remote-url (magit-get "remote.origin.url")))
             (when
              remote-url
-             (core-message-info
+             (logging-info
               "Adding repository to forge database: %s" (git-format-repository-display repo-root))
              (setq repo (forge-get-repository remote-url nil :insert!)))))
          ;; Now pull forge data if we have a valid repository
          (when
           repo
-          (core-message-info
+          (logging-info
            "Fetching forge git data for project: %s" (git-format-repository-display repo-root))
           ;; Call forge--pull directly with nil callback to pull all topics
           ;; This bypasses the transient menu that forge-pull shows
           (when (fboundp 'forge--pull) (forge--pull repo nil)))))
     (error
-     (core-message-error
+     (logging-error
       "Error during forge sync for %s: %s"
       (git-format-repository-display repo-root)
       (error-message-string err))))))
@@ -154,7 +154,7 @@ OBJ, RESOURCE, PARAMS, and ARGS are the original arguments."
             ()
             (unless
              completed
-             (core-message-error
+             (logging-error
               "Failed to fetch forge git data for project: %s.  The fetch of git data timed out after %d seconds"
               (git-format-repository-display repo-root)
               forge-api-timeout-seconds)))))
@@ -166,14 +166,14 @@ OBJ, RESOURCE, PARAMS, and ARGS are the original arguments."
             (condition-case callback-err
                 (apply original-callback callback-args)
               (error
-               (core-message-error
+               (logging-error
                 "Failed to fetch forge git data for project: %s (callback error: %s)"
                 (git-format-repository-display repo-root)
                 (error-message-string callback-err)))))))
          (wrapped-errorback
           (lambda
            (err &rest errorback-args) (setq completed t) (cancel-timer timeout-timer)
-           (core-message-error
+           (logging-error
             "Failed to fetch forge git data for project: %s"
             (git-format-repository-display repo-root))
            ;; Call original errorback if it exists and is a function
@@ -199,7 +199,7 @@ REPO, CALLBACK, and SINCE are the original forge--pull arguments."
      orig-fun repo
      (lambda
       () (when original-callback (funcall original-callback))
-      (core-message-success
+      (logging-success
        "Fetched forge git data for project: %s" (git-format-repository-display repo-root)))
      since)
     ;; Pass through unchanged for non-auto-synced calls
@@ -213,8 +213,7 @@ When called, it marks the repository as synced for this session."
  (interactive)
  (when-let ((repo-root (git-utils-find-repository-root)))
    (git--auto-sync-mark-repository-synced repo-root)
-   (core-message-info
-    "Initiated sync for repository: %s" (git-format-repository-display repo-root))
+   (logging-info "Initiated sync for repository: %s" (git-format-repository-display repo-root))
    (git-auto-sync-magit-fetch repo-root)
    (git-auto-sync-forge-pull repo-root)))
 
@@ -227,7 +226,7 @@ Skips remote files accessed via TRAMP."
  (when-let ((repo-root (git-utils-find-repository-root)))
    (if
     (core-is-remote-file repo-root)
-    (core-message-debug
+    (logging-debug
      "Skipping git auto-sync for remote repository (TRAMP): %s"
      (git-format-repository-display repo-root))
     (unless (git--auto-sync-is-repository-synced-p repo-root) (git-sync-repository)))))
@@ -241,7 +240,7 @@ Skips remote files accessed via TRAMP."
  (advice-add 'forge--pull :around #'git--auto-sync-around-forge-pull-advice)
  (advice-add 'forge--glab-get :around #'git--sync-around-forge-glab-get-advice))
 
-(core-message-config
+(logging-config
  "Git and Forge sync configured (manual sync via git-sync-repository, auto-sync opt-in via local.el)")
 (provide 'git-sync)
 ;;; git-sync.el ends here

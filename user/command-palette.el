@@ -148,11 +148,11 @@
            (insert (format "%S" item)))))
       (insert "))\n\n")
       (insert ";;; user--command-palette-history.el ends here\n")
-      (core-message-success
+      (logging-success
        "Saved command palette history to %s"
        (abbreviate-file-name user--command-palette-history-file)))
    (error
-    (core-message-error "Failed to save command palette history: %s" (error-message-string err)))))
+    (logging-error "Failed to save command palette history: %s" (error-message-string err)))))
 
 (defun
  command--palette-load-history (&optional silent)
@@ -171,11 +171,11 @@ If SILENT is non-nil, suppress success messages.  Returns t if successful, nil o
          (ring-insert user--command-palette-history item))
         (unless
          silent
-         (core-message-success
+         (logging-success
           "Loaded %d command(s) from history" (length command-palette-saved-history)))
         t))
     (error
-     (core-message-warning "Failed to load command palette history: %s" (error-message-string err))
+     (logging-warning "Failed to load command palette history: %s" (error-message-string err))
      nil))))
 
 (defun
@@ -202,12 +202,11 @@ If SILENT is non-nil, suppress success messages.  Returns t if successful, nil o
          (insert (format "%S" item))))
       (insert "))\n\n")
       (insert ";;; user-command-palette-favorites.el ends here\n")
-      (core-message-success
+      (logging-success
        "Saved command palette favorites to %s"
        (abbreviate-file-name user-command-palette-favorites-file)))
    (error
-    (core-message-error
-     "Failed to save command palette favorites: %s" (error-message-string err)))))
+    (logging-error "Failed to save command palette favorites: %s" (error-message-string err)))))
 
 (defun
  command--palette-load-favorites (&optional silent)
@@ -223,17 +222,15 @@ If SILENT is non-nil, suppress success messages.  Returns t if successful, nil o
         (setq user-command-palette-favorites command-palette-saved-favorites)
         (unless
          silent
-         (core-message-success
-          "Loaded %d favorite command(s)" (length user-command-palette-favorites)))
+         (logging-success "Loaded %d favorite command(s)" (length user-command-palette-favorites)))
         t))
     (error
-     (core-message-warning
-      "Failed to load command palette favorites: %s" (error-message-string err))
+     (logging-warning "Failed to load command palette favorites: %s" (error-message-string err))
      (setq user-command-palette-favorites user-command-palette-default-favorites)
      nil))
   (progn
    (setq user-command-palette-favorites user-command-palette-default-favorites)
-   (unless silent (core-message-info "Using default command palette favorites"))
+   (unless silent (logging-info "Using default command palette favorites"))
    nil)))
 
 (defun
@@ -450,7 +447,7 @@ persisted to disk immediately.  Useful for pinning frequently-used commands."
  (interactive)
  (if
   (= (ring-length user--command-palette-history) 0)
-  (core-message-warning "No recent commands to promote.  Execute commands via M-x first.")
+  (logging-warning "No recent commands to promote.  Execute commands via M-x first.")
   (let* ((max-index (ring-length user--command-palette-history))
          (index
           (core-user-read-number
@@ -471,8 +468,8 @@ persisted to disk immediately.  Useful for pinning frequently-used commands."
              (eq (cdr hist-item) cmd-symbol) (ring-insert-at-beginning new-ring hist-item))))
          (setq user--command-palette-history new-ring))
        (command--palette-refresh-buffer)
-       (core-message-success "Promoted #%d '%s' to favorites" index cmd-name))
-     (core-message-warning "Invalid index or cancelled")))))
+       (logging-success "Promoted #%d '%s' to favorites" index cmd-name))
+     (logging-warning "Invalid index or cancelled")))))
 
 (defun
  command--palette-remove-favorite ()
@@ -483,7 +480,7 @@ that command from favorites.  The change is persisted to disk immediately.
 Does not affect the command's availability in `M-x'."
  (interactive)
  (if
-  (= (length user-command-palette-favorites) 0) (core-message-warning "No favorites to remove")
+  (= (length user-command-palette-favorites) 0) (logging-warning "No favorites to remove")
   (let* ((max-index (length user-command-palette-favorites))
          (index
           (core-user-read-number
@@ -495,8 +492,8 @@ Does not affect the command's availability in `M-x'."
        (setq
         user-command-palette-favorites (cl-remove item-to-remove user-command-palette-favorites))
        (command--palette-refresh-buffer)
-       (core-message-success "Removed favorite #%d: '%s'" index cmd-name))
-     (core-message-warning "Invalid index or cancelled")))))
+       (logging-success "Removed favorite #%d: '%s'" index cmd-name))
+     (logging-warning "Invalid index or cancelled")))))
 
 (defun
  command--palette-clear-history
@@ -508,7 +505,7 @@ Use this to reset your recent commands list while keeping your favorites intact.
  (interactive)
  (setq user--command-palette-history (make-ring user-command-palette-history-size))
  (command--palette-refresh-buffer)
- (core-message-success "Command palette history cleared"))
+ (logging-success "Command palette history cleared"))
 
 (defun
  command--palette-validate-commands
@@ -527,7 +524,7 @@ Use this to reset your recent commands list while keeping your favorites intact.
          (and (fboundp cmd-symbol) (commandp cmd-symbol)) (push item valid-favorites)
          (progn
           (setq removed-favorites (1+ removed-favorites))
-          (core-message-warning "Removed invalid favorite: %s (%s)" cmd-name cmd-symbol)))))
+          (logging-warning "Removed invalid favorite: %s (%s)" cmd-name cmd-symbol)))))
      (setq user-command-palette-favorites (nreverse valid-favorites)))
    ;; Validate history
    (let ((new-ring (make-ring user-command-palette-history-size))
@@ -542,15 +539,14 @@ Use this to reset your recent commands list while keeping your favorites intact.
          (and (fboundp cmd-symbol) (commandp cmd-symbol)) (ring-insert new-ring item)
          (progn
           (setq removed-history (1+ removed-history))
-          (core-message-warning "Removed invalid history item: %s (%s)" cmd-name cmd-symbol)))))
+          (logging-warning "Removed invalid history item: %s (%s)" cmd-name cmd-symbol)))))
      (setq user--command-palette-history new-ring))
    ;; Refresh buffer
    (command--palette-refresh-buffer)
    ;; Report results
    (if
-    (and (= removed-favorites 0) (= removed-history 0))
-    (core-message-success "All commands are valid")
-    (core-message-success
+    (and (= removed-favorites 0) (= removed-history 0)) (logging-success "All commands are valid")
+    (logging-success
      "Validation complete: removed %d favorite(s) and %d history item(s)"
      removed-favorites
      removed-history))))
@@ -624,6 +620,6 @@ side windows (Flymake diagnostics, Imenu-list)."
 (add-hook 'kill-emacs-hook #'command--palette-save-history)
 (add-hook 'kill-emacs-hook #'command--palette-save-favorites)
 
-(core-message-success "Command palette loaded!")
+(logging-success "Command palette loaded!")
 (provide 'command-palette)
 ;;; command-palette.el ends here

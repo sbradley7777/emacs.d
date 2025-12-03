@@ -40,12 +40,12 @@
 (use-package
  nerd-icons-dired
  :hook (dired-mode . nerd-icons-dired-mode)
- :config (core-message-config "Nerd icons dired mode configured"))
+ :config (logging-config "Nerd icons dired mode configured"))
 
 (use-package
  dired-subtree
  :after dired
  :bind (:map dired-mode-map ("i" . dired-subtree-toggle) ("TAB" . dired-subtree-cycle))
- :config (core-message-config "Dired subtree configured - use 'i' to toggle subtrees"))
+ :config (logging-config "Dired subtree configured - use 'i' to toggle subtrees"))
 (provide 'dired-config)
 ;;; dired-config.el ends here

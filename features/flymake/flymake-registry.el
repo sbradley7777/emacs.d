@@ -348,7 +348,7 @@ BINARY is the executable name being passed to setup."
    (if
     (and expected-binary (not (string= binary expected-binary)))
     (progn
-     (core-message-warning
+     (logging-warning
       "Backend %s expects binary '%s' but '%s' was specified" function expected-binary binary)
      nil)
     t)))
@@ -366,7 +366,7 @@ EXPECTED-TYPE is the type this function should have in the registry."
    (if
     (and actual-type (not (eq actual-type expected-type)))
     (progn
-     (core-message-warning
+     (logging-warning
       "Backend %s registered as %s but called as %s backend" function actual-type expected-type)
      nil)
     t)))
@@ -407,7 +407,7 @@ SPEC is the full registry entry or nil if backend not registered."
              function
              major-mode
              supported-modes)))
-       (if flymake-strict-mode-checking (error "%s" msg) (core-message-warning "%s" msg))
+       (if flymake-strict-mode-checking (error "%s" msg) (logging-warning "%s" msg))
        nil)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

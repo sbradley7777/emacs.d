@@ -15,7 +15,7 @@
 (require 'core-constants)
 ;; Load message utilities for consistent logging
 (require 'core-logging)
-(core-message-loading "Loading early-init.el...")
+(logging-loading "Loading early-init.el...")
 
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar package-enable-at-startup) ; From package.el
@@ -135,12 +135,12 @@
   (setq native-comp-jit-compilation nil)
   (setq native-comp-enable-subr-trampolines nil)
   (setq native-comp-eln-load-path (list core-eln-cache-dir))
-  (core-message-warning "Native compilation disabled (running in Snap environment)"))
+  (logging-warning "Native compilation disabled (running in Snap environment)"))
  (progn
   ;; Enable native compilation for non-Snap installations (macOS, Linux, etc.)
   (setq native-comp-jit-compilation t)
   (setq native-comp-eln-load-path (list core-eln-cache-dir))
-  (core-message-success "Native compilation enabled (standard installation)")))
+  (logging-success "Native compilation enabled (standard installation)")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure all essential directories exist on startup
@@ -156,6 +156,6 @@
         core-files-auto-save-list-dir
         core-packages-dir)))
   (dolist (dir dirs-to-create) (core-ensure-directory dir)))
-(core-message-success "early-init.el loaded successfully - performance optimizations active.")
+(logging-success "early-init.el loaded successfully - performance optimizations active.")
 (provide 'early-init)
 ;;; early-init.el ends here

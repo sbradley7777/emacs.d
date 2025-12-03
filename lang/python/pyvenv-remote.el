@@ -20,19 +20,19 @@
  "Find virtual environment for remote directory.
 REMOTE-DIR is the remote directory to search for a virtual environment.
 First tries to find it remotely, falls back to local equivalent if needed."
- (core-message-debug "Searching for venv in: %s" (abbreviate-file-name remote-dir))
+ (logging-debug "Searching for venv in: %s" (abbreviate-file-name remote-dir))
  (if
   (core-is-remote-file remote-dir)
   ;; Try remote search first
   (let ((remote-venv (pyvenv--remote-search-venv remote-dir)))
     (if
-     remote-venv (progn (core-message-debug "Found remote venv: %s" remote-venv) remote-venv)
+     remote-venv (progn (logging-debug "Found remote venv: %s" remote-venv) remote-venv)
      ;; Fallback to local equivalent search
      (let* ((local-dir (file-local-name remote-dir))
             (default-directory local-dir))
        (when
         (file-exists-p local-dir)
-        (core-message-loading "Falling back to local venv search for remote file")
+        (logging-loading "Falling back to local venv search for remote file")
         (pyvenv-find-venv)))))
   ;; Local directory - use existing function
   (pyvenv-find-venv)))
@@ -69,14 +69,14 @@ Uses python-utils-find-venv-path which is TRAMP-compatible via `locate-dominatin
           ;; Set pyvenv-virtual-env buffer-locally to the remote venv path
           ;; This is used by the modeline and other tools
           (setq-local pyvenv-virtual-env venv-path)
-          (core-message-success "Activated Python venv for project: %s" project-name)
+          (logging-success "Activated Python venv for project: %s" project-name)
 
           ;; Log detected Python version for user feedback
           (let ((python-version (pyvenv-get-python-version venv-path)))
             (if
              python-version
-             (core-message-info "Using Python %s from virtual environment" python-version)
-             (core-message-warning "Could not detect Python version in virtual environment")))
+             (logging-info "Using Python %s from virtual environment" python-version)
+             (logging-warning "Could not detect Python version in virtual environment")))
 
           ;; Update python-shell-interpreter for doom-modeline display
           (pyvenv-update-shell-interpreter))))))
@@ -98,6 +98,6 @@ VENV-PATH is the path to the virtual environment on the remote host."
 ;; Add pyvenv--remote-activate back for virtual environment detection and modeline
 (lang-add-dual-mode-hooks 'python-mode-hook 'python-ts-mode-hook #'pyvenv--remote-activate)
 
-(core-message-debug "TRAMP-aware pyvenv support loaded")
+(logging-debug "TRAMP-aware pyvenv support loaded")
 (provide 'pyvenv-remote)
 ;;; pyvenv-remote.el ends here

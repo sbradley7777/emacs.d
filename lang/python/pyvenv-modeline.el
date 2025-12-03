@@ -31,12 +31,12 @@
          (venv-path pyvenv-virtual-env)
          (python-bin (expand-file-name python-pyvenv-python-executable-path pyvenv-virtual-env))
          (python-version (pyvenv-get-version-from-executable python-bin)))
-    (core-message-info
+    (logging-info
      "Python Project: %s | Venv: %s | Version: %s"
      project-name
      (abbreviate-file-name venv-path)
      (or python-version "Unknown")))
-  (core-message-warning "No Python virtual environment active")))
+  (logging-warning "No Python virtual environment active")))
 
 (defun
  pyvenv--modeline-indicator () "Return modeline indicator for Python venv with click handler."
@@ -79,7 +79,7 @@
         (define-key map [mode-line mouse-1] #'pyvenv--modeline-show-info)
         map)))))
 
- (core-message-success "Python venv modeline segment loaded"))
+ (logging-success "Python venv modeline segment loaded"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Fallback for Default Emacs Modeline

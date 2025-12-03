@@ -45,13 +45,13 @@ Returns t if valid, nil otherwise.  Logs warning if invalid.
 Allows regex metacharacters that are safe for git config --get-regexp."
  (cond
   ((not (stringp key))
-   (core-message-warning "Git config key must be a string, got: %s" (type-of key))
+   (logging-warning "Git config key must be a string, got: %s" (type-of key))
    nil)
   ((string-empty-p key)
-   (core-message-warning "Git config key cannot be empty")
+   (logging-warning "Git config key cannot be empty")
    nil)
   ((string-match-p "['\";|&`\n\r]" key)
-   (core-message-warning "Git config key contains unsafe shell characters: %s" key)
+   (logging-warning "Git config key contains unsafe shell characters: %s" key)
    nil)
   (t
    t)))
@@ -113,13 +113,13 @@ Example:
     (if
      (not (stringp suffix))
      (progn
-      (core-message-warning "Skipping non-string suffix: %s" suffix)
+      (logging-warning "Skipping non-string suffix: %s" suffix)
       (setq result (plist-put result (intern (concat ":" (format "%s" suffix))) nil)))
      (condition-case err
          (let ((value (git-utils-git-config-get (format base-key suffix))))
            (setq result (plist-put result (intern (concat ":" suffix)) value)))
        (error
-        (core-message-warning
+        (logging-warning
          "Failed to get config for suffix '%s': %s" suffix (error-message-string err))
         (setq result (plist-put result (intern (concat ":" suffix)) nil))))))
    result))
@@ -149,6 +149,6 @@ Supported formats:
    (t
     nil))))
 
-(core-message-config "Git utility functions loaded")
+(logging-config "Git utility functions loaded")
 (provide 'git-utils)
 ;;; git-utils.el ends here

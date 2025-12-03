@@ -45,6 +45,6 @@
  ;; Ensure proper frame parameters for fullscreen
  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
  (add-to-list 'default-frame-alist '(ns-appearance . dark))
- (core-message-info "macOS native fullscreen enabled"))
+ (logging-info "macOS native fullscreen enabled"))
 (provide 'core-gui-mode)
 ;;; core-gui-mode.el ends here

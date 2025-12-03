@@ -73,7 +73,7 @@ and whether they have credentials configured in ~/.authinfo."
         (no-authinfo-count 0))
    (if
     (zerop total-hosts)
-    (core-message-diagnostic
+    (logging-diagnostic
      "Forge Host Diagnostics" (list "No forge hosts configured in ~/.gitconfig"))
     (progn
      (dolist
@@ -118,7 +118,7 @@ and whether they have credentials configured in ~/.authinfo."
                "-"
                "-"
                (format "%d/%d" authenticated-count total-hosts)))))
-       (core-message-diagnostic
+       (logging-diagnostic
         "Forge Host Diagnostics" (core-logging-format-table headers reversed-rows total-spec)))))))
 
 (defun
@@ -142,6 +142,6 @@ via `process-file'.  For local directories, use original ghub implementation."
 (with-eval-after-load
  'ghub
  (advice-add 'ghub--git-get :around #'forge--utils-ghub-use-magit-get)
- (core-message-config "Forge TRAMP support configured"))
+ (logging-config "Forge TRAMP support configured"))
 (provide 'forge-utils)
 ;;; forge-utils.el ends here

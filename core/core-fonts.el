@@ -57,22 +57,22 @@ Uses fast file-based check instead of font system queries."
        (require 'nerd-icons)
        (unless
         (core--fonts-file-exists-p "NFM.ttf")
-        (core-message-package "Installing nerd-icons fonts...")
+        (logging-package "Installing nerd-icons fonts...")
         (nerd-icons-install-fonts t)
-        (core-message-success "nerd-icons fonts installed successfully")))
+        (logging-success "nerd-icons fonts installed successfully")))
     (error
-     (core-message-warning
+     (logging-warning
       "nerd-icons package not ready for font installation: %s" (error-message-string err))))))
 
 (defun
  core--fonts-check-nerd-icons () "Check if nerd-icons fonts are properly installed."
  (if
   (core--fonts-file-exists-p "NFM.ttf")
-  (core-message-success "nerd-icons fonts are available")
-  (core-message-warning "nerd-icons fonts not found - may need installation")))
+  (logging-success "nerd-icons fonts are available")
+  (logging-warning "nerd-icons fonts not found - may need installation")))
 
 ;; Install fonts automatically after packages are available
 (core--fonts-install-nerd-icons)
-(core-message-config "Font management system loaded - supports nerd-icons")
+(logging-config "Font management system loaded - supports nerd-icons")
 (provide 'core-fonts)
 ;;; core-fonts.el ends here

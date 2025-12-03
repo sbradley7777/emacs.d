@@ -27,7 +27,7 @@
 ;; Declare external variables to suppress byte-compiler warnings
 (defvar eglot-events-buffer-size) ; From eglot.el
 
-(core-message-loading "=== local.el: Loading local user configuration ===")
+(logging-loading "=== local.el: Loading local user configuration ===")
 ;; ============================================
 ;; 1. THEME CONFIGURATION
 ;; ============================================
@@ -112,7 +112,7 @@
 ;; By default, git/forge syncing is MANUAL only (use M-x git-sync-repository).
 ;; To enable AUTOMATIC syncing (fetch magit data and pull forge metadata
 ;; once per repository when first file is opened), uncomment the lines below:
-;; (core-message-config "Enabling automatic git/forge sync on file open")
+;; (logging-config "Enabling automatic git/forge sync on file open")
 ;; (add-hook 'find-file-hook #'git-auto-sync-repository-once)
 
 ;; ============================================
@@ -155,7 +155,7 @@
 ;; Personal keybindings
 ;; (global-set-key (kbd "C-c p") 'my-personal-function)
 ;; (global-set-key (kbd "C-c t") 'switch-theme)  ; Quick theme switching
-(core-message-info "=== local.el: The loading of local user configuration finished ===")
-(core-message-success "Local user configuration loaded successfully")
+(logging-info "=== local.el: The loading of local user configuration finished ===")
+(logging-success "Local user configuration loaded successfully")
 (provide 'local)
 ;;; local.el ends here

@@ -79,11 +79,10 @@ error message if either condition fails.
 Checks based on current `default-directory' (local or remote)."
  (cond
   ((not (executable-find "aspell" (file-remote-p default-directory)))
-   (core-message-error
-    "The command \"aspell\" was not found - please verify \"aspell\" is installed")
+   (logging-error "The command \"aspell\" was not found - please verify \"aspell\" is installed")
    nil)
   ((not (aspell--config-has-en-dictionary-p))
-   (core-message-error
+   (logging-error
     "The \"aspell\" English dictionary was not found - please verify it is installed")
    nil)
   (t
@@ -135,11 +134,11 @@ Checks current state and enables if disabled, disables if enabled."
    (remove-hook 'flymake-diagnostic-functions 'flymake-aspell--check t)
    (flymake-mode -1)
    (flymake-mode 1)
-   (core-message-info "Flymake aspell disabled"))
+   (logging-info "Flymake aspell disabled"))
   (progn
    (add-hook 'flymake-diagnostic-functions 'flymake-aspell--check nil t)
    (flymake-start)
-   (core-message-info "Flymake aspell enabled"))))
+   (logging-info "Flymake aspell enabled"))))
 
 (defun
  aspell--config-disable-flymake
@@ -151,7 +150,7 @@ Checks current state and enables if disabled, disables if enabled."
   (remove-hook 'flymake-diagnostic-functions 'flymake-aspell--check t)
   (flymake-mode -1)
   (flymake-mode 1)
-  (core-message-info "Flymake aspell disabled")))
+  (logging-info "Flymake aspell disabled")))
 
 (defun
  enable-flymake-aspell () "Enable flymake-aspell backend in current buffer." (interactive)
@@ -159,18 +158,18 @@ Checks current state and enables if disabled, disables if enabled."
   (memq 'flymake-aspell--check flymake-diagnostic-functions)
   (add-hook 'flymake-diagnostic-functions 'flymake-aspell--check nil t)
   (flymake-start)
-  (core-message-info "Flymake aspell enabled")))
+  (logging-info "Flymake aspell enabled")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when
  (and (core-check-command-in-path "aspell") (aspell--config-has-en-dictionary-p))
- (core-message-config "Configuring spell checking with flymake-aspell")
+ (logging-config "Configuring spell checking with flymake-aspell")
  (setq ispell-program-name "aspell")
  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
  (use-package flymake-aspell :demand t)
- (core-message-success "Spell checking configured with flymake-aspell (disabled by default)"))
+ (logging-success "Spell checking configured with flymake-aspell (disabled by default)"))
 
 (global-set-key (kbd "C-c f a") 'toggle-flymake-aspell)
 (global-set-key (kbd "C-c f A") 'aspell--config-disable-flymake)

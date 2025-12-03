@@ -123,7 +123,7 @@
   `(doom-modeline-panel
     ((t (:background ,themes-doom-1337-modeline-bg :foreground ,themes-doom-1337-color-cyan)))))
 
- (core-message-theme "Applied doom-1337 modeline faces with gray background"))
+ (logging-theme "Applied doom-1337 modeline faces with gray background"))
 
 (defun
  themes-doom-1337-breadcrumb-faces-apply
@@ -149,7 +149,7 @@
    nil
    :foreground themes-doom-1337-color-cyan
    :weight 'bold)
-  (core-message-theme "Applied doom-1337 breadcrumb faces")))
+  (logging-theme "Applied doom-1337 breadcrumb faces")))
 
 (defun
  themes-doom-1337-markdown-faces-apply
@@ -162,7 +162,7 @@
   `(markdown-plain-url-face ((t (:foreground ,themes-doom-1337-color-blue :underline t))))
   ;; URL portion in markdown links (the URL part in [text](url))
   `(markdown-url-face ((t (:foreground ,themes-doom-1337-color-teal)))))
- (core-message-theme "Applied doom-1337 markdown link faces"))
+ (logging-theme "Applied doom-1337 markdown link faces"))
 
 (defun
  themes-doom-1337-setup
@@ -172,7 +172,7 @@
  (themes-doom-1337-modeline-faces-apply)
  (themes-doom-1337-breadcrumb-faces-apply)
  (themes-doom-1337-markdown-faces-apply)
- (core-message-theme "Applied doom-1337 customizations"))
+ (logging-theme "Applied doom-1337 customizations"))
 
 ;; Make this module available for loading with (require 'theme-doom-1337)
 (provide 'theme-doom-1337)

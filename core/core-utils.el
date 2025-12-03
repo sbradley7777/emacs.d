@@ -45,10 +45,10 @@ Returns t if valid, logs warning and returns nil otherwise.
 DESCRIPTION is optional name for error messages (defaults to \\='Value\\=')."
  (cond
   ((not (stringp value))
-   (core-message-warning "%s must be a string, got: %s" (or description "Value") (type-of value))
+   (logging-warning "%s must be a string, got: %s" (or description "Value") (type-of value))
    nil)
   ((string-empty-p value)
-   (core-message-warning "%s cannot be empty" (or description "Value"))
+   (logging-warning "%s cannot be empty" (or description "Value"))
    nil)
   (t
    t)))
@@ -81,7 +81,7 @@ When `default-directory' is remote, searches for COMMAND on the remote host."
    (if
     command-path
     (progn
-     (core-message-success
+     (logging-success
       "The command \"%s\" was found in PATH at %s on host (%s): %s"
       command
       (abbreviate-file-name command-path)
@@ -89,7 +89,7 @@ When `default-directory' is remote, searches for COMMAND on the remote host."
       host)
      t)
     (progn
-     (core-message-warning
+     (logging-warning
       "The command \"%s\" was not found in PATH on host (%s): %s" command location host)
      nil))))
 
@@ -104,10 +104,10 @@ Returns t if directory exists/was created, nil if creation failed."
     (condition-case err
         (progn
          (make-directory expanded-path t)
-         (core-message-package "Created directory: %s" (abbreviate-file-name expanded-path))
+         (logging-package "Created directory: %s" (abbreviate-file-name expanded-path))
          t)
       (error
-       (core-message-error
+       (logging-error
         "Failed to create directory %s: %s"
         (abbreviate-file-name expanded-path)
         (error-message-string err))
@@ -175,10 +175,9 @@ DESCRIPTION is optional name for error messages (defaults to FILE).
 Returns t on success, nil on failure."
  (let ((desc (or description (abbreviate-file-name file))))
    (condition-case err
-       (progn
-        (set-file-modes file mode) (core-message-debug "Set permissions on %s to %o" desc mode) t)
+       (progn (set-file-modes file mode) (logging-debug "Set permissions on %s to %o" desc mode) t)
      (error
-      (core-message-error "Failed to set permissions on %s: %s" desc (error-message-string err))
+      (logging-error "Failed to set permissions on %s: %s" desc (error-message-string err))
       nil))))
 
 ;;; Provide this module

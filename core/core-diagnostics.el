@@ -114,7 +114,7 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
           (list "Display mode" (if (display-graphic-p) "GUI" "Terminal"))
           (list "Installed packages" (number-to-string package-count))
           (list "Tree-sitter" treesit-status))))
-   (core-message-diagnostic "System Information" (core-logging-format-table headers rows))))
+   (logging-diagnostic "System Information" (core-logging-format-table headers rows))))
 
 (defun
  core--diagnostics-show-config-details
@@ -147,7 +147,7 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
           (list "Dev config" dev-file-path)
           (list "Native compilation" native-comp-status)
           (list "Native comp cache" native-cache-dir))))
-   (core-message-diagnostic "Configuration Details" (core-logging-format-table headers rows))))
+   (logging-diagnostic "Configuration Details" (core-logging-format-table headers rows))))
 
 (defun
  core--diagnostics-show-grammars
@@ -172,11 +172,10 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
                      (file (plist-get grammar :file)))
                  (list name (abbreviate-file-name file))))
               grammars)))
-       (core-message-diagnostic
+       (logging-diagnostic
         (format "Installed Grammars (%d)" grammar-count)
         (core-logging-format-table headers rows))))
-    (core-message-diagnostic
-     "Installed Grammars (0)" (list "No tree-sitter grammars installed")))))
+    (logging-diagnostic "Installed Grammars (0)" (list "No tree-sitter grammars installed")))))
 
 (defun
  diagnostics-show-system
@@ -185,12 +184,12 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
 Displays comprehensive system diagnostics including OS info, Emacs configuration,
 custom configuration file status, and tree-sitter grammar installations in table format."
  (interactive)
- (core-message-info "=== System Diagnostics ===")
- (core-message-plain "")
+ (logging-info "=== System Diagnostics ===")
+ (logging-plain "")
  (core--diagnostics-show-system-info)
- (core-message-plain "")
+ (logging-plain "")
  (core--diagnostics-show-config-details)
- (core-message-plain "")
+ (logging-plain "")
  (core--diagnostics-show-grammars))
 
 (provide 'core-diagnostics)

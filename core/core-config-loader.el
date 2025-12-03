@@ -59,13 +59,13 @@ STATE contains use-package processing state."
              ,@body
              (let ((elapsed (float-time (time-subtract (current-time) load-time))))
                (add-to-list 'core-config-load-results (list module-name 'success elapsed desc))
-               (core-message-success "Loaded %s (%.3fs)" desc elapsed)))
+               (logging-success "Loaded %s (%.3fs)" desc elapsed)))
           (error
            (let ((elapsed (float-time (time-subtract (current-time) load-time))))
              (add-to-list
               'core-config-load-results
               (list module-name 'failed elapsed desc (error-message-string err)))
-             (core-message-error "Failed to load %s: %s" desc (error-message-string err))
+             (logging-error "Failed to load %s: %s" desc (error-message-string err))
              (signal (car err) (cdr err)))))))
     nil)))
 
@@ -85,7 +85,6 @@ STATE contains use-package processing state."
 (defalias 'use-package-normalize/:description 'core-config-loader-normalize/:description)
 (defalias 'use-package-handler/:description 'core-config-loader-handler/:description)
 
-(core-message-config
- "Configuration loader with :description keyword and core-load-module macro ready")
+(logging-config "Configuration loader with :description keyword and core-load-module macro ready")
 (provide 'core-config-loader)
 ;;; core-config-loader.el ends here

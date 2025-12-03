@@ -23,10 +23,10 @@
 Checks for updates across all configured repositories and upgrades packages
 that have newer versions available.  Requires network connectivity.
 Shows summary of upgraded packages or reports if no upgrades are available."
- (interactive) (core-message-debug "Checking for package upgrades...")
+ (interactive) (logging-debug "Checking for package upgrades...")
  (unless
   (pkg-system-responsive-p)
-  (core-message-error "Network unavailable - cannot check for package upgrades"))
+  (logging-error "Network unavailable - cannot check for package upgrades"))
  (pkg-system-refresh-with-timeout)
  (let ((upgradeable-packages '())
        (failed-packages '())
@@ -58,18 +58,18 @@ Shows summary of upgraded packages or reports if no upgrades are available."
           (progn
            (package-install pkg)
            (core-increment-counter upgraded-count)
-           (core-message-success "Upgraded: %s" pkg))
+           (logging-success "Upgraded: %s" pkg))
         (error
          (push pkg failed-packages)
-         (core-message-error "Failed to upgrade %s: %s" pkg (error-message-string err)))))
+         (logging-error "Failed to upgrade %s: %s" pkg (error-message-string err)))))
 
      ;; Summary
      (message
       "Package upgrade complete: %d successful, %d failed" upgraded-count (length failed-packages))
      (when
       failed-packages
-      (core-message-error "Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
-    (core-message-success "All packages are up to date"))))
+      (logging-error "Failed upgrades: %s" (mapconcat #'symbol-name failed-packages ", "))))
+    (logging-success "All packages are up to date"))))
 
 (defun
  pkg-system-maintenance-cleanup ()
@@ -77,10 +77,10 @@ Shows summary of upgraded packages or reports if no upgrades are available."
 Removes orphaned package dependencies using `package-autoremove' and resets metadata."
  (interactive)
  (let ((cleanup-count 0))
-   (core-message-package "Starting package cleanup...")
+   (logging-package "Starting package cleanup...")
 
    ;; Step 1: Remove unused dependencies using built-in package-autoremove
-   (core-message-loading "Removing unused package dependencies...")
+   (logging-loading "Removing unused package dependencies...")
    (condition-case err
        (progn
         ;; Use pkg-system-packages-all as wanted packages if package-selected-packages is empty
@@ -96,24 +96,24 @@ Removes orphaned package dependencies using `package-autoremove' and resets meta
           (setq cleanup-count (- before-count (length package-alist)))
           (if
            (> cleanup-count 0)
-           (core-message-success
+           (logging-success
             "Removed %d unused package%s" cleanup-count (if (> cleanup-count 1) "s" ""))
-           (core-message-success "No unused packages found"))))
+           (logging-success "No unused packages found"))))
      (error
-      (core-message-error "Package cleanup failed: %s" (error-message-string err))))
+      (logging-error "Package cleanup failed: %s" (error-message-string err))))
 
    ;; Step 2: Reset package metadata cache
-   (core-message-loading "Resetting package metadata cache...")
+   (logging-loading "Resetting package metadata cache...")
    (condition-case err
        (progn
         (require 'pkg-system-metadata)
         (when (fboundp 'pkg-system-metadata-reset) (pkg-system-metadata-reset))
-        (core-message-success "Package metadata cache reset"))
+        (logging-success "Package metadata cache reset"))
      (error
-      (core-message-warning "Metadata reset failed: %s" (error-message-string err))))
+      (logging-warning "Metadata reset failed: %s" (error-message-string err))))
 
    ;; Summary
-   (core-message-success
+   (logging-success
     "Cleanup complete: removed %d package%s, metadata reset"
     cleanup-count
     (if (> cleanup-count 1) "s" ""))))
@@ -155,43 +155,42 @@ Benefits:
      (pkg-system-responsive-p))
     ;; Perform weekly check
     (progn
-     (core-message-package "Checking for package updates (weekly check)...")
-     (core-message-debug "Configured repositories: %s" (mapcar #'car package-archives))
+     (logging-package "Checking for package updates (weekly check)...")
+     (logging-debug "Configured repositories: %s" (mapcar #'car package-archives))
      ;; Refresh package contents with timeout protection
      (condition-case err
          (progn
           (let ((refresh-successful nil))
             (with-timeout
              (core-package-refresh-timeout
-              (core-message-warning "Package update check timed out - skipping")
+              (logging-warning "Package update check timed out - skipping")
               (setq refresh-successful nil))
              (package-refresh-contents) (setq refresh-successful t))
             (if
              refresh-successful
              (progn
-              (core-message-success
+              (logging-success
                "Package refresh completed successfully - contacted %d repositories"
                (length package-archives))
               ;; Check what packages have available updates
               (let ((upgrades (package-menu--find-upgrades)))
                 (if
                  upgrades
-                 (core-message-package
+                 (logging-package
                   "Found %d package updates available. Run M-x pkg-system-ui-show-upgrades for details."
                   (length upgrades))
-                 (core-message-package
-                  "No package updates available - all packages are up to date.")))
+                 (logging-package "No package updates available - all packages are up to date.")))
               ;; Only update timestamp after EVERYTHING completed successfully
               (pkg-system-write-refresh-timestamp (float-time (current-time))))
-             (core-message-warning "Package refresh incomplete - will retry next startup"))))
+             (logging-warning "Package refresh incomplete - will retry next startup"))))
        (error
-        (core-message-error "Package refresh failed: %s" (error-message-string err))
+        (logging-error "Package refresh failed: %s" (error-message-string err))
         ;; Still mark as checked to prevent repeated attempts
         (pkg-system-write-refresh-timestamp (float-time (current-time))))))
     ;; Skip check and inform user
     (when
      (not noninteractive)
-     (core-message-package
+     (logging-package
       "Skipping package check (%.1f days since last check, checking weekly)"
       days-since-last-check)))))
 (provide 'pkg-system-maintenance)

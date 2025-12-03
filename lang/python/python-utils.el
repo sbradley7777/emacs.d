@@ -37,6 +37,6 @@ TRAMP-compatible - works with both local and remote files."
    (let ((venv-path (expand-file-name python-pyvenv-venv-directory-name project-root)))
      (when (file-directory-p venv-path) venv-path))))
 
-(core-message-config "Python utility functions loaded")
+(logging-config "Python utility functions loaded")
 (provide 'python-utils)
 ;;; python-utils.el ends here

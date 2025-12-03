@@ -53,8 +53,8 @@ This function is deprecated. Use `core-is-remote-file' instead."
       (or user "default")
       host
       (file-remote-p default-directory 'localname)))
-   (core-message-info "Local Directory: %s" (abbreviate-file-name default-directory))))
+   (logging-info "Local Directory: %s" (abbreviate-file-name default-directory))))
 
-(core-message-debug "TRAMP utilities loaded")
+(logging-debug "TRAMP utilities loaded")
 (provide 'tramp-utils)
 ;;; tramp-utils.el ends here

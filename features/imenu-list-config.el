@@ -45,7 +45,7 @@
  (define-key imenu-list-major-mode-map (kbd "f") 'imenu-list-find-symbol)
  (define-key imenu-list-major-mode-map (kbd "s") 'imenu-list-show-current-symbol)
 
- (core-message-success "Imenu-list configured for terminal-based symbol navigation"))
+ (logging-success "Imenu-list configured for terminal-based symbol navigation"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions

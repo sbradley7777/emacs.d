@@ -41,9 +41,9 @@
       (let ((cache-timestamp (float-time (current-time)))
             (package-count (length package-archive-contents)))
         (pkg-system-write-cache-info cache-timestamp package-count)
-        (core-message-info "Package state cached (%d packages)" package-count))
+        (logging-info "Package state cached (%d packages)" package-count))
     (error
-     (core-message-warning "Failed to save package cache: %s" (error-message-string err))))))
+     (logging-warning "Failed to save package cache: %s" (error-message-string err))))))
 
 (defun
  pkg-system-cache-load-cached-state () "Load cached package state using built-in package system."
@@ -60,12 +60,12 @@
                  (float-time
                   (time-subtract
                    (current-time) (seconds-to-time (plist-get cache-info :timestamp))))))
-            (core-message-info
+            (logging-info
              "Using cached package activation (%d packages, %.1f days old)"
              (length package-alist)
              (/ cache-age 86400)))))
       (error
-       (core-message-warning "Failed to load package cache: %s" (error-message-string err)))))))
+       (logging-warning "Failed to load package cache: %s" (error-message-string err)))))))
 
 (defun
  pkg-system--cache-clear ()

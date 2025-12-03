@@ -63,7 +63,7 @@
     (staged . show)
     (issues . show)))
  (advice-add 'magit-status-refresh-buffer :after #'magit-utils-format-buffer)
- (core-message-config "Magit configured for git integration"))
+ (logging-config "Magit configured for git integration"))
 
 (use-package
  forge
@@ -72,6 +72,6 @@
  (add-hook
   'forge-topic-mode-hook
   (lambda () (add-to-invisibility-spec 'markdown-markup) (visual-line-mode 1)))
- (core-message-config "Forge configured for GitHub/GitLab integration"))
+ (logging-config "Forge configured for GitHub/GitLab integration"))
 (provide 'git-config)
 ;;; git-config.el ends here

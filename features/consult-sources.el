@@ -16,7 +16,7 @@
 (declare-function consult--buffer-state "consult" ())
 (declare-function consult--buffer-query "consult" (&rest args))
 (declare-function consult--buffer-file-hash "consult" ())
-(declare-function core-message-config "core-logging" (format-string &rest args))
+(declare-function logging-config "core-logging" (format-string &rest args))
 (declare-function vc-git-root "vc-git" (file))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -134,7 +134,7 @@ To add more patterns, simply add regexp strings to this list.")
           (lambda (pattern) (string-match-p pattern buf)) features-ignored-buffer-patterns))
         git-buffers)))))
 
- (core-message-config "Project buffer source customized with filtering")
+ (logging-config "Project buffer source customized with filtering")
 
  ;; Limit recent files shown to 10 and show full paths (not abbreviated)
  (plist-put
@@ -147,7 +147,7 @@ To add more patterns, simply add regexp strings to this list.")
          (items recentf-list))
      (seq-take (seq-remove (lambda (x) (gethash x ht)) items) 10))))
 
- (core-message-config "Recent file source limited to 10 files"))
+ (logging-config "Recent file source limited to 10 files"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions

@@ -22,7 +22,7 @@ THEME should be a symbol like \\='doom-1337 or \\='doom-zenburn."
      (require 'theme-doom-1337)
      (themes-doom-1337-modeline-faces-apply))
     (t
-     (core-message-debug "No custom modeline faces defined for theme: %s" theme-name)))))
+     (logging-debug "No custom modeline faces defined for theme: %s" theme-name)))))
 
 (defun
  modeline--faces-on-theme-change (&rest _) "Apply modeline faces when theme change."

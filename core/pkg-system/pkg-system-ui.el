@@ -27,16 +27,14 @@ Shows available version and indicates if updates are available."
 
    ;; Always refresh package archive contents to ensure accurate update information
    (when
-    (pkg-system-responsive-p) (core-message-package "Refreshing package archive contents...")
+    (pkg-system-responsive-p) (logging-package "Refreshing package archive contents...")
     (condition-case err
         (with-timeout
          (core-package-refresh-timeout
-          (core-message-warning "Package refresh timed out - using cached data"))
-         (package-refresh-contents)
-         (core-message-success "Package archive refreshed successfully"))
+          (logging-warning "Package refresh timed out - using cached data"))
+         (package-refresh-contents) (logging-success "Package archive refreshed successfully"))
       (error
-       (core-message-warning
-        "Failed to refresh package contents: %s" (error-message-string err)))))
+       (logging-warning "Failed to refresh package contents: %s" (error-message-string err)))))
    (with-current-buffer
     buf (setq buffer-read-only nil) (erase-buffer)
 
@@ -79,7 +77,7 @@ Shows available version and indicates if updates are available."
         ;; Reload package state (suppress activation warnings)
         (let ((inhibit-message t))
           (package-initialize))
-        (core-message-success "Updated %d packages" (length packages-with-updates))
+        (logging-success "Updated %d packages" (length packages-with-updates))
         (sit-for 1)
         (pkg-system-ui-show-installed))))
      (insert "\n\n"))
@@ -148,7 +146,7 @@ TIMEOUT-SECONDS specifies how long to wait before timing out."
   (condition-case err
       (progn
        (with-timeout
-        (timeout-seconds (core-message-warning "Package update check timed out"))
+        (timeout-seconds (logging-warning "Package update check timed out"))
         (package-refresh-contents))
        ;; Manually find packages with updates (same logic as show-installed-packages)
        (let ((upgrades '()))
@@ -163,7 +161,7 @@ TIMEOUT-SECONDS specifies how long to wait before timing out."
              (push (list pkg installed-desc available-desc) upgrades))))
          (nreverse upgrades)))
     (error
-     (core-message-warning "Package update check failed: %s" (error-message-string err))
+     (logging-warning "Package update check failed: %s" (error-message-string err))
      nil))))
 
 (defun
@@ -173,32 +171,32 @@ TIMEOUT-SECONDS specifies how long to wait before timing out."
 Refreshes package contents and displays a list of packages with available updates,
 showing current version -> new version for each package."
  (interactive)
- (core-message-package "Checking for package updates (manual check)...")
- (core-message-debug "Configured repositories: %s" (mapcar #'car package-archives))
+ (logging-package "Checking for package updates (manual check)...")
+ (logging-debug "Configured repositories: %s" (mapcar #'car package-archives))
  (let ((upgrades (pkg-system--ui-safe-refresh-and-check core-package-refresh-timeout)))
    (if
     upgrades
     (progn
-     (core-message-success
+     (logging-success
       "Package refresh completed successfully - contacted %d repositories"
       (length package-archives))
-     (core-message-package "Found %d packages with updates available:" (length upgrades))
+     (logging-package "Found %d packages with updates available:" (length upgrades))
      (dolist
       (pkg upgrades)
       (let ((pkg-name (car pkg))
             (current-desc (cadr pkg))
             (new-desc (caddr pkg)))
-        (core-message-package
+        (logging-package
          "  %s: %s → %s"
          pkg-name
          (package-desc-version current-desc)
          (package-desc-version new-desc))))
-     (core-message-package "Run M-x package-list-packages, then 'U' and 'x' to install updates"))
+     (logging-package "Run M-x package-list-packages, then 'U' and 'x' to install updates"))
     (progn
-     (core-message-success
+     (logging-success
       "Package refresh completed successfully - contacted %d repositories"
       (length package-archives))
-     (core-message-package "No package updates available - all packages are up to date.")))))
+     (logging-package "No package updates available - all packages are up to date.")))))
 
 (provide 'pkg-system-ui)
 ;;; pkg-system-ui.el ends here

@@ -38,7 +38,7 @@ Validates that extracted hostnames are properly formatted."
         (if
          (core-validate-hostname host)
          (push host hosts)
-         (core-message-warning "Skipping invalid hostname in ~/.gitconfig: '%s'" host))))))
+         (logging-warning "Skipping invalid hostname in ~/.gitconfig: '%s'" host))))))
    (reverse hosts)))
 
 (defun
@@ -51,7 +51,7 @@ Returns nil if HOST is invalid."
   (cl-return-from git-forge-config-parse-host-config nil))
  (unless
   (core-validate-hostname host)
-  (core-message-warning "Host '%s' is not a valid hostname format" host)
+  (logging-warning "Host '%s' is not a valid hostname format" host)
   (cl-return-from git-forge-config-parse-host-config nil))
  (condition-case err
      (let ((config
@@ -61,17 +61,15 @@ Returns nil if HOST is invalid."
         (plist-get config :apihost)
         (unless
          (string-match-p "^[a-zA-Z0-9][-a-zA-Z0-9./]*[a-zA-Z0-9]$" (plist-get config :apihost))
-         (core-message-warning
-          "Invalid apihost format for %s: %s" host (plist-get config :apihost))))
+         (logging-warning "Invalid apihost format for %s: %s" host (plist-get config :apihost))))
        (when
         (plist-get config :webhost)
         (unless
          (core-validate-hostname (plist-get config :webhost))
-         (core-message-warning
-          "Invalid webhost format for %s: %s" host (plist-get config :webhost))))
+         (logging-warning "Invalid webhost format for %s: %s" host (plist-get config :webhost))))
        (plist-put config :githost host))
    (error
-    (core-message-error "Failed to parse config for host '%s': %s" host (error-message-string err))
+    (logging-error "Failed to parse config for host '%s': %s" host (error-message-string err))
     nil)))
 
 (defun
@@ -82,7 +80,7 @@ Returns the corresponding forge-*-repository symbol, or nil if unknown.
 Logs a warning if TYPE is unknown or invalid."
  (unless
   (and (stringp type) (not (string-empty-p type)))
-  (core-message-warning "Invalid forge type (must be non-empty string): %s" type)
+  (logging-warning "Invalid forge type (must be non-empty string): %s" type)
   (cl-return-from git-forge-config-type-to-class nil))
  (let ((normalized-type (downcase type)))
    (pcase normalized-type
@@ -92,7 +90,7 @@ Logs a warning if TYPE is unknown or invalid."
      ("gogs" 'forge-gogs-repository)
      ("bitbucket" 'forge-bitbucket-repository)
      (_
-      (core-message-warning
+      (logging-warning
        "Unknown forge type '%s'. Supported types: gitlab, github, gitea, gogs, bitbucket" type)
       nil))))
 
@@ -113,18 +111,17 @@ not globally, to keep .git/config files clean."
      (progn
       (unless
        (require 'forge nil t)
-       (core-message-error
+       (logging-error
         "Forge package not available.  Install it with: M-x package-install RET forge")
        (cl-return-from git-populate-forge-alist nil))
       (unless
        (boundp 'forge-alist)
-       (core-message-error
-        "Forge-alist variable not defined.  Ensure forge is properly loaded")
+       (logging-error "Forge-alist variable not defined.  Ensure forge is properly loaded")
        (cl-return-from git-populate-forge-alist nil))
       (let ((hosts (git-forge-config-parse-hosts))
             (added-count 0))
         (if
-         (null hosts) (core-message-info "No [emacs-forge] sections found in ~/.gitconfig")
+         (null hosts) (logging-info "No [emacs-forge] sections found in ~/.gitconfig")
          (dolist
           (host hosts)
           (let* ((config (git-forge-config-parse-host-config host))
@@ -134,9 +131,9 @@ not globally, to keep .git/config files clean."
                  (type (plist-get config :type)))
             (cond
              ((not config)
-              (core-message-warning "Failed to parse config for host '%s', skipping" host))
+              (logging-warning "Failed to parse config for host '%s', skipping" host))
              ((not (and githost apihost webhost type))
-              (core-message-warning
+              (logging-warning
                "Skipping incomplete [emacs-forge \"%s\"] entry in ~/.gitconfig (missing required fields)"
                (or githost host)))
              (t
@@ -149,21 +146,21 @@ not globally, to keep .git/config files clean."
                       (progn
                        (push (list githost apihost webhost repo-class) forge-alist)
                        (setq added-count (1+ added-count))
-                       (core-message-config "Added forge host from ~/.gitconfig: %s" githost))
+                       (logging-config "Added forge host from ~/.gitconfig: %s" githost))
                     (error
-                     (core-message-error
+                     (logging-error
                       "Failed to add forge host '%s': %s"
                       githost
                       (error-message-string inner-err)))))))))))
          (when
           (> added-count 0)
-          (core-message-success
+          (logging-success
            "Added %d forge host%s from ~/.gitconfig" added-count (if (= added-count 1) "" "s")))
          (when
           (and (= added-count 0) hosts)
-          (core-message-info "All forge hosts from ~/.gitconfig already configured")))))
+          (logging-info "All forge hosts from ~/.gitconfig already configured")))))
    (error
-    (core-message-error
+    (logging-error
      "Failed to read forge config from ~/.gitconfig: %s" (error-message-string err)))))
 
 (defun
@@ -200,10 +197,9 @@ This ensures each repository only gets username config for its own host."
           (unless
            (magit-get git-var)
            (condition-case err
-               (progn
-                (magit-set user git-var) (core-message-config "Set local %s = %s" git-var user))
+               (progn (magit-set user git-var) (logging-config "Set local %s = %s" git-var user))
              (error
-              (core-message-warning
+              (logging-warning
                "Failed to set local username: %s" (error-message-string err))))))))))))
 
 (defun
@@ -238,6 +234,6 @@ This is called as advice before forge-pull to ensure username is set."
 
 (with-eval-after-load 'forge (advice-add 'forge-pull :before #'git-forge-config-before-forge-pull))
 
-(core-message-config "Git forge configuration utilities loaded")
+(logging-config "Git forge configuration utilities loaded")
 (provide 'git-forge-config)
 ;;; git-forge-config.el ends here

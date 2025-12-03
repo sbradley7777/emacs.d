@@ -41,6 +41,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (lang-register-dual-mode-hooks python python-setup-common)
 
-(core-message-lang-loaded "Python" "python-mode and python-ts-mode with pylsp LSP")
+(logging-lang-loaded "Python" "python-mode and python-ts-mode with pylsp LSP")
 (provide 'python-config)
 ;;; python-config.el ends here

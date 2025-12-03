@@ -73,11 +73,10 @@ Returns nil if package-archive-contents is not loaded."
               (number-to-string row-count)
               (format "%d/%d" available-count total-repos)
               (format time-format-string total-time)))))
-      (core-message-diagnostic
+      (logging-diagnostic
        "Package Repository Connectivity"
        (core-logging-format-table headers formatted-rows total-spec)))
-    (core-message-diagnostic
-     "Package Repository Connectivity" (list "No repositories configured")))))
+    (logging-diagnostic "Package Repository Connectivity" (list "No repositories configured")))))
 
 (defun
  pkg-system--diagnostics-show-package-status
@@ -90,7 +89,7 @@ Returns nil if package-archive-contents is not loaded."
          (list
           (list "Installed Packages" (number-to-string installed))
           (list "Updates Available" (if upgrades (number-to-string upgrades) "Unknown")))))
-   (core-message-diagnostic "Package Status" (core-logging-format-table headers rows))))
+   (logging-diagnostic "Package Status" (core-logging-format-table headers rows))))
 
 (defun
  pkg-system--diagnostics-show-metadata
@@ -108,8 +107,8 @@ Returns nil if package-archive-contents is not loaded."
            (list
             (list "Last Refresh" (or refresh-ts "Never"))
             (list "Cache Created" (or cache-ts "Never")))))
-     (core-message-diagnostic "Package Metadata" (core-logging-format-table headers rows))))
-  (core-message-diagnostic "Package Metadata" (list "No package metadata found"))))
+     (logging-diagnostic "Package Metadata" (core-logging-format-table headers rows))))
+  (logging-diagnostic "Package Metadata" (list "No package metadata found"))))
 
 (defun
  diagnostics-show-pkg-system
@@ -117,12 +116,12 @@ Returns nil if package-archive-contents is not loaded."
  "Display comprehensive package system diagnostics.
 Shows repository connectivity, package status, and metadata information."
  (interactive)
- (core-message-info "=== Package System Diagnostics ===")
- (core-message-plain "")
+ (logging-info "=== Package System Diagnostics ===")
+ (logging-plain "")
  (pkg-system--diagnostics-show-repositories)
- (core-message-plain "")
+ (logging-plain "")
  (pkg-system--diagnostics-show-package-status)
- (core-message-plain "")
+ (logging-plain "")
  (pkg-system--diagnostics-show-metadata))
 
 (provide 'pkg-system-diagnostics)

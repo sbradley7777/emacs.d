@@ -28,12 +28,12 @@ Provides helpful guidance for 'Cannot use repository yet' errors."
    (if
     (string-match-p "Cannot use.*yet" err-msg)
     (let ((clean-msg (car (split-string err-msg "\n"))))
-      (core-message-warning
+      (logging-warning
        "%s Run M-x forge-pull (or N r) to fetch repository data from the forge" clean-msg))
     (if
      (eq error-type 'user-error)
-     (core-message-warning "%s" err-msg)
-     (core-message-error "Failed to list issues: %s" err-msg)))))
+     (logging-warning "%s" err-msg)
+     (logging-error "Failed to list issues: %s" err-msg)))))
 
 (defun
  forge--issues-kill-orphaned-buffers ()
@@ -136,6 +136,6 @@ Optional REPO argument specifies which repository to list issues for."
  'after-init-hook
  (lambda () (run-with-idle-timer 1.0 nil (lambda () (forge--issues-kill-orphaned-buffers)))))
 
-(core-message-config "Forge issue commands loaded")
+(logging-config "Forge issue commands loaded")
 (provide 'forge-issues)
 ;;; forge-issues.el ends here

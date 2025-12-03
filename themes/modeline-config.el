@@ -64,7 +64,7 @@ for available segment names.")
  modeline--config-setup-default
  ()
  "Configure the default Emacs modeline with standard features."
- (core-message-config "Setting up default Emacs modeline")
+ (logging-config "Setting up default Emacs modeline")
 
  ;; Enable column number display in modeline
  (column-number-mode 1)
@@ -103,13 +103,13 @@ for available segment names.")
     makefile-mode))
  (which-function-mode 1)
 
- (core-message-success "Default modeline configured"))
+ (logging-success "Default modeline configured"))
 
 (defun
  modeline--config-setup-doom-modeline
  ()
  "Configure and enable doom-modeline."
- (core-message-config "Setting up doom-modeline")
+ (logging-config "Setting up doom-modeline")
  (use-package
   doom-modeline
   :config
@@ -159,7 +159,7 @@ for available segment names.")
    (doom-modeline-def-modeline
     'main themes-modeline-segments-left themes-modeline-segments-right)))
 
- (core-message-success "doom-modeline configured and enabled"))
+ (logging-success "doom-modeline configured and enabled"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration

@@ -20,16 +20,15 @@ Should be called during initialization after package system is configured."
  (unless
   (package-installed-p 'gnu-elpa-keyring-update)
   (if
-   noninteractive (core-message-batch-skip "keyring update check")
+   noninteractive (logging-batch-skip "keyring update check")
    (when
     (pkg-system-responsive-p) (pkg-system-refresh-with-timeout)
     (condition-case err
         (progn
          (package-install 'gnu-elpa-keyring-update)
-         (core-message-success "GNU ELPA keyring updated for secure package verification"))
+         (logging-success "GNU ELPA keyring updated for secure package verification"))
       (error
-       (core-message-warning
-        "Failed to install keyring update: %s" (error-message-string err))))))))
+       (logging-warning "Failed to install keyring update: %s" (error-message-string err))))))))
 
 (defun
  pkg-system--installation-install-safely
@@ -39,7 +38,7 @@ Should be called during initialization after package system is configured."
        (installed-count 0)
        (skipped-count 0))
 
-   (core-message-package "Installing %d packages..." (length package-list))
+   (logging-package "Installing %d packages..." (length package-list))
 
    (dolist
     (package package-list)
@@ -47,7 +46,7 @@ Should be called during initialization after package system is configured."
      ;; Already installed
      ((package-installed-p package)
       (core-increment-counter skipped-count)
-      (core-message-success "Already installed: %s" package))
+      (logging-success "Already installed: %s" package))
 
      ;; Install with error handling
      (t
@@ -55,10 +54,10 @@ Should be called during initialization after package system is configured."
           (progn
            (package-install package)
            (core-increment-counter installed-count)
-           (core-message-success "Installed: %s" package))
+           (logging-success "Installed: %s" package))
         (error
          (push package failed-packages)
-         (core-message-error "Failed to install %s: %s" package (error-message-string err)))))))
+         (logging-error "Failed to install %s: %s" package (error-message-string err)))))))
 
    ;; Installation summary
    (let ((lines nil)
@@ -70,7 +69,7 @@ Should be called during initialization after package system is configured."
       (push (format (concat "❌  " format-str " %d") "Failed" (length failed-packages)) lines)
       (dolist (pkg failed-packages) (push (format "  - %s" pkg) lines))
       (push "ℹ️  Consider running (package-refresh-contents) and retrying" lines))
-     (core-message-diagnostic "Package Installation Summary" (nreverse lines)))
+     (logging-diagnostic "Package Installation Summary" (nreverse lines)))
 
    ;; Return list of failed packages for further handling
    failed-packages))
@@ -84,7 +83,7 @@ MAX-RETRIES is the maximum number of retry attempts (default: 2)."
        (failed-packages (pkg-system--installation-install-safely package-list)))
    (when
     (and failed-packages (> max-retries 0))
-    (core-message-loading "Retrying failed packages after network refresh...")
+    (logging-loading "Retrying failed packages after network refresh...")
     (package-refresh-contents)
     (pkg-system-install-with-retry failed-packages (1- max-retries)))))
 (provide 'pkg-system-installation)

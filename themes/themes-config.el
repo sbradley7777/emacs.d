@@ -57,14 +57,14 @@ Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
  (require 'themes-utils) ; Load utilities for generic customization functions
  (let ((theme themes-config-preferred-theme)
        (current-theme (car custom-enabled-themes)))
-   (core-message-theme
+   (logging-theme
     "Current theme: %s | Preferred theme: %s" (or current-theme "none") (or theme "none"))
    (if
-    (not theme) (core-message-theme "No theme preference set, skipping")
+    (not theme) (logging-theme "No theme preference set, skipping")
     (if
-     (eq theme current-theme) (core-message-theme "Theme %s already loaded" theme)
+     (eq theme current-theme) (logging-theme "Theme %s already loaded" theme)
      (progn
-      (core-message-theme "Loading theme: %s" theme)
+      (logging-theme "Loading theme: %s" theme)
       ;; Apply generic doom customizations before loading
       (themes--utils-apply-customizations theme)
 
@@ -74,7 +74,7 @@ Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
            ;; Clear all existing themes to prevent background conflicts
            (mapc #'disable-theme custom-enabled-themes)
            (load-theme theme t)
-           (core-message-success "Successfully loaded theme: %s" theme)
+           (logging-success "Successfully loaded theme: %s" theme)
            ;; Apply theme-specific customizations after loading
            (themes--config-apply-theme-specific-customizations theme)
            ;; Apply modeline face customizations if available
@@ -88,8 +88,7 @@ Example: \\='((doom-zenburn . ((doom-themes-enable-bold . t))))")
             :foreground 'unspecified
             :extend t))
         (error
-         (core-message-error
-          "Failed to load theme '%s': %s" theme (error-message-string err)))))))))
+         (logging-error "Failed to load theme '%s': %s" theme (error-message-string err)))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration

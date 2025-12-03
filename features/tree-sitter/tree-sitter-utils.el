@@ -102,13 +102,13 @@ Returns nil if LANG is nil."
          (grammar-available (when lang (treesit-language-available-p (intern lang))))
          (grammar-file
           (if (and lang grammar-available) (treesit--utils-get-grammar-filename lang) "none")))
-    (core-message-plain
+    (logging-plain
      "Tree-Sitter> Mode Name: %s | Mode Symbol: %s | Parent Mode: %s | Tree-sitter: %s | Grammar Installed: %s"
      mode-display-name
      (symbol-name major-mode)
      parent-mode-name
      (if is-ts-mode "yes" "no")
      grammar-file))
-  (core-message-warning "Tree-sitter: not available in this Emacs build")))
+  (logging-warning "Tree-sitter: not available in this Emacs build")))
 (provide 'tree-sitter-utils)
 ;;; tree-sitter-utils.el ends here

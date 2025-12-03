@@ -148,6 +148,6 @@ Optional INDENT specifies indentation level."
     ;; Make URLs clickable after converting face properties
     (forge--markdown-make-urls-clickable fontified-string))))
 
-(core-message-config "Forge markdown rendering functions loaded")
+(logging-config "Forge markdown rendering functions loaded")
 (provide 'forge-markdown)
 ;;; forge-markdown.el ends here

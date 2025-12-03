@@ -37,41 +37,41 @@ Tests repository connectivity and filters out unresponsive ones."
  pkg-system-refresh-with-timeout ()
  "Refresh package contents with comprehensive diagnostic feedback.
 Only contacts responsive repositories to prevent hanging on offline repos."
- (core-message-package "Refreshing package archive contents...")
+ (logging-package "Refreshing package archive contents...")
  (let ((start-time (current-time))
        (timeout-seconds pkg-system-refresh-timeout))
    (pkg-system-refresh-with-available
     (let ((archive-count (length package-archives)))
       (if
        (= archive-count 0)
-       (core-message-error "No repositories available - cannot refresh package contents")
+       (logging-error "No repositories available - cannot refresh package contents")
        (progn
-        (core-message-info
+        (logging-info
          "Contacting %d package archive(s) to refresh metadata: %s"
          archive-count
          (mapconcat (lambda (archive) (car archive)) package-archives ", "))
-        (core-message-info "This updates available package lists and dependency information")
+        (logging-info "This updates available package lists and dependency information")
         (condition-case err
             (with-timeout
              (timeout-seconds
-              (core-message-error
+              (logging-error
                "Package refresh timed out after %.1fs (limit: %ds)"
                (pkg-system--network-elapsed-since start-time)
                timeout-seconds)
-              (core-message-info "Using any cached package data available"))
+              (logging-info "Using any cached package data available"))
              (package-refresh-contents)
-             (core-message-success
+             (logging-success
               "Package refresh completed in %.2fs (%d packages available)"
               (pkg-system--network-elapsed-since start-time)
               (length package-archive-contents))
              ;; Event-based cache invalidation on success
              (pkg-system-repositories-clear-cache))
           (error
-           (core-message-error
+           (logging-error
             "Package refresh failed after %.2fs: %s"
             (pkg-system--network-elapsed-since start-time)
             (error-message-string err))
-           (core-message-info "Will attempt to use cached package data if available")))))))))
+           (logging-info "Will attempt to use cached package data if available")))))))))
 
 (provide 'pkg-system-refresh)
 ;;; pkg-system-refresh.el ends here

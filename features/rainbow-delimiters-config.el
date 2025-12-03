@@ -51,6 +51,6 @@
        :background ,features-color-delimiter-error-bg
        :weight bold)))))
 
- (core-message-config "Rainbow delimiters configured with enhanced bold visibility"))
+ (logging-config "Rainbow delimiters configured with enhanced bold visibility"))
 (provide 'rainbow-delimiters-config)
 ;;; rainbow-delimiters-config.el ends here

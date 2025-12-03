@@ -34,6 +34,6 @@
         (> (- line-end (line-beginning-position)) fill-column)
         (fill-region-as-paragraph label-end line-end)))))))
 
-(core-message-config "Magit utility functions loaded")
+(logging-config "Magit utility functions loaded")
 (provide 'magit-utils)
 ;;; magit-utils.el ends here

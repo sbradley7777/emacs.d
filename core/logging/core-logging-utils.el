@@ -28,14 +28,13 @@ BASE-FILENAME is the base name without directory path."
         (condition-case err
             (rename-file from-file to-file t)
           (error
-           (core-message-warning
+           (logging-warning
             "Failed to rotate log file %s: %s" from-file (error-message-string err)))))))
     ;; Move current log to .1
     (condition-case err
         (rename-file base-path (format "%s.1" base-path) t)
       (error
-       (core-message-warning
-        "Failed to rotate current log file: %s" (error-message-string err)))))))
+       (logging-warning "Failed to rotate current log file: %s" (error-message-string err)))))))
 
 (defun
  core-save-buffer-to-log (buffer-name log-filename directory &optional footer-fn)
@@ -61,7 +60,7 @@ Returns the full path to the saved log file, or nil on error."
             (when footer-fn (goto-char (point-max)) (funcall footer-fn)))))
         log-file))
    (error
-    (core-message-error "Failed to save %s to log: %s" buffer-name (error-message-string err))
+    (logging-error "Failed to save %s to log: %s" buffer-name (error-message-string err))
     nil)))
 
 (provide 'core-logging-utils)

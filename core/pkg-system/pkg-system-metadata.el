@@ -43,7 +43,7 @@ Returns t if file was loaded successfully, nil otherwise."
   (condition-case err
       (progn (load pkg-system-metadata-file) t)
     (error
-     (core-message-warning "Failed to load package metadata: %s" (error-message-string err))
+     (logging-warning "Failed to load package metadata: %s" (error-message-string err))
      nil))))
 
 (defun
@@ -63,10 +63,10 @@ Returns the timestamp as a float, or 0 if no previous check recorded."
         package-last-refresh-timestamp)
        ;; Unknown format
        (t
-        (core-message-warning "Invalid refresh timestamp format, resetting to 0")
+        (logging-warning "Invalid refresh timestamp format, resetting to 0")
         0))
     (error
-     (core-message-warning "Failed to parse refresh timestamp: %s" (error-message-string err))
+     (logging-warning "Failed to parse refresh timestamp: %s" (error-message-string err))
      0))
   0))
 
@@ -159,7 +159,7 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
         (insert "\n")
         (insert ";;; pkg-system-metadata.el ends here\n"))
      (error
-      (core-message-error "Failed to save package metadata: %s" (error-message-string err))))))
+      (logging-error "Failed to save package metadata: %s" (error-message-string err))))))
 
 (defun
  pkg-system-metadata-reset () "Delete the metadata file to reset all package system state."
@@ -168,9 +168,9 @@ ARGS is a plist of values to update: :refresh-timestamp, :cache-timestamp, :cach
   (condition-case err
       (progn
        (delete-file pkg-system-metadata-file)
-       (core-message-success "Package metadata reset successfully"))
+       (logging-success "Package metadata reset successfully"))
     (error
-     (core-message-error "Failed to delete metadata file: %s" (error-message-string err))))))
+     (logging-error "Failed to delete metadata file: %s" (error-message-string err))))))
 
 (provide 'pkg-system-metadata)
 ;;; pkg-system-metadata.el ends here

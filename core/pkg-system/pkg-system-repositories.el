@@ -112,7 +112,7 @@ Uses asynchronous retrieval to properly handle TCP connection timeouts."
    (if
     cached-status
     (progn
-     (core-message-debug
+     (logging-debug
       "Using cached status for %s: %s" repository-url (if cached-status "available" "unavailable"))
      cached-status)
     (let* ((timeout-seconds (or timeout pkg-system-repository-test-timeout))
@@ -136,36 +136,36 @@ Results are cached per `pkg-system-repository-cache-ttl'."
       (if
        responsive
        (progn
-        (core-message-debug
+        (logging-debug
          "Repository %s responsive (%.2fs)" url (pkg-system--network-elapsed-since start-time))
         (push archive available-repos))
        (push name unavailable-repos))))
    (when
     unavailable-repos
-    (core-message-warning
+    (logging-warning
      "Excluding %d unavailable repository(ies): %s"
      (length unavailable-repos)
      (mapconcat 'identity (reverse unavailable-repos) ", ")))
    (if
     available-repos
     (progn
-     (core-message-info "Using %d available repository(ies)" (length available-repos))
+     (logging-info "Using %d available repository(ies)" (length available-repos))
      (reverse available-repos))
-    (progn (core-message-error "No package repositories are currently available") nil))))
+    (progn (logging-error "No package repositories are currently available") nil))))
 
 (defun
  pkg-system-responsive-p ()
  "Quick network connectivity check with diagnostic feedback.
 Tests if at least one package repository is available."
- (core-message-debug "Testing connectivity to package repositories...")
+ (logging-debug "Testing connectivity to package repositories...")
  (let ((available-repos (pkg-system-get-available)))
    (if
     available-repos
     (progn
-     (core-message-success
+     (logging-success
       "Network connectivity confirmed - %d repository(ies) available" (length available-repos))
      t)
-    (progn (core-message-error "No package repositories are accessible") nil))))
+    (progn (logging-error "No package repositories are accessible") nil))))
 
 (defun
  pkg-system-repositories-clear-cache
@@ -174,7 +174,7 @@ Tests if at least one package repository is available."
 Useful when network conditions change or to manually trigger re-testing."
  (interactive)
  (setq pkg-system-repository-health-cache nil)
- (core-message-info "Repository health cache cleared - will re-test on next operation"))
+ (logging-info "Repository health cache cleared - will re-test on next operation"))
 
 (provide 'pkg-system-repositories)
 ;;; pkg-system-repositories.el ends here

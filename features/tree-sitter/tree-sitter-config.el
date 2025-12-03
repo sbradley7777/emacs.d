@@ -12,10 +12,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(core-message-config
+(logging-config
  "Tree-sitter grammar directory: %s" (abbreviate-file-name features-treesit-grammars-dir))
 (setq treesit-extra-load-path (list features-treesit-grammars-dir))
-(core-message-config
+(logging-config
  "treesit-extra-load-path: %s" (mapcar #'abbreviate-file-name treesit-extra-load-path))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,11 +58,11 @@ Dynamically discovers mode mappings from treesit-auto configuration."
                window-start-pos (set-window-start (get-buffer-window buffer) window-start-pos))
               (setq reloaded-count (1+ reloaded-count)))
            (error
-            (core-message-warning
+            (logging-warning
              "Failed to reload buffer %s: %s" file-name (error-message-string err)))))))
      (when
       (> reloaded-count 0)
-      (core-message-success
+      (logging-success
        "Reloaded %d buffer%s to use %s tree-sitter mode"
        reloaded-count
        (if (= reloaded-count 1) "" "s")
@@ -77,16 +77,15 @@ Dynamically discovers mode mappings from treesit-auto configuration."
 Uses features-treesit-grammars-dir unless OUT-DIR is explicitly provided.
 After successful installation, automatically reloads buffers to use the new grammar."
   (let ((install-dir (or out-dir features-treesit-grammars-dir)))
-    (core-message-info "Installing %s grammar to: %s" lang (abbreviate-file-name install-dir))
+    (logging-info "Installing %s grammar to: %s" lang (abbreviate-file-name install-dir))
     (funcall orig-fun lang install-dir)
     ;; After successful installation, reload buffers that can use this grammar
     (when
      (treesit-language-available-p lang)
-     (core-message-success "%s grammar installed successfully" lang)
+     (logging-success "%s grammar installed successfully" lang)
      (core--treesit-reload-buffers-for-language lang)))))
 
-(core-message-success "Tree-sitter grammar management configured")
-(core-message-info
- "Grammars will install to: %s" (abbreviate-file-name features-treesit-grammars-dir))
+(logging-success "Tree-sitter grammar management configured")
+(logging-info "Grammars will install to: %s" (abbreviate-file-name features-treesit-grammars-dir))
 (provide 'tree-sitter-config)
 ;;; tree-sitter-config.el ends here

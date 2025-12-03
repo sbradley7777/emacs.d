@@ -283,7 +283,7 @@ SPEC is the full registry entry or nil if server not registered."
              server-symbol
              major-mode
              supported-modes)))
-       (if eglot-strict-mode-checking (error "%s" msg) (core-message-warning "%s" msg))
+       (if eglot-strict-mode-checking (error "%s" msg) (logging-warning "%s" msg))
        nil)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

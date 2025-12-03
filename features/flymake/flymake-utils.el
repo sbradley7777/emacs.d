@@ -164,10 +164,10 @@ still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-serve
       (let ((backend-names
              (mapconcat
               (lambda (backend) (flymake-registry-get-description backend)) active-backends ", ")))
-        (core-message-success "Flymake: Active backends for %s: %s" mode-name backend-names)))
+        (logging-success "Flymake: Active backends for %s: %s" mode-name backend-names)))
      ;; Case 2: LSP configured but server not installed
      ((and lsp-config lsp-server (not (executable-find lsp-server)))
-      (core-message-warning
+      (logging-warning
        "Flymake: No backends active for %s. LSP server \"%s\" not found in PATH."
        mode-name
        lsp-server))
@@ -176,7 +176,7 @@ still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-serve
       nil)
      ;; Case 4: No backends and no LSP configured
      (t
-      (core-message-info
+      (logging-info
        "Flymake: No backends configured for %s. Consider adding LSP support or custom backend."
        mode-name))))))
 
@@ -207,7 +207,7 @@ Includes backend binary/LSP server information and installation status."
      (push "" lines)
      (dolist (line validation-lines) (push line lines)))
    ;; Display all tables
-   (core-message-diagnostic "Flymake Comprehensive Diagnostics" (nreverse lines))))
+   (logging-diagnostic "Flymake Comprehensive Diagnostics" (nreverse lines))))
 
 (defun
  flymake--diagnostics-find-window ()
@@ -253,7 +253,7 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
        (flymake-show-buffer-diagnostics) (setq flymake-diagnostics--current-width 'compact)
        (let ((diag-window (flymake--diagnostics-find-window)))
          (when diag-window (select-window diag-window))))
-      (core-message-warning "Flymake is not available"))))))
+      (logging-warning "Flymake is not available"))))))
 
 (defun
  flymake-friendly-backend-name (backend-name)

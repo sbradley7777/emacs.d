@@ -25,61 +25,61 @@ Format: YYYY-MM-DD HH:MM:SS (e.g., '2025-11-07 11:20:26').")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Message utility functions with Unicode prefixes
 (defun
- core-message-success (format-string &rest args)
+ logging-success (format-string &rest args)
  "Display success message with ✅ prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "✅  " format-string) args))
 (defun
- core-message-error (format-string &rest args)
+ logging-error (format-string &rest args)
  "Display error message with ❌ prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "❌  " format-string) args))
 (defun
- core-message-warning (format-string &rest args)
+ logging-warning (format-string &rest args)
  "Display warning message with ⚠️ prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "⚠️  " format-string) args))
 (defun
- core-message-info (format-string &rest args)
+ logging-info (format-string &rest args)
  "Display info message with ℹ️ prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "ℹ️  " format-string) args))
 (defun
- core-message-loading (format-string &rest args)
+ logging-loading (format-string &rest args)
  "Display loading message with 🔄 prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "🔄  " format-string) args))
 (defun
- core-message-package (format-string &rest args)
+ logging-package (format-string &rest args)
  "Display package message with 📦 prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "📦  " format-string) args))
 (defun
- core-message-config (format-string &rest args)
+ logging-config (format-string &rest args)
  "Display config message with ⚙️ prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "⚙️  " format-string) args))
 (defun
- core-message-debug (format-string &rest args)
+ logging-debug (format-string &rest args)
  "Display debug message with 🛠️ prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "🛠️  " format-string) args))
 (defun
- core-message-theme (format-string &rest args)
+ logging-theme (format-string &rest args)
  "Display theme message with 🎨 prefix.
 FORMAT-STRING is the message format string.
 ARGS are the format arguments."
  (apply #'message (concat "🎨  " format-string) args))
 (defun
- core-message-plain (format-string &rest args)
+ logging-plain (format-string &rest args)
  "Display plain message without Unicode prefix.
 Useful for system diagnostics, debug output, and structured information that doesn't need visual emphasis.
 FORMAT-STRING is the message format string.
@@ -87,20 +87,20 @@ ARGS are the format arguments."
  (apply #'message format-string args))
 
 (defun
- core-message-lang-loaded (language-name modes-and-backend)
+ logging-lang-loaded (language-name modes-and-backend)
  "Display language configuration loaded message with ✅ prefix.
 LANGUAGE-NAME is the name of the language (e.g., \\='Python\\=', \\='Bash\\=', \\='C/C++\\=').
 MODES-AND-BACKEND is a description of modes and backend configuration.
 This follows the standard format: \\='LANGUAGE configuration loaded (MODES-AND-BACKEND)\\='
 
 Examples:
-  (core-message-lang-loaded \"Python\" \"python-mode and python-ts-mode with pylsp LSP\")
-  (core-message-lang-loaded \"Bash\" \"sh-mode and bash-ts-mode with flymake-shellcheck\")
-  (core-message-lang-loaded \"JSON\" \"js-json-mode and json-ts-mode\")"
- (core-message-success "%s configuration loaded (%s)" language-name modes-and-backend))
+  (logging-lang-loaded \"Python\" \"python-mode and python-ts-mode with pylsp LSP\")
+  (logging-lang-loaded \"Bash\" \"sh-mode and bash-ts-mode with flymake-shellcheck\")
+  (logging-lang-loaded \"JSON\" \"js-json-mode and json-ts-mode\")"
+ (logging-success "%s configuration loaded (%s)" language-name modes-and-backend))
 
 (defun
- core-message-batch-skip
+ logging-batch-skip
  (operation &optional context &rest context-args)
  "Display batch mode skip message with ⏭️  prefix.
 OPERATION is the operation being skipped (e.g., \\='package installation\\=', \\='keyring update\\=').
@@ -115,7 +115,7 @@ Format: \\='⏭️  Skipping (batch mode): OPERATION\\=' with optional context a
 
 ;; Diagnostic message utilities
 (defun
- core-message-diagnostic (title lines)
+ logging-diagnostic (title lines)
  "Display diagnostic section with TITLE and formatted LINES.
 TITLE is the section header text (e.g., \\='Emacs Startup Log\\=' or \\='External Dependencies\\=').
 A timestamp is automatically appended to the title in the format (YYYY-MM-DD HH:MM:SS).
@@ -130,7 +130,7 @@ Output format:
     ...
     ========================================================================== (2 spaces + 80 chars)
   <empty line>"
- (core-message-plain "")
+ (logging-plain "")
  (let* ((timestamp (format-time-string logging-diagnostic-date-format))
         (title-with-date (format "%s (%s)" title timestamp))
         (prefix "=== ")
@@ -139,15 +139,13 @@ Output format:
         (padding-length (- logging-diagnostic-separator-length (length title-section))))
    (if
     (> padding-length 0)
-    (core-message-plain "\n  %s%s" title-section (make-string padding-length ?=))
-    (core-message-plain "\n  %s" title-section)))
+    (logging-plain "\n  %s%s" title-section (make-string padding-length ?=))
+    (logging-plain "\n  %s" title-section)))
  (dolist
   (line lines)
   (if
-   (or (string-empty-p line) (string= line " "))
-   (core-message-plain " ")
-   (core-message-plain "  %s" line)))
- (core-message-plain "  %s\n" logging-diagnostic-closing-separator) (core-message-plain ""))
+   (or (string-empty-p line) (string= line " ")) (logging-plain " ") (logging-plain "  %s" line)))
+ (logging-plain "  %s\n" logging-diagnostic-closing-separator) (logging-plain ""))
 
 ;; Warning buffer integration
 (defun

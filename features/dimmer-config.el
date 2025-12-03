@@ -70,8 +70,8 @@
   dimmer-buffer-exclusion-regexps
   '("^ \\*Minibuf-[0-9]+\\*$" "^ \\*Echo.*\\*$" "^\\*Flymake diagnostics.*\\*$"))
 
- (core-message-success "Dimmer configured for dark theme - inactive windows will be dimmed")
- (core-message-info "Dimming: foreground only, HSL color space, 80%% intensity"))
+ (logging-success "Dimmer configured for dark theme - inactive windows will be dimmed")
+ (logging-info "Dimming: foreground only, HSL color space, 80%% intensity"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -84,8 +84,7 @@ When disabled, all windows have normal brightness."
  (interactive)
  (if
   dimmer-mode
-  (progn (dimmer-mode -1) (core-message-info "Dimmer disabled - all windows at normal brightness"))
-  (progn
-   (dimmer-mode 1) (core-message-success "Dimmer enabled - inactive windows will be dimmed"))))
+  (progn (dimmer-mode -1) (logging-info "Dimmer disabled - all windows at normal brightness"))
+  (progn (dimmer-mode 1) (logging-success "Dimmer enabled - inactive windows will be dimmed"))))
 (provide 'dimmer-config)
 ;;; dimmer-config.el ends here

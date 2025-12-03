@@ -26,7 +26,7 @@ activation.  Searches for common venv directory names (.venv, venv, env).
 Updates Python interpreter path and modeline after successful activation."
  (interactive)
  (unless
-  pyvenv-project-root (core-message-info "Auto-detecting Python virtual environment...")
+  pyvenv-project-root (logging-info "Auto-detecting Python virtual environment...")
   (let ((detected-venv (pyvenv-find-venv)))
     (if
      detected-venv
@@ -44,16 +44,16 @@ Updates Python interpreter path and modeline after successful activation."
        (fboundp 'pyvenv-activate)
        (progn
         (pyvenv-activate detected-venv)
-        (core-message-success "Activated Python venv for project: %s" pyvenv-project-name)
+        (logging-success "Activated Python venv for project: %s" pyvenv-project-name)
 
         ;; Log detected Python version for user feedback
         (let ((python-version (pyvenv-get-python-version detected-venv)))
           (if
            python-version
-           (core-message-info "Using Python %s from virtual environment" python-version)
-           (core-message-warning "Could not detect Python version in virtual environment"))))
-       (core-message-warning "Warning: pyvenv-activate function not available")))
-     (core-message-warning "No Python virtual environment found")))))
+           (logging-info "Using Python %s from virtual environment" python-version)
+           (logging-warning "Could not detect Python version in virtual environment"))))
+       (logging-warning "Warning: pyvenv-activate function not available")))
+     (logging-warning "No Python virtual environment found")))))
 
 ;; Initialize pyvenv package and enable pyvenv-mode
 (if

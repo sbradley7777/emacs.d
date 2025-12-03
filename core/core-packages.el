@@ -59,7 +59,7 @@ Assembled from all category lists in load order.")
 ;; Log batch mode skip
 (when
  noninteractive
- (core-message-batch-skip "package installation" "%d packages available" (length package-alist)))
+ (logging-batch-skip "package installation" "%d packages available" (length package-alist)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration

@@ -48,7 +48,7 @@ uses for exact filename matching (after downcasing the filename)."
   (dolist
    (icon-spec treemacs-nerd-icons-file-icon-mappings)
    (add-to-list 'nerd-icons-extension-icon-alist icon-spec))
-  (core-message-config
+  (logging-config
    "Applied %d custom file icon mappings" (length treemacs-nerd-icons-file-icon-mappings))))
 
 (defun
@@ -62,17 +62,17 @@ When using nerd-icons theme, custom file icons are automatically applied."
    (treemacs-apply-nerd-icons-file-icons)
    (require 'treemacs-nerd-icons)
    (treemacs-load-theme "nerd-icons")
-   (core-message-success
+   (logging-success
     "Treemacs nerd-icons theme loaded with %d custom file icons"
     (length treemacs-nerd-icons-file-icon-mappings)))
 
   ;; Default theme
   ((string= theme-name "Default")
    (treemacs-load-theme "Default")
-   (core-message-success "Treemacs Default theme loaded"))
+   (logging-success "Treemacs Default theme loaded"))
 
   ;; Invalid or nil theme
   (t
-   (core-message-warning "Invalid treemacs theme: %s. Using default." theme-name))))
+   (logging-warning "Invalid treemacs theme: %s. Using default." theme-name))))
 (provide 'treemacs-utils)
 ;;; treemacs-utils.el ends here

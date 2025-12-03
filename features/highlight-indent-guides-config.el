@@ -49,7 +49,7 @@
 
  ;; Enable guides to work properly with blank lines
  (setq highlight-indent-guides-suppress-auto-error t)
- (core-message-config
+ (logging-config
   "Highlight indent guides configured with column method and responsive highlighting"))
 (provide 'highlight-indent-guides-config)
 ;;; highlight-indent-guides-config.el ends here

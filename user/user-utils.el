@@ -26,7 +26,7 @@ Saves init.el buffer if it's currently open before reloading."
     (bufferp (get-file-buffer init-file))
     (save-buffer (get-buffer (file-name-nondirectory init-file))))
    (load-file init-file)
-   (core-message-success "init.el reloaded successfully")))
+   (logging-success "init.el reloaded successfully")))
 
 (defun
  user-copy-whole-buffer
@@ -35,7 +35,7 @@ Saves init.el buffer if it's currently open before reloading."
 This is equivalent to doing \\[mark-whole-buffer] followed by `M-w'."
  (interactive)
  (kill-ring-save (point-min) (point-max))
- (core-message-info "Buffer copied to kill ring"))
+ (logging-info "Buffer copied to kill ring"))
 
 (defun
  user-smart-page-up ()

@@ -73,12 +73,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  core-files-log-backup-operation (_file) "Log when a backup file is created for FILE."
- ; (when _file (core-message-info "Backup created for: %s" (file-name-nondirectory _file)))
+ ; (when _file (logging-info "Backup created for: %s" (file-name-nondirectory _file)))
  )
 
 (defun
  core-files-log-auto-save-operation () "Log when an auto-save operation occurs."
- ; (when buffer-file-name (core-message-info "Auto-saved: %s" (file-name-nondirectory buffer-file-name)))
+ ; (when buffer-file-name (logging-info "Auto-saved: %s" (file-name-nondirectory buffer-file-name)))
  )
 
 ;; Hook into backup operations
