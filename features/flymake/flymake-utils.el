@@ -81,10 +81,10 @@ Returns list of formatted strings describing each backend."
 
 (defun
  flymake--get-lsp-config ()
- "Get LSP configuration for current `major-mode' from `features-eglot-lsp-server-registry'.
+ "Get LSP configuration for current `major-mode' from `eglot-lsp-server-registry'.
 Returns cons cell (MODE . SERVER-EXECUTABLE) or nil if no LSP configured for this mode."
  (when
-  (boundp 'features-eglot-lsp-server-registry)
+  (boundp 'eglot-lsp-server-registry)
   (let ((server-symbol (eglot-find-server-for-mode major-mode)))
     (when
      server-symbol
@@ -151,7 +151,7 @@ Returns a list of formatted strings describing the buffer state."
  "Check Flymake backend status and log appropriate messages.
 Provides success messages when backends are active, warnings about missing LSP servers,
 or info messages for unconfigured modes.  Remains silent when eglot is configured but
-still connecting.  Uses `flymake-backend-registry' and `features-eglot-lsp-server-registry'."
+still connecting.  Uses `flymake-backend-registry' and `eglot-lsp-server-registry'."
  (when
   (and (boundp 'flymake-mode) flymake-mode)
   (let* ((active-backends (flymake--get-active-backends))
@@ -441,7 +441,7 @@ Column layout (all widths calculated dynamically from actual data):
  flymake--get-backend-binary-info (backend-symbol)
  "Get binary/LSP server information for BACKEND-SYMBOL.
 Returns plist with :type, :binary/:lsp-server, :installed keys.
-Checks registry first, then `features-eglot-lsp-server-registry' for LSP backends.
+Checks registry first, then `eglot-lsp-server-registry' for LSP backends.
 
 Examples:
   LSP backend:    (:type lsp :lsp-server \"pylsp\" :installed t)
@@ -457,7 +457,7 @@ Examples:
      (let* ((mode (car modes))
             (lsp-server
              (when
-              (boundp 'features-eglot-lsp-server-registry)
+              (boundp 'eglot-lsp-server-registry)
               (let ((server-symbol (eglot-find-server-for-mode mode)))
                 (when server-symbol (eglot-registry-get-binary server-symbol)))))
             (installed (and lsp-server (executable-find lsp-server))))
@@ -637,19 +637,28 @@ Returns t if at least one buffer with MODE has eglot managing it."
  flymake--build-lsp-backends-table ()
  "Build Flymake LSP Backends table.
 Returns list of formatted table lines with total row showing running count.
-Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-registry'."
- (let* ((headers '("Major Mode" "Backend" "Description" "Binary" "Installed" "Running"))
+Creates one row per mode/LSP-server combination from `eglot-lsp-server-registry'."
+ (let* ((headers
+         '("Major Mode"
+           "Backend"
+           "Description"
+           "Binary"
+           "Installed"
+           "Enabled"
+           "Priority"
+           "Running"))
         (rows nil))
    (when
-    (boundp 'features-eglot-lsp-server-registry)
+    (boundp 'eglot-lsp-server-registry)
     (dolist
-     (entry features-eglot-lsp-server-registry)
+     (entry eglot-lsp-server-registry)
      (let* ((server-symbol (nth 0 entry))
             (description (nth 1 entry))
             (modes (nth 2 entry))
             (props (nthcdr 3 entry))
             (lsp-server (plist-get props :binary))
             (disabled (plist-get props :disabled))
+            (priority (or (plist-get props :priority) 100))
             (backend-symbol 'eglot-flymake-backend))
        (unless
         disabled
@@ -658,6 +667,7 @@ Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-
          (let* ((installed (executable-find lsp-server))
                 (running (flymake--lsp-running-for-mode-p mode))
                 (installed-str (if installed "yes" "no"))
+                (enabled-str "yes")
                 (running-str (if running "yes" "no")))
            (push
             (list
@@ -666,16 +676,18 @@ Creates one row per mode/LSP-server combination from `features-eglot-lsp-server-
              description
              lsp-server
              installed-str
+             enabled-str
+             (number-to-string priority)
              running-str)
             rows)))))))
    (if
     rows
     (let* ((reversed-rows (nreverse rows))
-           (running-count (cl-count-if (lambda (row) (string= (nth 5 row) "yes")) reversed-rows))
+           (running-count (cl-count-if (lambda (row) (string= (nth 7 row) "yes")) reversed-rows))
            (row-count (length reversed-rows))
            (total-spec
             (logging-total-with-count-label
-             "Total" row-count "-" "-" "-" "-" (number-to-string running-count))))
+             "Total" row-count "-" "-" "-" "-" "-" "-" (number-to-string running-count))))
       (core-logging-format-table headers reversed-rows total-spec))
     (list "No LSP backends registered"))))
 
@@ -691,10 +703,10 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
          '("Major Mode"
            "Backend"
            "Description"
-           "Priority"
-           "Enabled"
-           "Installed"
            "Binary"
+           "Installed"
+           "Enabled"
+           "Priority"
            "Buffers"))
         (rows nil)
         (buffer-counts (flymake--count-buffers-per-backend-mode)))
@@ -723,10 +735,10 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
               (format "%s" mode)
               (format "%s" backend-symbol)
               description
-              (number-to-string priority)
-              enabled-str
-              installed-str
               binary
+              installed-str
+              enabled-str
+              (number-to-string priority)
               (number-to-string buffer-count))
              rows)))))))
    (if
