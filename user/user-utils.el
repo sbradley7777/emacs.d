@@ -211,7 +211,7 @@ This ensures only one of these windows is open at a time."
    (setq user-command-palette-window nil))))
 
 (defun
- user-imenu-list-smart-toggle ()
+ toggle-imenu-list-window ()
  "Toggle Imenu-list with mutual exclusion from other side windows.
 This wrapper ensures that opening Imenu-list closes other exclusive side windows (F1, F9)."
  (interactive)

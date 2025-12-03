@@ -18,7 +18,7 @@
 (if
  (package-installed-p 'treemacs)
  (defun
-  treemacs-smart-toggle ()
+  toggle-treemacs-window ()
   "Smart toggle for Treemacs file tree sidebar.
 
 Behavior depends on current Treemacs state:
@@ -39,7 +39,7 @@ Opens exclusively at the current project for focused navigation."
    (t
     (treemacs-add-and-display-current-project-exclusively))))
  (defun
-  treemacs-smart-toggle
+  toggle-treemacs-window
   ()
   "Fallback function when treemacs is not available."
   (interactive)

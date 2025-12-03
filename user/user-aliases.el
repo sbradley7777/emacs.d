@@ -14,7 +14,7 @@
 ;; Package Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defalias 'yes-or-no-p #'y-or-n-p)
-(defalias 'list-themes #'theme-utils-list-themes)
+(defalias 'toggle-list-themes-window #'theme-utils-list-themes)
 (defalias 'switch-theme #'theme-utils-switch-theme)
 (provide 'user-aliases)
 ;;; user-aliases.el ends here

@@ -78,7 +78,7 @@
    ("Search Packages" . pkg-system-ui-search)
    ("Show Package Upgrades" . pkg-system-ui-show-upgrades)
    ("Refresh Package Archive Lists" . pkg-system-operations-refresh-archives)
-   ("List Themes" . list-themes)
+   ("Toggle List Themes" . toggle-list-themes-window)
    ("Toggle Flymake Aspell" . toggle-flymake-aspell)
    ("Pyvenv Activate" . pyvenv-activate)
    ("Pyvenv Deactivate" . pyvenv-deactivate)

@@ -64,8 +64,8 @@ These are configuration-specific shortcuts designed for quick access to common o
 | `F1` | `toggle-flymake-diagnostics-window` | Toggle Flymake diagnostics window | - |
 | `F2` | `flymake-goto-prev-error` | Go to previous flymake error | Flymake active |
 | `F3` | `flymake-goto-next-error` | Go to next flymake error | Flymake active |
-| `F4` | `treemacs-smart-toggle` | Smart toggle Treemacs file tree sidebar | - |
-| `F5` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
+| `F4` | `toggle-treemacs-window` | Smart toggle Treemacs file tree sidebar | - |
+| `F5` | `toggle-imenu-list-window` | Toggle imenu-list sidebar | - |
 | `F6` | `delete-trailing-whitespace` | Clean up line endings | - |
 | `F7` | `user-previous-buffer` | Switch to previous buffer (file buffers and *Messages* only) | - |
 | `F8` | `next-buffer` | Switch to next buffer | - |
@@ -185,8 +185,8 @@ Symbol navigation and outline sidebar powered by [imenu-list](https://github.com
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
-| `F5` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar | - |
-| `C-c` `i` `l` | `imenu-list-smart-toggle` | Toggle imenu-list sidebar (alternative) | - |
+| `F5` | `toggle-imenu-list-window` | Toggle imenu-list sidebar | - |
+| `C-c` `i` `l` | `toggle-imenu-list-window` | Toggle imenu-list sidebar (alternative) | - |
 | `C-c` `i` `s` | `imenu-list-show-current-symbol` | Show current symbol in sidebar | - |
 | `C-c` `i` `r` | `imenu-list-refresh` | Refresh symbol list | - |
 
@@ -211,7 +211,7 @@ Project file tree navigation powered by [Treemacs](https://github.com/Alexander-
 
 | Key Binding | Function | Description | Context |
 |:------------|:---------|:------------|:--------|
-| `F4` | `treemacs-smart-toggle` | Smart toggle Treemacs (open/close/focus) | - |
+| `F4` | `toggle-treemacs-window` | Smart toggle Treemacs (open/close/focus) | - |
 | `C-x` `t` `t` | `treemacs` | Open Treemacs sidebar | - |
 | `C-x` `t` `C-t` | `treemacs-find-file` | Find current file in Treemacs | - |
 | `C-x` `t` `1` | `treemacs-delete-other-windows` | Keep only Treemacs and current window | - |

@@ -22,16 +22,16 @@
 (global-set-key (kbd "<f1>") 'toggle-flymake-diagnostics-window) ; Show Flymake diagnostics
 (global-set-key (kbd "<f2>") 'flymake-goto-prev-error) ; Go to previous flymake error
 (global-set-key (kbd "<f3>") 'flymake-goto-next-error) ; Go to next flymake error
-(global-set-key (kbd "<f4>") 'treemacs-smart-toggle) ; Smart toggle Treemacs file tree
+(global-set-key (kbd "<f4>") 'toggle-treemacs-window) ; Smart toggle Treemacs file tree
 (global-set-key (kbd "C-x t 1") 'treemacs-delete-other-windows) ; Treemacs delete other windows
 (global-set-key (kbd "C-x t t") 'treemacs) ; Open treemacs
 (global-set-key (kbd "C-x t C-t") 'treemacs-find-file) ; Find file in treemacs
-(global-set-key (kbd "<f5>") 'user-imenu-list-smart-toggle) ; Smart toggle imenu-list symbol navigation
+(global-set-key (kbd "<f5>") 'toggle-imenu-list-window) ; Smart toggle imenu-list symbol navigation
 (global-set-key (kbd "<f6>") 'delete-trailing-whitespace) ; Delete trailing whitespace
 
 ;; Navigation keybindings
 (global-set-key (kbd "C-c i a") 'imenu-anywhere) ; Cross-buffer symbol search
-(global-set-key (kbd "C-c i l") 'user-imenu-list-smart-toggle) ; Toggle imenu-list sidebar
+(global-set-key (kbd "C-c i l") 'toggle-imenu-list-window) ; Toggle imenu-list sidebar
 (global-set-key (kbd "C-c i s") 'imenu-list-show-current-symbol) ; Show current symbol in imenu-list
 (global-set-key (kbd "C-c i r") 'imenu-list-refresh) ; Refresh imenu-list
 
