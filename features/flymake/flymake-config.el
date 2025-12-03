@@ -11,7 +11,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar flymake-config--check-timer nil "Timer for debounced backend availability check.")
+(defvar flymake--check-timer nil "Timer for debounced backend availability check.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -20,7 +20,7 @@
  flymake--config-check-all-buffers ()
  "Check backend availability for all buffers with Flymake enabled.
 Runs the check for each buffer in its own context."
- (setq flymake-config--check-timer nil)
+ (setq flymake--check-timer nil)
  (dolist
   (buf (buffer-list))
   (when
@@ -35,8 +35,8 @@ Runs the check for each buffer in its own context."
 Cancels existing timer and schedules new check after 3 seconds.
 This ensures all flymake backends are properly registered after mode setup.
 Multiple calls in quick succession will only trigger one check."
- (when flymake-config--check-timer (cancel-timer flymake-config--check-timer))
- (setq flymake-config--check-timer (run-with-timer 3.0 nil #'flymake--config-check-all-buffers)))
+ (when flymake--check-timer (cancel-timer flymake--check-timer))
+ (setq flymake--check-timer (run-with-timer 3.0 nil #'flymake--config-check-all-buffers)))
 
 (defun
  flymake--config-enable-for-prog-mode ()
