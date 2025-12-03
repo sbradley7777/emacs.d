@@ -85,7 +85,7 @@ All contributions must follow the established coding standards documented in [`S
 (provide 'filename)
 ```
 
-**Note**: Add `(require ...)` statements for any modules your file depends on. Only `early-init.el`, `init.el`, `core-logging.el`, and `core-utils.el` are exempt from using `core-utils-with-load-timing` due to technical constraints (circular dependencies or loading before core-utils exists).
+**Note**: Add `(require ...)` statements for any modules your file depends on. Only `early-init.el`, `init.el`, `logging-init.el`, and `core-utils.el` are exempt from using `core-utils-with-load-timing` due to technical constraints (circular dependencies or loading before core-utils exists).
 
 **Formatting Standards:**
 - **Indentation**: 2 spaces per level (automatic via [`elisp-autofmt`](https://github.com/emacsmirror/elisp-autofmt))
@@ -97,17 +97,17 @@ All contributions must follow the established coding standards documented in [`S
 **Standardized Utilities** - Use centralized utilities for consistency:
 - **User input**: `core-user-read-string`, `core-user-read-number`, `core-user-read-password` ([`core-user-interaction-utils.el`](core/core-user-interaction-utils.el))
 - **Process execution**: `core-process-run-sync` ([`core-process-utils.el`](core/core-process-utils.el))
-- **Message logging**: `core-message-*` functions ([`core-logging.el`](core/core-logging.el))
+- **Message logging**: `logging-*` functions ([`core/logging/logging-init.el`](core/logging/logging-init.el))
 
 **Message Functions** - Use the standardized message utilities:
-- `core-message-loading` - 🔄 Loading/In Progress
-- `core-message-success` - ✅ Success/Completion
-- `core-message-error` - ❌ Errors/Failures
-- `core-message-warning` - ⚠️ Warnings
-- `core-message-package` - 📦 Package Operations
-- `core-message-info` - ℹ️ Information/Details
-- `core-message-config` - ⚙️ Configuration Complete
-- `core-message-plain` - Plain messages (no Unicode prefix)
+- `logging-loading` - 🔄 Loading/In Progress
+- `logging-success` - ✅ Success/Completion
+- `logging-error` - ❌ Errors/Failures
+- `logging-warning` - ⚠️ Warnings
+- `logging-package` - 📦 Package Operations
+- `logging-info` - ℹ️ Information/Details
+- `logging-config` - ⚙️ Configuration Complete
+- `logging-plain` - Plain messages (no Unicode prefix)
 
 ### Automated Formatting
 
@@ -123,12 +123,12 @@ The configuration uses automated formatting tools:
 When adding new functionality, follow the modular structure:
 
 **Core Modules** ([`core/`](core/)): Essential functionality loaded first
-- `package-system/` - Modular package management system
+- `pkg-system/` - Modular package management system
 - `core-packages.el` - Package declarations and configurations
 - `core-ui.el` - User interface settings
 - `core-editing.el` - Text editing behavior
 - `core-files.el` - File handling and backup settings
-- `core-logging.el` - Message logging and log rotation system
+- `logging/logging-init.el` - Message logging and log rotation system
 - `core-user-interaction-utils.el` - Standardized user input collection utilities
 - `core-process-utils.el` - Centralized process execution utility
 - `core-diagnostics.el` - System information and configuration diagnostics
@@ -250,12 +250,12 @@ git diff --cached
 
 ### Managing Dependencies
 
-**Version Pinning** ([`core/package-system/package-repositories.el`](core/package-system/package-repositories.el)):
+**Version Pinning**:
 - **[MELPA Stable](https://stable.melpa.org/)**: Priority 20 (preferred for stability)
 - **[GNU ELPA](https://elpa.gnu.org/)**: Priority 15 (official packages)
 - **[MELPA](https://melpa.org/)**: Priority 10 (latest packages)
 
-**Dependency Resolution:**
+**Dependency Management** ([`core/pkg-system/pkg-system-repositories.el`](core/pkg-system/pkg-system-repositories.el)):
 - Check for conflicting packages before adding new ones
 - Use `:ensure t` for automatic installation
 - Document any manual installation requirements
@@ -377,7 +377,7 @@ git diff --name-only | grep "\.el$" | xargs -I {} scripts/elisp-lint.sh {}
 **Additional Manual Checks:**
 - Check for unused variables or functions
 - Ensure consistent error handling
-- Verify proper use of standardized utilities (`core-message-*`, `core-user-*`, `core-process-*`)
+- Verify proper use of standardized utilities (`logging-*`, `core-user-*`, `core-process-*`)
 
 **Periodic Reviews:**
 - Review startup performance regularly

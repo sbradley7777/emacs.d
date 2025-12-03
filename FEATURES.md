@@ -113,7 +113,7 @@ Interactive package management commands for browsing, updating, and maintaining 
 
 **Interactive Commands:**
 
-**`M-x package-ui-show-installed`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
+**`M-x package-ui-show-installed`** ([`core/pkg-system/pkg-system-ui.el`](core/pkg-system/pkg-system-ui.el)):
 - **Comprehensive package listing** showing all installed packages with status labels
 - **Update availability indicator** (`*` marker) for packages with available updates
 - **Clear status labels**: "Installed (by User)" vs "Dependency" for easy identification
@@ -121,19 +121,19 @@ Interactive package management commands for browsing, updating, and maintaining 
 - **Detailed columns**: Package name, installed version, update status, and description
 - **Sorted display**: Alphabetically sorted for easy navigation
 
-**`M-x package-ui-search`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
+**`M-x package-ui-search`** ([`core/pkg-system/pkg-system-ui.el`](core/pkg-system/pkg-system-ui.el)):
 - **Keyword-based search** across all available package repositories
 - **Interactive results**: Browse and install packages directly from search results
 - **Repository coverage**: Searches MELPA, GNU ELPA, and all configured repositories
 
-**`M-x package-ui-show-upgrades`** ([`core/package-system/package-ui.el`](core/package-system/package-ui.el)):
+**`M-x package-ui-show-upgrades`** ([`core/pkg-system/pkg-system-ui.el`](core/pkg-system/pkg-system-ui.el)):
 - **Manual update check** on demand (bypasses weekly automatic check)
 - **Detailed upgrade information**: Shows current version → new version for each package
 - **Repository diagnostics**: Confirms successful contact with all package repositories
 - **Network-aware**: Includes timeout protection and error handling
 - **Usage instructions**: Provides next steps for installing updates via `package-list-packages`
 
-**`M-x package-maintenance-cleanup`** ([`core/package-system/package-maintenance.el`](core/package-system/package-maintenance.el)):
+**`M-x package-maintenance-cleanup`** ([`core/pkg-system/pkg-system-maintenance.el`](core/pkg-system/pkg-system-maintenance.el)):
 - **Automatic dependency removal**: Uses built-in `package-autoremove` to clean orphaned packages
 - **Metadata cache reset**: Clears package metadata for fresh repository state
 - **Safe operation**: Auto-accepts removal prompts for streamlined cleanup
@@ -170,14 +170,14 @@ Standardized utilities for common operations ensuring consistent error handling 
 **Process Execution** ([`core/core-process-utils.el`](core/core-process-utils.el)):
 - **Centralized command execution**: `core-process-run-sync` for external commands
 - **Automatic output trimming**: Removes whitespace from command output
-- **Error logging**: Centralized error handling via `core-message-error`
+- **Error logging**: Centralized error handling via `logging-error`
 - **Quiet mode**: Optional suppression of non-zero exit code errors
 - **Exception handling**: Always logs exceptions for debugging
 
 **Benefits:**
 - **Consistent user experience**: All user input uses same error handling path
 - **Reduced boilerplate**: Eliminates repetitive `with-temp-buffer` and `call-process` code
-- **Better error messages**: Uses `core-message-*` utilities for standardized logging
+- **Better error messages**: Uses `logging-*` utilities for standardized logging
 - **Easier maintenance**: Centralized code changes affect all callers
 
 ### Message Logging System
@@ -993,8 +993,8 @@ Work with Git forges directly from Magit with comprehensive automation:
 - **Custom commands** - Additional forge-related helper functions
 - **Integration helpers** - Functions for working with forge data
 
-**User Commands** ([`features/git/git-utils.el`](features/git/git-utils.el)):
-- **Issue browser** - `user-git-issues` lists repository issues in side window
+**User Commands** ([`features/forge/forge-issues.el`](features/forge/forge-issues.el)):
+- **Issue browser** - `toggle-forge-issues-window` lists repository issues in side window
 - **Toggleable width** - Press `F10` to toggle between 30% and 50% window width
 - **Quick access** - Direct issue viewing without transient menus
 

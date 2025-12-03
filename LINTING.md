@@ -249,7 +249,7 @@ Create `lang/{language}/{language}-config.el` following the standard structure:
 
 ;;; Code:
 (require 'core-utils)
-(require 'core-logging)
+(require 'logging-init)
 (require 'lang-utils')
 (require 'flymake-lang-setup)
 
@@ -264,7 +264,7 @@ Create `lang/{language}/{language}-config.el` following the standard structure:
 (add-hook 'language-mode-hook 'language-setup-common)
 
 ;; Log configuration loaded
-(core-message-lang-loaded "Language" "language-mode")
+(logging-lang-loaded "Language" "language-mode")
 (provide 'language-config)
 ;;; language-config.el ends here
 ```

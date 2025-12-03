@@ -50,16 +50,16 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
 - **[`init.el`](init.el)** - Main Emacs initialization file that loads all configuration modules
 - **[`early-init.el`](early-init.el)** - Early initialization for performance optimizations and directory setup
 - **[`core/`](core/)** - Essential Emacs functionality (loaded first in dependency order)
-  - **[`package-system/`](core/package-system/)** - Modular package management system
-    - [`package-manager.el`](core/package-system/package-manager.el) - Package system orchestration and module loading
-    - [`package-bootstrap.el`](core/package-system/package-bootstrap.el) - Use-package installation and configuration
-    - [`package-cache.el`](core/package-system/package-cache.el) - Package state caching system (stores cache in `~/.emacs.d/local/package-metadata.el`)
-    - [`package-network.el`](core/package-system/package-network.el) - Network-aware package operations
-    - [`package-repositories.el`](core/package-system/package-repositories.el) - Repository configuration and security
-    - [`package-installation.el`](core/package-system/package-installation.el) - Package installation and dependency management
-    - [`package-metadata.el`](core/package-system/package-metadata.el) - Package metadata extraction and parsing
-    - [`package-ui.el`](core/package-system/package-ui.el) - Interactive package browsing and management UI
-    - [`package-maintenance.el`](core/package-system/package-maintenance.el) - Package upgrade and cleanup utilities
+  - **[`pkg-system/`](core/pkg-system/)** - Modular package management system
+    - [`pkg-system-manager.el`](core/pkg-system/pkg-system-manager.el) - Package system orchestration and module loading
+    - [`pkg-system-bootstrap.el`](core/pkg-system/pkg-system-bootstrap.el) - Use-package installation and configuration
+    - [`pkg-system-cache.el`](core/pkg-system/pkg-system-cache.el) - Package state caching system (stores cache in `~/.emacs.d/local/package-metadata.el`)
+    - [`pkg-system-network-utils.el`](core/pkg-system/pkg-system-network-utils.el) - Network-aware package operations
+    - [`pkg-system-repositories.el`](core/pkg-system/pkg-system-repositories.el) - Repository configuration and security
+    - [`pkg-system-installation.el`](core/pkg-system/pkg-system-installation.el) - Package installation and dependency management
+    - [`pkg-system-metadata.el`](core/pkg-system/pkg-system-metadata.el) - Package metadata extraction and parsing
+    - [`pkg-system-ui.el`](core/pkg-system/pkg-system-ui.el) - Interactive package browsing and management UI
+    - [`pkg-system-maintenance.el`](core/pkg-system/pkg-system-maintenance.el) - Package upgrade and cleanup utilities
   - [`core-constants.el`](core/core-constants.el) - Modern Emacs 30.2+ constants and configuration values
   - [`core-packages.el`](core/core-packages.el) - Package declarations and configurations
   - [`core-fonts.el`](core/core-fonts.el) - Automatic font management for icon packages
@@ -69,7 +69,12 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`core-gui-mode.el`](core/core-gui-mode.el) - GUI mode settings and window management
   - [`core-editing.el`](core/core-editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
-  - [`core-logging.el`](core/core-logging.el) - Message logging and log rotation system
+  - **[`logging/`](core/logging/)** - Message logging system
+    - [`logging-init.el`](core/logging/logging-init.el) - Logging system loader and unified interface
+    - [`logging-messages.el`](core/logging/logging-messages.el) - Message utility functions with Unicode prefixes
+    - [`logging-buffers.el`](core/logging/logging-buffers.el) - Buffer logging functionality
+    - [`logging-tables.el`](core/logging/logging-tables.el) - Table formatting for diagnostics
+    - [`logging-utils.el`](core/logging/logging-utils.el) - General logging utilities
   - [`core-log-writer.el`](core/core-log-writer.el) - Log file writing and rotation functionality
   - [`core-user-interaction-utils.el`](core/core-user-interaction-utils.el) - Standardized user input collection utilities
   - [`core-process-utils.el`](core/core-process-utils.el) - Centralized process execution utility
@@ -179,7 +184,7 @@ The configuration uses an intelligent auto-detection system in [`init.el`](init.
 ### How It Works
 
 1. **Scans** all directories in `~/.emacs.d/` for `.el` files
-2. **Includes** nested directories (e.g., `lang/python/`, `core/package-system/`)
+2. **Includes** nested directories (e.g., `lang/python/`, `core/pkg-system/`)
 3. **Excludes** runtime directories that shouldn't be in load-path
 4. **Adds** discovered directories automatically
 

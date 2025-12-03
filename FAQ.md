@@ -413,7 +413,7 @@ M-x fonts-check-nerd-icons
 
 ### Q: How does message logging work?
 
-**A:** The configuration includes automatic message logging ([`core/logging.el`](core/logging.el)) that:
+**A:** The configuration includes automatic message logging ([`core/logging/logging-init.el`](core/logging/logging-init.el)) that:
 - **Saves on exit**: Automatically saves Messages buffer content when Emacs exits
 - **Log rotation**: Maintains up to 5 log files with automatic rotation
 - **Timestamped entries**: Adds session end timestamps for debugging
@@ -464,32 +464,32 @@ M-x view-echo-area-messages
 C-x C-f <emacs-local-dir>/log/
 
 # Force save current messages
-M-x core-save-messages-log
+M-x logging-save-messages-log
 ```
 
 ### Q: Can I customize logging behavior?
 
-**A:** Yes, several customization options ([`core/logging.el`](core/logging.el)):
+**A:** Yes, several customization options ([`core/logging/logging-init.el`](core/logging/logging-init.el)):
 
 **Configuration variables:**
-- **`core-log-max-files`**: Number of rotated logs to keep (default: 5)
-- **`core-log-directory`**: Directory for log storage (default: `<emacs-local-dir>/log`)
-- **`core-messages-log-file`**: Base filename (default: `messages.log`)
+- **`logging-max-files`**: Number of rotated logs to keep (default: 5)
+- **`logging-log-directory`**: Directory for log storage (default: `<core-local-dir>/log`)
+- **`logging-messages-log-file`**: Base filename (default: `messages.log`)
 
 **Override in local.el:**
 ```elisp
 ;; Example customizations
-(setq core-log-max-files 10)                 ; Keep more log files
-(setq core-log-directory "~/emacs-logs")     ; Different directory
+(setq logging-max-files 10)                 ; Keep more log files
+(setq logging-log-directory "~/emacs-logs")     ; Different directory
 ```
 
 **Manual control:**
 ```elisp
 ;; Force log save
-(core-save-messages-log)
+(logging-save-messages-log)
 
 ;; Rotate logs manually
-(core-rotate-log-files "messages.log")
+(logging-rotate-log-files "messages.log")
 ```
 
 ## Python Development

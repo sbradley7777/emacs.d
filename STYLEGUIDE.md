@@ -285,7 +285,7 @@ Each configuration module should follow this template:
 (provide 'module-name)
 ```
 
-**Note**: Only `early-init.el`, `init.el`, `core-logging.el`, and `core-utils.el` are exempt from using `core-utils-with-load-timing` due to technical constraints (circular dependencies or loading before core-utils exists).
+**Note**: Only `early-init.el`, `init.el`, `logging-init.el`, and `core-utils.el` are exempt from using `core-utils-with-load-timing` due to technical constraints (circular dependencies or loading before core-utils exists).
 
 ### Required Elements
 1. **File header** with lexical binding
@@ -297,43 +297,43 @@ Each configuration module should follow this template:
 
 ## Message Utilities Reference
 
-**REQUIRED:** All user-facing messages must use the centralized message utilities from `core/logging.el` instead of direct `(message)` calls.
+**REQUIRED:** All user-facing messages must use the centralized message utilities from `core/logging/logging-init.el` instead of direct `(message)` calls.
 
 ### Message Utility Functions
 The configuration provides standardized message functions for consistent, professional output:
 
 ```elisp
 ;; Always require logging at the top of your file
-(require 'core-logging)
+(require 'logging-init)
 
 ;; Unicode message functions (preferred for operational status)
-(core-message-loading "Loading %s..." module-name)    ; 🔄  Loading...
-(core-message-success "Loaded %s successfully" name)  ; ✅  Success
-(core-message-error "Failed: %s" error-msg)           ; ❌  Failed
-(core-message-warning "Warning: %s" warning-msg)      ; ⚠️  Warning
-(core-message-package "Installing %s" pkg-name)       ; 📦  Package
-(core-message-config "Configured %s" feature)         ; ⚙️  Config
-(core-message-debug "Debug info: %s" info)            ; 🛠️  Debug
-(core-message-info "Information: %s" info)            ; ℹ️  Info
-(core-message-theme "Theme: %s" theme-name)           ; 🎨  Theme
+(logging-loading "Loading %s..." module-name)    ; 🔄  Loading...
+(logging-success "Loaded %s successfully" name)  ; ✅  Success
+(logging-error "Failed: %s" error-msg)           ; ❌  Failed
+(logging-warning "Warning: %s" warning-msg)      ; ⚠️  Warning
+(logging-package "Installing %s" pkg-name)       ; 📦  Package
+(logging-config "Configured %s" feature)         ; ⚙️  Config
+(logging-debug "Debug info: %s" info)            ; 🛠️  Debug
+(logging-info "Information: %s" info)            ; ℹ️  Info
+(logging-theme "Theme: %s" theme-name)           ; 🎨  Theme
 
 ;; Plain message function (for system diagnostics, section headers)
-(core-message-plain "=== Section Header ===")        ; No Unicode prefix
+(logging-plain "=== Section Header ===")        ; No Unicode prefix
 ```
 
 ### Message Categories and Usage Guidelines
 
 #### Unicode Messages (Operational Status)
 Use for user feedback, progress indicators, and operational status:
-- **Loading operations**: `core-message-loading`
-- **Success/completion**: `core-message-success`
-- **Errors/failures**: `core-message-error`
-- **Warnings**: `core-message-warning`
-- **Package operations**: `core-message-package`
-- **Configuration complete**: `core-message-config`
-- **Debug/diagnostics**: `core-message-debug`
-- **Information**: `core-message-info`
-- **Theme operations**: `core-message-theme`
+- **Loading operations**: `logging-loading`
+- **Success/completion**: `logging-success`
+- **Errors/failures**: `logging-error`
+- **Warnings**: `logging-warning`
+- **Package operations**: `logging-package`
+- **Configuration complete**: `logging-config`
+- **Debug/diagnostics**: `logging-debug`
+- **Information**: `logging-info`
+- **Theme operations**: `logging-theme`
 
 #### Plain Messages (System Information)
 Use for system diagnostics and configuration summaries:
@@ -352,9 +352,9 @@ When updating existing code, replace direct message calls:
 (message "❌  Failed: %s" error)
 
 ;; NEW - Use utilities
-(core-message-loading "Loading %s..." name)
-(core-message-success "Success: %s" result)
-(core-message-error "Failed: %s" error)
+(logging-loading "Loading %s..." name)
+(logging-success "Success: %s" result)
+(logging-error "Failed: %s" error)
 ```
 
 ### Symbol Categories and Technical Reference
@@ -362,42 +362,42 @@ When updating existing code, replace direct message calls:
 #### Process & Status Symbols
 | Symbol | Function | Purpose |
 |--------|----------|---------|
-| 🔄 | `core-message-loading` | Loading/In Progress |
-| ✅ | `core-message-success` | Success/Completion |
-| ❌ | `core-message-error` | Errors/Failures |
-| ⚠️ | `core-message-warning` | Warnings |
-| ℹ️ | `core-message-info` | Information/Details |
+| 🔄 | `logging-loading` | Loading/In Progress |
+| ✅ | `logging-success` | Success/Completion |
+| ❌ | `logging-error` | Errors/Failures |
+| ⚠️ | `logging-warning` | Warnings |
+| ℹ️ | `logging-info` | Information/Details |
 
 #### Operation-Specific Symbols
 | Symbol | Function | Purpose |
 |--------|----------|---------|
-| 📦 | `core-message-package` | Package Operations |
-| ⚙️ | `core-message-config` | Configuration Complete |
-| 🛠️ | `core-message-debug` | Debug/Diagnostics |
-| 🎨 | `core-message-theme` | Theme Operations |
+| 📦 | `logging-package` | Package Operations |
+| ⚙️ | `logging-config` | Configuration Complete |
+| 🛠️ | `logging-debug` | Debug/Diagnostics |
+| 🎨 | `logging-theme` | Theme Operations |
 
 ### Context-Specific Usage Patterns
 
 **Module Loading Pattern:**
 ```elisp
-(core-message-loading "Loading module-name.el...")
+(logging-loading "Loading module-name.el...")
 ;; ... configuration code ...
-(core-message-success "module-name.el loaded successfully")
+(logging-success "module-name.el loaded successfully")
 ```
 
 **Package Installation Pattern:**
 ```elisp
-(core-message-package "Installing %d packages..." count)
-(core-message-success "Already installed: %s" package)
-(core-message-success "Installed: %s" package)
-(core-message-error "Failed to install %s: %s" package error)
+(logging-package "Installing %d packages..." count)
+(logging-success "Already installed: %s" package)
+(logging-success "Installed: %s" package)
+(logging-error "Failed to install %s: %s" package error)
 ```
 
 **Configuration Pattern:**
 ```elisp
-(core-message-config "%s configured successfully" feature-name)
-(core-message-debug "Global Mode: %s" status)
-(core-message-info "Consider checking: %s" suggestion)
+(logging-config "%s configured successfully" feature-name)
+(logging-debug "Global Mode: %s" status)
+(logging-info "Consider checking: %s" suggestion)
 ```
 
 ### Implementation Benefits
@@ -436,7 +436,7 @@ Always use standardized input functions from [`core-user-interaction-utils.el`](
 **Benefits:**
 - Consistent error handling across all user input
 - Built-in validation for numeric input
-- Standardized error messages via `core-message-*` utilities
+- Standardized error messages via `logging-*` utilities
 - Returns `nil` on error for graceful handling
 
 ### Process Execution
@@ -487,13 +487,13 @@ When updating existing code:
        (index (string-to-number index-str)))
   (if (and (> index 0) (<= index 10))
       (do-something index)
-    (core-message-error "Invalid index: %s" index-str)))
+    (logging-error "Invalid index: %s" index-str)))
 
 ;; NEW - Use utility with built-in validation
 (let ((index (core-user-read-number "Enter index (1-10): " 1 10)))
   (if index
       (do-something index)
-    (core-message-warning "Invalid index or cancelled")))
+    (logging-warning "Invalid index or cancelled")))
 ```
 
 ## Quality Assurance

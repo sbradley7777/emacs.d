@@ -513,7 +513,7 @@ M-x getenv RET COLORTERM
 **Symptoms**: No message logs in `~/.emacs.d/local/log/` directory
 
 **About Log Locations**:
-The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. This directory is defined by the `emacs-local-dir` constant (`~/.emacs.d/local/`) and is excluded from load-path to prevent interference with module loading.
+The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. This directory is defined by the `core-local-dir` constant (`~/.emacs.d/local/`) and is excluded from load-path to prevent interference with module loading.
 
 **Troubleshooting Steps**:
 1. **Check log directory**: Verify directory exists and is writable:
@@ -529,7 +529,7 @@ The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. Th
 
 3. **Test manual logging**: Force a log save:
    ```elisp
-   M-x core-save-messages-log
+   M-x logging-save-messages-log
    ```
 
 4. **Check hook installation**: Verify logging hook is installed:
@@ -546,12 +546,12 @@ The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. Th
 **Solutions**:
 1. **Check log file count**: Verify rotation settings:
    ```elisp
-   M-x describe-variable core-log-max-files
+   M-x describe-variable logging-max-files
    ```
 
 2. **Manual rotation test**: Test rotation manually:
    ```elisp
-   M-x core-rotate-log-files RET messages.log
+   M-x logging-rotate-log-files RET messages.log
    ```
 
 3. **File permissions**: Ensure Emacs can rename/move log files:
@@ -571,7 +571,7 @@ The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. Th
 
 2. **Force buffer save**: Manually save Messages buffer:
    ```elisp
-   M-x core-save-messages-log
+   M-x logging-save-messages-log
    ```
 
 3. **Check buffer content**: Ensure Messages buffer has content before Emacs exit
@@ -669,7 +669,7 @@ The configuration stores message logs in `~/.emacs.d/local/log/messages.log`. Th
 **Solutions**:
 1. **Update all packages**: `M-x package-list-packages`, then `U` followed by `x`
 2. **Clear package cache**: Delete `~/.emacs.d/elpa/` and restart Emacs
-3. **Check package pinning**: Review package-archive-priorities in [`core/package-system/package-repositories.el`](core/package-system/package-repositories.el)
+3. **Check package pinning**: Review package-archive-priorities in [`core/pkg-system/pkg-system-repositories.el`](core/pkg-system/pkg-system-repositories.el)
 
 ### Package Metadata Cache Issues
 

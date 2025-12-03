@@ -506,12 +506,12 @@ Downloads latest issues, PRs, and other forge data to local database.
 #### List Issues
 
 ```elisp
-M-x user-git-issues
+M-x toggle-forge-issues-window
 ```
 
 Or press the configured keybinding (e.g., `F10`).
 
-**Features** ([`features/git/git-utils.el`](features/git/git-utils.el)):
+**Features** ([`features/forge/forge-issues.el`](features/forge/forge-issues.el)):
 - Opens issues list in side window (30% width by default)
 - Press again to toggle width (30% → 50% → 30%)
 - Navigate with `n`/`p`, press `RET` to open issue
@@ -555,7 +555,7 @@ For a complete list of keybindings, see [`KEYMAP.md`](KEYMAP.md).
 - `N c p` - Create pull request
 
 **Custom Commands**:
-- `F10` - Toggle issues window (`user-git-issues`)
+- `F10` - Toggle issues window (`toggle-forge-issues-window`)
 
 ## Advanced Configuration
 
@@ -599,7 +599,7 @@ To customize, add to your `local.el`:
 
 #### Issues Window Toggle Widths
 
-The `user-git-issues` command toggles between 30% and 50% width by default. To customize, modify the function in [`features/git/git-utils.el`](features/git/git-utils.el).
+The `toggle-forge-issues-window` command toggles between 30% and 50% width by default. To customize, modify the function in [`features/forge/forge-issues.el`](features/forge/forge-issues.el).
 
 ### Automatic Configuration Functions
 
