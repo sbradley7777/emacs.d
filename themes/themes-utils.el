@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;; WHAT: Interactive theme switching and browsing utilities
 ;; WHY:  Provides advanced theme management features separate from core loading
-;; PROVIDES: switch-theme, list-themes, theme preview functionality
+;; PROVIDES: theme-utils-switch-theme, toggle-list-themes-window, theme preview functionality
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Advanced theme utilities for interactive theme management
 ;; Core theme loading is handled by themes-config.el
@@ -72,7 +72,7 @@
 
 ;;;###autoload
 (defun
- theme-utils-list-themes ()
+ toggle-list-themes-window ()
  "Display all available themes in a selectable buffer.
 
 Shows doom-themes and built-in Emacs themes in a dedicated buffer.
@@ -154,7 +154,7 @@ test different color schemes."
                  (themes-config-load-configured-theme)
                  (logging-success "Switched to theme: %s (buffer stays open for testing)" theme)
                  ;; Update the buffer to show new current theme
-                 (theme-utils-list-themes)))))))
+                 (toggle-list-themes-window)))))))
 
       ;; Keyboard bindings
       (local-set-key (kbd "RET") select-theme-fn)

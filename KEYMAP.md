@@ -499,11 +499,11 @@ Interactive theme selection and customization using [Doom Themes](https://github
 
 | Function | Description |
 |:---------|:------------|
-| `switch-theme` | Quick theme selection with tab completion |
+| `theme-utils-switch-theme` | Quick theme selection with tab completion |
 | `toggle-list-themes-window` | Interactive theme browser with live testing |
 
-**Using `switch-theme`:**
-- Press `M-x switch-theme` to open theme selector with tab completion
+**Using `theme-utils-switch-theme`:**
+- Press `M-x theme-utils-switch-theme` to open theme selector with tab completion
 - Type to filter from 68+ doom themes plus other terminal-friendly themes
 - Press `TAB` to see all available options
 - Changes apply immediately when you select a theme

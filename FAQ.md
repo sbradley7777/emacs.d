@@ -163,7 +163,7 @@ The modular design makes it easy to add support for additional languages.
 - **Default theme**: `doom-1337` in the main configuration
 - **40+ professional themes**: Comprehensive collection from the Doom Emacs ecosystem
 - **Terminal optimization**: Automatic adjustments to reduce warnings in terminal mode
-- **Interactive switching**: Use `M-x switch-theme` to preview and change themes
+- **Interactive switching**: Use `M-x theme-utils-switch-theme` to preview and change themes
 - **Local customization**: Override theme preferences in `local.el`
 
 **Popular theme options:**
