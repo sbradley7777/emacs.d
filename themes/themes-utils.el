@@ -126,6 +126,9 @@ test different color schemes."
    (with-output-to-temp-buffer
     buffer-name (dolist (line (reverse lines)) (princ line) (princ "\n")))
 
+   ;; Switch focus to the theme list window
+   (pop-to-buffer buffer-name)
+
    (with-current-buffer
     buffer-name (goto-char (point-min))
 
