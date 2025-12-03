@@ -1,4 +1,4 @@
-;;; core-logging-utils.el --- Log File Writing and Rotation Utilities -*- lexical-binding: t -*-
+;;; logging-utils.el --- Log File Writing and Rotation Utilities -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; Generic log file writing and rotation utilities.
 ;; Provides shared functions for all buffer logging implementations.
@@ -63,5 +63,5 @@ Returns the full path to the saved log file, or nil on error."
     (logging-error "Failed to save %s to log: %s" buffer-name (error-message-string err))
     nil)))
 
-(provide 'core-logging-utils)
-;;; core-logging-utils.el ends here
+(provide 'logging-utils)
+;;; logging-utils.el ends here

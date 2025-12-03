@@ -73,7 +73,7 @@ Opens exclusively at the current project for focused navigation."
   treemacs-never-persist
   nil
   treemacs-persist-file
-  features-treemacs-persist-file
+  treemacs-persist-file
   treemacs-is-never-other-window
   nil
   treemacs-goto-tag-strategy

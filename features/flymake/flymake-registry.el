@@ -10,9 +10,9 @@
 
 ;;; Code:
 (require 'core-logging)
-(require 'core-registry)
-(require 'core-registry-query)
-(require 'core-registry-validation)
+(require 'registry-init)
+(require 'registry-query)
+(require 'registry-validation)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flymake Constructor
@@ -60,7 +60,7 @@ Example:
    identifier
    type))
  (let* ((base-entry
-         (core-registry-create-base-entry
+         (registry-create-base-entry
           identifier
           description
           modes
@@ -72,7 +72,7 @@ Example:
         (base-props (nthcdr 3 base-entry))
         (flymake-props (list :abbreviation abbreviation :type type)))
    (when loader (setq flymake-props (plist-put flymake-props :loader loader)))
-   (let ((merged-props (core-registry-merge-properties base-props flymake-props)))
+   (let ((merged-props (registry-merge-properties base-props flymake-props)))
      (append (list identifier description modes) merged-props))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -261,7 +261,7 @@ This is a strict mode option that prevents invalid configurations."
  flymake-registry-find-backend (backend-symbol)
  "Find backend specification in `flymake-backend-registry' for BACKEND-SYMBOL.
 Returns the backend spec entry (FUNCTION-SYMBOL DESCRIPTION MODES) or nil if not found."
- (core-registry-find-entry flymake-backend-registry backend-symbol))
+ (registry-find-entry flymake-backend-registry backend-symbol))
 
 (defun
  flymake-registry-get-property (backend-symbol property)
@@ -271,14 +271,14 @@ Returns nil if backend not found or property not set.
 
 The registry format is (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)
 where PROPERTIES is a plist starting at index 3."
- (core-registry-get-property flymake-backend-registry backend-symbol property))
+ (registry-get-property flymake-backend-registry backend-symbol property))
 
 (defun
  flymake-registry-get-description (backend-symbol)
  "Get human-readable description for BACKEND-SYMBOL.
 Looks up the backend in `flymake-backend-registry' and returns its description.
 Falls back to the backend function name if not found in registry."
- (core-registry-get-description flymake-backend-registry backend-symbol))
+ (registry-get-description flymake-backend-registry backend-symbol))
 
 (defun
  flymake-registry-get-binary (backend-symbol)
@@ -292,7 +292,7 @@ BACKEND-SYMBOL is the backend function symbol to look up."
  "Get list of supported modes for BACKEND-SYMBOL from registry.
 Returns list of mode symbols or special value like (multiple).
 BACKEND-SYMBOL is the backend function symbol to look up."
- (core-registry-get-modes flymake-backend-registry backend-symbol))
+ (registry-get-modes flymake-backend-registry backend-symbol))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Validation Functions
@@ -310,7 +310,7 @@ This function enforces the :disabled flag from the registry.
 Backends marked with :disabled t will return nil, preventing them from being enabled.
 
 This is the standard validation check used before enabling any flymake backend."
- (core-registry-entry-available-p
+ (registry-entry-available-p
   flymake-backend-registry backend-function binary backend-function nil))
 
 (defun
@@ -325,7 +325,7 @@ disabled backends never run, even if added by Emacs built-in modes."
   (and (boundp 'flymake-diagnostic-functions) flymake-diagnostic-functions)
   (setq
    flymake-diagnostic-functions
-   (core-registry-filter-disabled flymake-backend-registry flymake-diagnostic-functions))))
+   (registry-filter-disabled flymake-backend-registry flymake-diagnostic-functions))))
 
 (defun
  flymake--mode-compatible-p (supported-modes)
@@ -334,7 +334,7 @@ Returns t if current mode matches exactly or derives from any supported mode.
 Handles special case where SUPPORTED-MODES is (multiple).
 
 SUPPORTED-MODES is a list of mode symbols from registry entry."
- (core-registry-mode-compatible-p supported-modes major-mode))
+ (registry-mode-compatible-p supported-modes major-mode))
 
 (defun
  flymake--validate-binary-name (function binary)
@@ -379,7 +379,7 @@ Does not signal errors, only returns validation result.
 
 ENTRY is a registry entry in format (FUNCTION-SYMBOL DESCRIPTION MODES . PROPERTIES)."
  (or
-  (core-registry-validate-entry entry '(:type :abbreviation))
+  (registry-validate-entry entry '(:type :abbreviation))
   (let ((func (nth 0 entry))
         (props (nthcdr 3 entry)))
     (cond

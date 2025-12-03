@@ -14,7 +14,7 @@
 
 ;;; Code:
 (require 'core-logging)
-(require 'core-logging-tables)
+(require 'logging-tables)
 (require 'core-utils)
 (require 'forge-constants)
 (require 'git-forge-config)
@@ -119,7 +119,7 @@ and whether they have credentials configured in ~/.authinfo."
                "-"
                (format "%d/%d" authenticated-count total-hosts)))))
        (logging-diagnostic
-        "Forge Host Diagnostics" (core-logging-format-table headers reversed-rows total-spec)))))))
+        "Forge Host Diagnostics" (logging-format-table headers reversed-rows total-spec)))))))
 
 (defun
  forge--utils-ghub-use-magit-get (orig-fun var)

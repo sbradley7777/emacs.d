@@ -1,7 +1,7 @@
-;;; core-logging-buffers.el --- Buffer Logging (Messages and Debug) -*- lexical-binding: t -*-
+;;; logging-buffers.el --- Buffer Logging (Messages and Debug) -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; Buffer logging implementations for Messages buffer and debug buffers.
-;; Uses shared rotation utilities from core-logging-utils.el.
+;; Uses shared rotation utilities from logging-utils.el.
 ;;
 ;; Messages Buffer Logging:
 ;;   - Automatically saves *Messages* buffer on Emacs exit
@@ -14,12 +14,12 @@
 ;;     (add-hook 'kill-emacs-hook #'logging--save-debug-buffers-on-exit)
 ;;
 ;; Manual command:
-;;   M-x core-logging-save-debug-buffers - Save debug buffers immediately
+;;   M-x logging-save-debug-buffers - Save debug buffers immediately
 
 ;;; Code:
 (require 'core-constants)
 (require 'core-logging)
-(require 'core-logging-utils)
+(require 'logging-utils)
 (require 'subr-x)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -113,7 +113,7 @@ Only creates the debug directory if there are buffers to save."
         (if (> saved-count 1) "s" "")))))))
 
 (defun
- core-logging-save-debug-buffers
+ logging-save-debug-buffers
  ()
  "Manually save debug buffers to ~/.emacs.d/local/log/debug/."
  (interactive)
@@ -125,5 +125,5 @@ Only creates the debug directory if there are buffers to save."
 ;; Messages buffer logging (always enabled)
 (add-hook 'kill-emacs-hook #'logging--save-messages-buffer)
 
-(provide 'core-logging-buffers)
-;;; core-logging-buffers.el ends here
+(provide 'logging-buffers)
+;;; logging-buffers.el ends here

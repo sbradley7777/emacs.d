@@ -1,12 +1,12 @@
-;;; core-registry-constructors.el --- Registry Entry Constructors -*- lexical-binding: t -*-
+;;; registry-constructors.el --- Registry Entry Constructors -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; Constructor functions for building registry entries.
 ;;
 ;; Base constructor:
-;;   core-registry-create-base-entry - Create entry with common properties
+;;   registry-create-base-entry - Create entry with common properties
 ;;
 ;; Helper functions:
-;;   core-registry-merge-properties  - Merge property plists
+;;   registry-merge-properties  - Merge property plists
 ;;
 ;; Common properties (all registries):
 ;;   :binary          - Executable name
@@ -16,16 +16,16 @@
 ;;   :url             - Project homepage URL
 ;;
 ;; Usage pattern:
-;;   Domain-specific constructors call core-registry-create-base-entry
+;;   Domain-specific constructors call registry-create-base-entry
 ;;   and extend with additional properties.
 ;;
 ;; Example:
 ;;   (defun registry--my-create-entry (id desc modes &key binary my-prop)
-;;     (let* ((base (core-registry-create-base-entry id desc modes :binary binary))
+;;     (let* ((base (registry-create-base-entry id desc modes :binary binary))
 ;;            (base-props (nthcdr 3 base))
 ;;            (my-props (list :my-prop my-prop)))
 ;;       (append (list id desc modes)
-;;               (core-registry-merge-properties base-props my-props))))
+;;               (registry-merge-properties base-props my-props))))
 
 ;;; Code:
 (require 'cl-lib)
@@ -34,7 +34,7 @@
 ;; Base Constructor
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (cl-defun
- core-registry-create-base-entry
+ registry-create-base-entry
  (identifier description modes &key binary disabled disabled-reason (priority 100) url)
  "Create base registry entry with common properties.
 
@@ -56,7 +56,7 @@ Returns entry in format: (IDENTIFIER DESCRIPTION MODES . BASE-PROPERTIES)
 This is meant to be extended by domain-specific constructors.
 
 Example:
-  (core-registry-create-base-entry
+  (registry-create-base-entry
    \\='my-backend \"My Backend\" \\='(python-mode)
    :binary \"my-binary\"
    :priority 50
@@ -76,7 +76,7 @@ Example:
 ;; Property Helpers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-registry-merge-properties (base-props extension-props)
+ registry-merge-properties (base-props extension-props)
  "Merge BASE-PROPS and EXTENSION-PROPS plists.
 EXTENSION-PROPS take precedence over BASE-PROPS for duplicate keys.
 
@@ -84,7 +84,7 @@ BASE-PROPS typically come from base constructor (common properties).
 EXTENSION-PROPS come from domain-specific constructor (unique properties).
 
 Example:
-  (core-registry-merge-properties
+  (registry-merge-properties
    \\='(:binary \"foo\" :disabled nil)
    \\='(:abbreviation \"f\" :type \\='direct))
   => (:binary \"foo\" :disabled nil :abbreviation \"f\" :type direct)"
@@ -92,5 +92,5 @@ Example:
    (cl-loop for (key val) on extension-props by #'cddr do (setq merged (plist-put merged key val)))
    merged))
 
-(provide 'core-registry-constructors)
-;;; core-registry-constructors.el ends here
+(provide 'registry-constructors)
+;;; registry-constructors.el ends here

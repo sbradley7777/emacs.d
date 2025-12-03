@@ -1,16 +1,16 @@
-;;; core-registry-query.el --- Registry Query Functions -*- lexical-binding: t -*-
+;;; registry-query.el --- Registry Query Functions -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; Query and access functions for registry data structures.
 ;;
 ;; Registry format: (IDENTIFIER DESCRIPTION MODES . PROPERTIES)
 ;;
 ;; Query functions:
-;;   - core-registry-find-entry          - Find entry by identifier
-;;   - core-registry-get-property        - Get property value
-;;   - core-registry-get-description     - Get description string
-;;   - core-registry-get-modes           - Get supported modes
+;;   - registry-find-entry          - Find entry by identifier
+;;   - registry-get-property        - Get property value
+;;   - registry-get-description     - Get description string
+;;   - registry-get-modes           - Get supported modes
 ;;   - registry--get-all-identifiers - Get all identifiers
-;;   - core-registry-find-by-mode        - Find entries for a mode
+;;   - registry-find-by-mode        - Find entries for a mode
 ;;   - registry--find-all-by-mode    - Find all entries for a mode
 ;;
 ;; Iteration helpers:
@@ -20,14 +20,14 @@
 ;;; Code:
 (require 'cl-lib)
 
-;; Forward declaration for core-registry-mode-compatible-p
-(declare-function core-registry-mode-compatible-p "core-registry-validation")
+;; Forward declaration for registry-mode-compatible-p
+(declare-function registry-mode-compatible-p "registry-validation")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core Query Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-registry-find-entry (registry identifier)
+ registry-find-entry (registry identifier)
  "Find entry in REGISTRY with IDENTIFIER.
 Return the full entry or nil if not found.
 REGISTRY is a list of entries following the registry format.
@@ -35,31 +35,31 @@ IDENTIFIER is the symbol to look up (first element of entry)."
  (assq identifier registry))
 
 (defun
- core-registry-get-property (registry identifier property)
+ registry-get-property (registry identifier property)
  "Get PROPERTY for IDENTIFIER from REGISTRY.
 Return the property value or nil if not found.
 PROPERTY is a keyword like :binary, :type, :install-hint, etc.
 REGISTRY is the registry to search in.
 IDENTIFIER is the entry identifier symbol."
- (let ((entry (core-registry-find-entry registry identifier)))
+ (let ((entry (registry-find-entry registry identifier)))
    (when entry (plist-get (nthcdr 3 entry) property))))
 
 (defun
- core-registry-get-description (registry identifier)
+ registry-get-description (registry identifier)
  "Get human-readable description for IDENTIFIER from REGISTRY.
 Return the description string or the identifier symbol as fallback.
 REGISTRY is the registry to search in.
 IDENTIFIER is the entry identifier symbol."
- (let ((entry (core-registry-find-entry registry identifier)))
+ (let ((entry (registry-find-entry registry identifier)))
    (if entry (nth 1 entry) (format "%s" identifier))))
 
 (defun
- core-registry-get-modes (registry identifier)
+ registry-get-modes (registry identifier)
  "Get list of supported modes for IDENTIFIER from REGISTRY.
 Return list of mode symbols or special value like (multiple).
 REGISTRY is the registry to search in.
 IDENTIFIER is the entry identifier symbol."
- (let ((entry (core-registry-find-entry registry identifier)))
+ (let ((entry (registry-find-entry registry identifier)))
    (when entry (nth 2 entry))))
 
 (defun
@@ -82,7 +82,7 @@ Example:
 ;; Mode-Based Query Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-registry-find-by-mode (registry mode &optional filter-fn)
+ registry-find-by-mode (registry mode &optional filter-fn)
  "Find first entry in REGISTRY that supports MODE.
 Return the identifier (first element) of matching entry, or nil.
 If FILTER-FN is provided, only consider entries where (FILTER-FN entry) is non-nil.
@@ -91,7 +91,7 @@ MODE is the major mode symbol to find.
 FILTER-FN is optional predicate function.
 
 Example:
-  (core-registry-find-by-mode eglot-registry \\='python-mode
+  (registry-find-by-mode eglot-registry \\='python-mode
     (lambda (e) (not (plist-get (nthcdr 3 e) :disabled))))"
  (let ((result nil))
    (catch
@@ -101,8 +101,7 @@ Example:
      (when
       (or (null filter-fn) (funcall filter-fn entry))
       (let ((modes (nth 2 entry)))
-        (when
-         (core-registry-mode-compatible-p modes mode) (throw 'found (setq result (car entry))))))))
+        (when (registry-mode-compatible-p modes mode) (throw 'found (setq result (car entry))))))))
    result))
 
 (defun
@@ -119,7 +118,7 @@ FILTER-FN is optional predicate function."
     (when
      (or (null filter-fn) (funcall filter-fn entry))
      (let ((modes (nth 2 entry)))
-       (when (core-registry-mode-compatible-p modes mode) (push (car entry) results)))))
+       (when (registry-mode-compatible-p modes mode) (push (car entry) results)))))
    (nreverse results)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -153,7 +152,7 @@ Example:
 ;; Filtering Helpers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-registry-filter-disabled (registry identifier-list)
+ registry-filter-disabled (registry identifier-list)
  "Filter IDENTIFIER-LIST, removing entries marked as disabled in REGISTRY.
 Return new list with disabled entries removed.
 Only filters symbol identifiers; preserves non-symbol elements unchanged.
@@ -166,7 +165,7 @@ those with :disabled t property.  Non-symbol elements (like hook markers)
 are preserved in the output.
 
 Example:
-  (core-registry-filter-disabled
+  (registry-filter-disabled
     flymake-backend-registry
     \\='(python-flymake sh-shellcheck-flymake t \\='elisp-flymake-byte-compile))
   => (python-flymake t \\='elisp-flymake-byte-compile)
@@ -176,11 +175,11 @@ Example:
    (identifier)
    (when
     (symbolp identifier)
-    (let* ((entry (core-registry-find-entry registry identifier))
+    (let* ((entry (registry-find-entry registry identifier))
            (props (when entry (nthcdr 3 entry)))
            (disabled (when props (plist-get props :disabled))))
       disabled)))
   identifier-list))
 
-(provide 'core-registry-query)
-;;; core-registry-query.el ends here
+(provide 'registry-query)
+;;; registry-query.el ends here

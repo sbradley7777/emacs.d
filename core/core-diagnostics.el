@@ -5,7 +5,7 @@
 
 ;;; Code:
 (require 'core-logging)
-(require 'core-logging-tables)
+(require 'logging-tables)
 (require 'core-constants)
 (require 'tree-sitter-utils)
 (require 'core-process-utils)
@@ -114,7 +114,7 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
           (list "Display mode" (if (display-graphic-p) "GUI" "Terminal"))
           (list "Installed packages" (number-to-string package-count))
           (list "Tree-sitter" treesit-status))))
-   (logging-diagnostic "System Information" (core-logging-format-table headers rows))))
+   (logging-diagnostic "System Information" (logging-format-table headers rows))))
 
 (defun
  core--diagnostics-show-config-details
@@ -147,7 +147,7 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
           (list "Dev config" dev-file-path)
           (list "Native compilation" native-comp-status)
           (list "Native comp cache" native-cache-dir))))
-   (logging-diagnostic "Configuration Details" (core-logging-format-table headers rows))))
+   (logging-diagnostic "Configuration Details" (logging-format-table headers rows))))
 
 (defun
  core--diagnostics-show-grammars
@@ -173,8 +173,7 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
                  (list name (abbreviate-file-name file))))
               grammars)))
        (logging-diagnostic
-        (format "Installed Grammars (%d)" grammar-count)
-        (core-logging-format-table headers rows))))
+        (format "Installed Grammars (%d)" grammar-count) (logging-format-table headers rows))))
     (logging-diagnostic "Installed Grammars (0)" (list "No tree-sitter grammars installed")))))
 
 (defun

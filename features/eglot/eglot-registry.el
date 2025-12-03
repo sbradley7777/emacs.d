@@ -10,9 +10,9 @@
 
 ;;; Code:
 (require 'core-logging)
-(require 'core-registry)
-(require 'core-registry-query)
-(require 'core-registry-validation)
+(require 'registry-init)
+(require 'registry-query)
+(require 'registry-validation)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Eglot Constructor
@@ -35,7 +35,7 @@ Example:
    :priority 100
    :url \\\"https://github.com/python-lsp/python-lsp-server\\\")"
  (unless binary (error "Eglot LSP server %s missing required :binary" identifier))
- (core-registry-create-base-entry
+ (registry-create-base-entry
   identifier
   description
   modes
@@ -177,7 +177,7 @@ This is a strict mode option that prevents invalid configurations."
  eglot-registry-find-server (server-symbol)
  "Find LSP server specification in `eglot-lsp-server-registry' for SERVER-SYMBOL.
 Returns the server spec entry (SERVER-SYMBOL DESCRIPTION MODES) or nil if not found."
- (core-registry-find-entry eglot-lsp-server-registry server-symbol))
+ (registry-find-entry eglot-lsp-server-registry server-symbol))
 
 (defun
  eglot-find-server-for-mode (mode)
@@ -188,7 +188,7 @@ MODE is the major mode symbol to find (e.g., \\='python-mode).
 Example:
   (eglot-find-server-for-mode \\='python-mode)
   => pylsp"
- (core-registry-find-by-mode eglot-lsp-server-registry mode))
+ (registry-find-by-mode eglot-lsp-server-registry mode))
 
 (defun
  eglot-registry-get-property (server-symbol property)
@@ -198,14 +198,14 @@ Returns nil if server not found or property not set.
 
 The registry format is (SERVER-SYMBOL DESCRIPTION MODES . PROPERTIES)
 where PROPERTIES is a plist starting at index 3."
- (core-registry-get-property eglot-lsp-server-registry server-symbol property))
+ (registry-get-property eglot-lsp-server-registry server-symbol property))
 
 (defun
  eglot-registry-get-description (server-symbol)
  "Get human-readable description for SERVER-SYMBOL.
 Looks up the server in `eglot-lsp-server-registry' and returns its description.
 Falls back to the server symbol name if not found in registry."
- (core-registry-get-description eglot-lsp-server-registry server-symbol))
+ (registry-get-description eglot-lsp-server-registry server-symbol))
 
 (defun
  eglot-registry-get-binary (server-symbol)
@@ -219,7 +219,7 @@ SERVER-SYMBOL is the LSP server identifier symbol to look up."
  "Get list of supported modes for SERVER-SYMBOL from registry.
 Returns list of mode symbols.
 SERVER-SYMBOL is the LSP server identifier symbol to look up."
- (core-registry-get-modes eglot-lsp-server-registry server-symbol))
+ (registry-get-modes eglot-lsp-server-registry server-symbol))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Validation Functions
@@ -235,7 +235,7 @@ Servers marked with :disabled t will return nil, preventing them from being enab
 This is the standard validation check used before enabling any LSP server.
 
 Note: This function looks up the server by binary name in the registry.
-It uses `core-registry-entry-available-p' with is-lsp=t for LSP-specific checking."
+It uses `registry-entry-available-p' with is-lsp=t for LSP-specific checking."
  (let ((server-entry
         (cl-find-if
          (lambda
@@ -244,8 +244,7 @@ It uses `core-registry-entry-available-p' with is-lsp=t for LSP-specific checkin
    (when
     server-entry
     (let ((server-symbol (car server-entry)))
-      (core-registry-entry-available-p
-       eglot-lsp-server-registry server-symbol lsp-server nil t)))))
+      (registry-entry-available-p eglot-lsp-server-registry server-symbol lsp-server nil t)))))
 
 (defun
  eglot--mode-compatible-p (supported-modes)
@@ -253,7 +252,7 @@ It uses `core-registry-entry-available-p' with is-lsp=t for LSP-specific checkin
 Returns t if current mode matches exactly or derives from any supported mode.
 
 SUPPORTED-MODES is a list of mode symbols from registry entry."
- (core-registry-mode-compatible-p supported-modes major-mode))
+ (registry-mode-compatible-p supported-modes major-mode))
 
 (defun
  eglot--validate-registry-entry (entry)
@@ -262,7 +261,7 @@ Returns nil if valid, error message string if invalid.
 Does not signal errors, only returns validation result.
 
 ENTRY is a registry entry in format (SERVER-SYMBOL DESCRIPTION MODES . PROPERTIES)."
- (core-registry-validate-entry entry '(:binary)))
+ (registry-validate-entry entry '(:binary)))
 
 (defun
  eglot--check-mode-compatibility (server-symbol spec)

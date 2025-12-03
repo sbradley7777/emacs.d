@@ -27,9 +27,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq tramp-default-method "ssh")
 (setq tramp-default-remote-shell tramp-default-shell)
-(setq tramp-persistency-file-name features-tramp-cache-file)
-(setq tramp-auto-save-directory features-tramp-autosave-dir)
-(core-ensure-directory features-tramp-autosave-dir)
+(setq tramp-persistency-file-name tramp-cache-file)
+(setq tramp-auto-save-directory tramp-autosave-dir)
+(core-ensure-directory tramp-autosave-dir)
 (dolist (path tramp-user-paths) (add-to-list 'tramp-remote-path path))
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 (provide 'tramp-config)

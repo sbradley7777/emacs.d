@@ -1,4 +1,4 @@
-;;; core-logging-tables.el --- Table Formatting for Logging and Diagnostics -*- lexical-binding: t -*-
+;;; logging-tables.el --- Table Formatting for Logging and Diagnostics -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;; Table formatting utilities for diagnostic output and logging.
@@ -45,7 +45,7 @@ Example:
     (number-sequence 0 (1- num-cols)))))
 
 (defun
- core-logging-add-column-padding (widths padding)
+ logging-add-column-padding (widths padding)
  "Add PADDING to each width in WIDTHS list, except the last column.
 WIDTHS is a list of column widths.
 PADDING is the number of spaces to add to each column (except the last).
@@ -54,7 +54,7 @@ Returns new widths list with padding applied.
 The last column receives no padding (typically for unlimited-width columns).
 
 Example:
-  (core-logging-add-column-padding \\='(4 3 7 10) 2)
+  (logging-add-column-padding \\='(4 3 7 10) 2)
   => (6 5 9 10)  ; First 3 columns +2, last column unchanged"
  (let ((result nil)
        (len (length widths)))
@@ -79,7 +79,7 @@ COUNT-VALUE is the numeric count to display after label.
 OTHER-COLUMNS are remaining column values (strings or numbers).
 
 Returns a lambda function suitable for use as TOTAL-SPEC parameter
-in `core-logging-format-table'.
+in `logging-format-table'.
 
 The function calculates column widths to determine proper padding between
 LABEL and COUNT-VALUE, ensuring the combined text fits the first column width.
@@ -163,7 +163,7 @@ Example:
 PLISTS is a list of property lists.
 COLUMN-KEYS is a list of plist keys to extract (in order).
 
-Returns list of rows suitable for `core-logging-format-table'.
+Returns list of rows suitable for `logging-format-table'.
 Missing keys are rendered as \"-\".
 
 Example:
@@ -183,7 +183,7 @@ Example:
 ALISTS is a list of association lists.
 COLUMN-KEYS is a list of alist keys to extract (in order).
 
-Returns list of rows suitable for `core-logging-format-table'.
+Returns list of rows suitable for `logging-format-table'.
 Missing keys are rendered as \"-\".
 
 Example:
@@ -356,7 +356,7 @@ Numeric patterns recognized: integers, floats, and fractions (e.g., \"3/5\")."
         'right 'left))))))
 
 (defun
- core-logging-format-table (headers rows &optional total-spec)
+ logging-format-table (headers rows &optional total-spec)
  "Format HEADERS and ROWS as a box-drawing table.
 HEADERS is a list of column header strings.
 ROWS is a list of row data, where each row is a list of column values.
@@ -373,14 +373,14 @@ Automatically right-aligns numeric columns (both headers and data).
 
 Examples:
   ;; No total row (default)
-  (core-logging-format-table
+  (logging-format-table
    \\='(\"Name\" \"Age\" \"City\")
    \\='((\"Alice\" \"25\" \"NYC\")
      (\"Bob\" \"30\" \"SF\")))
   => Table without total row
 
   ;; Count-only total
-  (core-logging-format-table
+  (logging-format-table
    \\='(\"Name\" \"Age\" \"City\")
    \\='((\"Alice\" \"25\" \"NYC\")
      (\"Bob\" \"30\" \"SF\"))
@@ -388,7 +388,7 @@ Examples:
   => Last row: │ TOTAL: 2 │ - │ - │
 
   ;; Sum specific columns by index
-  (core-logging-format-table
+  (logging-format-table
    \\='(\"Name\" \"Age\" \"Score\")
    \\='((\"Alice\" \"25\" \"100\")
      (\"Bob\" \"30\" \"150\"))
@@ -396,7 +396,7 @@ Examples:
   => Last row: │ TOTAL │ 55 │ 250 │
 
   ;; Sum specific columns by name
-  (core-logging-format-table
+  (logging-format-table
    \\='(\"Name\" \"Age\" \"Score\")
    \\='((\"Alice\" \"25\" \"100\")
      (\"Bob\" \"30\" \"150\"))
@@ -404,7 +404,7 @@ Examples:
   => Last row: │ TOTAL │ 55 │ 250 │
 
   ;; Custom total row function
-  (core-logging-format-table
+  (logging-format-table
    \\='(\"Name\" \"Count\" \"Value\")
    \\='((\"A\" \"10\" \"100\")
      (\"B\" \"20\" \"200\"))
@@ -433,5 +433,5 @@ Examples:
    (push (logging--build-border col-widths 'bottom) lines)
    (nreverse lines)))
 
-(provide 'core-logging-tables)
-;;; core-logging-tables.el ends here
+(provide 'logging-tables)
+;;; logging-tables.el ends here

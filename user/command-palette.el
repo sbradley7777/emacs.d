@@ -73,7 +73,7 @@
    ("Diagnostics Show Flymake Backends" . diagnostics-show-flymake-backends)
    ("Diagnostics Show Forge Hosts" . diagnostics-show-forge-hosts)
    ("Diagnostics Show Package System" . diagnostics-show-pkg-system)
-   ("Save Diagnostic Buffers" . core-logging-save-debug-buffers)
+   ("Save Diagnostic Buffers" . logging-save-debug-buffers)
    ("Show Installed Packages" . pkg-system-ui-show-installed)
    ("Search Packages" . pkg-system-ui-search)
    ("Show Package Upgrades" . pkg-system-ui-show-upgrades)

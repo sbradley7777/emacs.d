@@ -1,4 +1,4 @@
-;;; core-registry.el --- Generic Registry System -*- lexical-binding: t -*-
+;;; registry-init.el --- Generic Registry System -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; Main entry point for the generic registry system.
 ;; Provides a unified interface for all registry operations:
@@ -21,17 +21,17 @@
 ;;
 ;; This abstraction is used by:
 ;;   - flymake-backend-registry (diagnostic backends)
-;;   - features-eglot-lsp-server-registry (LSP servers)
+;;   - eglot-lsp-server-registry (LSP servers)
 ;;
 ;; To use the registry system:
-;;   (require \\='core-registry)
+;;   (require \\='registry-init)
 ;;
 ;; This will load all registry modules automatically.
 
 ;;; Code:
-(require 'core-registry-query)
-(require 'core-registry-validation)
-(require 'core-registry-constructors)
+(require 'registry-query)
+(require 'registry-validation)
+(require 'registry-constructors)
 
-(provide 'core-registry)
-;;; core-registry.el ends here
+(provide 'registry-init)
+;;; registry-init.el ends here

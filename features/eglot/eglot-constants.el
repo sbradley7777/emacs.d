@@ -1,7 +1,7 @@
 ;;; eglot-constants.el --- Eglot LSP Configuration Constants -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; This file contains constants for Eglot LSP configuration.
-;; Constants are prefixed with 'features-eglot-' to avoid naming conflicts.
+;; Constants are prefixed with 'eglot-' following parent directory naming convention.
 
 ;;; Code:
 (require 'core-utils)

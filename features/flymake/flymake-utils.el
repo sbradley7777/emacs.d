@@ -5,7 +5,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'core-logging)
-(require 'core-logging-tables)
+(require 'logging-tables)
 (require 'core-ui-utils)
 (require 'core-utils)
 (require 'eglot-registry)
@@ -421,7 +421,7 @@ Column layout (all widths calculated dynamically from actual data):
            (if
             rows (logging-calculate-column-widths headers rows '(4 3 7 4 10 0)) '(4 3 7 4 10 0)))
           ;; Add column padding
-          (new-widths (core-logging-add-column-padding base-widths 2)))
+          (new-widths (logging-add-column-padding base-widths 2)))
      ;; Update format if widths changed
      (unless
       (equal new-widths flymake-diagnostics--last-column-widths)
@@ -567,7 +567,7 @@ Returns list of formatted table lines with total row."
                "-"
                (format "%d/%d/%d" total-errors total-warnings total-notes)
                "-"))))
-        (core-logging-format-table headers rows total-spec)))
+        (logging-format-table headers rows total-spec)))
     (list "No buffers with flymake-mode enabled"))))
 
 (defun
@@ -688,7 +688,7 @@ Creates one row per mode/LSP-server combination from `eglot-lsp-server-registry'
            (total-spec
             (logging-total-with-count-label
              "Total" row-count "-" "-" "-" "-" "-" "-" (number-to-string running-count))))
-      (core-logging-format-table headers reversed-rows total-spec))
+      (logging-format-table headers reversed-rows total-spec))
     (list "No LSP backends registered"))))
 
 (defun
@@ -750,7 +750,7 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
            (total-spec
             (logging-total-with-count-label
              "Total" row-count "-" "-" "-" "-" "-" "-" (number-to-string total-buffers))))
-      (core-logging-format-table headers reversed-rows total-spec))
+      (logging-format-table headers reversed-rows total-spec))
     (list empty-message))))
 
 (defun

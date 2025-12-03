@@ -197,10 +197,10 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 (core-load-module core-editing :description "Editing preferences")
 (core-load-module core-files :description "File handling")
 (core-load-module
- core-logging-utils
+ logging-utils
  :after core-files
  :description "Log file writing and rotation utilities")
-(core-load-module core-logging-buffers :description "Messages and debug buffer logging")
+(core-load-module logging-buffers :description "Messages and debug buffer logging")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Phase 5: Enhanced Features (Optional Components)

@@ -128,10 +128,10 @@
 ;; The debug directory is only created if there are buffers to save.
 ;;
 ;; Uncomment the following line to enable auto-save on exit:
-;; (add-hook 'kill-emacs-hook #'core-logging--save-debug-buffers-on-exit)
+;; (add-hook 'kill-emacs-hook #'logging--save-debug-buffers-on-exit)
 ;;
 ;; Manual command available anytime:
-;;   M-x core-logging-save-debug-buffers  - Save debug buffers immediately
+;;   M-x logging-save-debug-buffers  - Save debug buffers immediately
 
 ;; ============================================
 ;; 9. FLYMAKE STRICT VALIDATION (OPTIONAL)
