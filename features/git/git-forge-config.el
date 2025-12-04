@@ -106,7 +106,6 @@ Skips entries with missing required fields (apihost, webhost, or type).
 
 Note: Usernames are configured per-repository when files are opened,
 not globally, to keep .git/config files clean."
- (interactive)
  (condition-case err
      (progn
       (unless
@@ -181,7 +180,6 @@ Only sets username if:
 2. The repository's host matches one of our [emacs-forge] configurations
 3. The username is not already set in local config
 This ensures each repository only gets username config for its own host."
- (interactive)
  (when
   (and (fboundp 'magit-get) (fboundp 'magit-set))
   (let ((repo-host (git-forge-config-get-repo-host)))

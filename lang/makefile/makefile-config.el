@@ -23,10 +23,7 @@
   show-trailing-whitespace t)) ; Show trailing whitespace clearly
 
 (defun
- makefile-validate-tabs
- ()
- "Check if Makefile use proper tabs for recipe indentation."
- (interactive)
+ makefile-validate-tabs () "Check if Makefile use proper tabs for recipe indentation."
  (save-excursion
   (goto-char (point-min))
   (let ((tab-recipe-count 0)

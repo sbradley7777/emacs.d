@@ -72,8 +72,8 @@ For markdown links [text](url), finds the link text and extracts the URL from th
           (url (match-string 0))
           (map (make-sparse-keymap)))
      ;; Create a keymap that opens the URL when clicked or when RET is pressed
-     (define-key map [mouse-1] `(lambda () (interactive) (browse-url ,url)))
-     (define-key map (kbd "RET") `(lambda () (interactive) (browse-url ,url)))
+     (define-key map [mouse-1] `(lambda () (browse-url ,url)))
+     (define-key map (kbd "RET") `(lambda () (browse-url ,url)))
      ;; Add interactive properties to make the link clickable
      (put-text-property url-start url-end 'keymap map)
      (put-text-property url-start url-end 'follow-link t)
@@ -100,8 +100,8 @@ For markdown links [text](url), finds the link text and extracts the URL from th
        (let* ((url (match-string 1))
               (map (make-sparse-keymap)))
          ;; Make the link text clickable
-         (define-key map [mouse-1] `(lambda () (interactive) (browse-url ,url)))
-         (define-key map (kbd "RET") `(lambda () (interactive) (browse-url ,url)))
+         (define-key map [mouse-1] `(lambda () (browse-url ,url)))
+         (define-key map (kbd "RET") `(lambda () (browse-url ,url)))
          (put-text-property link-text-start link-text-end 'keymap map)
          (put-text-property link-text-start link-text-end 'follow-link t)
          (put-text-property link-text-start link-text-end 'mouse-face 'highlight)

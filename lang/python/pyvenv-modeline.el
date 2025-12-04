@@ -24,7 +24,6 @@
  pyvenv--modeline-show-info
  ()
  "Display Python virtual environment info in minibuffer when clicked."
- (interactive)
  (if
   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
   (let* ((project-name (if (boundp 'pyvenv-project-name) pyvenv-project-name "Unknown"))
