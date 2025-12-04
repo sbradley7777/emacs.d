@@ -7,12 +7,12 @@
 ;;; Code:
 (require 'command-palette-init)
 (require 'command-palette-constants)
+(require 'command-palette-actions)
 (require 'ring)
 
 ;; Forward declarations
 (declare-function command-palette--get-keybinding "command-palette-actions")
 (declare-function command-palette--execute-command "command-palette-actions")
-(declare-function command-palette--make-button "command-palette-actions")
 (declare-function command-palette-switch-to-favorites "command-palette-views")
 (declare-function command-palette-switch-to-diagnostics "command-palette-views")
 (declare-function command-palette-switch-to-history "command-palette-views")
@@ -191,17 +191,7 @@ Properties:
          "\n")))
    (insert (propertize separator-line 'face command-palette--color-border))))
 
-(defun
- command-palette--make-text-button
- (text action face)
- "Create a text button with TEXT that executes ACTION, styled with FACE."
- (let ((start (point)))
-   (insert text)
-   (make-text-button start (point) 'action action 'follow-link t 'face face)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Section Helper Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  command-palette--iterate-data (data data-type callback)
  "Call CALLBACK for each item in DATA, handling both ring and list types.
@@ -236,8 +226,8 @@ Looks up actions from `command-palette--action-buttons' based on current view."
           label
           (if
            (eq call-type 'interactive)
-           `(lambda (_) (call-interactively ',func))
-           `(lambda (_) (funcall ',func)))
+           (lambda (_) (call-interactively func))
+           (lambda (_) (funcall func)))
           face)
          (let* ((bullet-len (length command-palette--format-bullet))
                 (label-len (length label))
@@ -260,8 +250,8 @@ _VIEW-CONFIG is unused but required for section renderer interface."
           (key (plist-get nav-button :key))
           (func (plist-get nav-button :function)))
      (insert command-palette--format-bullet)
-     (command-palette--make-text-button
-      label `(lambda (_) (funcall ',func)) command-palette--color-navigation)
+     (command-palette--make-button
+      label (lambda (_) (funcall func)) command-palette--color-navigation)
      (let* ((bullet-len (length command-palette--format-bullet))
             (label-len (length label))
             (key-text (format command-palette--format-key key))
@@ -289,16 +279,16 @@ _VIEW-CONFIG is unused but required for section renderer interface."
           next-enabled (format "%s %s" (format command-palette--format-key next-key) next-label))))
    (when
     prev-enabled
-    (command-palette--make-text-button
-     prev-text `(lambda (_) (funcall ',prev-func)) command-palette--color-navigation))
+    (command-palette--make-button
+     prev-text (lambda (_) (funcall prev-func)) command-palette--color-navigation))
    (when
     (and prev-enabled next-enabled)
     (let ((spacing (- command-palette--border-width (length prev-text) (length next-text))))
       (insert (make-string spacing ?\s))))
    (when
     next-enabled
-    (command-palette--make-text-button
-     next-text `(lambda (_) (funcall ',next-func)) command-palette--color-navigation)))
+    (command-palette--make-button
+     next-text (lambda (_) (funcall next-func)) command-palette--color-navigation)))
  (insert "\n"))
 
 (defun
@@ -326,7 +316,7 @@ Returns the position of the first command button, or nil if no commands."
           (when (= display-index 1) (setq first-button-pos button-start))
           (command-palette--make-button
            (format command-palette--format-command display-index name)
-           `(lambda (_) (command-palette--execute-command ',cmd))
+           (lambda (_) (command-palette--execute-command cmd))
            button-color
            keybinding)
           (insert "\n")

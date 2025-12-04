@@ -4,11 +4,15 @@
 ;; Handles saving and loading of favorites, diagnostics, and history.
 
 ;;; Code:
-(require 'command-palette-init)
 (require 'command-palette-constants)
 (require 'command-palette-defaults)
 (require 'logging-init)
 (require 'ring)
+
+;; Forward declarations
+(defvar user-command-palette-favorites)
+(defvar user-command-palette-diagnostics)
+(defvar user--command-palette-history)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helper Functions

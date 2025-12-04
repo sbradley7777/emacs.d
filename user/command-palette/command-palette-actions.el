@@ -78,7 +78,10 @@ Switches to the previous window before executing the command, then closes the pa
            (win) (not (string= (buffer-name (window-buffer win)) command-palette-buffer-name)))
           (window-list)))))
    (when target-window (select-window target-window))
-   (call-interactively cmd-symbol)))
+   (condition-case err
+       (call-interactively cmd-symbol)
+     (error
+      (logging-error "Command execution failed: %s" (error-message-string err))))))
 
 (defun
  command-palette--make-button (label action face &optional keybinding)
@@ -114,7 +117,7 @@ Returns width as number of columns needed to display content."
      (let ((line-width (- (line-end-position) (line-beginning-position))))
        (setq max-width (max max-width line-width)))
      (forward-line 1))
-    (+ max-width 2))))
+    (+ max-width command-palette--window-padding))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Action Functions
@@ -225,7 +228,7 @@ Returns (valid-data . removed-count)."
               (cmd-symbol (cdr item))
               (cmd-name (car item)))
          (if
-          (and (fboundp cmd-symbol) (commandp cmd-symbol)) (ring-insert new-ring item)
+          (commandp cmd-symbol) (ring-insert new-ring item)
           (progn
            (setq removed-count (1+ removed-count))
            (logging-warning "Removed invalid %s: %s (%s)" type-name cmd-name cmd-symbol)))))
@@ -236,7 +239,7 @@ Returns (valid-data . removed-count)."
        (let ((cmd-symbol (cdr item))
              (cmd-name (car item)))
          (if
-          (and (fboundp cmd-symbol) (commandp cmd-symbol)) (push item valid-items)
+          (commandp cmd-symbol) (push item valid-items)
           (progn
            (setq removed-count (1+ removed-count))
            (logging-warning "Removed invalid %s: %s (%s)" type-name cmd-name cmd-symbol)))))
