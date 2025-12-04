@@ -120,6 +120,36 @@ Returns width as number of columns needed to display content."
 ;; Action Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
+ command-palette--add-to-favorites-from-source (source-data source-type source-name)
+ "Generic function to promote item from SOURCE-DATA to favorites.
+SOURCE-DATA is the data structure to promote from.
+SOURCE-TYPE is \\='ring or \\='list.
+SOURCE-NAME is a string used in user messages (e.g., \"recent command\", \"diagnostic\")."
+ (let ((data-length (if (eq source-type 'ring) (ring-length source-data) (length source-data))))
+   (if
+    (= data-length 0)
+    (logging-warning (format command-palette--msg-no-items source-name "promote"))
+    (let* ((max-index data-length)
+           (index
+            (core-user-read-number
+             (format "Promote %s to favorites (1 - %d): " source-name max-index) 1 max-index)))
+      (if
+       index
+       (let* ((item
+               (if
+                (eq source-type 'ring)
+                (ring-ref source-data (1- index))
+                (nth (1- index) source-data)))
+              (cmd-name (car item))
+              (cmd-symbol (cdr item)))
+         (unless
+          (assoc cmd-name user-command-palette-favorites)
+          (add-to-list 'user-command-palette-favorites item t)
+          (command-palette--refresh-buffer)
+          (logging-success (format command-palette--msg-promoted index cmd-name source-name))))
+       (logging-warning command-palette--msg-invalid-index))))))
+
+(defun
  command-palette--add-favorite ()
  "Promote a recent command from history to the favorites list.
 
@@ -127,24 +157,8 @@ Prompts for an index number from the recent commands list, then adds that
 command to the favorites section.  The command remains in history.
 The favorites list is persisted to disk immediately."
  (interactive)
- (if
-  (= (ring-length user--command-palette-history) 0)
-  (logging-warning "No recent commands to promote.  Execute commands via M-x first.")
-  (let* ((max-index (ring-length user--command-palette-history))
-         (index
-          (core-user-read-number
-           (format "Promote recent command to favorites (1 - %d): " max-index) 1 max-index)))
-    (if
-     index
-     (let* ((item (ring-ref user--command-palette-history (1- index)))
-            (cmd-name (car item))
-            (cmd-symbol (cdr item)))
-       (unless
-        (assoc cmd-name user-command-palette-favorites)
-        (add-to-list 'user-command-palette-favorites item t)
-        (command-palette--refresh-buffer)
-        (logging-success "Promoted #%d '%s' to favorites (kept in history)" index cmd-name)))
-     (logging-warning "Invalid index or cancelled")))))
+ (command-palette--add-to-favorites-from-source
+  user--command-palette-history 'ring "recent command"))
 
 (defun
  command-palette--add-favorite-from-diagnostics ()
@@ -154,24 +168,8 @@ Prompts for an index number from the diagnostics list, then adds that
 command to the favorites section.  The command remains in diagnostics.
 The favorites list is persisted to disk immediately."
  (interactive)
- (if
-  (= (length user-command-palette-diagnostics) 0)
-  (logging-warning "No diagnostic commands to promote.")
-  (let* ((max-index (length user-command-palette-diagnostics))
-         (index
-          (core-user-read-number
-           (format "Promote diagnostic to favorites (1 - %d): " max-index) 1 max-index)))
-    (if
-     index
-     (let* ((item (nth (1- index) user-command-palette-diagnostics))
-            (cmd-name (car item))
-            (cmd-symbol (cdr item)))
-       (unless
-        (assoc cmd-name user-command-palette-favorites)
-        (add-to-list 'user-command-palette-favorites item t)
-        (command-palette--refresh-buffer)
-        (logging-success "Promoted #%d '%s' to favorites (kept in diagnostics)" index cmd-name)))
-     (logging-warning "Invalid index or cancelled")))))
+ (command-palette--add-to-favorites-from-source
+  user-command-palette-diagnostics 'list "diagnostic"))
 
 (defun
  command-palette--remove-favorite ()
@@ -182,7 +180,8 @@ that command from favorites.  The change is persisted to disk immediately.
 Does not affect the command's availability in `M-x'."
  (interactive)
  (if
-  (= (length user-command-palette-favorites) 0) (logging-warning "No favorites to remove")
+  (= (length user-command-palette-favorites) 0)
+  (logging-warning (format command-palette--msg-no-items "favorites" "remove"))
   (let* ((max-index (length user-command-palette-favorites))
          (index
           (core-user-read-number
@@ -194,8 +193,8 @@ Does not affect the command's availability in `M-x'."
        (setq
         user-command-palette-favorites (cl-remove item-to-remove user-command-palette-favorites))
        (command-palette--refresh-buffer)
-       (logging-success "Removed favorite #%d: '%s'" index cmd-name))
-     (logging-warning "Invalid index or cancelled")))))
+       (logging-success (format command-palette--msg-removed "favorite" index cmd-name)))
+     (logging-warning command-palette--msg-invalid-index)))))
 
 (defun
  command-palette--clear-history
@@ -210,49 +209,56 @@ Use this to reset your recent commands list while keeping your favorites intact.
  (logging-success "Command palette history cleared"))
 
 (defun
+ command-palette--validate-data-list (data data-type type-name)
+ "Validate command list DATA of DATA-TYPE, removing invalid commands.
+TYPE-NAME is used for logging messages.
+Returns (valid-data . removed-count)."
+ (let ((removed-count 0))
+   (if
+    (eq data-type 'ring)
+    (let ((new-ring (make-ring command-palette-history-size))
+          (len (ring-length data)))
+      (dotimes
+       (i len)
+       (let* ((idx (- len 1 i))
+              (item (ring-ref data idx))
+              (cmd-symbol (cdr item))
+              (cmd-name (car item)))
+         (if
+          (and (fboundp cmd-symbol) (commandp cmd-symbol)) (ring-insert new-ring item)
+          (progn
+           (setq removed-count (1+ removed-count))
+           (logging-warning "Removed invalid %s: %s (%s)" type-name cmd-name cmd-symbol)))))
+      (cons new-ring removed-count))
+    (let ((valid-items nil))
+      (dolist
+       (item data)
+       (let ((cmd-symbol (cdr item))
+             (cmd-name (car item)))
+         (if
+          (and (fboundp cmd-symbol) (commandp cmd-symbol)) (push item valid-items)
+          (progn
+           (setq removed-count (1+ removed-count))
+           (logging-warning "Removed invalid %s: %s (%s)" type-name cmd-name cmd-symbol)))))
+      (cons (nreverse valid-items) removed-count)))))
+
+(defun
  command-palette--validate-commands
  ()
  "Validate all commands in favorites, diagnostics, and history, removing any that no longer exist."
  (interactive)
- (let ((removed-favorites 0)
-       (removed-diagnostics 0)
-       (removed-history 0))
-   (let ((valid-favorites nil))
-     (dolist
-      (item user-command-palette-favorites)
-      (let ((cmd-symbol (cdr item))
-            (cmd-name (car item)))
-        (if
-         (and (fboundp cmd-symbol) (commandp cmd-symbol)) (push item valid-favorites)
-         (progn
-          (setq removed-favorites (1+ removed-favorites))
-          (logging-warning "Removed invalid favorite: %s (%s)" cmd-name cmd-symbol)))))
-     (setq user-command-palette-favorites (nreverse valid-favorites)))
-   (let ((valid-diagnostics nil))
-     (dolist
-      (item user-command-palette-diagnostics)
-      (let ((cmd-symbol (cdr item))
-            (cmd-name (car item)))
-        (if
-         (and (fboundp cmd-symbol) (commandp cmd-symbol)) (push item valid-diagnostics)
-         (progn
-          (setq removed-diagnostics (1+ removed-diagnostics))
-          (logging-warning "Removed invalid diagnostic: %s (%s)" cmd-name cmd-symbol)))))
-     (setq user-command-palette-diagnostics (nreverse valid-diagnostics)))
-   (let ((new-ring (make-ring command-palette-history-size))
-         (len (ring-length user--command-palette-history)))
-     (dotimes
-      (i len)
-      (let* ((idx (- len 1 i))
-             (item (ring-ref user--command-palette-history idx))
-             (cmd-symbol (cdr item))
-             (cmd-name (car item)))
-        (if
-         (and (fboundp cmd-symbol) (commandp cmd-symbol)) (ring-insert new-ring item)
-         (progn
-          (setq removed-history (1+ removed-history))
-          (logging-warning "Removed invalid history item: %s (%s)" cmd-name cmd-symbol)))))
-     (setq user--command-palette-history new-ring))
+ (let* ((fav-result
+         (command-palette--validate-data-list user-command-palette-favorites 'list "favorite"))
+        (diag-result
+         (command-palette--validate-data-list user-command-palette-diagnostics 'list "diagnostic"))
+        (hist-result
+         (command-palette--validate-data-list user--command-palette-history 'ring "history item"))
+        (removed-favorites (cdr fav-result))
+        (removed-diagnostics (cdr diag-result))
+        (removed-history (cdr hist-result)))
+   (setq user-command-palette-favorites (car fav-result))
+   (setq user-command-palette-diagnostics (car diag-result))
+   (setq user--command-palette-history (car hist-result))
    (command-palette--refresh-buffer)
    (if
     (and (= removed-favorites 0) (= removed-diagnostics 0) (= removed-history 0))

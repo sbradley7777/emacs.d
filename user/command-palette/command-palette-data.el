@@ -5,12 +5,13 @@
 
 ;;; Code:
 (require 'command-palette-init)
+(require 'command-palette-constants)
 (require 'command-palette-defaults)
 (require 'logging-init)
 (require 'ring)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Functions
+;; Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  command-palette--ensure-data-directory
@@ -19,169 +20,146 @@
  (core-ensure-directory command-palette-data-dir))
 
 (defun
+ command-palette--insert-file-header
+ (file-path description)
+ "Insert standard file header for FILE-PATH with DESCRIPTION."
+ (insert (format ";;; %s -*- lexical-binding: t -*-\n" (file-name-nondirectory file-path)))
+ (insert ";;;\n")
+ (insert (format ";;; This file stores the command palette %s.\n" description))
+ (insert ";;; Generated automatically - do not edit manually.\n")
+ (insert ";;;\n\n"))
+
+(defun
+ command-palette--get-config
+ (data-key)
+ "Get persistence config for DATA-KEY (history, favorites, or diagnostics)."
+ (cdr (assoc data-key command-palette--persistence-configs)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Generic Save Function
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ command-palette--save-data (data-key)
+ "Save data for DATA-KEY to persistent storage.
+DATA-KEY should be one of: history, favorites, diagnostics."
+ (command-palette--ensure-data-directory)
+ (let* ((config (command-palette--get-config data-key))
+        (variable (plist-get config :variable))
+        (saved-var (plist-get config :saved-var))
+        (file-path (symbol-value (plist-get config :file)))
+        (data-type (plist-get config :data-type))
+        (description (plist-get config :description))
+        (data (symbol-value variable)))
+   (condition-case err
+       (with-temp-file
+        file-path
+        (command-palette--insert-file-header file-path description)
+        (insert (format "(setq %s\n" saved-var))
+        (insert "  '(")
+        (let ((first t))
+          (if
+           (eq data-type 'ring)
+           (dotimes
+            (i (ring-length data))
+            (let ((item (ring-ref data i)))
+              (unless first (insert "\n    "))
+              (setq first nil)
+              (insert (format "%S" item))))
+           (dolist
+            (item data)
+            (unless first (insert "\n    "))
+            (setq first nil)
+            (insert (format "%S" item)))))
+        (insert "))\n\n")
+        (insert (format ";;; %s ends here\n" (file-name-nondirectory file-path)))
+        (logging-success
+         "Saved command palette %s to %s" description (abbreviate-file-name file-path)))
+     (error
+      (logging-error
+       "Failed to save command palette %s: %s" description (error-message-string err))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Generic Load Function
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ command-palette--load-data (data-key &optional silent)
+ "Load data for DATA-KEY from persistent storage.
+If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise.
+DATA-KEY should be one of: history, favorites, diagnostics."
+ (let* ((config (command-palette--get-config data-key))
+        (variable (plist-get config :variable))
+        (saved-var (plist-get config :saved-var))
+        (file-path (symbol-value (plist-get config :file)))
+        (data-type (plist-get config :data-type))
+        (description (plist-get config :description))
+        (default-value (plist-get config :default)))
+   (if
+    (file-exists-p file-path)
+    (condition-case err
+        (progn
+         (load file-path)
+         (when
+          (boundp saved-var)
+          (if
+           (eq data-type 'ring)
+           (progn
+            (set variable (make-ring command-palette-history-size))
+            (dolist
+             (item (reverse (symbol-value saved-var))) (ring-insert (symbol-value variable) item)))
+           (set variable (symbol-value saved-var)))
+          (unless
+           silent
+           (logging-success
+            "Loaded %d %s command(s)" (length (symbol-value saved-var)) description))
+          t))
+      (error
+       (logging-warning
+        "Failed to load command palette %s: %s" description (error-message-string err))
+       (when default-value (set variable default-value))
+       nil))
+    (progn
+     (when default-value (set variable default-value))
+     (unless silent (logging-info "Using default command palette %s" description))
+     nil))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Public API Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
  command-palette--save-history
  ()
  "Save command history to persistent storage."
- (command-palette--ensure-data-directory)
- (condition-case err
-     (with-temp-file
-      command-palette-history-file
-      (insert
-       ";;; command-palette-history.el --- Command Palette History -*- lexical-binding: t -*-\n")
-      (insert ";;;\n")
-      (insert ";;; This file stores the command palette execution history.\n")
-      (insert ";;; Generated automatically - do not edit manually.\n")
-      (insert ";;;\n\n")
-      (insert "(setq command-palette-saved-history\n")
-      (insert "  '(")
-      (let ((first t))
-        (dotimes
-         (i (ring-length user--command-palette-history))
-         (let ((item (ring-ref user--command-palette-history i)))
-           (unless first (insert "\n    "))
-           (setq first nil)
-           (insert (format "%S" item)))))
-      (insert "))\n\n")
-      (insert ";;; command-palette-history.el ends here\n")
-      (logging-success
-       "Saved command palette history to %s" (abbreviate-file-name command-palette-history-file)))
-   (error
-    (logging-error "Failed to save command palette history: %s" (error-message-string err)))))
+ (command-palette--save-data 'history))
 
 (defun
  command-palette--load-history (&optional silent)
  "Load command history from persistent storage.
 If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise."
- (when
-  (file-exists-p command-palette-history-file)
-  (condition-case err
-      (progn
-       (load command-palette-history-file)
-       (when
-        (boundp 'command-palette-saved-history)
-        (setq user--command-palette-history (make-ring command-palette-history-size))
-        (dolist
-         (item (reverse command-palette-saved-history))
-         (ring-insert user--command-palette-history item))
-        (unless
-         silent
-         (logging-success
-          "Loaded %d command(s) from history" (length command-palette-saved-history)))
-        t))
-    (error
-     (logging-warning "Failed to load command palette history: %s" (error-message-string err))
-     nil))))
+ (command-palette--load-data 'history silent))
 
 (defun
  command-palette--save-favorites
  ()
  "Save favorites list to persistent storage."
- (command-palette--ensure-data-directory)
- (condition-case err
-     (with-temp-file
-      command-palette-favorites-file
-      (insert
-       ";;; command-palette-favorites.el --- Command Palette Favorites -*- lexical-binding: t -*-\n")
-      (insert ";;;\n")
-      (insert ";;; This file stores the command palette favorites list.\n")
-      (insert ";;; Generated automatically - do not edit manually.\n")
-      (insert ";;;\n\n")
-      (insert "(setq command-palette-saved-favorites\n")
-      (insert "  '(")
-      (let ((first t))
-        (dolist
-         (item user-command-palette-favorites)
-         (unless first (insert "\n    "))
-         (setq first nil)
-         (insert (format "%S" item))))
-      (insert "))\n\n")
-      (insert ";;; command-palette-favorites.el ends here\n")
-      (logging-success
-       "Saved command palette favorites to %s"
-       (abbreviate-file-name command-palette-favorites-file)))
-   (error
-    (logging-error "Failed to save command palette favorites: %s" (error-message-string err)))))
+ (command-palette--save-data 'favorites))
 
 (defun
  command-palette--load-favorites (&optional silent)
  "Load favorites from persistent storage.
 If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise."
- (if
-  (file-exists-p command-palette-favorites-file)
-  (condition-case err
-      (progn
-       (load command-palette-favorites-file)
-       (when
-        (boundp 'command-palette-saved-favorites)
-        (setq user-command-palette-favorites command-palette-saved-favorites)
-        (unless
-         silent
-         (logging-success "Loaded %d favorite command(s)" (length user-command-palette-favorites)))
-        t))
-    (error
-     (logging-warning "Failed to load command palette favorites: %s" (error-message-string err))
-     (setq user-command-palette-favorites command-palette-default-favorites)
-     nil))
-  (progn
-   (setq user-command-palette-favorites command-palette-default-favorites)
-   (unless silent (logging-info "Using default command palette favorites"))
-   nil)))
+ (command-palette--load-data 'favorites silent))
 
 (defun
  command-palette--save-diagnostics
  ()
  "Save diagnostics list to persistent storage."
- (command-palette--ensure-data-directory)
- (condition-case err
-     (with-temp-file
-      command-palette-diagnostics-file
-      (insert
-       ";;; command-palette-diagnostics.el --- Command Palette Diagnostics -*- lexical-binding: t -*-\n")
-      (insert ";;;\n")
-      (insert ";;; This file stores the command palette diagnostics list.\n")
-      (insert ";;; Generated automatically - do not edit manually.\n")
-      (insert ";;;\n\n")
-      (insert "(setq command-palette-saved-diagnostics\n")
-      (insert "  '(")
-      (let ((first t))
-        (dolist
-         (item user-command-palette-diagnostics)
-         (unless first (insert "\n    "))
-         (setq first nil)
-         (insert (format "%S" item))))
-      (insert "))\n\n")
-      (insert ";;; command-palette-diagnostics.el ends here\n")
-      (logging-success
-       "Saved command palette diagnostics to %s"
-       (abbreviate-file-name command-palette-diagnostics-file)))
-   (error
-    (logging-error "Failed to save command palette diagnostics: %s" (error-message-string err)))))
+ (command-palette--save-data 'diagnostics))
 
 (defun
  command-palette--load-diagnostics (&optional silent)
  "Load diagnostics from persistent storage.
 If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise."
- (if
-  (file-exists-p command-palette-diagnostics-file)
-  (condition-case err
-      (progn
-       (load command-palette-diagnostics-file)
-       (when
-        (boundp 'command-palette-saved-diagnostics)
-        (setq user-command-palette-diagnostics command-palette-saved-diagnostics)
-        (unless
-         silent
-         (logging-success
-          "Loaded %d diagnostic command(s)" (length user-command-palette-diagnostics)))
-        t))
-    (error
-     (logging-warning "Failed to load command palette diagnostics: %s" (error-message-string err))
-     (setq user-command-palette-diagnostics command-palette-default-diagnostics)
-     nil))
-  (progn
-   (setq user-command-palette-diagnostics command-palette-default-diagnostics)
-   (unless silent (logging-info "Using default command palette diagnostics"))
-   nil)))
+ (command-palette--load-data 'diagnostics silent))
 
 (provide 'command-palette-data)
 ;;; command-palette-data.el ends here

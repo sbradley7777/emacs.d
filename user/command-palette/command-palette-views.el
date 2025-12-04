@@ -1,34 +1,77 @@
 ;;; command-palette-views.el --- Command Palette View Rendering and Navigation -*- lexical-binding: t -*-
 ;;; Commentary:
-;; View rendering and navigation functions for command palette.
-;; Handles switching between Favorites, Diagnostics, and History views.
+;; View configuration, navigation, and high-level rendering for command palette.
+;; Handles view switching and orchestrates section rendering.
 
 ;;; Code:
 (require 'command-palette-init)
 (require 'command-palette-constants)
+(require 'command-palette-sections)
 (require 'logging-init)
-(require 'ring)
+(require 'cl-lib)
 
 ;; Forward declarations
-(declare-function command-palette--make-button "command-palette-actions")
-(declare-function command-palette--get-keybinding "command-palette-actions")
-(declare-function command-palette--execute-command "command-palette-actions")
-(declare-function command-palette--add-favorite "command-palette-actions")
-(declare-function command-palette--add-favorite-from-diagnostics "command-palette-actions")
-(declare-function command-palette--remove-favorite "command-palette-actions")
-(declare-function command-palette--clear-history "command-palette-actions")
-(declare-function command-palette--validate-commands "command-palette-actions")
+(declare-function command-palette--render-section "command-palette-sections")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; View Configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defconst
+ command-palette--view-configs
+ '((favorites
+    :title "FAVORITES   "
+    :view-label "Favorites"
+    :view-key "f"
+    :data-var user-command-palette-favorites
+    :data-type list
+    :header "⭐ Commands\n"
+    :empty-msg "    (No favorites yet)\n"
+    :button-color command-palette--color-button-favorites)
+   (diagnostics
+    :title "DIAGNOSTICS   "
+    :view-label "Diagnostics"
+    :view-key "d"
+    :data-var user-command-palette-diagnostics
+    :data-type list
+    :header "🔍 Commands\n"
+    :empty-msg "    (No diagnostics configured)\n"
+    :button-color command-palette--color-button-diagnostics)
+   (history
+    :title "HISTORY   "
+    :view-label "History"
+    :view-key "h"
+    :data-var user--command-palette-history
+    :data-type ring
+    :header "🕐 Commands\n"
+    :empty-msg "    (No recent commands)\n"
+    :button-color command-palette--color-button-history))
+ "Configuration alist defining properties for each view.
+Each view configuration contains:
+  :title         - Display title for the view
+  :view-label    - Label for navigation button
+  :view-key      - Keybinding letter shown in navigation
+  :data-var      - Symbol of variable holding the data
+  :data-type     - Type of data (list or ring)
+  :header        - Header text for command list section
+  :empty-msg     - Message when no commands available
+  :button-color  - Face constant for command buttons")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Navigation Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ command-palette--switch-to-view
+ (view)
+ "Switch command palette to VIEW and refresh buffer."
+ (setq user--command-palette-current-view view)
+ (command-palette--refresh-buffer))
+
 (defun
  command-palette-switch-to-favorites
  ()
  "Switch command palette to Favorites view."
  (interactive)
- (setq user--command-palette-current-view 'favorites)
- (command-palette--refresh-buffer)
+ (command-palette--switch-to-view 'favorites)
  (logging-info "Switched to Favorites view"))
 
 (defun
@@ -36,8 +79,7 @@
  ()
  "Switch command palette to Diagnostics view."
  (interactive)
- (setq user--command-palette-current-view 'diagnostics)
- (command-palette--refresh-buffer)
+ (command-palette--switch-to-view 'diagnostics)
  (logging-info "Switched to Diagnostics view"))
 
 (defun
@@ -45,8 +87,7 @@
  ()
  "Switch command palette to History view."
  (interactive)
- (setq user--command-palette-current-view 'history)
- (command-palette--refresh-buffer)
+ (command-palette--switch-to-view 'history)
  (logging-info "Switched to History view"))
 
 (defun
@@ -54,50 +95,67 @@
  ()
  "Switch to next view in cycle: Favorites → Diagnostics → History → Favorites."
  (interactive)
- (setq
-  user--command-palette-current-view
-  (pcase user--command-palette-current-view
-    ('favorites 'diagnostics)
-    ('diagnostics 'history)
-    ('history 'favorites)))
- (command-palette--refresh-buffer))
+ (let* ((current-idx (cl-position user--command-palette-current-view command-palette--view-order))
+        (next-idx (mod (1+ current-idx) (length command-palette--view-order))))
+   (setq user--command-palette-current-view (nth next-idx command-palette--view-order))
+   (command-palette--refresh-buffer)))
 
 (defun
  command-palette-previous-view
  ()
  "Switch to previous view in cycle: Favorites → History → Diagnostics → Favorites."
  (interactive)
- (setq
-  user--command-palette-current-view
-  (pcase user--command-palette-current-view
-    ('favorites 'history)
-    ('history 'diagnostics)
-    ('diagnostics 'favorites)))
- (command-palette--refresh-buffer))
+ (let* ((current-idx (cl-position user--command-palette-current-view command-palette--view-order))
+        (prev-idx (mod (1- current-idx) (length command-palette--view-order))))
+   (setq user--command-palette-current-view (nth prev-idx command-palette--view-order))
+   (command-palette--refresh-buffer)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Rendering Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  command-palette--render-top-border (title) "Render top border with TITLE."
- (let ((border-line (concat "╔" (make-string (- command-palette--border-width 2) ?═) "╗\n")))
-   (insert (propertize border-line 'face '(:foreground "green"))))
+ (let ((border-line
+        (concat
+         (char-to-string command-palette--char-top-left)
+         (make-string
+          (- command-palette--border-width 2) command-palette--char-horizontal-double)
+         (char-to-string command-palette--char-top-right) "\n")))
+   (insert (propertize border-line 'face command-palette--color-border)))
  (let* ((title-len (length title))
         (total-width (- command-palette--border-width 2))
         (left-padding (/ (- total-width title-len) 2))
         (right-padding (- total-width title-len left-padding))
         (line
          (format
-          "║%s%s%s║\n" (make-string left-padding ?\s) title (make-string right-padding ?\s))))
-   (insert (propertize line 'face '(:weight bold :foreground "green")))))
+          "%s%s%s%s%s\n"
+          (char-to-string command-palette--char-vertical)
+          (make-string left-padding ?\s)
+          title
+          (make-string right-padding ?\s)
+          (char-to-string command-palette--char-vertical))))
+   (insert (propertize line 'face command-palette--color-title))))
+
 (defun
  command-palette--render-bottom-border () "Render bottom border."
- (let ((border-line (concat "╚" (make-string (- command-palette--border-width 2) ?═) "╝\n")))
-   (insert (propertize border-line 'face '(:foreground "green")))))
+ (let ((border-line
+        (concat
+         (char-to-string command-palette--char-bottom-left)
+         (make-string
+          (- command-palette--border-width 2) command-palette--char-horizontal-double)
+         (char-to-string command-palette--char-bottom-right) "\n")))
+   (insert (propertize border-line 'face command-palette--color-border))))
+
 (defun
- command-palette--render-separator () "Render a section separator line."
- (let ((separator-line (concat "╠" (make-string (- command-palette--border-width 2) ?═) "╣\n")))
-   (insert (propertize separator-line 'face '(:foreground "green")))))
+ command-palette--render-separator () "Render a box separator line."
+ (let ((separator-line
+        (concat
+         (char-to-string command-palette--char-left-tee)
+         (make-string
+          (- command-palette--border-width 2) command-palette--char-horizontal-double)
+         (char-to-string command-palette--char-right-tee) "\n")))
+   (insert (propertize separator-line 'face command-palette--color-border))))
+
 (defun
  command-palette--refresh-buffer () "Refresh the command palette buffer contents."
  (let ((buffer (get-buffer command-palette-buffer-name)))
@@ -111,161 +169,6 @@
          (if first-cmd-pos (goto-char first-cmd-pos) (goto-char (point-min)))))))))
 
 (defun
- command-palette--render-action-section (actions)
- "Render action section with ACTIONS list.
-Each action is (LABEL FUNCTION FACE CALL-TYPE)."
- (insert (propertize "⚙️  Actions\n" 'face '(:weight bold :foreground "green")))
- (let ((separator-line (concat (make-string command-palette--border-width ?─) "\n")))
-   (insert (propertize separator-line 'face '(:foreground "green"))))
- (dolist
-  (action actions)
-  (let ((label (nth 0 action))
-        (func (nth 1 action))
-        (face (nth 2 action))
-        (call-type (nth 3 action)))
-    (insert " • ")
-    (command-palette--make-button
-     label
-     (if
-      (eq call-type 'interactive)
-      (lambda (_) (call-interactively func))
-      (lambda (_) (funcall func)))
-     face)
-    (insert "\n"))))
-
-(defun
- command-palette--render-views-section
- ()
- "Render views navigation section with bullet list and prev/next buttons."
- (insert "\n")
- (insert (propertize "🧭 Navigation\n" 'face '(:weight bold :foreground "green")))
- (let ((separator-line (concat (make-string command-palette--border-width ?─) "\n")))
-   (insert (propertize separator-line 'face '(:foreground "green"))))
- (insert " • ")
- (let ((start (point)))
-   (insert "Favorites (f)")
-   (make-text-button
-    start
-    (point)
-    'action
-    (lambda (_) (command-palette-switch-to-favorites))
-    'follow-link
-    t
-    'face
-    '(:foreground "yellow")))
- (insert "\n")
- (insert " • ")
- (let ((start (point)))
-   (insert "Diagnostics (d)")
-   (make-text-button
-    start
-    (point)
-    'action
-    (lambda (_) (command-palette-switch-to-diagnostics))
-    'follow-link
-    t
-    'face
-    '(:foreground "yellow")))
- (insert "\n")
- (insert " • ")
- (let ((start (point)))
-   (insert "History (h)")
-   (make-text-button
-    start
-    (point)
-    'action
-    (lambda (_) (command-palette-switch-to-history))
-    'follow-link
-    t
-    'face
-    '(:foreground "yellow")))
- (insert "\n\n")
- (let ((start (point)))
-   (insert "← Previous (p)")
-   (make-text-button
-    start
-    (point)
-    'action
-    (lambda (_) (command-palette-previous-view))
-    'follow-link
-    t
-    'face
-    '(:foreground "yellow")))
- (let* ((prev-text "← Previous (p)")
-        (next-text "Next (n) →")
-        (total-width command-palette--border-width)
-        (prev-len (length prev-text))
-        (next-len (length next-text))
-        (spacing (- total-width prev-len next-len)))
-   (insert (make-string spacing ?\s)))
- (let ((start (point)))
-   (insert "Next (n) →")
-   (make-text-button
-    start
-    (point)
-    'action
-    (lambda (_) (command-palette-next-view))
-    'follow-link
-    t
-    'face
-    '(:foreground "yellow")))
- (insert "\n"))
-
-(defun
- command-palette--render-command-list-section (config)
- "Render command list section using view CONFIG.
-CONFIG is a plist from `command-palette--view-configs'.
-Returns the position of the first command button, or nil if no commands."
- (let* ((data-var (plist-get config :data-var))
-        (data-type (plist-get config :data-type))
-        (header (plist-get config :header))
-        (empty-msg (plist-get config :empty-msg))
-        (button-color (plist-get config :button-color))
-        (data (symbol-value data-var))
-        (first-button-pos nil))
-   (insert "\n")
-   (insert (propertize header 'face '(:weight bold :foreground "green")))
-   (let ((separator-line (concat (make-string command-palette--border-width ?─) "\n")))
-     (insert (propertize separator-line 'face '(:foreground "green"))))
-   (if
-    (if (eq data-type 'ring) (= (ring-length data) 0) (= (length data) 0))
-    (insert (propertize empty-msg 'face '(:foreground "gray" :slant italic)))
-    (let ((index 1))
-      (if
-       (eq data-type 'ring)
-       (dotimes
-        (i (ring-length data))
-        (let* ((item (ring-ref data i))
-               (name (car item))
-               (cmd (cdr item))
-               (keybinding (command-palette--get-keybinding cmd))
-               (button-start (point)))
-          (when (= index 1) (setq first-button-pos button-start))
-          (command-palette--make-button
-           (format "  %2d. %s" index name)
-           `(lambda (_) (command-palette--execute-command ',cmd))
-           button-color
-           keybinding)
-          (insert "\n")
-          (setq index (1+ index))))
-       (dolist
-        (item data)
-        (let* ((name (car item))
-               (cmd (cdr item))
-               (keybinding (command-palette--get-keybinding cmd))
-               (button-start (point)))
-          (when (= index 1) (setq first-button-pos button-start))
-          (command-palette--make-button
-           (format "  %2d. %s" index name)
-           `(lambda (_) (command-palette--execute-command ',cmd))
-           button-color
-           keybinding)
-          (insert "\n")
-          (setq index (1+ index)))))))
-   (insert "\n")
-   first-button-pos))
-
-(defun
  command-palette--render-view (view-name)
  "Render a single view using VIEW-NAME configuration.
 Returns the position of the first command button, or nil if no commands."
@@ -273,24 +176,21 @@ Returns the position of the first command button, or nil if no commands."
    (when
     config
     (let ((title (plist-get config :title))
-          (actions (plist-get config :actions)))
+          (first-cmd-pos nil))
       (command-palette--render-top-border title)
       (command-palette--render-separator)
-      (command-palette--render-action-section actions)
-      (command-palette--render-views-section)
-      (let ((first-cmd-pos (command-palette--render-command-list-section config)))
-        (command-palette--render-bottom-border)
-        first-cmd-pos)))))
+      (dolist
+       (section-key command-palette--section-order)
+       (let ((result (command-palette--render-section section-key config)))
+         (when (and (eq section-key :commands) result) (setq first-cmd-pos result))))
+      (command-palette--render-bottom-border)
+      first-cmd-pos))))
 
 (defun
  command-palette--render-content
  ()
  "Render the command palette buffer content based on current view."
- (pcase user--command-palette-current-view
-   ('favorites (command-palette--render-view 'favorites))
-   ('diagnostics (command-palette--render-view 'diagnostics))
-   ('history (command-palette--render-view 'history))
-   (_ (command-palette--render-view 'favorites))))
+ (command-palette--render-view user--command-palette-current-view))
 
 (provide 'command-palette-views)
 ;;; command-palette-views.el ends here

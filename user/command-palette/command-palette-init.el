@@ -9,6 +9,7 @@
 (require 'logging-init)
 (require 'ring)
 (require 'command-palette-defaults)
+(require 'command-palette-constants)
 
 ;; Forward declarations
 (declare-function command-palette--render-content "command-palette-views")
@@ -80,7 +81,7 @@
  nil
  "Window that was active before opening the command palette.")
 (defvar
- user--command-palette-current-view 'favorites
+ user--command-palette-current-view command-palette--default-view
  "Current view displayed in command palette.
 Possible values: \\='favorites, \\='diagnostics, \\='history.")
 (defvar user--command-palette-mx-flag nil "Non-nil means `M-x' was invoked.")
@@ -115,7 +116,7 @@ side windows (Flymake diagnostics, Imenu-list)."
   (and user-command-palette-window (window-live-p user-command-palette-window))
   (progn (delete-window user-command-palette-window) (setq user-command-palette-window nil))
   (when (fboundp 'user-close-exclusive-side-windows) (user-close-exclusive-side-windows))
-  (setq user--command-palette-current-view 'favorites)
+  (setq user--command-palette-current-view command-palette--default-view)
   (setq user--command-palette-previous-window (selected-window))
   (let* ((buffer (get-buffer-create command-palette-buffer-name))
          (window-width nil)
