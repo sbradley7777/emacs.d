@@ -38,7 +38,7 @@ To browse available icons: \\[nerd-icons-insert]")
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- treemacs-apply-nerd-icons-file-icons ()
+ treemacs--apply-nerd-icons-file-icons ()
  "Apply custom file icon mappings to nerd-icons extension list.
 This function should be called before loading the treemacs nerd-icons theme.
 Adds lowercase filename entries to nerd-icons-extension-icon-alist which treemacs
@@ -59,7 +59,7 @@ When using nerd-icons theme, custom file icons are automatically applied."
  (cond
   ;; Nerd Icons theme with custom file icons
   ((and (string= theme-name "nerd-icons") (package-installed-p 'treemacs-nerd-icons))
-   (treemacs-apply-nerd-icons-file-icons)
+   (treemacs--apply-nerd-icons-file-icons)
    (require 'treemacs-nerd-icons)
    (treemacs-load-theme "nerd-icons")
    (logging-success

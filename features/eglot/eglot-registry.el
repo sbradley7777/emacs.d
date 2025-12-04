@@ -191,7 +191,7 @@ Example:
  (registry-find-by-mode eglot-lsp-server-registry mode))
 
 (defun
- eglot-registry-get-property (server-symbol property)
+ eglot--registry-get-property (server-symbol property)
  "Get PROPERTY for SERVER-SYMBOL from `eglot-lsp-server-registry'.
 PROPERTY is a keyword like :binary, :url, or :disabled.
 Returns nil if server not found or property not set.
@@ -212,7 +212,7 @@ Falls back to the server symbol name if not found in registry."
  "Get LSP server binary name for SERVER-SYMBOL from registry.
 Returns the :binary property value if set, nil otherwise.
 SERVER-SYMBOL is the LSP server identifier symbol to look up."
- (eglot-registry-get-property server-symbol :binary))
+ (eglot--registry-get-property server-symbol :binary))
 
 (defun
  eglot-registry-get-modes (server-symbol)

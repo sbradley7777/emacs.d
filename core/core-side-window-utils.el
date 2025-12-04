@@ -21,24 +21,24 @@ Value: \\='compact or \\='expanded.")
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-side-window-get-state (buffer-pattern)
+ core--side-window-get-state (buffer-pattern)
  "Get current width state for BUFFER-PATTERN window.
 Returns \\='compact or \\='expanded, defaults to \\='compact if not set."
  (or (gethash buffer-pattern core-side-window-states) 'compact))
 
 (defun
- core-side-window-set-state (buffer-pattern state)
+ core--side-window-set-state (buffer-pattern state)
  "Set width STATE for BUFFER-PATTERN window.
 STATE should be \\='compact or \\='expanded."
  (puthash buffer-pattern state core-side-window-states))
 
 (defun
- core-side-window-toggle-state (buffer-pattern)
+ core--side-window-toggle-state (buffer-pattern)
  "Toggle width state for BUFFER-PATTERN between compact and expanded.
 Returns the new state (\\='compact or \\='expanded)."
- (let ((current (core-side-window-get-state buffer-pattern)))
+ (let ((current (core--side-window-get-state buffer-pattern)))
    (let ((new-state (if (eq current 'compact) 'expanded 'compact)))
-     (core-side-window-set-state buffer-pattern new-state)
+     (core--side-window-set-state buffer-pattern new-state)
      new-state)))
 
 (defun
@@ -60,7 +60,7 @@ Uses state tracking to remember width across invocations."
    (if
     existing-window
     (progn
-     (let ((new-state (core-side-window-toggle-state buffer-pattern)))
+     (let ((new-state (core--side-window-toggle-state buffer-pattern)))
        (core-resize-window-to-ratio
         existing-window
         (if
@@ -69,7 +69,7 @@ Uses state tracking to remember width across invocations."
          features-side-window-expanded-width)))
      (select-window existing-window))
     (progn
-     (funcall open-fn) (core-side-window-set-state buffer-pattern 'compact)
+     (funcall open-fn) (core--side-window-set-state buffer-pattern 'compact)
      (let ((new-window (funcall finder buffer-pattern)))
        (when new-window (select-window new-window)))))))
 

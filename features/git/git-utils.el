@@ -80,7 +80,7 @@ Returns nil if git is not installed, PATTERN is invalid, or no matches found."
     (when (> (length output) 0) (split-string output "\n" t)))))
 
 (defun
- git-utils-git-config-get (key)
+ git--utils-git-config-get (key)
  "Get git config value for KEY using git config --global --get.
 Returns the value as a string, or nil if not found, KEY is invalid, or git not installed."
  (when
@@ -116,7 +116,7 @@ Example:
       (logging-warning "Skipping non-string suffix: %s" suffix)
       (setq result (plist-put result (intern (concat ":" (format "%s" suffix))) nil)))
      (condition-case err
-         (let ((value (git-utils-git-config-get (format base-key suffix))))
+         (let ((value (git--utils-git-config-get (format base-key suffix))))
            (setq result (plist-put result (intern (concat ":" suffix)) value)))
        (error
         (logging-warning

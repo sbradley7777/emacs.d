@@ -72,12 +72,12 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- core-files-log-backup-operation (_file) "Log when a backup file is created for FILE."
+ core--files-log-backup-operation (_file) "Log when a backup file is created for FILE."
  ; (when _file (logging-info "Backup created for: %s" (file-name-nondirectory _file)))
  )
 
 (defun
- core-files-log-auto-save-operation () "Log when an auto-save operation occurs."
+ core--files-log-auto-save-operation () "Log when an auto-save operation occurs."
  ; (when buffer-file-name (logging-info "Auto-saved: %s" (file-name-nondirectory buffer-file-name)))
  )
 
@@ -88,9 +88,9 @@
   ()
   (when
    (and buffer-file-name make-backup-files (file-exists-p buffer-file-name))
-   (core-files-log-backup-operation buffer-file-name))))
+   (core--files-log-backup-operation buffer-file-name))))
 
 ;; Hook into auto-save operations
-(add-hook 'auto-save-hook #'core-files-log-auto-save-operation)
+(add-hook 'auto-save-hook #'core--files-log-auto-save-operation)
 (provide 'core-files)
 ;;; core-files.el ends here

@@ -23,7 +23,7 @@
   show-trailing-whitespace t)) ; Show trailing whitespace clearly
 
 (defun
- makefile-validate-tabs () "Check if Makefile use proper tabs for recipe indentation."
+ makefile--validate-tabs () "Check if Makefile use proper tabs for recipe indentation."
  (save-excursion
   (goto-char (point-min))
   (let ((tab-recipe-count 0)
@@ -104,6 +104,6 @@
 ;; Automatically validate Makefile syntax when opening
 (add-hook
  'makefile-mode-hook
- (lambda () "Validate Makefile syntax on open." (run-with-timer 1 nil 'makefile-validate-tabs)))
+ (lambda () "Validate Makefile syntax on open." (run-with-timer 1 nil 'makefile--validate-tabs)))
 (provide 'makefile-config)
 ;;; makefile-config.el ends here

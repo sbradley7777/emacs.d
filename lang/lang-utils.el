@@ -49,7 +49,7 @@ EXTRA-HOOKS is an optional list of additional hook functions to register."
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- lang-setup-basic-editing ()
+ lang--setup-basic-editing ()
  "Apply basic editing settings common to all language modes.
 These settings are applied before language-specific configuration."
  (electric-indent-mode 1) (setq indent-tabs-mode nil))
@@ -103,11 +103,13 @@ Example:
  (remove-hook base-mode-hook hook-function) (remove-hook ts-mode-hook hook-function))
 
 (defun
- lang-setup-minimal (indent-var indent-value &optional extra-indent-vars)
+ lang-setup-minimal
+ (indent-var indent-value &optional extra-indent-vars)
  "Minimal language setup: basic editing + indentation.
 Sets INDENT-VAR to INDENT-VALUE and applies EXTRA-INDENT-VARS if provided.
 Use for simple file formats (JSON, YAML, etc.)."
- (lang-setup-basic-editing) (lang-apply-indent-settings indent-var indent-value extra-indent-vars))
+ (lang--setup-basic-editing)
+ (lang-apply-indent-settings indent-var indent-value extra-indent-vars))
 
 (defun
  lang-setup-full
@@ -115,7 +117,7 @@ Use for simple file formats (JSON, YAML, etc.)."
  "Full language setup: basic editing + UI enhancements + indentation.
 Sets INDENT-VAR to INDENT-VALUE and applies EXTRA-INDENT-VARS if provided.
 Use for programming languages (Python, C, Bash, etc.)."
- (lang-setup-basic-editing)
+ (lang--setup-basic-editing)
  (lang-setup-ui-enhancements)
  (lang-apply-indent-settings indent-var indent-value extra-indent-vars))
 (provide 'lang-utils)

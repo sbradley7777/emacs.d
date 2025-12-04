@@ -86,7 +86,7 @@ Useful for binding to keys where you want completion priority over indentation."
  (if (and corfu-mode (not corfu--visible)) (completion-at-point) (indent-for-tab-command)))
 
 (defun
- user-buffer-should-skip-p (buffer)
+ user--buffer-should-skip-p (buffer)
  "Return t if BUFFER should be skipped during cycling.
 
 Buffers INCLUDED in cycling:
@@ -107,7 +107,7 @@ Buffers EXCLUDED from cycling:
      (buffer-file-name buffer)))))
 
 (defun
- user-cycle-buffer (direction)
+ user--cycle-buffer (direction)
  "Cycle through buffers in DIRECTION (:forward or :backward).
 Skips buffers that should not be included in cycling.
 Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
@@ -115,7 +115,7 @@ Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
         (all-buffers (sort (buffer-list) (lambda (a b) (string< (buffer-name a) (buffer-name b)))))
         ;; Filter valid buffers first, maintaining sorted order
         (valid-buffers
-         (seq-filter (lambda (buf) (not (user-buffer-should-skip-p buf))) all-buffers))
+         (seq-filter (lambda (buf) (not (user--buffer-should-skip-p buf))) all-buffers))
         (current-buffer (current-buffer))
         (current-index (cl-position current-buffer valid-buffers))
         (num-buffers (length valid-buffers))
@@ -147,7 +147,7 @@ Works even when called from an excluded buffer (e.g., dashboard, *scratch*)."
 Skips internal buffers, dired buffers, and other filtered buffers.
 Only cycles through file-visiting buffers and the *Messages* buffer.
 If called from an excluded buffer, jumps to the first valid buffer."
- (interactive) (user-cycle-buffer :forward))
+ (interactive) (user--cycle-buffer :forward))
 
 (defun
  user-previous-buffer ()
@@ -156,7 +156,7 @@ If called from an excluded buffer, jumps to the first valid buffer."
 Skips internal buffers, dired buffers, and other filtered buffers.
 Only cycles through file-visiting buffers and the *Messages* buffer.
 If called from an excluded buffer, jumps to the last valid buffer."
- (interactive) (user-cycle-buffer :backward))
+ (interactive) (user--cycle-buffer :backward))
 
 (defun
  user-git-commit-format ()

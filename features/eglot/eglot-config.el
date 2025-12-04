@@ -24,7 +24,7 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- eglot-setup-lsp-for-mode (mode lsp-executable)
+ eglot--setup-lsp-for-mode (mode lsp-executable)
  "Set up eglot hook for MODE if LSP-EXECUTABLE is available.
 MODE is the major mode symbol to configure.
 LSP-EXECUTABLE is the name of the LSP server executable to check for.
@@ -54,6 +54,6 @@ Checks local or remote host appropriately based on `default-directory'."
         (props (nthcdr 3 entry))
         (lsp-executable (plist-get props :binary))
         (disabled (plist-get props :disabled)))
-   (unless disabled (dolist (mode modes) (eglot-setup-lsp-for-mode mode lsp-executable)))))
+   (unless disabled (dolist (mode modes) (eglot--setup-lsp-for-mode mode lsp-executable)))))
 (provide 'eglot-config)
 ;;; eglot-config.el ends here

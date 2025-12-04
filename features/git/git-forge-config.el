@@ -73,7 +73,7 @@ Returns nil if HOST is invalid."
     nil)))
 
 (defun
- git-forge-config-type-to-class (type)
+ git--forge-config-type-to-class (type)
  "Convert forge TYPE string to repository class symbol.
 TYPE should be one of: gitlab, github, gitea, gogs, bitbucket (case-insensitive).
 Returns the corresponding forge-*-repository symbol, or nil if unknown.
@@ -81,7 +81,7 @@ Logs a warning if TYPE is unknown or invalid."
  (unless
   (and (stringp type) (not (string-empty-p type)))
   (logging-warning "Invalid forge type (must be non-empty string): %s" type)
-  (cl-return-from git-forge-config-type-to-class nil))
+  (cl-return-from git--forge-config-type-to-class nil))
  (let ((normalized-type (downcase type)))
    (pcase normalized-type
      ("gitlab" 'forge-gitlab-repository)
@@ -138,7 +138,7 @@ not globally, to keep .git/config files clean."
              (t
               (unless
                (assoc githost forge-alist)
-               (let ((repo-class (git-forge-config-type-to-class type)))
+               (let ((repo-class (git--forge-config-type-to-class type)))
                  (when
                   repo-class
                   (condition-case inner-err
@@ -163,7 +163,7 @@ not globally, to keep .git/config files clean."
      "Failed to read forge config from ~/.gitconfig: %s" (error-message-string err)))))
 
 (defun
- git-forge-config-get-repo-host ()
+ git--forge-config-get-repo-host ()
  "Get the forge host for the current git repository.
 Returns the host portion from the remote.origin.url, or nil if not in a git repo.
 For example: \\='github.com\\=' or \\='gitlab.example.com\\='."
@@ -173,7 +173,7 @@ For example: \\='github.com\\=' or \\='gitlab.example.com\\='."
     (git-utils-extract-host-from-url url))))
 
 (defun
- git-forge-config-set-repo-username ()
+ git--forge-config-set-repo-username ()
  "Set username in local .git/config for the current repository's forge host.
 Only sets username if:
 1. We're in a git repository
@@ -182,7 +182,7 @@ Only sets username if:
 This ensures each repository only gets username config for its own host."
  (when
   (and (fboundp 'magit-get) (fboundp 'magit-set))
-  (let ((repo-host (git-forge-config-get-repo-host)))
+  (let ((repo-host (git--forge-config-get-repo-host)))
     (when
      repo-host
      (let* ((config (git-forge-config-parse-host-config repo-host))
@@ -213,7 +213,7 @@ Loads Magit if needed, then sets username for the repository's forge host."
    ;; Load magit if not already loaded
    (unless (fboundp 'magit-get) (require 'magit nil t))
    ;; Set username if magit functions are available
-   (when (and (fboundp 'magit-get) (fboundp 'magit-set)) (git-forge-config-set-repo-username)))))
+   (when (and (fboundp 'magit-get) (fboundp 'magit-set)) (git--forge-config-set-repo-username)))))
 
 ;; Auto-configure username when opening files in git repositories
 ;; Hook is added immediately, but function checks if Magit is loaded before running
@@ -226,7 +226,7 @@ Loads Magit if needed, then sets username for the repository's forge host."
 This is called as advice before forge-pull to ensure username is set."
  (when
   (and (git-utils-find-repository-root) (fboundp 'magit-get) (fboundp 'magit-set))
-  (git-forge-config-set-repo-username)))
+  (git--forge-config-set-repo-username)))
 
 (add-hook 'find-file-hook #'git--forge-config-setup-repo-on-file-open)
 

@@ -42,7 +42,7 @@ Returns the timestamp if synced, nil otherwise."
  (puthash repo-root (current-time) git-auto-sync--synced-repositories-table))
 
 (defun
- git-auto-sync-magit-fetch (repo-root)
+ git--auto-sync-magit-fetch (repo-root)
  "Fetch Git data for REPO-ROOT using Magit.
 Loads Magit if not already loaded and fetches all remotes."
  (require 'magit nil t)
@@ -94,12 +94,12 @@ which contains the actual git command, not the shell wrapper."
           (git-format-repository-display repo-root)))))))))
 
 (defun
- git-auto-sync-forge-pull (repo-root)
+ git--auto-sync-forge-pull (repo-root)
  "Fetch Forge data for REPO-ROOT using Forge.
 Loads Forge if not already loaded and fetches issues/PRs from the forge API.
 If the repository is not yet in the Forge database, adds it automatically.
 
-Note: We use 'Fetching' in the message for consistency with git-auto-sync-magit-fetch,
+Note: We use 'Fetching' in the message for consistency with git--auto-sync-magit-fetch,
 even though the underlying function is named forge-pull.  The operation is semantically
 a fetch (retrieves remote data without modifying local state), not a pull (fetch + merge)."
  (require 'forge nil t)
@@ -214,8 +214,8 @@ When called, it marks the repository as synced for this session."
  (when-let ((repo-root (git-utils-find-repository-root)))
    (git--auto-sync-mark-repository-synced repo-root)
    (logging-info "Initiated sync for repository: %s" (git-format-repository-display repo-root))
-   (git-auto-sync-magit-fetch repo-root)
-   (git-auto-sync-forge-pull repo-root)))
+   (git--auto-sync-magit-fetch repo-root)
+   (git--auto-sync-forge-pull repo-root)))
 
 (defun
  git-auto-sync-repository-once ()

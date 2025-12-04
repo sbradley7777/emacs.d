@@ -241,7 +241,7 @@ Displays syntax errors, warnings, and notes from all active Flymake backends."
   (lambda (pattern) (flymake--diagnostics-find-window))))
 
 (defun
- flymake-friendly-backend-name (backend-name)
+ flymake--friendly-backend-name (backend-name)
  "Convert backend abbreviations to user-friendly names.
 Looks up BACKEND-NAME (abbreviation string) in `flymake-backend-registry' and returns
 the friendly description, or the original name if no match found.
@@ -317,7 +317,7 @@ Example:
         (type (aref values 2))
         (message (aref values 4))
         (error-code (flymake--extract-error-code message error-code-extractor))
-        (backend (flymake-friendly-backend-name (aref values 3))))
+        (backend (flymake--friendly-backend-name (aref values 3))))
    (list line col type error-code backend message)))
 
 (defun
@@ -336,7 +336,7 @@ Example:
         (values (cadr entry))
         (message (aref values 4))
         (error-code (flymake--extract-error-code message error-code-extractor))
-        (backend-name (flymake-friendly-backend-name (aref values 3))))
+        (backend-name (flymake--friendly-backend-name (aref values 3))))
    (list
     diag-data
     (vector

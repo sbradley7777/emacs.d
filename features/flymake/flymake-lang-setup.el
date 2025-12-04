@@ -138,7 +138,7 @@ Delegates to `flymake-schedule-backend-check' for timer management."
 ;; See Commentary section for Backend Setup Function Selection Guide
 
 (defun
- flymake-lang-setup-direct-backend (backend-function)
+ flymake--lang-setup-direct-backend (backend-function)
  "Set up direct flymake backend (standalone, no LSP).
 BACKEND-FUNCTION is the flymake backend symbol (e.g., \\='flymake-collection-jsonlint).
 
@@ -254,7 +254,7 @@ If binary is not found in PATH, setup is silently skipped."
     ;; Direct backend function - add eglot hook for persistence
     ;; Eglot can reset flymake-diagnostic-functions, so we ensure backend persists
     (progn
-     (flymake-lang-setup-direct-backend function)
+     (flymake--lang-setup-direct-backend function)
      (flymake--lang-add-eglot-hook binary function)))))
 
 (provide 'flymake-lang-setup)
