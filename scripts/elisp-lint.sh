@@ -74,7 +74,7 @@ PRE_COMMIT_ERROR_COUNT=0
 
 # Patterns to filter out from checkdoc (configured to use 127 char limit, ignore 80 char warnings)
 # Also filter early-init.el loading messages that appear in stderr
-CHECKDOC_FILTER_PATTERNS="Some lines are over 80 columns wide\|Unable to activate package\|Required package.*is unavailable\|use-package not installed\|First-time setup:\|Batch mode requires"
+CHECKDOC_FILTER_PATTERNS="Some lines are over 80 columns wide\|Unable to activate package\|Required package.*is unavailable\|use-package not installed\|First-time setup:\|Batch mode requires\|Messages log saved to"
 
 # Patterns to filter out from isolated byte-compile (expected errors without init.el)
 # Also filter early-init.el loading messages that appear in stderr
