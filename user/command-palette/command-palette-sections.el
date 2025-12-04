@@ -245,7 +245,9 @@ _VIEW-CONFIG is unused but required for section renderer interface."
  (dolist
   (nav-button command-palette--navigation-buttons)
   (when
-   (plist-get nav-button :enabled)
+   (and
+    (plist-get nav-button :enabled)
+    (not (eq (plist-get nav-button :view) user--command-palette-current-view)))
    (let* ((label (plist-get nav-button :label))
           (key (plist-get nav-button :key))
           (func (plist-get nav-button :function)))
