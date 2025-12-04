@@ -320,7 +320,7 @@ Returns a list of absolute directory paths suitable for adding to `load-path'."
 (core-load-module user-aliases :after user-utils :description "Function aliases and shortcuts")
 (core-load-module user-keybindings :after user-utils :description "User keybindings")
 (core-load-module
- command-palette
+ command-palette-init
  :after user-aliases
  :description "Command palette with M-x history tracking")
 
