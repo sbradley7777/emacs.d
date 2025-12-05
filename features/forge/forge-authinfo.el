@@ -59,7 +59,8 @@ Does not run when editing remote files via TRAMP."
     (if
      (null hosts) (logging-warning "No [emacs-forge] sections found in ~/.gitconfig")
      (progn
-      (logging-info "Checking %d forge host%s..." (length hosts) (if (= (length hosts) 1) "" "s"))
+      (logging-info
+       "Checking %d forge %s..." (length hosts) (core-pluralize (length hosts) "host"))
       (dolist
        (host hosts)
        (let* ((config (git-forge-config-parse-host-config host))
@@ -104,13 +105,13 @@ Does not run when editing remote files via TRAMP."
               (when
                (core-set-file-permissions authinfo-file #o600 "~/.authinfo")
                (logging-success
-                "Added %d entr%s to ~/.authinfo"
+                "Added %d %s to ~/.authinfo"
                 processed-count
-                (if (= processed-count 1) "y" "ies"))
+                (core-pluralize processed-count "entry" "entries"))
                (when
                 (> skipped-count 0)
                 (logging-info
-                 "Skipped %d host%s" skipped-count (if (= skipped-count 1) "" "s"))))))
+                 "Skipped %d %s" skipped-count (core-pluralize skipped-count "host"))))))
          (error
           (logging-error "Failed to write ~/.authinfo: %s" (error-message-string err))))))))))
 

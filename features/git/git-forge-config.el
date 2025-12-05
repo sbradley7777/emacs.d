@@ -154,7 +154,7 @@ not globally, to keep .git/config files clean."
          (when
           (> added-count 0)
           (logging-success
-           "Added %d forge host%s from ~/.gitconfig" added-count (if (= added-count 1) "" "s")))
+           "Added %d forge %s from ~/.gitconfig" added-count (core-pluralize added-count "host")))
          (when
           (and (= added-count 0) hosts)
           (logging-info "All forge hosts from ~/.gitconfig already configured")))))

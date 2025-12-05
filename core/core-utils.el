@@ -180,6 +180,21 @@ Returns t on success, nil on failure."
       (logging-error "Failed to set permissions on %s: %s" desc (error-message-string err))
       nil))))
 
+(defun
+ core-pluralize (count singular &optional plural)
+ "Return SINGULAR or PLURAL form based on COUNT.
+COUNT is the numeric count (e.g., 1, 2, 10).
+SINGULAR is the singular form of the word.
+PLURAL is the optional plural form.  If not provided, defaults to SINGULAR + \"s\".
+
+Examples:
+  (core-pluralize 1 \"error\")        => \"error\"
+  (core-pluralize 2 \"error\")        => \"errors\"
+  (core-pluralize 0 \"file\")         => \"files\"
+  (core-pluralize 1 \"fly\" \"flies\") => \"fly\"
+  (core-pluralize 2 \"fly\" \"flies\") => \"flies\""
+ (if (= count 1) singular (or plural (concat singular "s"))))
+
 ;;; Provide this module
 (provide 'core-utils)
 ;;; core-utils.el ends here

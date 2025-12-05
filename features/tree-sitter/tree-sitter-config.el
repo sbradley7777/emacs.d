@@ -63,9 +63,9 @@ Dynamically discovers mode mappings from treesit-auto configuration."
      (when
       (> reloaded-count 0)
       (logging-success
-       "Reloaded %d buffer%s to use %s tree-sitter mode"
+       "Reloaded %d %s to use %s tree-sitter mode"
        reloaded-count
-       (if (= reloaded-count 1) "" "s")
+       (core-pluralize reloaded-count "buffer")
        lang)))))
 
 (advice-add

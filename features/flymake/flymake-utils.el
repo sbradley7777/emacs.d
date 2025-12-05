@@ -47,13 +47,13 @@ WARNING-COUNT is the number of warnings.
 NOTE-COUNT is the number of notes.
 Returns formatted string like \\='3 errors, 2 warnings, 1 note\\='."
  (format
-  "Diagnostics: %d error%s, %d warning%s, %d note%s"
+  "Diagnostics: %d %s, %d %s, %d %s"
   error-count
-  (if (= error-count 1) "" "s")
+  (core-pluralize error-count "error")
   warning-count
-  (if (= warning-count 1) "" "s")
+  (core-pluralize warning-count "warning")
   note-count
-  (if (= note-count 1) "" "s")))
+  (core-pluralize note-count "note")))
 
 (defun
  flymake--format-backend-list (active-backends)
