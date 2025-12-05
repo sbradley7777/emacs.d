@@ -17,14 +17,97 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
+ pkg-system--ui-find-upgradable-packages ()
+ "Find all installed packages that have available upgrades.
+Returns list of (PKG-NAME INSTALLED-DESC AVAILABLE-DESC)."
+ (let ((upgrades '()))
+   (dolist
+    (pkg (mapcar #'car package-alist))
+    (let* ((installed-desc (cadr (assq pkg package-alist)))
+           (installed-version (package-desc-version installed-desc))
+           (available-desc (cadr (assq pkg package-archive-contents)))
+           (available-version (when available-desc (package-desc-version available-desc))))
+      (when
+       (and available-version (version-list-< installed-version available-version))
+       (push (list pkg installed-desc available-desc) upgrades))))
+   (nreverse upgrades)))
+
+(defun
+ pkg-system--ui-format-update-count
+ (count)
+ "Format update count message for COUNT packages."
+ (format "  %d package update%s available." count (if (> count 1) "s" "")))
+
+(defun
+ pkg-system--ui-finalize-buffer
+ ()
+ "Finalize package UI buffer - set read-only, help-mode, reset point."
+ (goto-char (point-min))
+ (setq buffer-read-only t)
+ (help-mode))
+
+(defun
+ pkg-system--ui-render-package-list (packages)
+ "Render package list table for PACKAGES.
+PACKAGES is a list of package symbols to display.
+Displays: Package, Installed, Update Available, Status, Description."
+ (insert
+  (format
+   "%-40s %-20s %-20s %-22s %s\n" "Package" "Installed" "Update Available" "Status" "Description"))
+ (insert (make-string core-fill-column ?-) "\n")
+ (dolist
+  (pkg (sort packages #'string<))
+  (let* ((desc (cadr (assq pkg package-alist)))
+         (installed-version (package-desc-version desc))
+         (available-desc (cadr (assq pkg package-archive-contents)))
+         (available-version (when available-desc (package-desc-version available-desc)))
+         (summary (package-desc-summary desc))
+         (status (if (memq pkg package-selected-packages) "Installed (by User)" "Dependency"))
+         (update-str
+          (cond
+           ((not available-version)
+            "N/A")
+           ((version-list-< installed-version available-version)
+            (package-version-join available-version))
+           (t
+            ""))))
+    (insert
+     (string-trim-right
+      (format
+       "%-40s %-20s %-20s %-22s %s"
+       (symbol-name pkg)
+       (package-version-join installed-version)
+       update-str
+       status
+       (or summary "")))
+     "\n"))))
+
+(defun
+ pkg-system--ui-insert-update-button (packages refresh-callback)
+ "Insert update button for PACKAGES with REFRESH-CALLBACK after update.
+PACKAGES can be a list of package names or upgrade info lists.
+REFRESH-CALLBACK is the function to call after successful update."
+ (insert-button
+  "[Update All]" 'action
+  (lambda
+   (_)
+   (when
+    (yes-or-no-p
+     (format "Update %d package%s? " (length packages) (if (> (length packages) 1) "s" "")))
+    (dolist (pkg packages) (if (listp pkg) (package-upgrade (car pkg)) (package-upgrade pkg)))
+    (let ((inhibit-message t))
+      (package-initialize))
+    (logging-success "Updated %d packages" (length packages))
+    (sit-for 1)
+    (funcall refresh-callback)))))
+
+(defun
  pkg-system-ui-show-installed ()
  "Show installed packages with clear status labels and update information.
 Packages are labeled as either \='Installed (by User)\=' or \='Dependency\='.
 Shows available version and indicates if updates are available."
  (interactive)
- (let ((buf (get-buffer-create "*Installed Packages*"))
-       (packages-with-updates '()))
-
+ (let ((buf (get-buffer-create "*Installed Packages*")))
    ;; Always refresh package archive contents to ensure accurate update information
    (when
     (pkg-system-responsive-p) (logging-package "Refreshing package archive contents...")
@@ -37,89 +120,16 @@ Shows available version and indicates if updates are available."
        (logging-warning "Failed to refresh package contents: %s" (error-message-string err)))))
    (with-current-buffer
     buf (setq buffer-read-only nil) (erase-buffer)
-
-    ;; Collect packages with updates
-    (dolist
-     (pkg (mapcar #'car package-alist))
-     (let* ((installed-desc (cadr (assq pkg package-alist)))
-            (installed-version (package-desc-version installed-desc))
-            (available-desc (cadr (assq pkg package-archive-contents)))
-            (available-version (when available-desc (package-desc-version available-desc))))
-       (when
-        (and available-version (version-list-< installed-version available-version))
-        (message
-         "There is an update for package %s. The current version is \"%s\" and updated version is available \"%s\""
-         pkg
-         (package-version-join installed-version)
-         (package-version-join available-version))
-        (push pkg packages-with-updates))))
-
-    ;; Show update button if updates are available
-    (when
-     packages-with-updates
-     (insert
-      (format
-       "%d package update%s available. "
-       (length packages-with-updates)
-       (if (> (length packages-with-updates) 1) "s" "")))
-     (insert-button
-      "[Update All]" 'action
-      (lambda
-       (_)
-       (when
-        (yes-or-no-p
-         (format
-          "Update %d package%s? "
-          (length packages-with-updates)
-          (if (> (length packages-with-updates) 1) "s" "")))
-        ;; Upgrade packages
-        (dolist (pkg packages-with-updates) (package-upgrade pkg))
-        ;; Reload package state (suppress activation warnings)
-        (let ((inhibit-message t))
-          (package-initialize))
-        (logging-success "Updated %d packages" (length packages-with-updates))
-        (sit-for 1)
-        (pkg-system-ui-show-installed))))
-     (insert "\n\n"))
-
-    ;; Insert table header
-    (insert
-     (format
-      "%-40s %-20s %-18s %-22s %s\n"
-      "Package"
-      "Installed"
-      "Update Available"
-      "Status"
-      "Description"))
-    (insert (make-string 127 ?-) "\n")
-
-    ;; Insert package list
-    (dolist
-     (pkg (sort (mapcar #'car package-alist) #'string<))
-     (let* ((desc (cadr (assq pkg package-alist)))
-            (installed-version (package-desc-version desc))
-            (available-desc (cadr (assq pkg package-archive-contents)))
-            (available-version (when available-desc (package-desc-version available-desc)))
-            (summary (package-desc-summary desc))
-            (status (if (memq pkg package-selected-packages) "Installed (by User)" "Dependency"))
-            (update-str
-             (cond
-              ((not available-version)
-               "N/A")
-              ((version-list-< installed-version available-version)
-               "*")
-              (t
-               ""))))
-       (insert
-        (format
-         "%-40s %-20s %-18s %-22s %s\n"
-         (symbol-name pkg)
-         (package-version-join installed-version)
-         update-str
-         status
-         (or summary "")))))
-
-    (goto-char (point-min)) (setq buffer-read-only t) (help-mode))
+    (let ((packages-with-updates (mapcar #'car (pkg-system--ui-find-upgradable-packages))))
+      ;; Show update button if updates are available
+      (when
+       packages-with-updates
+       (pkg-system--ui-insert-update-button packages-with-updates #'pkg-system-ui-show-installed)
+       (insert (pkg-system--ui-format-update-count (length packages-with-updates)))
+       (insert "\n\n"))
+      ;; Render package list
+      (pkg-system--ui-render-package-list (mapcar #'car package-alist)))
+    (pkg-system--ui-finalize-buffer))
    (switch-to-buffer buf)))
 
 (defun
@@ -148,18 +158,7 @@ TIMEOUT-SECONDS specifies how long to wait before timing out."
        (with-timeout
         (timeout-seconds (logging-warning "Package update check timed out"))
         (package-refresh-contents))
-       ;; Manually find packages with updates (same logic as show-installed-packages)
-       (let ((upgrades '()))
-         (dolist
-          (pkg (mapcar #'car package-alist))
-          (let* ((installed-desc (cadr (assq pkg package-alist)))
-                 (installed-version (package-desc-version installed-desc))
-                 (available-desc (cadr (assq pkg package-archive-contents)))
-                 (available-version (when available-desc (package-desc-version available-desc))))
-            (when
-             (and available-version (version-list-< installed-version available-version))
-             (push (list pkg installed-desc available-desc) upgrades))))
-         (nreverse upgrades)))
+       (pkg-system--ui-find-upgradable-packages))
     (error
      (logging-warning "Package update check failed: %s" (error-message-string err))
      nil))))
@@ -168,35 +167,44 @@ TIMEOUT-SECONDS specifies how long to wait before timing out."
  pkg-system-ui-show-upgrades
  ()
  "Show only installed packages that have available upgrades.
-Refreshes package contents and displays a list of packages with available updates,
-showing current version -> new version for each package."
+Refreshes package contents and displays a list of packages with available updates."
  (interactive)
  (logging-package "Checking for package updates (manual check)...")
  (logging-debug "Configured repositories: %s" (mapcar #'car package-archives))
  (let ((upgrades (pkg-system--ui-safe-refresh-and-check core-package-refresh-timeout)))
    (if
     upgrades
-    (progn
-     (logging-success
-      "Package refresh completed successfully - contacted %d repositories"
-      (length package-archives))
-     (logging-package "Found %d packages with updates available:" (length upgrades))
-     (dolist
-      (pkg upgrades)
-      (let ((pkg-name (car pkg))
-            (current-desc (cadr pkg))
-            (new-desc (caddr pkg)))
-        (logging-package
-         "  %s: %s → %s"
-         pkg-name
-         (package-desc-version current-desc)
-         (package-desc-version new-desc))))
-     (logging-package "Run M-x package-list-packages, then 'U' and 'x' to install updates"))
-    (progn
-     (logging-success
-      "Package refresh completed successfully - contacted %d repositories"
-      (length package-archives))
-     (logging-package "No package updates available - all packages are up to date.")))))
+    (let ((buf (get-buffer-create "*Package Updates*"))
+          (package-names (mapcar #'car upgrades)))
+      (logging-success
+       "Package refresh completed successfully - contacted %d repositories"
+       (length package-archives))
+      (logging-package "Found %d packages with updates available:" (length upgrades))
+      (dolist
+       (pkg upgrades)
+       (let ((pkg-name (car pkg))
+             (current-desc (cadr pkg))
+             (new-desc (caddr pkg)))
+         (logging-package
+          "  %s: %s → %s"
+          pkg-name
+          (package-desc-version current-desc)
+          (package-desc-version new-desc))))
+      (with-current-buffer
+       buf
+       (setq buffer-read-only nil)
+       (erase-buffer)
+       (pkg-system--ui-insert-update-button upgrades #'pkg-system-ui-show-upgrades)
+       (insert (pkg-system--ui-format-update-count (length upgrades)))
+       (insert "\n\n")
+       ;; Render package list using shared function
+       (pkg-system--ui-render-package-list package-names)
+       (pkg-system--ui-finalize-buffer))
+      (switch-to-buffer buf))
+    (logging-success
+     "Package refresh completed successfully - contacted %d repositories"
+     (length package-archives))
+    (logging-package "No package updates available - all packages are up to date."))))
 
 (provide 'pkg-system-ui)
 ;;; pkg-system-ui.el ends here
