@@ -155,25 +155,6 @@ Example:
 
 This registry uses constructors for type safety and validation at creation time.")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Validation Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- flymake-backend-available-p (binary backend-function)
- "Return non-nil if BINARY exists, BACKEND-FUNCTION is defined, and backend is not disabled.
-BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\", \"shellcheck\").
-Special values:
-  - nil: No binary check is performed (for backends without executables)
-  - \"(built-in)\": Backend is built into Emacs, skip executable check
-BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
-
-This function enforces the :disabled flag from the registry.
-Backends marked with :disabled t will return nil, preventing them from being enabled.
-
-This is the standard validation check used before enabling any flymake backend."
- (registry-entry-available-p
-  flymake-backend-registry backend-function binary backend-function nil))
-
 (defun
  flymake-remove-disabled-backends ()
  "Remove all disabled backends from `flymake-diagnostic-functions'.

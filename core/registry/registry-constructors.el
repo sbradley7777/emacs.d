@@ -120,14 +120,21 @@ Example:
    :type \\='direct
    :binary \\\"yamllint\\\"
    :url \\\"https://github.com/adrienverge/yamllint\\\")"
- ;; Validate type if provided
+ ;; Structure validation - must be valid to create entry
+ (unless
+  (symbolp identifier) (error "Registry entry identifier must be symbol, got: %s" identifier))
+ (unless
+  (stringp description)
+  (error "Registry entry %s: description must be string, got: %s" identifier description))
+ (unless (listp modes) (error "Registry entry %s: modes must be list, got: %s" identifier modes))
+ ;; Type validation - programmer error if invalid
  (when
   (and type (not (memq type '(direct loader-based lsp))))
   (error
    "Registry entry %s has invalid :type %s (must be direct, loader-based, or lsp)"
    identifier
    type))
- ;; Auto-disable if binary specified but not found (unless already disabled or built-in)
+ ;; Binary availability - auto-disable if missing (expected scenario)
  (when
   (and
    binary (not disabled) (not (string= binary "(built-in)")) (not (executable-find binary)))

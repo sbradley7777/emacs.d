@@ -97,7 +97,7 @@ BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 Adds BACKEND-FUNCTION to `flymake-diagnostic-functions' buffer-locally."
  (when
-  (flymake-backend-available-p binary backend-function)
+  (registry-entry-enabled-p flymake-backend-registry backend-function)
   (add-hook 'flymake-diagnostic-functions backend-function nil t)))
 
 (defun
@@ -108,7 +108,8 @@ BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-colle
 Eglot can sometimes reset the diagnostic functions list, so we re-add the backend if missing."
  (when
   (and
-   (bound-and-true-p eglot--managed-mode) (flymake-backend-available-p binary backend-function))
+   (bound-and-true-p eglot--managed-mode)
+   (registry-entry-enabled-p flymake-backend-registry backend-function))
   (unless
    (memq backend-function flymake-diagnostic-functions)
    (add-hook 'flymake-diagnostic-functions backend-function nil t)
@@ -177,7 +178,7 @@ If binary is not found in PATH, setup is silently skipped."
    (unless spec (error "Backend %s not found in flymake-backend-registry" load-function))
    (unless binary (error "Backend %s missing :binary property in registry" load-function))
    (when
-    (flymake-backend-available-p binary load-function)
+    (registry-entry-enabled-p flymake-backend-registry load-function)
     (funcall load-function)
     (flymake--lang-trigger-check-timer))))
 

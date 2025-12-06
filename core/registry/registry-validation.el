@@ -1,14 +1,13 @@
 ;;; registry-validation.el --- Registry Validation Functions -*- lexical-binding: t -*-
 ;;; Commentary:
-;; Validation functions for registry entries and structure.
+;; Runtime validation functions for registry entries.
 ;;
 ;; Validation functions:
-;;   - registry-validate-entry       - Validate single entry structure
-;;   - registry--validate-all         - Validate entire registry
 ;;   - registry-mode-compatible-p    - Check mode compatibility
+;;   - registry-entry-enabled-p      - Check if entry is enabled (not disabled)
 ;;
-;; These functions ensure registry entries are well-formed and
-;; contain required properties.
+;; All structure and type validation is performed by registry-create-entry
+;; at creation time. Runtime only checks the :disabled flag.
 
 ;;; Code:
 (require 'cl-lib)
@@ -34,89 +33,26 @@ CURRENT-MODE is the mode symbol to check (typically `major-mode')."
    (cl-some (lambda (mode) (provided-mode-derived-p current-mode mode)) supported-modes))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Structure Validation
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- registry-validate-entry (entry &optional required-properties)
- "Validate ENTRY structure and optionally check REQUIRED-PROPERTIES.
-Return nil if valid, or error message string if invalid.
-
-ENTRY should be in format: (IDENTIFIER DESCRIPTION MODES . PROPERTIES)
-REQUIRED-PROPERTIES is optional list of required property keywords.
-
-Example:
-  (registry-validate-entry entry \\='(:binary :type))
-  Return error message if :binary or :type is missing."
- (let ((identifier (nth 0 entry))
-       (description (nth 1 entry))
-       (modes (nth 2 entry))
-       (props (nthcdr 3 entry)))
-   (cond
-    ((not (symbolp identifier))
-     (format "Entry identifier must be symbol, got: %s" identifier))
-    ((not (stringp description))
-     (format "Entry %s: description must be string, got: %s" identifier description))
-    ((not (listp modes))
-     (format "Entry %s: modes must be list, got: %s" identifier modes))
-    ((not (zerop (mod (length props) 2)))
-     (format "Entry %s: properties must be even-length plist" identifier))
-    ((and
-      required-properties
-      (cl-some (lambda (prop) (not (plist-member props prop))) required-properties))
-     (let ((missing (cl-remove-if (lambda (p) (plist-member props p)) required-properties)))
-       (format "Entry %s missing required properties: %s" identifier missing)))
-    (t
-     nil))))
-
-(defun
- registry--validate-all (registry &optional required-properties)
- "Validate all entries in REGISTRY.
-Signals error if any entry is invalid.
-REGISTRY is the registry to validate.
-REQUIRED-PROPERTIES is optional list of required property keywords for all entries."
- (dolist
-  (entry registry)
-  (let ((error-msg (registry-validate-entry entry required-properties)))
-    (when error-msg (error "%s" error-msg)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Entry Availability
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
- registry-entry-available-p (registry identifier binary-or-lsp function-symbol &optional is-lsp)
- "Check if IDENTIFIER in REGISTRY is available for use.
-Return non-nil if entry is not disabled, binary/LSP-server exists, and function is defined.
+ registry-entry-enabled-p (registry identifier)
+ "Check if IDENTIFIER in REGISTRY is enabled.
+Return non-nil if entry is not disabled, nil otherwise.
+
+All validation (structure, type, binary existence) is performed by the constructor
+at creation time. This function only checks the :disabled flag set by the constructor.
 
 REGISTRY is the registry to check.
 IDENTIFIER is the entry identifier symbol to look up.
-BINARY-OR-LSP is either a binary name (e.g., \"shellcheck\") or LSP server name (e.g., \"pylsp\").
-  Special values:
-  - nil: No binary check performed (for entries without executables)
-  - \"(built-in)\": Entry is built into Emacs, skip executable check
-FUNCTION-SYMBOL is the function symbol to check with `fboundp'.
-IS-LSP if non-nil, treat BINARY-OR-LSP as LSP server (different availability check).
-
-This function enforces the :disabled flag from the registry.
-Entries marked with :disabled t will return nil, preventing them from being enabled.
 
 Example:
-  ;; Check flymake backend
-  (registry-entry-available-p
-    flymake-backend-registry \\='python-flymake \"(built-in)\" \\='python-flymake nil)
-
-  ;; Check LSP server
-  (registry-entry-available-p
-    eglot-lsp-server-registry \\='python-mode \"pylsp\" nil t)"
+  (registry-entry-enabled-p flymake-backend-registry \\='python-flymake)
+  (registry-entry-enabled-p eglot-lsp-server-registry \\='pylsp)"
  (let* ((entry (registry-find-entry registry identifier))
         (props (when entry (nthcdr 3 entry)))
         (disabled (when props (plist-get props :disabled))))
-   (and
-    (not disabled)
-    (if
-     is-lsp (executable-find binary-or-lsp)
-     (or
-      (null binary-or-lsp) (string= binary-or-lsp "(built-in)") (executable-find binary-or-lsp)))
-    (fboundp function-symbol))))
+   (not disabled)))
 
 (provide 'registry-validation)
 ;;; registry-validation.el ends here
