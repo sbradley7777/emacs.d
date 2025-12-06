@@ -149,10 +149,9 @@ For languages that only have a standalone linter, no LSP server.
 Uses direct backend functions that are manually added to `flymake-diagnostic-functions'.
 
 If binary is not found in PATH, setup is silently skipped."
- ;; Validation: Check backend type is 'direct
- (flymake--validate-backend-type backend-function 'direct)
- (let* ((spec (flymake-registry-find-backend backend-function))
-        (binary (when spec (flymake-registry-get-binary backend-function))))
+ (let* ((spec (registry-find-entry flymake-backend-registry backend-function))
+        (binary
+         (when spec (registry-get-property flymake-backend-registry backend-function :binary))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" backend-function))
    (unless binary (error "Backend %s missing :binary property in registry" backend-function))
    (flymake--lang-setup-backend binary backend-function)
@@ -172,10 +171,9 @@ direct backend functions.  The load function typically handles adding
 the backend to `flymake-diagnostic-functions' and enabling `flymake-mode'.
 
 If binary is not found in PATH, setup is silently skipped."
- ;; Validation: Check backend type is 'loader-based
- (flymake--validate-backend-type load-function 'loader-based)
- (let* ((spec (flymake-registry-find-backend load-function))
-        (binary (when spec (flymake-registry-get-binary load-function))))
+ (let* ((spec (registry-find-entry flymake-backend-registry load-function))
+        (binary
+         (when spec (registry-get-property flymake-backend-registry load-function :binary))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" load-function))
    (unless binary (error "Backend %s missing :binary property in registry" load-function))
    (when
@@ -222,9 +220,9 @@ DESIGN NOTE:
 
 If binary is not found in PATH, setup is silently skipped."
  ;; Query registry for backend metadata
- (let* ((spec (flymake-registry-find-backend function))
-        (backend-type (when spec (flymake-registry-get-property function :type)))
-        (binary (when spec (flymake-registry-get-binary function)))
+ (let* ((spec (registry-find-entry flymake-backend-registry function))
+        (backend-type (when spec (registry-get-property flymake-backend-registry function :type)))
+        (binary (when spec (registry-get-property flymake-backend-registry function :binary)))
         (use-loader nil))
 
    ;; Validation: Check if backend is registered
@@ -232,9 +230,6 @@ If binary is not found in PATH, setup is silently skipped."
 
    ;; Validation: Check binary is defined
    (unless binary (error "Backend %s missing :binary property in registry" function))
-
-   ;; Validation: Check mode compatibility (using helper)
-   (flymake--check-mode-compatibility function spec)
 
    ;; Determine backend type: use registry first, fallback to heuristic
    (setq

@@ -67,7 +67,7 @@ Returns list of formatted strings describing each backend."
      (push (format "Active Backends (%d):" (length active-backends)) lines)
      (dolist
       (backend active-backends)
-      (let ((backend-spec (flymake-registry-find-backend backend)))
+      (let ((backend-spec (registry-find-entry flymake-backend-registry backend)))
         (if
          backend-spec
          (push (format "  - %s (%s)" (nth 1 backend-spec) backend) lines)
@@ -81,10 +81,10 @@ Returns list of formatted strings describing each backend."
 Returns cons cell (MODE . SERVER-EXECUTABLE) or nil if no LSP configured for this mode."
  (when
   (boundp 'eglot-lsp-server-registry)
-  (let ((server-symbol (eglot-find-server-for-mode major-mode)))
+  (let ((server-symbol (registry-find-by-mode eglot-lsp-server-registry major-mode)))
     (when
      server-symbol
-     (let ((binary (eglot-registry-get-binary server-symbol)))
+     (let ((binary (registry-get-property eglot-lsp-server-registry server-symbol :binary)))
        (when binary (cons major-mode binary)))))))
 
 (defun
@@ -159,7 +159,9 @@ still connecting.  Uses `flymake-backend-registry' and `eglot-lsp-server-registr
      (active-backends
       (let ((backend-names
              (mapconcat
-              (lambda (backend) (flymake-registry-get-description backend)) active-backends ", ")))
+              (lambda
+               (backend) (registry-get-description flymake-backend-registry backend))
+              active-backends ", ")))
         (logging-success "Flymake: Active backends for %s: %s" mode-name backend-names)))
      ;; Case 2: LSP configured but server not installed
      ((and lsp-config lsp-server (not (executable-find lsp-server)))
@@ -433,9 +435,9 @@ Examples:
   Direct backend: (:type direct :binary \"shellcheck\" :installed nil)
   Loader backend: (:type loader-based :binary nil :installed t)
   Built-in:       (:type direct :binary \"(built-in)\" :installed t)"
- (let* ((backend-type (flymake-registry-get-property backend-symbol :type))
-        (binary-name (flymake-registry-get-property backend-symbol :binary))
-        (modes (nth 2 (flymake-registry-find-backend backend-symbol))))
+ (let* ((backend-type (registry-get-property flymake-backend-registry backend-symbol :type))
+        (binary-name (registry-get-property flymake-backend-registry backend-symbol :binary))
+        (modes (nth 2 (registry-find-entry flymake-backend-registry backend-symbol))))
    (cond
     ;; LSP backend
     ((eq backend-type 'lsp)
@@ -443,8 +445,10 @@ Examples:
             (lsp-server
              (when
               (boundp 'eglot-lsp-server-registry)
-              (let ((server-symbol (eglot-find-server-for-mode mode)))
-                (when server-symbol (eglot-registry-get-binary server-symbol)))))
+              (let ((server-symbol (registry-find-by-mode eglot-lsp-server-registry mode)))
+                (when
+                 server-symbol
+                 (registry-get-property eglot-lsp-server-registry server-symbol :binary)))))
             (installed (and lsp-server (executable-find lsp-server))))
        (list :type 'lsp :lsp-server (or lsp-server "-") :installed (if installed t nil))))
     ;; Direct backend with binary
@@ -475,7 +479,7 @@ Disabled backends in registry are not flagged as issues."
          (issues nil))
      (dolist
       (backend active-backends)
-      (let ((spec (flymake-registry-find-backend backend)))
+      (let ((spec (registry-find-entry flymake-backend-registry backend)))
         (unless
          spec
          (push (format "Buffer %s: Backend %s not in registry" (buffer-name) backend) issues))))

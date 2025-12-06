@@ -75,6 +75,82 @@ Example:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Property Helpers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(cl-defun
+ registry-create-entry
+ (identifier
+  description
+  modes
+  &key
+  binary
+  disabled
+  disabled-reason
+  (priority 100)
+  url
+  abbreviation
+  type
+  loader)
+ "Create registry entry with all common and domain-specific properties.
+
+This is the universal constructor used by both flymake and eglot registries.
+
+Required parameters:
+  IDENTIFIER   - Symbol uniquely identifying this entry
+  DESCRIPTION  - User-friendly description string
+  MODES        - List of major mode symbols (or special value like (multiple))
+
+Common properties (inherited from base):
+  :binary          - Executable name (e.g., \\\"pylsp\\\", \\\"shellcheck\\\")
+  :disabled        - If t, skip this entry during setup
+  :disabled-reason - Explanation for why entry is disabled
+  :priority        - Integer priority (default 100, lower = higher priority)
+  :url             - Project homepage URL
+
+Domain-specific properties:
+  :abbreviation - Short identifier for display (e.g., \\\"f-c-y\\\", \\\"pylsp\\\")
+  :type         - Entry type: \\='direct, \\='loader-based, or \\='lsp
+  :loader       - Function symbol to call for loading (optional)
+
+Type validation:
+  If :type is provided, it must be one of: direct, loader-based, lsp
+
+Example:
+  (registry-create-entry
+   \\='flymake-collection-yamllint \\\"YAMLLint\\\" \\='(yaml-mode yaml-ts-mode)
+   :abbreviation \\\"f-c-y\\\"
+   :type \\='direct
+   :binary \\\"yamllint\\\"
+   :url \\\"https://github.com/adrienverge/yamllint\\\")"
+ ;; Validate type if provided
+ (when
+  (and type (not (memq type '(direct loader-based lsp))))
+  (error
+   "Registry entry %s has invalid :type %s (must be direct, loader-based, or lsp)"
+   identifier
+   type))
+ ;; Auto-disable if binary specified but not found (unless already disabled or built-in)
+ (when
+  (and
+   binary (not disabled) (not (string= binary "(built-in)")) (not (executable-find binary)))
+  (setq disabled t) (setq disabled-reason (format "Binary '%s' not found in PATH" binary)))
+ (let* ((base-entry
+         (registry-create-base-entry
+          identifier
+          description
+          modes
+          :binary binary
+          :disabled disabled
+          :disabled-reason disabled-reason
+          :priority priority
+          :url url))
+        (base-props (nthcdr 3 base-entry))
+        (ext-props nil))
+   ;; Add optional domain properties
+   (when abbreviation (setq ext-props (plist-put ext-props :abbreviation abbreviation)))
+   (when type (setq ext-props (plist-put ext-props :type type)))
+   (when loader (setq ext-props (plist-put ext-props :loader loader)))
+   (let ((merged-props (registry-merge-properties base-props ext-props)))
+     (append (list identifier description modes) merged-props))))
+
 (defun
  registry-merge-properties (base-props extension-props)
  "Merge BASE-PROPS and EXTENSION-PROPS plists.
