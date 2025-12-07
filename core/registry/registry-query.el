@@ -198,13 +198,7 @@ Example:
   ;; Removes sh-shellcheck-flymake if :disabled t in registry"
  (cl-remove-if
   (lambda
-   (identifier)
-   (when
-    (symbolp identifier)
-    (let* ((entry (registry-find-entry registry identifier))
-           (props (when entry (nthcdr 3 entry)))
-           (disabled (when props (plist-get props :disabled))))
-      disabled)))
+   (identifier) (when (symbolp identifier) (not (registry-entry-enabled-p registry identifier))))
   identifier-list))
 
 (provide 'registry-query)
