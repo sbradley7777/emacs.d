@@ -88,7 +88,8 @@ Example:
   url
   abbreviation
   type
-  loader)
+  loader
+  defer-check)
  "Create registry entry with all common and domain-specific properties.
 
 This is the universal constructor used by both flymake and eglot registries.
@@ -109,6 +110,7 @@ Domain-specific properties:
   :abbreviation - Short identifier for display (e.g., \\\"f-c-y\\\", \\\"pylsp\\\")
   :type         - Entry type: \\='direct, \\='loader-based, or \\='lsp
   :loader       - Function symbol to call for loading (optional)
+  :defer-check  - If t, defer Flymake checks until LSP connects (optional)
 
 Type validation:
   If :type is provided, it must be one of: direct, loader-based, lsp
@@ -155,6 +157,7 @@ Example:
    (when abbreviation (setq ext-props (plist-put ext-props :abbreviation abbreviation)))
    (when type (setq ext-props (plist-put ext-props :type type)))
    (when loader (setq ext-props (plist-put ext-props :loader loader)))
+   (when defer-check (setq ext-props (plist-put ext-props :defer-check defer-check)))
    (let ((merged-props (registry-merge-properties base-props ext-props)))
      (append (list identifier description modes) merged-props))))
 

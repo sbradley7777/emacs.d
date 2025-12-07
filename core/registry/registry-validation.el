@@ -54,5 +54,27 @@ Example:
         (disabled (when props (plist-get props :disabled))))
    (not disabled)))
 
+(defun
+ registry-entry-defer-check-p (registry identifier)
+ "Check if IDENTIFIER in REGISTRY should defer Flymake checks.
+Return t if entry has :defer-check property set to t, nil otherwise.
+
+This is used to control whether a Flymake backend should defer its initial
+check until LSP connects, avoiding \\='Canceling obsolete check\\=' warnings in
+dual-backend scenarios.
+
+REGISTRY is the registry to check.
+IDENTIFIER is the entry identifier symbol to look up.
+
+Example:
+  (registry-entry-defer-check-p flymake-backend-registry \\='flymake-collection-yamllint)
+  => t
+  (registry-entry-defer-check-p flymake-backend-registry \\='flymake-shellcheck-load)
+  => nil"
+ (let* ((entry (registry-find-entry registry identifier))
+        (props (when entry (nthcdr 3 entry)))
+        (defer-check (when props (plist-get props :defer-check))))
+   (eq defer-check t)))
+
 (provide 'registry-validation)
 ;;; registry-validation.el ends here

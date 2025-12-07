@@ -28,7 +28,8 @@
    :abbreviation "pylsp-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/python-lsp/python-lsp-server")
+   :url "https://github.com/python-lsp/python-lsp-server"
+   :defer-check nil)
   (registry-create-entry
    'clangd
    "C/C++ Language Server"
@@ -37,7 +38,8 @@
    :abbreviation "clangd-lsp"
    :type 'lsp
    :priority 100
-   :url "https://clangd.llvm.org/")
+   :url "https://clangd.llvm.org/"
+   :defer-check nil)
   (registry-create-entry
    'vscode-json-languageserver
    "JSON Language Server"
@@ -46,7 +48,8 @@
    :abbreviation "json-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/microsoft/vscode-json-languageserver")
+   :url "https://github.com/microsoft/vscode-json-languageserver"
+   :defer-check nil)
   (registry-create-entry
    'yaml-language-server
    "YAML Language Server"
@@ -55,7 +58,8 @@
    :abbreviation "yaml-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/redhat-developer/yaml-language-server")
+   :url "https://github.com/redhat-developer/yaml-language-server"
+   :defer-check nil)
   (registry-create-entry
    'taplo
    "TOML Language Server"
@@ -64,7 +68,8 @@
    :abbreviation "taplo-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/tamasfe/taplo")
+   :url "https://github.com/tamasfe/taplo"
+   :defer-check nil)
   (registry-create-entry
    'marksman
    "Markdown Language Server"
@@ -73,7 +78,8 @@
    :abbreviation "markdown-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/artempyanykh/marksman")
+   :url "https://github.com/artempyanykh/marksman"
+   :defer-check nil)
   (registry-create-entry
    'bash-language-server
    "Bash Language Server"
@@ -84,7 +90,8 @@
    :priority 100
    :url "https://github.com/bash-lsp/bash-language-server"
    :disabled t
-   :disabled-reason "Disabled by default - conflicts with flymake-shellcheck. Enable in local.el if needed."))
+   :disabled-reason "Disabled by default - conflicts with flymake-shellcheck. Enable in local.el if needed."
+   :defer-check nil))
  "Registry of Eglot LSP servers using type-safe constructors.
 
 All entries created using `registry-create-entry' for validation.

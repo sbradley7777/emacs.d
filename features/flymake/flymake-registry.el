@@ -28,7 +28,8 @@
    :type 'direct
    :binary "aspell"
    :priority 100
-   :url "https://github.com/GNUAspell/aspell")
+   :url "https://github.com/GNUAspell/aspell"
+   :defer-check nil)
   (registry-create-entry
    'python-flymake
    "Python built-in"
@@ -37,7 +38,8 @@
    :type 'direct
    :binary "(built-in)"
    :priority 100
-   :url "https://docs.python.org/3/library/pydoc.html")
+   :url "https://docs.python.org/3/library/pydoc.html"
+   :defer-check t)
   (registry-create-entry
    'elisp-flymake-byte-compile
    "Elisp Byte Compile"
@@ -46,7 +48,8 @@
    :type 'direct
    :binary "(built-in)"
    :priority 100
-   :url "https://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html")
+   :url "https://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html"
+   :defer-check nil)
   (registry-create-entry
    'elisp-flymake-checkdoc
    "Elisp Checkdoc"
@@ -55,7 +58,8 @@
    :type 'direct
    :binary "(built-in)"
    :priority 100
-   :url "https://www.gnu.org/software/emacs/manual/html_node/elisp/Documentation-Tips.html")
+   :url "https://www.gnu.org/software/emacs/manual/html_node/elisp/Documentation-Tips.html"
+   :defer-check nil)
   (registry-create-entry
    'flymake-shellcheck-load
    "ShellCheck linter (loader)"
@@ -64,7 +68,8 @@
    :type 'loader-based
    :binary "shellcheck"
    :priority 100
-   :url "https://github.com/federicotdn/flymake-shellcheck")
+   :url "https://github.com/federicotdn/flymake-shellcheck"
+   :defer-check nil)
   (registry-create-entry
    'flymake-shellcheck--backend
    "ShellCheck linter (backend)"
@@ -73,7 +78,8 @@
    :type 'direct
    :binary "shellcheck"
    :priority 100
-   :url "https://github.com/federicotdn/flymake-shellcheck")
+   :url "https://github.com/federicotdn/flymake-shellcheck"
+   :defer-check nil)
   (registry-create-entry
    'sh-shellcheck-flymake
    "ShellCheck built-in"
@@ -84,7 +90,8 @@
    :priority 100
    :url "https://github.com/koalaman/shellcheck"
    :disabled t
-   :disabled-reason "Requires ShellCheck 0.7.0+ for --format=json1 support. Current system has 0.6.0. See: https://github.com/sbradley7777/emacs.d/issues/48")
+   :disabled-reason "Requires ShellCheck 0.7.0+ for --format=json1 support. Current system has 0.6.0. See: https://github.com/sbradley7777/emacs.d/issues/48"
+   :defer-check nil)
   (registry-create-entry
    'flymake-collection-yamllint
    "YAMLLint"
@@ -93,7 +100,8 @@
    :type 'direct
    :binary "yamllint"
    :priority 100
-   :url "https://github.com/adrienverge/yamllint")
+   :url "https://github.com/adrienverge/yamllint"
+   :defer-check t)
   (registry-create-entry
    'flymake-collection-jsonlint
    "JSONLint"
@@ -102,7 +110,8 @@
    :type 'direct
    :binary "jsonlint"
    :priority 100
-   :url "https://github.com/zaach/jsonlint")
+   :url "https://github.com/zaach/jsonlint"
+   :defer-check t)
   (registry-create-entry
    'flymake-collection-markdownlint
    "MarkdownLint"
@@ -111,7 +120,8 @@
    :type 'direct
    :binary "markdownlint"
    :priority 100
-   :url "https://github.com/DavidAnson/markdownlint")
+   :url "https://github.com/DavidAnson/markdownlint"
+   :defer-check t)
   (registry-create-entry
    'eglot-flymake-backend
    "Eglot LSP"
@@ -119,7 +129,8 @@
    :abbreviation "e-f-b"
    :type 'lsp
    :priority 100
-   :url "https://github.com/joaotavora/eglot"))
+   :url "https://github.com/joaotavora/eglot"
+   :defer-check nil))
  "Registry of Flymake backends using type-safe constructors.
 
 All entries created using `registry-create-entry' for validation.
