@@ -2,11 +2,11 @@
 ;;; Commentary:
 ;; Constructor functions for building registry entries.
 ;;
-;; Base constructor:
-;;   registry-create-base-entry - Create entry with common properties
+;; Public constructor:
+;;   registry-create-entry - Create entry with all properties
 ;;
 ;; Helper functions:
-;;   registry-merge-properties  - Merge property plists
+;;   registry-merge-properties - Merge property plists
 ;;
 ;; Common properties (all registries):
 ;;   :binary          - Executable name
@@ -14,29 +14,17 @@
 ;;   :disabled-reason - Why disabled
 ;;   :priority        - Integer priority (default 100, lower = higher priority)
 ;;   :url             - Project homepage URL
-;;
-;; Usage pattern:
-;;   Domain-specific constructors call registry-create-base-entry
-;;   and extend with additional properties.
-;;
-;; Example:
-;;   (defun registry--my-create-entry (id desc modes &key binary my-prop)
-;;     (let* ((base (registry-create-base-entry id desc modes :binary binary))
-;;            (base-props (nthcdr 3 base))
-;;            (my-props (list :my-prop my-prop)))
-;;       (append (list id desc modes)
-;;               (registry-merge-properties base-props my-props))))
 
 ;;; Code:
 (require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Base Constructor
+;; Internal Constructor
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (cl-defun
- registry-create-base-entry
+ registry--create-base-entry
  (identifier description modes &key binary disabled disabled-reason (priority 100) url)
- "Create base registry entry with common properties.
+ "Internal function to create base registry entry with common properties.
 
 All registry entries share these properties:
 
@@ -53,14 +41,7 @@ Common optional keywords:
   :url             - Project homepage URL
 
 Returns entry in format: (IDENTIFIER DESCRIPTION MODES . BASE-PROPERTIES)
-This is meant to be extended by domain-specific constructors.
-
-Example:
-  (registry-create-base-entry
-   \\='my-backend \"My Backend\" \\='(python-mode)
-   :binary \"my-binary\"
-   :priority 50
-   :url \"https://github.com/example/my-backend\")"
+Used internally by `registry-create-entry'."
  (unless (symbolp identifier) (error "Registry entry identifier must be symbol: %s" identifier))
  (unless (stringp description) (error "Registry entry description must be string: %s" description))
  (unless (listp modes) (error "Registry entry modes must be list: %s" modes))
@@ -142,7 +123,7 @@ Example:
    binary (not disabled) (not (string= binary "(built-in)")) (not (executable-find binary)))
   (setq disabled t) (setq disabled-reason (format "Binary '%s' not found in PATH" binary)))
  (let* ((base-entry
-         (registry-create-base-entry
+         (registry--create-base-entry
           identifier
           description
           modes

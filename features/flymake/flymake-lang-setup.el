@@ -110,11 +110,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Low-Level Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defun
- flymake--lang-setup-backend (binary backend-function)
- "Set up standalone flymake BACKEND-FUNCTION if BINARY is available.
-BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\").
+ flymake--lang-setup-backend (backend-function)
+ "Set up standalone flymake BACKEND-FUNCTION.
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 Adds BACKEND-FUNCTION to `flymake-diagnostic-functions' buffer-locally.
 
@@ -123,16 +121,14 @@ to nil to prevent automatic check when flymake-mode is enabled."
  (when
   (registry-entry-enabled-p flymake-backend-registry backend-function)
   (when
-   (and
-    (registry-entry-defer-check-p flymake-backend-registry backend-function)
-    (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry major-mode))
+   (registry-should-defer-check-p
+    flymake-backend-registry eglot-lsp-server-registry backend-function major-mode)
    (setq-local flymake-start-on-flymake-mode nil))
   (add-hook 'flymake-diagnostic-functions backend-function nil t)))
 
 (defun
- flymake--lang-ensure-backend-after-eglot (binary backend-function)
+ flymake--lang-ensure-backend-after-eglot (backend-function)
  "Ensure BACKEND-FUNCTION is active after eglot start.
-BINARY is the name of the executable to check for (e.g., \"mdl\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 Eglot can sometimes reset the diagnostic functions list, so we re-add the backend if missing."
  (when
@@ -145,14 +141,13 @@ Eglot can sometimes reset the diagnostic functions list, so we re-add the backen
    (flymake-start))))
 
 (defun
- flymake--lang-add-eglot-hook (binary backend-function)
+ flymake--lang-add-eglot-hook (backend-function)
  "Add hook to ensure BACKEND-FUNCTION persists after eglot start.
-BINARY is the name of the executable (e.g., \"mdl\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
 This addresses the issue where eglot can reset `flymake-diagnostic-functions'."
  (add-hook
   'eglot-managed-mode-hook
-  (lambda () (flymake--lang-ensure-backend-after-eglot binary backend-function))
+  (lambda () (flymake--lang-ensure-backend-after-eglot backend-function))
   nil
   t))
 
@@ -183,16 +178,15 @@ If binary is not found in PATH, setup is silently skipped.
 If backend has :defer-check t and LSP is available, skips initial check trigger."
  (let* ((spec (registry-find-entry flymake-backend-registry backend-function))
         (binary
-         (when spec (registry-get-property flymake-backend-registry backend-function :binary)))
-        (should-defer
-         (and
-          (registry-entry-defer-check-p flymake-backend-registry backend-function)
-          (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry major-mode))))
+         (when spec (registry-get-property flymake-backend-registry backend-function :binary))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" backend-function))
    (unless binary (error "Backend %s missing :binary property in registry" backend-function))
-   (flymake--lang-setup-backend binary backend-function)
+   (flymake--lang-setup-backend backend-function)
    (flymake-mode 1)
-   (unless should-defer (flymake--lang-trigger-check-timer))))
+   (unless
+    (registry-should-defer-check-p
+     flymake-backend-registry eglot-lsp-server-registry backend-function major-mode)
+    (flymake--lang-trigger-check-timer))))
 
 (defun
  flymake-lang-setup-package-loader (load-function)
@@ -210,17 +204,16 @@ If binary is not found in PATH, setup is silently skipped.
 
 If backend has :defer-check t and LSP is available, skips initial check trigger."
  (let* ((spec (registry-find-entry flymake-backend-registry load-function))
-        (binary (when spec (registry-get-property flymake-backend-registry load-function :binary)))
-        (should-defer
-         (and
-          (registry-entry-defer-check-p flymake-backend-registry load-function)
-          (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry major-mode))))
+        (binary
+         (when spec (registry-get-property flymake-backend-registry load-function :binary))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" load-function))
    (unless binary (error "Backend %s missing :binary property in registry" load-function))
    (when
-    (registry-entry-enabled-p flymake-backend-registry load-function)
-    (funcall load-function)
-    (unless should-defer (flymake--lang-trigger-check-timer)))))
+    (registry-entry-enabled-p flymake-backend-registry load-function) (funcall load-function)
+    (unless
+     (registry-should-defer-check-p
+      flymake-backend-registry eglot-lsp-server-registry load-function major-mode)
+     (flymake--lang-trigger-check-timer)))))
 
 (defun
  flymake-lang-setup-lsp-backend ()
@@ -290,8 +283,7 @@ If binary is not found in PATH, setup is silently skipped."
     ;; Direct backend function - add eglot hook for persistence
     ;; Eglot can reset flymake-diagnostic-functions, so we ensure backend persists
     (progn
-     (flymake--lang-setup-direct-backend function)
-     (flymake--lang-add-eglot-hook binary function)))))
+     (flymake--lang-setup-direct-backend function) (flymake--lang-add-eglot-hook function)))))
 
 (provide 'flymake-lang-setup)
 ;;; flymake-lang-setup.el ends here

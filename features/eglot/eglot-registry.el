@@ -28,8 +28,7 @@
    :abbreviation "pylsp-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/python-lsp/python-lsp-server"
-   :defer-check nil)
+   :url "https://github.com/python-lsp/python-lsp-server")
   (registry-create-entry
    'clangd
    "C/C++ Language Server"
@@ -38,8 +37,7 @@
    :abbreviation "clangd-lsp"
    :type 'lsp
    :priority 100
-   :url "https://clangd.llvm.org/"
-   :defer-check nil)
+   :url "https://clangd.llvm.org/")
   (registry-create-entry
    'vscode-json-languageserver
    "JSON Language Server"
@@ -48,8 +46,7 @@
    :abbreviation "json-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/microsoft/vscode-json-languageserver"
-   :defer-check nil)
+   :url "https://github.com/microsoft/vscode-json-languageserver")
   (registry-create-entry
    'yaml-language-server
    "YAML Language Server"
@@ -58,8 +55,7 @@
    :abbreviation "yaml-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/redhat-developer/yaml-language-server"
-   :defer-check nil)
+   :url "https://github.com/redhat-developer/yaml-language-server")
   (registry-create-entry
    'taplo
    "TOML Language Server"
@@ -68,8 +64,7 @@
    :abbreviation "taplo-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/tamasfe/taplo"
-   :defer-check nil)
+   :url "https://github.com/tamasfe/taplo")
   (registry-create-entry
    'marksman
    "Markdown Language Server"
@@ -78,8 +73,7 @@
    :abbreviation "markdown-lsp"
    :type 'lsp
    :priority 100
-   :url "https://github.com/artempyanykh/marksman"
-   :defer-check nil)
+   :url "https://github.com/artempyanykh/marksman")
   (registry-create-entry
    'bash-language-server
    "Bash Language Server"
@@ -90,8 +84,7 @@
    :priority 100
    :url "https://github.com/bash-lsp/bash-language-server"
    :disabled t
-   :disabled-reason "Disabled by default - conflicts with flymake-shellcheck. Enable in local.el if needed."
-   :defer-check nil))
+   :disabled-reason "Disabled by default - conflicts with flymake-shellcheck. Enable in local.el if needed."))
  "Registry of Eglot LSP servers using type-safe constructors.
 
 All entries created using `registry-create-entry' for validation.
@@ -112,7 +105,6 @@ Optional Properties:
 - :disabled-reason - Explanation for disabled servers
 - :priority - Integer priority (default 100, lower = higher, 1 = highest)
 - :url - Project homepage URL
-- :defer-check - Currently unused for LSP servers (used by Flymake backends)
 
 Example:
   (registry-create-entry

@@ -15,6 +15,7 @@
 ;;
 ;; Cross-registry queries:
 ;;   - registry-has-available-lsp-for-mode-p - Check if LSP available for mode
+;;   - registry-should-defer-check-p         - Check if backend should defer check
 ;;
 ;; Iteration helpers:
 ;;   - registry--map-entries         - Map function over entries
@@ -152,6 +153,30 @@ Example:
                                 (let ((props (nthcdr 3 entry)))
                                   (not (plist-get props :disabled)))))))
    (and lsp-identifier t)))
+
+(defun
+ registry-should-defer-check-p (backend-registry lsp-registry backend-identifier mode)
+ "Check if BACKEND-IDENTIFIER should defer initial Flymake check.
+Return t if backend has defer-check enabled AND LSP is available for MODE.
+
+This cross-registry query coordinates between Flymake backends and LSP servers
+to prevent \\='Canceling obsolete check\\=' warnings in dual-backend scenarios.
+
+BACKEND-REGISTRY is the Flymake backend registry to query.
+LSP-REGISTRY is the eglot LSP server registry to query.
+BACKEND-IDENTIFIER is the backend identifier symbol to check.
+MODE is the major mode symbol (e.g., \\='python-mode, \\='yaml-mode).
+
+Example:
+  (registry-should-defer-check-p
+   flymake-backend-registry
+   eglot-lsp-server-registry
+   \\='flymake-collection-yamllint
+   \\='yaml-mode)
+  => t  ; If yamllint has :defer-check t and yaml-language-server is available"
+ (and
+  (registry-entry-defer-check-p backend-registry backend-identifier)
+  (registry-has-available-lsp-for-mode-p lsp-registry mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Iteration Helpers

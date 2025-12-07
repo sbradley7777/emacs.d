@@ -13,7 +13,7 @@
 (require 'cl-lib)
 
 ;; Forward declarations
-(declare-function registry-find-entry "registry-query")
+(declare-function registry-get-property "registry-query")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode Compatibility
@@ -49,10 +49,7 @@ IDENTIFIER is the entry identifier symbol to look up.
 Example:
   (registry-entry-enabled-p flymake-backend-registry \\='python-flymake)
   (registry-entry-enabled-p eglot-lsp-server-registry \\='pylsp)"
- (let* ((entry (registry-find-entry registry identifier))
-        (props (when entry (nthcdr 3 entry)))
-        (disabled (when props (plist-get props :disabled))))
-   (not disabled)))
+ (not (registry-get-property registry identifier :disabled)))
 
 (defun
  registry-entry-defer-check-p (registry identifier)
@@ -71,10 +68,7 @@ Example:
   => t
   (registry-entry-defer-check-p flymake-backend-registry \\='flymake-shellcheck-load)
   => nil"
- (let* ((entry (registry-find-entry registry identifier))
-        (props (when entry (nthcdr 3 entry)))
-        (defer-check (when props (plist-get props :defer-check))))
-   (eq defer-check t)))
+ (eq (registry-get-property registry identifier :defer-check) t))
 
 (provide 'registry-validation)
 ;;; registry-validation.el ends here
