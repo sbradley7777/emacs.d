@@ -13,6 +13,9 @@
 ;;   - registry-find-by-mode        - Find entries for a mode
 ;;   - registry--find-all-by-mode    - Find all entries for a mode
 ;;
+;; Cross-registry queries:
+;;   - registry-has-available-lsp-for-mode-p - Check if LSP available for mode
+;;
 ;; Iteration helpers:
 ;;   - registry--map-entries         - Map function over entries
 ;;   - registry--filter-entries      - Filter entries by predicate
@@ -120,6 +123,35 @@ FILTER-FN is optional predicate function."
      (let ((modes (nth 2 entry)))
        (when (registry-mode-compatible-p modes mode) (push (car entry) results)))))
    (nreverse results)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Cross-Registry Queries
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ registry-has-available-lsp-for-mode-p (lsp-registry mode)
+ "Check if MODE has an available LSP server in LSP-REGISTRY.
+Return t if an enabled LSP server exists for MODE, nil otherwise.
+
+An LSP server is considered available if:
+- It supports the given MODE
+- It is not disabled in the registry
+- Its binary exists in PATH (checked by constructor)
+
+LSP-REGISTRY is the eglot LSP server registry to query.
+MODE is the major mode symbol to check (e.g., \\='python-mode, \\='yaml-mode).
+
+Example:
+  (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry \\='python-mode)
+  => t  ; If pylsp is enabled and available
+  (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry \\='sh-mode)
+  => nil ; If bash-language-server is disabled"
+ (let ((lsp-identifier
+        (registry-find-by-mode lsp-registry mode
+                               (lambda
+                                (entry)
+                                (let ((props (nthcdr 3 entry)))
+                                  (not (plist-get props :disabled)))))))
+   (and lsp-identifier t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Iteration Helpers

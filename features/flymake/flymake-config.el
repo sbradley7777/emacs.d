@@ -1,12 +1,22 @@
 ;;; flymake-config.el --- Flymake Configuration -*- lexical-binding: t -*-
 ;;; Commentary:
-;;      Global Flymake configuration for diagnostic display and behavior
+;;      Global Flymake configuration for diagnostic display and behavior.
+;;
+;; Defer-Check Integration (GitHub Issue #55):
+;;   Sets `flymake-start-on-flymake-mode' to nil for modes with available LSP.
+;;   This prevents auto-start when flymake-mode is enabled, allowing standalone
+;;   linters to be added without triggering checks. When eglot connects, it will
+;;   trigger the check with both backends ready, preventing "Canceling obsolete
+;;   check" warnings. See eglot-config.el for the companion hook that handles
+;;   LSP-only modes (like C) that have no standalone linter.
 
 ;;; Code:
 (require 'core-utils)
 (require 'logging-init)
 (require 'features-constants)
 (require 'flymake-utils)
+(require 'flymake-registry)
+(require 'eglot-registry)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
@@ -41,8 +51,16 @@ Multiple calls in quick succession will only trigger one check."
 (defun
  flymake--config-enable-for-prog-mode ()
  "Enable Flymake mode for programming buffers, excluding *scratch*.
-Triggers a debounced backend availability check via `flymake-schedule-backend-check'."
- (unless (string= (buffer-name) "*scratch*") (flymake-mode 1) (flymake-schedule-backend-check)))
+Sets `flymake-start-on-flymake-mode' to nil if LSP is available, then enables flymake-mode.
+This prevents the initial auto-check when flymake-mode is enabled for dual-backend scenarios.
+Triggers a debounced backend availability check via `flymake-schedule-backend-check',
+unless current mode has defer-check backends with available LSP."
+ (unless
+  (string= (buffer-name) "*scratch*")
+  (let ((has-lsp (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry major-mode)))
+    (when has-lsp (setq-local flymake-start-on-flymake-mode nil))
+    (flymake-mode 1)
+    (unless has-lsp (flymake-schedule-backend-check)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package Configuration

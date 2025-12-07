@@ -112,6 +112,7 @@ Optional Properties:
 - :disabled-reason - Explanation for disabled servers
 - :priority - Integer priority (default 100, lower = higher, 1 = highest)
 - :url - Project homepage URL
+- :defer-check - Currently unused for LSP servers (used by Flymake backends)
 
 Example:
   (registry-create-entry

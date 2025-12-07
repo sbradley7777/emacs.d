@@ -2,6 +2,13 @@
 ;;; Commentary:
 ;;      Configuration for Eglot (Emacs Polyglot) LSP client.
 ;;      Enables language server protocol support with automatic local/remote detection.
+;;
+;; Defer-Check Integration (GitHub Issue #55):
+;;   The eglot-managed-mode-hook triggers flymake-start for LSP-only modes
+;;   (like C) that have no standalone linter. This works with flymake-config.el
+;;   which disables auto-start for all modes with LSP. The conditional hook only
+;;   triggers when ONLY eglot-flymake-backend is present, avoiding duplicate calls
+;;   for dual-backend modes (which eglot handles automatically).
 
 ;;; Code:
 (require 'core-constants)
@@ -23,6 +30,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ eglot--trigger-flymake-after-connect ()
+ "Trigger flymake check after eglot connects for LSP-only backends.
+When defer-check is enabled, `flymake-start-on-flymake-mode' is set to nil.
+This prevents auto-start for all modes with LSP. However, eglot only calls
+flymake-start if there were pre-existing non-eglot backends. This function
+ensures flymake-start is called for LSP-only modes (like C) where there are
+no standalone linters."
+ (when
+  (and
+   (bound-and-true-p eglot--managed-mode) (bound-and-true-p flymake-mode)
+   (not
+    (cl-some
+     (lambda
+      (backend) (and (symbolp backend) (not (eq backend 'eglot-flymake-backend))))
+     flymake-diagnostic-functions)))
+  (flymake-start)))
+
 (defun
  eglot--setup-lsp-for-mode (mode lsp-executable)
  "Set up eglot hook for MODE if LSP-EXECUTABLE is available.
@@ -55,5 +80,9 @@ Checks local or remote host appropriately based on `default-directory'."
         (lsp-executable (plist-get props :binary))
         (disabled (plist-get props :disabled)))
    (unless disabled (dolist (mode modes) (eglot--setup-lsp-for-mode mode lsp-executable)))))
+
+;; Trigger flymake-start for LSP-only backends (no standalone linter)
+;; Only calls start if ONLY eglot-flymake-backend is present
+(add-hook 'eglot-managed-mode-hook 'eglot--trigger-flymake-after-connect)
 (provide 'eglot-config)
 ;;; eglot-config.el ends here

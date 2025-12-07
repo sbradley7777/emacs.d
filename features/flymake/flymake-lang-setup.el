@@ -3,6 +3,24 @@
 ;; Shared utilities for configuring flymake in language modes.
 ;; Provides common patterns for standalone backends and dual backend (flymake + LSP) setups.
 ;;
+;; Defer-Check Mechanism (Dual-Backend Timing Control):
+;;   When a backend has :defer-check t in the registry AND an LSP server is available
+;;   for the current mode, the initial Flymake check is deferred until LSP connects.
+;;   This prevents "Canceling obsolete check" warnings in dual-backend scenarios.
+;;
+;;   How it works:
+;;   1. Mode starts -> backend added to `flymake-diagnostic-functions'
+;;   2. Setup functions check :defer-check property + LSP availability
+;;   3. If both true:
+;;      a. Set `flymake-start-on-flymake-mode' to nil (prevents auto-check on mode enable)
+;;      b. Skip calling `flymake--lang-trigger-check-timer' (prevents timer-based check)
+;;   4. Flymake mode enabled but NO check triggered (neither automatic nor timer)
+;;   5. Eglot connects -> adds eglot-flymake-backend -> calls `flymake-start'
+;;   6. Both backends run together in one check (no cancellation)
+;;
+;;   Defer-check is also enforced in `flymake-config.el' via the global prog-mode hook
+;;   to prevent the scheduled timer check from triggering before eglot connects.
+;;
 ;; Usage:
 ;;   (require 'flymake-lang-setup)
 ;;   (flymake--lang-trigger-check-timer)
@@ -53,12 +71,14 @@
 ;;      - Linter catches style issues LSP might miss
 ;;      - LSP provides semantic analysis linter cannot do
 ;;    Examples:
-;;      - YAML: flymake-collection-yamllint + yaml-language-server
-;;      - JSON: flymake-collection-jsonlint + vscode-json-languageserver
-;;      - Markdown: flymake-collection-markdownlint + marksman
+;;      - YAML: flymake-collection-yamllint + yaml-language-server (defer-check enabled)
+;;      - JSON: flymake-collection-jsonlint + vscode-json-languageserver (defer-check enabled)
+;;      - Markdown: flymake-collection-markdownlint + marksman (defer-check enabled)
+;;      - Python: python-flymake + pylsp (defer-check enabled)
 ;;    Usage:
 ;;      (flymake-lang-setup-dual-backend 'flymake-collection-yamllint)
 ;;      (flymake-lang-setup-dual-backend 'flymake-shellcheck-load)
+;;    Note: Backends with :defer-check t automatically defer initial checks until LSP connects
 ;;
 ;; Auto-detection in dual backend:
 ;;   The dual function automatically detects the function type:
@@ -79,6 +99,7 @@
 ;;; Code:
 (require 'flymake)
 (require 'flymake-registry)
+(require 'eglot-registry)
 (require 'core-utils)
 
 ;; External declarations
@@ -95,9 +116,17 @@
  "Set up standalone flymake BACKEND-FUNCTION if BINARY is available.
 BINARY is the name of the executable to check for (e.g., \"mdl\", \"yamllint\").
 BACKEND-FUNCTION is the flymake backend function symbol (e.g., \\='flymake-collection-markdownlint).
-Adds BACKEND-FUNCTION to `flymake-diagnostic-functions' buffer-locally."
+Adds BACKEND-FUNCTION to `flymake-diagnostic-functions' buffer-locally.
+
+If backend has :defer-check t and LSP is available, sets `flymake-start-on-flymake-mode'
+to nil to prevent automatic check when flymake-mode is enabled."
  (when
   (registry-entry-enabled-p flymake-backend-registry backend-function)
+  (when
+   (and
+    (registry-entry-defer-check-p flymake-backend-registry backend-function)
+    (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry major-mode))
+   (setq-local flymake-start-on-flymake-mode nil))
   (add-hook 'flymake-diagnostic-functions backend-function nil t)))
 
 (defun
@@ -149,15 +178,21 @@ Errors if backend is not registered or missing :binary property.
 For languages that only have a standalone linter, no LSP server.
 Uses direct backend functions that are manually added to `flymake-diagnostic-functions'.
 
-If binary is not found in PATH, setup is silently skipped."
+If binary is not found in PATH, setup is silently skipped.
+
+If backend has :defer-check t and LSP is available, skips initial check trigger."
  (let* ((spec (registry-find-entry flymake-backend-registry backend-function))
         (binary
-         (when spec (registry-get-property flymake-backend-registry backend-function :binary))))
+         (when spec (registry-get-property flymake-backend-registry backend-function :binary)))
+        (should-defer
+         (and
+          (registry-entry-defer-check-p flymake-backend-registry backend-function)
+          (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry major-mode))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" backend-function))
    (unless binary (error "Backend %s missing :binary property in registry" backend-function))
    (flymake--lang-setup-backend binary backend-function)
    (flymake-mode 1)
-   (flymake--lang-trigger-check-timer)))
+   (unless should-defer (flymake--lang-trigger-check-timer))))
 
 (defun
  flymake-lang-setup-package-loader (load-function)
@@ -171,16 +206,21 @@ For flymake packages that provide their own load functions instead of
 direct backend functions.  The load function typically handles adding
 the backend to `flymake-diagnostic-functions' and enabling `flymake-mode'.
 
-If binary is not found in PATH, setup is silently skipped."
+If binary is not found in PATH, setup is silently skipped.
+
+If backend has :defer-check t and LSP is available, skips initial check trigger."
  (let* ((spec (registry-find-entry flymake-backend-registry load-function))
-        (binary
-         (when spec (registry-get-property flymake-backend-registry load-function :binary))))
+        (binary (when spec (registry-get-property flymake-backend-registry load-function :binary)))
+        (should-defer
+         (and
+          (registry-entry-defer-check-p flymake-backend-registry load-function)
+          (registry-has-available-lsp-for-mode-p eglot-lsp-server-registry major-mode))))
    (unless spec (error "Backend %s not found in flymake-backend-registry" load-function))
    (unless binary (error "Backend %s missing :binary property in registry" load-function))
    (when
     (registry-entry-enabled-p flymake-backend-registry load-function)
     (funcall load-function)
-    (flymake--lang-trigger-check-timer))))
+    (unless should-defer (flymake--lang-trigger-check-timer)))))
 
 (defun
  flymake-lang-setup-lsp-backend ()

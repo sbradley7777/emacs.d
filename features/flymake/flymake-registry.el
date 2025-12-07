@@ -154,6 +154,7 @@ Optional Properties:
 - :disabled-reason  - Explanation for disabled backends
 - :priority         - Integer priority (default 100, lower = higher, 1 = highest)
 - :url              - Project homepage URL
+- :defer-check      - If t, defer initial check until LSP connects (dual-backend timing control)
 
 Example:
   (registry-create-entry
