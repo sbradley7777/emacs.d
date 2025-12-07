@@ -13,7 +13,7 @@
 ;;   2. Setup functions check :defer-check property + LSP availability
 ;;   3. If both true:
 ;;      a. Set `flymake-start-on-flymake-mode' to nil (prevents auto-check on mode enable)
-;;      b. Skip calling `flymake--lang-trigger-check-timer' (prevents timer-based check)
+;;      b. Skip calling `flymake-schedule-backend-check' (prevents timer-based check)
 ;;   4. Flymake mode enabled but NO check triggered (neither automatic nor timer)
 ;;   5. Eglot connects -> adds eglot-flymake-backend -> calls `flymake-start'
 ;;   6. Both backends run together in one check (no cancellation)
@@ -23,7 +23,7 @@
 ;;
 ;; Usage:
 ;;   (require 'flymake-lang-setup)
-;;   (flymake--lang-trigger-check-timer)
+;;   (flymake-schedule-backend-check)
 ;;
 ;; Backend Setup Function Selection Guide:
 ;;
@@ -151,12 +151,6 @@ This addresses the issue where eglot can reset `flymake-diagnostic-functions'."
   nil
   t))
 
-(defun
- flymake--lang-trigger-check-timer ()
- "Trigger flymake configuration check timer.
-Delegates to `flymake-schedule-backend-check' for timer management."
- (flymake-schedule-backend-check))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; High-Level Backend Setup Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -186,7 +180,7 @@ If backend has :defer-check t and LSP is available, skips initial check trigger.
    (unless
     (registry-should-defer-check-p
      flymake-backend-registry eglot-lsp-server-registry backend-function major-mode)
-    (flymake--lang-trigger-check-timer))))
+    (flymake-schedule-backend-check))))
 
 (defun
  flymake-lang-setup-package-loader (load-function)
@@ -213,7 +207,7 @@ If backend has :defer-check t and LSP is available, skips initial check trigger.
     (unless
      (registry-should-defer-check-p
       flymake-backend-registry eglot-lsp-server-registry load-function major-mode)
-     (flymake--lang-trigger-check-timer)))))
+     (flymake-schedule-backend-check)))))
 
 (defun
  flymake-lang-setup-lsp-backend ()

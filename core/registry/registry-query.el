@@ -16,10 +16,6 @@
 ;; Cross-registry queries:
 ;;   - registry-has-available-lsp-for-mode-p - Check if LSP available for mode
 ;;   - registry-should-defer-check-p         - Check if backend should defer check
-;;
-;; Iteration helpers:
-;;   - registry--map-entries         - Map function over entries
-;;   - registry--filter-entries      - Filter entries by predicate
 
 ;;; Code:
 (require 'cl-lib)
@@ -177,33 +173,6 @@ Example:
  (and
   (registry-entry-defer-check-p backend-registry backend-identifier)
   (registry-has-available-lsp-for-mode-p lsp-registry mode)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Iteration Helpers
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- registry--map-entries (registry function)
- "Apply FUNCTION to each entry in REGISTRY, return list of results.
-FUNCTION receives the full entry and should return a value.
-REGISTRY is the registry to iterate over.
-FUNCTION is the mapping function.
-
-Example:
-  (registry--map-entries reg
-    (lambda (entry) (list (car entry) (nth 1 entry))))"
- (mapcar function registry))
-
-(defun
- registry--filter-entries (registry predicate)
- "Return entries from REGISTRY where PREDICATE return non-nil.
-PREDICATE receives the full entry.
-REGISTRY is the registry to filter.
-PREDICATE is the filter function.
-
-Example:
-  (registry--filter-entries reg
-    (lambda (e) (eq (plist-get (nthcdr 3 e) :type) \\='lsp)))"
- (cl-remove-if-not predicate registry))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Filtering Helpers
