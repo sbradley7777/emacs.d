@@ -5,7 +5,7 @@
 ;;; Code:
 (require 'core-constants)
 (require 'logging-init)
-(require 'logging-tables)
+(require 'core-table-utils)
 (require 'core-side-window-utils)
 (require 'core-utils)
 (require 'eglot-registry)
@@ -371,7 +371,7 @@ Returns list of formatted table lines with total row."
                "-"
                (format "%d/%d/%d" total-errors total-warnings total-notes)
                "-"))))
-        (logging-format-table headers rows total-spec)))
+        (core-table-format headers rows total-spec)))
     (list "No buffers with flymake-mode enabled"))))
 
 (defun
@@ -490,9 +490,9 @@ Creates one row per mode/LSP-server combination from `eglot-lsp-server-registry'
            (running-count (cl-count-if (lambda (row) (string= (nth 7 row) "yes")) reversed-rows))
            (row-count (length reversed-rows))
            (total-spec
-            (logging-total-with-count-label
+            (core-table-total-with-count-label
              "Total" row-count "-" "-" "-" "-" "-" "-" (number-to-string running-count))))
-      (logging-format-table headers reversed-rows total-spec))
+      (core-table-format headers reversed-rows total-spec))
     (list "No LSP backends registered"))))
 
 (defun
@@ -552,9 +552,9 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
             (apply '+ (mapcar (lambda (row) (string-to-number (nth 7 row))) reversed-rows)))
            (row-count (length reversed-rows))
            (total-spec
-            (logging-total-with-count-label
+            (core-table-total-with-count-label
              "Total" row-count "-" "-" "-" "-" "-" "-" (number-to-string total-buffers))))
-      (logging-format-table headers reversed-rows total-spec))
+      (core-table-format headers reversed-rows total-spec))
     (list empty-message))))
 
 (defun

@@ -5,7 +5,7 @@
 
 ;;; Code:
 (require 'logging-init)
-(require 'logging-tables)
+(require 'core-table-utils)
 (require 'pkg-system-repositories)
 (require 'pkg-system-metadata)
 (require 'pkg-system-network-utils)
@@ -74,7 +74,7 @@ Returns nil if package-archive-contents is not loaded."
               (format "%d/%d" available-count total-repos)
               (format time-format-string total-time)))))
       (logging-diagnostic
-       "Package Repository Connectivity" (logging-format-table headers formatted-rows total-spec)))
+       "Package Repository Connectivity" (core-table-format headers formatted-rows total-spec)))
     (logging-diagnostic "Package Repository Connectivity" (list "No repositories configured")))))
 
 (defun
@@ -88,7 +88,7 @@ Returns nil if package-archive-contents is not loaded."
          (list
           (list "Installed Packages" (number-to-string installed))
           (list "Updates Available" (if upgrades (number-to-string upgrades) "Unknown")))))
-   (logging-diagnostic "Package Status" (logging-format-table headers rows))))
+   (logging-diagnostic "Package Status" (core-table-format headers rows))))
 
 (defun
  pkg-system--diagnostics-show-metadata
@@ -106,7 +106,7 @@ Returns nil if package-archive-contents is not loaded."
            (list
             (list "Last Refresh" (or refresh-ts "Never"))
             (list "Cache Created" (or cache-ts "Never")))))
-     (logging-diagnostic "Package Metadata" (logging-format-table headers rows))))
+     (logging-diagnostic "Package Metadata" (core-table-format headers rows))))
   (logging-diagnostic "Package Metadata" (list "No package metadata found"))))
 
 (defun

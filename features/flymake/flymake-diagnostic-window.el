@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'flymake)
 (require 'flymake-diagnostic-data)
-(require 'logging-tables)
+(require 'core-table-utils)
 (require 'logging-init)
 
 ;; External declarations
@@ -108,9 +108,11 @@ Column layout (all widths calculated dynamically from actual data):
           ;; Calculate base widths
           (base-widths
            (if
-            rows (logging-calculate-column-widths headers rows '(4 3 7 4 10 0)) '(4 3 7 4 10 0)))
+            rows
+            (core-table-calculate-column-widths headers rows '(4 3 7 4 10 0))
+            '(4 3 7 4 10 0)))
           ;; Add column padding
-          (new-widths (logging-add-column-padding base-widths 2)))
+          (new-widths (core-table-add-column-padding base-widths 2)))
      ;; Update format if widths changed
      (unless
       (equal new-widths flymake-diagnostics--last-column-widths)

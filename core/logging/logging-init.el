@@ -15,7 +15,7 @@
 ;;; Code:
 (require 'logging-messages)
 (require 'logging-buffers)
-(require 'logging-tables)
+(require 'core-table-utils)
 (require 'logging-utils)
 
 (provide 'logging-init)
