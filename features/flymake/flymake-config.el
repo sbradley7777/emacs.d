@@ -16,6 +16,8 @@
 (require 'features-constants)
 (require 'flymake-utils)
 (require 'flymake-registry)
+(require 'flymake-diagnostic-data)
+(require 'flymake-diagnostic-window)
 (require 'eglot-registry)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -77,8 +79,7 @@ unless current mode has defer-check backends with available LSP."
 ;; Enforce :disabled flag from registry by removing disabled backends
 (add-hook 'flymake-mode-hook 'flymake-remove-disabled-backends)
 
-;; Set up custom diagnostics buffer formatting with friendly backend names
-;; nil = no custom error-code extractor (uses default, shows "-" in Code column)
-(add-hook 'flymake-diagnostics-buffer-mode-hook (lambda () (flymake-setup-custom-format nil)))
+;; Set up custom diagnostics buffer formatting with friendly backend names and error codes
+(add-hook 'flymake-diagnostics-buffer-mode-hook (lambda () (flymake-setup-diagnostic-window)))
 (provide 'flymake-config)
 ;;; flymake-config.el ends here
