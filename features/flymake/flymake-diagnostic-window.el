@@ -33,24 +33,13 @@ The entry format is (plist . [line col type backend message]) where plist contai
 Returns (plist . column-values-array) where column-values-array contains
 formatted strings for each column: Line, Col, Type, Code, Backend, Message.
 
-Uses built-in Flymake diagnostic accessors for all data extraction.
+Uses shared `flymake-convert-buffer-entry-to-row' for data extraction.
 
 Example:
   (flymake--format-entry-for-display entry)
   => (plist . [\"42\" \"10\" \"error\" \"F401\" \"Ruff\" \"unused import\"])"
- (let* ((diag (plist-get (car entry) :diagnostic))
-        (values (cadr entry))
-        (raw-message (flymake-diagnostic-text diag))
-        (message (flymake-diagnostic-sanitize-message raw-message))
-        (error-code (flymake-diagnostic-extract-error-code diag))
-        (backend-name (flymake-diagnostic-friendly-backend-name (aref values 3))))
-   (list
-    (car entry)
-    (vector
-     (format "%s" (aref values 0)) ; Line
-     (format "%s" (aref values 1)) ; Col
-     (format "%s" (aref values 2)) ; Type
-     error-code backend-name message))))
+ (let ((row-data (flymake-convert-buffer-entry-to-row entry)))
+   (list (car entry) (apply #'vector row-data))))
 
 (defun
  flymake--create-tabulated-format (widths)

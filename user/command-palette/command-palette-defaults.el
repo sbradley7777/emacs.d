@@ -60,7 +60,9 @@ To customize, either:
    ("Diagnostics Show Flymake Backends" . diagnostics-show-flymake-backends)
    ("Diagnostics Show Forge Hosts" . diagnostics-show-forge-hosts)
    ("Diagnostics Show Package System" . diagnostics-show-pkg-system)
-   ("Save Diagnostic Buffers" . logging-save-debug-buffers))
+   ("Save Diagnostic Buffers" . logging-save-debug-buffers)
+   ("Export Current Buffer Flymake Diagnostics" . flymake-export-current-buffer-diagnostics)
+   ("Export All Buffers Flymake Diagnostics" . flymake-export-all-buffers-diagnostics))
  "Default list of diagnostic commands.
 Format: ((\"Display Name\" . command-symbol) ...)
 

@@ -71,12 +71,34 @@ FILTER-FN is optional predicate function receiving entry as argument.
 
 Example:
   (registry--get-all-identifiers reg
-    (lambda (e) (not (plist-get (nthcdr 3 e) :disabled))))"
+    (lambda (e) (not (registry-get-property reg (car e) :disabled))))"
  (let ((identifiers nil))
    (dolist
     (entry registry)
     (when (or (null filter-fn) (funcall filter-fn entry)) (push (car entry) identifiers)))
    (nreverse identifiers)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Property-Based Query Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ registry-find-by-property (registry property value)
+ "Find first entry in REGISTRY where PROPERTY equals VALUE.
+Return the identifier symbol or nil if not found.
+REGISTRY is the registry to search in.
+PROPERTY is the keyword property to match (e.g., :abbreviation, :binary).
+VALUE is the value to match against.
+
+Example:
+  (registry-find-by-property flymake-backend-registry :abbreviation \"e-f-b\")
+  => eglot-flymake-backend"
+ (catch
+  'found
+  (dolist
+   (entry registry)
+   (let ((symbol (car entry)))
+     (when (equal (registry-get-property registry symbol property) value) (throw 'found symbol))))
+  nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode-Based Query Functions
@@ -92,7 +114,7 @@ FILTER-FN is optional predicate function.
 
 Example:
   (registry-find-by-mode eglot-registry \\='python-mode
-    (lambda (e) (not (plist-get (nthcdr 3 e) :disabled))))"
+    (lambda (e) (not (registry-get-property eglot-registry (car e) :disabled))))"
  (let ((result nil))
    (catch
     'found

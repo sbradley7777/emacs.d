@@ -61,11 +61,8 @@ Returns list of formatted strings describing each backend."
      (push (format "Active Backends (%d):" (length active-backends)) lines)
      (dolist
       (backend active-backends)
-      (let ((backend-spec (registry-find-entry flymake-backend-registry backend)))
-        (if
-         backend-spec
-         (push (format "  - %s (%s)" (nth 1 backend-spec) backend) lines)
-         (push (format "  - %s" backend) lines)))))
+      (let ((description (registry-get-description flymake-backend-registry backend)))
+        (push (format "  - %s (%s)" description backend) lines))))
     (push "Active Backends: None" lines))
    (nreverse lines)))
 
@@ -252,7 +249,7 @@ Examples:
   Built-in:       (:type direct :binary \"(built-in)\" :installed t)"
  (let* ((backend-type (registry-get-property flymake-backend-registry backend-symbol :type))
         (binary-name (registry-get-property flymake-backend-registry backend-symbol :binary))
-        (modes (nth 2 (registry-find-entry flymake-backend-registry backend-symbol))))
+        (modes (registry-get-modes flymake-backend-registry backend-symbol)))
    (cond
     ;; LSP backend
     ((eq backend-type 'lsp)
@@ -456,13 +453,13 @@ Creates one row per mode/LSP-server combination from `eglot-lsp-server-registry'
     (boundp 'eglot-lsp-server-registry)
     (dolist
      (entry eglot-lsp-server-registry)
-     (let* ((server-symbol (nth 0 entry))
-            (description (nth 1 entry))
-            (modes (nth 2 entry))
-            (props (nthcdr 3 entry))
-            (lsp-server (plist-get props :binary))
-            (disabled (plist-get props :disabled))
-            (priority (or (plist-get props :priority) 100))
+     (let* ((server-symbol (car entry))
+            (description (registry-get-description eglot-lsp-server-registry server-symbol))
+            (modes (registry-get-modes eglot-lsp-server-registry server-symbol))
+            (lsp-server (registry-get-property eglot-lsp-server-registry server-symbol :binary))
+            (disabled (registry-get-property eglot-lsp-server-registry server-symbol :disabled))
+            (priority
+             (or (registry-get-property eglot-lsp-server-registry server-symbol :priority) 100))
             (backend-symbol 'eglot-flymake-backend))
        (unless
         disabled
@@ -516,12 +513,12 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
         (buffer-counts (flymake--count-buffers-per-backend-mode)))
    (dolist
     (entry flymake-backend-registry)
-    (let* ((backend-symbol (nth 0 entry))
-           (description (nth 1 entry))
-           (modes (nth 2 entry))
-           (props (nthcdr 3 entry))
-           (priority (or (plist-get props :priority) 100))
-           (disabled (plist-get props :disabled))
+    (let* ((backend-symbol (car entry))
+           (description (registry-get-description flymake-backend-registry backend-symbol))
+           (modes (registry-get-modes flymake-backend-registry backend-symbol))
+           (priority
+            (or (registry-get-property flymake-backend-registry backend-symbol :priority) 100))
+           (disabled (registry-get-property flymake-backend-registry backend-symbol :disabled))
            (info (flymake--get-backend-binary-info backend-symbol)))
       (when
        (eq (plist-get info :type) backend-type)

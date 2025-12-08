@@ -15,46 +15,32 @@
 ;;; Code:
 (require 'flymake)
 (require 'flymake-registry)
+(require 'registry-query)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
  flymake-diagnostic-friendly-backend-name (backend-name)
- "Convert backend abbreviations to user-friendly names.
-Looks up BACKEND-NAME (abbreviation string) in `flymake-backend-registry' and returns
-the friendly description, or the original name if no match found.
-
+ "Convert backend identifier to friendly description.
 BACKEND-NAME can be:
-- String abbreviation (e.g., \\='f-s--\\=', \\='e-f-b\\=')
-- Backend symbol (e.g., \\='flymake-shellcheck--backend)
-- List format (e.g., (flymake flymake))
+- Abbreviation string from F1 window (e.g., \\='e-f-b\\=')
+- Backend symbol from diagnostic object (e.g., \\='eglot-flymake-backend)
 
-Returns the friendly name from the registry or the original name as fallback."
- (let ((backend-str
-        (cond
-         ((stringp backend-name)
-          backend-name)
-         ((listp backend-name)
-          (format "%s" (car backend-name)))
-         ((symbolp backend-name)
-          (symbol-name backend-name))
-         (t
-          (format "%s" backend-name))))
-       (friendly-name nil))
-   ;; Search unified registry for matching abbreviation
-   (catch
-    'found
-    (dolist
-     (entry flymake-backend-registry)
-     (let ((abbrev (plist-get (nthcdr 3 entry) :abbreviation))
-           (description (nth 1 entry)))
-       (when
-        (and abbrev (string= abbrev backend-str))
-        (setq friendly-name description)
-        (throw 'found friendly-name)))))
-   ;; Return friendly name or fall back to original
-   (or friendly-name backend-str)))
+Returns friendly description from registry or falls back to formatted name."
+ (cond
+  ;; If it's already a symbol, use registry-get-description directly
+  ((symbolp backend-name)
+   (registry-get-description flymake-backend-registry backend-name))
+  ;; If it's a string, check if it's an abbreviation or symbol name
+  ((stringp backend-name)
+   (let ((found-symbol
+          (registry-find-by-property flymake-backend-registry :abbreviation backend-name)))
+     ;; Get description for found symbol, or try backend-name as symbol name
+     (registry-get-description flymake-backend-registry (or found-symbol (intern backend-name)))))
+  ;; Fallback for other types
+  (t
+   (format "%s" backend-name))))
 
 (defun
  flymake-diagnostic-extract-error-code (diag)
@@ -105,6 +91,34 @@ Example:
         (error-code (flymake-diagnostic-extract-error-code diag))
         (backend (flymake-diagnostic-friendly-backend-name (aref values 3))))
    (list line col type error-code backend message)))
+
+(defun
+ flymake-convert-diagnostic-to-row (diag)
+ "Convert flymake diagnostic object DIAG to row data for export.
+DIAG is a flymake diagnostic object from `flymake-diagnostics'.
+
+Returns list: (line col type error-code backend message) suitable for export.
+
+Uses built-in Flymake diagnostic accessors for all data extraction.
+Calculates line and column numbers from buffer positions.
+
+Example:
+  (flymake-convert-diagnostic-to-row diag)
+  => (\"42\" \"10\" \"eglot-error\" \"F401\" \"Eglot LSP\" \"unused import\")"
+ (let* ((buffer (flymake-diagnostic-buffer diag))
+        (beg (flymake-diagnostic-beg diag))
+        (type (flymake-diagnostic-type diag))
+        (backend (flymake-diagnostic-backend diag))
+        (raw-message (flymake-diagnostic-text diag))
+        (line (with-current-buffer buffer (number-to-string (line-number-at-pos beg))))
+        (col
+         (with-current-buffer
+          buffer (save-excursion (goto-char beg) (number-to-string (current-column)))))
+        (type-str (format "%s" type))
+        (message (flymake-diagnostic-sanitize-message raw-message))
+        (error-code (flymake-diagnostic-extract-error-code diag))
+        (backend-name (flymake-diagnostic-friendly-backend-name backend)))
+   (list line col type-str error-code backend-name message)))
 
 (defun
  flymake-diagnostic-sanitize-message (message)

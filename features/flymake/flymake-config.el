@@ -18,6 +18,7 @@
 (require 'flymake-registry)
 (require 'flymake-diagnostic-data)
 (require 'flymake-diagnostic-window)
+(require 'flymake-diagnostic-export)
 (require 'eglot-registry)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
