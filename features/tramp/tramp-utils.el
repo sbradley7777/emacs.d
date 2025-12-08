@@ -33,11 +33,6 @@ PYTHON-PATH: Optional additional Python path"
       (tramp-remote-process-environment . ,env-vars)))
 
    (connection-local-set-profiles `(:application tramp :machine ,host) profile-name)))
-(defun
- tramp-is-remote-file (&optional file)
- "Check if FILE (or current buffer file) is accessed via TRAMP.
-This function is deprecated. Use `core-is-remote-file' instead."
- (core-is-remote-file file))
 
 (defun
  tramp-utils-show-connection-info

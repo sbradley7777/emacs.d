@@ -155,8 +155,8 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
  "Display installed tree-sitter grammars as a table (non-interactive)."
  (let ((grammar-count
         (if
-         (fboundp 'tree-sitter-count-installed-grammars)
-         (tree-sitter-count-installed-grammars)
+         (fboundp 'tree-sitter-get-installed-grammars)
+         (length (tree-sitter-get-installed-grammars))
          0)))
    (if
     (> grammar-count 0)

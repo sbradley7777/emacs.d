@@ -21,13 +21,6 @@ DIRECTORY defaults to `default-directory' if not provided."
  (core-find-dominating-directory-by-markers python-pyvenv-project-markers directory))
 
 (defun
- python-utils-extract-project-name (project-root)
- "Extract project name from PROJECT-ROOT path.
-Uses built-in file name functions to get the directory name.
-Returns project name as a string, or nil if PROJECT-ROOT is nil."
- (core-extract-directory-name project-root))
-
-(defun
  python-utils-find-venv-path (&optional directory)
  "Find virtual environment path by locating project root and venv directory.
 Returns the venv path if found, nil otherwise.

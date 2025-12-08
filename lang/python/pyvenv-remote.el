@@ -24,7 +24,7 @@ First tries to find it remotely, falls back to local equivalent if needed."
  (if
   (core-is-remote-file remote-dir)
   ;; Try remote search first
-  (let ((remote-venv (pyvenv--remote-search-venv remote-dir)))
+  (let ((remote-venv (python-utils-find-venv-path remote-dir)))
     (if
      remote-venv (progn (logging-debug "Found remote venv: %s" remote-venv) remote-venv)
      ;; Fallback to local equivalent search
@@ -36,13 +36,6 @@ First tries to find it remotely, falls back to local equivalent if needed."
         (pyvenv-find-venv)))))
   ;; Local directory - use existing function
   (pyvenv-find-venv)))
-
-(defun
- pyvenv--remote-search-venv (remote-dir)
- "Search for virtual environment in remote directory using centralized detection.
-REMOTE-DIR is the remote directory to search for a virtual environment.
-Uses python-utils-find-venv-path which is TRAMP-compatible via `locate-dominating-file'."
- (python-utils-find-venv-path remote-dir))
 
 (defun
  pyvenv--remote-activate () "TRAMP-aware virtual environment activation."
@@ -62,7 +55,7 @@ Uses python-utils-find-venv-path which is TRAMP-compatible via `locate-dominatin
 
         ;; Update project state (use buffer-local variables for remote files)
         (let* ((project-dir (file-name-directory (directory-file-name venv-path)))
-               (project-name (python-utils-extract-project-name project-dir)))
+               (project-name (core-extract-directory-name project-dir)))
           ;; Set buffer-local variables so they don't interfere with local Python files
           (setq-local pyvenv-project-root project-dir)
           (setq-local pyvenv-project-name project-name)

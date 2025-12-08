@@ -37,7 +37,7 @@ Updates Python interpreter path and modeline after successful activation."
          pyvenv-project-root
          project-dir
          pyvenv-project-name
-         (python-utils-extract-project-name project-dir)))
+         (core-extract-directory-name project-dir)))
 
       ;; pyvenv-activate sets python-shell-virtualenv-path (Python mode's primary interpreter source)
       (if

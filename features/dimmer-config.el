@@ -72,19 +72,5 @@
 
  (logging-success "Dimmer configured for dark theme - inactive windows will be dimmed")
  (logging-info "Dimming: foreground only, HSL color space, 80%% intensity"))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun
- dimmer--config-toggle ()
- "Toggle dimmer-mode on and off.
-When enabled, inactive windows are dimmed for better visual focus.
-When disabled, all windows have normal brightness."
- (interactive)
- (if
-  dimmer-mode
-  (progn (dimmer-mode -1) (logging-info "Dimmer disabled - all windows at normal brightness"))
-  (progn (dimmer-mode 1) (logging-success "Dimmer enabled - inactive windows will be dimmed"))))
 (provide 'dimmer-config)
 ;;; dimmer-config.el ends here

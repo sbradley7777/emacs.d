@@ -21,9 +21,11 @@
   (string-prefix-p (expand-file-name pyvenv-project-root) (expand-file-name buffer-file-name))))
 
 (defun
- pyvenv--modeline-show-info
- ()
- "Display Python virtual environment info in minibuffer when clicked."
+ pyvenv--modeline-show-info ()
+ "Display Python virtual environment info in minibuffer when clicked.
+This function is used as a mouse click handler in the modeline (lines 56, 78).
+IMPORTANT: Must have (interactive) declaration to work as a click handler."
+ (interactive) ;; Required for use as mouse-1 click handler in modeline
  (if
   (and (boundp 'pyvenv-virtual-env) pyvenv-virtual-env)
   (let* ((project-name (if (boundp 'pyvenv-project-name) pyvenv-project-name "Unknown"))

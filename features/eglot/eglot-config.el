@@ -58,7 +58,7 @@ Checks local or remote host appropriately based on `default-directory'."
   (intern (format "%s-hook" mode))
   (lambda
    ()
-   (let* ((is-remote (tramp-is-remote-file))
+   (let* ((is-remote (core-is-remote-file))
           (hostname (if is-remote (file-remote-p default-directory 'host) (system-name)))
           (location (if is-remote "remote" "local")))
      (logging-info

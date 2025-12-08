@@ -46,12 +46,6 @@ Returns a list of plists with :name and :file keys."
     grammars)))
 
 (defun
- tree-sitter-count-installed-grammars ()
- "Count the number of installed tree-sitter grammars.
-Returns the count of .so/.dylib grammar files found in the tree-sitter grammar directory."
- (length (tree-sitter-get-installed-grammars)))
-
-(defun
  treesit-utils-get-mode-mapping (lang)
  "Get the (REGULAR-MODE TS-MODE) pair for LANG by querying treesit-auto.
 Returns nil if no mapping is found."
