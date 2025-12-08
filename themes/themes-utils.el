@@ -11,6 +11,7 @@
 (require 'core-utils)
 (require 'logging-init)
 (require 'themes-config)
+(require 'core-side-window-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -70,78 +71,56 @@
  (themes-config-load-configured-theme)
  (logging-success "Theme switched to: %s" theme))
 
-;;;###autoload
 (defun
- toggle-list-themes-window ()
- "Display all available themes in a selectable buffer.
-
-Shows doom-themes and built-in Emacs themes in a dedicated buffer.
-Press RET on a theme name to preview it immediately.  The currently
-active theme is highlighted.  Provides a visual way to browse and
-test different color schemes."
- (interactive)
+ themes--utils-setup-buffer-content ()
+ "Create and populate the themes list buffer content, then display it.
+Returns the buffer name."
  (let* ((doom-themes (themes--utils-get-available-doom-themes))
         (other-themes (themes--utils-get-other-themes))
         (current-theme (car custom-enabled-themes))
         (buffer-name "*Available Themes*")
-        (lines '())
-        (max-width 0))
+        (lines '()))
    (logging-theme "Opening theme browser...")
-
-   ;; Collect all lines and calculate max width
+   ;; Collect all lines
    (push "Available Themes:" lines)
    (push "==================" lines)
    (push "" lines)
    (push "Click on a theme name or press 'RET' to select it, 'q' to quit." lines)
    (push "" lines)
    (push "DOOM THEMES:" lines)
-   (dolist
-    (theme doom-themes)
-    (let ((line
-           (if (eq theme current-theme) (format "-> %s (current)" theme) (format "   %s" theme))))
-      (push line lines)
-      (setq max-width (max max-width (length line)))))
+   ;; Sort doom-themes with current theme first
+   (let ((sorted-doom-themes
+          (if
+           (and current-theme (memq current-theme doom-themes))
+           (cons current-theme (remove current-theme doom-themes))
+           doom-themes)))
+     (dolist
+      (theme sorted-doom-themes)
+      (let ((line
+             (if
+              (eq theme current-theme) (format "-> %s (current)" theme) (format "   %s" theme))))
+        (push line lines))))
    (push "" lines)
    (push "OTHER THEMES:" lines)
-   (dolist
-    (theme other-themes)
-    (let ((line
-           (if (eq theme current-theme) (format "-> %s (current)" theme) (format "   %s" theme))))
-      (push line lines)
-      (setq max-width (max max-width (length line)))))
-
-   ;; Update max-width for header lines
-   (setq
-    max-width
-    (max
-     max-width
-     (length "Available Themes:")
-     (length "==================")
-     (length "Click on a theme name or press 'RET' to select it, 'q' to quit.")
-     (length "DOOM THEMES:")
-     (length "OTHER THEMES:")))
-
-   ;; Add some padding
-   (setq max-width (+ max-width 4))
-   (with-output-to-temp-buffer
-    buffer-name (dolist (line (reverse lines)) (princ line) (princ "\n")))
-
-   ;; Switch focus to the theme list window
-   (pop-to-buffer buffer-name)
-
+   ;; Sort other-themes with current theme first
+   (let ((sorted-other-themes
+          (if
+           (and current-theme (memq current-theme other-themes))
+           (cons current-theme (remove current-theme other-themes))
+           other-themes)))
+     (dolist
+      (theme sorted-other-themes)
+      (let ((line
+             (if
+              (eq theme current-theme) (format "-> %s (current)" theme) (format "   %s" theme))))
+        (push line lines))))
+   ;; Create or update buffer
    (with-current-buffer
-    buffer-name (goto-char (point-min))
-
-    ;; Resize window to fit content
-    (let ((window (get-buffer-window buffer-name)))
-      (when
-       window
-       (with-selected-window
-        window
-        (fit-window-to-buffer window nil nil max-width max-width)
-        (shrink-window-horizontally (max 0 (- (window-width) max-width))))))
-
-    ;; Function to select theme from current line
+    (get-buffer-create buffer-name)
+    (let ((inhibit-read-only t))
+      (erase-buffer)
+      (dolist (line (reverse lines)) (insert line) (insert "\n")))
+    ;; Set up keybindings
     (let ((select-theme-fn
            (lambda
             () (interactive)
@@ -155,13 +134,28 @@ test different color schemes."
                  (logging-success "Switched to theme: %s (buffer stays open for testing)" theme)
                  ;; Update the buffer to show new current theme
                  (toggle-list-themes-window)))))))
-
-      ;; Keyboard bindings
       (local-set-key (kbd "RET") select-theme-fn)
       (local-set-key (kbd "q") 'quit-window)
       (local-set-key (kbd "C-g") 'quit-window)
-      (setq buffer-read-only t)
-      (goto-char (point-min))))))
+      (setq buffer-read-only t))
+    (goto-char (point-min)))
+   ;; Display buffer in side window
+   (display-buffer buffer-name '(display-buffer-in-side-window (side . right)))
+   buffer-name))
+
+;;;###autoload
+(defun
+ toggle-list-themes-window
+ ()
+ "Toggle themes list window with size cycling between 30% and 50% width.
+When buffer is closed, opens at 30%.  When buffer is open, toggles between 30% and 50%.
+
+Shows doom-themes and built-in Emacs themes in a dedicated side window.
+Press RET on a theme name to preview it immediately.  The currently
+active theme is highlighted.  Provides a visual way to browse and
+test different color schemes."
+ (interactive)
+ (core-side-window-toggle "*Available Themes*" (lambda () (themes--utils-setup-buffer-content))))
 
 ;; Make this module available for loading with (require 'themes-utils)
 (provide 'themes-utils)
