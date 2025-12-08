@@ -104,7 +104,8 @@ Column layout (all widths calculated dynamically from actual data):
    (let* ((original-entries (flymake--diagnostics-buffer-entries))
           (headers '("Line" "Col" "Type" "Code" "Backend" "Message"))
           ;; Convert entries to rows for width calculation
-          (rows (mapcar (lambda (entry) (flymake-diagnostic-entry-to-row entry)) original-entries))
+          (rows
+           (mapcar (lambda (entry) (flymake-convert-buffer-entry-to-row entry)) original-entries))
           ;; Calculate base widths
           (base-widths
            (if

@@ -83,8 +83,8 @@ Returns error code string if available, or \"-\" otherwise."
      "-"))))
 
 (defun
- flymake-diagnostic-entry-to-row (entry)
- "Convert flymake ENTRY to row data for table display.
+ flymake-convert-buffer-entry-to-row (entry)
+ "Convert flymake buffer ENTRY to row data for table display.
 ENTRY is a flymake diagnostic entry from `flymake--diagnostics-buffer-entries'.
 The entry format is (plist . [line col type backend message]) where plist contains :diagnostic.
 
@@ -93,7 +93,7 @@ Returns list: (line col type error-code backend message) suitable for width calc
 Uses built-in Flymake diagnostic accessors for all data extraction.
 
 Example:
-  (flymake-diagnostic-entry-to-row entry)
+  (flymake-convert-buffer-entry-to-row entry)
   => (\"42\" \"10\" \"error\" \"F401\" \"Ruff\" \"unused import\")"
  (let* ((diag (plist-get (car entry) :diagnostic))
         (values (cadr entry))
