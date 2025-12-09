@@ -28,6 +28,38 @@
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
+ flymake-export--count-error-codes (diagnostics)
+ "Count occurrences of error codes in DIAGNOSTICS.
+Returns an alist of (code . count) sorted by count descending.
+Returns nil if no diagnostics have error codes."
+ (let ((code-counts (make-hash-table :test 'equal))
+       (has-codes nil))
+   (dolist
+    (diag diagnostics)
+    (let ((code (flymake-diagnostic-extract-error-code diag)))
+      (when
+       (and code (not (string= code "-")))
+       (setq has-codes t)
+       (puthash code (1+ (gethash code code-counts 0)) code-counts))))
+   (when
+    has-codes
+    (let ((result nil))
+      (maphash (lambda (code count) (push (cons code count) result)) code-counts)
+      (sort result (lambda (a b) (> (cdr a) (cdr b))))))))
+
+(defun
+ flymake-export--format-code-summary (diagnostics)
+ "Format error code summary table for DIAGNOSTICS.
+Returns list of table lines, or nil if no error codes present."
+ (let ((code-counts (flymake-export--count-error-codes diagnostics)))
+   (when
+    code-counts
+    (let* ((headers '("Error Code" "Count"))
+           (rows
+            (mapcar (lambda (pair) (list (car pair) (number-to-string (cdr pair)))) code-counts)))
+      (core-table-format headers rows)))))
+
+(defun
  flymake-export--create-mirrored-path (source-file)
  "Create mirrored export path for SOURCE-FILE.
 Returns the full export path with directory structure mirrored from root.
@@ -65,13 +97,19 @@ Only works if Flymake is active in current buffer with a file."
         (diagnostics (flymake-diagnostics))
         (headers '("Line" "Col" "Type" "Code" "Backend" "Message"))
         (rows (mapcar #'flymake-convert-diagnostic-to-row diagnostics))
-        (table-lines (core-table-format headers rows)))
+        (table-lines (core-table-format headers rows))
+        (summary-lines (flymake-export--format-code-summary diagnostics)))
    (flymake-export--ensure-directory export-file)
    (with-temp-file
     export-file
     (insert (format "Flymake Diagnostics for %s\n" buffer-name))
     (insert (format "Source: %s\n" source-file))
     (insert (format "Exported: %s\n\n" (format-time-string "%Y-%m-%d %H:%M:%S")))
+    (when
+     summary-lines
+     (insert "Error Code Summary:\n")
+     (dolist (line summary-lines) (insert line "\n"))
+     (insert "\nDetailed Diagnostics:\n"))
     (dolist (line table-lines) (insert line "\n")))
    (logging-success "Exported %d diagnostics to %s" (length diagnostics) export-file)))
 
@@ -102,13 +140,19 @@ Only exports buffers that:
                 (buffer-name (buffer-name))
                 (headers '("Line" "Col" "Type" "Code" "Backend" "Message"))
                 (rows (mapcar #'flymake-convert-diagnostic-to-row diagnostics))
-                (table-lines (core-table-format headers rows)))
+                (table-lines (core-table-format headers rows))
+                (summary-lines (flymake-export--format-code-summary diagnostics)))
            (flymake-export--ensure-directory export-file)
            (with-temp-file
             export-file
             (insert (format "Flymake Diagnostics for %s\n" buffer-name))
             (insert (format "Source: %s\n" source-file))
             (insert (format "Exported: %s\n\n" (format-time-string "%Y-%m-%d %H:%M:%S")))
+            (when
+             summary-lines
+             (insert "Error Code Summary:\n")
+             (dolist (line summary-lines) (insert line "\n"))
+             (insert "\nDetailed Diagnostics:\n"))
             (dolist (line table-lines) (insert line "\n")))
            (setq exported-count (1+ exported-count))
            (setq total-diags (+ total-diags (length diagnostics)))))))))
