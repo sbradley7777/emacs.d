@@ -4,7 +4,14 @@
 ;;
 ;; Registry format: (IDENTIFIER DESCRIPTION MODES . PROPERTIES)
 ;;
-;; Query functions:
+;; Entry-level accessors (when you have an entry object):
+;;   - registry-entry-identifier    - Get identifier from entry
+;;   - registry-entry-description   - Get description from entry
+;;   - registry-entry-modes         - Get modes from entry
+;;   - registry-entry-properties    - Get properties plist from entry
+;;   - registry-entry-get-property  - Get property value from entry
+;;
+;; Query functions (when you have registry + identifier):
 ;;   - registry-find-entry          - Find entry by identifier
 ;;   - registry-get-property        - Get property value
 ;;   - registry-get-description     - Get description string
@@ -22,6 +29,40 @@
 
 ;; Forward declaration for registry-mode-compatible-p
 (declare-function registry-mode-compatible-p "registry-validation")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Entry-Level Accessors
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ registry-entry-identifier (entry)
+ "Get identifier (symbol) from ENTRY.
+ENTRY is a registry entry in format (IDENTIFIER DESCRIPTION MODES . PROPERTIES)."
+ (car entry))
+
+(defun
+ registry-entry-description (entry)
+ "Get description (string) from ENTRY.
+ENTRY is a registry entry in format (IDENTIFIER DESCRIPTION MODES . PROPERTIES)."
+ (nth 1 entry))
+
+(defun
+ registry-entry-modes (entry)
+ "Get modes (list) from ENTRY.
+ENTRY is a registry entry in format (IDENTIFIER DESCRIPTION MODES . PROPERTIES)."
+ (nth 2 entry))
+
+(defun
+ registry-entry-properties (entry)
+ "Get properties plist from ENTRY.
+ENTRY is a registry entry in format (IDENTIFIER DESCRIPTION MODES . PROPERTIES)."
+ (nthcdr 3 entry))
+
+(defun
+ registry-entry-get-property (entry property)
+ "Get PROPERTY value from ENTRY's properties plist.
+ENTRY is a registry entry.
+PROPERTY is a keyword like :binary, :disabled, :priority, etc."
+ (plist-get (registry-entry-properties entry) property))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core Query Functions
@@ -42,7 +83,7 @@ PROPERTY is a keyword like :binary, :type, :install-hint, etc.
 REGISTRY is the registry to search in.
 IDENTIFIER is the entry identifier symbol."
  (let ((entry (registry-find-entry registry identifier)))
-   (when entry (plist-get (nthcdr 3 entry) property))))
+   (when entry (registry-entry-get-property entry property))))
 
 (defun
  registry-get-description (registry identifier)
@@ -51,7 +92,7 @@ Return the description string or the identifier symbol as fallback.
 REGISTRY is the registry to search in.
 IDENTIFIER is the entry identifier symbol."
  (let ((entry (registry-find-entry registry identifier)))
-   (if entry (nth 1 entry) (format "%s" identifier))))
+   (if entry (registry-entry-description entry) (format "%s" identifier))))
 
 (defun
  registry-get-modes (registry identifier)
@@ -60,7 +101,7 @@ Return list of mode symbols or special value like (multiple).
 REGISTRY is the registry to search in.
 IDENTIFIER is the entry identifier symbol."
  (let ((entry (registry-find-entry registry identifier)))
-   (when entry (nth 2 entry))))
+   (when entry (registry-entry-modes entry))))
 
 (defun
  registry--get-all-identifiers (registry &optional filter-fn)
@@ -71,11 +112,13 @@ FILTER-FN is optional predicate function receiving entry as argument.
 
 Example:
   (registry--get-all-identifiers reg
-    (lambda (e) (not (registry-get-property reg (car e) :disabled))))"
+    (lambda (e) (not (registry-entry-get-property e :disabled))))"
  (let ((identifiers nil))
    (dolist
     (entry registry)
-    (when (or (null filter-fn) (funcall filter-fn entry)) (push (car entry) identifiers)))
+    (when
+     (or (null filter-fn) (funcall filter-fn entry))
+     (push (registry-entry-identifier entry) identifiers)))
    (nreverse identifiers)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -96,8 +139,9 @@ Example:
   'found
   (dolist
    (entry registry)
-   (let ((symbol (car entry)))
-     (when (equal (registry-get-property registry symbol property) value) (throw 'found symbol))))
+   (let ((symbol (registry-entry-identifier entry))
+         (entry-value (registry-entry-get-property entry property)))
+     (when (equal entry-value value) (throw 'found symbol))))
   nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -114,7 +158,7 @@ FILTER-FN is optional predicate function.
 
 Example:
   (registry-find-by-mode eglot-registry \\='python-mode
-    (lambda (e) (not (registry-get-property eglot-registry (car e) :disabled))))"
+    (lambda (e) (registry-entry-enabled-p eglot-registry (registry-entry-identifier e))))"
  (let ((result nil))
    (catch
     'found
@@ -122,8 +166,10 @@ Example:
      (entry registry)
      (when
       (or (null filter-fn) (funcall filter-fn entry))
-      (let ((modes (nth 2 entry)))
-        (when (registry-mode-compatible-p modes mode) (throw 'found (setq result (car entry))))))))
+      (let ((modes (registry-entry-modes entry)))
+        (when
+         (registry-mode-compatible-p modes mode)
+         (throw 'found (setq result (registry-entry-identifier entry))))))))
    result))
 
 (defun
@@ -139,8 +185,10 @@ FILTER-FN is optional predicate function."
     (entry registry)
     (when
      (or (null filter-fn) (funcall filter-fn entry))
-     (let ((modes (nth 2 entry)))
-       (when (registry-mode-compatible-p modes mode) (push (car entry) results)))))
+     (let ((modes (registry-entry-modes entry)))
+       (when
+        (registry-mode-compatible-p modes mode)
+        (push (registry-entry-identifier entry) results)))))
    (nreverse results)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -168,8 +216,8 @@ Example:
         (registry-find-by-mode lsp-registry mode
                                (lambda
                                 (entry)
-                                (let ((props (nthcdr 3 entry)))
-                                  (not (plist-get props :disabled)))))))
+                                (registry-entry-enabled-p
+                                 lsp-registry (registry-entry-identifier entry))))))
    (and lsp-identifier t)))
 
 (defun

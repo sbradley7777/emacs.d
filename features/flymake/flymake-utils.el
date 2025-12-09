@@ -453,13 +453,12 @@ Creates one row per mode/LSP-server combination from `eglot-lsp-server-registry'
     (boundp 'eglot-lsp-server-registry)
     (dolist
      (entry eglot-lsp-server-registry)
-     (let* ((server-symbol (car entry))
-            (description (registry-get-description eglot-lsp-server-registry server-symbol))
-            (modes (registry-get-modes eglot-lsp-server-registry server-symbol))
-            (lsp-server (registry-get-property eglot-lsp-server-registry server-symbol :binary))
-            (disabled (registry-get-property eglot-lsp-server-registry server-symbol :disabled))
-            (priority
-             (or (registry-get-property eglot-lsp-server-registry server-symbol :priority) 100))
+     (let* ((server-symbol (registry-entry-identifier entry))
+            (description (registry-entry-description entry))
+            (modes (registry-entry-modes entry))
+            (lsp-server (registry-entry-get-property entry :binary))
+            (disabled (registry-entry-get-property entry :disabled))
+            (priority (or (registry-entry-get-property entry :priority) 100))
             (backend-symbol 'eglot-flymake-backend))
        (unless
         disabled
@@ -513,12 +512,11 @@ EMPTY-MESSAGE is the message to display when no backends of this type exist."
         (buffer-counts (flymake--count-buffers-per-backend-mode)))
    (dolist
     (entry flymake-backend-registry)
-    (let* ((backend-symbol (car entry))
-           (description (registry-get-description flymake-backend-registry backend-symbol))
-           (modes (registry-get-modes flymake-backend-registry backend-symbol))
-           (priority
-            (or (registry-get-property flymake-backend-registry backend-symbol :priority) 100))
-           (disabled (registry-get-property flymake-backend-registry backend-symbol :disabled))
+    (let* ((backend-symbol (registry-entry-identifier entry))
+           (description (registry-entry-description entry))
+           (modes (registry-entry-modes entry))
+           (priority (or (registry-entry-get-property entry :priority) 100))
+           (disabled (registry-entry-get-property entry :disabled))
            (info (flymake--get-backend-binary-info backend-symbol)))
       (when
        (eq (plist-get info :type) backend-type)

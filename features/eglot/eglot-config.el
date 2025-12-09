@@ -74,11 +74,10 @@ Checks local or remote host appropriately based on `default-directory'."
 
 (dolist
  (entry eglot-lsp-server-registry)
- (let* ((lsp-server-symbol (car entry))
-        (modes (registry-get-modes eglot-lsp-server-registry lsp-server-symbol))
-        (lsp-executable
-         (registry-get-property eglot-lsp-server-registry lsp-server-symbol :binary))
-        (disabled (registry-get-property eglot-lsp-server-registry lsp-server-symbol :disabled)))
+ (let* ((lsp-server-symbol (registry-entry-identifier entry))
+        (modes (registry-entry-modes entry))
+        (lsp-executable (registry-entry-get-property entry :binary))
+        (disabled (registry-entry-get-property entry :disabled)))
    (unless disabled (dolist (mode modes) (eglot--setup-lsp-for-mode mode lsp-executable)))))
 
 ;; Trigger flymake-start for LSP-only backends (no standalone linter)
