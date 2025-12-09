@@ -158,6 +158,64 @@ Example:
   (cl-count-if (lambda (row) (string= (format "%s" (nth column-index row)) value)) rows)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Input Validation Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core-table--validate-headers
+ (headers)
+ "Validate HEADERS is a non-empty list of strings.
+Signals error if validation fails."
+ (unless (and (listp headers) (> (length headers) 0)) (error "Headers must be a non-empty list"))
+ (unless (cl-every #'stringp headers) (error "All header elements must be strings")))
+
+(defun
+ core-table--validate-rows (rows)
+ "Validate ROWS is a list.
+Signals error if validation fails."
+ (unless (listp rows) (error "Rows must be a list")))
+
+(defun
+ core-table--validate-column-consistency (headers rows)
+ "Validate all ROWS have same column count as HEADERS.
+Signals error if any row has inconsistent column count."
+ (let ((expected-cols (length headers))
+       (row-idx 0))
+   (dolist
+    (row rows) (setq row-idx (1+ row-idx))
+    (let ((actual-cols (length row)))
+      (unless
+       (= actual-cols expected-cols)
+       (error
+        "Row %d has %d columns but headers specify %d" row-idx actual-cols expected-cols))))))
+
+(defun
+ core-table--validate-total-spec (total-spec headers)
+ "Validate TOTAL-SPEC is valid type and references are correct.
+HEADERS is used to validate column name references.
+Signals error if validation fails."
+ (when
+  total-spec
+  (unless
+   (or (symbolp total-spec) (functionp total-spec) (listp total-spec))
+   (error "Total-spec must be nil, symbol, function, or list"))
+  (when
+   (listp total-spec)
+   (let ((num-cols (length headers)))
+     (if
+      (stringp (car total-spec))
+      ;; Validate column names
+      (dolist
+       (name total-spec)
+       (unless
+        (member name headers) (error "Total-spec column name '%s' not found in headers" name)))
+      ;; Validate column indices
+      (dolist
+       (idx total-spec)
+       (unless
+        (and (integerp idx) (>= idx 0) (< idx num-cols))
+        (error "Total-spec column index %d out of range (max: %d)" idx (1- num-cols)))))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Data Transformation Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun
@@ -359,7 +417,8 @@ Numeric patterns recognized: integers, floats, and fractions (e.g., \"3/5\")."
         'right 'left))))))
 
 (defun
- core-table-format (headers rows &optional total-spec)
+ core-table-format
+ (headers rows &optional total-spec)
  "Format HEADERS and ROWS as a box-drawing table.
 HEADERS is a list of column header strings.
 ROWS is a list of row data, where each row is a list of column values.
@@ -414,6 +473,12 @@ Examples:
    (lambda (headers rows)
      (list \"Custom\" (number-to-string (length rows)) \"Total\")))
   => Last row: │ Custom │ 2 │ Total │"
+ ;; Input validation
+ (core-table--validate-headers headers)
+ (core-table--validate-rows rows)
+ (core-table--validate-column-consistency headers rows)
+ (core-table--validate-total-spec total-spec headers)
+ ;; Table formatting
  (let* ((col-widths (core-table-calculate-column-widths headers rows))
         (alignments (core-table--detect-column-alignments headers rows))
         (lines nil))
