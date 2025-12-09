@@ -139,41 +139,6 @@
  "Message format for successful removal. Args: type, index, name.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Data Persistence Configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defconst
- command-palette--persistence-configs
- '((history
-    :variable user--command-palette-history
-    :saved-var command-palette-saved-history
-    :file command-palette-history-file
-    :data-type ring
-    :description "execution history"
-    :default nil)
-   (favorites
-    :variable user-command-palette-favorites
-    :saved-var command-palette-saved-favorites
-    :file command-palette-favorites-file
-    :data-type list
-    :description "favorites list"
-    :default command-palette-default-favorites)
-   (diagnostics
-    :variable user-command-palette-diagnostics
-    :saved-var command-palette-saved-diagnostics
-    :file command-palette-diagnostics-file
-    :data-type list
-    :description "diagnostics list"
-    :default command-palette-default-diagnostics))
- "Configuration for persistent data storage.
-Each entry defines:
-  :variable     - Runtime variable holding the data
-  :saved-var    - Variable name used in saved file
-  :file         - File path constant for storage
-  :data-type    - Type of data structure (ring or list)
-  :description  - Human-readable description
-  :default      - Default value constant (or nil for history)")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; View Navigation Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst

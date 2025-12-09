@@ -5,6 +5,7 @@
 
 ;;; Code:
 (require 'command-palette-init)
+(require 'command-palette-entries)
 (require 'core-user-interaction-utils)
 (require 'logging-init)
 (require 'ring)
@@ -44,7 +45,10 @@ Removes any existing occurrences before adding to ensure no duplicates.  Returns
    (not
     (assoc
      cmd-symbol
-     (mapcar (lambda (item) (cons (cdr item) (car item))) user-command-palette-favorites))))
+     (mapcar
+      (lambda
+       (item) (cons (command-palette-item-symbol item) (command-palette-item-name item)))
+      user-command-palette-favorites))))
   (let ((new-ring (make-ring command-palette-history-size))
         (cmd-name (command-palette--format-command-name cmd-symbol))
         (len (ring-length user--command-palette-history)))
@@ -52,9 +56,9 @@ Removes any existing occurrences before adding to ensure no duplicates.  Returns
      (i len)
      (let* ((idx (- len 1 i))
             (item (ring-ref user--command-palette-history idx)))
-       (unless (eq (cdr item) cmd-symbol) (ring-insert new-ring item))))
+       (unless (eq (command-palette-item-symbol item) cmd-symbol) (ring-insert new-ring item))))
     (setq user--command-palette-history new-ring)
-    (ring-insert user--command-palette-history (cons cmd-name cmd-symbol))
+    (ring-insert user--command-palette-history (command-palette-create-item cmd-name cmd-symbol))
     (command-palette--refresh-buffer)
     t)))
 
@@ -143,8 +147,8 @@ SOURCE-NAME is a string used in user messages (e.g., \"recent command\", \"diagn
                 (eq source-type 'ring)
                 (ring-ref source-data (1- index))
                 (nth (1- index) source-data)))
-              (cmd-name (car item))
-              (cmd-symbol (cdr item)))
+              (cmd-name (command-palette-item-name item))
+              (cmd-symbol (command-palette-item-symbol item)))
          (unless
           (assoc cmd-name user-command-palette-favorites)
           (add-to-list 'user-command-palette-favorites item t)
@@ -192,7 +196,7 @@ Does not affect the command's availability in `M-x'."
     (if
      index
      (let* ((item-to-remove (nth (1- index) user-command-palette-favorites))
-            (cmd-name (car item-to-remove)))
+            (cmd-name (command-palette-item-name item-to-remove)))
        (setq
         user-command-palette-favorites (cl-remove item-to-remove user-command-palette-favorites))
        (command-palette--refresh-buffer)
@@ -225,8 +229,8 @@ Returns (valid-data . removed-count)."
        (i len)
        (let* ((idx (- len 1 i))
               (item (ring-ref data idx))
-              (cmd-symbol (cdr item))
-              (cmd-name (car item)))
+              (cmd-symbol (command-palette-item-symbol item))
+              (cmd-name (command-palette-item-name item)))
          (if
           (commandp cmd-symbol) (ring-insert new-ring item)
           (progn
@@ -236,8 +240,8 @@ Returns (valid-data . removed-count)."
     (let ((valid-items nil))
       (dolist
        (item data)
-       (let ((cmd-symbol (cdr item))
-             (cmd-name (car item)))
+       (let ((cmd-symbol (command-palette-item-symbol item))
+             (cmd-name (command-palette-item-name item)))
          (if
           (commandp cmd-symbol) (push item valid-items)
           (progn

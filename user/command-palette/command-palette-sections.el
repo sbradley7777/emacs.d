@@ -6,6 +6,7 @@
 
 ;;; Code:
 (require 'command-palette-init)
+(require 'command-palette-entries)
 (require 'command-palette-constants)
 (require 'command-palette-actions)
 (require 'ring)
@@ -311,8 +312,8 @@ Returns the position of the first command button, or nil if no commands."
        data data-type
        (lambda
         (item _idx)
-        (let* ((name (car item))
-               (cmd (cdr item))
+        (let* ((name (command-palette-item-name item))
+               (cmd (command-palette-item-symbol item))
                (keybinding (command-palette--get-keybinding cmd))
                (button-start (point)))
           (when (= display-index 1) (setq first-button-pos button-start))

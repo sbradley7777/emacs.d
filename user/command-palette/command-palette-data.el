@@ -5,6 +5,7 @@
 
 ;;; Code:
 (require 'command-palette-constants)
+(require 'command-palette-entries)
 (require 'command-palette-defaults)
 (require 'logging-init)
 (require 'ring)
@@ -48,11 +49,11 @@
 DATA-KEY should be one of: history, favorites, diagnostics."
  (command-palette--ensure-data-directory)
  (let* ((config (command-palette--get-config data-key))
-        (variable (plist-get config :variable))
-        (saved-var (plist-get config :saved-var))
-        (file-path (symbol-value (plist-get config :file)))
-        (data-type (plist-get config :data-type))
-        (description (plist-get config :description))
+        (variable (command-palette-config-variable config))
+        (saved-var (command-palette-config-saved-var config))
+        (file-path (symbol-value (command-palette-config-file config)))
+        (data-type (command-palette-config-data-type config))
+        (description (command-palette-config-description config))
         (data (symbol-value variable)))
    (condition-case err
        (with-temp-file
@@ -91,12 +92,12 @@ DATA-KEY should be one of: history, favorites, diagnostics."
 If SILENT is non-nil, suppress success messages.  Returns t if successful, nil otherwise.
 DATA-KEY should be one of: history, favorites, diagnostics."
  (let* ((config (command-palette--get-config data-key))
-        (variable (plist-get config :variable))
-        (saved-var (plist-get config :saved-var))
-        (file-path (symbol-value (plist-get config :file)))
-        (data-type (plist-get config :data-type))
-        (description (plist-get config :description))
-        (default-value (plist-get config :default)))
+        (variable (command-palette-config-variable config))
+        (saved-var (command-palette-config-saved-var config))
+        (file-path (symbol-value (command-palette-config-file config)))
+        (data-type (command-palette-config-data-type config))
+        (description (command-palette-config-description config))
+        (default-value (command-palette-config-default config)))
    (if
     (file-exists-p file-path)
     (condition-case err
