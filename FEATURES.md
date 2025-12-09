@@ -174,11 +174,36 @@ Standardized utilities for common operations ensuring consistent error handling 
 - **Quiet mode**: Optional suppression of non-zero exit code errors
 - **Exception handling**: Always logs exceptions for debugging
 
+**Side Window Management Framework** ([`core/core-side-window-utils.el`](core/core-side-window-utils.el)):
+- **Unified toggle behavior**: Consistent window toggle logic across all side windows
+- **Smart sizing**: Compact (30% width) and expanded (50% width) states with automatic cycling
+- **State tracking**: Remembers window state between toggles for predictable behavior
+- **Focus management**: Intelligent focus handling during window operations
+- **Shared utilities**: Eliminates code duplication across feature modules (Flymake, Imenu, Forge, Treemacs)
+
+**Table Formatting Utilities** ([`core/core-table-utils.el`](core/core-table-utils.el)):
+- **Diagnostic table display**: Formatted output for Flymake diagnostics and system information
+- **Column alignment**: Automatic column width calculation and alignment
+- **Sortable tables**: Support for interactive sorting in diagnostic buffers
+- **Reusable formatting**: Shared table utilities used across diagnostics, package UI, and registry displays
+
+**Registry System** ([`core/registry/`](core/registry/)):
+- **Configuration management**: Centralized registry for language server and tool configurations
+- **Entry validation**: Automatic validation of registry entries at construction time
+- **Query interface**: Accessor functions for retrieving and filtering registry data
+- **Modular design**: Separate modules for construction, validation, and querying
+  - [`registry-init.el`](core/registry/registry-init.el) - Initialization and setup
+  - [`registry-constructors.el`](core/registry/registry-constructors.el) - Entry builders with validation
+  - [`registry-query.el`](core/registry/registry-query.el) - Query and accessor functions
+  - [`registry-validation.el`](core/registry/registry-validation.el) - Validation utilities
+
 **Benefits:**
 - **Consistent user experience**: All user input uses same error handling path
 - **Reduced boilerplate**: Eliminates repetitive `with-temp-buffer` and `call-process` code
 - **Better error messages**: Uses `logging-*` utilities for standardized logging
 - **Easier maintenance**: Centralized code changes affect all callers
+- **Uniform UI**: Side windows behave consistently across all features
+- **Code reuse**: Shared utilities reduce duplication and improve maintainability
 
 ### Message Logging System
 
@@ -788,15 +813,26 @@ Professional startup screen with quick access to recent files, package managemen
 
 Interactive command launcher with history tracking and customizable favorites:
 
-**[Command Palette](user/command-palette.el) Features:**
-- **Clickable side window** - dedicated right-side panel with command buttons
-- **Automatic M-x tracking** - captures and displays recently executed commands
-- **Customizable favorites** - persistent list of frequently used commands
-- **Auto-sizing window** - automatically adjusts width to fit content
-- **Auto-close on execution** - closes after running a command for clean workflow
-- **Index-based operations** - promote recent commands to favorites or remove favorites by number
-- **Persistent storage** - saves history and favorites between sessions
-- **Mutual exclusion** - automatically manages side windows (F1, F5, F9)
+**Command Palette Features** ([`user/command-palette/`](user/command-palette/)):
+- **Modular Architecture** - Data-driven design with specialized modules:
+  - [`command-palette-init.el`](user/command-palette/command-palette-init.el) - Initialization and setup
+  - [`command-palette-data.el`](user/command-palette/command-palette-data.el) - Persistent data storage and management
+  - [`command-palette-entries.el`](user/command-palette/command-palette-entries.el) - Command entry data structures with accessor functions
+  - [`command-palette-sections.el`](user/command-palette/command-palette-sections.el) - Section rendering and organization
+  - [`command-palette-views.el`](user/command-palette/command-palette-views.el) - Display and interaction views
+  - [`command-palette-actions.el`](user/command-palette/command-palette-actions.el) - User actions and command execution
+  - [`command-palette-defaults.el`](user/command-palette/command-palette-defaults.el) - Default favorite commands configuration
+  - [`command-palette-constants.el`](user/command-palette/command-palette-constants.el) - Constants and configuration values
+- **User Interface**:
+  - Clickable side window - dedicated right-side panel with command buttons
+  - Auto-sizing window - automatically adjusts width to fit content
+  - Auto-close on execution - closes after running a command for clean workflow
+  - Mutual exclusion - automatically manages side windows (F1, F5, F9)
+- **Functionality**:
+  - Automatic M-x tracking - captures and displays recently executed commands
+  - Customizable favorites - persistent list of frequently used commands
+  - Index-based operations - promote recent commands to favorites or remove favorites by number
+  - Persistent storage - saves history and favorites between sessions
 
 **Default Favorite Commands:**
 - **Show Installed Packages** - view all installed packages with update indicators
@@ -871,18 +907,37 @@ Interactive command launcher with history tracking and customizable favorites:
 
 ### Enhanced Diagnostics
 
-- **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)** ([`features/flymake/flymake-config.el`](features/flymake/flymake-config.el), [`features/flymake/flymake-utils.el`](features/flymake/flymake-utils.el)): Real-time syntax checking and linting
-  - **Enhanced diagnostics buffer** with user-friendly backend names
-  - **Intelligent backend mapping** - Ruff, Eglot, and other checkers displayed clearly
-  - **Diagnostics window toggle** via `F1` for quick access
-  - **Navigation shortcuts** - `F2`/`F3` for previous/next error
+- **[Flymake Integration](https://www.gnu.org/software/emacs/manual/html_mono/flymake.html)**: Real-time syntax checking and linting with modular architecture
+  - **Core Configuration** ([`features/flymake/flymake-config.el`](features/flymake/flymake-config.el)):
+    - Enhanced diagnostics buffer with user-friendly backend names
+    - Diagnostics window toggle via `F1` for quick access
+    - Navigation shortcuts - `F2`/`F3` for previous/next error
+  - **Diagnostic System** - Modular architecture for extensibility:
+    - [`flymake-diagnostic-data.el`](features/flymake/flymake-diagnostic-data.el) - Diagnostic data structures and extraction from Flymake API
+    - [`flymake-diagnostic-window.el`](features/flymake/flymake-diagnostic-window.el) - Window management and display using side window framework
+    - [`flymake-diagnostic-export.el`](features/flymake/flymake-diagnostic-export.el) - Export utilities for diagnostic data
+  - **Backend Management**:
+    - [`flymake-registry.el`](features/flymake/flymake-registry.el) - Registry system for backend configurations
+    - [`flymake-lang-setup.el`](features/flymake/flymake-lang-setup.el) - Language-specific backend setup and activation
+    - [`flymake-utils.el`](features/flymake/flymake-utils.el) - Shared utility functions and backend formatting
+  - **Features**:
+    - Intelligent backend mapping - Ruff, Eglot, and other checkers displayed clearly
+    - Error code extraction and display in dedicated column
+    - Built-in Flymake API integration for reliable diagnostic data
+    - Defer-check mechanism to prevent "Canceling obsolete check" warnings
 
-- **[Eglot LSP Client](https://github.com/joaotavora/eglot)** ([`features/eglot/eglot-config.el`](features/eglot/eglot-config.el)): Language Server Protocol integration for intelligent code features
-  - **Automatic LSP detection** - enables LSP when server executables are found
-  - **Local and remote support** - seamless TRAMP integration for SSH-based development
-  - **Smart connection handling** - 60-second timeout for remote connections
-  - **Informative logging** - shows LSP command availability checks for debugging
-  - **Automatic mode hooks** - LSP activates automatically for configured languages
+- **[Eglot LSP Client](https://github.com/joaotavora/eglot)**: Language Server Protocol integration for intelligent code features
+  - **Core Configuration** ([`features/eglot/eglot-config.el`](features/eglot/eglot-config.el)):
+    - Automatic LSP detection - enables LSP when server executables are found
+    - Local and remote support - seamless TRAMP integration for SSH-based development
+    - Smart connection handling - 60-second timeout for remote connections
+    - Informative logging - shows LSP command availability checks for debugging
+    - Automatic mode hooks - LSP activates automatically for configured languages
+  - **Language Server Registry** ([`features/eglot/eglot-registry.el`](features/eglot/eglot-registry.el)):
+    - Centralized language server configuration management
+    - Server availability detection and validation
+    - Per-language server configuration with commands and arguments
+    - Integration with core registry system for consistent configuration
 
 See [LINTING.md](LINTING.md) for complete language support, required tools, and installation details.
 

@@ -60,22 +60,31 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
     - [`pkg-system-metadata.el`](core/pkg-system/pkg-system-metadata.el) - Package metadata extraction and parsing
     - [`pkg-system-ui.el`](core/pkg-system/pkg-system-ui.el) - Interactive package browsing and management UI
     - [`pkg-system-maintenance.el`](core/pkg-system/pkg-system-maintenance.el) - Package upgrade and cleanup utilities
+    - [`pkg-system-operations.el`](core/pkg-system/pkg-system-operations.el) - Core package operations and utilities
+    - [`pkg-system-refresh.el`](core/pkg-system/pkg-system-refresh.el) - Package repository refresh logic
+    - [`pkg-system-diagnostics.el`](core/pkg-system/pkg-system-diagnostics.el) - Package system diagnostics and debugging
   - [`core-constants.el`](core/core-constants.el) - Modern Emacs 30.2+ constants and configuration values
   - [`core-packages.el`](core/core-packages.el) - Package declarations and configurations
   - [`core-fonts.el`](core/core-fonts.el) - Automatic font management for icon packages
   - [`core-utils.el`](core/core-utils.el) - Utility functions and load timing system
   - [`core-config-loader.el`](core/core-config-loader.el) - Configuration module loading with custom use-package keywords
   - [`core-ui.el`](core/core-ui.el) - Basic UI configuration
+  - [`core-ui-utils.el`](core/core-ui-utils.el) - UI utility functions and helpers
   - [`core-gui-mode.el`](core/core-gui-mode.el) - GUI mode settings and window management
   - [`core-editing.el`](core/core-editing.el) - Editing preferences and behavior
   - [`core-files.el`](core/core-files.el) - File handling and backup settings
+  - [`core-side-window-utils.el`](core/core-side-window-utils.el) - Shared side window management framework for consistent toggle behavior
+  - [`core-table-utils.el`](core/core-table-utils.el) - Table formatting utilities for diagnostics and UI display
   - **[`logging/`](core/logging/)** - Message logging system
     - [`logging-init.el`](core/logging/logging-init.el) - Logging system loader and unified interface
     - [`logging-messages.el`](core/logging/logging-messages.el) - Message utility functions with Unicode prefixes
     - [`logging-buffers.el`](core/logging/logging-buffers.el) - Buffer logging functionality
-    - [`logging-tables.el`](core/logging/logging-tables.el) - Table formatting for diagnostics
     - [`logging-utils.el`](core/logging/logging-utils.el) - General logging utilities
-  - [`core-log-writer.el`](core/core-log-writer.el) - Log file writing and rotation functionality
+  - **[`registry/`](core/registry/)** - Configuration registry system for managing language and tool configurations
+    - [`registry-init.el`](core/registry/registry-init.el) - Registry system initialization and setup
+    - [`registry-constructors.el`](core/registry/registry-constructors.el) - Registry entry constructors and builders
+    - [`registry-query.el`](core/registry/registry-query.el) - Registry query and accessor functions
+    - [`registry-validation.el`](core/registry/registry-validation.el) - Registry entry validation utilities
   - [`core-user-interaction-utils.el`](core/core-user-interaction-utils.el) - Standardized user input collection utilities
   - [`core-process-utils.el`](core/core-process-utils.el) - Centralized process execution utility
   - [`core-diagnostics.el`](core/core-diagnostics.el) - System information and configuration diagnostics
@@ -91,9 +100,15 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - **[`eglot/`](features/eglot/)** - LSP client integration
     - [`eglot-config.el`](features/eglot/eglot-config.el) - [Eglot](https://github.com/joaotavora/eglot) LSP client with automatic local/remote detection
     - [`eglot-constants.el`](features/eglot/eglot-constants.el) - Eglot configuration constants
+    - [`eglot-registry.el`](features/eglot/eglot-registry.el) - Eglot language server registry configuration
   - **[`flymake/`](features/flymake/)** - Syntax checking and diagnostics
     - [`flymake-config.el`](features/flymake/flymake-config.el) - Flymake diagnostic display configuration
     - [`flymake-utils.el`](features/flymake/flymake-utils.el) - Flymake utility functions and backend formatting
+    - [`flymake-lang-setup.el`](features/flymake/flymake-lang-setup.el) - Language-specific Flymake backend configuration
+    - [`flymake-registry.el`](features/flymake/flymake-registry.el) - Flymake backend registry system
+    - [`flymake-diagnostic-data.el`](features/flymake/flymake-diagnostic-data.el) - Diagnostic data structures and extraction
+    - [`flymake-diagnostic-window.el`](features/flymake/flymake-diagnostic-window.el) - Diagnostic window display and management
+    - [`flymake-diagnostic-export.el`](features/flymake/flymake-diagnostic-export.el) - Diagnostic data export utilities
   - **Git Integration** - Magit and Forge for GitHub/GitLab workflows
     - **[`git/`](features/git/)** - Git and Magit configuration
       - [`git-config.el`](features/git/git-config.el) - Magit configuration for Git operations
@@ -162,7 +177,15 @@ For detailed feature information, see [`FEATURES.md`](FEATURES.md). For installa
   - [`modeline-faces.el`](themes/modeline-faces.el) - Theme-specific modeline face customizations
   - [`modeline-segments.el`](themes/modeline-segments.el) - Custom modeline segments and utilities
 - **[`user/`](user/)** - Personal customizations
-  - [`command-palette.el`](user/command-palette.el) - Interactive command launcher with history tracking
+  - **[`command-palette/`](user/command-palette/)** - Interactive command launcher with history tracking
+    - [`command-palette-init.el`](user/command-palette/command-palette-init.el) - Command palette initialization and setup
+    - [`command-palette-data.el`](user/command-palette/command-palette-data.el) - Data persistence and storage management
+    - [`command-palette-entries.el`](user/command-palette/command-palette-entries.el) - Command entry data structures
+    - [`command-palette-sections.el`](user/command-palette/command-palette-sections.el) - Section rendering and organization
+    - [`command-palette-views.el`](user/command-palette/command-palette-views.el) - Display and interaction views
+    - [`command-palette-actions.el`](user/command-palette/command-palette-actions.el) - User actions and command execution
+    - [`command-palette-defaults.el`](user/command-palette/command-palette-defaults.el) - Default favorite commands
+    - [`command-palette-constants.el`](user/command-palette/command-palette-constants.el) - Command palette constants
   - [`user-aliases.el`](user/user-aliases.el) - Custom command aliases
   - [`user-keybindings.el`](user/user-keybindings.el) - Global key bindings
   - [`user-utils.el`](user/user-utils.el) - Custom helper functions
