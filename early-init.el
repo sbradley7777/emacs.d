@@ -53,8 +53,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package System Early Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Configure package directory to use core-emacs-local-dir
-(setq package-user-dir core-packages-dir)
 ;; Disable package.el auto-initialization to prevent loading warnings
 ;; This must be done very early, before any package loading attempts
 (setq package-enable-at-startup nil package-quickstart nil)
@@ -134,12 +132,10 @@
   ;; Disable native compilation for Snap due to library compatibility issues
   (setq native-comp-jit-compilation nil)
   (setq native-comp-enable-subr-trampolines nil)
-  (setq native-comp-eln-load-path (list core-eln-cache-dir))
   (logging-warning "Native compilation disabled (running in Snap environment)"))
  (progn
   ;; Enable native compilation for non-Snap installations (macOS, Linux, etc.)
   (setq native-comp-jit-compilation t)
-  (setq native-comp-eln-load-path (list core-eln-cache-dir))
   (logging-success "Native compilation enabled (standard installation)")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -149,12 +145,7 @@
 (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
 (require 'core-utils)
 (let ((dirs-to-create
-       (list
-        core-eln-cache-dir
-        core-files-autosave-dir
-        core-files-backup-dir
-        core-files-auto-save-list-dir
-        core-packages-dir)))
+       (list core-files-autosave-dir core-files-backup-dir core-files-auto-save-list-dir)))
   (dolist (dir dirs-to-create) (core-ensure-directory dir)))
 (logging-success "early-init.el loaded successfully - performance optimizations active.")
 (provide 'early-init)

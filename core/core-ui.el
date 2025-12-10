@@ -110,11 +110,7 @@
 (recentf-mode 1)
 ;; Ensure recentf loads existing list on startup
 (recentf-load-list)
-(setq
- recentf-max-saved-items
- core-recentf-max-items
- recentf-exclude
- `(,(concat core-packages-dir "/.*") "/tmp/.*"))
+(setq recentf-max-saved-items core-recentf-max-items recentf-exclude '(".*/elpa/.*" "/tmp/.*"))
 
 ;; Auto-save recentf list every 30 seconds when idle
 (setq recentf-auto-cleanup 'never)

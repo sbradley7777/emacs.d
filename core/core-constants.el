@@ -32,10 +32,6 @@
 
 ;; Package System
 (core-define-path
- core-packages-dir "elpa" core-emacs-local-dir "Directory for installed packages.")
-(core-define-path
- core-eln-cache-dir "eln-cache" core-emacs-local-dir "Directory for native compilation cache.")
-(core-define-path
  core-package-metadata-file
  "package-metadata.el"
  core-emacs-local-dir

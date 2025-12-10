@@ -134,7 +134,8 @@ Returns status like \\='Enabled (Snap mode)\\=' or \\='Disabled\\='."
         (dev-file-path
          (if (file-exists-p core-dev-config-file) (abbreviate-file-name core-dev-config-file) "-"))
         (native-comp-status (core--diagnostics-get-native-comp-status))
-        (native-cache-dir (abbreviate-file-name core-eln-cache-dir))
+        (native-cache-dir
+         (abbreviate-file-name (expand-file-name "eln-cache" user-emacs-directory)))
         (headers '("Setting" "Value"))
         (rows
          (list
