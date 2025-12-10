@@ -79,12 +79,16 @@ Removes orphaned package dependencies using `package-autoremove' and resets meta
  (let ((cleanup-count 0))
    (logging-package "Starting package cleanup...")
 
+   ;; Step 0: Sync package-selected-packages with pkg-system-packages-all
+   (setq package-selected-packages pkg-system-packages-all)
+   (customize-save-variable 'package-selected-packages pkg-system-packages-all)
+
    ;; Step 1: Remove unused dependencies using built-in package-autoremove
    (logging-loading "Removing unused package dependencies...")
    (condition-case err
        (progn
-        ;; Use pkg-system-packages-all as wanted packages if package-selected-packages is empty
-        (let ((package-selected-packages (or package-selected-packages pkg-system-packages-all))
+        ;; Use pkg-system-packages-all as the authoritative source of wanted packages
+        (let ((package-selected-packages pkg-system-packages-all)
               (before-count (length package-alist)))
 
           ;; Override confirmation prompts to auto-accept

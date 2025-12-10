@@ -14,11 +14,12 @@
 ;; Package Categories
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Packages organized by function and load order for better maintainability.
-;; Categories: interface -> editing -> development -> languages
+;; Categories: interface -> editing -> minibuffer -> development -> languages
 (defvar
  core-packages-interface
  '(doom-themes
    doom-modeline
+   nerd-icons
    which-key
    rainbow-delimiters
    highlight-indent-guides
@@ -31,14 +32,30 @@
 Themes, visual enhancements, icons, and interface helpers.")
 
 (defvar
- core-packages-editing '(corfu cape imenu-list imenu-anywhere treemacs breadcrumb dired-subtree)
+ core-packages-editing
+ '(corfu corfu-terminal cape imenu-list imenu-anywhere treemacs breadcrumb dired-subtree)
  "Text manipulation and navigation tools for all users.
 Completion, navigation, and file browsing functionality.")
+
+(defvar
+ core-packages-minibuffer '(vertico orderless marginalia consult)
+ "Minibuffer completion and enhancement.
+Vertical completion UI, fuzzy matching, annotations, and enhanced commands.")
+
 (defvar
  core-packages-development
- '(flymake-ruff flymake-aspell flymake-collection elisp-autofmt treesit-auto diff-hl magit forge)
+ '(flymake-ruff
+   flymake-aspell
+   flymake-collection
+   flymake-shellcheck
+   elisp-autofmt
+   treesit-auto
+   diff-hl
+   magit
+   forge
+   gnu-elpa-keyring-update)
  "Programming-specific development tools.
-Linting, formatting, spell checking, code analysis, tree-sitter support, git diff visualization, and git integration.")
+Linting, formatting, spell checking, code analysis, tree-sitter support, git diff visualization, git integration, and package keyring updates.")
 (defvar
  core-packages-languages '(pyvenv yaml-mode toml-mode markdown-mode)
  "Language-specific modes and tools.
@@ -46,7 +63,11 @@ File type handlers and language-specific utilities.")
 (defvar
  pkg-system-packages-all
  (append
-  core-packages-interface core-packages-editing core-packages-development core-packages-languages)
+  core-packages-interface
+  core-packages-editing
+  core-packages-minibuffer
+  core-packages-development
+  core-packages-languages)
  "Complete list of all packages to install.
 Assembled from all category lists in load order.")
 
