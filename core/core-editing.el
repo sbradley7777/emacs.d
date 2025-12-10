@@ -15,6 +15,14 @@
  global-display-fill-column-indicator-mode "display-fill-column-indicator" (&optional arg))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun
+ core--osc-52-copy (text) "Copy TEXT to system clipboard using OSC 52 escape sequence."
+ (let ((encoded (base64-encode-string text t)))
+   (send-string-to-terminal (concat "\e]52;c;" encoded "\a"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhanced editing preferences
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (electric-pair-mode 1) ; Auto-close parentheses
@@ -63,15 +71,6 @@
 (unless
  (display-graphic-p)
  (setq select-enable-clipboard t select-enable-primary t save-interprogram-paste-before-kill t)
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; Functions
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (defun
-  core--osc-52-copy (text) "Copy TEXT to system clipboard using OSC 52 escape sequence."
-  (let ((encoded (base64-encode-string text t)))
-    (send-string-to-terminal (concat "\e]52;c;" encoded "\a"))))
-
  ;; Hook into Emacs clipboard system
  (setq interprogram-cut-function 'core--osc-52-copy))
 (provide 'core-editing)
