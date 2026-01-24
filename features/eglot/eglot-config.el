@@ -3,6 +3,22 @@
 ;;      Configuration for Eglot (Emacs Polyglot) LSP client.
 ;;      Enables language server protocol support with automatic local/remote detection.
 ;;
+;; Python Virtual Environment Integration:
+;;   pyvenv automatically detects and activates virtual environments for Python projects.
+;;   However, pylsp-mypy (the mypy type checker plugin for pylsp) needs additional
+;;   configuration to use the venv's Python interpreter instead of the system Python.
+;;
+;;   REQUIRED SETUP (per-project):
+;;   Add this line to your project's pyproject.toml [tool.mypy] section:
+;;     python_executable = "$VIRTUAL_ENV/bin/python"
+;;
+;;   This tells mypy to use the virtual environment's Python (where dependencies are
+;;   installed) instead of the system Python. The $VIRTUAL_ENV variable is automatically
+;;   set by pyvenv when it activates the venv, so this works for all projects without
+;;   hardcoding paths.
+;;
+;;   OPTIONAL: Add the same line to ~/.mypy.ini [mypy] section for global default.
+;;
 ;; Defer-Check Integration (GitHub Issue #55):
 ;;   The eglot-managed-mode-hook triggers flymake-start for LSP-only modes
 ;;   (like C) that have no standalone linter. This works with flymake-config.el
@@ -30,6 +46,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun
  eglot--trigger-flymake-after-connect ()
  "Trigger flymake check after eglot connects for LSP-only backends.
@@ -68,9 +85,12 @@ Checks local or remote host appropriately based on `default-directory'."
       location
       hostname)
      (let ((should-enable (core-check-command-in-path lsp-executable)))
-       ;; Start eglot directly - no timer needed.
-       ;; Eglot handles async connection internally, so it won't block even during git-sync.
-       (when should-enable (eglot-ensure)))))))
+       (when
+        should-enable
+        ;; Start eglot directly - no timer needed.
+        ;; Eglot handles async connection internally, so it won't block even during git-sync.
+        (eglot-ensure)))))
+  50))
 
 (dolist
  (entry eglot-lsp-server-registry)
@@ -83,5 +103,6 @@ Checks local or remote host appropriately based on `default-directory'."
 ;; Trigger flymake-start for LSP-only backends (no standalone linter)
 ;; Only calls start if ONLY eglot-flymake-backend is present
 (add-hook 'eglot-managed-mode-hook 'eglot--trigger-flymake-after-connect)
+
 (provide 'eglot-config)
 ;;; eglot-config.el ends here

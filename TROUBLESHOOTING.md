@@ -132,6 +132,57 @@ M-x emacs-version
 2. **Permission issues**: Check directory permissions
 3. **Path issues**: Ensure virtual environment path doesn't contain spaces or special characters
 
+### Mypy Cannot Find Packages in Virtual Environment
+
+**Symptoms**:
+- Mypy reports "Cannot find implementation or library stub for module" errors in Emacs/Flymake
+- Same file shows no errors when running `mypy` from command line
+- Error messages like `[import-not-found]` for packages installed in your venv
+
+**Cause**:
+By default, mypy (via pylsp-mypy) uses the system Python interpreter instead of the virtual environment's Python, so it cannot see packages installed in the venv.
+
+**Solution**:
+
+Add this line to your project's `pyproject.toml` in the `[tool.mypy]` section:
+
+```toml
+[tool.mypy]
+python_version = "3.12"
+python_executable = "$VIRTUAL_ENV/bin/python"  # ← Add this line
+mypy_path = "stubs"
+# ... rest of your mypy config
+```
+
+**Why this works**:
+- The `$VIRTUAL_ENV` environment variable is automatically set by pyvenv when it activates the venv
+- This tells mypy to use the venv's Python interpreter (where your dependencies are installed)
+- Works for all projects without hardcoding paths - `$VIRTUAL_ENV` is different for each project
+- Both command-line mypy and pylsp-mypy will use the same Python interpreter
+
+**Optional - Global Default**:
+
+You can also add the same setting to `~/.mypy.ini` for a global default:
+
+```ini
+[mypy]
+python_version = 3.11
+python_executable = $VIRTUAL_ENV/bin/python  # ← Add this
+show_error_codes = true
+```
+
+**Note**: Project-specific `pyproject.toml` settings override the global `~/.mypy.ini`, so if a project has `[tool.mypy]`, you'll need to add the `python_executable` line to both files.
+
+**Verification**:
+
+After adding the setting, restart Emacs and reopen your Python file. The import errors should be gone. You can verify mypy is using the correct Python with:
+
+```bash
+cd /path/to/your/project
+mypy --verbose your_file.py 2>&1 | grep "Configured Executable"
+# Should show: Configured Executable:  /path/to/your/project/venv/bin/python
+```
+
 ## LSP and Tool Executable Issues
 
 ### Overview
