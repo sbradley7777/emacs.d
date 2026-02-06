@@ -57,5 +57,24 @@
  themes-doom-1337-search-highlight-color
  themes-doom-1337-color-green
  "Search match highlighting - used by isearch, `query-replace', and orderless.")
+
+;; Parenthesis Matching Colors (show-paren-mode)
+(defconst
+ themes-doom-1337-paren-match-bg
+ "#00CED1"
+ "Matching parenthesis background - bright dark turquoise.")
+
+(defconst
+ themes-doom-1337-paren-match-fg "#000000" "Matching parenthesis foreground - black for contrast.")
+
+(defconst
+ themes-doom-1337-paren-mismatch-bg
+ "#FF0000"
+ "Mismatched parenthesis background - pure bright red for error visibility.")
+
+(defconst
+ themes-doom-1337-paren-mismatch-fg
+ "#FFFF00"
+ "Mismatched parenthesis foreground - bright yellow for maximum contrast.")
 (provide 'themes-doom-1337-constants)
 ;;; themes-doom-1337-constants.el ends here

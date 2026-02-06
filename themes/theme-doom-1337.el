@@ -165,6 +165,28 @@
  (logging-theme "Applied doom-1337 markdown link faces"))
 
 (defun
+ themes-doom-1337-paren-faces-apply ()
+ "Apply doom-1337 theme-specific colors to show-paren-mode faces.
+These colors are used EXCLUSIVELY for matching/mismatching parentheses
+when cursor is on or near a parenthesis."
+ (custom-set-faces
+  ;; Matching parenthesis - bright turquoise background with black text
+  `(show-paren-match
+    ((t
+      (:background
+       ,themes-doom-1337-paren-match-bg
+       :foreground ,themes-doom-1337-paren-match-fg
+       :weight bold))))
+  ;; Mismatched parenthesis - bright red background with yellow text (error!)
+  `(show-paren-mismatch
+    ((t
+      (:background
+       ,themes-doom-1337-paren-mismatch-bg
+       :foreground ,themes-doom-1337-paren-mismatch-fg
+       :weight bold)))))
+ (logging-theme "Applied doom-1337 show-paren faces"))
+
+(defun
  themes-doom-1337-setup
  ()
  "Apply all doom-1337 theme customizations."
@@ -172,6 +194,7 @@
  (themes-doom-1337-modeline-faces-apply)
  (themes-doom-1337-breadcrumb-faces-apply)
  (themes-doom-1337-markdown-faces-apply)
+ (themes-doom-1337-paren-faces-apply)
  (logging-theme "Applied doom-1337 customizations"))
 
 ;; Make this module available for loading with (require 'theme-doom-1337)
