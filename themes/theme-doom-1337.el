@@ -187,6 +187,16 @@ when cursor is on or near a parenthesis."
  (logging-theme "Applied doom-1337 show-paren faces"))
 
 (defun
+ themes-doom-1337-flymake-faces-apply ()
+ "Apply doom-1337 theme-specific customizations to flymake diagnostic faces.
+Removes underlines from error, warning, and note indicators."
+ (custom-set-faces
+  '(flymake-error ((t (:underline nil))))
+  '(flymake-warning ((t (:underline nil))))
+  '(flymake-note ((t (:underline nil)))))
+ (logging-theme "Applied doom-1337 flymake faces"))
+
+(defun
  themes-doom-1337-setup
  ()
  "Apply all doom-1337 theme customizations."
@@ -195,6 +205,7 @@ when cursor is on or near a parenthesis."
  (themes-doom-1337-breadcrumb-faces-apply)
  (themes-doom-1337-markdown-faces-apply)
  (themes-doom-1337-paren-faces-apply)
+ (themes-doom-1337-flymake-faces-apply)
  (logging-theme "Applied doom-1337 customizations"))
 
 ;; Make this module available for loading with (require 'theme-doom-1337)
