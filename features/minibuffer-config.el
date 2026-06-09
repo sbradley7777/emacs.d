@@ -124,7 +124,7 @@
   (setq
    consult-buffer-sources
    '(consult--source-filtered-buffer
-     consult--source-project-buffer consult--source-buffer consult--source-recent-file))
+     consult-source-project-buffer consult-source-buffer consult-source-recent-file))
 
   (logging-config "Consult buffer sources and preview customization configured"))
 

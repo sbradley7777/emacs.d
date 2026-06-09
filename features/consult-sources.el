@@ -7,9 +7,9 @@
 (require 'subr-x) ; For when-let
 
 ;; Declare external variables to suppress byte-compiler warnings
-(defvar consult--source-buffer) ; From consult.el
-(defvar consult--source-project-buffer) ; From consult.el
-(defvar consult--source-recent-file) ; From consult.el
+(defvar consult-source-buffer) ; From consult.el
+(defvar consult-source-project-buffer) ; From consult.el
+(defvar consult-source-recent-file) ; From consult.el
 (defvar recentf-list) ; From recentf.el
 
 ;; Declare external functions to suppress byte-compiler warnings
@@ -97,21 +97,21 @@ To add more patterns, simply add regexp strings to this list.")
 (with-eval-after-load
  'consult
  ;; Apply custom annotation to default buffer source for consistent alignment
- (plist-put consult--source-buffer :category nil)
- (plist-put consult--source-buffer :annotate #'consult--sources-buffer-annotation)
+ (plist-put consult-source-buffer :category nil)
+ (plist-put consult-source-buffer :annotate #'consult--sources-buffer-annotation)
 
  ;; Assign unique narrowing key to project buffer source. By default it shares 'b' with regular buffers, causing conflicts
- (plist-put consult--source-project-buffer :narrow ?p)
- (plist-put consult--source-project-buffer :hidden nil)
+ (plist-put consult-source-project-buffer :narrow ?p)
+ (plist-put consult-source-project-buffer :hidden nil)
  ;; Remove category to allow custom annotations
- (plist-put consult--source-project-buffer :category nil)
+ (plist-put consult-source-project-buffer :category nil)
  ;; Add shared custom annotation function
- (plist-put consult--source-project-buffer :annotate #'consult--sources-buffer-annotation)
+ (plist-put consult-source-project-buffer :annotate #'consult--sources-buffer-annotation)
 
  ;; Filter git repository buffers to exclude patterns from features-ignored-buffer-patterns
  ;; and ensure only buffers in the current git repository are shown
  (plist-put
-  consult--source-project-buffer
+  consult-source-project-buffer
   :items
   (lambda
    ()
@@ -138,7 +138,7 @@ To add more patterns, simply add regexp strings to this list.")
 
  ;; Limit recent files shown to 10 and show full paths (not abbreviated)
  (plist-put
-  consult--source-recent-file
+  consult-source-recent-file
   :items
   (lambda
    ()

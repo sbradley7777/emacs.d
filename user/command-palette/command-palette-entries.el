@@ -46,7 +46,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defconst
  command-palette--persistence-configs
- '((history
+ `((history
     :variable user--command-palette-history
     :saved-var command-palette-saved-history
     :file command-palette-history-file
@@ -59,14 +59,14 @@
     :file command-palette-favorites-file
     :data-type list
     :description "favorites list"
-    :default command-palette-default-favorites)
+    :default ,command-palette-default-favorites)
    (diagnostics
     :variable user-command-palette-diagnostics
     :saved-var command-palette-saved-diagnostics
     :file command-palette-diagnostics-file
     :data-type list
     :description "diagnostics list"
-    :default command-palette-default-diagnostics))
+    :default ,command-palette-default-diagnostics))
  "Configuration for persistent data storage.
 Each entry defines:
   :variable     - Runtime variable holding the data
